@@ -34,7 +34,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	const cViewThreshold = [0, 0.01, 0.05];
 	const cViewRootMargin = "0px";
 	const cStayDelayMs = 3500;
-	const cScrollMarks = [25, 50, 75];
+	const cScrollMarks = [];
 	const cPageInstanceId = NewId("p");
 	const cFocusAwayMinMs = 1500;
 	const cObservedViewElems = new Set();
@@ -654,6 +654,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	window.addEventListener("scroll", () => {
+	return;
 	CheckScroll();
 	CheckVisibleViews();
 	}, { passive: true });
