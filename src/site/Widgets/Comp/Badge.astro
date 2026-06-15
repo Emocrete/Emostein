@@ -1,0 +1,587 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Text, Colors, ElemBg, EmoMediaData, Size, Pixel, Place, type PlaceProps } from "@/TypesLib";
+import HzStack from "./HzStack.astro";
+import Stack from "./Stack.astro";
+import Emograph from "./Emograph.astro";
+import RespImg from "../Media/RespImage.astro";
+
+type TBadgeTextPos = "Right" | "Left" | "Top" | "Bottom";
+type TBadgeNumberView = "Split" | "Inline";
+type TBadgeImg = EmoMediaData | string;
+
+interface BadgeData {
+	Number?: string | number;
+	Text: string;
+	Img: EmoMediaData;
+}
+
+interface Props extends HTMLAttributes<"div">, PlaceProps {
+	pYears?: string | number;
+	pYearsText?: string;
+	pYearsImg?: TBadgeImg;
+
+	pWorks?: string | number;
+	pWorksText?: string;
+	pWorksImg?: TBadgeImg;
+
+	pDuration?: string | number;
+	pDurationText?: string;
+	pDurationImg?: TBadgeImg;
+
+	pQualityText?: string;
+	pQualityImg?: TBadgeImg;
+
+	pScopeText?: string;
+	pScopeImg?: TBadgeImg;
+
+	pTextPos?: TBadgeTextPos;
+	pNumberView?: TBadgeNumberView;
+	pNumSize?: Pixel;
+	pTextSize?: Pixel;
+	pImgTextGap?: Pixel;
+	pNumTextGap?: Pixel;
+	pItemGap?: Pixel;
+	pImgSize?: Size;
+	pUseBg?: boolean;
+	pBgColor?: string;
+	pPad?: Pixel;
+	pWidth?: Pixel;
+	pColor?: string;
+	pMobMaxCols?: number;
+}
+
+const {
+	pYears,
+	pYearsText = "سنوات خبرة",
+	pYearsImg,
+
+	pWorks,
+	pWorksText = "مشروع",
+	pWorksImg,
+
+	pDuration,
+	pDurationText = "ساعة",
+	pDurationImg,
+
+	pQualityText,
+	pQualityImg,
+
+	pScopeText = "القاهرة والجيزة",
+	pScopeImg,
+
+	pTextPos = "Left",
+	pNumberView = "Split",
+	pNumSize = new Pixel(40, 20),
+	pTextSize = new Pixel(18, 14),
+	pImgTextGap = new Pixel(10, 10),
+	pNumTextGap = new Pixel(0, 0),
+	pItemGap = new Pixel(30, 10),
+	pImgSize = new Size(100, 100, 50, 50),
+	pUseBg = false,
+	pBgColor = Colors.WhiteOff,
+	pPad = new Pixel(0, 0),
+	pWidth,
+	pColor = Colors.BlackOff,
+	pMobMaxCols = 2,
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("Badge"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+
+const cBadges = GetBadges();
+const cItemDir = pTextPos === "Top" || pTextPos === "Bottom" ? "Col" : "Row";
+const cTextFirst = pTextPos === "Right" || pTextPos === "Top";
+const cItemStyle = pTextPos === "Right" || pTextPos === "Left" ? "direction:rtl;" : "";
+const cNumFont = Text.Body.WithSize(pNumSize).WithColor(pColor).Centered;
+const cTextFont = Text.Body.WithSize(pTextSize).WithColor(pColor).Centered;
+const cBg = pUseBg ? new ElemBg(pBgColor) : undefined;
+const cMobMaxCols = Math.max(1, Math.min(6, Number(pMobMaxCols) || 2));
+
+const cCssVars = `
+--BadgeNumSizeL:${pNumSize.Landscape};
+--BadgeNumSizeP:${pNumSize.Portrait};
+--BadgeTextSizeL:${pTextSize.Landscape};
+--BadgeTextSizeP:${pTextSize.Portrait};
+--BadgeNumTextGapL:${pNumTextGap.Landscape};
+--BadgeNumTextGapP:${pNumTextGap.Portrait};
+--BadgeColor:${pColor};
+--BadgeItemWidthP:100%;
+${cGivenStyle}
+`;
+
+function GetBadges(): BadgeData[] {
+	const cItems: BadgeData[] = [];
+
+	if (HasValue(pYears)) {
+		cItems.push({
+			Number: pYears,
+			Text: pYearsText,
+			Img: GetImg(pYearsImg, "ExperienceIconGold.webp", "سنوات خبرة هندسية"),
+		});
+	}
+
+	if (HasValue(pWorks)) {
+		cItems.push({
+			Number: pWorks,
+			Text: pWorksText,
+			Img: GetImg(pWorksImg, "TrustedIcon.webp", "سابقة أعمال هندسية"),
+		});
+	}
+
+	if (HasValue(pDuration)) {
+		cItems.push({
+			Number: pDuration,
+			Text: pDurationText,
+			Img: GetImg(pDurationImg, "Hours24Icon.webp", "مدة تنفيذ الخدمة"),
+		});
+	}
+
+	if (HasValue(pQualityText)) {
+		cItems.push({
+			Text: pQualityText as string,
+			Img: GetImg(pQualityImg, "QualityIcon.webp", "جودة الخدمة الهندسية"),
+		});
+	}
+
+	if (HasValue(pScopeText)) {
+		cItems.push({
+			Text: pScopeText,
+			Img: GetImg(pScopeImg, "LocationIcon.webp", "النطاق الجغرافي للخدمة"),
+		});
+	}
+
+	return cItems;
+}
+
+function HasValue(pValue: unknown): boolean {
+	return pValue !== undefined && pValue !== null && String(pValue).trim() !== "";
+}
+
+function GetImg(pImg: TBadgeImg | undefined, pDefaultFile: string, pAlt: string): EmoMediaData {
+	if (pImg instanceof EmoMediaData) {
+		return pImg;
+	}
+
+	if (typeof pImg === "string" && pImg.trim() !== "") {
+		return {
+			Type: "Img",
+			LinkL: pImg,
+			LinkP: pImg,
+			Alt: pAlt,
+			Size: pImgSize,
+		} as EmoMediaData;
+	}
+
+	return new EmoMediaData("Img", "/Media/", pDefaultFile, false, pAlt, pImgSize);
+}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<HzStack
+	class = {`Badge BadgeAutoMobile ${pGivenClass}`}
+	style = {cCssVars}
+	id={pGivenID}
+	pGap={pItemGap}
+	pPad={pPad}
+	pBg={cBg}
+	pLoc={pLoc}
+	pSize={pSize}
+	pRotate={pRotate}
+	pZ={pZ}
+	pOrigin={pOrigin}
+	pOpacity={pOpacity}
+	pClickable={pClickable}
+	pLandOnly={pLandOnly}
+	pPortOnly={pPortOnly}
+	data-badge-auto-mobile="true"
+	data-badge-max-cols={cMobMaxCols}
+	{...RemAttr}
+>
+
+	{ cBadges.map((cBadge) => (
+
+		<Stack
+			class = " BadgeItem "
+			style = {cItemStyle}
+			pDir={cItemDir}
+			pGap={pImgTextGap}
+			pPad={new Pixel(0, 0)}
+			pFlipNarrow={false}
+			data-own-size="true"
+			data-badge-item="true"
+		>
+
+			{ cTextFirst && (
+				cBadge.Number !== undefined ? (
+					pNumberView === "Split" ? (
+
+						<Stack
+							class = " BadgeTextStack "
+							pDir="Col"
+							pGap={pNumTextGap}
+							pPad={new Pixel(0, 0)}
+							pFlipNarrow={false}
+						>
+
+							<Emograph pTitle={cNumFont.OfText(String(cBadge.Number))} />
+
+							<Emograph pTitle={cTextFont.OfText(cBadge.Text)} />
+
+						</Stack>
+
+						) : (
+
+							<p class = " BadgeInlineText ">
+
+								<span class = " BadgeInlineNum ">
+									{cBadge.Number}
+								</span>
+
+								<span class = " BadgeInlineDesc ">
+									{cBadge.Text}
+								</span>
+
+							</p>
+
+						)
+						) : (
+
+							<Emograph pTitle={cTextFont.OfText(cBadge.Text)} />
+
+						)) }
+
+				<RespImg pImg={cBadge.Img} />
+
+				{ !cTextFirst && (
+					cBadge.Number !== undefined ? (
+						pNumberView === "Split" ? (
+
+							<Stack
+								class = " BadgeTextStack "
+								pDir="Col"
+								pGap={pNumTextGap}
+								pPad={new Pixel(0, 0)}
+								pFlipNarrow={false}
+							>
+
+								<Emograph pTitle={cNumFont.OfText(String(cBadge.Number))} />
+
+								<Emograph pTitle={cTextFont.OfText(cBadge.Text)} />
+
+							</Stack>
+
+							) : (
+
+								<p class = " BadgeInlineText ">
+
+									<span class = " BadgeInlineNum ">
+										{cBadge.Number}
+									</span>
+
+									<span class = " BadgeInlineDesc ">
+										{cBadge.Text}
+									</span>
+
+								</p>
+
+							)
+							) : (
+
+								<Emograph pTitle={cTextFont.OfText(cBadge.Text)} />
+
+							)) }
+
+				</Stack>
+
+				)) }
+
+		</Stack>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.BadgeInlineText {
+		margin: 0;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: var(--BadgeNumTextGapL);
+		width: 100%;
+		color: var(--BadgeColor);
+		line-height: 2;
+		text-align: center;
+		white-space: nowrap;
+	}
+
+
+	.BadgeInlineNum {
+		font-size: var(--BadgeNumSizeL);
+	}
+
+
+	.BadgeInlineDesc {
+		font-size: var(--BadgeTextSizeL);
+	}
+
+
+
+	:global(.BadgeItem.EmoStack) {
+		min-width: fit-content;
+	}
+
+
+	:global(.BadgeTextStack.EmoStack) {
+		min-width: fit-content;
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		:global(.BadgeAutoMobile.EmoStack.IsRow.FlipAllowed),
+		:global(.BadgeAutoMobile.EmoStack.IsRow.IsMobFlip)
+		{
+			flex-direction: row !important;
+			flex-wrap: wrap !important;
+			align-items: center !important;
+			justify-content: center !important;
+			height: auto !important;
+		}
+
+		:global(.BadgeAutoMobile.EmoStack.IsRow.FlipAllowed > .BadgeItem),
+		:global(.BadgeAutoMobile.EmoStack.IsRow.IsMobFlip > .BadgeItem)
+		{
+			flex: 0 0 var(--BadgeItemWidthP, 100%) !important;
+			width: var(--BadgeItemWidthP, 100%) !important;
+			max-width: 100% !important;
+			min-width: 0 !important;
+			height: auto !important;
+			justify-content: center !important;
+			align-items: center !important;
+		}
+
+		.BadgeInlineText {
+			gap: var(--BadgeNumTextGapP);
+		}
+
+		.BadgeInlineNum {
+			font-size: var(--BadgeNumSizeP);
+		}
+
+		.BadgeInlineDesc {
+			font-size: var(--BadgeTextSizeP);
+		}
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script is:inline>
+	(function InitBadgeMobileLayout() {
+	if (window.__BadgeMobileLayoutReady) return;
+	window.__BadgeMobileLayoutReady = true;
+
+	let cFrame = 0;
+
+	window.addEventListener("resize", RequestRefreshBadgeMobileLayout);
+	window.addEventListener("orientationchange", RequestRefreshBadgeMobileLayout);
+	window.addEventListener("load", RequestRefreshBadgeMobileLayout);
+	document.addEventListener("astro:page-load", RequestRefreshBadgeMobileLayout);
+
+	if (document.fonts?.ready) {
+	document.fonts.ready.then(RequestRefreshBadgeMobileLayout);
+	}
+
+	document.addEventListener(
+	"load",
+	function (pEvent) {
+	if (pEvent.target instanceof HTMLImageElement) {
+	RequestRefreshBadgeMobileLayout();
+	}
+	},
+	true
+	);
+
+	RequestRefreshBadgeMobileLayout();
+
+	function RequestRefreshBadgeMobileLayout() {
+	cancelAnimationFrame(cFrame);
+	cFrame = requestAnimationFrame(RefreshBadgeMobileLayout);
+	}
+
+	function RefreshBadgeMobileLayout() {
+	const cIsPortrait = window.matchMedia("(orientation: portrait)").matches;
+	const cBadges = document.querySelectorAll(".BadgeAutoMobile[data-badge-auto-mobile='true']");
+
+	cBadges.forEach(function (pBadge) {
+	if (!cIsPortrait) {
+	pBadge.style.removeProperty("--BadgeItemWidthP");
+	pBadge.removeAttribute("data-badge-cols");
+	return;
+	}
+
+	const cItems = Array.from(pBadge.children).filter(function (pItem) {
+	return pItem instanceof HTMLElement && pItem.dataset.badgeItem === "true";
+	});
+
+	if (!cItems.length) return;
+
+	const cAvailableWidth = pBadge.clientWidth;
+	if (cAvailableWidth <= 0) return;
+
+	const cComputedStyle = window.getComputedStyle(pBadge);
+	const cGap = GetPixelValue(cComputedStyle.columnGap || cComputedStyle.gap);
+	const cMaxCols = Math.max(1, Math.min(Number(pBadge.dataset.badgeMaxCols) || 2, cItems.length));
+	const cNaturalItemWidth = Math.ceil(Math.max(...cItems.map(MeasureNaturalWidth)));
+	const cAllowedCols = GetAllowedCols(cAvailableWidth, cNaturalItemWidth, cGap, cMaxCols);
+
+	pBadge.dataset.badgeCols = String(cAllowedCols);
+	pBadge.style.setProperty("--BadgeItemWidthP", GetItemWidthValue(cAllowedCols));
+	});
+	}
+
+	function GetAllowedCols(pAvailableWidth, pItemWidth, pGap, pMaxCols) {
+	for (let cCols = pMaxCols; cCols >= 2; cCols--) {
+	const cRequiredWidth = pItemWidth * cCols + pGap * (cCols - 1);
+	if (cRequiredWidth <= pAvailableWidth) return cCols;
+	}
+
+	return 1;
+	}
+
+	function GetItemWidthValue(pCols) {
+	if (pCols <= 1) return "100%";
+
+	const cGapExpression = Array.from({ length: pCols - 1 }, function () {
+	return "var(--StackGapP, 0px)";
+	}).join(" - ");
+
+	return `calc((100% - ${cGapExpression}) / ${pCols})`;
+	}
+
+	function MeasureNaturalWidth(pItem) {
+	const cClone = pItem.cloneNode(true);
+
+	cClone.style.cssText = [
+	"position:absolute",
+	"visibility:hidden",
+	"pointer-events:none",
+	"left:-10000px",
+	"top:-10000px",
+	"width:max-content",
+	"max-width:none",
+	"min-width:0",
+	"height:auto",
+	"flex:none",
+	].join(";");
+
+	document.body.appendChild(cClone);
+	const cWidth = cClone.getBoundingClientRect().width;
+	cClone.remove();
+
+	return cWidth;
+	}
+
+	function GetPixelValue(pValue) {
+	const cValue = Number.parseFloat(pValue);
+	return Number.isFinite(cValue) ? cValue : 0;
+	}
+	})();
+</script>

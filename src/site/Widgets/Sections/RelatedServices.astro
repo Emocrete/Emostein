@@ -1,0 +1,415 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Text, ElemBg, Colors, Pixel, Size, Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"section">, PlaceProps {
+	pTitle?: Text;
+	pDesc?: Text;
+	pHeadBg?: ElemBg;
+	pBodyBg?: ElemBg;
+	pCardBg?: ElemBg;
+	pTitleFnt?: Text;
+	pDescFnt?: Text;
+	pCardTitleFnt?: Text;
+	pCardDescFnt?: Text;
+	pWidth?: Size;
+	pGap?: Pixel;
+	pMax?: number | string;
+	pMaxP?: number | string;
+	pCardRadius?: Pixel;
+	pImgHeight?: Pixel;
+	pCentered?: boolean;
+	Centered?: boolean | string;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+
+if ("pItems" in cProps) {
+	throw new Error("RelServices اتغير: استخدم <RelServiceItem ... /> كأبناء داخل <RelServices>، ولا تستخدم pItems.");
+}
+
+const {
+	pTitle = Text.H2.Centered.White.OfText("خدمات ذات علاقة"),
+	pDesc,
+	pHeadBg = new ElemBg(Colors.Gray5),
+	pBodyBg = new ElemBg(Colors.Gray1),
+	pCardBg = new ElemBg(Colors.WhiteOff),
+	pTitleFnt,
+	pDescFnt,
+	pCardTitleFnt = Text.H4.WithColor(Colors.BlackOff),
+	pCardDescFnt = Text.Body.WithColor(Colors.BlackOff),
+	pWidth = new Size(1180, "auto", "calc(100% - 24px)", "auto"),
+	pGap = new Pixel(22, 14),
+	pMax = 3,
+	pMaxP = 1,
+	pCardRadius = new Pixel(20, 16),
+	pImgHeight = new Pixel(200, 165),
+	pCentered = true,
+	Centered = false,
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("RelatedServices"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = cProps;
+
+const cMaxL = NormalizeMax(pMax, 3);
+const cMaxP = NormalizeMax(pMaxP, 1);
+const cCentered = pCentered || GetBoolAttr(Centered);
+const cGivenStyle = GetStyleText(pGivenStyle);
+const cItemWidthL = GetItemWidth(cMaxL, pGap.Landscape);
+const cItemWidthP = GetItemWidth(cMaxP, pGap.Portrait);
+
+const cDefaultTitleFnt = Text.H2.Centered.WithColor(Colors.WhiteOff);
+const cDefaultDescFnt = Text.Body.Centered.WithColor(Colors.WhiteOff);
+const cTitleFnt = pTitleFnt ?? pTitle;
+const cDescFnt = pDescFnt ?? pDesc ?? cDefaultDescFnt;
+const cTitleText = pTitle.text ?? "خدمات ذات علاقة";
+const cDescText = pDesc?.text ?? "";
+
+const TitleTag = pTitle.GetTag() as keyof astroHTML.JSX.DefinedIntrinsicElements;
+
+const cStyle = [
+	`--RelServicesHeadBg:${pHeadBg.Color};`,
+	`--RelServicesBodyBg:${pBodyBg.Color};`,
+	`--RelServiceCardBg:${pCardBg.Color};`,
+	`--RelServicesWidthL:${pWidth.WidthL};`,
+	`--RelServicesWidthP:${pWidth.WidthP};`,
+	`--RelServicesGapL:${pGap.Landscape};`,
+	`--RelServicesGapP:${pGap.Portrait};`,
+	`--RelServiceItemWidthL:${cItemWidthL};`,
+	`--RelServiceItemWidthP:${cItemWidthP};`,
+	`--RelServiceCardRadiusL:${pCardRadius.Landscape};`,
+	`--RelServiceCardRadiusP:${pCardRadius.Portrait};`,
+	`--RelServiceImgHeightL:${pImgHeight.Landscape};`,
+	`--RelServiceImgHeightP:${pImgHeight.Portrait};`,
+	`--RelServiceBtnBg:${Colors.Bistage};`,
+	`--RelServiceBtnClr:${Colors.BlackOff};`,
+	`--RelServiceBtnHoverBg:${Colors.BlackOff};`,
+	`--RelServiceBtnHoverClr:${Colors.WhiteOff};`,
+	GetTextVars("RelServicesHeadTitle", cTitleFnt, cDefaultTitleFnt),
+	GetTextVars("RelServicesHeadDesc", cDescFnt, cDefaultDescFnt),
+	GetTextVars("RelServiceCardTitle", pCardTitleFnt, Text.H4.WithColor(Colors.BlackOff)),
+	GetTextVars("RelServiceCardDesc", pCardDescFnt, Text.Body.WithColor(Colors.BlackOff)),
+	cGivenStyle,
+].filter(Boolean).join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cStyle);
+
+const cClass = [
+	"RelatedServices",
+	cCentered ? "Centered" : "",
+	cPlace.Class,
+	pGivenClass,
+].filter(Boolean).join(" ");
+
+function NormalizeMax(pValue: unknown, pDefault: number) {
+	const cValue = typeof pValue === "number" ? pValue : Number.parseInt(`${pValue}`, 10);
+	if (!Number.isFinite(cValue) || cValue < 1) return Math.max(1, pDefault);
+	return Math.floor(cValue);
+}
+
+function GetBoolAttr(pValue: unknown) {
+	return pValue === true || pValue === "" || pValue === "true";
+}
+
+function GetItemWidth(pMax: number, pGap: string) {
+	const cGapNum = ParsePx(pGap);
+	const cPercent = 100 / pMax;
+	const cGapShare = cGapNum * ((pMax - 1) / pMax);
+
+	if (cGapShare === 0) return `${RoundCss(cPercent)}%`;
+	return `calc(${RoundCss(cPercent)}% - ${RoundCss(cGapShare)}px)`;
+}
+
+function ParsePx(pValue: string) {
+	const cMatch = `${pValue}`.trim().match(/^(-?\d+(?:\.\d+)?)px$/i);
+	return cMatch ? Number.parseFloat(cMatch[1]) : 0;
+}
+
+function RoundCss(pValue: number) {
+	return Number.parseFloat(pValue.toFixed(4));
+}
+
+function GetTextVars(pName: string, pText: Text, pFallback: Text) {
+	const cColor = pText.color ?? pFallback.color;
+	const cSize = pText.size ?? pFallback.size;
+	const cBold = pText.bold ?? pFallback.bold;
+	const cAlign = pText.align ?? pFallback.align;
+	const cFamily = pText.family ?? pFallback.family;
+
+	return [
+		cColor ? `--${pName}Color:${cColor};` : "",
+		cSize ? `--${pName}SizeL:${cSize.Landscape};` : "",
+		cSize ? `--${pName}SizeP:${cSize.Portrait};` : "",
+		`--${pName}Weight:${cBold ? 700 : 400};`,
+		`--${pName}Align:${cAlign};`,
+		`--${pName}Family:${cFamily};`,
+	].filter(Boolean).join(" ");
+}
+
+function GetStyleText(pStyle: unknown) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+	if (typeof pStyle !== "object") return "";
+
+	return Object.entries(pStyle as Record<string, string | number | null | undefined>)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section
+	class = {cClass}
+	style = {cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+
+
+
+
+
+
+	<header class = " RelatedHead ">
+
+		<TitleTag class = " RelatedTitle ">
+
+			{cTitleText}
+
+		</TitleTag>
+
+		{ cDescText && (
+
+			<p class = " RelatedDesc ">
+				{cDescText}
+			</p>
+		) }
+
+	</header>
+
+
+
+
+
+
+
+	<div class = " RelatedBody ">
+
+		<slot />
+
+	</div>
+
+
+
+
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.RelatedServices {
+		width: 100%;
+		background: var(--RelServicesBodyBg);
+	}
+
+
+	.RelatedHead {
+		background: var(--RelServicesHeadBg);
+		padding: 34px 20px 28px;
+		box-sizing: border-box;
+		text-align: center;
+	}
+
+
+	.RelatedTitle {
+		margin: 0;
+		color: var(--RelServicesHeadTitleColor, inherit) !important;
+		font-size: var(--RelServicesHeadTitleSizeL) !important;
+		font-weight: var(--RelServicesHeadTitleWeight) !important;
+		text-align: var(--RelServicesHeadTitleAlign) !important;
+		font-family: var(--RelServicesHeadTitleFamily) !important;
+		line-height: 2;
+	}
+
+
+	.RelatedDesc {
+		margin: 0;
+		color: var(--RelServicesHeadDescColor, inherit) !important;
+		font-size: var(--RelServicesHeadDescSizeL) !important;
+		font-weight: var(--RelServicesHeadDescWeight) !important;
+		text-align: var(--RelServicesHeadDescAlign) !important;
+		font-family: var(--RelServicesHeadDescFamily) !important;
+		line-height: 2;
+	}
+
+
+	.RelatedBody {
+		background: var(--RelServicesBodyBg);
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		direction: rtl;
+		box-sizing: border-box;
+		width: 100%;
+		padding-block: 36px;
+		padding-inline: max(12px, calc((100% - var(--RelServicesWidthL)) / 2));
+		gap: var(--RelServicesGapL);
+		align-items: stretch;
+		justify-content: flex-start;
+		align-content: flex-start;
+		overflow: visible;
+	}
+
+	.RelatedBody > :global(*) {
+		box-sizing: border-box !important;
+		flex-grow: 0 !important;
+		flex-shrink: 1 !important;
+		flex-basis: var(--RelServiceItemWidthL) !important;
+		width: var(--RelServiceItemWidthL) !important;
+		max-width: var(--RelServiceItemWidthL) !important;
+		min-width: 0 !important;
+		margin: 0 !important;
+	}
+
+	.RelatedBody > :global(* > *) {
+		max-width: 100%;
+		box-sizing: border-box;
+	}
+
+
+
+	.RelatedServices.Centered .RelatedBody {
+		justify-content: center;
+	}
+
+
+	.RelatedServices.IsPlaced {
+		position: absolute;
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait), (max-width: 920px) {
+		.RelatedHead {
+			padding: 26px 14px 20px;
+		}
+
+		.RelatedTitle {
+			font-size: var(--RelServicesHeadTitleSizeP, var(--RelServicesHeadTitleSizeL)) !important;
+		}
+
+		.RelatedDesc {
+			font-size: var(--RelServicesHeadDescSizeP, var(--RelServicesHeadDescSizeL)) !important;
+		}
+
+		.RelatedBody {
+			padding-block: 24px;
+			padding-inline: max(12px, calc((100% - var(--RelServicesWidthP)) / 2));
+			gap: var(--RelServicesGapP);
+		}
+
+		.RelatedBody > :global(*) {
+			flex-basis: var(--RelServiceItemWidthP) !important;
+			width: var(--RelServiceItemWidthP) !important;
+			max-width: var(--RelServiceItemWidthP) !important;
+		}
+
+		.RelatedServices.IsPlaced {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+	}
+
+
+
+</style>

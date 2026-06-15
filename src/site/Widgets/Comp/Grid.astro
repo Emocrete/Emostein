@@ -1,0 +1,313 @@
+---
+import { DirectSize, ElemBg, Pixel, Place, type PlaceProps } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"div">, PlaceProps {
+	pMax?: number | string;
+	pMaxP?: number | string;
+	pSize?: DirectSize;
+	pGap?: Pixel;
+	pPad?: Pixel;
+	pMargin?: Pixel;
+	pBg?: ElemBg;
+	pRadius?: Pixel;
+	Centered?: boolean | string;
+	pCentered?: boolean | string;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+
+const {
+	pMax = 3,
+	pMaxP=1,
+	pSize,
+	pGap = new Pixel(30, 15),
+	pPad = new Pixel(0),
+	pMargin = new Pixel(0),
+	pBg,
+	pRadius = new Pixel(0),
+	Centered = false,
+	pCentered = false,
+
+	pLoc,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("Grid"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = cProps;
+
+const cMaxL = NormalizeMax(pMax, 3);
+const cMaxP = NormalizeMax(pMaxP ?? pMax, cMaxL);
+const cCentered = GetBoolAttr(Centered) || GetBoolAttr(pCentered);
+
+const cWidthL = pSize?.WidthL || "100%";
+const cWidthP = pSize?.WidthP || pSize?.WidthL || "100%";
+const cHeightL = pSize?.HeightL || "auto";
+const cHeightP = pSize?.HeightP || pSize?.HeightL || "auto";
+
+const cItemWidthL = GetItemWidth(cMaxL, pGap.Landscape);
+const cItemWidthP = GetItemWidth(cMaxP, pGap.Portrait);
+
+const cCoreStyle = [
+	`--GridWidthL:${cWidthL};`,
+	`--GridWidthP:${cWidthP};`,
+	`--GridHeightL:${cHeightL};`,
+	`--GridHeightP:${cHeightP};`,
+	`--GridGapL:${pGap.Landscape};`,
+	`--GridGapP:${pGap.Portrait};`,
+	`--GridPadL:${pPad.Landscape};`,
+	`--GridPadP:${pPad.Portrait};`,
+	`--GridMarginL:${pMargin.Landscape};`,
+	`--GridMarginP:${pMargin.Portrait};`,
+	`--GridRadiusL:${pRadius.Landscape};`,
+	`--GridRadiusP:${pRadius.Portrait};`,
+	`--GridBgColor:${pBg?.Color || "transparent"};`,
+	`--GridItemWidthL:${cItemWidthL};`,
+	`--GridItemWidthP:${cItemWidthP};`,
+	GetStyleText(pGivenStyle),
+].filter(Boolean).join(" ");
+
+const cPlace = new Place({
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+}, cCoreStyle);
+
+const cGridClass = [
+	"EmoGrid",
+	cCentered ? "Centered" : "",
+	cPlace.Class,
+	pGivenClass,
+].filter(Boolean).join(" ");
+
+function NormalizeMax(pValue: unknown, pDefault: number) {
+	const cValue = typeof pValue === "number" ? pValue : Number.parseInt(`${pValue}`, 10);
+	if (!Number.isFinite(cValue) || cValue < 1) return Math.max(1, pDefault);
+	return Math.floor(cValue);
+}
+
+function GetBoolAttr(pValue: unknown) {
+	return pValue === true || pValue === "" || pValue === "true";
+}
+
+function GetItemWidth(pMax: number, pGap: string) {
+	const cGapNum = ParsePx(pGap);
+	const cPercent = 100 / pMax;
+	const cGapShare = cGapNum * ((pMax - 1) / pMax);
+
+	if (cGapShare === 0) return `${cPercent}%`;
+	return `calc(${cPercent}% - ${RoundCss(cGapShare)}px)`;
+}
+
+function ParsePx(pValue: string) {
+	const cMatch = `${pValue}`.trim().match(/^(-?\d+(?:\.\d+)?)px$/i);
+	return cMatch ? Number.parseFloat(cMatch[1]) : 0;
+}
+
+function RoundCss(pValue: number) {
+	return Number.parseFloat(pValue.toFixed(4));
+}
+
+function GetStyleText(pStyle: unknown) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+	if (typeof pStyle !== "object") return "";
+
+	return Object.entries(pStyle as Record<string, string | number | null | undefined>)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div
+	class = {cGridClass}
+	style = {cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+
+
+
+
+
+
+	<slot />
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.EmoGrid {
+		position: relative;
+		isolation: isolate;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		direction: rtl;
+		box-sizing: border-box;
+		width: var(--GridWidthL, 100%);
+		max-width: 100%;
+		height: var(--GridHeightL, auto);
+		margin: var(--GridMarginL, 0);
+		padding: var(--GridPadL, 0);
+		gap: var(--GridGapL, 0);
+		border-radius: var(--GridRadiusL, 0);
+		background-color: var(--GridBgColor, transparent);
+		overflow: visible;
+		align-items: stretch;
+		justify-content: flex-start;
+		justify-items: stretch;
+		align-content: flex-start;
+		min-width: 0;
+	}
+
+	.EmoGrid > :global(*) {
+		box-sizing: border-box !important;
+		flex-grow: 0 !important;
+		flex-shrink: 1 !important;
+		flex-basis: var(--GridItemWidthL) !important;
+		width: var(--GridItemWidthL) !important;
+		max-width: var(--GridItemWidthL) !important;
+		min-width: 0 !important;
+		margin: 0 !important;
+	}
+
+	.EmoGrid > :global(* > *) {
+		max-width: 100%;
+		box-sizing: border-box;
+	}
+
+
+
+	.EmoGrid.Centered {
+		justify-content: center;
+	}
+
+
+	.EmoGrid.IsPlaced {
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.EmoGrid {
+			width: var(--GridWidthP, var(--GridWidthL, 100%));
+			height: var(--GridHeightP, var(--GridHeightL, auto));
+			margin: var(--GridMarginP, var(--GridMarginL, 0));
+			padding: var(--GridPadP, var(--GridPadL, 0));
+			gap: var(--GridGapP, var(--GridGapL, 0));
+			border-radius: var(--GridRadiusP, var(--GridRadiusL, 0));
+		}
+
+		.EmoGrid > :global(*) {
+			flex-basis: var(--GridItemWidthP) !important;
+			width: var(--GridItemWidthP) !important;
+			max-width: var(--GridItemWidthP) !important;
+		}
+
+		.EmoGrid.IsPlaced {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+	}
+
+
+
+</style>

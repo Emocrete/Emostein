@@ -1,0 +1,75 @@
+---
+import SubMenuHead from "../../Menu/SubMenuHead.astro";
+import SubMenuItem from "../../Menu/SubMenuItem.astro";
+
+const cMenuIconsList = import.meta.glob("./*.webp", {
+	eager: true,
+	import: "default",
+	query: "?url",
+});
+
+const cMenuIcons = Object.fromEntries(
+	Object.entries(cMenuIconsList).map(([fPath, fUrl]) => {
+		const fFileName = fPath.split("/").pop() ?? "";
+		const fBaseName = fFileName.replace(/\.[^.]+$/, "");
+		return [fBaseName, fUrl];
+	}),
+);
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<SubMenuHead fTitle="تراخيص سكنية بالأحياء" fLink="" fIcon={cMenuIcons.Lab}>
+
+	<SubMenuItem fTitle="ترخيص بناء" fLink="/emoperm/building/districts/construction" />
+
+	<SubMenuItem fTitle="ترخيص تعلية" fLink="/emoperm/building/districts/construction/addition" />
+
+	<SubMenuItem fTitle="ترخيص هدم" fLink="/emoperm/building/districts/demolish" />
+
+</SubMenuHead>
+
+<SubMenuHead fTitle="تراخيص سكنية بالمدن الجديدة" fLink="" fIcon={cMenuIcons.Lab}>
+
+	<SubMenuItem fTitle="ترخيص بناء" fLink="/emoperm/building/newcities/construction" />
+
+	<SubMenuItem fTitle="ترخيص تعلية" fLink="/emoperm/building/newcities/construction/addition" />
+
+	<SubMenuItem fTitle="ترخيص استكمال روف" fLink="/emoperm/building/newcities/construction/increase" />
+
+</SubMenuHead>
+
+<SubMenuHead fTitle="التصالح" fLink="/emoperm/building/reconcile" fIcon={cMenuIcons.Lab} />
+
+<SubMenuHead fTitle="تراخيص تجارية" fLink="" fIcon={cMenuIcons.Lab}>
+
+	<SubMenuItem fTitle="ترخيص محل تجاري" fLink="/emoperm/retail/general" />
+
+	<SubMenuItem fTitle="رسم هندسي لمحل تجاري" fLink="/emoperm/retail/general/dwg" />
+
+	<SubMenuItem fTitle="ترخيص مطعم" fLink="/emoperm/retail/resturant" />
+
+</SubMenuHead>
+
+<SubMenuHead fTitle="ترخيص مصنع" fLink="/emoperm/factory" fIcon={cMenuIcons.Lab} />
+
+<SubMenuHead fTitle="ترخيص محطة وقود" fLink="/emoperm/fuelstation" fIcon={cMenuIcons.Lab} />
+
+<SubMenuHead fTitle="ترخيص  حضانة" fLink="/emoperm/nursery" fIcon={cMenuIcons.Lab} />

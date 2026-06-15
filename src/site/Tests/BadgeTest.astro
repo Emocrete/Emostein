@@ -1,0 +1,750 @@
+---
+import BLayout from "@/Layout.astro";
+import { Align, Colors, ElemBg, EmoMediaData, Location, NumPer, RespString, Pixel, Size, Text } from "@/TypesLib";
+import { Badge, EmoStrip, Emograph, FreeHero, FreeHeroItem } from "@/Widgets";
+
+const cIconSize = new Size(82, 82, 52, 52);
+const cSmallIconSize = new Size(58, 58, 42, 42);
+const cWideBadgeWidth = new Pixel(920, 340);
+const cCardBadgeWidth = new Pixel(720, 320);
+const cCustomYearsImg = new EmoMediaData("Img", "/Media/", "ExperienceIcon.webp", false, "أيقونة خبرة بديلة", cIconSize);
+const cCustomWorksImg = new EmoMediaData("Img", "/Media/", "IndexIcon.webp", false, "أيقونة أعمال بديلة", cIconSize);
+const cCustomQualityImg = new EmoMediaData("Img", "/Media/", "TrustedIcon.webp", false, "أيقونة جودة بديلة", cIconSize);
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<BLayout
+	pIntro={false}
+	pSchemaType="Article"
+	pTitle="اختبار ودجت Badge"
+	pDescr="صفحة اختبار داخلية لمراجعة كل حالات استخدام ودجت Badge في التدفق الطبيعي وداخل FreeHeroItem."
+>
+
+	<EmoStrip
+		pBg={new ElemBg(Colors.Gray5)}
+		pMinH={new NumPer(180, 155)}
+		pAlign={Align.Center}
+	>
+
+		<Emograph
+			pTitle={Text.H1.White.Centered.OfText("اختبار ودجت Badge")}
+			pText={Text.Body.White.Centered.OfText("كل حالة داخل سكشن مستقل، مع فصل حالات التدفق الطبيعي عن حالات التموضع داخل FreeHeroItem.")}
+		/>
+
+	</EmoStrip>
+
+	<EmoStrip
+		data-debugF
+		pBg={new ElemBg(Colors.Creamy)}
+		pMinH={new NumPer(260, 220)}
+		pAlign={Align.Center}
+	>
+
+		<Emograph
+			pTitle={Text.H3.Bistage.Centered.OfText("01 — الحالة الافتراضية")}
+			pText={Text.Body.Centered.OfText("بدون تمرير أرقام أو صور. المتوقع ظهور نطاق الخدمة الافتراضي فقط بسبب pScopeText الافتراضي.")}
+		/>
+
+		<Badge data-debugF />
+
+	</EmoStrip>
+
+	<EmoStrip
+		data-debugF
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pMinH={new NumPer(330, 380)}
+		pAlign={Align.Center}
+	>
+
+		<Emograph
+			pTitle={Text.H3.Bistage.Centered.OfText("02 — كل عناصر البادج الرقمية")}
+			pText={Text.Body.Centered.OfText("سنوات خبرة، أعمال، مدة تنفيذ، جودة، ونطاق خدمة بالصور الافتراضية.")}
+		/>
+
+		<Badge
+			data-debugF
+			pYears={6}
+			pWorks={120}
+			pDuration={24}
+			pQualityText="مراجعة هندسية"
+		/>
+
+	</EmoStrip>
+
+	<EmoStrip
+		data-debugF
+		pBg={new ElemBg(Colors.SkyLite)}
+		pMinH={new NumPer(280, 250)}
+		pAlign={Align.Center}
+	>
+
+		<Emograph
+			pTitle={Text.H3.Bistage.Centered.OfText("03 — عنصر واحد فقط بدون نطاق")}
+			pText={Text.Body.Centered.OfText("اختبار إلغاء نطاق الخدمة الافتراضي بتمرير pScopeText فارغة.")}
+		/>
+
+		<Badge
+			data-debugF
+			pYears="8+"
+			pYearsText="سنوات ممارسة"
+			pScopeText=""
+		/>
+
+	</EmoStrip>
+
+	<EmoStrip
+		data-debugF
+		pBg={new ElemBg(Colors.Gray1)}
+		pMinH={new NumPer(300, 330)}
+		pAlign={Align.Center}
+	>
+
+		<Emograph
+			pTitle={Text.H3.Bistage.Centered.OfText("04 — أعمال ومدة وجودة ونطاق مخصص")}
+			pText={Text.Body.Centered.OfText("اختبار العناصر غير المرتبطة بسنوات الخبرة، مع تغيير نص النطاق.")}
+		/>
+
+		<Badge
+			data-debugF
+			pWorks="75+"
+			pWorksText="ملف ترخيص"
+			pDuration="48"
+			pDurationText="ساعة مراجعة"
+			pQualityText="ملف جاهز للتقديم"
+			pScopeText="القاهرة الكبرى"
+		/>
+
+	</EmoStrip>
+
+	<EmoStrip
+		data-debugF
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pMinH={new NumPer(330, 430)}
+		pAlign={Align.Center}
+	>
+
+		<Emograph
+			pTitle={Text.H3.Bistage.Centered.OfText("05 — النص يمين الصورة")}
+			pText={Text.Body.Centered.OfText("pTextPos = Right مع NumberView = Split. النص يجب أن يظهر قبل الصورة في الاتجاه البصري العربي.")}
+		/>
+
+		<Badge
+			data-debugF
+			pYears={6}
+			pWorks={90}
+			pDuration={24}
+			pTextPos="Right"
+			pNumberView="Split"
+			pScopeText=""
+		/>
+
+	</EmoStrip>
+
+	<EmoStrip
+		data-debugF
+		pBg={new ElemBg(Colors.Creamy)}
+		pMinH={new NumPer(330, 430)}
+		pAlign={Align.Center}
+	>
+
+		<Emograph
+			pTitle={Text.H3.Bistage.Centered.OfText("06 — النص يسار الصورة")}
+			pText={Text.Body.Centered.OfText("pTextPos = Left مع NumberView = Inline. الرقم والوصف في سطر واحد.")}
+		/>
+
+		<Badge
+			data-debugF
+			pYears="6"
+			pWorks="120+"
+			pDuration="24"
+			pTextPos="Left"
+			pNumberView="Inline"
+			pNumTextGap={new Pixel(8, 5)}
+			pScopeText=""
+		/>
+
+	</EmoStrip>
+
+	<EmoStrip
+		data-debugF
+		pBg={new ElemBg(Colors.SkyLite)}
+		pMinH={new NumPer(360, 500)}
+		pAlign={Align.Center}
+	>
+
+		<Emograph
+			pTitle={Text.H3.Bistage.Centered.OfText("07 — النص أعلى الصورة")}
+			pText={Text.Body.Centered.OfText("pTextPos = Top مع NumberView = Split. كل عنصر يجب أن يتحول لتكوين رأسي.")}
+		/>
+
+		<Badge
+			data-debugF
+			pYears={6}
+			pWorks={120}
+			pDuration={24}
+			pTextPos="Top"
+			pNumberView="Split"
+			pScopeText=""
+		/>
+
+	</EmoStrip>
+
+	<EmoStrip
+		data-debugF
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pMinH={new NumPer(360, 500)}
+		pAlign={Align.Center}
+	>
+
+		<Emograph
+			pTitle={Text.H3.Bistage.Centered.OfText("08 — النص أسفل الصورة")}
+			pText={Text.Body.Centered.OfText("pTextPos = Bottom مع NumberView = Inline.")}
+		/>
+
+		<Badge
+			data-debugF
+			pYears="6"
+			pWorks="120+"
+			pDuration="24"
+			pTextPos="Bottom"
+			pNumberView="Inline"
+			pNumTextGap={new Pixel(8, 5)}
+			pScopeText=""
+		/>
+
+	</EmoStrip>
+
+	<EmoStrip
+		data-debugF
+		pBg={new ElemBg(Colors.Gray1)}
+		pMinH={new NumPer(360, 420)}
+		pAlign={Align.Center}
+	>
+
+		<Emograph
+			pTitle={Text.H3.Bistage.Centered.OfText("09 — تحكم كامل في المقاسات والمسافات")}
+			pText={Text.Body.Centered.OfText("تغيير حجم الرقم، حجم النص، حجم الصورة، مسافة الصورة/النص، مسافة الرقم/النص، والمسافة بين العناصر.")}
+		/>
+
+		<Badge
+			data-debugF
+			pYears={14}
+			pWorks="300+"
+			pDuration={72}
+			pTextPos="Left"
+			pNumberView="Split"
+			pNumSize={new Pixel(54, 28)}
+			pTextSize={new Pixel(21, 13)}
+			pImgSize={new Size(72, 72, 42, 42)}
+			pImgTextGap={new Pixel(14, 8)}
+			pNumTextGap={new Pixel(4, 2)}
+			pItemGap={new Pixel(46, 13)}
+			pScopeText=""
+		/>
+
+	</EmoStrip>
+
+	<EmoStrip
+		data-debugF
+		pBg={new ElemBg(Colors.SkyLite)}
+		pMinH={new NumPer(360, 430)}
+		pAlign={Align.Center}
+	>
+
+		<Emograph
+			pTitle={Text.H3.Bistage.Centered.OfText("10 — خلفية داخلية وعرض محدد")}
+			pText={Text.Body.Centered.OfText("pUseBg + pBgColor + pPad + pWidth مع لون نص مختلف.")}
+		/>
+
+		<Badge
+			data-debugF
+			pYears={6}
+			pWorks="90+"
+			pQualityText="تسليم منظم"
+			pScopeText=""
+			pUseBg={true}
+			pBgColor={Colors.Gray5}
+			pPad={new Pixel(24, 16)}
+			pWidth={cCardBadgeWidth}
+			pColor={Colors.WhiteOff}
+		/>
+
+	</EmoStrip>
+
+	<EmoStrip
+		data-debugF
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pMinH={new NumPer(340, 420)}
+		pAlign={Align.Center}
+	>
+
+		<Emograph
+			pTitle={Text.H3.Bistage.Centered.OfText("11 — صور مخصصة كمسارات نصية")}
+			pText={Text.Body.Centered.OfText("اختبار تمرير pYearsImg و pWorksImg و pDurationImg كروابط مباشرة بدل EmoMediaData.")}
+		/>
+
+		<Badge
+			data-debugF
+			pYears={9}
+			pYearsImg="/Media/ExperienceIcon.webp"
+			pWorks={180}
+			pWorksImg="/Media/IndexIcon.webp"
+			pDuration={12}
+			pDurationImg="/Media/Hours24Icon.webp"
+			pImgSize={cIconSize}
+			pScopeText=""
+		/>
+
+	</EmoStrip>
+
+	<EmoStrip
+		data-debugF
+		pBg={new ElemBg(Colors.Creamy)}
+		pMinH={new NumPer(340, 420)}
+		pAlign={Align.Center}
+	>
+
+		<Emograph
+			pTitle={Text.H3.Bistage.Centered.OfText("12 — صور مخصصة من EmoMediaData")}
+			pText={Text.Body.Centered.OfText("اختبار مسار الصور الكامل عند تمرير EmoMediaData للخبرة والأعمال والجودة.")}
+		/>
+
+		<Badge
+			data-debugF
+			pYears="10+"
+			pYearsImg={cCustomYearsImg}
+			pWorks="220+"
+			pWorksImg={cCustomWorksImg}
+			pQualityText="ثقة ومراجعة"
+			pQualityImg={cCustomQualityImg}
+			pScopeText=""
+		/>
+
+	</EmoStrip>
+
+	<EmoStrip
+		data-debugF
+		pBg={new ElemBg(Colors.Gray1)}
+		pMinH={new NumPer(340, 390)}
+		pAlign={Align.Center}
+	>
+
+		<Emograph
+			pTitle={Text.H3.Bistage.Centered.OfText("13 — أرقام كنصوص حرة")}
+			pText={Text.Body.Centered.OfText("اختبار قيم رقمية بصيغ نصية: علامة زائد، فاصلة، وأرقام عربية.")}
+		/>
+
+		<Badge
+			data-debugF
+			pYears="6+"
+			pWorks="1,200"
+			pDuration="٢٤"
+			pTextPos="Left"
+			pNumberView="Inline"
+			pScopeText=""
+		/>
+
+	</EmoStrip>
+
+	<EmoStrip
+		data-debugF
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pMinH={new NumPer(300, 270)}
+		pAlign={Align.Center}
+	>
+
+		<Emograph
+			pTitle={Text.H3.Bistage.Centered.OfText("14 — قيمة صفرية")}
+			pText={Text.Body.Centered.OfText("اختبار أن الرقم 0 يظهر ولا يتم اعتباره قيمة فارغة.")}
+		/>
+
+		<Badge
+			data-debugF
+			pDuration={0}
+			pDurationText="ساعة متبقية"
+			pScopeText=""
+		/>
+
+	</EmoStrip>
+
+	<EmoStrip
+		data-debugF
+		pBg={new ElemBg(Colors.SkyLite)}
+		pMinH={new NumPer(320, 300)}
+		pAlign={Align.Center}
+	>
+
+		<Emograph
+			pTitle={Text.H3.Bistage.Centered.OfText("15 — عناصر نصية فقط")}
+			pText={Text.Body.Centered.OfText("اختبار quality + scope بدون أرقام.")}
+		/>
+
+		<Badge
+			data-debugF
+			pQualityText="تدقيق هندسي"
+			pScopeText="القاهرة والجيزة والعبور"
+			pTextPos="Bottom"
+		/>
+
+	</EmoStrip>
+
+	<EmoStrip
+		data-debugF
+		pBg={new ElemBg(Colors.Creamy)}
+		pMinH={new NumPer(340, 390)}
+		pAlign={Align.Center}
+	>
+
+		<Emograph
+			pTitle={Text.H3.Bistage.Centered.OfText("16 — تمرير id و data و style")}
+			pText={Text.Body.Centered.OfText("اختبار تمرير خصائص HTML المتبقية إلى جذر Badge بدون إضافة غلاف خارجي.")}
+		/>
+
+		<Badge
+			style = " outline : 3px dashed #A7C45C ; border-radius : 18px "
+			id="BadgePassThroughCase"
+			data-debugF
+			data-test-name="badge-pass-through"
+			pYears={6}
+			pWorks={120}
+			pWidth={cCardBadgeWidth}
+			pPad={new Pixel(18, 12)}
+			pScopeText=""
+		/>
+
+	</EmoStrip>
+
+	<FreeHero pImgF="/Media/Home/" data-debugF>
+
+		<FreeHeroItem
+			pLoc={new Location("6%", "5%", "18%", "10%")}
+			pSize={new Size("46%", "auto", "90%", "auto")}
+			pZ={2}
+		>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("17 — Badge داخل FreeHeroItem")}
+				pText={Text.Body.White.OfText("اختبار تموضع Badge كعنصر مستقل داخل الهيرو بدون تغليفه بعناصر HTML خارجية.")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			pLoc={new Location("7%", "5%", "58%", "52%")}
+			pSize={new Size(620, 135, 320, 170)}
+			pZ={3}
+		>
+
+			<Badge
+				data-debugF
+				pYears={6}
+				pWorks="120+"
+				pDuration={24}
+				pTextPos="Left"
+				pScopeText=""
+				pUseBg={true}
+				pBgColor="rgba(250,250,250,.88)"
+				pPad={new Pixel(14, 12)}
+				pWidth={new Pixel(620, 320)}
+			/>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<FreeHero pImgF="/Media/Emocrete/" data-debugF>
+
+		<FreeHeroItem
+			pLoc={new Location("8%", "6%", "16%", "12%")}
+			pSize={new Size("45%", "auto", "88%", "auto")}
+			pZ={2}
+		>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("18 — FreeHeroItem بحجم ثابت")}
+				pText={Text.Body.White.OfText("اختبار Badge داخل صندوق له عرض وارتفاع محددان، مع استخدام pFit لملء مساحة العنصر.")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = "
+					background : rgba(0,0,0,.58) ;
+					border-radius : 28px ;
+					padding : 18px
+				"
+			pLoc={new Location("53%", "10%", "44%", "56%")}
+			pSize={new Size(470, 170, 300, 205)}
+			pFit={true}
+			pZ={3}
+		>
+
+			<Badge
+				data-debugF
+				pYears="14"
+				pWorks="300+"
+				pTextPos="Top"
+				pNumberView="Split"
+				pColor={Colors.WhiteOff}
+				pImgSize={cSmallIconSize}
+				pItemGap={new Pixel(24, 10)}
+				pPad={new Pixel(0, 0)}
+				pWidth={new Pixel(430, 270)}
+				pScopeText=""
+			/>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<FreeHero pImgF="/Media/Emoperm/" data-debugF>
+
+		<FreeHeroItem
+			pLoc={new Location("8%", "5%", "16%", "10%")}
+			pSize={new Size("44%", "auto", "90%", "auto")}
+			pZ={2}
+		>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("19 — Badge مائل")}
+				pText={Text.Body.White.OfText("اختبار تدوير Badge من خلال FreeHeroItem وليس من خلال غلاف عادي.")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = "
+					background : #fbff00 ;
+					border-radius : 22px ;
+					padding : 14px
+				"
+			pLoc={new Location("61%", "24%", "58%", "63%")}
+			pSize={new Size(340, 120, 235, 130)}
+			pRot={new RespString("-8deg", "6deg")}
+			pZ={4}
+		>
+
+			<Badge
+				data-debugF
+				pYears="6+"
+				pYearsText="سنوات"
+				pQualityText="جاهز للتقديم"
+				pTextPos="Left"
+				pNumberView="Inline"
+				pImgSize={new Size(52, 52, 38, 38)}
+				pTextSize={new Pixel(16, 12)}
+				pNumSize={new Pixel(28, 19)}
+				pItemGap={new Pixel(16, 8)}
+				pPad={new Pixel(0, 0)}
+				pScopeText=""
+			/>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<FreeHero pImgF="/Media/Emostone/" data-debugF>
+
+		<FreeHeroItem
+			pLoc={new Location("7%", "5%", "14%", "10%")}
+			pSize={new Size("48%", "auto", "90%", "auto")}
+			pZ={2}
+		>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("20 — نسختان حسب الاتجاه")}
+				pText={Text.Body.White.OfText("نسخة أفقية للشاشة العريضة ونسخة موبايل مستقلة، وكل نسخة داخل FreeHeroItem خاص بها.")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = "
+					background : rgba(250,250,250,.9) ;
+					border-radius : 24px ;
+					padding : 16px
+				"
+			pLoc={new Location("8%", "0%", "57%", "0%")}
+			pSize={new Size(780, 120, 1, 1)}
+			pHidePort={true}
+			pZ={3}
+		>
+
+			<Badge
+				data-debugF
+				pYears={6}
+				pWorks="120+"
+				pDuration={24}
+				pTextPos="Left"
+				pNumberView="Inline"
+				pWidth={new Pixel(740, 1)}
+				pScopeText=""
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = "
+					background : rgba(250,250,250,.9) ;
+					border-radius : 22px ;
+					padding : 14px
+				"
+			pLoc={new Location("0%", "8%", "0%", "58%")}
+			pSize={new Size(1, 1, 305, 205)}
+			pHideLand={true}
+			pZ={3}
+		>
+
+			<Badge
+				data-debugF
+				pYears={6}
+				pWorks="120+"
+				pDuration={24}
+				pTextPos="Bottom"
+				pNumberView="Split"
+				pImgSize={new Size(50, 50, 42, 42)}
+				pItemGap={new Pixel(12, 8)}
+				pWidth={new Pixel(1, 285)}
+				pScopeText=""
+			/>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<FreeHero pImgF="/Media/Emodsign/" data-debugF>
+
+		<FreeHeroItem
+			pLoc={new Location("7%", "5%", "14%", "9%")}
+			pSize={new Size("48%", "auto", "90%", "auto")}
+			pZ={2}
+		>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("21 — توزيع عدة Badges داخل الهيرو")}
+				pText={Text.Body.White.OfText("كل Badge في FreeHeroItem مستقل بمكان وحجم مختلف، بدل تجميعهم في Stack واحد.")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = "
+					background : rgba(0,0,0,.62) ;
+					border-radius : 20px ;
+					padding : 12px
+				"
+			pLoc={new Location("9%", "8%", "54%", "48%")}
+			pSize={new Size(210, 115, 142, 112)}
+			pZ={3}
+		>
+
+			<Badge
+				data-debugF
+				pYears="6+"
+				pYearsText="سنوات"
+				pColor={Colors.WhiteOff}
+				pTextPos="Bottom"
+				pImgSize={new Size(44, 44, 34, 34)}
+				pNumSize={new Pixel(30, 22)}
+				pTextSize={new Pixel(15, 11)}
+				pScopeText=""
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = "
+					background : rgba(250,250,250,.88) ;
+					border-radius : 20px ;
+					padding : 12px
+				"
+			pLoc={new Location("34%", "53%", "62%", "49%")}
+			pSize={new Size(220, 115, 142, 112)}
+			pZ={3}
+		>
+
+			<Badge
+				data-debugF
+				pWorks="120+"
+				pWorksText="عمل"
+				pTextPos="Bottom"
+				pImgSize={new Size(44, 44, 34, 34)}
+				pNumSize={new Pixel(30, 22)}
+				pTextSize={new Pixel(15, 11)}
+				pScopeText=""
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = "
+					background : #fbff00 ;
+					border-radius : 20px ;
+					padding : 12px
+				"
+			pLoc={new Location("60%", "30%", "54%", "70%")}
+			pSize={new Size(220, 115, 142, 112)}
+			pZ={3}
+		>
+
+			<Badge
+				data-debugF
+				pDuration="24"
+				pDurationText="ساعة"
+				pTextPos="Bottom"
+				pImgSize={new Size(44, 44, 34, 34)}
+				pNumSize={new Pixel(30, 22)}
+				pTextSize={new Pixel(15, 11)}
+				pScopeText=""
+			/>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<EmoStrip
+		data-debugF
+		pBg={new ElemBg(Colors.Gray5)}
+		pMinH={new NumPer(320, 280)}
+		pAlign={Align.Center}
+	>
+
+		<Emograph
+			pTitle={Text.H2.White.Centered.OfText("22 — ختام اختبار Badge")}
+			pText={Text.Body.White.Centered.OfText("تمت تغطية القيم الافتراضية، حالات النص، الرقم، الصور، المقاسات، الخلفية، المرور HTML، والتثبيت داخل FreeHeroItem.")}
+		/>
+
+		<Badge
+			data-debugF
+			pYears={6}
+			pWorks="120+"
+			pDuration={24}
+			pQualityText="اختبار مكتمل"
+			pScopeText="كل الحالات الأساسية"
+			pUseBg={true}
+			pBgColor={Colors.WhiteOff}
+			pPad={new Pixel(20, 14)}
+			pWidth={cWideBadgeWidth}
+		/>
+
+	</EmoStrip>
+
+</BLayout>

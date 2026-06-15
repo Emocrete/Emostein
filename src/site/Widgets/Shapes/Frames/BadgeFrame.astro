@@ -1,0 +1,42 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"article">, PlaceProps { pBadge?: string; pBg?: string; pBadgeBg?: string; pColor?: string; }
+const { pBadge = "NEW", pBg = "#FAFAFA", pBadgeBg = "#A7C45C", pColor = "#111111", pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly, id: pGivenID = GetWidgetId("BadgeFrame"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cPlace = new Place(Astro.props as PlaceProps, `--BadgeFrameBg:${pBg}; --BadgeFrameColor:${pColor}; --BadgeBg:${pBadgeBg}; ${cGivenStyle}`);
+---
+<article class={`BadgeFrame ${cPlace.Class} ${pGivenClass}`.trim()} style={cPlace.Style} id={pGivenID} {...RemAttr}>
+	<span class="BadgeText">{pBadge}</span>
+	<slot />
+</article>
+<style>
+	.BadgeFrame { position: relative; display: flex; flex-direction: column; justify-content: center; width: 100%; height: auto; padding: clamp(22px, 3vw, 40px); padding-top: clamp(34px, 4vw, 54px); border-radius: 26px; background: var(--BadgeFrameBg); color: var(--BadgeFrameColor); box-shadow: 0 22px 50px rgba(0,0,0,.16); box-sizing: border-box; }
+	.BadgeText { position: absolute; top: 0; inset-inline-start: clamp(20px, 3vw, 42px); translate: 0 -50%; display: inline-flex; align-items: center; justify-content: center; min-width: 86px; padding: 8px 18px; border-radius: 999px; background: var(--BadgeBg); color: #111111; font-weight: 900; box-shadow: 0 12px 24px rgba(0,0,0,.18); }
+.BadgeFrame.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+		z-index: var(--PlaceZ, 1);
+		opacity: var(--PlaceOpacityL, 100%);
+		transform: rotate(var(--PlaceRotateL, 0deg));
+		transform-origin: var(--PlaceOrigin, center center);
+		pointer-events: var(--PlaceClickable, auto);
+		min-width: 0;
+		box-sizing: border-box;
+	}
+
+	@media (orientation: portrait) {
+		.BadgeFrame.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+			opacity: var(--PlaceOpacityP, var(--PlaceOpacityL, 100%));
+			transform: rotate(var(--PlaceRotateP, var(--PlaceRotateL, 0deg)));
+		}
+	}
+</style>

@@ -1,0 +1,550 @@
+---
+import BLayout from "@/Layout.astro";
+import Price from "@/Widgets/Prices/Price.astro";
+import { Hero, IndexSec, ESec, Emograph, EmoList, EmoBtn, DataCard, SecTitle, VrStack, HzStack } from "@/Widgets";
+import { Text, ElemBg, Size, RespString, EmoMediaData, Colors } from "@/TypesLib";
+import IndexBtn from "@/Widgets/Comp/IndexLinkButton.astro";
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="المتر ما بيعديش !! | خدمات قياس المسافة بين الصيدليات"
+	pDescr="قياس دقيق للمسافة بين الصيدليات طبقاً للأسلوب المتبع من قبل هيئة الدواء المصرية للتحقق من شرط المسافة لأقرب صيدلية قبل المبادرة بالشراء أو الاستئجار."
+>
+
+
+
+
+
+
+
+	<Hero
+		pTitle="خدمات قياس المسافة بين الصيدليات"
+		pDesc="قياس دقيق للمسافة بين الصيدليات طبقاً للأسلوب المتبع من قبل هيئة الدواء المصرية ، للتحقق من شرط المسافة لأقرب صيدلية قبل المبادرة بالشراء أو الاستئجار"
+		pTitleClr="#f7ca34"
+		pDescClr="#ffffff"
+		pAlign="right"
+		pPosL="38% 45% 12% 6%"
+		pPosP="48% 8% 8% 8%"
+		pBlurL="on"
+		pBlurP="on"
+	>
+
+		<EmoBtn
+			pText="عرض التفاصيل"
+			pWidth="190px"
+			pHeight="50px"
+			pRadius="12px"
+			pBgColor="#f7ca34"
+			pBgColorHover="#ffffff"
+			pBgColorActive="#b8d85e"
+			pTextColor="#111111"
+			pFontSize="18px"
+			onclick="window.location.href='#page-topics'"
+		/>
+
+	</Hero>
+
+
+
+
+
+
+
+	<IndexSec
+		id="page-topics"
+		pMedia={new EmoMediaData("Vid", "/Media/", "IndexBgVid.mp4")}
+		pTitleClr="white"
+	>
+
+		<VrStack>
+
+			<IndexBtn pText="إلغاء شرط المسافة بين الصيدليات" onclick="window.location.href='#cancel-distance-rule'" />
+
+			<IndexBtn pText="كيفية قياس المسافة بين الصيدليات" onclick="window.location.href='#how-to-measure-distance'" />
+
+			<IndexBtn pText="أمثلة لطريقة القياس لبعض الحالات" onclick="window.location.href='#distance-examples'" />
+
+		</VrStack>
+
+	</IndexSec>
+
+
+
+
+
+
+
+	<ESec id="cancel-distance-rule" pBg={new ElemBg("#ffffff")}>
+
+		<SecTitle
+			style = " --StripBg : #2f3340 "
+			pTitle="إلغاء شرط المسافة بين الصيدليات"
+			pDesc="الشرط لا يزال قائما وله أساس مهني وقانوني واضح"
+		/>
+
+		<VrStack>
+
+			<Emograph
+				pSize={new Size("min(1100px, 100%)", "auto", "100%", "auto")}
+				pTitle={new Text(3, 26 as any, true, "#6f6b7c", "right", "inherit", "لماذا لا يتم إلغاء شرط المسافة بين الصيدليات ؟")}
+				pText={new Text(0, 19 as any, false, "#222222", "right", "inherit", "بالنظر إلى حقيقة أن أساس مهنة الصيدلة هو تقديم الخدمة الدوائية وليس تجارة الأدوية ، فإن هذا الشرط يعتبر محوريا جدا تقوم على أساسه مهنة الصيدلة والتي تهدف لتقديم الخدمة الصيدلانية إلى أكبر نطاق جغرافي ممكن ، وعدم وجود هذا الشرط يهدم فكرة الخدمة الصيدلانية من أساسها .")}
+			/>
+
+			<EmoList
+				pWidth={new RespString("min(1100px, 100%)", "100%") as any}
+				pTitle={new Text(3, 26 as any, true, "#6f6b7c", "right", "inherit", "الموقف القانوني لشرط المسافة بين الصيدليات")}
+				pDesc={new Text(0, 18 as any, false, "#222222", "right", "inherit", "يتأيد استمرار العمل بشرط المسافة بين الصيدليات في مصر إلى الآتي :")}
+				pItems={[
+					{
+						Title: "النص القانوني القائم",
+						Items: [
+							"الشرط منصوص عليه صراحة في المادة 30 من القانون رقم 127 لسنة 1955 بشأن مزاولة مهنة الصيدلة.",
+							"لا يمنح الترخيص بإنشاء صيدلية إلا إذا روعي ألا تقل المسافة بينها وبين أقرب صيدلية مرخصة عن مائة متر.",
+						],
+					},
+					{
+						Title: "حكم المحكمة الدستورية العليا",
+						Items: [
+							"قضت المحكمة الدستورية العليا بحكم نهائي بعدم دستورية إلغاء شرط المسافة بين الصيدليات وعدم دستورية الاستثناءات التي كانت تسمح بنقل الصيدلية في حالة هدم العقار أو الحريق دون الالتزام بشرط المسافة.",
+							"أصبح شرط المسافة بين الصيدليات لازما أيضا حتى لمثل هذه الحالات ، مما أكد على إلزامية تطبيق هذا الشرط الأساسي.",
+						],
+					},
+				]}
+				pNumbered={false}
+				pItemFnt={new Text(0, 18 as any, false, "#222222", "right", "inherit", "")}
+				pItemsBg={new ElemBg("#f6f7f8")}
+			/>
+
+			<Emograph
+				pSize={new Size("min(1100px, 100%)", "auto", "100%", "auto")}
+				pTitle={new Text(3, 26 as any, true, "#6f6b7c", "right", "inherit", "فائدة الالتزام بشرط المسافة بالنسبة للصيدلي")}
+				pText={new Text(0, 19 as any, false, "#222222", "right", "inherit", "حماية حقوق الصيدليات القائمة ، حيث يهدف الشرط إلى حماية المراكز القانونية للصيدليات المرخصة بالفعل ، من خلال منع فتح صيدلية جديدة على مسافة قريبة جدًا قد تؤثر بشكل كبير على مبيعاتها .")}
+			/>
+
+			<Emograph
+				pSize={new Size("min(1100px, 100%)", "auto", "100%", "auto")}
+				pTitle={new Text(3, 26 as any, true, "#6f6b7c", "right", "inherit", "فائدة الالتزام بشرط المسافة بالنسبة للمرضى")}
+				pText={new Text(0, 19 as any, false, "#222222", "right", "inherit", "ضمان التوزيع العادل ، الهدف الأساسي من وجود شرط المسافة هو تنظيم سوق الأدوية والصيدليات ، ومنع المنافسة غير العادلة التي قد تؤدي إلى تكدس الصيدليات في مناطق معينة وحرمان مناطق أخرى من الحصول على الخدمة الصيدلانية ، مما يضمن وصول المرضى للأدوية بسهولة .")}
+			/>
+
+		</VrStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec id="how-to-measure-distance" pBg={new ElemBg("#ffffff")}>
+
+		<SecTitle
+			style = " --StripBg : #c9def0 "
+			pTitle="كيفية قياس المسافة بين صيدليتين"
+			pDesc="المسافة تحتسب كمسار مشاة فعلي وليس كخط هوائي مباشر"
+		/>
+
+		<VrStack>
+
+			<Emograph
+				pSize={new Size("min(1100px, 100%)", "auto", "100%", "auto")}
+				pText={new Text(0, 20 as any, false, "#222222", "right", "inherit", "مسار المشاة الذي يتم حسابه غير مقيد بفتحات الدوران المرورية المخصصة للسيارات ، ولا بمناطق عبور المشاة المخططة في الطريق العام المخصص للسيارات أو فتحات عبور المشاة المفتوحة بالرصيف ، يتم حساب نقطة عبور الطريق للجانب المقابل من أقرب نقطة يمكن للشخص السليم السوي العبور منها فعليا ما دام ارتفاع الرصيف مناسب ويمكن تخطيه .")}
+			/>
+
+			<Emograph
+				pSize={new Size("min(1100px, 100%)", "auto", "100%", "auto")}
+				pText={new Text(0, 20 as any, false, "#222222", "right", "inherit", "ويتم اختيار الصيدلية الثانية التي يتم القياس إليها باعتبارها الأقرب من أي اتجاه ، سواء كانت في نفس الجانب من نفس الشارع الموجود به الصيدلية المطلوب ترخيصها ، أو كانت في الجانب المقابل من نفس الشارع ، أو كانت في شارع عمودي على الشارع الموجود به الصيدلية المراد ترخيصها ، أو كانت في الشارع الموازي السابق أو التالي للشارع الموجود به الصيدلية الأولى .")}
+			/>
+
+			<Emograph
+				pSize={new Size("min(1100px, 100%)", "auto", "100%", "auto")}
+				pText={new Text(0, 20 as any, false, "#222222", "right", "inherit", "يتم قياس المسافة بين الصيدليات باعتبارها طول أقصر مسار للمشاة يمكن للشخص المترجل سلوكه مشيا على الأقدام بين الصيدليتين ، على أن يكون هذا المسار من خطوط مستقيمة عمودية تبدأ من منتصف الباب للصيدلية الأولى وتنتهي عند منتصف الباب للصيدلية الثانية .")}
+			/>
+
+		</VrStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec id="distance-examples" pBg={new ElemBg("#ffffff")}>
+
+		<SecTitle
+			style = " --StripBg : #2f3340 "
+			pTitle="أمثلة لطريقة قياس المسافة بين صيدليتين للحالات المختلفة"
+			pDesc="كل حالة يتم التعامل معها حسب أقصر مسار مشاة فعلي بين منتصف باب الصيدلية الأولى ومنتصف باب الصيدلية الثانية"
+		/>
+
+		<VrStack>
+
+			<DataCard
+				style = "
+						width : min(980px,100%) ;
+						background : #ffffff ;
+						border-color : #d8d8d8
+					"
+				TitleTag="h3"
+				pTitle="صيدليتين في نفس الشارع على نفس الجهة من الطريق"
+				pBody=""
+				pImg="https://static.wixstatic.com/media/308dfd_96e7a4fce502411fba224b02b53cee53~mv2.webp/v1/fill/w_980%2Ch_269%2Cal_c%2Cq_80%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/%D9%82%D9%8A%D8%A7%D8%B3%20%D8%A7%D9%84%D9%85%D8%B3%D8%A7%D9%81%D8%A9%20%D8%A8%D9%8A%D9%86%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%AA%D9%8A%D9%86%201.webp"
+			/>
+
+			<DataCard
+				style = "
+						width : min(980px,100%) ;
+						background : #ffffff ;
+						border-color : #d8d8d8
+					"
+				TitleTag="h3"
+				pTitle="صيدليتين في نفس الشارع على جهتين متقابلتين"
+				pBody=""
+				pImg="https://static.wixstatic.com/media/308dfd_90b0caacddeb43ebb8c438655e385423~mv2.webp/v1/fill/w_980%2Ch_346%2Cal_c%2Cq_80%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/%D9%82%D9%8A%D8%A7%D8%B3%20%D8%A7%D9%84%D9%85%D8%B3%D8%A7%D9%81%D8%A9%20%D8%A8%D9%8A%D9%86%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%AA%D9%8A%D9%86%202.webp"
+			/>
+
+			<DataCard
+				style = "
+						width : min(980px,100%) ;
+						background : #ffffff ;
+						border-color : #d8d8d8
+					"
+				TitleTag="h3"
+				pTitle="صيدلية في شارع رئيسي وصيدلية في شارع فرعي من نفس الجهة على نفس الرصيف"
+				pBody=""
+				pImg="https://static.wixstatic.com/media/308dfd_07a9f091a23a4ccdb2aa6259ee705bb8~mv2.webp/v1/fill/w_980%2Ch_377%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/%D9%82%D9%8A%D8%A7%D8%B3%20%D8%A7%D9%84%D9%85%D8%B3%D8%A7%D9%81%D8%A9%20%D8%A8%D9%8A%D9%86%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%AA%D9%8A%D9%86%203.webp"
+			/>
+
+			<DataCard
+				style = "
+						width : min(980px,100%) ;
+						background : #ffffff ;
+						border-color : #d8d8d8
+					"
+				TitleTag="h3"
+				pTitle="صيدلية في شارع رئيسي وصيدلية في شارع فرعي من نفس الجهة على الرصيف المقابل"
+				pBody=""
+				pImg="https://static.wixstatic.com/media/308dfd_b8dbf7c0f0774db6850ea0b701fb1ec1~mv2.webp/v1/fill/w_980%2Ch_377%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/%D9%82%D9%8A%D8%A7%D8%B3%20%D8%A7%D9%84%D9%85%D8%B3%D8%A7%D9%81%D8%A9%20%D8%A8%D9%8A%D9%86%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%AA%D9%8A%D9%86%204.webp"
+			/>
+
+		</VrStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec id="service-value" pBg={new ElemBg("#ffffff")}>
+
+		<SecTitle
+			style = " --StripBg : #f7ca34 "
+			pTitle="خدمات قياس المسافة بين الصيدليات"
+			pDesc="الخدمة متاحة فقط في محافظتي القاهرة والجيزة"
+		/>
+
+		<VrStack>
+
+			<Price
+				pTitle={Text.H3.OfText("قيمة الخدمة")}
+				pTitlePlace="top"
+				pPrice="1000"
+			>
+
+				<VrStack>
+
+					<Emograph
+						pSize={new Size("min(850px, 100%)", "auto", "100%", "auto")}
+						pText={new Text(0, 19 as any, false, "#2f3340", "right", "inherit", "قياس دقيق للمسافة بين الصيدليات طبقاً للأسلوب المتبع من قبل هيئة الدواء المصرية ، للتحقق من شرط المسافة لأقرب صيدلية قبل المبادرة بالشراء أو الاستئجار")}
+					/>
+
+					<EmoBtn
+						pText="أرسل رسالة"
+						pIcon="https://static.wixstatic.com/media/308dfd_2d0d01a8bb31404f99f117d897ce0a23~mv2.webp/v1/fill/w_60%2Ch_60%2Cal_c%2Cq_80%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/Whatsapp%20Icon.webp"
+						pIconPos="right"
+						pWidth="230px"
+						pHeight="56px"
+						pRadius="12px"
+						pBgColor="#111111"
+						pBgColorHover="#2f3340"
+						pTextColor="#ffffff"
+						pFontSize="18px"
+						onclick="window.location.href='https://wa.me/201014490054'"
+					/>
+
+				</VrStack>
+
+			</DirectServiceValuePrice>
+
+			<Emograph
+				pSize={new Size("min(900px, 100%)", "auto", "100%", "auto")}
+				pTitle={new Text(3, 26 as any, true, "#6f6b7c", "center", "inherit", "اطلب الخدمة")}
+				pText={new Text(0, 19 as any, false, "#222222", "center", "inherit", "للمساعدة والتفاصيل اتصل بنا 01014490054 أو راسلنا على واتس أب")}
+			/>
+
+			<HzStack>
+
+				<EmoBtn
+					pText="01014490054"
+					pWidth="210px"
+					pHeight="54px"
+					pRadius="12px"
+					pBgColor="#6f6b7c"
+					pBgColorHover="#2f3340"
+					pTextColor="#ffffff"
+					pFontSize="18px"
+					onclick="window.location.href='tel:01014490054'"
+				/>
+
+				<EmoBtn
+					pText="واتس أب"
+					pIcon="https://static.wixstatic.com/media/308dfd_2d0d01a8bb31404f99f117d897ce0a23~mv2.webp/v1/fill/w_60%2Ch_60%2Cal_c%2Cq_80%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/Whatsapp%20Icon.webp"
+					pIconPos="right"
+					pWidth="210px"
+					pHeight="54px"
+					pRadius="12px"
+					pBgColor="#22c55e"
+					pBgColorHover="#16a34a"
+					pTextColor="#ffffff"
+					pFontSize="18px"
+					onclick="window.location.href='https://wa.me/201014490054'"
+				/>
+
+			</HzStack>
+
+		</VrStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#f6f7f8")}>
+
+		<SecTitle
+			style = " --StripBg : #2f3340 "
+			pTitle="اقرأ أيضا ..."
+			pDesc="موضوعات مرتبطة بترخيص الصيدليات"
+		/>
+
+		<VrStack>
+
+			<HzStack>
+
+				<DataCard
+					style = " background : #ffffff ; border-color : #d8d8d8 "
+					TitleTag="h3"
+					pTitle="أقل مساحة لترخيص صيدلية وكيفية حسابها"
+					pBody=""
+					pLink="/emomed/pharmacy"
+				/>
+
+				<DataCard
+					style = " background : #ffffff ; border-color : #d8d8d8 "
+					TitleTag="h3"
+					pTitle="كيفية حساب ارتفاع الصيدلية"
+					pBody=""
+					pLink="/emomed/pharmacy"
+				/>
+
+				<DataCard
+					style = " background : #ffffff ; border-color : #d8d8d8 "
+					TitleTag="h3"
+					pTitle="متى يحق للصيدلي فتح صيدلية"
+					pBody=""
+					pLink="/emomed/pharmacy"
+				/>
+
+			</HzStack>
+
+			<HzStack>
+
+				<DataCard
+					style = " background : #ffffff ; border-color : #d8d8d8 "
+					TitleTag="h3"
+					pTitle="كم صيدلية يحق للصيدلي فتحها"
+					pBody=""
+					pLink="/emomed/pharmacy"
+				/>
+
+				<DataCard
+					style = " background : #ffffff ; border-color : #d8d8d8 "
+					TitleTag="h3"
+					pTitle="شروط ترخيص صيدلية"
+					pBody=""
+					pLink="/emomed/pharmacy"
+				/>
+
+				<DataCard
+					style = " background : #ffffff ; border-color : #d8d8d8 "
+					TitleTag="h3"
+					pTitle="الأوراق المطلوبة لترخيص صيدلية"
+					pBody=""
+					pLink="/emomed/pharmacy"
+				/>
+
+			</HzStack>
+
+			<HzStack>
+
+				<DataCard
+					style = " background : #ffffff ; border-color : #d8d8d8 "
+					TitleTag="h3"
+					pTitle="إجراءات ترخيص صيدلية"
+					pBody=""
+					pLink="/emomed/pharmacy"
+				/>
+
+				<DataCard
+					style = " background : #ffffff ; border-color : #d8d8d8 "
+					TitleTag="h3"
+					pTitle="الرسم الهندسي لصيدلية"
+					pBody=""
+					pLink="/emomed/pharmacy/dwg"
+				/>
+
+				<DataCard
+					style = " background : #ffffff ; border-color : #d8d8d8 "
+					TitleTag="h3"
+					pTitle="ترخيص صيدلية لغير صيدلي"
+					pBody=""
+					pLink="/emomed/pharmacy"
+				/>
+
+			</HzStack>
+
+			<HzStack>
+
+				<DataCard
+					style = " background : #ffffff ; border-color : #d8d8d8 "
+					TitleTag="h3"
+					pTitle="عقوبة فتح صيدلية بدون ترخيص"
+					pBody=""
+					pLink="/emomed/pharmacy"
+				/>
+
+				<DataCard
+					style = " background : #ffffff ; border-color : #d8d8d8 "
+					TitleTag="h3"
+					pTitle="كيفية حساب المهلة بين المعاينتين"
+					pBody=""
+					pLink="/emomed/pharmacy"
+				/>
+
+			</HzStack>
+
+		</VrStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#ffffff")}>
+
+		<SecTitle
+			style = " --StripBg : #c9def0 "
+			pTitle="خدماتنا"
+			pDesc="خدمات هندسية مرتبطة بترخيص وتجهيز الصيدليات"
+		/>
+
+		<VrStack>
+
+			<HzStack>
+
+				<DataCard
+					style = " background : #fff8d8 ; border-color : #f7ca34 "
+					TitleTag="h3"
+					pTitle="استخراج ترخيص صيدلية"
+					pBody="مباشرة إجراءات استخراج رخصة صيدلية كوكيل عن الطبيب"
+					pLink="/emomed/pharmacy"
+				/>
+
+				<DataCard
+					style = " background : #fff8d8 ; border-color : #f7ca34 "
+					TitleTag="h3"
+					pTitle="رسم هندسي لصيدلية للمعاينة الأولى"
+					pBody="إعداد الرسم الهندسي المطلوب للمعاينة الأولى لترخيص صيدلية ، يتم عمل معاينة للمحل لرفع الأبعاد وجمع المعلومات المطلوبة لإعداد الرسم الهندسي ."
+					pLink="/emomed/pharmacy/dwg"
+				/>
+
+				<DataCard
+					style = " background : #fff8d8 ; border-color : #f7ca34 "
+					TitleTag="h3"
+					pTitle="اعتماد رسم هندسي للمعاينة الثانية من نقابة المهندسين"
+					pBody="ختم الرسومات الهندسية للصيدلية بختم نقابة المهندسين للتسليم في المرحلة النهائية بعد المعاينة الثانية ، نسخة أصل بختم نقابة المهندسين وصورتين منها ."
+					pLink="/emomed/pharmacy/dwg"
+				/>
+
+			</HzStack>
+
+			<HzStack>
+
+				<DataCard
+					style = " background : #fff8d8 ; border-color : #f7ca34 "
+					TitleTag="h3"
+					pTitle="تعديل الرسم الهندسي لصيدلية"
+					pBody="تنفيذ التعديلات المطلوبة على الرسم الهندسي المتوفر للصيدلية ، سواء في صورة نسخة ورقية أو نسخة إلكترونية أوتوكاد أو PDF"
+					pLink="/emomed/pharmacy/dwg"
+				/>
+
+				<DataCard
+					style = " background : #fff8d8 ; border-color : #f7ca34 "
+					TitleTag="h3"
+					pTitle="تقرير هندسي استشاري عن حالة مبنى صيدلية"
+					pBody="عمل تقرير هندسي استشاري عن حالة المبنى الذي توجد به الصيدلية ، قد يطلب لبعض الحالات التي يكون فيها المبنى قديم أو بدون رخصة بناء ، يكون التقرير مختوم بختم مهندس استشاري فقط أو مع ختم نقابة المهندسين أيضا حسب الطلب"
+					pLink="/emonsult/report/safety"
+				/>
+
+				<DataCard
+					style = " background : #fff8d8 ; border-color : #f7ca34 "
+					TitleTag="h3"
+					pTitle="تشطيب وتجهيز الصيدليات"
+					pBody="تصميم وتنفيذ جميع أنواع تشطيبات وفرش الصيدليات ، مرونة في تجهيز تصميمات تناسب نطاق واسع من الميزانيات"
+					pLink="/emocrete/finishing/pharmacy"
+				/>
+
+			</HzStack>
+
+		</VrStack>
+
+	</ESec>
+
+
+
+
+
+
+
+</BLayout>

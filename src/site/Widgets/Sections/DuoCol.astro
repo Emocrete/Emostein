@@ -1,0 +1,134 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { DirectSize, ElemBg, NumPer, Percent, Pixel, type PlaceProps } from "@/TypesLib";
+import Stack from "../Comp/Stack.astro";
+
+interface Props extends HTMLAttributes<"div">, PlaceProps {
+	Centered?: boolean;
+	centered?: boolean;
+	pAlign?: "Start" | "Center" | "End";
+	pGap?: Pixel;
+	pPad?: Pixel;
+	pBg?: ElemBg;
+	pBgColor?: ElemBg;
+	pBgOpacity?: Percent;
+	pBlur?: Pixel;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+
+const {
+	Centered = false,
+	centered = false,
+	pAlign = "Center",
+	pGap = new Pixel(18, 12),
+	pPad = new Pixel(40, 20),
+	pBg,
+	pBgColor,
+	pBgOpacity = new Percent(100),
+	pBlur = new Pixel(0),
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("DuoCol"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = cProps;
+
+const cIsCentered = Centered || centered || GetBoolAttr(cProps["data-centered"]);
+const cBg = pBg ?? pBgColor;
+
+const cAlignItems = cIsCentered
+	? "center"
+	: pAlign === "End"
+		? "flex-end"
+		: pAlign === "Start"
+			? "flex-start"
+			: "center";
+
+const cJustifyContent = cIsCentered ? "center" : "flex-start";
+
+const cStyle = [
+	`--StackAlignItems:${cAlignItems};`,
+	`--StackJustifyContent:${cJustifyContent};`,
+	GetStyleText(pGivenStyle),
+].filter(Boolean).join(" ");
+
+function GetBoolAttr(pValue: unknown) {
+	return pValue === true || pValue === "" || pValue === "true";
+}
+
+function GetStyleText(pStyle: unknown) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+	if (typeof pStyle !== "object") return "";
+
+	return Object.entries(pStyle as Record<string, string | number | null | undefined>)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<Stack
+	class = {`DuoCol ${cIsCentered ? "IsCentered" : "IsTop"} ${pGivenClass}`.trim()}
+	style = {cStyle}
+	pDir="Col"
+	pAlign="Center"
+	pGap={pGap}
+	pPad={pPad}
+	pSize={pSize ?? new DirectSize(new NumPer("100%"))}
+	pBgColor={cBg}
+	pBgOpacity={pBgOpacity}
+	pBlur={pBlur}
+	pLoc={pLoc}
+	pRotate={pRotate}
+	pZ={pZ}
+	pOrigin={pOrigin}
+	pOpacity={pOpacity}
+	pClickable={pClickable}
+	pLandOnly={pLandOnly}
+	pPortOnly={pPortOnly}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	<slot />
+
+</Stack>

@@ -1,0 +1,115 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+import EmoFooterShareBar from "./EmoFooterShareBar.astro";
+import EmoFooterFollowBar from "./EmoFooterFollowBar.astro";
+import EmoFooterJobsButton from "./EmoFooterJobsButton.astro";
+
+export interface Props extends HTMLAttributes<"div">, PlaceProps {
+	pShareTitle?: string;
+	pFollowTitle?: string;
+	pShareText?: string;
+	pFacebookFollow?: string;
+	pInstagramFollow?: string;
+	pLinkedInFollow?: string;
+	pYouTubeFollow?: string;
+	pTikTokFollow?: string;
+	pPartnerText?: string;
+	pPartnerHref?: string;
+}
+
+const {
+	pShareTitle = "تجدنا على",
+	pFollowTitle = "تابع الجديد",
+	pShareText = "",
+	pFacebookFollow = "#",
+	pInstagramFollow = "https://www.instagram.com/emocrete",
+	pLinkedInFollow = "https://www.linkedin.com/in/ayman-ashoor-998433128",
+	pYouTubeFollow = "https://www.youtube.com/@aymanashoor7410",
+	pTikTokFollow = "#",
+	pPartnerText = "انضم للعمل معنا",
+	pPartnerHref = "/jobs",
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("EmoFooterPanel"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
+---
+
+
+
+
+<div
+	class = {`EmoFooterPanel ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	<EmoFooterShareBar pTitle={pShareTitle} pShareText={pShareText} />
+
+	<EmoFooterFollowBar
+		pTitle={pFollowTitle}
+		pFacebookFollow={pFacebookFollow}
+		pInstagramFollow={pInstagramFollow}
+		pLinkedInFollow={pLinkedInFollow}
+		pYouTubeFollow={pYouTubeFollow}
+		pTikTokFollow={pTikTokFollow}
+	/>
+
+	<EmoFooterJobsButton pText={pPartnerText} pHref={pPartnerHref} />
+
+</div>
+
+
+
+
+<style>
+
+
+
+	.EmoFooterPanel {
+		display: grid;
+		align-content: center;
+		justify-items: center;
+		gap: 34px;
+		width: 100%;
+		height: 100%;
+		box-sizing: border-box;
+		padding: 18px;
+		border: 1px solid rgba(255, 255, 255, 0.10);
+		border-radius: 24px;
+		background: radial-gradient(circle at 20% 18%, rgba(255, 255, 255, 0.055), transparent 28%),
+			radial-gradient(circle at 84% 78%, rgba(255, 209, 92, 0.055), transparent 30%),
+			linear-gradient(135deg, #171a1f 0%, #101318 52%, #090b0f 100%);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07),
+			0 18px 38px rgba(0, 0, 0, 0.28);
+		direction: rtl;
+	}
+
+
+	@media (orientation: portrait) {
+		.EmoFooterPanel {
+			height: auto;
+			gap: 28px;
+			padding: 22px 16px;
+			border-radius: 22px;
+		}
+	}
+
+
+
+</style>

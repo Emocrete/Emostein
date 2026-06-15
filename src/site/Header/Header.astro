@@ -1,0 +1,248 @@
+---
+import "./Header.css";
+import "./Drawer.css";
+
+import MainMenu from "./Menus/Main/Menu.astro";
+import EmodsignMenu from "./Menus/Emodsign/Menu.astro";
+import EmocreteMenu from "./Menus/Emocrete/Menu.astro";
+import EmoStoneMenu from "./Menus/Emostone/Menu.astro";
+import EmormissionMenu from "./Menus/Emoperm/Menu.astro";
+import EmoMedicalMenu from "./Menus/Emomed/Menu.astro";
+import EmonsultMenu from "./Menus/Emonsult/Menu.astro";
+import EmostateMenu from "./Menus/Emostate/Menu.astro";
+
+const fPath = Astro.url.pathname;
+
+const cMenus = [
+	{ fPrefix: "/emodsign", cMenu: EmodsignMenu },
+	{ fPrefix: "/emocrete", cMenu: EmocreteMenu },
+	{ fPrefix: "/emostone", cMenu: EmoStoneMenu },
+	{ fPrefix: "/emoperm", cMenu: EmormissionMenu },
+	{ fPrefix: "/emomed", cMenu: EmoMedicalMenu },
+	{ fPrefix: "/emonsult", cMenu: EmonsultMenu },
+	{ fPrefix: "/emostate", cMenu: EmostateMenu },
+];
+
+const SelMenu = cMenus.find((x) => fPath.includes(x.fPrefix))?.cMenu ?? MainMenu;
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class = {"hBar"} hdr-bar>
+
+	<div class = " hInner ">
+
+		<button class = " hMenuBtn " type="button" hdr-open-btn>
+
+		</button>
+
+		<a class = " hBrandLink " href="/" aria-label="الصفحة الرئيسية">
+
+			<img
+				class = " hBrand "
+				src="/Media/EmoLogo.svg"
+				alt=""
+			/>
+
+		</a>
+
+	</div>
+
+</header>
+
+<div
+	class = " hOverlay "
+	id="hOverlay"
+	hdr-overlay
+	hidden
+>
+
+</div>
+
+<div
+	class = " hDrawer "
+	id="hDrawer"
+	hdr-drawer
+	hidden
+>
+
+	<div class = " hDrawerInner ">
+
+		<div class = " hDrawerHead ">
+
+			<div class = " hDrawerTitle ">
+
+				الخدمات
+
+			</div>
+
+			<button class = " hClose " type="button" hdr-close-btn>
+
+				✕
+
+			</button>
+
+		</div>
+
+		<div class = " hDrawerLinks ">
+
+			<SelMenu />
+
+		</div>
+
+	</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script is:inline>
+	(() => {
+	/** @type {HTMLButtonElement|null} */
+	const fBtn = document.querySelector("[hdr-open-btn]");
+	/** @type {HTMLButtonElement|null} */
+	const fCloseBtn = document.querySelector("[hdr-close-btn]");
+	/** @type {HTMLElement|null} */
+	const fDrawer = document.querySelector("[hdr-drawer]");
+	/** @type {HTMLElement|null} */
+	const fOverlay = document.querySelector("[hdr-overlay]");
+
+	if (!fBtn || !fCloseBtn || !fDrawer || !fOverlay) return;
+
+	const fOpen = () => {
+	fDrawer.hidden = false;
+	fOverlay.hidden = false;
+	document.body.style.overflow = "hidden";
+	};
+
+	const fClose = () => {
+	fDrawer.querySelectorAll("[sub-panel]").forEach((p) => (p.hidden = true));
+	fDrawer.querySelectorAll("[sub-head].isOpen").forEach((h) => h.classList.remove("isOpen"));
+	fDrawer.hidden = true;
+	fOverlay.hidden = true;
+	document.body.style.overflow = "";
+	};
+	const fToggle = () => {
+	fDrawer.hidden ? fOpen() : fClose();
+	};
+
+	fBtn.addEventListener("click", (e) => {
+	e.stopPropagation();
+	fToggle();
+	});
+
+	fCloseBtn.addEventListener("click", (e) => {
+	e.preventDefault();
+	e.stopPropagation();
+	fClose();
+	});
+
+	fOverlay.addEventListener("click", () => {
+	fClose();
+	});
+
+	document.addEventListener("keydown", (e) => {
+	if (e.key === "Escape") {
+	fClose();
+	}
+	});
+	})();
+</script>
+
+
+
+<script is:inline>
+	// @ts-check
+	(() => {
+	document.addEventListener("subMenuOpen", (e) => {
+	const fOpened = e.detail?.fHead;
+	if (!fOpened) return;
+
+	document.querySelectorAll("[sub-head].isOpen").forEach((h) => {
+	if (h === fOpened) return;
+	const p = h.querySelector("[sub-panel]");
+	if (p) p.hidden = true;
+	h.classList.remove("isOpen");
+	});
+	});
+	})();
+</script>
+
+
+
+<script is:inline>
+	(() => {
+	const fHdr = document.querySelector("[hdr-bar]");
+	if (!fHdr) return;
+
+	let fLastY = window.scrollY;
+	let fDownAcc = 0;
+
+	const fHideAfter = 90; // اخفي بعد نزول 90px (غيّرها براحتك)
+	const fTopShowY = 10; // عند أول الصفحة دايمًا أظهر
+
+	const fShow = () => fHdr.classList.remove("hdrHidden");
+	const fHide = () => fHdr.classList.add("hdrHidden");
+
+	const fOnScroll = () => {
+	const fY = window.scrollY;
+	const fDelta = fY - fLastY;
+
+	// دايمًا أظهر قريب من أعلى الصفحة
+	if (fY <= fTopShowY) {
+	fDownAcc = 0;
+	fShow();
+	fLastY = fY;
+	return;
+	}
+
+	if (fDelta > 0) {
+	// scrolling down
+	fDownAcc += fDelta;
+	if (fDownAcc >= fHideAfter) fHide();
+	} else if (fDelta < 0) {
+	// scrolling up (أي طلوع = إظهار فورًا)
+	fDownAcc = 0;
+	fShow();
+	}
+
+	fLastY = fY;
+	};
+
+	window.addEventListener("scroll", fOnScroll, { passive: true });
+	})();
+</script>

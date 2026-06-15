@@ -1,0 +1,223 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"article"> {
+	pTitle: string;
+	pDesc?: string;
+	pHref: string;
+	pImg?: string;
+	pExternal?: boolean;
+}
+
+const {
+	pTitle,
+	pDesc,
+	pHref,
+	pImg,
+	pExternal = false,
+
+	id: pGivenID = GetWidgetId("ReadAlsoItem"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cTarget = pExternal ? "_blank" : undefined;
+const cRel = pExternal ? "noopener noreferrer" : undefined;
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<article
+	class = {`ReadAlsoItem ${pGivenClass}`.trim()}
+	style = {cGivenStyle}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	{ pImg && (
+
+		<a
+			class = " ReadAlsoImgLink "
+			href={pHref}
+			target={cTarget}
+			rel={cRel}
+		>
+		
+			<img
+				class = " ReadAlsoImg "
+				src={pImg}
+				alt={pTitle}
+				loading="lazy"
+				decoding="async"
+			/>
+		
+		</a>
+	) }
+
+	<div class = " ReadAlsoText ">
+
+		<h4 class = " ReadAlsoItemTitle ">
+
+			{pTitle}
+
+		</h4>
+
+		{ pDesc && (
+
+			<p class = " ReadAlsoItemDesc ">
+				{pDesc}
+			</p>
+		) }
+
+	</div>
+
+	<a
+		class = " ReadAlsoBtn "
+		href={pHref}
+		target={cTarget}
+		rel={cRel}
+	>
+		اقرأ الصفحة
+	</a>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.ReadAlsoItem {
+		background: var(--ReadAlsoCardBg);
+		border-radius: var(--ReadAlsoCardRadiusL);
+		overflow: hidden;
+		box-shadow: 0 12px 30px rgb(0 0 0 / 10%);
+		border: 1px solid rgb(0 0 0 / 8%);
+		display: flex;
+		flex-direction: column;
+		box-sizing: border-box;
+		direction: rtl;
+		min-height: 100%;
+	}
+
+
+	.ReadAlsoImgLink {
+		display: block;
+		width: 100%;
+		height: var(--ReadAlsoImgHeightL);
+		background: rgb(0 0 0 / 5%);
+		overflow: hidden;
+		text-decoration: none;
+	}
+
+
+	.ReadAlsoImg {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+
+	.ReadAlsoText {
+		padding: 20px 20px 8px;
+		box-sizing: border-box;
+		flex: 1;
+	}
+
+
+	.ReadAlsoItemTitle {
+		margin: 0;
+		color: var(--ReadAlsoCardTitleColor, inherit) !important;
+		font-size: var(--ReadAlsoCardTitleSizeL) !important;
+		font-weight: var(--ReadAlsoCardTitleWeight) !important;
+		text-align: var(--ReadAlsoCardTitleAlign) !important;
+		font-family: var(--ReadAlsoCardTitleFamily) !important;
+		line-height: 2;
+	}
+
+
+	.ReadAlsoItemDesc {
+		margin: 0;
+		color: var(--ReadAlsoCardDescColor, inherit) !important;
+		font-size: var(--ReadAlsoCardDescSizeL) !important;
+		font-weight: var(--ReadAlsoCardDescWeight) !important;
+		text-align: var(--ReadAlsoCardDescAlign) !important;
+		font-family: var(--ReadAlsoCardDescFamily) !important;
+		line-height: 2;
+	}
+
+
+	.ReadAlsoBtn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin: 16px 20px 20px;
+		min-height: 44px;
+		border-radius: 12px;
+		background: var(--ReadAlsoBtnBg);
+		color: var(--ReadAlsoBtnClr);
+		text-decoration: none;
+		font-weight: 700;
+		transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+	}
+
+
+	.ReadAlsoBtn:hover {
+		background: var(--ReadAlsoBtnHoverBg);
+		color: var(--ReadAlsoBtnHoverClr);
+		transform: translateY(-2px);
+	}
+
+
+
+	@media (orientation: portrait), (max-width: 920px) {
+		.ReadAlsoItem {
+			border-radius: var(--ReadAlsoCardRadiusP, var(--ReadAlsoCardRadiusL));
+		}
+
+		.ReadAlsoImgLink {
+			height: var(--ReadAlsoImgHeightP, var(--ReadAlsoImgHeightL));
+		}
+
+		.ReadAlsoItemTitle {
+			font-size: var(--ReadAlsoCardTitleSizeP, var(--ReadAlsoCardTitleSizeL)) !important;
+		}
+
+		.ReadAlsoItemDesc {
+			font-size: var(--ReadAlsoCardDescSizeP, var(--ReadAlsoCardDescSizeL)) !important;
+		}
+	}
+
+
+
+</style>

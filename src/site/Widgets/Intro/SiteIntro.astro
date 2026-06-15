@@ -1,0 +1,374 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Colors, RespString } from "@/TypesLib";
+import { Media } from "@/Media";
+
+export interface Props extends HTMLAttributes<"div"> {
+	pLogo?: string;
+	pAlt?: string;
+
+	pBaseClr?: string;
+	pSweepClr?: string;
+	pLogoBgClr?: string;
+
+	pTotalMs?: number;
+	pLogoWidth?: string | RespString;
+	pZ?: number;
+
+	pOnceKey?: string;
+	pEase?: string;
+}
+
+const {
+	pLogo = "/Media/EmoLogo.svg",
+	pAlt = "شعار الموقع",
+
+	pBaseClr = Colors.WhiteOff,
+	pSweepClr = Colors.Bistage,
+	pLogoBgClr = "transparent",
+
+	pTotalMs = 2600,
+	pLogoWidth = new RespString("600px", "250px"),
+	pZ = 999999,
+
+	pOnceKey = "",
+	pEase = "cubic-bezier(.42, 0, .18, 1)",
+
+	id: pGivenID = GetWidgetId("SiteIntro"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cPagePath = Astro.url.pathname;
+const cLogo = Media.GetPageFile(cPagePath, pLogo);
+
+const cLogoWidthL = pLogoWidth instanceof RespString ? pLogoWidth.Landscape : pLogoWidth;
+const cLogoWidthP = pLogoWidth instanceof RespString ? pLogoWidth.Portrait : pLogoWidth;
+
+const cSafeTotalMs = Number.isFinite(pTotalMs) && pTotalMs > 400
+	? pTotalMs
+	: 2600;
+
+const cStyle = `
+--SiteIntroBaseClr:${pBaseClr};
+--SiteIntroSweepClr:${pSweepClr};
+--SiteIntroLogoBgClr:${pLogoBgClr};
+--SiteIntroTotal:${cSafeTotalMs}ms;
+--SiteIntroLogoWidthL:${cLogoWidthL};
+--SiteIntroLogoWidthP:${cLogoWidthP};
+--SiteIntroZ:${pZ};
+--SiteIntroEase:${pEase};
+${pGivenStyle || ""}
+`;
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div
+	class = {`SiteIntro ${pGivenClass}`}
+	style = {cStyle}
+	id={pGivenID}
+	data-once-key={pOnceKey}
+	aria-hidden="true"
+	{...RemAttr}
+>
+
+	<div class = " SiteIntroBase ">
+
+	</div>
+
+	<div class = " SiteIntroSweep ">
+
+	</div>
+
+	<div class = " SiteIntroLogoWrap ">
+
+		<img
+			class = " SiteIntroLogo "
+			src={cLogo}
+			alt={pAlt}
+			loading="eager"
+			decoding="sync"
+			fetchpriority="high"
+		/>
+
+	</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.SiteIntro {
+		position: fixed;
+		inset: 0;
+		z-index: var(--SiteIntroZ);
+		overflow: hidden;
+		pointer-events: all;
+		isolation: isolate;
+		animation: SiteIntroHide var(--SiteIntroTotal) linear forwards;
+	}
+
+
+	.SiteIntroBase {
+		z-index: 1;
+		background: var(--SiteIntroBaseClr);
+		animation: SiteIntroBaseExit var(--SiteIntroTotal) var(--SiteIntroEase) forwards;
+	}
+
+
+	.SiteIntroSweep {
+		z-index: 2;
+		background: var(--SiteIntroSweepClr);
+		transform: translateX(-105%);
+		animation: SiteIntroSweepMove var(--SiteIntroTotal) var(--SiteIntroEase) forwards;
+	}
+
+
+	.SiteIntroLogoWrap {
+		position: absolute;
+		inset: 0;
+		z-index: 3;
+		display: grid;
+		place-items: center;
+		pointer-events: none;
+		transform: translateX(120vw) scale(.92);
+		animation: SiteIntroLogoMove var(--SiteIntroTotal) var(--SiteIntroEase) forwards;
+		will-change: transform, opacity;
+	}
+
+
+	.SiteIntroLogo {
+		display: block;
+		width: var(--SiteIntroLogoWidthL);
+		height: auto;
+		max-width: 72vw;
+		max-height: 45vh;
+		object-fit: contain;
+		background: var(--SiteIntroLogoBgClr);
+	}
+
+	@media (orientation: portrait) {
+		.SiteIntroLogo {
+			width: var(--SiteIntroLogoWidthP);
+			max-width: 62vw;
+		}
+	}
+
+
+
+	.SiteIntroBase,
+	.SiteIntroSweep
+	{
+		position: absolute;
+		inset: 0;
+		will-change: transform;
+	}
+
+
+	@keyframes SiteIntroSweepMove {
+	0% {
+										transform: translateX(-105%);
+									}
+	
+									10% {
+										transform: translateX(-105%);
+									}
+	
+									32% {
+										transform: translateX(0);
+									}
+	
+									74% {
+										transform: translateX(0);
+									}
+	
+									100% {
+										transform: translateX(105%);
+									}
+	}
+
+
+	@keyframes SiteIntroLogoMove {
+	0% {
+										opacity: 0;
+										transform: translateX(120vw) scale(.92) rotate(0deg);
+									}
+	
+									20% {
+										opacity: 0;
+										transform: translateX(120vw) scale(.92) rotate(0deg);
+									}
+	
+									36% {
+										opacity: 1;
+										transform: translateX(-26px) scale(1.06) rotate(-2deg);
+									}
+	
+									43% {
+										transform: translateX(16px) scale(.98) rotate(1deg);
+									}
+	
+									50% {
+										transform: translateX(-7px) scale(1.02) rotate(-.5deg);
+									}
+	
+									56% {
+										transform: translateX(0) scale(1) rotate(0deg);
+									}
+	
+									66% {
+										opacity: 1;
+										transform: translateX(0) scale(1) rotate(0deg);
+									}
+	
+									78% {
+										opacity: 1;
+										transform: translateX(12vw) scale(.96) rotate(3deg);
+									}
+	
+									100% {
+										opacity: 0;
+										transform: translateX(120vw) scale(1) rotate(0deg);
+									}
+	}
+
+
+	@keyframes SiteIntroBaseExit {
+	0% {
+										transform: translateX(0);
+									}
+	
+									78% {
+										transform: translateX(0);
+									}
+	
+									100% {
+										transform: translateX(105%);
+									}
+	}
+
+
+	@keyframes SiteIntroHide {
+	0% {
+										visibility: visible;
+									}
+	
+									99% {
+										visibility: visible;
+									}
+	
+									100% {
+										visibility: hidden;
+										pointer-events: none;
+									}
+	}
+
+
+	@media (prefers-reduced-motion: reduce) {
+		.SiteIntro {
+			animation-duration: 1ms;
+		}
+
+		.SiteIntroBase,
+		.SiteIntroSweep,
+		.SiteIntroLogoWrap
+		{
+			animation-duration: 1ms;
+		}
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script is:inline>
+	(() => {
+
+	const cIntro = document.currentScript?.previousElementSibling;
+
+	if (!cIntro || !(cIntro instanceof HTMLElement)) {
+	return;
+	}
+
+	const cOnceKey = cIntro.dataset.onceKey;
+
+	if (cOnceKey && sessionStorage.getItem(cOnceKey) === "1") {
+	cIntro.remove();
+	return;
+	}
+
+	document.documentElement.classList.add("SiteIntroIsRunning");
+
+	cIntro.addEventListener("animationend", (pEvent) => {
+	if (pEvent.animationName !== "SiteIntroHide") {
+	return;
+	}
+
+	if (cOnceKey) {
+	sessionStorage.setItem(cOnceKey, "1");
+	}
+
+	document.documentElement.classList.remove("SiteIntroIsRunning");
+	cIntro.remove();
+	});
+
+	})();
+</script>

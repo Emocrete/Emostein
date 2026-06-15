@@ -1,0 +1,253 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"details"> {
+	pQuestion: string;
+	pAnswer?: string;
+}
+
+const {
+	pQuestion,
+	pAnswer,
+
+	id: pGivenID = GetWidgetId("FaqItem"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<details
+	class = {`FaqItem ${pGivenClass}`.trim()}
+	style = {cGivenStyle}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+
+
+
+
+
+
+	<summary class = " FaqQuestion ">
+
+		<span class = " FaqQuestionText ">
+			{pQuestion}
+		</span>
+
+	</summary>
+
+
+
+
+
+
+
+	<div class = " FaqAnswer ">
+
+		<slot>
+
+			{pAnswer}
+
+		</slot>
+
+	</div>
+
+
+
+
+
+
+
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.FaqItem {
+		position: relative;
+		direction: rtl;
+		background: linear-gradient(110deg, rgb(18 31 43 / 92%), rgb(23 39 53 / 74%));
+		border: 1px solid rgb(135 190 232 / 22%);
+		border-radius: 16px;
+		box-shadow: 0 14px 34px rgb(0 0 0 / 35%), inset 0 0 28px rgb(125 184 255 / 7%);
+		overflow: hidden;
+		box-sizing: border-box;
+		transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+	}
+
+	.FaqItem:hover {
+		background: linear-gradient(110deg, rgb(28 43 57 / 96%), rgb(35 53 68 / 82%));
+		border-color: rgb(255 255 255 / 42%);
+		box-shadow: 0 16px 38px rgb(0 0 0 / 38%), 0 0 22px rgb(255 255 255 / 16%), inset 0 0 30px rgb(255 255 255 / 7%);
+	}
+
+	.FaqItem::before {
+		content: "";
+		position: absolute;
+		inset-block: 0;
+		inset-inline-start: 0;
+		width: 10px;
+		background: #68bcff;
+		box-shadow: 0 0 22px #68bcff;
+		transition: background 0.18s ease, box-shadow 0.18s ease;
+	}
+
+
+	.FaqQuestion {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		min-height: var(--FaqQuestionHeight, 58px);
+		padding: 13px 28px 13px 22px;
+		box-sizing: border-box;
+		cursor: pointer;
+		list-style: none;
+		user-select: none;
+	}
+
+	.FaqQuestion::-webkit-details-marker {
+		display: none;
+	}
+
+
+	.FaqQuestionText {
+		display: block;
+		width: 100%;
+		color: #f3f7fb;
+		font-size: clamp(17px, 1.34vw, 24px);
+		font-weight: 800;
+		line-height: 1.7;
+		text-align: right;
+		text-shadow: 0 2px 14px rgb(0 0 0 / 55%);
+	}
+
+
+	.FaqAnswer {
+		padding: 4px 28px 24px 22px;
+		box-sizing: border-box;
+		color: #d9e1e8;
+		font-size: clamp(15px, 1.05vw, 19px);
+		font-weight: 500;
+		line-height: 2.05;
+		text-align: right;
+	}
+
+	.FaqAnswer > :global(*) {
+		margin-top: 0;
+	}
+
+	.FaqAnswer > :global(*:last-child) {
+		margin-bottom: 0;
+	}
+
+
+
+	.FaqItem[open] {
+		border-color: rgb(190 255 33 / 58%);
+		box-shadow: 0 18px 42px rgb(0 0 0 / 42%), 0 0 30px rgb(190 255 33 / 12%), inset 0 0 32px rgb(125 184 255 / 8%);
+	}
+
+
+	.FaqItem[open]::before {
+		background: #baff18;
+		box-shadow: 0 0 26px #baff18, 0 0 54px rgb(186 255 24 / 70%);
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait), (max-width: 920px) {
+		.FaqItem {
+			border-radius: 14px;
+		}
+
+		.FaqItem::before {
+			width: 8px;
+		}
+
+		.FaqQuestion {
+			padding: 12px 22px 12px 16px;
+		}
+
+		.FaqQuestionText {
+			font-size: clamp(16px, 4.6vw, 20px);
+			line-height: 1.8;
+		}
+
+		.FaqAnswer {
+			padding: 2px 22px 20px 16px;
+			font-size: clamp(14px, 4.1vw, 17px);
+		}
+	}
+
+
+
+</style>

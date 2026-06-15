@@ -1,0 +1,149 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+interface Props extends HTMLAttributes<"div">, PlaceProps {
+	pTopColor?: string;
+	pBottomColor?: string;
+	pHeight?:  number;
+	pBottomLeft?:  number;
+	pBottomRight?: number;
+	pContentWidth?: string | number;
+	pPadInline?: number;
+}
+
+
+const {
+	pTopColor = "#d9e8f2",
+	pBottomColor = "#9c3636",
+	pHeight = 500,
+	pBottomLeft = 100,
+	pBottomRight = 400,
+	pContentWidth = 1000,
+	pPadInline = 25,
+
+	id: pGivenID = GetWidgetId("IncLineSep"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+
+const cCssVars = [
+	`--TopColor:${pTopColor};`,
+	`--BottomColor:${pBottomColor};`,
+	`--Height:${pHeight}px;`,
+	`--BottomLeft:${pBottomLeft}px;`,
+	`--BottomRight:${pBottomRight}px;`,
+	`--ContentWidth:${pContentWidth}px;`,
+	`--PadInline:${pPadInline};`,
+	cGivenStyle,
+].filter(Boolean).join(" ");
+
+const cPlace = new Place(Astro.props as PlaceProps, cCssVars);
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div
+	class = {`SplitSep ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+	<div class = " BottomPart " />
+	<div class = " SlotWrap ">
+		<div class = " SlotInner ">
+			<slot />
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.SplitSep {
+		position: relative;
+		height: var(--Height);
+		background: var(--TopColor);
+		overflow: visible;
+	}
+
+
+	.BottomPart {
+		position: absolute;
+		inset: 0;
+		background: var(--BottomColor);
+		clip-path: polygon(
+			0  calc(100% - var(--BottomLeft)),
+			100%  calc(100% - var(--BottomRight)),
+			100% 100%,
+			0  100%
+		);
+	}
+
+
+	.SlotWrap {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding-inline: var(--PadInline);
+		pointer-events: none;
+	}
+
+
+	.SlotInner {
+		width: min(var(--ContentWidth), 100%);
+		max-width: 100%;
+		pointer-events: auto;
+	}
+
+	.SlotInner > :global(*) {
+		display: block;
+		width: 100%;
+		max-width: 100%;
+		margin-inline: auto;
+	}
+
+
+
+</style>

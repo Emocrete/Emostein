@@ -1,0 +1,53 @@
+---
+import SubMenuHead from "../../Menu/SubMenuHead.astro";
+import SubMenuItem from "../../Menu/SubMenuItem.astro";
+
+const cMenuIconsList = import.meta.glob("./*.webp", {
+	eager: true,
+	import: "default",
+	query: "?url",
+});
+
+const cMenuIcons = Object.fromEntries(
+	Object.entries(cMenuIconsList).map(([fPath, fUrl]) => {
+		const fFileName = fPath.split("/").pop() ?? "";
+		const fBaseName = fFileName.replace(/\.[^.]+$/, "");
+		return [fBaseName, fUrl];
+	}),
+);
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<SubMenuHead fTitle="المكتب الهندسي" fLink="/emodsign" fIcon={cMenuIcons.Lab} />
+
+<SubMenuHead fTitle="المقاولات" fLink="/emocrete" fIcon={cMenuIcons.Lab} />
+
+<SubMenuHead fTitle="الرخام والجرانيت" fLink="/emostone" fIcon={cMenuIcons.Lab} />
+
+<SubMenuHead fTitle="التوريدات" fLink="/emochain" fIcon={cMenuIcons.Lab} />
+
+<SubMenuHead fTitle="التراخيص" fLink="/emoperm" fIcon={cMenuIcons.Lab} />
+
+<SubMenuHead fTitle="التراخيص الطبية" fLink="/emomed" fIcon={cMenuIcons.Lab} />
+
+<SubMenuHead fTitle="الخدمات الاستشارية" fLink="/emonsult" fIcon={cMenuIcons.Lab} />
+
+<SubMenuHead fTitle="التسويق العقاري" fLink="/emostate" fIcon={cMenuIcons.Lab} />

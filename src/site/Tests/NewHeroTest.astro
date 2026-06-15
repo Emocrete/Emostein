@@ -1,0 +1,891 @@
+---
+import BLayout from "@/Layout.astro";
+import { Text, Topic, ElemBg, EmoMediaData, Colors, RespString, Location, Size, Pixel } from "@/TypesLib";
+import { Emograph, Stack, EmoCall, RespImg, CardsGr,FreeHero, FreeHeroMoveItem, FreeHeroKeyPoint ,FreeHeroItem } from "@/Widgets";
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<BLayout pSchemaType="Article" pTitle="FreeHero Preview" pDescr="صفحة اختبار لعشرين حالة استخدام مختلفة لودجت FreeHero الجديد">
+
+	<FreeHero pImgF="/Media/Home/">
+
+		<FreeHeroMoveItem
+			pKeyPoints={[
+				new FreeHeroKeyPoint(
+					new Location("8%", "5%", "20%", "12%"),
+					new Size(340, 120, 280, 110),
+					"0deg",
+					1
+				),
+	
+				new FreeHeroKeyPoint(
+					new Location("58%", "20%", "28%", "42%"),
+					new Size(420, 150, 300, 120),
+					new RespString("8deg", "-6deg"),
+					.85
+				),
+	
+				new FreeHeroKeyPoint(
+					new Location("35%", "8%", "62%", "68%"),
+					new Size(300, 110, 260, 100),
+					"0deg",
+					1
+				),
+			]}
+			pIntervals={[900, 1200]}
+			pEase="cubic-bezier(.42, 0, .18, 1)"
+			pZ={5}
+		>
+
+			<Emograph pTitle={Text.H2.Centered.OfText("عنصر متحرك")} pText={Text.Body.Centered.OfText("ينتقل بين عدة KeyPoints ثم يستقر على آخر حالة")} />
+
+		</FreeHeroMoveItem>
+
+	</FreeHero>
+
+	<!-- 01 - عنوان ووصف وزر منفصلين بدل بوكس واحد -->
+
+	<FreeHero pImgF="/Media/Emoperm/Retail/General/">
+
+		<FreeHeroItem
+			pLoc={new Location("20%", "6%", "18%", "12%")}
+			pBox={new Size("30%", "auto", "95%", "auto")}
+			pZ={2}
+			pRotate={new RespString("8deg", "-5deg")}
+		>
+
+			<Emograph pTitle={Text.H1.White.OfText("01 — هيرو حر بتكوين كلاسيكي")} pSize={new Size("100%", "auto", "100%", "auto")} />
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			pLoc={new Location("20%", "26%", "38%", "32%")}
+			pBox={new Size("30%", "auto", "95%", "auto")}
+			pZ={2}
+			pRotate={new RespString("18deg", "-5deg")}
+		>
+
+			<Emograph
+				pText={Text.Body.White.OfText("العنوان والوصف والزرار كل واحد منهم عنصر مستقل يمكن تحريكه وحده بدون الالتزام بقالب الهيرو القديم.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			pLoc={new Location("20%", "50%", "46%", "36%")}
+			pBox={new Size(260, 50, 140, 25)}
+			pZ={3}
+			pRotate={new RespString("-18deg", "-5deg")}
+		>
+
+			<EmoCall
+				pText="اطلب الخدمة"
+				pBgColor={Colors.GreenLite}
+				pBgColorHover={Colors.Bistage}
+				pTextColor={Colors.BlackOff}
+				pWidth="100%"
+				pHeight="56px"
+				pRadius="14px"
+				pFontSize="18px"
+			/>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<!-- 02 - العنوان في ناحية والصورة/الأيقونة في ناحية تانية -->
+
+	<FreeHero pImgF="/Media/Emocrete/Supervision/Construction/">
+
+		<FreeHeroItem pLoc={new Location("8%", "5%", "16%", "12%")} pBox={new Size("42%", "auto", "90%", "auto")} pZ={2}>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("02 — فصل النص عن العنصر البصري")}
+				pText={Text.Body.White.OfText("النص موجود في اليمين، والأيقونة عنصر مستقل في مكان مختلف تمامًا داخل نفس نظام الإحداثيات.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			pLoc={new Location("66%", "28%", "24%", "52%")}
+			pBox={new Size(180, 180, 150, 150)}
+			pRotate={new RespString("8deg", "-5deg")}
+			pZ={3}
+		>
+
+			<RespImg pImg={new EmoMediaData("Img", "/Media/", "ExperienceIconGold.webp", false, "أيقونة خبرة", new Size("100%", "100%", "100%", "100%"))} />
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<!-- 03 - توزيع أرقام خبرة كعناصر مستقلة -->
+
+	<FreeHero pImgF="/Media/Emocrete/Finishing/Apartment/">
+
+		<FreeHeroItem pLoc={new Location("8%", "5%", "12%", "10%")} pBox={new Size("50%", "auto", "90%", "auto")} pZ={2}>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("03 — عناصر إحصائية موزعة")}
+				pText={Text.Body.White.OfText("كل رقم له مكانه وحجمه، وليسوا مضطرين يدخلوا داخل Stack واحد أو قالب ثابت.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : rgba(0,0,0,.5) ; border-radius : 20px ; padding : 15px "
+			pLoc={new Location("10%", "8%", "52%", "48%")}
+			pBox={new Size(180, 120, 140, 100)}
+			pZ={3}
+		>
+
+			<Emograph
+				pTitle={Text.H2.White.Centered.OfText("14")}
+				pText={Text.Body.White.Centered.OfText("سنة خبرة")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : rgba(0,0,0,.5) ; border-radius : 20px ; padding : 15px "
+			pLoc={new Location("32%", "52%", "60%", "48%")}
+			pBox={new Size(180, 120, 140, 100)}
+			pZ={3}
+		>
+
+			<Emograph
+				pTitle={Text.H2.White.Centered.OfText("+90")}
+				pText={Text.Body.White.Centered.OfText("صفحة خدمة")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : rgba(0,0,0,.5) ; border-radius : 20px ; padding : 15px "
+			pLoc={new Location("54%", "30%", "52%", "68%")}
+			pBox={new Size(180, 120, 140, 100)}
+			pZ={3}
+		>
+
+			<Emograph
+				pTitle={Text.H2.White.Centered.OfText("1")}
+				pText={Text.Body.White.Centered.OfText("نظام تصميم")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<!-- 04 - شارة مائلة فوق الخلفية -->
+
+	<FreeHero pImgF="/Media/Emodsign/Des/">
+
+		<FreeHeroItem pLoc={new Location("9%", "6%", "20%", "14%")} pBox={new Size("44%", "auto", "88%", "auto")} pZ={2}>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("04 — Badge مستقل ومائل")}
+				pText={Text.Body.White.OfText("الشارة ليست جزءًا من النص، وتقدر تدوّرها أو تحركها وحدها بدون تأثير على العنوان.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = "
+					background : #fbff00 ;
+					border-radius : 16px ;
+					padding : 14px ;
+					box-shadow : 0 20px 50px rgba(0,0,0,.35)
+				"
+			pLoc={new Location("62%", "22%", "18%", "54%")}
+			pBox={new Size(260, 90, 220, 80)}
+			pRotate={new RespString("-12deg", "9deg")}
+			pZ={4}
+		>
+
+			<Emograph pTitle={Text.H3.Centered.OfText("تصميم حر")} pText={Text.Body.Centered.OfText("مثل Wix")} pSize={new Size("100%", "auto", "100%", "auto")} />
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<!-- 05 - اختبار القص من أعلى ويسار السكشن -->
+
+	<FreeHero pImgF="/Media/Emonsult/Stamp/Eng/">
+
+		<FreeHeroItem pLoc={new Location("8%", "6%", "18%", "18%")} pBox={new Size("46%", "auto", "88%", "auto")} pZ={2}>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("05 — قص العنصر خارج حدود الهيرو")}
+				pText={Text.Body.White.OfText("العنصر الأصفر له إحداثيات سالبة؛ لذلك يظهر الجزء الموجود داخل الهيرو فقط ولا يطلع على السكشن السابق.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : #fbff00 ; border-radius : 30px ; padding : 30px "
+			pLoc={new Location(-120, -80, -40, -35)}
+			pBox={new Size(360, 160, 300, 140)}
+			pZ={5}
+		>
+
+			<Emograph
+				pTitle={Text.H3.Centered.OfText("Negative X/Y")}
+				pText={Text.Body.Centered.OfText("يجب أن يتم قصي داخل الهيرو")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<!-- 06 - اختبار القص من أسفل السكشن -->
+
+	<FreeHero pImgF="/Media/Emonsult/Certificate/Validity/">
+
+		<FreeHeroItem pLoc={new Location("8%", "6%", "16%", "12%")} pBox={new Size("48%", "auto", "88%", "auto")} pZ={2}>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("06 — عنصر تحت ارتفاع الهيرو")}
+				pText={Text.Body.White.OfText("العنصر الأحمر موضوع بعد 105svh؛ لا يجب أن يظهر فوق السكشن التالي لأن الأب يعمل clipping.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : rgba(160,0,0,.85) ; border-radius : 25px ; padding : 25px "
+			pLoc={new Location("20%", "8%", "105svh", "104svh")}
+			pBox={new Size(420, 140, 300, 130)}
+			pZ={5}
+		>
+
+			<Emograph
+				pTitle={Text.H3.White.Centered.OfText("Outside Bottom")}
+				pText={Text.Body.White.Centered.OfText("مكانه خارج ارتفاع الهيرو")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<!-- 07 - بوكس زجاجي في منتصف الهيرو -->
+
+	<FreeHero pImgF="/Media/Emomed/Pharmacy/">
+
+		<FreeHeroItem
+			style = "
+					background : rgba(0,0,0,.45) ;
+					backdrop-filter : blur(10px) ;
+					border-radius : 30px ;
+					padding : 35px ;
+					border : 1px solid rgba(255,255,255,.25)
+				"
+			pLoc={new Location("28%", "6%", "24%", "22%")}
+			pBox={new Size("44%", "auto", "88%", "auto")}
+			pZ={2}
+		>
+
+			<Stack pGap={new Pixel(20, 15)} pPad={new Pixel(0, 0)} pAlign="Center">
+
+				<Emograph
+					pTitle={Text.H1.White.Centered.OfText("07 — كارت زجاجي مركزي")}
+					pText={Text.Body.White.Centered.OfText("يمكن استخدام FreeHeroItem كصندوق بصري مستقل، وتضع داخله أي ودجت آخر بدون أن يتحكم الأب في القالب.")}
+					pSize={new Size("100%", "auto", "100%", "auto")}
+				/>
+
+				<EmoCall
+					pText="اتصل الآن"
+					pBgColor={Colors.Sky}
+					pBgColorHover={Colors.SkyDark}
+					pTextColor={Colors.BlackOff}
+					pWidth="230px"
+					pHeight="54px"
+					pRadius="14px"
+					pFontSize="18px"
+				/>
+
+			</Stack>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<!-- 08 - العنوان أعلى والزر أسفل بعيد عنه -->
+
+	<FreeHero pImgF="/Media/Emocrete/Contracting/">
+
+		<FreeHeroItem pLoc={new Location("7%", "5%", "10%", "10%")} pBox={new Size("54%", "auto", "90%", "auto")} pZ={2}>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("08 — العنوان لا يجر الزر معه")}
+				pText={Text.Body.White.OfText("مفيد لما تحتاج تعمل تكوين بصري واسع: العنوان في الأعلى، والـ CTA في أسفل الشاشة.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem pLoc={new Location("7%", "5%", "78%", "78%")} pBox={new Size(300, 58, 260, 58)} pZ={3}>
+
+			<EmoCall
+				pText="احجز معاينة"
+				pBgColor={Colors.GreenLite}
+				pBgColorHover={Colors.Bistage}
+				pTextColor={Colors.BlackOff}
+				pWidth="100%"
+				pHeight="58px"
+				pRadius="16px"
+				pFontSize="18px"
+			/>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<!-- 09 - شريط أزرار سفلي -->
+
+	<FreeHero pImgF="/Media/Emocrete/Finishing/Villa/">
+
+		<FreeHeroItem pLoc={new Location("8%", "5%", "14%", "12%")} pBox={new Size("48%", "auto", "90%", "auto")} pZ={2}>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("09 — أكثر من زر في شريط سفلي")}
+				pText={Text.Body.White.OfText("الأزرار نفسها داخل Stack، والـ Stack كله عنصر حر له مكان مستقل داخل الهيرو.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : rgba(0,0,0,.45) ; border-radius : 22px ; padding : 15px "
+			pLoc={new Location("8%", "5%", "74%", "72%")}
+			pBox={new Size(620, 80, 320, 150)}
+			pZ={3}
+		>
+
+			<Stack
+				pDir="Row"
+				pFlipNarrow={true}
+				pGap={new Pixel(15, 12)}
+				pPad={new Pixel(0, 0)}
+			>
+
+				<EmoCall
+					pText="اتصال"
+					pBgColor={Colors.GreenLite}
+					pBgColorHover={Colors.Bistage}
+					pTextColor={Colors.BlackOff}
+					pWidth="180px"
+					pHeight="50px"
+					pRadius="12px"
+					pFontSize="17px"
+				/>
+
+				<EmoCall
+					pText="واتساب"
+					pBgColor={Colors.Sky}
+					pBgColorHover={Colors.SkyDark}
+					pTextColor={Colors.BlackOff}
+					pWidth="180px"
+					pHeight="50px"
+					pRadius="12px"
+					pFontSize="17px"
+				/>
+
+				<EmoCall
+					pText="معاينة"
+					pBgColor={Colors.Yellow}
+					pBgColorHover={Colors.GreenLite}
+					pTextColor={Colors.BlackOff}
+					pWidth="180px"
+					pHeight="50px"
+					pRadius="12px"
+					pFontSize="17px"
+				/>
+
+			</Stack>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<!-- 10 - اختلاف كبير بين توزيع الديسكتوب والموبايل -->
+
+	<FreeHero pImgF="/Media/Emomed/Hospital/">
+
+		<FreeHeroItem pLoc={new Location("58%", "6%", "14%", "10%")} pBox={new Size("34%", "auto", "88%", "auto")} pZ={2}>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("10 — توزيع مختلف حسب الاتجاه")}
+				pText={Text.Body.White.OfText("في الديسكتوب النص على اليسار البصري للصورة، وفي الموبايل يرجع لأعلى الشاشة بإحداثيات مختلفة.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : rgba(255,255,255,.9) ; border-radius : 20px ; padding : 15px "
+			pLoc={new Location("12%", "18%", "62%", "64%")}
+			pBox={new Size(280, 90, 240, 90)}
+			pZ={3}
+		>
+
+			<Emograph
+				pTitle={Text.H4.Centered.OfText("نفس العنصر")}
+				pText={Text.Body.Centered.OfText("لكن بإحداثيات Portrait مختلفة")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<!-- 11 - صورة مائية ضخمة فوق الخلفية -->
+
+	<FreeHero pImgF="/Media/Emostone/Marble/">
+
+		<FreeHeroItem pLoc={new Location("6%", "5%", "18%", "12%")} pBox={new Size("45%", "auto", "88%", "auto")} pZ={3}>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("11 — Watermark مستقل")}
+				pText={Text.Body.White.OfText("أيقونة ضخمة شفافة فوق الخلفية، ولا تتبع العنوان أو الوصف.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " opacity : .28 "
+			pLoc={new Location("58%", "35%", "18%", "50%")}
+			pBox={new Size(360, 360, 240, 240)}
+			pZ={2}
+			pPointer={false}
+		>
+
+			<RespImg pImg={new EmoMediaData("Img", "/Media/", "TrustedIcon.webp", false, "علامة ثقة", new Size("100%", "100%", "100%", "100%"))} />
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<!-- 12 - كروت داخل الهيرو -->
+
+	<FreeHero pImgF="/Media/Emoperm/Building/Construction/">
+
+		<FreeHeroItem pLoc={new Location("6%", "5%", "10%", "8%")} pBox={new Size("52%", "auto", "90%", "auto")} pZ={2}>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("12 — CardsGr داخل FreeHero")}
+				pText={Text.Body.White.OfText("يمكن وضع مجموعة كروت كاملة داخل عنصر واحد حر، مع التحكم في مكان المجموعة كلها.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem pLoc={new Location("8%", "5%", "50%", "48%")} pBox={new Size("70%", "auto", "90%", "auto")} pZ={3}>
+
+			<CardsGr
+				pWidth={new RespString("100%", "100%")}
+				pGrTitle={Text.H3.White.Centered.OfText("حالات داخل الكروت")}
+				pCardTitleFnt={Text.H4.Centered}
+				pCardBodyFnt={Text.Body.Centered}
+				pCardBg={new ElemBg("rgba(255,255,255,.9)")}
+				pSpacing={15}
+				pTopic1={new Topic("ترخيص", "عنصر مستقل")}
+				pTopic2={new Topic("رسم", "مكان مستقل")}
+				pTopic3={new Topic("معاينة", "طبقة مستقلة")}
+			/>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<!-- 13 - لوحة سعر منفصلة عن العنوان -->
+
+	<FreeHero pImgF="/Media/Emocrete/Finishing/Apartment/">
+
+		<FreeHeroItem pLoc={new Location("7%", "5%", "14%", "12%")} pBox={new Size("45%", "auto", "90%", "auto")} pZ={2}>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("13 — لوحة عرض سعر")}
+				pText={Text.Body.White.OfText("السعر أو العرض الخاص يمكن وضعه في ركن مستقل، بعيد عن النص الرئيسي.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = "
+					background : rgba(255,255,255,.92) ;
+					border-radius : 28px ;
+					padding : 25px ;
+					box-shadow : 0 25px 60px rgba(0,0,0,.35)
+				"
+			pLoc={new Location("66%", "12%", "22%", "58%")}
+			pBox={new Size(300, 250, 280, 230)}
+			pZ={4}
+		>
+
+			<Stack pGap={new Pixel(10, 10)} pPad={new Pixel(0, 0)}>
+
+				<Emograph
+					pTitle={Text.H3.Centered.OfText("عرض معاينة")}
+					pText={Text.Body.Centered.OfText("بوكس مستقل قابل للتحريك")}
+					pSize={new Size("100%", "auto", "100%", "auto")}
+				/>
+
+				<Emograph pTitle={Text.H2.Centered.OfText("مجاني")} pText={Text.Body.Centered.OfText("عند التعاقد")} pSize={new Size("100%", "auto", "100%", "auto")} />
+
+			</Stack>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<!-- 14 - خطوات موزعة على خط بصري -->
+
+	<FreeHero pImgF="/Media/Emomed/Pharmacy/Dwg/">
+
+		<FreeHeroItem pLoc={new Location("7%", "5%", "12%", "8%")} pBox={new Size("52%", "auto", "90%", "auto")} pZ={2}>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("14 — خطوات متناثرة")}
+				pText={Text.Body.White.OfText("كل خطوة عنصر مستقل، فتقدر تعمل مسار بصري بدل قائمة رأسية تقليدية.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : rgba(255,255,255,.88) ; border-radius : 20px ; padding : 15px "
+			pLoc={new Location("12%", "8%", "58%", "50%")}
+			pBox={new Size(190, 110, 150, 95)}
+			pZ={3}
+		>
+
+			<Emograph pTitle={Text.H4.Centered.OfText("01")} pText={Text.Body.Centered.OfText("استلام المطلوب")} pSize={new Size("100%", "auto", "100%", "auto")} />
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : rgba(255,255,255,.88) ; border-radius : 20px ; padding : 15px "
+			pLoc={new Location("38%", "43%", "48%", "60%")}
+			pBox={new Size(190, 110, 150, 95)}
+			pZ={3}
+		>
+
+			<Emograph pTitle={Text.H4.Centered.OfText("02")} pText={Text.Body.Centered.OfText("إعداد الرسم")} pSize={new Size("100%", "auto", "100%", "auto")} />
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : rgba(255,255,255,.88) ; border-radius : 20px ; padding : 15px "
+			pLoc={new Location("64%", "22%", "58%", "70%")}
+			pBox={new Size(190, 110, 150, 95)}
+			pZ={3}
+		>
+
+			<Emograph pTitle={Text.H4.Centered.OfText("03")} pText={Text.Body.Centered.OfText("التسليم")} pSize={new Size("100%", "auto", "100%", "auto")} />
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<!-- 15 - زر اتصال عائم في ركن مستقل -->
+
+	<FreeHero pImgF="/Media/Emonsult/Report/Safety/">
+
+		<FreeHeroItem pLoc={new Location("8%", "5%", "16%", "12%")} pBox={new Size("48%", "auto", "90%", "auto")} pZ={2}>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("15 — CTA عائم في الركن")}
+				pText={Text.Body.White.OfText("زر الاتصال لا يحتاج أن يكون أسفل النص، ويمكن تثبيته في أي ركن داخل الهيرو.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem pLoc={new Location("76%", "36%", "78%", "82%")} pBox={new Size(230, 58, 220, 58)} pZ={10}>
+
+			<EmoCall
+				pText="اتصال سريع"
+				pBgColor={Colors.Yellow}
+				pBgColorHover={Colors.GreenLite}
+				pTextColor={Colors.BlackOff}
+				pWidth="100%"
+				pHeight="58px"
+				pRadius="999px"
+				pFontSize="18px"
+			/>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<!-- 16 - عنوان كبير وحاشية صغيرة في مكان بعيد -->
+
+	<FreeHero pImgF="/Media/Emodsign/Tech/Shopdwg/">
+
+		<FreeHeroItem pLoc={new Location("6%", "5%", "18%", "10%")} pBox={new Size("58%", "auto", "90%", "auto")} pZ={2}>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("16 — فصل المعلومة الثانوية")}
+				pText={Text.Body.White.OfText("المعلومة الصغيرة ممكن تتحط بعيد عن العنوان، كتعليق بصري أو ملاحظة في أسفل التصميم.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : rgba(0,0,0,.5) ; border-radius : 18px ; padding : 18px "
+			pLoc={new Location("60%", "12%", "72%", "72%")}
+			pBox={new Size(360, 100, 280, 100)}
+			pZ={3}
+		>
+
+			<Emograph
+				pTitle={Text.H4.White.Centered.OfText("ملاحظة مستقلة")}
+				pText={Text.Body.White.Centered.OfText("تتحرك وحدها دون التأثير على العنوان الرئيسي")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<!-- 17 - تكوين فيه صورة داخلية + نص + زر -->
+
+	<FreeHero pImgF="/Media/Emostone/Granit/Eg/">
+
+		<FreeHeroItem pLoc={new Location("8%", "5%", "16%", "10%")} pBox={new Size("42%", "auto", "90%", "auto")} pZ={2}>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("17 — تكوين منتج/خامة")}
+				pText={Text.Body.White.OfText("استخدام صورة مستقلة مع عنوان وزر، وكل جزء قابل للتموضع.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : rgba(255,255,255,.8) ; border-radius : 50% ; padding : 30px "
+			pLoc={new Location("62%", "30%", "22%", "50%")}
+			pBox={new Size(260, 260, 190, 190)}
+			pZ={3}
+		>
+
+			<RespImg pImg={new EmoMediaData("Img", "/Media/", "QualityIcon.webp", false, "أيقونة جودة", new Size("100%", "100%", "100%", "100%"))} />
+
+		</FreeHeroItem>
+
+		<FreeHeroItem pLoc={new Location("8%", "5%", "58%", "68%")} pBox={new Size(260, 56, 230, 56)} pZ={4}>
+
+			<EmoCall
+				pText="اسأل عن التوريد"
+				pBgColor={Colors.GreenLite}
+				pBgColorHover={Colors.Bistage}
+				pTextColor={Colors.BlackOff}
+				pWidth="100%"
+				pHeight="56px"
+				pRadius="14px"
+				pFontSize="18px"
+			/>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<!-- 18 - تكوين قطري باستخدام الدوران -->
+
+	<FreeHero pImgF="/Media/Emostone/Quartz/">
+
+		<FreeHeroItem pLoc={new Location("8%", "5%", "14%", "10%")} pBox={new Size("48%", "auto", "90%", "auto")} pZ={2}>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("18 — تكوين قطري")}
+				pText={Text.Body.White.OfText("العناصر المائلة ممكن تعمل حركة بصرية بدون أن يكون الودجت الأب عارف محتوى العنصر.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : rgba(255,255,255,.9) ; border-radius : 18px ; padding : 15px "
+			pLoc={new Location("52%", "14%", "48%", "56%")}
+			pBox={new Size(360, 90, 260, 80)}
+			pRotate={new RespString("-18deg", "-10deg")}
+			pZ={3}
+		>
+
+			<Emograph
+				pTitle={Text.H3.Centered.OfText("Diagonal Label")}
+				pText={Text.Body.Centered.OfText("عنصر مستقل مائل")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : #fbff00 ; border-radius : 16px ; padding : 12px "
+			pLoc={new Location("62%", "28%", "62%", "70%")}
+			pBox={new Size(300, 80, 240, 70)}
+			pRotate={new RespString("-18deg", "-10deg")}
+			pZ={4}
+		>
+
+			<Emograph
+				pTitle={Text.H4.Centered.OfText("Second Line")}
+				pText={Text.Body.Centered.OfText("نفس اتجاه التصميم")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<!-- 19 - شارات في الأركان الأربعة -->
+
+	<FreeHero pImgF="/Media/Emoperm/Factory/">
+
+		<FreeHeroItem pLoc={new Location("30%", "6%", "26%", "20%")} pBox={new Size("40%", "auto", "88%", "auto")} pZ={2}>
+
+			<Emograph
+				pTitle={Text.H1.White.Centered.OfText("19 — عناصر أركان")}
+				pText={Text.Body.White.Centered.OfText("يمكن تثبيت شارات أو رسائل قصيرة في أركان مختلفة من الهيرو كطبقات مستقلة.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : rgba(0,0,0,.55) ; border-radius : 14px ; padding : 10px "
+			pLoc={new Location("4%", "5%", "8%", "8%")}
+			pBox={new Size(180, 70, 140, 60)}
+			pZ={3}
+		>
+
+			<Emograph pTitle={Text.H5.White.Centered.OfText("Top Right")} pSize={new Size("100%", "auto", "100%", "auto")} />
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : rgba(0,0,0,.55) ; border-radius : 14px ; padding : 10px "
+			pLoc={new Location("78%", "55%", "8%", "8%")}
+			pBox={new Size(180, 70, 140, 60)}
+			pZ={3}
+		>
+
+			<Emograph pTitle={Text.H5.White.Centered.OfText("Top Left")} pSize={new Size("100%", "auto", "100%", "auto")} />
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : rgba(0,0,0,.55) ; border-radius : 14px ; padding : 10px "
+			pLoc={new Location("4%", "5%", "82%", "84%")}
+			pBox={new Size(180, 70, 140, 60)}
+			pZ={3}
+		>
+
+			<Emograph pTitle={Text.H5.White.Centered.OfText("Bottom Right")} pSize={new Size("100%", "auto", "100%", "auto")} />
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : rgba(0,0,0,.55) ; border-radius : 14px ; padding : 10px "
+			pLoc={new Location("78%", "55%", "82%", "84%")}
+			pBox={new Size(180, 70, 140, 60)}
+			pZ={3}
+		>
+
+			<Emograph pTitle={Text.H5.White.Centered.OfText("Bottom Left")} pSize={new Size("100%", "auto", "100%", "auto")} />
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+	<!-- 20 - خلفية فقط مع عناصر حرة كثيرة -->
+
+	<FreeHero pImgF="/Media/Home/">
+
+		<FreeHeroItem pLoc={new Location("8%", "5%", "12%", "8%")} pBox={new Size("48%", "auto", "90%", "auto")} pZ={2}>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("20 — صفحة هيرو مثل Canvas")}
+				pText={Text.Body.White.OfText("السكشن هنا مجرد نقطة صفر وخلفية. كل شيء فوقه عنصر مستقل: عنوان، نص، زر، أيقونات، كروت، شارات، أو صور.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem pLoc={new Location("8%", "5%", "54%", "54%")} pBox={new Size(260, 56, 230, 56)} pZ={5}>
+
+			<EmoCall
+				pText="ابدأ التصميم"
+				pBgColor={Colors.GreenLite}
+				pBgColorHover={Colors.Bistage}
+				pTextColor={Colors.BlackOff}
+				pWidth="100%"
+				pHeight="56px"
+				pRadius="14px"
+				pFontSize="18px"
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : rgba(255,255,255,.85) ; border-radius : 25px ; padding : 25px "
+			pLoc={new Location("58%", "58%", "18%", "44%")}
+			pBox={new Size(140, 140, 110, 110)}
+			pRotate={new RespString("12deg", "8deg")}
+			pZ={3}
+		>
+
+			<RespImg pImg={new EmoMediaData("Img", "/Media/", "IndexIcon.webp", false, "أيقونة فهرس", new Size("100%", "100%", "100%", "100%"))} />
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			style = " background : rgba(0,0,0,.55) ; border-radius : 22px ; padding : 15px "
+			pLoc={new Location("72%", "18%", "42%", "70%")}
+			pBox={new Size(180, 120, 160, 110)}
+			pRotate={new RespString("-8deg", "-6deg")}
+			pZ={4}
+		>
+
+			<Emograph
+				pTitle={Text.H4.White.Centered.OfText("حر")}
+				pText={Text.Body.White.Centered.OfText("مكان + حجم + طبقة")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+</BLayout>

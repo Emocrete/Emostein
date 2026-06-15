@@ -1,0 +1,28 @@
+<script is:inline>
+	(function InitGA() {
+	const cAllowedHosts = new Set([
+	"emocrete.com",
+	"www.emocrete.com"
+	]);
+
+	if (!cAllowedHosts.has(window.location.hostname)) return;
+
+	const cGAId = "G-ZGW6SNPV2X";
+
+	window.dataLayer = window.dataLayer || [];
+
+	function gtag() {
+	window.dataLayer.push(arguments);
+	}
+
+	window.gtag = gtag;
+
+	const cScript = document.createElement("script");
+	cScript.async = true;
+	cScript.src = `https://www.googletagmanager.com/gtag/js?id=${cGAId}`;
+	document.head.appendChild(cScript);
+
+	gtag("js", new Date());
+	gtag("config", cGAId);
+	})();
+</script>

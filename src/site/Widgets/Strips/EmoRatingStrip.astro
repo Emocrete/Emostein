@@ -1,0 +1,1655 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+
+interface PageReviewData {
+	ratingValue: number;
+	ratingComment: string;
+	datePublished: string;
+	authorName: string;
+}
+
+interface PageRatingData {
+	hasRating: boolean;
+	pagePath: string;
+	ratingValue: number;
+	ratingCount: number;
+	bestRating: number;
+	worstRating: number;
+	review: PageReviewData | null;
+}
+
+interface Props extends HTMLAttributes<"section">, PlaceProps {
+	pTitle?: string;
+	pSubmitText?: string;
+	pCommentPlaceholder?: string;
+	pPrivacyText?: string;
+	pSourceName?: string;
+	pNotifyEmail?: string;
+	pEmailSubject?: string;
+	pStarEmailSubject?: string;
+	pEmailJsPublicKey?: string;
+	pEmailJsServiceId?: string;
+	pEmailJsTemplateId?: string;
+	pStorageUrl?: string;
+	pRequireComment?: boolean;
+	pRatingData?: PageRatingData | null;
+	pFooterMode?: boolean;
+}
+
+const {
+	pTitle = "عبر عن تجربتك مع هذه الصفحة",
+	pSubmitText = "إرسال التقييم",
+	pCommentPlaceholder = "اكتب تعليقك هنا إن أردت...",
+	pPrivacyText = "",
+	pSourceName = "موقع Emocrete",
+	pNotifyEmail = "emocrete@gmail.com",
+	pEmailSubject = "تعليق جديد على صفحة من موقع Emocrete",
+	pStarEmailSubject = "تقييم نجوم جديد على صفحة من موقع Emocrete",
+	pEmailJsPublicKey = "OleHS6UOuh_Wj_5p_",
+	pEmailJsServiceId = "EmoMail",
+	pEmailJsTemplateId = "EmoRating20015161",
+	pStorageUrl = "",
+	pRequireComment = false,
+	pRatingData = null,
+	pFooterMode = false,
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("EmoRatingStrip"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
+const cFooterModeClass = pFooterMode ? "IsFooterMode" : "";
+const cStars = [1, 2, 3, 4, 5];
+const cBestRating = Number(pRatingData?.bestRating || 5);
+const cInitialHasRating = !!pRatingData?.hasRating && Number(pRatingData.ratingCount || 0) > 0;
+const cInitialRatingValue = cInitialHasRating ? Number(pRatingData?.ratingValue || 0) : 0;
+const cInitialRatingCount = cInitialHasRating ? Number(pRatingData?.ratingCount || 0) : 0;
+const cInitialProgress = GetRatingProgress(cInitialRatingValue, cBestRating);
+const cInitialAverageText = cInitialHasRating ? FormatDecimal(cInitialRatingValue) : "";
+const cInitialCountText = cInitialHasRating ? `من ${FormatInteger(cInitialRatingCount)} زائر` : "";
+
+function GetRatingProgress(pValue: number, pBest: number): number {
+	if (!pValue || !pBest) return 0;
+
+	return Math.max(0, Math.min(100, (pValue / pBest) * 100));
+}
+
+function GetStarFill(pValue: number, pRating: number): number {
+	return Math.max(0, Math.min(100, (pRating - (pValue - 1)) * 100));
+}
+
+function FormatDecimal(pValue: number): string {
+	return new Intl.NumberFormat("ar-EG", {
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2
+	}).format(pValue || 0);
+}
+
+function FormatInteger(pValue: number): string {
+	return new Intl.NumberFormat("ar-EG", {
+		maximumFractionDigits: 0
+	}).format(pValue || 0);
+}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section
+	class = {`EmoRatingStrip ${cFooterModeClass} ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	data-emo-rating-strip="true"
+	data-source-name={pSourceName}
+	data-notify-email={pNotifyEmail}
+	data-email-subject={pEmailSubject}
+	data-star-email-subject={pStarEmailSubject}
+	data-email-js-public-key={pEmailJsPublicKey}
+	data-email-js-service-id={pEmailJsServiceId}
+	data-email-js-template-id={pEmailJsTemplateId}
+	data-storage-url={pStorageUrl}
+	data-require-comment={pRequireComment ? "true" : "false"}
+	data-initial-rating-value={String(cInitialRatingValue)}
+	data-initial-rating-count={String(cInitialRatingCount)}
+	data-best-rating={String(cBestRating)}
+	data-footer-mode={pFooterMode ? "true" : "false"}
+	{...RemAttr}
+>
+
+	<div class = " RatingLayout ">
+
+		<form
+			class = " RatingCard "
+			data-rating-form="true"
+			autocomplete="off"
+		>
+
+			<div class = " RatingUpper ">
+
+				<h2 class = " RatingTitle ">
+					{pTitle}
+				</h2>
+
+				<strong class = " RatingBadge ">
+					تقييم الصفحة
+				</strong>
+
+				<div class = " StarsZone " data-stars-zone="true">
+
+					<div
+						class = " StarsRow "
+						data-stars-row="true"
+						role="radiogroup"
+						aria-label="تقييم الصفحة من خمس نجمات"
+					>
+
+						{ cStars.map((cValue) => (
+
+							<button
+								class = " StarBtn "
+								style = {`--star-fill:${GetStarFill(cValue, cInitialRatingValue)}%;`}
+								type="button"
+								data-star-value={String(cValue)}
+								aria-label={`${FormatInteger(cValue)} ${cValue === 1 ? "نجمة" : "نجوم"}`}
+							>
+
+								<span class = " StarIcon " aria-hidden="true">
+									★
+								</span>
+
+							</button>
+
+						)) }
+
+					</div>
+
+					<input
+						type="hidden"
+						value=""
+						data-rating-value-input="true"
+					/>
+
+				</div>
+
+				<span class = " RatingHint " data-rating-hint="true">
+					لم يتم اختيار التقييم بعد
+				</span>
+
+				<div class = {`RatingAverageBox ${cInitialHasRating ? "" : "IsHidden"}`.trim()} data-rating-average-box="true">
+
+					<strong class = " RatingAverage " data-rating-average="true">
+						{cInitialAverageText}
+					</strong>
+
+					<span
+						class = " RatingProgress "
+						style = {`--rating-progress:${cInitialProgress}%;`}
+						data-rating-progress="true"
+						aria-hidden="true"
+					>
+
+						<span>
+
+						</span>
+
+					</span>
+
+					<span class = " RatingCount " data-rating-count="true">
+						{cInitialCountText}
+					</span>
+
+				</div>
+
+				<span class = {`RatingNoAverage ${cInitialHasRating ? "IsHidden" : ""}`.trim()} data-rating-empty="true">
+					لم يتم التقييم بعد
+				</span>
+
+			</div>
+
+			<span
+				class = " RatingUserPill "
+				data-user-rating-pill="true"
+				hidden
+			>
+
+			</span>
+
+			<label class = " CommentField ">
+
+				<span class = " CommentTitle ">
+					تعليق اختياري
+				</span>
+
+				<textarea
+					rows="4"
+					maxlength="700"
+					placeholder={pCommentPlaceholder}
+					data-rating-comment="true"
+				>
+
+				</textarea>
+
+			</label>
+
+			<button
+				class = " SubmitBtn "
+				type="submit"
+				data-rating-submit="true"
+			>
+
+				<span>
+					{pSubmitText}
+				</span>
+
+				<svg viewBox="0 0 24 24" aria-hidden="true">
+
+					<path
+						d="M21.7 3.4 2.9 10.8c-.8.3-.8 1.5.1 1.8l4.8 1.5 1.8 5.6c.3.8 1.4.9 1.8.2l2.6-4.2 4.9 3.6c.7.5 1.7.1 1.8-.8l2.4-13.7c.2-.9-.7-1.6-1.4-1.4ZM9 13.5l8.5-5.3-6.9 6.9-.4 2.2L9 13.5Z"
+					/>
+
+				</svg>
+
+			</button>
+
+			<span
+				class = " RatingStatus "
+				data-rating-status="true"
+				hidden
+			>
+				{pPrivacyText}
+			</span>
+
+		</form>
+
+	</div>
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.EmoRatingStrip {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		width: 100%;
+		min-height: 475px;
+		box-sizing: border-box;
+		direction: rtl;
+		background: linear-gradient(rgba(0, 0, 0, 0.50), rgba(0, 0, 0, 0.50)),
+			radial-gradient(circle at 14% 26%, rgba(48, 241, 249, 0.12), transparent 34%),
+			radial-gradient(circle at 84% 82%, rgba(48, 241, 249, 0.08), transparent 30%),
+			linear-gradient(135deg, #231a46 0%, #211840 48%, #181231 100%);
+		color: #f7fbff;
+		border-block: 1px solid rgba(48, 241, 249, 0.22);
+		box-shadow: 0 18px 45px rgba(0, 8, 26, 0.28);
+	}
+
+	.EmoRatingStrip::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -2;
+		pointer-events: none;
+		background: linear-gradient(90deg, rgba(255, 255, 255, 0.065) 1px, transparent 1px),
+			linear-gradient(0deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+			url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='88' viewBox='0 0 88 88'%3E%3Cpath d='M16 16h56v56H16z' fill='none' stroke='%2330f1f9' stroke-opacity='.10' stroke-width='1'/%3E%3Cpath d='M0 44h88M44 0v88' stroke='%23ffffff' stroke-opacity='.045' stroke-width='1'/%3E%3Ccircle cx='44' cy='44' r='1.6' fill='%2330f1f9' fill-opacity='.12'/%3E%3C/svg%3E");
+		background-size: 44px 44px, 44px 44px, 88px 88px;
+		mask-image: linear-gradient(90deg, transparent, black 9%, black 92%, transparent);
+		opacity: 0.32;
+	}
+
+	.EmoRatingStrip::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		pointer-events: none;
+		background: linear-gradient(90deg, rgba(0, 0, 0, 0.08), transparent 22%, transparent 68%, rgba(48, 241, 249, 0.06));
+	}
+
+
+	.RatingLayout {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		align-items: center;
+		width: min(1920px, 100%);
+		min-height: 475px;
+		margin-inline: auto;
+		padding: 20px 18px;
+		box-sizing: border-box;
+		direction: ltr;
+	}
+
+
+	.RatingCard {
+		grid-column: 3;
+		justify-self: end;
+		display: grid;
+		gap: 13px;
+		width: min(100%, 560px);
+		padding: 22px 24px 24px;
+		box-sizing: border-box;
+		border: 1px solid rgba(90, 159, 218, 0.38);
+		border-radius: 24px;
+		background: linear-gradient(145deg, rgba(2, 19, 43, 0.94), rgba(2, 16, 37, 0.88));
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09),
+			0 18px 40px rgba(0, 0, 0, 0.28);
+		backdrop-filter: blur(11px);
+		-webkit-backdrop-filter: blur(11px);
+		direction: rtl;
+	}
+
+
+	.RatingUpper {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 124px;
+		grid-template-areas: "Title Badge"
+			"Stars Average"
+			"Hint Average";
+		column-gap: 10px;
+		align-items: center;
+		direction: ltr;
+	}
+
+
+	.RatingTitle {
+		grid-area: Title;
+		margin: 0;
+		padding: 0 4px;
+		color: #ffffff;
+		font-size: 20px;
+		font-weight: 950;
+		line-height: 1.35;
+		text-align: center;
+		direction: rtl;
+		letter-spacing: -0.15px;
+	}
+
+
+	.RatingBadge {
+		grid-area: Badge;
+		justify-self: end;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 112px;
+		height: 37px;
+		padding: 0 15px;
+		box-sizing: border-box;
+		overflow: hidden;
+		border: 1px solid rgba(255, 209, 92, 0.58);
+		border-radius: 999px;
+		background: linear-gradient(135deg, rgba(255, 209, 92, 0.25), rgba(255, 209, 92, 0.10));
+		color: #ffd15c;
+		font-size: 13px;
+		font-weight: 950;
+		line-height: 1;
+		direction: rtl;
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+	}
+
+
+	.StarsZone {
+		grid-area: Stars;
+		justify-self: center;
+		display: grid;
+		justify-items: center;
+		gap: 5px;
+		direction: rtl;
+	}
+
+
+	.StarsRow {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 5px;
+		direction: ltr;
+	}
+
+
+	.StarBtn {
+		--star-fill: 0%;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 48px;
+		height: 48px;
+		padding: 0;
+		border: 1px solid rgba(255, 209, 92, 0.28);
+		border-radius: 12px;
+		outline: 0;
+		background: linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.045));
+		font-family: inherit;
+		font-size: 31px;
+		line-height: 1;
+		cursor: pointer;
+		transition: transform 0.12s ease,
+			background 0.12s ease,
+			border-color 0.12s ease,
+			box-shadow 0.12s ease,
+			filter 0.12s ease;
+	}
+
+
+	.StarIcon {
+		position: relative;
+		display: inline-block;
+		width: 1em;
+		height: 1em;
+		color: rgba(255, 255, 255, 0.30);
+		transform: translateY(-1px);
+	}
+
+	.StarIcon::after {
+		content: "★";
+		position: absolute;
+		inset: 0;
+		width: var(--star-fill);
+		overflow: hidden;
+		color: rgba(255, 209, 92, 0.26);
+		white-space: nowrap;
+		pointer-events: none;
+	}
+
+
+	.RatingHint {
+		grid-area: Hint;
+		justify-self: center;
+		min-height: 19px;
+		color: rgba(230, 238, 249, 0.72);
+		font-size: 12px;
+		font-weight: 850;
+		line-height: 1.35;
+		text-align: center;
+		direction: rtl;
+	}
+
+
+	.RatingAverageBox {
+		grid-area: Average;
+		justify-self: stretch;
+		display: grid;
+		justify-items: center;
+		align-content: center;
+		gap: 3px;
+		direction: rtl;
+	}
+
+
+	.RatingNoAverage {
+		grid-area: Average;
+		justify-self: center;
+		align-self: center;
+		color: rgba(230, 238, 249, 0.78);
+		font-size: 13px;
+		font-weight: 900;
+		line-height: 1.35;
+		text-align: center;
+		direction: rtl;
+	}
+
+
+	.IsHidden {
+		display: none !important;
+	}
+
+
+	.RatingAverage {
+		color: #ffffff;
+		font-size: 34px;
+		font-weight: 950;
+		line-height: 0.95;
+		letter-spacing: -1px;
+	}
+
+
+	.RatingProgress {
+		--rating-progress: 0%;
+		position: relative;
+		display: block;
+		width: 118px;
+		height: 18px;
+		padding: 3px;
+		box-sizing: border-box;
+		overflow: hidden;
+		border: 2px solid rgba(48, 241, 249, 0.94);
+		border-radius: 5px;
+		background: rgba(35, 26, 70, 0.92);
+		box-shadow: 0 0 0 1px rgba(55, 97, 255, 0.60),
+			inset 0 0 0 1px rgba(0, 0, 0, 0.45);
+	}
+
+	.RatingProgress::before {
+		content: "";
+		position: absolute;
+		inset: 3px;
+		border-radius: 3px;
+		background: repeating-linear-gradient(120deg, rgba(130, 130, 130, 0.55) 0 9px, rgba(60, 60, 65, 0.60) 9px 18px);
+	}
+
+	.RatingProgress span {
+		position: relative;
+		display: block;
+		width: var(--rating-progress);
+		height: 100%;
+		border-radius: 3px;
+		background: repeating-linear-gradient(120deg, #30f1f9 0 8px, #1195d5 8px 16px);
+		box-shadow: 0 0 8px rgba(48, 241, 249, 0.45);
+	}
+
+
+	.RatingCount {
+		color: #ffffff;
+		font-size: 12px;
+		font-weight: 900;
+		line-height: 1.2;
+	}
+
+
+	.RatingUserPill {
+		justify-self: center;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: fit-content;
+		max-width: 100%;
+		min-height: 22px;
+		padding: 2px 10px;
+		box-sizing: border-box;
+		border: 1px solid rgba(255, 209, 92, 0.28);
+		border-radius: 999px;
+		background: rgba(255, 209, 92, 0.10);
+		color: #ffd15c;
+		font-size: 12px;
+		font-weight: 900;
+		line-height: 1.4;
+		text-align: center;
+	}
+
+
+	.CommentField {
+		display: grid;
+		grid-template-columns: 1fr;
+		align-items: end;
+		gap: 8px;
+		direction: rtl;
+	}
+
+	.CommentField textarea {
+		grid-column: 1 / -1;
+		width: 100%;
+		min-height: 136px;
+		resize: vertical;
+		padding: 14px 16px;
+		box-sizing: border-box;
+		border: 1px solid rgba(232, 239, 248, 0.70);
+		border-radius: 14px;
+		outline: 0;
+		background: #e9eef5;
+		color: #07182d;
+		font-family: inherit;
+		font-size: 15px;
+		font-weight: 750;
+		line-height: 1.8;
+		text-align: right;
+		direction: rtl;
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.96),
+			0 12px 26px rgba(0, 15, 35, 0.22);
+	}
+
+	.CommentField textarea::placeholder {
+		color: rgba(7, 24, 45, 0.52);
+	}
+
+
+	.CommentTitle {
+		color: #ffffff;
+		font-size: 15px;
+		font-weight: 950;
+		line-height: 1.2;
+		white-space: nowrap;
+	}
+
+
+	.SubmitBtn {
+		justify-self: center;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		width: 220px;
+		height: 44px;
+		padding: 0 18px;
+		border: 0;
+		border-radius: 14px;
+		background: linear-gradient(135deg, #26b5ff, #176dff 56%, #1835d8);
+		color: #ffffff;
+		font-family: inherit;
+		font-size: 15px;
+		font-weight: 950;
+		white-space: nowrap;
+		cursor: pointer;
+		box-shadow: 0 12px 26px rgba(23, 109, 255, 0.34),
+			inset 0 1px 0 rgba(255, 255, 255, 0.22);
+		transition: transform 0.12s ease, filter 0.12s ease;
+	}
+
+	.SubmitBtn svg {
+		width: 17px;
+		height: 17px;
+		fill: currentColor;
+		flex: 0 0 auto;
+	}
+
+	.SubmitBtn:disabled {
+		opacity: 0.68;
+		cursor: wait;
+	}
+
+
+	.RatingStatus {
+		justify-self: center;
+		min-height: 20px;
+		text-align: center;
+		color: rgba(125, 211, 255, 0.88);
+		font-size: 12px;
+		font-weight: 850;
+		line-height: 1.5;
+	}
+
+
+
+	.StarBtn.IsActive {
+		border-color: rgba(255, 209, 92, 0.86);
+		background: linear-gradient(145deg, rgba(255, 209, 92, 0.23), rgba(179, 121, 26, 0.15));
+		box-shadow: 0 10px 18px rgba(255, 191, 64, 0.14);
+	}
+
+	.StarBtn.IsActive .StarIcon {
+		color: #ffd15c;
+	}
+
+	.StarBtn.IsActive .StarIcon::after {
+		width: 100%;
+		color: #ffd15c;
+	}
+
+
+	.EmoRatingStrip.IsStarLocked .StarBtn {
+		cursor: default;
+		pointer-events: none;
+	}
+
+	.EmoRatingStrip.IsStarLocked .StarBtn:not(.IsActive) .StarIcon::after {
+		width: 0;
+	}
+
+
+	.RatingStatus.IsError {
+		color: #ffbd5c;
+	}
+
+
+	.RatingStatus.IsDone {
+		color: #7dd3ff;
+	}
+
+
+
+	.RatingUserPill[hidden] {
+		display: none;
+	}
+
+
+	.RatingStatus[hidden],
+	.RatingStatus:empty
+	{
+		display: none;
+	}
+
+
+	@media (hover: hover) and (pointer: fine) {
+		.EmoRatingStrip:not(.IsStarLocked) .StarBtn:hover,
+		.SubmitBtn:hover
+		{
+			filter: brightness(1.08);
+			transform: translateY(-1px);
+		}
+	}
+
+
+	@media (max-width: 1500px) and (orientation: landscape) {
+		.RatingCard {
+			width: min(100%, 520px);
+			padding: 20px 22px 22px;
+		}
+
+		.RatingTitle {
+			font-size: 19px;
+		}
+
+		.StarBtn {
+			width: 46px;
+			height: 46px;
+			font-size: 29px;
+		}
+	}
+
+
+	@media (orientation: portrait) {
+		.EmoRatingStrip {
+			min-height: auto;
+		}
+
+		.RatingLayout {
+			grid-template-columns: 1fr;
+			min-height: auto;
+			padding: 22px 14px;
+		}
+
+		.RatingCard {
+			grid-column: 1;
+			justify-self: center;
+			width: min(100%, 560px);
+			padding: 20px 24px 22px;
+			border-radius: 24px;
+		}
+
+		.RatingUpper {
+			grid-template-columns: minmax(0, 1fr) 112px;
+			column-gap: 7px;
+		}
+
+		.RatingTitle {
+			font-size: 19px;
+		}
+
+		.RatingBadge {
+			min-width: 104px;
+			height: 34px;
+			padding-inline: 12px;
+			font-size: 12px;
+		}
+
+		.StarBtn {
+			width: 46px;
+			height: 46px;
+			font-size: 29px;
+		}
+
+		.RatingAverage {
+			font-size: 32px;
+		}
+
+		.RatingProgress {
+			width: 108px;
+		}
+
+		.CommentField textarea {
+			min-height: 134px;
+		}
+
+		.SubmitBtn {
+			width: 220px;
+		}
+	}
+
+
+	@media (max-width: 430px) and (orientation: portrait) {
+		.RatingCard {
+			padding: 17px 16px 20px;
+		}
+
+		.RatingUpper {
+			grid-template-columns: 1fr;
+			grid-template-areas: "Badge"
+				"Title"
+				"Average"
+				"Stars"
+				"Hint";
+			row-gap: 7px;
+		}
+
+		.RatingBadge,
+		.RatingAverageBox,
+		.StarsZone,
+		.RatingHint
+		{
+			justify-self: center;
+		}
+
+		.StarsRow {
+			gap: 4px;
+		}
+
+		.StarBtn {
+			width: 42px;
+			height: 42px;
+			border-radius: 11px;
+			font-size: 27px;
+		}
+
+		.SubmitBtn {
+			width: 100%;
+		}
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+	const cEmailJsSrc = "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
+
+	type EmailJsBrowser = {
+	init: (pOptions: { publicKey: string }) => void;
+	send: (pServiceId: string, pTemplateId: string, pTemplateParams: Record<string, string>) => Promise<unknown>;
+	};
+
+	type RatingWindow = Window & {
+	__EmoRatingStripReady?: boolean;
+	__EmoRatingStripEmailJsLoading?: Promise<EmailJsBrowser>;
+	emailjs?: EmailJsBrowser;
+	};
+
+	type LocalStarRating = {
+	ratingValue: number;
+	pagePath: string;
+	createdAt: string;
+	};
+
+	type LiveRatingData = {
+	ok?: boolean;
+	hasRating?: boolean;
+	ratingValue?: number;
+	ratingCount?: number;
+	review?: {
+	ratingComment?: string;
+	} | null;
+	};
+
+	const cWindow = window as RatingWindow;
+
+	if (!cWindow.__EmoRatingStripReady) {
+	cWindow.__EmoRatingStripReady = true;
+	document.addEventListener("astro:page-load", SetupRatingStrips);
+	window.addEventListener("load", SetupRatingStrips);
+	SetupRatingStrips();
+	}
+
+	function SetupRatingStrips(): void {
+	const cStrips = document.querySelectorAll<HTMLElement>("[data-emo-rating-strip='true']:not([data-rating-ready='true'])");
+
+	cStrips.forEach(SetupRatingStrip);
+	}
+
+	function SetupRatingStrip(pRoot: HTMLElement): void {
+	pRoot.dataset.ratingReady = "true";
+
+	const cForm = pRoot.querySelector<HTMLFormElement>("[data-rating-form='true']");
+	const cStarsZone = pRoot.querySelector<HTMLElement>("[data-stars-zone='true']");
+	const cStarsRow = pRoot.querySelector<HTMLElement>("[data-stars-row='true']");
+	const cStars = pRoot.querySelectorAll<HTMLButtonElement>("[data-star-value]");
+	const cComment = pRoot.querySelector<HTMLTextAreaElement>("[data-rating-comment='true']");
+
+	if (cComment) cComment.value = "";
+
+	RenderAverageStars(pRoot, GetCurrentAverage(pRoot));
+
+	const cSavedRating = ReadLocalStarRating(pRoot);
+
+	if (cSavedRating) {
+	LockStarRating(pRoot, cSavedRating.ratingValue, "تم قراءة تقييمك السابق لهذه الصفحة.");
+	} else {
+	RestoreAverageStars(pRoot);
+	}
+
+	cStars.forEach(function SetupStar(pStar): void {
+	pStar.addEventListener("click", function HandleStarClick(): void {
+	void SubmitStarRating(pRoot, GetStarValue(pStar));
+	});
+
+	pStar.addEventListener("pointerenter", function HandleStarPointerEnter(): void {
+	if (IsStarLocked(pRoot)) return;
+	PreviewRating(pRoot, GetStarValue(pStar));
+	});
+
+	pStar.addEventListener("focus", function HandleStarFocus(): void {
+	if (IsStarLocked(pRoot)) return;
+	PreviewRating(pRoot, GetStarValue(pStar));
+	});
+	});
+
+	cStarsRow?.addEventListener("pointerleave", function HandleStarsPointerLeave(): void {
+	if (IsStarLocked(pRoot)) return;
+	RestoreAverageStars(pRoot);
+	});
+
+	cStarsZone?.addEventListener("focusout", function HandleStarsFocusOut(): void {
+	window.setTimeout(function RestoreAfterFocusMove(): void {
+	if (IsStarLocked(pRoot)) return;
+
+	const cActiveElement = document.activeElement;
+
+	if (cActiveElement instanceof HTMLElement && cStarsZone.contains(cActiveElement)) return;
+
+	RestoreAverageStars(pRoot);
+	}, 0);
+	});
+
+	cForm?.addEventListener("submit", function HandleSubmit(pEvent): void {
+	pEvent.preventDefault();
+	void SendComment(pRoot);
+	});
+
+	void RefreshRatingFromSheet(pRoot);
+
+	if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+	pRoot.addEventListener("dblclick", async function CopyRatingMessage(): Promise<void> {
+	if (!pRoot.id) return;
+
+	const cPageTitle = document.title
+	.split("|")
+	.map(function CleanTitlePart(pPart): string {
+	return pPart.trim();
+	})
+	.filter(function KeepTitlePart(pPart): boolean {
+	return pPart !== "Emostein" && pPart !== "Emodsign" && pPart !== "Emocrete" && pPart !== "Emostone" && pPart !== "Emochain" && pPart !== "Emoperm" && pPart !== "Emomed" && pPart !== "Emonsult" && pPart !== "Emostate" && pPart !== "م. أيمن عاشور" && !/^\d{4}$/.test(pPart);
+	})
+	.at(-1) ?? "";
+	const cUrl = new URL(location.href);
+
+	cUrl.search = "";
+	cUrl.hash = pRoot.id;
+
+	await navigator.clipboard.writeText(
+	`نسعد بالإطلاع على آرائكم وملاحظاتكم لتحسين محتوى الخدمة\n\nلتقييم صفحة ${cPageTitle} انتقل للرابط بالأسفل :\n\n${cUrl.href}\n\nشكرًا لكم 🌷`
+	).catch(function IgnoreCopyError(): void {});
+	});
+	}
+	}
+
+	async function SubmitStarRating(pRoot: HTMLElement, pRating: number): Promise<void> {
+	if (IsStarLocked(pRoot)) return;
+	if (pRating < 1 || pRating > 5) return;
+
+	const cStatus = pRoot.querySelector<HTMLElement>("[data-rating-status='true']");
+	const cPayload = BuildStarPayload(pRoot, pRating);
+
+	LockStarRating(pRoot, pRating, "تم تسجيل تقييمك لهذه الصفحة.");
+	SaveLocalStarRating(pRoot, pRating);
+	ShowStatus(cStatus, "تم تسجيل التقييم.", "IsDone");
+
+	const cStorageResult = await SavePayloadIfNeeded(pRoot, cPayload)
+	.then(function HandleStored(): boolean {
+	return true;
+	})
+	.catch(function HandleStorageError(pError): boolean {
+	console.warn("Star rating storage warning:", pError);
+
+	return false;
+	});
+
+	const cEmailResult = await SendPayloadEmailIfConfigured(pRoot, cPayload, GetStarEmailSubject(pRoot))
+	.then(function HandleSent(): boolean {
+	return true;
+	})
+	.catch(function HandleEmailError(pError): boolean {
+	console.warn("Star rating email warning:", pError);
+
+	return false;
+	});
+
+	if (!cStorageResult && !cEmailResult) {
+	ShowStatus(cStatus, "تم تثبيت اختيارك، لكن تعذر الإرسال الآن.", "IsError");
+	return;
+	}
+
+	window.setTimeout(function RefreshAfterStarSaved(): void {
+	void RefreshRatingFromSheet(pRoot).then(function HandleRatingRefresh(): void {
+	ShowStatus(cStatus, "تم تسجيل التقييم.", "IsDone");
+	});
+	}, 900);
+	}
+
+	async function SendComment(pRoot: HTMLElement): Promise<void> {
+	const cComment = GetComment(pRoot);
+	const cStatus = pRoot.querySelector<HTMLElement>("[data-rating-status='true']");
+	const cSubmitButton = pRoot.querySelector<HTMLButtonElement>("[data-rating-submit='true']");
+
+	if (cComment.length < 3) {
+	ShowStatus(cStatus, "اكتب تعليقًا مختصرًا قبل إرسال الرأي.", "IsError");
+	return;
+	}
+
+	const cPayload = BuildCommentPayload(pRoot, cComment);
+
+	SetSubmitBusy(cSubmitButton, true);
+	ShowStatus(cStatus, "جاري إرسال تعليقك...", "IsDone");
+
+	try {
+	await SendPayloadEmailIfConfigured(pRoot, cPayload, GetCommentEmailSubject(pRoot));
+	await SavePayloadIfNeeded(pRoot, cPayload);
+	ClearComment(pRoot);
+	ShowStatus(cStatus, "تم إرسال تعليقك بنجاح.", "IsDone");
+	} catch (pError) {
+	console.error("Comment submit error:", pError);
+	ShowStatus(cStatus, "تعذر إرسال التعليق حاليًا. حاول مرة أخرى لاحقًا.", "IsError");
+	} finally {
+	SetSubmitBusy(cSubmitButton, false);
+	}
+	}
+
+	function BuildStarPayload(pRoot: HTMLElement, pRating: number): Record<string, string> {
+	return {
+	payload_type: "page_rating",
+	page_title: document.title,
+	page_url: location.href,
+	page_path: NormalizePath(location.pathname),
+	rating_value: String(pRating),
+	rating_label: GetRatingLabel(pRating),
+	rating_comment: "",
+	source_name: pRoot.dataset.sourceName || "موقع Emocrete",
+	created_at: GetEgyptTimeText(),
+	visitor_key: GetVisitorKey(),
+	user_agent: navigator.userAgent
+	};
+	}
+
+	function BuildCommentPayload(pRoot: HTMLElement, pComment: string): Record<string, string> {
+	const cSavedRating = ReadLocalStarRating(pRoot);
+	const cRating = cSavedRating?.ratingValue || 0;
+
+	return {
+	payload_type: "page_comment",
+	page_title: document.title,
+	page_url: location.href,
+	page_path: NormalizePath(location.pathname),
+	rating_value: cRating ? String(cRating) : "",
+	rating_label: cRating ? GetRatingLabel(cRating) : "تعليق بدون تقييم نجوم من نفس المتصفح",
+	rating_comment: pComment,
+	source_name: pRoot.dataset.sourceName || "موقع Emocrete",
+	created_at: GetEgyptTimeText(),
+	visitor_key: GetVisitorKey(),
+	user_agent: navigator.userAgent
+	};
+	}
+
+	async function SendPayloadEmailIfConfigured(pRoot: HTMLElement, pPayload: Record<string, string>, pSubject: string): Promise<void> {
+	const cPublicKey = pRoot.dataset.emailJsPublicKey || "";
+	const cServiceId = pRoot.dataset.emailJsServiceId || "";
+	const cTemplateId = pRoot.dataset.emailJsTemplateId || "";
+	const cNotifyEmail = pRoot.dataset.notifyEmail || "";
+
+	if (!cPublicKey || !cServiceId || !cTemplateId || !cNotifyEmail) return;
+
+	const cEmailJs = await LoadEmailJs();
+
+	cEmailJs.init({
+	publicKey: cPublicKey
+	});
+
+	await cEmailJs.send(cServiceId, cTemplateId, {
+	to_email: cNotifyEmail,
+	subject: pSubject,
+	...pPayload
+	});
+	}
+
+	function GetStarEmailSubject(pRoot: HTMLElement): string {
+	return pRoot.dataset.starEmailSubject || "تقييم نجوم جديد على صفحة من موقع Emocrete";
+	}
+
+	function GetCommentEmailSubject(pRoot: HTMLElement): string {
+	return pRoot.dataset.emailSubject || "تعليق جديد على صفحة من موقع Emocrete";
+	}
+
+	async function SavePayloadIfNeeded(pRoot: HTMLElement, pPayload: Record<string, string>): Promise<void> {
+	const cStorageUrl = pRoot.dataset.storageUrl || "";
+
+	if (!cStorageUrl) return;
+
+	await fetch(cStorageUrl, {
+	method: "POST",
+	mode: "no-cors",
+	headers: {
+	"Content-Type": "text/plain;charset=utf-8"
+	},
+	body: JSON.stringify(pPayload)
+	});
+	}
+
+	function LoadEmailJs(): Promise<EmailJsBrowser> {
+	if (cWindow.emailjs) return Promise.resolve(cWindow.emailjs);
+	if (cWindow.__EmoRatingStripEmailJsLoading) return cWindow.__EmoRatingStripEmailJsLoading;
+
+	cWindow.__EmoRatingStripEmailJsLoading = new Promise<EmailJsBrowser>(function HandleEmailJsLoad(pResolve, pReject): void {
+	const cScript = document.createElement("script");
+
+	cScript.src = cEmailJsSrc;
+	cScript.async = true;
+
+	cScript.addEventListener("load", function HandleLoad(): void {
+	if (cWindow.emailjs) {
+	pResolve(cWindow.emailjs);
+	return;
+	}
+
+	pReject(new Error("EmailJS library did not load."));
+	});
+
+	cScript.addEventListener("error", function HandleError(): void {
+	pReject(new Error("EmailJS library loading failed."));
+	});
+
+	document.head.appendChild(cScript);
+	});
+
+	return cWindow.__EmoRatingStripEmailJsLoading;
+	}
+
+	function LockStarRating(pRoot: HTMLElement, pRating: number, pHint: string): void {
+	const cInput = pRoot.querySelector<HTMLInputElement>("[data-rating-value-input='true']");
+	const cStars = pRoot.querySelectorAll<HTMLButtonElement>("[data-star-value]");
+
+	pRoot.dataset.starLocked = "true";
+	pRoot.classList.add("IsStarLocked");
+
+	if (cInput) cInput.value = String(pRating);
+
+	UpdateStars(pRoot, pRating);
+	UpdateHint(pRoot, pHint);
+	UpdateUserPill(pRoot, pRating);
+
+	cStars.forEach(function LockStar(pStar): void {
+	pStar.setAttribute("aria-disabled", "true");
+	pStar.tabIndex = -1;
+	});
+	}
+
+	function PreviewRating(pRoot: HTMLElement, pRating: number): void {
+	UpdateStars(pRoot, pRating);
+	UpdateHint(pRoot, GetRatingLabel(pRating));
+	}
+
+	function RestoreAverageStars(pRoot: HTMLElement): void {
+	if (IsStarLocked(pRoot)) return;
+
+	const cInput = pRoot.querySelector<HTMLInputElement>("[data-rating-value-input='true']");
+	const cRating = GetCurrentAverage(pRoot);
+
+	if (cInput) cInput.value = "";
+
+	UpdateStars(pRoot, 0);
+	RenderAverageStars(pRoot, cRating);
+	UpdateHint(pRoot, "لم يتم اختيار التقييم بعد");
+	}
+
+	function UpdateStars(pRoot: HTMLElement, pRating: number): void {
+	const cStars = pRoot.querySelectorAll<HTMLButtonElement>("[data-star-value]");
+
+	cStars.forEach(function UpdateStar(pStar): void {
+	const cValue = GetStarValue(pStar);
+
+	pStar.classList.toggle("IsActive", cValue <= pRating && pRating > 0);
+	pStar.setAttribute("aria-pressed", cValue === pRating ? "true" : "false");
+	});
+	}
+
+	function RenderAverageStars(pRoot: HTMLElement, pRating: number): void {
+	const cStars = pRoot.querySelectorAll<HTMLButtonElement>("[data-star-value]");
+
+	cStars.forEach(function RenderAverageStar(pStar): void {
+	const cValue = GetStarValue(pStar);
+	const cFill = Math.max(0, Math.min(100, (pRating - (cValue - 1)) * 100));
+
+	pStar.style.setProperty("--star-fill", `${cFill}%`);
+	});
+	}
+
+	function RenderLiveRating(pRoot: HTMLElement, pData: LiveRatingData): void {
+	if (!pData?.ok || !pData.hasRating || !pData.ratingCount || !pData.ratingValue) {
+	SetAverageUi(pRoot, 0, 0);
+	if (!IsStarLocked(pRoot)) RestoreAverageStars(pRoot);
+	return;
+	}
+
+	SetAverageUi(pRoot, Number(pData.ratingValue), Number(pData.ratingCount));
+
+	if (!IsStarLocked(pRoot)) RestoreAverageStars(pRoot);
+	}
+
+	function SetAverageUi(pRoot: HTMLElement, pRatingValue: number, pRatingCount: number): void {
+	const cAverageBox = pRoot.querySelector<HTMLElement>("[data-rating-average-box='true']");
+	const cEmpty = pRoot.querySelector<HTMLElement>("[data-rating-empty='true']");
+	const cAverage = pRoot.querySelector<HTMLElement>("[data-rating-average='true']");
+	const cCount = pRoot.querySelector<HTMLElement>("[data-rating-count='true']");
+	const cProgress = pRoot.querySelector<HTMLElement>("[data-rating-progress='true']");
+	const cBestRating = Number(pRoot.dataset.bestRating || "5");
+	const cHasRating = pRatingCount > 0 && pRatingValue > 0;
+	const cSafeRating = cHasRating ? pRatingValue : 0;
+	const cProgressValue = cBestRating ? Math.max(0, Math.min(100, (cSafeRating / cBestRating) * 100)) : 0;
+
+	pRoot.dataset.currentAverage = String(cSafeRating);
+	pRoot.dataset.currentCount = String(cHasRating ? pRatingCount : 0);
+
+	cAverageBox?.classList.toggle("IsHidden", !cHasRating);
+	cEmpty?.classList.toggle("IsHidden", cHasRating);
+
+	if (cAverage) cAverage.textContent = cHasRating ? FormatDecimal(cSafeRating) : "";
+	if (cCount) cCount.textContent = cHasRating ? `من ${FormatInteger(pRatingCount)} زائر` : "";
+	if (cProgress) cProgress.style.setProperty("--rating-progress", `${cProgressValue}%`);
+
+	RenderAverageStars(pRoot, cSafeRating);
+	}
+
+	function GetCurrentAverage(pRoot: HTMLElement): number {
+	return Number(pRoot.dataset.currentAverage || pRoot.dataset.initialRatingValue || "0");
+	}
+
+	function UpdateHint(pRoot: HTMLElement, pText: string): void {
+	const cHint = pRoot.querySelector<HTMLElement>("[data-rating-hint='true']");
+
+	if (!cHint) return;
+
+	cHint.textContent = pText;
+	}
+
+	function UpdateUserPill(pRoot: HTMLElement, pRating: number): void {
+	const cPill = pRoot.querySelector<HTMLElement>("[data-user-rating-pill='true']");
+
+	if (!cPill) return;
+
+	cPill.hidden = false;
+	cPill.textContent = `تقييمك لهذه الصفحة: ${FormatInteger(pRating)} من ٥`;
+	}
+
+	function IsStarLocked(pRoot: HTMLElement): boolean {
+	return pRoot.dataset.starLocked === "true";
+	}
+
+	function GetStarValue(pStar: HTMLElement): number {
+	return Number(pStar.dataset.starValue || "0");
+	}
+
+	function GetComment(pRoot: HTMLElement): string {
+	const cComment = pRoot.querySelector<HTMLTextAreaElement>("[data-rating-comment='true']");
+
+	return (cComment?.value || "").trim();
+	}
+
+	function GetRatingLabel(pRating: number): string {
+	switch (pRating) {
+	case 1:
+	return "تقييم ضعيف - نجمة واحدة";
+	case 2:
+	return "تقييم مقبول - نجمتان";
+	case 3:
+	return "تقييم متوسط - ثلاث نجمات";
+	case 4:
+	return "تقييم جيد جدًا - أربع نجمات";
+	case 5:
+	return "تقييم ممتاز - خمس نجمات";
+	default:
+	return "لم يتم اختيار التقييم بعد";
+	}
+	}
+
+	function ClearComment(pRoot: HTMLElement): void {
+	const cComment = pRoot.querySelector<HTMLTextAreaElement>("[data-rating-comment='true']");
+
+	if (cComment) cComment.value = "";
+	}
+
+	function SaveLocalStarRating(pRoot: HTMLElement, pRating: number): void {
+	try {
+	const cValue: LocalStarRating = {
+	ratingValue: pRating,
+	pagePath: NormalizePath(location.pathname),
+	createdAt: new Date().toISOString()
+	};
+
+	localStorage.setItem(GetPageRatingStorageKey(pRoot), JSON.stringify(cValue));
+	} catch (pError) {
+	console.warn("Local star rating save warning:", pError);
+	}
+	}
+
+	function ReadLocalStarRating(pRoot: HTMLElement): LocalStarRating | null {
+	try {
+	const cRawValue = localStorage.getItem(GetPageRatingStorageKey(pRoot));
+
+	if (!cRawValue) return null;
+
+	const cParsedValue = JSON.parse(cRawValue) as LocalStarRating;
+	const cRating = Number(cParsedValue.ratingValue || 0);
+
+	if (cRating < 1 || cRating > 5) return null;
+
+	return {
+	ratingValue: cRating,
+	pagePath: cParsedValue.pagePath || NormalizePath(location.pathname),
+	createdAt: cParsedValue.createdAt || ""
+	};
+	} catch {
+	return null;
+	}
+	}
+
+	function GetPageRatingStorageKey(pRoot: HTMLElement): string {
+	return `EmoPageStarRating:${pRoot.dataset.sourceName || "Emostein"}:${NormalizePath(location.pathname)}`;
+	}
+
+	function GetVisitorKey(): string {
+	const cStorageKey = "EmoRatingVisitorKey";
+
+	try {
+	const cExistingValue = localStorage.getItem(cStorageKey);
+
+	if (cExistingValue) return cExistingValue;
+
+	const cNewValue = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+	localStorage.setItem(cStorageKey, cNewValue);
+
+	return cNewValue;
+	} catch {
+	return `NoStorage-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+	}
+	}
+
+	function GetEgyptTimeText(): string {
+	return new Intl.DateTimeFormat("ar-EG", {
+	timeZone: "Africa/Cairo",
+	dateStyle: "medium",
+	timeStyle: "short"
+	}).format(new Date());
+	}
+
+	function FormatDecimal(pValue: number): string {
+	return new Intl.NumberFormat("ar-EG", {
+	minimumFractionDigits: 2,
+	maximumFractionDigits: 2
+	}).format(pValue || 0);
+	}
+
+	function FormatInteger(pValue: number): string {
+	return new Intl.NumberFormat("ar-EG", {
+	maximumFractionDigits: 0
+	}).format(pValue || 0);
+	}
+
+	function NormalizePath(pValue: string): string {
+	let cValue = pValue.trim();
+
+	if (!cValue.startsWith("/")) {
+	cValue = `/${cValue}`;
+	}
+
+	if (!cValue.endsWith("/")) {
+	cValue = `${cValue}/`;
+	}
+
+	return cValue.toLowerCase();
+	}
+
+	function RefreshRatingFromSheet(pRoot: HTMLElement): Promise<void> {
+	const cStorageUrl = pRoot.dataset.storageUrl || "";
+
+	if (!cStorageUrl) return Promise.resolve();
+
+	return LoadRatingJsonp(cStorageUrl, NormalizePath(location.pathname))
+	.then(function HandleRatingData(pData): void {
+	RenderLiveRating(pRoot, pData);
+	})
+	.catch(function HandleRatingError(pError): void {
+	console.warn("Rating read warning:", pError);
+	});
+	}
+
+	function LoadRatingJsonp(pStorageUrl: string, pPagePath: string): Promise<LiveRatingData> {
+	return new Promise(function HandleJsonp(pResolve, pReject): void {
+	const cCallbackName = `EmoRatingCallback_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+	const cUrl = new URL(pStorageUrl);
+	const cScript = document.createElement("script");
+	let cDone = false;
+
+	cUrl.searchParams.set("mode", "page");
+	cUrl.searchParams.set("page_path", pPagePath);
+	cUrl.searchParams.set("callback", cCallbackName);
+
+	(window as unknown as Record<string, unknown>)[cCallbackName] = function HandleRatingCallback(pData: LiveRatingData): void {
+	cDone = true;
+	Cleanup();
+	pResolve(pData);
+	};
+
+	cScript.src = cUrl.href;
+	cScript.async = true;
+
+	cScript.addEventListener("error", function HandleError(): void {
+	if (cDone) return;
+
+	Cleanup();
+	pReject(new Error("Rating JSONP loading failed."));
+	});
+
+	document.head.appendChild(cScript);
+
+	function Cleanup(): void {
+	delete (window as unknown as Record<string, unknown>)[cCallbackName];
+	cScript.remove();
+	}
+	});
+	}
+
+	function SetSubmitBusy(pButton: HTMLButtonElement | null, pIsBusy: boolean): void {
+	if (!pButton) return;
+
+	pButton.disabled = pIsBusy;
+	}
+
+	function ShowStatus(pStatus: HTMLElement | null, pText: string, pClassName: "IsError" | "IsDone"): void {
+	if (!pStatus) return;
+
+	pStatus.hidden = false;
+	pStatus.textContent = pText;
+	pStatus.classList.remove("IsError", "IsDone");
+	pStatus.classList.add(pClassName);
+	}
+</script>
+
+
+
+
+
+<style>
+
+
+
+	.EmoRatingStrip.IsFooterMode {
+		width: 100%;
+		height: 100%;
+		min-height: 0;
+		border: 1px solid rgba(255, 255, 255, 0.10);
+		border-radius: 24px;
+		background: radial-gradient(circle at 16% 18%, rgba(255, 255, 255, 0.055), transparent 30%),
+			radial-gradient(circle at 84% 82%, rgba(48, 241, 249, 0.055), transparent 32%),
+			linear-gradient(135deg, #171a1f 0%, #101318 50%, #090b0f 100%);
+		border-block: 1px solid rgba(255, 255, 255, 0.10);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07),
+			0 18px 38px rgba(0, 0, 0, 0.28);
+	}
+
+	.EmoRatingStrip.IsFooterMode::before {
+		background: linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+			linear-gradient(0deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+			url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='92' height='92' viewBox='0 0 92 92'%3E%3Cpath d='M14 14h64v64H14z' fill='none' stroke='%23ffffff' stroke-opacity='.055' stroke-width='1'/%3E%3Cpath d='M0 46h92M46 0v92' stroke='%23ffffff' stroke-opacity='.035' stroke-width='1'/%3E%3Ccircle cx='46' cy='46' r='1.8' fill='%23ffffff' fill-opacity='.08'/%3E%3C/svg%3E");
+		background-size: 38px 38px, 38px 38px, 92px 92px;
+		mask-image: none;
+		opacity: 0.36;
+	}
+
+	.EmoRatingStrip.IsFooterMode::after {
+		background: radial-gradient(ellipse at 84% 34%, rgba(255, 255, 255, 0.055), transparent 30%),
+			linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(0, 0, 0, 0.18));
+	}
+
+	.EmoRatingStrip.IsFooterMode .RatingLayout {
+		display: grid;
+		grid-template-columns: 1fr;
+		align-items: stretch;
+		width: 100%;
+		height: 100%;
+		min-height: 0;
+		padding: 0;
+	}
+
+	.EmoRatingStrip.IsFooterMode .RatingCard {
+		grid-column: 1;
+		justify-self: stretch;
+		align-self: stretch;
+		align-content: start;
+		width: 100%;
+		height: 100%;
+		padding: 18px;
+		border: 0;
+		border-radius: 24px;
+		background: transparent;
+		box-shadow: none;
+		backdrop-filter: none;
+		-webkit-backdrop-filter: none;
+	}
+
+	.EmoRatingStrip.IsFooterMode .RatingUpper {
+		grid-template-columns: minmax(0, 1fr) 112px;
+		column-gap: 8px;
+	}
+
+	.EmoRatingStrip.IsFooterMode .RatingTitle {
+		font-size: 18px;
+	}
+
+	.EmoRatingStrip.IsFooterMode .RatingBadge {
+		min-width: 100px;
+		height: 34px;
+		padding-inline: 12px;
+		font-size: 12px;
+	}
+
+	.EmoRatingStrip.IsFooterMode .StarBtn {
+		width: 40px;
+		height: 40px;
+		border-radius: 11px;
+		font-size: 26px;
+	}
+
+	.EmoRatingStrip.IsFooterMode .RatingAverage {
+		font-size: 30px;
+	}
+
+	.EmoRatingStrip.IsFooterMode .RatingProgress {
+		width: 104px;
+	}
+
+	.EmoRatingStrip.IsFooterMode .CommentField textarea {
+		min-height: 122px;
+	}
+
+	.EmoRatingStrip.IsFooterMode .SubmitBtn {
+		width: 200px;
+		height: 42px;
+	}
+
+
+	@media (orientation: portrait) {
+		.EmoRatingStrip.IsFooterMode {
+			height: auto;
+			min-height: 0;
+			border-radius: 22px;
+		}
+
+		.EmoRatingStrip.IsFooterMode .RatingLayout {
+			height: auto;
+		}
+
+		.EmoRatingStrip.IsFooterMode .RatingCard {
+			height: auto;
+			padding: 18px;
+			border-radius: 22px;
+		}
+	}
+
+
+
+</style>

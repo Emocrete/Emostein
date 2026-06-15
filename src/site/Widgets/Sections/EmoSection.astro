@@ -1,0 +1,264 @@
+---
+import { Align, DirectSize, ElemBg, NumPer, Place, type PlaceProps } from "@/TypesLib";
+import { Media } from "@/Media";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"section">, PlaceProps {
+	pBg?: ElemBg;
+	pBox?: DirectSize;
+	pMinH?: NumPer;
+	pAlign?: Align;
+	pImgF?: string;
+	pImgL?: string;
+	pImgP?: string;
+/** وصف صورة خلفية السكشن لمحركات البحث وقارئات الشاشة. */
+pImgAlt?: string;
+}
+
+const {
+	pBg,
+	pBox,
+	pMinH,
+	pAlign = Align.Center,
+	pImgF = "",
+	pImgL = "",
+	pImgP = "",
+pImgAlt = "",
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = "",
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = GetStyleText(pGivenStyle);
+const cIsHero = GetBoolAttr((Astro.props as Record<string, unknown>)["data-hero"]);
+const cLoading: "eager" | "lazy" = cIsHero ? "eager" : "lazy";
+const cFetchPriority: "high" | undefined = cIsHero ? "high" : undefined;
+const cPagePath = Astro.url.pathname;
+const cImgFolder = pImgF || Media.GetPageFolder(cPagePath);
+const cUseAutoHeroImg = cIsHero || pImgF !== "";
+
+const cBgImgL = pImgL
+? Media.GetPageFile(cPagePath, pImgL, { pFolder: cImgFolder })
+: cUseAutoHeroImg
+	? Media.GetHeroLandscape(cPagePath, { pFolder: cImgFolder })
+	: pBg?.Img?.LinkL || "";
+
+const cBgImgP = pImgP
+? Media.GetPageFile(cPagePath, pImgP, { pFolder: cImgFolder })
+: pImgL
+	? cBgImgL
+	: cUseAutoHeroImg
+		? Media.GetHeroPortrait(cPagePath, { pFolder: cImgFolder })
+		: pBg?.Img?.LinkP || pBg?.Img?.LinkL || "";
+
+const cFinalBgImgL = cBgImgL || cBgImgP;
+const cFinalBgImgP = cBgImgP || cBgImgL;
+const cHasBgImg = cFinalBgImgL !== "" || cFinalBgImgP !== "";
+const cBgAlt = pImgAlt || pBg?.Img?.Alt || "";
+
+const cSectionStyle = [
+	`--SecBg:${pBg?.Color || "transparent"};`,
+	`--SecWidthL:${pBox?.WidthL || "100%"};`,
+	`--SecWidthP:${pBox?.WidthP || pBox?.WidthL || "100%"};`,
+	`--SecHeightL:${pBox?.HeightL || "auto"};`,
+	`--SecHeightP:${pBox?.HeightP || pBox?.HeightL || "auto"};`,
+	`--SecMinHeightL:${pMinH?.Landscape || (cIsHero ? "100svh" : "auto")};`,
+	`--SecMinHeightP:${pMinH?.Portrait || (cIsHero ? "100svh" : "auto")};`,
+	`--SecAlignL:${GetHorizontalAlign(pAlign.HzL)};`,
+	`--SecAlignP:${GetHorizontalAlign(pAlign.HzP)};`,
+	`--SecJustifyL:${GetVerticalAlign(pAlign.VrL)};`,
+	`--SecJustifyP:${GetVerticalAlign(pAlign.VrP)};`,
+	cGivenStyle,
+].filter(Boolean).join(" ");
+
+const cPlace = new Place(Astro.props as PlaceProps, cSectionStyle);
+
+function GetStyleText(pStyle: Props["style"]) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+
+	return Object.entries(pStyle)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+
+function GetBoolAttr(pValue: unknown) {
+	return pValue === true || pValue === "" || pValue === "true";
+}
+
+function GetHorizontalAlign(pValue?: string) {
+	if (pValue === "left") return "flex-start";
+	if (pValue === "right") return "flex-end";
+	return "center";
+}
+
+function GetVerticalAlign(pValue?: string) {
+	if (pValue === "top") return "flex-start";
+	if (pValue === "bottom") return "flex-end";
+	return "center";
+}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section
+	class = {`EmoSection ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	{ cHasBgImg && (
+
+		<picture class = " EmoSectionBg ">
+		
+			<source media="(orientation: portrait)" srcset={cFinalBgImgP} />
+		
+			<img
+				class = " EmoSectionBgImg "
+				src={cFinalBgImgL}
+				alt={cBgAlt}
+				loading={cLoading}
+				decoding="async"
+				fetchpriority={cFetchPriority}
+			/>
+		
+		</picture>
+	) }
+
+	<slot />
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.EmoSection {
+		position: relative;
+		isolation: isolate;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		align-items: var(--SecAlignL, center);
+		align-content: var(--SecAlignL, center);
+		justify-content: var(--SecJustifyL, center);
+		width: var(--SecWidthL, 100%);
+		height: var(--SecHeightL, auto);
+		min-height: var(--SecMinHeightL, auto);
+		max-width: 100%;
+		background-color: var(--SecBg, transparent);
+		min-width: 0;
+		inline-size: 100%;
+		max-inline-size: 100%;
+		overflow-x: clip;
+		overflow-y: hidden;
+	}
+
+
+	.EmoSectionBg {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		display: block;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+	}
+
+
+	.EmoSectionBgImg {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		pointer-events: none;
+		user-select: none;
+	}
+
+
+
+	.EmoSection.IsPlaced {
+		position: absolute;
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+	@media (orientation: portrait) {
+		.EmoSection {
+			align-items: var(--SecAlignP, var(--SecAlignL, center));
+			align-content: var(--SecAlignP, var(--SecAlignL, center));
+			justify-content: var(--SecJustifyP, var(--SecJustifyL, center));
+			width: var(--SecWidthP, var(--SecWidthL, 100%));
+			height: var(--SecHeightP, var(--SecHeightL, auto));
+			min-height: var(--SecMinHeightP, var(--SecMinHeightL, auto));
+		}
+
+		.EmoSection.IsPlaced {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+	}
+
+
+
+</style>

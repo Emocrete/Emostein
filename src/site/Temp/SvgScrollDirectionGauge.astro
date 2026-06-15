@@ -1,0 +1,182 @@
+---
+const {
+    fTitle = "Scroll Gauge",
+    fText = "انزل/اطلع… السهم يعكس والـ meter يتغير.",
+    fColor = "#7CFFB2",
+} = Astro.props;
+const fId = "sg_" + Math.random().toString(36).slice(2);
+---
+
+<article class="sgCard" data-sg-root>
+    <div class="sgTop">
+        <div>
+            <h3 class="sgTitle">{fTitle}</h3>
+            <p class="sgText">{fText}</p>
+        </div>
+        <div class="sgState" data-sg-state>—</div>
+    </div>
+
+    <div class="sgViz" aria-hidden="true">
+        <svg viewBox="0 0 520 170">
+            <defs>
+                <linearGradient id={`${fId}_g`} x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0" stop-color={fColor} stop-opacity="0.25"
+                    ></stop>
+                    <stop offset="1" stop-color={fColor} stop-opacity="0.95"
+                    ></stop>
+                </linearGradient>
+            </defs>
+
+            <rect x="0" y="0" width="520" height="170" rx="22" fill="#0f1115"
+            ></rect>
+
+            <rect
+                x="28"
+                y="120"
+                width="340"
+                height="16"
+                rx="10"
+                fill="rgba(255,255,255,.12)"></rect>
+            <rect
+                class="sgFill"
+                x="28"
+                y="120"
+                width="0"
+                height="16"
+                rx="10"
+                fill={`url(#${fId}_g)`}></rect>
+
+            <g class="sgArrow" transform="translate(420 88)">
+                <circle
+                    cx="0"
+                    cy="0"
+                    r="42"
+                    fill="rgba(255,255,255,.06)"
+                    stroke="rgba(255,255,255,.16)"
+                    stroke-width="2"></circle>
+                <path
+                    d="M0,-18 L0,18"
+                    stroke={fColor}
+                    stroke-width="6"
+                    stroke-linecap="round"></path>
+                <path
+                    d="M-14,8 L0,22 L14,8"
+                    fill="none"
+                    stroke={fColor}
+                    stroke-width="6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+            </g>
+
+            <text
+                x="28"
+                y="56"
+                fill="rgba(255,255,255,.85)"
+                font-size="16"
+                font-family="system-ui, Arial"
+            >
+                Scroll Direction
+            </text>
+        </svg>
+    </div>
+
+    <script is:inline>
+        // @ts-nocheck
+        (function () {
+            const fRoot =
+                document.currentScript &&
+                document.currentScript.closest("[data-sg-root]");
+            if (!fRoot) return;
+
+            const fFill = fRoot.querySelector(".sgFill");
+            const fArrow = fRoot.querySelector(".sgArrow");
+            const fState = fRoot.querySelector("[data-sg-state]");
+            if (!fFill || !fArrow || !fState) return;
+
+            let fLastY = window.scrollY;
+            let fMeter = 0;
+            let fAngle = 0;
+            let fTgtAngle = 0;
+
+            const fReduce =
+                window.matchMedia &&
+                window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+            function fClamp(v, a, b) {
+                return Math.max(a, Math.min(b, v));
+            }
+
+            function fOnScroll() {
+                const y = window.scrollY;
+                const d = y - fLastY;
+                fLastY = y;
+                if (Math.abs(d) < 2) return;
+
+                const fDir = d > 0 ? 1 : -1;
+
+                fMeter = fClamp(fMeter + fDir * 0.06, 0, 1);
+                fTgtAngle = fDir > 0 ? 180 : 0;
+                fState.textContent = fDir > 0 ? "DOWN" : "UP";
+            }
+
+            window.addEventListener("scroll", fOnScroll, { passive: true });
+
+            function fLoop() {
+                if (fReduce) return;
+
+                fAngle += (fTgtAngle - fAngle) * 0.14;
+                fArrow.setAttribute(
+                    "transform",
+                    `translate(420 88) rotate(${fAngle.toFixed(2)})`,
+                );
+
+                const w = 340 * fMeter;
+                fFill.setAttribute("width", String(w.toFixed(0)));
+
+                requestAnimationFrame(fLoop);
+            }
+
+            requestAnimationFrame(fLoop);
+        })();
+    </script>
+</article>
+
+<style>
+    .sgCard {
+        border-radius: 22px;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.1);
+        background: #fff;
+        padding: 14px 16px 16px;
+    }
+    .sgTop {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: flex-start;
+        margin-bottom: 12px;
+    }
+    .sgTitle {
+        margin: 0 0 6px 0;
+        font-weight: 1000;
+    }
+    .sgText {
+        margin: 0;
+        color: rgba(16, 17, 20, 0.72);
+        line-height: 1.8;
+    }
+    .sgState {
+        font-weight: 1000;
+        padding: 10px 12px;
+        border-radius: 14px;
+        background: rgba(124, 255, 178, 0.16);
+        border: 1px solid rgba(124, 255, 178, 0.3);
+        white-space: nowrap;
+    }
+    .sgViz svg {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+</style>

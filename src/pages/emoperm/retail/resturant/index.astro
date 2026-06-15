@@ -1,0 +1,629 @@
+---
+import BLayout from "@/Layout.astro";
+import { Text, ElemBg, EmoMediaData, Colors, Pixel, Topic, Size, Align, RespString } from "@/TypesLib";
+import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, ReadAlso, RelServices, EmoFaq, SecTitle, VrStack, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="ترخيص مطعم"
+	pDescr="خدمة استخراج ترخيص مطعم ومتابعة إجراءات الترخيص، مع توضيح المستندات المطلوبة وخطوات التقديم والمعاينة والرسومات الهندسية وبنود الخدمة وتكلفتها."
+>
+
+
+
+
+
+
+
+	<Hero
+		pTitle="ترخيص مطعم"
+		pDesc="استخراج ترخيص مطعم ومتابعة الملف أمام الجهة المختصة بداية من تجهيز المستندات وحتى استلام الرخصة"
+		pTitleClr={Colors.WhiteOff}
+		pDescClr={Colors.WhiteOff}
+		pAlign="center"
+		pBlurL="on"
+		pBlurP="on"
+		pPosL="42% 8% 12% 8%"
+		pPosP="45% 4% 10% 4%"
+	>
+
+		<EmoCall BlackSky pText="اطلب ترخيص مطعم" />
+
+	</Hero>
+
+
+
+
+
+
+
+	<ESec
+		id="Intro"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.SkyLite};`}
+			pTitle="استخراج ترخيص مطعم"
+			pDesc="خدمة احترافية للسير في إجراءات استخراج ترخيص مطعم"
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+			<HzStack pGap={new Pixel(28, 16)} pPad={new Pixel(0, 0)}>
+
+				<RespImg
+					pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp/v1/fill/w_980%2Ch_408%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_auto/308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp", false, "ترخيص مطعم", new Size(480, "auto", 320, "auto"))}
+				/>
+
+				<VrStack
+					pWidth={new Pixel(700, 340)}
+					pGap={new Pixel(20, 14)}
+					pPad={new Pixel(0, 0)}
+				>
+
+					<Emograph
+						pTitle={Text.H3.OfText("المطعم ليس محلًا تجاريًا عاديًا")}
+						pText={Text.Body.OfText("ترخيص المطعم يجمع بين ملف المحل العام واشتراطات النشاط الغذائي؛ لذلك لا يكفي تجهيز عقد الإيجار وبطاقة صاحب الطلب فقط، بل يجب النظر إلى العاملين، الشهادات الصحية، الحالة الجنائية، الرسم الهندسي، التهوية، السلامة، وتجهيزات التشغيل التي ستظهر عند المعاينة.")}
+						pSize={new Size(700, "auto", "100%", "auto")}
+					/>
+
+					<CardsGr
+						pWidth={new RespString("700px", "100%")}
+						pCardBg={new ElemBg(Colors.Gray1)}
+						pCardTitleFnt={Text.H4.Centered}
+						pCardBodyFnt={Text.Body.Centered}
+						pTopic1={new Topic("ملف إداري", "طلب الترخيص والمستندات وبيانات صاحب النشاط وسند شغل العين")}
+						pTopic2={new Topic("ملف فني", "الرسم الهندسي والمعاينة والاشتراطات التي تثبت صلاحية المكان للنشاط")}
+						pTopic3={new Topic("ملف تشغيل", "الشهادات الصحية والتأمينات والعمالة والتجهيزات المؤثرة على تشغيل المطعم")}
+					/>
+
+				</VrStack>
+
+			</HzStack>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="Documents"
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.Gray5};`}
+			pTitle="الاوراق المطلوبة لاستخراج رخصة مطعم"
+			pDesc="الأوراق الأساسية التي يبدأ بها ملف الترخيص قبل مراجعة الاشتراطات الخاصة بالنشاط الغذائي والمعاينة"
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+
+			<EmoList
+				pWidth={new RespString("980px", "100%")}
+				pTitle={Text.H3.Centered.OfText("مستندات فتح مطعم")}
+				pDesc={Text.Body.Centered.OfText("يتم تجهيز الصور مع الأصول للاطلاع، ثم تراجع الجهة المختصة مدى كفاية الملف حسب حالة المطعم والنشاط")}
+				pHeadBg={new ElemBg(Colors.GreenLite)}
+				pItemsBg={new ElemBg(Colors.WhiteOff)}
+				pNumbered={true}
+				pItems={[
+					"صورة عقد الملكية أو عقد إيجار المحل مع توفير أصل العقد للإطلاع",
+					"صورة بطاقة الرقم القومي لصاحب الترخيص",
+					"عدد 3 نسخ من الرسومات الهندسية للمحل حسب المواصفات المعتمدة",
+					"خطاب التأمين الصادر عن التأمينات الاجتماعية",
+					"شهادة بالقيمة الإيجارية للمحل من الضرائب العقارية",
+					"شهادة صحية للعاملين في المحل مستخرج من مستشفى حكومي",
+					"صحيفة الحالة الجنائية"
+				]}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.GreenLite};`}
+			pTitle="مستندات يجب مراجعتها قبل التقديم"
+			pDesc="قد تختلف تفاصيل الملف حسب الحي أو الجهاز أو طبيعة النشاط، لذلك يجب مراجعة هذه النقاط قبل بدء إجراءات الترخيص"
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+			<CardsGr
+				pWidth={new RespString("1220px", "100%")}
+				pCardBg={new ElemBg(Colors.Gray1)}
+				pCardTitleFnt={Text.H4}
+				pCardBodyFnt={Text.Body}
+				pTopic1={new Topic("السجل التجاري والبطاقة الضريبية", "وجود نشاط غذائي أو مطعم في بيانات النشاط التجاري والضريبي يقلل تعارض البيانات عند مراجعة الملف.")}
+				pTopic2={new Topic("الشهادات الصحية للعاملين", "المطاعم من الأنشطة التي تتعامل مع الأغذية والمشروبات، لذلك يجب مراجعة شهادات العاملين قبل المعاينة وليس بعدها.")}
+				pTopic3={new Topic("الحالة الجنائية", "صحيفة الحالة الجنائية تظهر في ملفات المحال العامة، ويجب تجهيزها بالصيغة والحداثة التي تقبلها الجهة المختصة.")}
+				pTopic4={new Topic("موافقات النشاط", "قد يطلب الملف موافقات أو مراجعات مرتبطة بالحماية المدنية أو البيئة أو الصرف أو التنظيم حسب حالة المطعم وموقعه وتجهيزاته.")}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="Procedures"
+		pBg={new ElemBg(Colors.Creamy)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.BistageDark};`}
+			pTitle="اجراءات ترخيص مطعم"
+			pDesc="يمر طلب الترخيص من تقديم الملف إلى القبول المبدئي ثم الاشتراطات والمعاينة وسداد الرسوم واستلام الترخيص"
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+
+			<EmoList
+				pWidth={new RespString("980px", "100%")}
+				pTitle={Text.H3.Centered.OfText("خطوات الترخيص")}
+				pDesc={Text.Body.Centered.OfText("ترتيب الخطوات يساعد صاحب المطعم على معرفة المرحلة التي يتوقف عندها الملف وسبب طلب الاستيفاء إن ظهر")}
+				pHeadBg={new ElemBg(Colors.SkyLite)}
+				pItemsBg={new ElemBg(Colors.WhiteOff)}
+				pNumbered={true}
+				pItems={[
+					"تقديم طلب ترخيص محل تجاري مرفق به المستندات المطلوبة",
+					"يتم الرد خلال 60 يوم بالقبول المبدئي أو بالرفض المسبب ، وفي حال عدم الرد خلال المدة المحددة يعتبر الطلب مقبولاً",
+					"استلام إخطار قبول طلب ترخيص المحل التجاري الموضح به الاشتراطات العامة والخاصة للنشاط المراد الترخيص به",
+					"إرسال إخطار استيفاء الاشتراطات المطلوبة للترخيص بخطاب مسجل بعلم الوصول إلى إدارة تراخيص المحلات التجارية التابع لها المحل",
+					"تقديم طلب معاينة المحل التجاري في حال تحقق الاشتراطات ودفع الرسوم المقررة للمعاينة",
+					"استلام إخطار الرد من إدارة التراخيص بعد إجراء المعاينة للمحل التجاري بالموافقة على الترخيص أو بتوضيح الاشتراطات التي لم يتم استيفاؤها",
+					"استلام اخطار الموافقة على اصدار ترخيص المحل التجاري بعد إتمام استيفاء الاشتراطات كاملة",
+					"سداد الرسوم المحددة لاستخراج ترخيص المحل التجاري واستلام الترخيص"
+				]}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.OrangeLite};`}
+			pTitle="مرحلة المعاينة في ترخيص المطعم"
+			pDesc="المعاينة هي المرحلة التي تربط بين الورق والواقع، وفي المطاعم تكون أكثر حساسية بسبب المطبخ والتهوية والحريق والصرف والتشغيل"
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+			<HzStack pGap={new Pixel(28, 16)} pPad={new Pixel(0, 0)}>
+
+				<VrStack
+					pWidth={new Pixel(680, 340)}
+					pGap={new Pixel(18, 12)}
+					pPad={new Pixel(0, 0)}
+				>
+
+					<Emograph
+						pTitle={Text.H3.OfText("ما الذي تنظر إليه الجهة عند المعاينة؟")}
+						pText={Text.Body.OfText("لا تنظر المعاينة إلى اسم النشاط فقط، بل إلى قابلية المكان لتشغيل مطعم فعليًا: مساحة التحضير، منطقة الخدمة، المداخل، التهوية، المدخنة عند الحاجة، وسائل الحماية من الحريق، الصرف، الكهرباء، نظافة مناطق تداول الغذاء، ومطابقة الرسم الهندسي للحالة القائمة.")}
+						pSize={new Size(680, "auto", "100%", "auto")}
+					/>
+
+					<Emograph
+						pTitle={Text.H3.OfText("لماذا يتعطل ملف مطعم رغم اكتمال الورق؟")}
+						pText={Text.Body.OfText("قد يكون الملف الورقي مكتملًا، لكن المطعم نفسه غير مستوفٍ فنيًا. أكثر ما يسبب التعطيل هو اختلاف الرسم عن الواقع، ضعف التهوية، غموض مسار المدخنة، عدم وضوح الصرف، أو تنفيذ تشطيب لا يراعي اشتراطات النشاط قبل طلب المعاينة.")}
+						pSize={new Size(680, "auto", "100%", "auto")}
+					/>
+
+				</VrStack>
+
+				<RespImg
+					pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp/v1/fill/w_980%2Ch_408%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_auto/308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp", false, "مطعم وتجهيزات تشغيل", new Size(460, "auto", 320, "auto"))}
+				/>
+
+			</HzStack>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="Drawing"
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.Gray5};`}
+			pTitle="الرسم الهندسي لـترخيص مطعم"
+			pDesc="يجب أن يتضمن الرسم الهندسي للمحل التجاري عدة عناصر رئيسية لتوصيف المحل وتوضيح مدى ملاءمته للمواصفات المطلوبة للنشاط الذي سيتم له ترخيص المحل التجاري."
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+
+			<EmoList
+				pWidth={new RespString("980px", "100%")}
+				pTitle={Text.H3.Centered.OfText("شروط الرسم الهندسي لـترخيص مطعم")}
+				pDesc={Text.Body.Centered.OfText("الرسم الهندسي يجب أن يصف المطعم كما سيتم تشغيله، لا كمساحة فارغة فقط")}
+				pHeadBg={new ElemBg(Colors.GreenLite)}
+				pItemsBg={new ElemBg(Colors.WhiteOff)}
+				pNumbered={false}
+				pItems={[
+					"مسقط أفقي موضح به المساحة الكلية والأبعاد الخارجية والداخلية وطريقة توزيع الفراغات الداخلية وأماكن الأعمدة وأبعاد المداخل والمنافذ.",
+					"قطاع رأسي موضح به ارتفاع الأرضية بالنسبة للطريق وعدد مستويات الأرضية الداخلية وارتفاعات السقف عند كل مستوى.",
+					"واجهة موضح بها مدخل المطعم واللافتة النهائية بالاسم التجاري المعتمد لصاحب الترخيص بالإضافة لموقع المحل بالنسبة لمدخل العقار وترتيبه بالنسبة للمحلات المجاورة بنفس العقار.",
+					"كروكي للموقع العام للمطعم ."
+				]}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.SkyLite};`}
+			pTitle="نماذج رسم هندسي لمطعم"
+			pDesc="نماذج رسومات توضح طريقة عرض المسقط والواجهة والقطاع وكروكي الموقع ضمن ملف ترخيص المطعم"
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+			<VrStack
+				pWidth={new Pixel(1120, 340)}
+				pGap={new Pixel(18, 14)}
+				pPad={new Pixel(0, 0)}
+			>
+
+				<HzStack pGap={new Pixel(18, 14)} pPad={new Pixel(0, 0)}>
+
+					<RespImg
+						pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_d8e96ad2e5cf407f8774a05ffb1ed8a7~mv2.jpg/v1/fill/w_250%2Ch_176%2Cal_c%2Cq_90%2Cenc_auto/308dfd_d8e96ad2e5cf407f8774a05ffb1ed8a7~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(350, "auto", 300, "auto"))}
+					/>
+
+					<RespImg
+						pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_76ac6416a15e443f910aabecd06451b3~mv2.jpg/v1/fill/w_250%2Ch_176%2Cal_c%2Cq_90%2Cenc_auto/308dfd_76ac6416a15e443f910aabecd06451b3~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(350, "auto", 300, "auto"))}
+					/>
+
+					<RespImg
+						pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_af2f73fa44bc4bbc992930c79a91a632~mv2.jpg/v1/fill/w_250%2Ch_176%2Cal_c%2Cq_90%2Cenc_auto/308dfd_af2f73fa44bc4bbc992930c79a91a632~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(350, "auto", 300, "auto"))}
+					/>
+
+				</HzStack>
+
+				<RespImg
+					pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_1cac27102827417dae8d180632d80e89~mv2.jpg/v1/fill/w_250%2Ch_353%2Cal_c%2Cq_90%2Cenc_auto/308dfd_1cac27102827417dae8d180632d80e89~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(350, "auto", 300, "auto"))}
+				/>
+
+			</VrStack>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="ServiceScope"
+		pBg={new ElemBg(Colors.Creamy)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.BistageDark};`}
+			pTitle="خدمة متابعة إجراءات استخراج ترخيص مطعم"
+			pDesc="نطاق الخدمة محدد من البداية حتى يعرف صاحب المطعم ما يدخل ضمن المتابعة وما يخرج عنها"
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+
+			<VrStack
+				pWidth={new Pixel(1100, 340)}
+				pGap={new Pixel(22, 14)}
+				pPad={new Pixel(0, 0)}
+			>
+
+				<CardsGr
+					pWidth={new RespString("900px", "100%")}
+					pCardBg={new ElemBg(Colors.WhiteOff)}
+					pCardTitleFnt={Text.H3.Centered}
+					pCardBodyFnt={Text.Body.Centered}
+					pTopic1={new Topic("7000 جنيه", "قيمة خدمة متابعة إجراءات استخراج ترخيص مطعم")}
+					pTopic2={new Topic("القاهرة والجيزة", "نطاق الخدمة الميدانية والمتابعة العملية")}
+				/>
+
+				<CardsGr
+					pWidth={new RespString("1100px", "100%")}
+					pCardBg={new ElemBg(Colors.WhiteOff)}
+					pCardTitleFnt={Text.H4}
+					pCardBodyFnt={Text.Body}
+					pTopic1={new Topic("تقديم الملف", "تقديم ملف ترخيص المطعم إلى الحي أو الجهاز التابع له المحل إداريا .")}
+					pTopic2={new Topic("متابعة الموافقات", "متابعة استخراج الموافقات التي تطلب للحصول على ترخيص مزاولة النشاط التجاري .")}
+					pTopic3={new Topic("تنسيق المعاينة", "التنسيق مع مهندس الحي بخصوص معاينة المحل للتحقق من توافر شروط النشاط به .")}
+					pTopic4={new Topic("استلام الترخيص", "مراجعة الحي أو الجهاز التابع له المحل إداريا لاستلام ترخيص المحل .")}
+				/>
+
+				<EmoCall BlackSky pText="اطلب الخدمة" />
+
+			</VrStack>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.OrangeLite};`}
+			pTitle="الخدمة لا تشمل ما يلي"
+			pDesc="هذه البنود تحتاج اتفاقًا مستقلًا أو تسدد حسب ما تطلبه الجهات المختصة أثناء سير الملف"
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+			<EmoList
+				pWidth={new RespString("920px", "100%")}
+				pTitle={Text.H3.Centered.OfText("بنود خارج أتعاب المتابعة")}
+				pDesc={Text.Body.Centered.OfText("وضوح الاستثناءات يمنع الخلط بين أتعاب المتابعة وبين المصروفات الرسمية أو الفنية الأخرى")}
+				pHeadBg={new ElemBg(Colors.SkyLite)}
+				pItemsBg={new ElemBg(Colors.Gray1)}
+				pNumbered={false}
+				pItems={[
+					"إعداد الرسم الهندسي لترخيص مطعم .",
+					"إعداد تقرير مهندسي استشاري لحالة المبنى في حال تطلبته الحالة .",
+					"أي مصروفات مفوترة مدفوعة لأي جهة .",
+					"أي مصروفات غير رسمية أو إكراميات تزيد عن 500 جنيه قد تكون مطلوبة إجباريا بأي جهة لتسيير الأعمال ."
+				]}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.Gray5};`}
+			pTitle="بيان الدفعات"
+			pDesc="تقسيم الأتعاب على مراحل العمل يجعل التعاقد واضحًا ومرتبطًا بتقدم ملف الترخيص"
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+
+			<CardsGr
+				pWidth={new RespString("1100px", "100%")}
+				pCardBg={new ElemBg(Colors.WhiteOff)}
+				pCardTitleFnt={Text.H3.Centered}
+				pCardBodyFnt={Text.Body.Centered}
+				pTopic1={new Topic("3000 جنيه", "عند بداية التعاقد")}
+				pTopic2={new Topic("2000 جنيه", "بعد معاينة مهندس الحي")}
+				pTopic3={new Topic("2000 جنيه", "بعد استلام الترخيص")}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.SkyLite};`}
+			pTitle="لماذا يحتاج المطعم إلى إدارة ملف قبل التشطيب؟"
+			pDesc="القرار الصحيح في مرحلة الترخيص قد يوفر تكلفة تعديلات كبيرة بعد تنفيذ الديكور والمطبخ والتهوية"
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+			<CardsGr
+				pWidth={new RespString("1220px", "100%")}
+				pCardBg={new ElemBg(Colors.Gray1)}
+				pCardTitleFnt={Text.H4}
+				pCardBodyFnt={Text.Body}
+				pTopic1={new Topic("التهوية والمدخنة", "المطاعم التي تعتمد على طهي أو تسخين أو شواية أو قلاية تحتاج مراجعة مسار الأبخرة والروائح والحريق قبل اعتماد التشطيب.")}
+				pTopic2={new Topic("الحماية المدنية", "تجهيزات الإطفاء والإنذار والمخارج والمسارات لا يجب أن تترك للنهاية، لأنها قد تغير توزيع الفراغات والتكلفة.")}
+				pTopic3={new Topic("الصرف والمياه", "مناطق الغسيل والتحضير والمطبخ تحتاج صرفًا واضحًا ومناسبًا لطبيعة التشغيل حتى لا تظهر ملاحظات تشغيلية أو صحية لاحقًا.")}
+				pTopic4={new Topic("مطابقة الرسم للواقع", "أي تعديل في التقسيم أو الواجهة أو المداخل بعد إعداد الرسم قد يحتاج تحديثًا قبل المعاينة أو قبل استكمال الترخيص.")}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoFaq>
+
+		<FaqItem
+			pQuestion="هل ترخيص المطعم يختلف عن ترخيص محل تجاري عادي؟"
+			pAnswer="نعم. المطعم يدخل ضمن أنشطة تداول الأغذية والمشروبات، لذلك تظهر أهمية الشهادات الصحية للعاملين، ومراجعة التهوية والمدخنة والصرف والحماية المدنية والتجهيزات الداخلية بجانب مستندات المحل العامة."
+		/>
+
+		<FaqItem
+			pQuestion="هل الرسم الهندسي داخل خدمة متابعة الترخيص؟"
+			pAnswer="لا. خدمة متابعة الترخيص لا تشمل إعداد الرسم الهندسي إلا إذا تم الاتفاق عليه كخدمة مستقلة، لأن الرسم يحتاج معاينة ورفع أبعاد وإعداد لوحة هندسية منفصلة."
+		/>
+
+		<FaqItem
+			pQuestion="متى قد يطلب تقرير مدخنة؟"
+			pAnswer="قد يطلب تقرير المدخنة في المطاعم التي تعتمد على مدخنة لتصريف الأبخرة أو نواتج الطهي، خصوصًا إذا كان مسار المدخنة أو حالتها يحتاج إثباتًا فنيًا أمام الجهة المختصة."
+		/>
+
+		<FaqItem
+			pQuestion="هل يمكن البدء في التشطيب قبل الترخيص؟"
+			pAnswer="يمكن التفكير في التصميم مبكرًا، لكن تنفيذ التشطيب قبل فهم اشتراطات النشاط قد يؤدي إلى تعديلات مكلفة. الأفضل مراجعة المتطلبات الفنية ومسار الترخيص قبل غلق الأسقف أو تنفيذ التهوية أو تركيب واجهة نهائية."
+		/>
+
+	</EmoFaq>
+
+
+
+
+
+
+
+	<ReadAlso
+		pTitle={Text.H2.Centered.OfText("اقرأ أيضا ...")}
+		pHeadBg={new ElemBg(Colors.SkyLite)}
+		pBodyBg={new ElemBg(Colors.WhiteOff)}
+		pCardBg={new ElemBg(Colors.Gray1)}
+	>
+
+		<ReadAlsoItem
+			pTitle="ترخيص محل تجاري"
+			pDesc="الصفحة الأساسية لخدمات ترخيص المحلات التجارية، وتشمل الصورة العامة للمستندات والإجراءات والرسم الهندسي وتكلفة الترخيص."
+			pHref="/emoperm/retail/general"
+		/>
+
+		<ReadAlsoItem
+			pTitle="رسم هندسي لمطعم"
+			pDesc="تفاصيل إعداد الرسم الهندسي المطلوب لترخيص مطعم، شامل المسقط والقطاع والواجهة وكروكي الموقع العام."
+			pHref="/emoperm/retail/resturant/dwg"
+		/>
+
+		<ReadAlsoItem
+			pTitle="مستندات ترخيص محل تجاري"
+			pDesc="الأوراق الأساسية قبل التقديم، مع توضيح المستندات التي تختلف حسب النشاط أو صفة طالب الترخيص."
+			pHref="/emoperm/retail/general/doc"
+		/>
+
+		<ReadAlsoItem
+			pTitle="إجراءات ترخيص محل تجاري"
+			pDesc="خطوات تقديم الطلب والقبول المبدئي والمعاينة واستيفاء الاشتراطات وسداد الرسوم واستلام الترخيص."
+			pHref="/emoperm/retail/general/proc"
+		/>
+
+	</ReadAlso>
+
+
+
+
+
+
+
+	<RelServices
+		pTitle={Text.H2.Centered.White.OfText("خدماتنا")}
+		pHeadBg={new ElemBg(Colors.Gray5)}
+		pBodyBg={new ElemBg(Colors.Gray1)}
+		pCardBg={new ElemBg(Colors.WhiteOff)}
+	>
+
+		<RelServiceItem
+			pTitle="رسم هندسي لمطعم"
+			pDesc="إعداد الرسم الهندسي المطلوب لترخيص مطعم بعد معاينة المكان ورفع الأبعاد وتجهيز المسقط والقطاع والواجهة وكروكي الموقع."
+			pHref="/emoperm/retail/resturant/dwg"
+			pBtnText="معرفة المزيد"
+		/>
+
+		<RelServiceItem
+			pTitle="تقرير هندسي لسلامة المبنى"
+			pDesc="إعداد تقرير هندسي عن حالة وسلامة المبنى إذا طلبته جهة الترخيص بسبب حالة العقار أو قدمه أو غموض موقفه الإنشائي."
+			pHref="/emonsult/report/safety"
+			pBtnText="معرفة المزيد"
+		/>
+
+		<RelServiceItem
+			pTitle="تقرير هندسي لمدخنة مطعم"
+			pDesc="تقرير فني عن سلامة المدخنة ومطابقتها الفنية في الحالات التي تعتمد على تصريف الأبخرة ونواتج الطهي."
+			pHref="/emonsult/report/chimney"
+			pBtnText="معرفة المزيد"
+		/>
+
+		<RelServiceItem
+			pTitle="تشطيب وتجهيز مطعم"
+			pDesc="تصميم وتنفيذ تشطيبات وفرش المطاعم بما يناسب طبيعة التشغيل والميزانية والتجهيزات المطلوبة للنشاط."
+			pHref="/emocrete/finishing/retail"
+			pBtnText="معرفة المزيد"
+		/>
+
+	</RelServices>
+
+
+
+
+
+
+
+</BLayout>

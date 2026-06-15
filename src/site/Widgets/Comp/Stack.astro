@@ -1,0 +1,376 @@
+---
+import { Colors, ElemBg, Pixel,Percent, Place, type PlaceProps } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"div">, PlaceProps {
+	pDir?: "Row" | "Col" | "Grid";
+	pWidth?:Pixel;
+	pHeight?: Pixel;
+	pAlign?: "Start" | "Center" | "End";
+	pGap?: Pixel;
+	pPad?: Pixel;
+	pFlipNarrow?: boolean;
+	pBgColor?:ElemBg;
+	pBgOpacity?: Percent;
+pBlur?: Pixel;
+}
+
+let {
+	pDir = "Col",
+	pWidth,
+	pHeight,
+	pAlign = "Center",
+	pGap = new Pixel(30,10),
+	pPad = new Pixel(30,10),
+	pFlipNarrow= true,
+	pBgColor ,
+	pBgOpacity = new Percent(100),
+pBlur = new Pixel(0),
+
+	pLoc,
+pSize,
+pRotate,
+pZ,
+pOrigin,
+pOpacity,
+pClickable,
+pLandOnly,
+pPortOnly,
+
+	id: pGivenID = GetWidgetId("EmoStack"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cIsRow = pDir === "Row";
+const cHasCrossSize = pHeight ? true : false ;
+const cDirClass = cIsRow ? "IsRow" : "IsCol";
+const cCrossClass = cHasCrossSize ? "HasCrossSize" : "";
+const cFlipClass = pFlipNarrow ? "FlipAllowed" : "";
+const cAlignClass =	pAlign === "Center"	? "IsCenter" : pAlign === "End"	? "IsEnd" : "IsStart";
+const cAlignItems = pAlign === "Center" ? "center" : pAlign === "End" ? "flex-end" : "flex-start";
+const cJustifyContent = pAlign === "Center" ? "center" : pAlign === "End" ? "flex-end" : "flex-start";
+const cJustifyItems = pAlign === "Center" ? "center" : pAlign === "End" ? "end" : "start";
+const cPlace = new Place(Astro.props as PlaceProps);
+
+const cSizeForStack = cPlace.IsPlaced ? undefined : pSize;
+const cIsInsidePlace = cPlace.IsPlaced;
+const cMainSizeClass = pWidth || cSizeForStack || cIsInsidePlace ? "HasMainSize" : "";
+
+const cStackDimL = cIsInsidePlace
+? "100%"
+: cSizeForStack?.WidthL || pWidth?.Landscape || "fit-content";
+
+const cStackDimP = cIsInsidePlace
+? "100%"
+: cSizeForStack?.WidthP || pWidth?.Portrait || (cIsRow && pFlipNarrow ? "100%" : cStackDimL);
+
+const cStackHeightL = cIsInsidePlace
+? "100%"
+: cSizeForStack?.HeightL || pHeight?.Landscape || "fit-content";
+
+const cStackHeightP = cIsInsidePlace
+? "100%"
+: cSizeForStack?.HeightP || pHeight?.Portrait || cStackHeightL;
+
+let CssStyle = `
+--StackGapL:${pGap.Landscape};
+--StackGapP:${pGap.Portrait};
+--StackPadL:${pPad.Landscape};
+--StackPadP:${pPad.Portrait};
+--StackDimL:${cStackDimL};
+--StackDimP:${cStackDimP};
+--StackHeightL:${cStackHeightL};
+--StackHeightP:${cStackHeightP};
+--BgColor:${pBgColor?.Color || "transparent"};
+--BgOpacityL:${pBgOpacity.Landscape};
+--BgOpacityP:${pBgOpacity.Portrait};
+--StackBlurL:${pBlur.Landscape};
+--StackBlurP:${pBlur.Portrait};
+--StackAlignItems:${cAlignItems};
+--StackJustifyContent:${cJustifyContent};
+--StackJustifyItems:${cJustifyItems};
+${pGivenStyle}
+`;
+
+const cStackClass = `EmoStack ${cDirClass} ${cCrossClass} ${cFlipClass} ${cAlignClass} ${cMainSizeClass} ${pGivenClass}`.trim();
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{ cPlace.IsPlaced ? (
+
+	<div class = {cPlace.Class} style = {cPlace.Style}>
+	
+		<div
+			class = {cStackClass}
+			style = {CssStyle}
+			id={pGivenID}
+			data-flip-allowed={pFlipNarrow ? "true" : "false"}
+			data-base-dir={pDir}
+			{...RemAttr}
+		>
+	
+			<slot />
+	
+		</div>
+	
+	</div>
+) : (
+
+	<div
+		class = {cStackClass}
+		style = {CssStyle}
+		id={pGivenID}
+		data-flip-allowed={pFlipNarrow ? "true" : "false"}
+		data-base-dir={pDir}
+		{...RemAttr}
+	>
+	
+		<slot />
+	
+	</div>
+) }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.EmoStack {
+		position: relative;
+		display: flex;
+		box-sizing: border-box;
+		width: min(100%, var(--StackDimL, fit-content));
+		max-width: 100%;
+		height: var(--StackHeightL, fit-content);
+		padding: var(--StackPadL);
+		gap: var(--StackGapL);
+		background-color: color-mix(in srgb, var(--BgColor) var(--BgOpacityL), transparent);
+		backdrop-filter: blur(var(--StackBlurL));
+		-webkit-backdrop-filter: blur(var(--StackBlurL));
+		overflow: visible;
+		align-items: var(--StackAlignItems);
+		justify-content: var(--StackJustifyContent);
+		justify-items: var(--StackJustifyItems);
+		margin-inline: auto;
+	}
+
+	.EmoStack > :global(*) {
+		box-sizing: border-box;
+		flex: 0 1 auto;
+		min-width: 0;
+		max-width: 100%;
+	}
+
+
+
+	.EmoStack.IsRow {
+		flex-direction: row;
+	}
+
+	.EmoStack.IsRow > :global(:not([data-own-size])) {
+		flex: 1 1 0;
+		min-width: 0;
+		max-width: 100%;
+	}
+
+	.EmoStack.IsRow > :global([data-own-size]) {
+		flex: 0 0 auto;
+		min-width: 0;
+		max-width: 100%;
+	}
+
+
+	.EmoStack.HasMainSize {
+		margin-inline: auto;
+	}
+
+
+	.EmoStack.IsCol {
+		flex-direction: column;
+	}
+
+
+	.EmoStack.IsMobFlip {
+		flex-direction: column;
+	}
+
+	.EmoStack.IsMobFlip > :global(*) {
+		flex: 0 0 auto;
+		width: 100%;
+		height: auto;
+		min-width: 0;
+		max-width: 100%;
+	}
+
+
+
+	.EmoStack.IsRow.HasCrossSize {
+		height: var(--StackCrossSizeL);
+		align-items: stretch;
+	}
+
+	.EmoStack.IsRow.HasCrossSize > :global(*) {
+		height: 100%;
+	}
+
+
+	.EmoStack.IsCol.HasCrossSize {
+		width: var(--StackCrossSizeL);
+		align-items: stretch;
+	}
+
+	.EmoStack.IsCol.HasCrossSize > :global(*) {
+		width: 100%;
+	}
+
+
+	.EmoStack.IsMobFlip.HasCrossSize {
+		width: var(--StackCrossSizeP);
+		height: auto;
+		align-items: stretch;
+	}
+
+	.EmoStack.IsMobFlip.HasCrossSize > :global(*) {
+		width: 100%;
+		height: auto;
+	}
+
+
+
+	@media (orientation: portrait) {
+		.EmoStack {
+			width: min(100%, var(--StackDimP, var(--StackDimL)));
+			padding: var(--StackPadP, var(--StackPadL));
+			gap: var(--StackGapP, var(--StackGapL));
+			background-color: color-mix(in srgb, var(--BgColor) var(--BgOpacityP), transparent);
+			backdrop-filter: blur(var(--StackBlurP));
+			-webkit-backdrop-filter: blur(var(--StackBlurP));
+			height: var(--StackHeightP, var(--StackHeightL, fit-content));
+		}
+
+		.EmoStack.IsRow.FlipAllowed {
+			flex-direction: column;
+		}
+
+		.EmoStack.IsRow.FlipAllowed > :global(*) {
+			flex: 0 0 auto;
+			width: 100%;
+			height: auto;
+			min-width: 0;
+			max-width: 100%;
+		}
+
+		.EmoStack.IsRow.HasCrossSize {
+			height: var(--StackCrossSizeP, auto);
+		}
+
+		.EmoStack.IsCol.HasCrossSize,
+		.EmoStack.IsRow.FlipAllowed.HasCrossSize
+		{
+			width: min(100%, var(--StackCrossSizeP, var(--StackCrossSizeL)));
+			height: auto;
+			align-items: stretch;
+		}
+
+		.EmoStack.IsCol.HasCrossSize > :global(*),
+		.EmoStack.IsRow.FlipAllowed.HasCrossSize > :global(*)
+		{
+			width: 100%;
+			height: auto;
+		}
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script is:inline>
+	(function InitEmoStackFlip() {
+	if (window.__EmoStackFlipReady) return;
+	window.__EmoStackFlipReady = true;
+
+	const cBreakPoint = 460;
+	let cResizeFrame = 0;
+
+	window.addEventListener("resize", RequestRefreshStacks);
+	window.addEventListener("orientationchange", RequestRefreshStacks);
+	document.addEventListener("astro:page-load", RefreshStacks);
+	window.addEventListener("load", RefreshStacks);
+
+	RequestRefreshStacks();
+
+	function RequestRefreshStacks() {
+	cancelAnimationFrame(cResizeFrame);
+	cResizeFrame = requestAnimationFrame(RefreshStacks);
+	}
+
+	function RefreshStacks() {
+	const cIsMobile = window.innerWidth <= cBreakPoint;
+	const cStacks = document.querySelectorAll('.EmoStack[data-flip-allowed="true"][data-base-dir="Row"]');
+
+	cStacks.forEach(ApplyStackFlipState);
+
+	function ApplyStackFlipState(pStackElem) {
+	pStackElem.classList.toggle("IsMobFlip", cIsMobile);
+	}
+	}
+	})();
+</script>

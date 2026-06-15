@@ -1,0 +1,1111 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"section">, PlaceProps {
+	pTitle?: string;
+	pDesc?: string;
+	pServiceName?: string;
+	pContactTargetId?: string;
+	pPortfolioTargetId?: string;
+}
+
+const {
+	pTitle = "حالة الشغل الحالي",
+	pDesc = "متابعة مختصرة للطلبات المفتوحة والملفات الجاري تجهيزها، لتوضيح ضغط التشغيل وأقرب متابعة متاحة.",
+	pServiceName = "الخدمة الحالية",
+	pContactTargetId = "EmoContactStrip",
+	pPortfolioTargetId = "EmoPortfolioStrip",
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("EmoPipelineStrip"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+
+const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section
+	class = {`EmoPipelineStrip ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	data-emo-pipeline-strip="true"
+	{...RemAttr}
+>
+
+	<svg class = " SvgDefs " aria-hidden="true">
+
+		<symbol id="PipeIconQueue" viewBox="0 0 24 24">
+
+			<path d="M4 4h16v3H4V4Zm0 6h16v3H4v-3Zm0 6h10v3H4v-3Zm12.6.2 1.4 1.4 3.4-3.4 1.4 1.4-4.8 4.8-2.8-2.8 1.4-1.4Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="PipeIconClock" viewBox="0 0 24 24">
+
+			<path d="M12 2.5a9.5 9.5 0 1 0 0 19 9.5 9.5 0 0 0 0-19Zm1 10.1 4 2.3-1 1.7-5-2.9V7h2v5.6Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="PipeIconReview" viewBox="0 0 24 24">
+
+			<path d="M5 3h10l4 4v14H5V3Zm9 1.8V8h3.2L14 4.8ZM8 11h8v1.6H8V11Zm0 3.4h8V16H8v-1.6Zm0-6.8h4v1.6H8V7.6Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="PipeIconSite" viewBox="0 0 24 24">
+
+			<path d="M12 2.5 21 7v10l-9 4.5L3 17V7l9-4.5ZM5 8.2v7.6l6 3v-7.6l-6-3Zm14 0-6 3v7.6l6-3V8.2Zm-7-3.5L6.8 7.3 12 9.9l5.2-2.6L12 4.7Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="PipeIconUrgent" viewBox="0 0 24 24">
+
+			<path d="M13 2 4 14h6l-1 8 11-14h-7l0-6Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="PipeIconDone" viewBox="0 0 24 24">
+
+			<path d="M12 2.5a9.5 9.5 0 1 0 0 19 9.5 9.5 0 0 0 0-19Zm-1.1 13.2-4-4 1.4-1.4 2.6 2.6 5.8-5.8 1.4 1.4-7.2 7.2Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="PipeIconGallery" viewBox="0 0 24 24">
+
+			<path d="M4 4h16v16H4V4Zm2 2v9.6l3.4-3.4 3 3 2.2-2.2L18 16.4V6H6Zm2.2 4.2a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="PipeIconSend" viewBox="0 0 24 24">
+
+			<path
+				d="M21.7 3.4 2.9 10.8c-.8.3-.8 1.5.1 1.8l4.8 1.5 1.8 5.6c.3.8 1.4.9 1.8.2l2.6-4.2 4.9 3.6c.7.5 1.7.1 1.8-.8l2.4-13.7c.2-.9-.7-1.6-1.4-1.4ZM9 13.5l8.5-5.3-6.9 6.9-.4 2.2L9 13.5Z"
+			>
+
+			</path>
+
+		</symbol>
+
+	</svg>
+
+	<div class = " PipelineShell ">
+
+		<div class = " PipelineHead ">
+
+			<div class = " TitleBox ">
+
+				<strong>
+					تشغيل قائم
+				</strong>
+
+				<h2>
+					{pTitle}
+				</h2>
+
+				<p>
+					{pDesc}
+				</p>
+
+			</div>
+
+			<div class = " ServiceBadge ">
+
+				<span>
+					الخدمة
+				</span>
+
+				<b>
+
+					{pServiceName}
+
+				</b>
+
+			</div>
+
+		</div>
+
+		<div class = " PipelineBody ">
+
+			<div class = " SummaryPanel ">
+
+				<div class = " SummaryCard MainSummary ">
+
+					<span class = " SummaryIcon ">
+
+						<svg>
+
+							<use href="#PipeIconClock">
+
+							</use>
+
+						</svg>
+
+					</span>
+
+					<div>
+
+						<span>
+							أقرب متابعة متاحة
+						</span>
+
+						<strong>
+							خلال 48 ساعة
+						</strong>
+
+					</div>
+
+				</div>
+
+				<div class = " SummaryGrid ">
+
+					<div class = " MiniStat ">
+
+						<svg>
+
+							<use href="#PipeIconQueue">
+
+							</use>
+
+						</svg>
+
+						<span>
+							طلبات مفتوحة
+						</span>
+
+						<strong>
+							5
+						</strong>
+
+					</div>
+
+					<div class = " MiniStat ">
+
+						<svg>
+
+							<use href="#PipeIconReview">
+
+							</use>
+
+						</svg>
+
+						<span>
+							قيد المراجعة
+						</span>
+
+						<strong>
+							2
+						</strong>
+
+					</div>
+
+					<div class = " MiniStat ">
+
+						<svg>
+
+							<use href="#PipeIconSite">
+
+							</use>
+
+						</svg>
+
+						<span>
+							معاينات
+						</span>
+
+						<strong>
+							1
+						</strong>
+
+					</div>
+
+					<div class = " MiniStat ">
+
+						<svg>
+
+							<use href="#PipeIconUrgent">
+
+							</use>
+
+						</svg>
+
+						<span>
+							طلبات عاجلة
+						</span>
+
+						<strong>
+							1
+						</strong>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class = " WorkTable ">
+
+				<div class = " TableHead ">
+
+					<span>
+						الملف
+					</span>
+
+					<span>
+						الحالة
+					</span>
+
+					<span>
+						المتابعة
+					</span>
+
+				</div>
+
+				<div class = " WorkRow ">
+
+					<div class = " WorkName ">
+
+						<svg>
+
+							<use href="#PipeIconReview">
+
+							</use>
+
+						</svg>
+
+						<span>
+							تقرير استشاري إنشائي
+						</span>
+
+					</div>
+
+					<span class = " StatusBadge StatusReview ">
+						قيد المراجعة
+					</span>
+
+					<strong>
+						48 ساعة
+					</strong>
+
+				</div>
+
+				<div class = " WorkRow ">
+
+					<div class = " WorkName ">
+
+						<svg>
+
+							<use href="#PipeIconQueue">
+
+							</use>
+
+						</svg>
+
+						<span>
+							رسم هندسي لمحل تجاري
+						</span>
+
+					</div>
+
+					<span class = " StatusBadge StatusWork ">
+						تحت التجهيز
+					</span>
+
+					<strong>
+						هذا الأسبوع
+					</strong>
+
+				</div>
+
+				<div class = " WorkRow ">
+
+					<div class = " WorkName ">
+
+						<svg>
+
+							<use href="#PipeIconSite">
+
+							</use>
+
+						</svg>
+
+						<span>
+							معاينة تشطيب فيلا
+						</span>
+
+					</div>
+
+					<span class = " StatusBadge StatusVisit ">
+						مجدولة
+					</span>
+
+					<strong>
+						الأحد
+					</strong>
+
+				</div>
+
+				<div class = " WorkRow ">
+
+					<div class = " WorkName ">
+
+						<svg>
+
+							<use href="#PipeIconUrgent">
+
+							</use>
+
+						</svg>
+
+						<span>
+							ملف عاجل قيد الفرز
+						</span>
+
+					</div>
+
+					<span class = " StatusBadge StatusUrgent ">
+						أولوية
+					</span>
+
+					<strong>
+						اليوم
+					</strong>
+
+				</div>
+
+			</div>
+
+			<div class = " PortfolioPanel ">
+
+				<div class = " PortfolioTop ">
+
+					<span class = " PortfolioIcon ">
+
+						<svg>
+
+							<use href="#PipeIconGallery">
+
+							</use>
+
+						</svg>
+
+					</span>
+
+					<div>
+
+						<span>
+							بعد التسليم
+						</span>
+
+						<strong>
+							الأعمال المكتملة تنتقل إلى معرض الأعمال
+						</strong>
+
+					</div>
+
+				</div>
+
+				<div class = " ProgressLine ">
+
+					<span class = " Step IsDone ">
+						طلب
+					</span>
+
+					<span class = " Step IsActive ">
+						تنفيذ
+					</span>
+
+					<span class = " Step ">
+						تسليم
+					</span>
+
+					<span class = " Step ">
+						معرض
+					</span>
+
+				</div>
+
+				<div class = " PortfolioStats ">
+
+					<div>
+
+						<span>
+							تم تسليمها هذا الشهر
+						</span>
+
+						<strong>
+							8
+						</strong>
+
+					</div>
+
+					<div>
+
+						<span>
+							جاهزة للإضافة للمعرض
+						</span>
+
+						<strong>
+							3
+						</strong>
+
+					</div>
+
+				</div>
+
+				<div class = " PipelineActions ">
+
+					<a class = " PrimaryAction " href={`#${pContactTargetId}`}>
+
+						<svg>
+
+							<use href="#PipeIconSend">
+
+							</use>
+
+						</svg>
+
+						اذكر أن طلبك عاجل
+
+					</a>
+
+					<a class = " GhostAction " href={`#${pPortfolioTargetId}`}>
+
+						<svg>
+
+							<use href="#PipeIconGallery">
+
+							</use>
+
+						</svg>
+
+						معرض الأعمال
+
+					</a>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.EmoPipelineStrip {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		width: 100%;
+		height: min(390px, 44vw);
+		min-height: 310px;
+		box-sizing: border-box;
+		direction: rtl;
+		background: radial-gradient(circle at 7% 22%, rgba(255, 209, 92, 0.12), transparent 24%),
+			radial-gradient(circle at 94% 45%, rgba(38, 181, 255, 0.14), transparent 25%),
+			linear-gradient(135deg, #071426 0%, #081b31 54%, #06101e 100%);
+		color: #f8fbff;
+		border-block: 1px solid rgba(125, 190, 255, 0.18);
+	}
+
+	.EmoPipelineStrip::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+			linear-gradient(0deg, rgba(255, 255, 255, 0.032) 1px, transparent 1px);
+		background-size: 38px 38px;
+		opacity: 0.28;
+		pointer-events: none;
+	}
+
+
+	.SvgDefs {
+		position: absolute;
+		width: 0;
+		height: 0;
+		overflow: hidden;
+	}
+
+
+	.PipelineShell {
+		display: grid;
+		grid-template-rows: auto 1fr;
+		gap: 10px;
+		width: min(1780px, calc(100% - 20px));
+		height: 100%;
+		margin-inline: auto;
+		padding-block: 14px;
+		box-sizing: border-box;
+	}
+
+
+	.PipelineHead {
+		display: grid;
+		grid-template-columns: minmax(300px, 1fr) auto;
+		align-items: center;
+		gap: 12px;
+		min-height: 48px;
+	}
+
+
+	.TitleBox {
+		display: grid;
+		grid-template-columns: auto auto 1fr;
+		align-items: center;
+		gap: 10px;
+		min-width: 0;
+	}
+
+	.TitleBox strong {
+		display: inline-flex;
+		width: fit-content;
+		padding: 4px 10px;
+		border: 1px solid rgba(255, 209, 92, 0.34);
+		border-radius: 999px;
+		background: rgba(255, 209, 92, 0.10);
+		color: #ffd15c;
+		font-size: 11px;
+		font-weight: 950;
+		line-height: 1.2;
+		white-space: nowrap;
+	}
+
+	.TitleBox h2 {
+		margin: 0;
+		color: #ffffff;
+		font-size: 21px;
+		font-weight: 950;
+		line-height: 1.25;
+		white-space: nowrap;
+	}
+
+	.TitleBox p {
+		margin: 0;
+		color: rgba(248, 251, 255, 0.64);
+		font-size: 12px;
+		font-weight: 700;
+		line-height: 1.6;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+
+	.ServiceBadge {
+		display: grid;
+		gap: 2px;
+		padding: 8px 13px;
+		border: 1px solid rgba(125, 211, 255, 0.22);
+		border-radius: 15px;
+		background: rgba(255, 255, 255, 0.065);
+		white-space: nowrap;
+	}
+
+	.ServiceBadge span {
+		color: rgba(248, 251, 255, 0.55);
+		font-size: 10px;
+		font-weight: 800;
+	}
+
+	.ServiceBadge b {
+		color: #7dd3ff;
+		font-size: 13px;
+		font-weight: 950;
+	}
+
+
+	.PipelineBody {
+		display: grid;
+		grid-template-columns: 0.65fr 1.25fr 0.8fr;
+		gap: 10px;
+		min-height: 0;
+	}
+
+
+	.SummaryPanel {
+		display: grid;
+		grid-template-rows: auto 1fr;
+		gap: 8px;
+		padding: 10px;
+	}
+
+
+	.SummaryCard {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		align-items: center;
+		gap: 9px;
+		padding: 10px;
+		border-radius: 16px;
+		background: linear-gradient(135deg, rgba(255, 209, 92, 0.13), rgba(38, 181, 255, 0.06)),
+			rgba(2, 12, 28, 0.30);
+	}
+
+
+	.SummaryGrid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 7px;
+	}
+
+
+	.MiniStat {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		align-items: center;
+		gap: 6px;
+		min-width: 0;
+		padding: 8px;
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		border-radius: 13px;
+		background: rgba(2, 12, 28, 0.32);
+	}
+
+	.MiniStat svg {
+		color: #7dd3ff;
+	}
+
+	.MiniStat span {
+		color: rgba(248, 251, 255, 0.70);
+		font-size: 11px;
+		font-weight: 850;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.MiniStat strong {
+		color: #ffffff;
+		font-size: 16px;
+		font-weight: 950;
+		direction: ltr;
+	}
+
+
+	.WorkTable {
+		display: grid;
+		grid-template-rows: auto repeat(4, 1fr);
+		gap: 7px;
+		padding: 10px;
+	}
+
+
+	.TableHead {
+		padding: 0 8px 3px;
+		color: rgba(248, 251, 255, 0.52);
+		font-size: 10px;
+		font-weight: 900;
+	}
+
+
+	.WorkRow {
+		min-height: 42px;
+		padding: 7px 8px;
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		border-radius: 13px;
+		background: rgba(2, 12, 28, 0.32);
+		box-sizing: border-box;
+	}
+
+	.WorkRow > strong {
+		color: #ffffff;
+		font-size: 12px;
+		font-weight: 950;
+		white-space: nowrap;
+	}
+
+
+	.WorkName {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		align-items: center;
+		gap: 7px;
+		min-width: 0;
+	}
+
+	.WorkName svg {
+		color: #7dd3ff;
+	}
+
+	.WorkName span {
+		color: rgba(248, 251, 255, 0.82);
+		font-size: 12px;
+		font-weight: 850;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+
+	.StatusBadge {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		height: 25px;
+		padding-inline: 9px;
+		border-radius: 999px;
+		font-size: 10px;
+		font-weight: 950;
+		white-space: nowrap;
+	}
+
+
+	.StatusReview {
+		background: rgba(125, 211, 255, 0.12);
+		color: #7dd3ff;
+	}
+
+
+	.StatusWork {
+		background: rgba(255, 209, 92, 0.13);
+		color: #ffd15c;
+	}
+
+
+	.StatusVisit {
+		background: rgba(66, 255, 159, 0.11);
+		color: #42ff9f;
+	}
+
+
+	.StatusUrgent {
+		background: rgba(255, 112, 112, 0.15);
+		color: #ff9c9c;
+	}
+
+
+	.PortfolioPanel {
+		display: grid;
+		grid-template-rows: auto auto 1fr auto;
+		gap: 9px;
+		padding: 10px;
+	}
+
+
+	.PortfolioTop {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		align-items: center;
+		gap: 9px;
+		min-width: 0;
+	}
+
+
+	.ProgressLine {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 6px;
+	}
+
+
+	.Step {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		height: 28px;
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.07);
+		color: rgba(248, 251, 255, 0.58);
+		font-size: 10px;
+		font-weight: 900;
+	}
+
+
+	.PortfolioStats {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 7px;
+	}
+
+	.PortfolioStats div {
+		display: grid;
+		gap: 3px;
+		padding: 9px;
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		border-radius: 13px;
+		background: rgba(2, 12, 28, 0.32);
+	}
+
+	.PortfolioStats strong {
+		color: #ffffff;
+		font-size: 20px;
+		font-weight: 950;
+		direction: ltr;
+	}
+
+
+	.PipelineActions {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 7px;
+	}
+
+	.PipelineActions a {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		height: 34px;
+		padding-inline: 10px;
+		border-radius: 12px;
+		text-decoration: none;
+		font-size: 11px;
+		font-weight: 950;
+		white-space: nowrap;
+	}
+
+
+	.PrimaryAction {
+		background: linear-gradient(135deg, #ffd15c, #ff9f1f);
+		color: #101827;
+	}
+
+
+	.GhostAction {
+		border: 1px solid rgba(125, 211, 255, 0.24);
+		background: rgba(255, 255, 255, 0.06);
+		color: #7dd3ff;
+	}
+
+
+
+	.Step.IsDone {
+		background: rgba(66, 255, 159, 0.12);
+		color: #42ff9f;
+	}
+
+
+	.Step.IsActive {
+		background: rgba(255, 209, 92, 0.13);
+		color: #ffd15c;
+	}
+
+
+
+	.SummaryPanel,
+	.WorkTable,
+	.PortfolioPanel
+	{
+		min-width: 0;
+		min-height: 0;
+		border: 1px solid rgba(125, 190, 255, 0.19);
+		border-radius: 20px;
+		background: rgba(255, 255, 255, 0.052);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08),
+			0 10px 24px rgba(0, 0, 0, 0.17);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+		box-sizing: border-box;
+	}
+
+
+	.SummaryIcon,
+	.PortfolioIcon
+	{
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 38px;
+		height: 38px;
+		border-radius: 14px;
+		background: rgba(255, 209, 92, 0.13);
+		color: #ffd15c;
+	}
+
+
+	.SummaryIcon svg,
+	.PortfolioIcon svg,
+	.MiniStat svg,
+	.WorkName svg,
+	.PipelineActions svg
+	{
+		width: 18px;
+		height: 18px;
+		fill: currentColor;
+	}
+
+
+	.SummaryCard span,
+	.PortfolioTop span,
+	.PortfolioStats span
+	{
+		color: rgba(248, 251, 255, 0.62);
+		font-size: 11px;
+		font-weight: 800;
+		line-height: 1.4;
+	}
+
+
+	.SummaryCard strong,
+	.PortfolioTop strong
+	{
+		display: block;
+		margin-top: 2px;
+		color: #ffffff;
+		font-size: 16px;
+		font-weight: 950;
+		line-height: 1.3;
+	}
+
+
+	.TableHead,
+	.WorkRow
+	{
+		display: grid;
+		grid-template-columns: minmax(170px, 1fr) 120px 90px;
+		align-items: center;
+		gap: 8px;
+	}
+
+
+	@media (max-width: 1220px) {
+		.EmoPipelineStrip {
+			height: auto;
+			min-height: 100svh;
+			overflow: visible;
+		}
+
+		.PipelineShell {
+			height: auto;
+			width: min(760px, calc(100% - 24px));
+		}
+
+		.PipelineHead {
+			grid-template-columns: 1fr;
+			justify-items: center;
+			text-align: center;
+		}
+
+		.TitleBox {
+			grid-template-columns: 1fr;
+			justify-items: center;
+		}
+
+		.TitleBox h2,
+		.TitleBox p
+		{
+			white-space: normal;
+			text-align: center;
+		}
+
+		.PipelineBody {
+			grid-template-columns: 1fr;
+		}
+	}
+
+
+	@media (orientation: portrait) {
+		.PipelineShell {
+			width: min(430px, calc(100% - 18px));
+			padding-block: 14px;
+		}
+
+		.TitleBox h2 {
+			font-size: 20px;
+		}
+
+		.TitleBox p {
+			font-size: 11px;
+		}
+
+		.TableHead {
+			display: none;
+		}
+
+		.WorkTable {
+			grid-template-rows: auto;
+		}
+
+		.WorkRow {
+			grid-template-columns: 1fr auto;
+			gap: 7px;
+		}
+
+		.WorkRow > strong {
+			grid-column: 1 / -1;
+			justify-self: start;
+			color: rgba(248, 251, 255, 0.66);
+		}
+
+		.PortfolioStats,
+		.PipelineActions
+		{
+			grid-template-columns: 1fr;
+		}
+	}
+
+
+
+</style>

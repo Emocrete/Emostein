@@ -1,0 +1,1608 @@
+---
+import { Colors } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"section"> {
+	pMaxResults?: number;
+}
+
+const {
+	pMaxResults = 12,
+	id: pGivenID = GetWidgetId("SiteSearch404"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cStyle = [
+	`--SearchSky:${Colors.SkyLite};`,
+	`--SearchSkyDark:${Colors.SkyDark};`,
+	`--SearchBistage:${Colors.Bistage};`,
+	`--SearchBistageDark:${Colors.BistageDark};`,
+	`--SearchBlack:${Colors.BlackOff};`,
+	`--SearchWhite:${Colors.WhiteOff};`,
+	pGivenStyle,
+].filter(Boolean).join(" ");
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section
+	class = {`SiteSearch404 ${pGivenClass}`.trim()}
+	style = {cStyle}
+	id={pGivenID}
+	data-site-search-404
+	data-max-results={pMaxResults}
+	{...RemAttr}
+>
+
+	<div
+		class = " SearchPanel "
+		role="search"
+		aria-label="بحث داخل صفحات الموقع"
+	>
+
+		<label class = " SearchLabel " for="SiteSearchInput">
+
+			ابحث داخل صفحات الموقع
+
+		</label>
+
+		<div class = " SearchBox ">
+
+			<input
+				class = " SearchInput "
+				id="SiteSearchInput"
+				name="q"
+				type="search"
+				autocomplete="off"
+				placeholder="مثال: ترخيص محل، رسم صيدلية، ختم مهندس، تقرير سلامة"
+				data-site-search-input
+			/>
+
+			<button
+				class = " SearchButton "
+				type="button"
+				data-site-search-button
+			>
+
+				بحث
+
+			</button>
+
+		</div>
+
+	</div>
+
+	<output
+		class = " SearchStatus "
+		data-site-search-status
+		aria-live="polite"
+	>
+
+		جاري تجهيز البحث في صفحات الموقع المنشورة...
+
+	</output>
+
+	<ol class = " SearchResults " data-site-search-results>
+
+	</ol>
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style is:global>
+
+
+
+	.SiteSearch404 {
+		width: min(1100px, 100%);
+		box-sizing: border-box;
+		margin-inline: auto;
+		padding: 25px;
+		border-radius: 24px;
+		background: linear-gradient(135deg, rgba(218, 239, 254, 0.96), rgba(250, 250, 250, 0.98));
+		box-shadow: 0 18px 45px rgba(0, 0, 0, 0.12);
+	}
+
+	.SiteSearch404 .SearchPanel {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		width: 100%;
+	}
+
+	.SiteSearch404 .SearchLabel {
+		font-size: 24px;
+		font-weight: 800;
+		color: var(--SearchBlack);
+		text-align: center;
+	}
+
+	.SiteSearch404 .SearchBox {
+		display: flex;
+		flex-direction: row;
+		gap: 12px;
+		width: 100%;
+	}
+
+	.SiteSearch404 .SearchInput {
+		flex: 1 1 auto;
+		min-width: 0;
+		height: 62px;
+		box-sizing: border-box;
+		border: 2px solid var(--SearchSkyDark);
+		border-radius: 18px;
+		padding: 0 24px;
+		font: inherit;
+		font-size: 21px;
+		font-weight: 700;
+		color: var(--SearchBlack);
+		background: white;
+		outline: none;
+		box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.08);
+	}
+
+	.SiteSearch404 .SearchInput:focus {
+		border-color: var(--SearchBistageDark);
+		box-shadow: 0 0 0 4px rgba(167, 196, 92, 0.22),
+			inset 0 2px 8px rgba(0, 0, 0, 0.06);
+	}
+
+	.SiteSearch404 .SearchButton {
+		flex: 0 0 150px;
+		height: 62px;
+		border: 0;
+		border-radius: 18px;
+		font: inherit;
+		font-size: 21px;
+		font-weight: 800;
+		color: var(--SearchBlack);
+		background: var(--SearchBistage);
+		cursor: pointer;
+		box-shadow: 0 10px 22px rgba(0, 0, 0, 0.15);
+	}
+
+	.SiteSearch404 .SearchButton:hover {
+		background: var(--SearchBistageDark);
+		color: white;
+	}
+
+	.SiteSearch404 .SearchStatus {
+		display: block;
+		margin-top: 18px;
+		font-size: 17px;
+		font-weight: 800;
+		text-align: center;
+		color: var(--SearchBlack);
+	}
+
+	.SiteSearch404 .SearchResults {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 20px;
+		width: 100%;
+		margin: 25px 0 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.SiteSearch404 .SearchCard {
+		display: grid;
+		grid-template-columns: 170px minmax(0, 1fr);
+		gap: 16px;
+		align-items: stretch;
+		box-sizing: border-box;
+		width: 100%;
+		min-width: 0;
+		padding: 14px;
+		border-radius: 22px;
+		background: white;
+		box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+		overflow: hidden;
+	}
+
+	.SiteSearch404 .SearchCardMedia {
+		display: block;
+		width: 170px;
+		height: 145px;
+		min-width: 0;
+		border-radius: 18px;
+		overflow: hidden;
+		background: var(--SearchSky);
+	}
+
+	.SiteSearch404 .SearchCardImg {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.SiteSearch404 .SearchCardBody {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 8px;
+		min-width: 0;
+		overflow: hidden;
+	}
+
+	.SiteSearch404 .SearchCardTitle {
+		display: -webkit-box;
+		max-width: 100%;
+		color: var(--SearchBlack);
+		font-size: 19px;
+		font-weight: 900;
+		line-height: 1.55;
+		text-decoration: none;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.SiteSearch404 .SearchCardTitle:hover {
+		color: var(--SearchBistageDark);
+	}
+
+	.SiteSearch404 .SearchCardDesc {
+		display: -webkit-box;
+		margin: 0;
+		color: #444;
+		font-size: 15px;
+		line-height: 1.8;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.SiteSearch404 .SearchCardUrl {
+		display: block;
+		max-width: 100%;
+		color: #777;
+		font-size: 12px;
+		direction: ltr;
+		text-align: left;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.SiteSearch404 .SearchCardButton {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 135px;
+		height: 38px;
+		margin-top: auto;
+		border-radius: 12px;
+		background: var(--SearchBistage);
+		color: var(--SearchBlack);
+		font-size: 15px;
+		font-weight: 900;
+		text-decoration: none;
+	}
+
+	.SiteSearch404 .SearchCardButton:hover {
+		background: var(--SearchBistageDark);
+		color: white;
+	}
+
+	.SiteSearch404 .SearchContext {
+		display: block;
+		box-sizing: border-box;
+		width: 100%;
+		margin: 4px 0 0;
+		padding: 10px 12px;
+		border-radius: 12px;
+		background: rgba(218, 239, 254, 0.55);
+		color: #333;
+		font-size: 14px;
+		line-height: 1.9;
+	}
+
+	.SiteSearch404 .SearchContextLabel {
+		display: block;
+		margin-bottom: 4px;
+		color: #555;
+		font-size: 12px;
+		font-weight: 900;
+	}
+
+	.SiteSearch404 .SearchContextWord {
+		display: inline;
+	}
+
+	.SiteSearch404 .SearchContextHit {
+		display: inline;
+		padding: 0 4px;
+		border-radius: 6px;
+		background: rgba(167, 196, 92, 0.45);
+		color: #111;
+		font-weight: 900;
+	}
+
+	.SiteSearch404 .SearchMatchBar {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+		align-items: center;
+		width: 100%;
+		margin-top: 4px;
+		padding: 7px 9px;
+		border-radius: 12px;
+		background: rgba(0, 0, 0, 0.045);
+	}
+
+	.SiteSearch404 .SearchMatchBarLabel {
+		color: #555;
+		font-size: 12px;
+		font-weight: 900;
+	}
+
+	.SiteSearch404 .SearchToken {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 4px 8px;
+		border-radius: 999px;
+		font-size: 13px;
+		font-weight: 900;
+		line-height: 1.4;
+	}
+
+	.SiteSearch404 .SearchTokenFound {
+		background: rgba(167, 196, 92, 0.35);
+		color: #1f5f19;
+	}
+
+	.SiteSearch404 .SearchTokenMissing {
+		background: rgba(220, 70, 70, 0.16);
+		color: #a21919;
+	}
+
+	@media (orientation: portrait) {
+		.SiteSearch404 {
+			padding: 18px;
+			border-radius: 20px;
+		}
+
+		.SiteSearch404 .SearchLabel {
+			font-size: 21px;
+		}
+
+		.SiteSearch404 .SearchBox {
+			flex-direction: column;
+		}
+
+		.SiteSearch404 .SearchInput {
+			height: 58px;
+			padding-inline: 16px;
+			font-size: 17px;
+		}
+
+		.SiteSearch404 .SearchButton {
+			flex-basis: auto;
+			width: 100%;
+			height: 52px;
+			font-size: 18px;
+		}
+
+		.SiteSearch404 .SearchResults {
+			grid-template-columns: 1fr;
+			gap: 15px;
+		}
+
+		.SiteSearch404 .SearchCard {
+			grid-template-columns: 115px minmax(0, 1fr);
+			gap: 12px;
+			padding: 10px;
+			border-radius: 18px;
+		}
+
+		.SiteSearch404 .SearchCardMedia {
+			width: 115px;
+			height: 125px;
+			border-radius: 15px;
+		}
+
+		.SiteSearch404 .SearchCardTitle {
+			font-size: 17px;
+			line-height: 1.55;
+		}
+
+		.SiteSearch404 .SearchCardDesc {
+			font-size: 13px;
+			line-height: 1.75;
+			-webkit-line-clamp: 3;
+		}
+
+		.SiteSearch404 .SearchCardButton {
+			min-width: 115px;
+			height: 34px;
+			font-size: 13px;
+		}
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+	interface SearchTarget {
+	Url: string;
+	}
+
+	interface PageData {
+	Url: string;
+	Title: string;
+	Description: string;
+	Text: string;
+	NormalizedTitle: string;
+	NormalizedDescription: string;
+	NormalizedText: string;
+	HeroCandidates: string[];
+	}
+
+	interface SearchMatch {
+	Url: string;
+	Title: string;
+	Description: string;
+	Snippet: string;
+	Score: number;
+	HeroCandidates: string[];
+	QueryTokenStates: QueryTokenState[];
+	ContextParts: ContextPart[];
+	}
+
+	interface QueryData {
+	Raw: string;
+	Normalized: string;
+	Tokens: string[];
+	IsValid: boolean;
+	}
+
+	interface QueryTokenState {
+	Text: string;
+	Found: boolean;
+	}
+
+	interface ContextPart {
+	Text: string;
+	Matched: boolean;
+	}
+
+	interface MatchInfo {
+	Accepted: boolean;
+	Score: number;
+	QueryTokenStates: QueryTokenState[];
+	ContextParts: ContextPart[];
+	}
+
+	interface StoredSearchIndex {
+	Signature: string;
+	SavedAt: number;
+	Pages: PageData[];
+	}
+
+	const cRoot = document.querySelector<HTMLElement>("[data-site-search-404]");
+	const cInput = cRoot?.querySelector<HTMLInputElement>("[data-site-search-input]") || null;
+	const cButton = cRoot?.querySelector<HTMLButtonElement>("[data-site-search-button]") || null;
+	const cStatus = cRoot?.querySelector<HTMLElement>("[data-site-search-status]") || null;
+	const cResults = cRoot?.querySelector<HTMLOListElement>("[data-site-search-results]") || null;
+	const cMaxResults = Number(cRoot?.dataset.maxResults || "12");
+	const cConcurrentFetches = 12;
+	const cMaxPageTextChars = 18000;
+	const cStorageKey = "EmosteinSiteSearch404IndexV2";
+	const cStorageMaxAge = 1000 * 60 * 60 * 6;
+
+	const cIndexedUrls = new Set<string>();
+	const cIndexedPages: PageData[] = [];
+
+	let cTargetsPromise: Promise<SearchTarget[]> | null = null;
+	let cWarmupPromise: Promise<void> | null = null;
+	let cInputTimer = 0;
+	let cRenderTimer = 0;
+	let cWarmupDone = false;
+	let cTotalTargets = 0;
+	let cActiveQuery: QueryData | null = null;
+
+	cButton?.addEventListener("click", HandleSearchClick);
+	cInput?.addEventListener("keydown", HandleInputKeyDown);
+	cInput?.addEventListener("input", HandleSearchInput);
+
+	SetStatus("جاري تجهيز البحث في صفحات الموقع المنشورة...");
+	window.setTimeout(StartWarmup, 250);
+
+	function HandleSearchClick(): void {
+	RunSearch(cInput?.value || "");
+	}
+
+	function HandleInputKeyDown(pEvent: KeyboardEvent): void {
+	if (pEvent.key !== "Enter") {
+	return;
+	}
+
+	pEvent.preventDefault();
+	RunSearch(cInput?.value || "");
+	}
+
+	function HandleSearchInput(): void {
+	clearTimeout(cInputTimer);
+	cInputTimer = window.setTimeout(SearchAfterTyping, 450);
+	}
+
+	function SearchAfterTyping(): void {
+	RunSearch(cInput?.value || "");
+	}
+
+	function RunSearch(pQuery: string): void {
+	const cQuery = BuildQueryData(pQuery);
+
+	window.clearTimeout(cRenderTimer);
+	cRenderTimer = 0;
+
+	ClearResults();
+
+	if (!cQuery.IsValid) {
+	cActiveQuery = null;
+	SetStatus("اكتب كلمة بحث أوضح.");
+	return;
+	}
+
+	cActiveQuery = cQuery;
+	StartWarmup();
+	RenderSearch(cQuery);
+	}
+
+	function StartWarmup(): void {
+	if (!cWarmupPromise) {
+	cWarmupPromise = WarmupSearchIndex();
+	}
+	}
+
+	async function WarmupSearchIndex(): Promise<void> {
+	const cTargets = await GetSearchTargets();
+	const cSignature = BuildTargetsSignature(cTargets);
+	const cStoredPages = TryReadStoredIndex(cSignature);
+
+	cTotalTargets = cTargets.length;
+
+	if (cStoredPages) {
+	AddPagesToIndex(cStoredPages);
+	cWarmupDone = true;
+	SetStatus("تم تجهيز البحث داخل صفحات الموقع. اكتب كلمة بحث لعرض النتائج.");
+
+	if (cActiveQuery?.IsValid) {
+	RenderSearch(cActiveQuery);
+	}
+
+	return;
+	}
+
+	await BuildIndexFromTargets(cTargets);
+
+	cWarmupDone = true;
+	TryStoreIndex(cSignature);
+
+	if (cActiveQuery?.IsValid) {
+	RenderSearch(cActiveQuery);
+	return;
+	}
+
+	SetStatus("تم تجهيز البحث داخل صفحات الموقع. اكتب كلمة بحث لعرض النتائج.");
+	}
+
+	async function BuildIndexFromTargets(pTargets: SearchTarget[]): Promise<void> {
+	let cNextIndex = 0;
+
+	async function RunWorker(): Promise<void> {
+	while (cNextIndex < pTargets.length) {
+	const cTarget = pTargets[cNextIndex];
+	cNextIndex += 1;
+
+	const cPage = await GetPageData(cTarget.Url);
+
+	if (cPage && !cIndexedUrls.has(cPage.Url)) {
+	AddPageToIndex(cPage);
+	RequestActiveRender();
+	UpdateWarmupStatus();
+	}
+	}
+	}
+
+	const cWorkerCount = Math.min(cConcurrentFetches, pTargets.length);
+	const cWorkers: Promise<void>[] = [];
+
+	for (let cIndex = 0; cIndex < cWorkerCount; cIndex += 1) {
+	cWorkers.push(RunWorker());
+	}
+
+	await Promise.all(cWorkers);
+	}
+
+	function AddPagesToIndex(pPages: PageData[]): void {
+	for (const cPage of pPages) {
+	AddPageToIndex(cPage);
+	}
+	}
+
+	function AddPageToIndex(pPage: PageData): void {
+	if (cIndexedUrls.has(pPage.Url)) {
+	return;
+	}
+
+	cIndexedUrls.add(pPage.Url);
+	cIndexedPages.push(pPage);
+	}
+
+	function RequestActiveRender(): void {
+	if (!cActiveQuery?.IsValid || cRenderTimer) {
+	return;
+	}
+
+	cRenderTimer = window.setTimeout(RenderActiveQuery, 200);
+	}
+
+	function RenderActiveQuery(): void {
+	cRenderTimer = 0;
+
+	if (cActiveQuery?.IsValid) {
+	RenderSearch(cActiveQuery);
+	}
+	}
+
+	function UpdateWarmupStatus(): void {
+	if (cActiveQuery?.IsValid) {
+	return;
+	}
+
+	SetStatus("جاري تجهيز البحث: " + cIndexedPages.length + " من " + cTotalTargets + " صفحة.");
+	}
+
+	function BuildQueryData(pQuery: string): QueryData {
+	const cNormalized = NormalizeText(pQuery);
+	const cTokens = cNormalized
+	.split(" ")
+	.map(CleanToken)
+	.filter(IsValidToken);
+
+	return {
+	Raw: pQuery,
+	Normalized: cNormalized,
+	Tokens: cTokens,
+	IsValid: cNormalized.length >= 2 && cTokens.length > 0,
+	};
+	}
+
+	function CleanToken(pToken: string): string {
+	return pToken.trim();
+	}
+
+	function IsValidToken(pToken: string): boolean {
+	return pToken.length > 1;
+	}
+
+	function GetSearchTargets(): Promise<SearchTarget[]> {
+	if (!cTargetsPromise) {
+	cTargetsPromise = BuildSearchTargetsFromPublishedSitemap();
+	}
+
+	return cTargetsPromise;
+	}
+
+	async function BuildSearchTargetsFromPublishedSitemap(): Promise<SearchTarget[]> {
+	const cSitemapUrls: string[] = [
+	"/sitemap-index.xml",
+	"/sitemap.xml",
+	"/sitemap-0.xml",
+	];
+
+	const cFoundUrls = new Set<string>();
+
+	for (const cSitemapUrl of cSitemapUrls) {
+	const cUrls = await ReadSitemapUrl(cSitemapUrl, 0);
+
+	for (const cUrl of cUrls) {
+	const cNormalizedUrl = NormalizePageUrl(cUrl);
+
+	if (cNormalizedUrl) {
+	cFoundUrls.add(cNormalizedUrl);
+	}
+	}
+	}
+
+	return Array
+	.from(cFoundUrls)
+	.filter(IsSearchablePublishedUrl)
+	.sort(SortUrls)
+	.map(BuildTarget);
+	}
+
+	function SortUrls(pA: string, pB: string): number {
+	return pA.localeCompare(pB, "ar");
+	}
+
+	function BuildTarget(pUrl: string): SearchTarget {
+	return {
+	Url: pUrl,
+	};
+	}
+
+	async function ReadSitemapUrl(pUrl: string, pDepth: number): Promise<string[]> {
+	if (pDepth > 4) {
+	return [];
+	}
+
+	const cXml = await FetchText(BuildSameOriginFetchUrl(pUrl), "application/xml,text/xml", 12000);
+
+	if (!cXml) {
+	return [];
+	}
+
+	const cDocument = new DOMParser().parseFromString(cXml, "application/xml");
+	const cLocs = Array
+	.from(cDocument.querySelectorAll("loc"))
+	.map(GetLocText)
+	.filter(IsFilledText);
+
+	const cSitemapLocs = cLocs.filter(IsSitemapUrl);
+	const cPageLocs = cLocs.filter(IsPageLoc);
+	const cNestedPages: string[] = [];
+
+	for (const cSitemapLoc of cSitemapLocs) {
+	const cNestedResult = await ReadSitemapUrl(cSitemapLoc, pDepth + 1);
+	cNestedPages.push(...cNestedResult);
+	}
+
+	return [...cPageLocs, ...cNestedPages];
+	}
+
+	async function FetchText(pUrl: string, pAccept: string, pTimeoutMs: number): Promise<string | null> {
+	const cController = new AbortController();
+	const cTimer = window.setTimeout(AbortFetch, pTimeoutMs);
+
+	function AbortFetch(): void {
+	cController.abort();
+	}
+
+	try {
+	const cResponse = await fetch(pUrl, {
+	headers: {
+	Accept: pAccept,
+	},
+	signal: cController.signal,
+	});
+
+	if (!cResponse.ok) {
+	return null;
+	}
+
+	return await cResponse.text();
+	}
+	catch {
+	return null;
+	}
+	finally {
+	window.clearTimeout(cTimer);
+	}
+	}
+
+	function BuildSameOriginFetchUrl(pUrl: string): string {
+	try {
+	const cUrl = new URL(pUrl, window.location.origin);
+
+	if (cUrl.hostname === "www.emocrete.com" || cUrl.origin === window.location.origin) {
+	return cUrl.pathname + cUrl.search;
+	}
+
+	return pUrl;
+	}
+	catch {
+	return pUrl;
+	}
+	}
+
+	function GetLocText(pLoc: Element): string {
+	return CleanText(pLoc.textContent);
+	}
+
+	function IsFilledText(pText: string): boolean {
+	return pText.length > 0;
+	}
+
+	function IsPageLoc(pLoc: string): boolean {
+	return !IsSitemapUrl(pLoc);
+	}
+
+	function IsSitemapUrl(pUrl: string): boolean {
+	return /sitemap.*\.xml($|\?)/i.test(pUrl);
+	}
+
+	function NormalizePageUrl(pUrl: string): string {
+	try {
+	const cUrl = new URL(pUrl, window.location.origin);
+
+	if (cUrl.hostname !== "www.emocrete.com" && cUrl.origin !== window.location.origin) {
+	return "";
+	}
+
+	let cPath = cUrl.pathname || "/";
+
+	if (cPath.length > 1 && cPath.endsWith("/")) {
+	cPath = cPath.slice(0, -1);
+	}
+
+	return cPath;
+	}
+	catch {
+	return "";
+	}
+	}
+
+	function IsSearchablePublishedUrl(pUrl: string): boolean {
+	return (
+	pUrl !== "/404" &&
+	!pUrl.includes("/Tests/") &&
+	!pUrl.includes("/_") &&
+	!pUrl.includes("[") &&
+	!/\.(xml|txt|json|webp|png|jpg|jpeg|svg|ico|css|js|map|pdf)$/i.test(pUrl)
+	);
+	}
+
+	async function GetPageData(pUrl: string): Promise<PageData | null> {
+	const cHtml = await FetchText(pUrl, "text/html", 14000);
+
+	if (!cHtml) {
+	return null;
+	}
+
+	const cDocument = new DOMParser().parseFromString(cHtml, "text/html");
+	const cReadableRoot = GetReadableRoot(cDocument);
+	const cTitleElement = cReadableRoot?.querySelector("h1, h2, h3") || null;
+	const cMetaDescription = cDocument.querySelector<HTMLMetaElement>('meta[name="description"]');
+	const cTitle = CleanText(cTitleElement?.textContent || cDocument.title || pUrl);
+	const cDescription = CleanText(cMetaDescription?.getAttribute("content") || "");
+	const cText = CleanText(cReadableRoot?.textContent || cDocument.body?.textContent || "").slice(0, cMaxPageTextChars);
+
+	return {
+	Url: pUrl,
+	Title: cTitle,
+	Description: cDescription,
+	Text: cText,
+	NormalizedTitle: NormalizeText(cTitle),
+	NormalizedDescription: NormalizeText(cDescription),
+	NormalizedText: NormalizeText(cText),
+	HeroCandidates: BuildHeroCandidates(pUrl, cDocument),
+	};
+	}
+
+	function GetReadableRoot(pDocument: Document): Element | null {
+	const cRoot = pDocument.querySelector("main") || pDocument.querySelector("#stage") || pDocument.body;
+
+	if (!cRoot) {
+	return null;
+	}
+
+	const cClone = cRoot.cloneNode(true) as Element;
+
+	cClone
+	.querySelectorAll("script, style, svg, nav, header, footer, form")
+	.forEach(RemoveElement);
+
+	return cClone;
+	}
+
+	function RemoveElement(pElement: Element): void {
+	pElement.remove();
+	}
+
+	function BuildHeroCandidates(pUrl: string, pDocument: Document): string[] {
+	const cMetaImage = GetMetaImage(pDocument);
+	const cParts = pUrl
+	.split("/")
+	.filter(IsFilledText)
+	.map(ToMediaFolderPart);
+
+	const cCandidates: string[] = [];
+
+	if (cMetaImage) {
+	cCandidates.push(cMetaImage);
+	}
+
+	for (let cCount = cParts.length; cCount > 0; cCount -= 1) {
+	cCandidates.push("/Media/" + cParts.slice(0, cCount).join("/") + "/HeroL.webp");
+	}
+
+	cCandidates.push("/Media/Home/HeroL.webp");
+	cCandidates.push("/Media/Emocrete/HeroL.webp");
+
+	return Array.from(new Set(cCandidates));
+	}
+
+	function GetMetaImage(pDocument: Document): string {
+	const cImage =
+	pDocument.querySelector<HTMLMetaElement>('meta[property="og:image"]')?.getAttribute("content") ||
+	pDocument.querySelector<HTMLMetaElement>('meta[name="twitter:image"]')?.getAttribute("content") ||
+	"";
+
+	if (!cImage) {
+	return "";
+	}
+
+	try {
+	const cUrl = new URL(cImage, window.location.origin);
+
+	if (cUrl.hostname === "www.emocrete.com" || cUrl.origin === window.location.origin) {
+	return cUrl.pathname + cUrl.search;
+	}
+
+	return cImage;
+	}
+	catch {
+	return cImage;
+	}
+	}
+
+	function ToMediaFolderPart(pValue: string): string {
+	return pValue
+	.split("-")
+	.filter(IsFilledText)
+	.map(CapitalizePart)
+	.join("-");
+	}
+
+	function CapitalizePart(pValue: string): string {
+	return pValue.charAt(0).toUpperCase() + pValue.slice(1);
+	}
+
+	function RenderSearch(pQuery: QueryData): void {
+	const cMatches = cIndexedPages
+	.map(function BuildMatch(pPage) {
+	return BuildSearchMatch(pPage, pQuery);
+	})
+	.filter(function IsAcceptedMatch(pMatch) {
+	return IsPositiveMatch(pMatch) && IsRelevantMatch(pMatch, pQuery);
+	})
+	.sort(SortByScore);
+
+	RenderResults(cMatches.slice(0, cMaxResults), cMatches.length, pQuery);
+	}
+
+	function IsRelevantMatch(pMatch: SearchMatch, pQuery: QueryData): boolean {
+	const cFoundCount = pMatch.QueryTokenStates.filter(IsFoundToken).length;
+
+	return cFoundCount > 0;
+	}
+
+	function IsFoundToken(pToken: QueryTokenState): boolean {
+	return pToken.Found;
+	}
+
+
+	function BuildSearchMatch(pPage: PageData, pQuery: QueryData): SearchMatch {
+	const cMatchInfo = BuildMatchInfo(pPage, pQuery);
+
+	return {
+	Url: pPage.Url,
+	Title: pPage.Title,
+	Description: pPage.Description,
+	Snippet: BuildSnippet(pPage.Text),
+	Score: cMatchInfo.Score,
+	HeroCandidates: pPage.HeroCandidates,
+	QueryTokenStates: cMatchInfo.QueryTokenStates,
+	ContextParts: cMatchInfo.ContextParts
+	};
+	}
+
+	function IsPositiveMatch(pMatch: SearchMatch): boolean {
+	return pMatch.Score > 0;
+	}
+
+	function SortByScore(pA: SearchMatch, pB: SearchMatch): number {
+	return pB.Score - pA.Score;
+	}
+
+	function ScorePage(pPage: PageData, pQuery: string, pTokens: string[]): number {
+	const cMatchInfo = BuildMatchInfoFromParts(
+	pPage.Title,
+	pPage.Description,
+	pPage.Text,
+	pQuery,
+	pTokens
+	);
+
+	return cMatchInfo.Score;
+	}
+
+
+	function BuildMatchInfo(pPage: PageData, pQuery: QueryData): MatchInfo {
+	return BuildMatchInfoFromParts(
+	pPage.Title,
+	pPage.Description,
+	pPage.Text,
+	pQuery.Normalized,
+	pQuery.Tokens
+	);
+	}
+
+	function BuildMatchInfoFromParts(
+	pTitle: string,
+	pDescription: string,
+	pText: string,
+	pQuery: string,
+	pTokens: string[]
+	): MatchInfo {
+	const cNormalizedTitle = NormalizeText(pTitle);
+	const cNormalizedDescription = NormalizeText(pDescription);
+	const cNormalizedText = NormalizeText(pText);
+	const cContextSource = BuildContextSource(pTitle, pDescription, pText);
+	const cContextParts = BuildContextParts(cContextSource, pQuery, pTokens);
+
+	const cQueryTokenStates = BuildQueryTokenStates(
+	cNormalizedTitle,
+	cNormalizedDescription,
+	cNormalizedText,
+	pTokens
+	);
+
+	const cFoundCount = cQueryTokenStates.filter(IsFoundToken).length;
+	const cPhraseInTitle = cNormalizedTitle.includes(pQuery);
+	const cPhraseInDescription = cNormalizedDescription.includes(pQuery);
+	const cPhraseInText = cNormalizedText.includes(pQuery);
+	const cAccepted = cFoundCount > 0;
+
+	const cScore = cAccepted
+	? CalculateRelevantScore(
+	cNormalizedTitle,
+	cNormalizedDescription,
+	cNormalizedText,
+	pQuery,
+	pTokens,
+	cPhraseInTitle,
+	cPhraseInDescription,
+	cPhraseInText,
+	CountContextMatchedTokens(cContextParts, pTokens)
+	)
+	: 0;
+
+	return {
+	Accepted: cAccepted,
+	Score: cScore,
+	QueryTokenStates: cQueryTokenStates,
+	ContextParts: cContextParts
+	};
+	}
+
+
+
+	function BuildContextSource(pTitle: string, pDescription: string, pText: string): string {
+	return [
+	pTitle,
+	pDescription,
+	pText
+	]
+	.filter(IsFilledText)
+	.join(" ");
+	}
+
+	function BuildQueryTokenStates(
+	pNormalizedTitle: string,
+	pNormalizedDescription: string,
+	pNormalizedText: string,
+	pTokens: string[]
+	): QueryTokenState[] {
+	const cCorpus = NormalizeText([
+	pNormalizedTitle,
+	pNormalizedDescription,
+	pNormalizedText
+	].join(" "));
+
+	return pTokens.map(function BuildTokenState(pToken) {
+	return {
+	Text: pToken,
+	Found: cCorpus.includes(pToken)
+	};
+	});
+	}
+
+	function GetContextPartText(pPart: ContextPart): string {
+	return pPart.Text;
+	}
+
+	function BuildContextParts(pText: string, pQuery: string, pTokens: string[]): ContextPart[] {
+	const cWords = CleanText(pText)
+	.split(" ")
+	.filter(IsFilledText);
+
+	if (cWords.length === 0) {
+	return [];
+	}
+
+	const cNormalizedWords = cWords.map(NormalizeText);
+	const cBestWindow = FindBestContextWindow(cNormalizedWords, pTokens);
+
+	if (cBestWindow.Score <= 0) {
+	return [];
+	}
+
+	const cParts: ContextPart[] = [];
+
+	if (cBestWindow.Start > 0) {
+	cParts.push({
+	Text: "... ",
+	Matched: false
+	});
+	}
+
+	for (let cIndex = cBestWindow.Start; cIndex < cBestWindow.End; cIndex += 1) {
+	cParts.push({
+	Text: cWords[cIndex] + " ",
+	Matched: WordMatchesAnyToken(cNormalizedWords[cIndex], pTokens)
+	});
+	}
+
+	if (cBestWindow.End < cWords.length) {
+	cParts.push({
+	Text: "...",
+	Matched: false
+	});
+	}
+
+	return cParts;
+	}
+
+	function FindBestContextWindow(pWords: string[], pTokens: string[]): { Start: number; End: number; Score: number } {
+	const cWindowSize = 42;
+	let cBestStart = 0;
+	let cBestEnd = Math.min(cWindowSize, pWords.length);
+	let cBestScore = 0;
+
+	for (let cStart = 0; cStart < pWords.length; cStart += 1) {
+	const cEnd = Math.min(cStart + cWindowSize, pWords.length);
+	const cScore = ScoreContextWindow(pWords, pTokens, cStart, cEnd);
+
+	if (cScore > cBestScore) {
+	cBestScore = cScore;
+	cBestStart = cStart;
+	cBestEnd = cEnd;
+	}
+	}
+
+	return {
+	Start: cBestStart,
+	End: cBestEnd,
+	Score: cBestScore
+	};
+	}
+
+	function ScoreContextWindow(pWords: string[], pTokens: string[], pStartIndex: number, pEndIndex: number): number {
+	const cFoundTokens = new Set<string>();
+	let cHitCount = 0;
+
+	for (let cIndex = pStartIndex; cIndex < pEndIndex; cIndex += 1) {
+	for (const cToken of pTokens) {
+	if (pWords[cIndex].includes(cToken)) {
+	cFoundTokens.add(cToken);
+	cHitCount += 1;
+	}
+	}
+	}
+
+	return cFoundTokens.size * 100 + cHitCount * 5;
+	}
+
+	function CountContextMatchedTokens(pParts: ContextPart[], pTokens: string[]): number {
+	const cContextText = NormalizeText(
+	pParts
+	.map(GetContextPartText)
+	.join(" ")
+	);
+
+	let cCount = 0;
+
+	for (const cToken of pTokens) {
+	if (cContextText.includes(cToken)) {
+	cCount += 1;
+	}
+	}
+
+	return cCount;
+	}
+
+	function WordMatchesAnyToken(pWord: string, pTokens: string[]): boolean {
+	return pTokens.some(function HasToken(pToken) {
+	return pWord.includes(pToken);
+	});
+	}
+
+	function CalculateRelevantScore(
+	pTitle: string,
+	pDescription: string,
+	pText: string,
+	pQuery: string,
+	pTokens: string[],
+	pPhraseInTitle: boolean,
+	pPhraseInDescription: boolean,
+	pPhraseInText: boolean,
+	pContextFoundCount: number
+	): number {
+	let cScore = 0;
+
+	if (pPhraseInTitle) {
+	cScore += 500;
+	}
+
+	if (pPhraseInDescription) {
+	cScore += 350;
+	}
+
+	if (pPhraseInText) {
+	cScore += 180;
+	}
+
+	cScore += pContextFoundCount * 90;
+
+	for (const cToken of pTokens) {
+	cScore += CountTerm(pTitle, cToken) * 40;
+	cScore += CountTerm(pDescription, cToken) * 25;
+	cScore += Math.min(CountTerm(pText, cToken), 6) * 8;
+	}
+
+	return cScore;
+	}
+
+
+	function RenderResults(pMatches: SearchMatch[], pTotalCount: number, pQuery: QueryData): void {
+	ClearResults();
+
+	if (pMatches.length === 0) {
+	SetNoResultStatus(pQuery);
+	return;
+	}
+
+	SetResultStatus(pMatches.length, pTotalCount);
+
+	for (const cMatch of pMatches) {
+	cResults?.append(BuildResultCard(cMatch));
+	}
+	}
+
+	function SetNoResultStatus(pQuery: QueryData): void {
+	if (!pQuery.IsValid) {
+	SetStatus("اكتب كلمة بحث أوضح.");
+	return;
+	}
+
+	if (!cWarmupDone && cIndexedPages.length > 0) {
+	SetStatus("لم تظهر نتيجة مطابقة حتى الآن، وجاري استكمال البحث في باقي الصفحات.");
+	return;
+	}
+
+	if (!cWarmupDone) {
+	SetStatus("جاري تجهيز البحث. سيتم عرض النتائج المطابقة بمجرد تجهيز الصفحات الأولى.");
+	return;
+	}
+
+	SetStatus("لم يتم العثور على نتائج واضحة لعبارة: " + pQuery.Raw);
+	}
+
+	function SetResultStatus(pVisibleCount: number, pTotalCount: number): void {
+	const cProgress = cWarmupDone
+	? ""
+	: " — جاري استكمال تجهيز باقي الصفحات.";
+
+	SetStatus("تم العثور على " + pTotalCount + " نتيجة، ويتم عرض أقرب " + pVisibleCount + " نتائج" + cProgress);
+	}
+
+	function BuildResultCard(pMatch: SearchMatch): HTMLLIElement {
+	const cItem = document.createElement("li");
+	const cMedia = document.createElement("a");
+	const cImage = document.createElement("img");
+	const cBody = document.createElement("div");
+	const cTitle = document.createElement("a");
+	const cDesc = document.createElement("p");
+	const cContext = BuildContextElement(pMatch.ContextParts);
+	const cMatchBar = BuildMatchBarElement(pMatch.QueryTokenStates);
+	const cUrl = document.createElement("small");
+	const cButton = document.createElement("a");
+
+	cItem.className = "SearchCard";
+	cMedia.className = "SearchCardMedia";
+	cImage.className = "SearchCardImg";
+	cBody.className = "SearchCardBody";
+	cTitle.className = "SearchCardTitle";
+	cDesc.className = "SearchCardDesc";
+	cUrl.className = "SearchCardUrl";
+	cButton.className = "SearchCardButton";
+
+	cMedia.href = pMatch.Url;
+	cTitle.href = pMatch.Url;
+	cButton.href = pMatch.Url;
+
+	cImage.alt = pMatch.Title;
+	cImage.loading = "lazy";
+	cImage.decoding = "async";
+	SetHeroImage(cImage, pMatch.HeroCandidates);
+
+	cTitle.textContent = pMatch.Title;
+	cDesc.textContent = pMatch.Description || pMatch.Snippet;
+	cUrl.textContent = pMatch.Url;
+	cButton.textContent = "افتح الصفحة";
+
+	cMedia.append(cImage);
+	cBody.append(cTitle, cDesc, cContext, cMatchBar, cUrl, cButton);
+	cItem.append(cMedia, cBody);
+
+	return cItem;
+	}
+
+	function BuildContextElement(pParts: ContextPart[]): HTMLParagraphElement {
+	const cContext = document.createElement("p");
+	const cLabel = document.createElement("span");
+
+	cContext.className = "SearchContext";
+	cLabel.className = "SearchContextLabel";
+	cLabel.textContent = "موضع مطابق داخل الصفحة";
+
+	cContext.append(cLabel);
+
+	if (pParts.length === 0) {
+	const cEmpty = document.createElement("span");
+	cEmpty.className = "SearchContextWord";
+	cEmpty.textContent = "لا يوجد موضع نصي واضح داخل الصفحة لهذه العبارة.";
+	cContext.append(cEmpty);
+	return cContext;
+	}
+
+	for (const cPart of pParts) {
+	const cSpan = document.createElement("span");
+	cSpan.className = cPart.Matched
+	? "SearchContextHit"
+	: "SearchContextWord";
+	cSpan.textContent = cPart.Text;
+	cContext.append(cSpan);
+	}
+
+	return cContext;
+	}
+
+	function BuildMatchBarElement(pTokens: QueryTokenState[]): HTMLDivElement {
+	const cBar = document.createElement("div");
+	const cLabel = document.createElement("span");
+
+	cBar.className = "SearchMatchBar";
+	cLabel.className = "SearchMatchBarLabel";
+	cLabel.textContent = "مطابقة البحث:";
+
+	cBar.append(cLabel);
+
+	for (const cToken of pTokens) {
+	const cSpan = document.createElement("span");
+
+	cSpan.className = cToken.Found
+	? "SearchToken SearchTokenFound"
+	: "SearchToken SearchTokenMissing";
+
+	cSpan.textContent = cToken.Text;
+	cBar.append(cSpan);
+	}
+
+	return cBar;
+	}
+
+	function SetHeroImage(pImage: HTMLImageElement, pCandidates: string[]): void {
+	pImage.dataset.heroIndex = "0";
+	pImage.dataset.heroList = JSON.stringify(pCandidates);
+	pImage.src = pCandidates[0] || "/Media/Emocrete/HeroL.webp";
+	pImage.addEventListener("error", HandleHeroImageError);
+	}
+
+	function HandleHeroImageError(pEvent: Event): void {
+	const cImage = pEvent.currentTarget as HTMLImageElement | null;
+
+	if (!cImage) {
+	return;
+	}
+
+	const cCandidates = ReadHeroCandidates(cImage);
+	const cCurrentIndex = Number(cImage.dataset.heroIndex || "0");
+	const cNextIndex = cCurrentIndex + 1;
+
+	if (cNextIndex >= cCandidates.length) {
+	cImage.removeEventListener("error", HandleHeroImageError);
+	return;
+	}
+
+	cImage.dataset.heroIndex = String(cNextIndex);
+	cImage.src = cCandidates[cNextIndex];
+	}
+
+	function ReadHeroCandidates(pImage: HTMLImageElement): string[] {
+	try {
+	const cParsed = JSON.parse(pImage.dataset.heroList || "[]");
+
+	if (Array.isArray(cParsed)) {
+	return cParsed.filter(IsStringValue);
+	}
+
+	return [];
+	}
+	catch {
+	return [];
+	}
+	}
+
+	function IsStringValue(pValue: unknown): pValue is string {
+	return typeof pValue === "string";
+	}
+
+	function BuildTargetsSignature(pTargets: SearchTarget[]): string {
+	return pTargets
+	.map(function GetTargetUrl(pTarget) {
+	return pTarget.Url;
+	})
+	.join("|");
+	}
+
+	function TryReadStoredIndex(pSignature: string): PageData[] | null {
+	try {
+	const cRaw = window.localStorage.getItem(cStorageKey);
+
+	if (!cRaw) {
+	return null;
+	}
+
+	const cParsed = JSON.parse(cRaw) as unknown;
+
+	if (!IsStoredSearchIndex(cParsed)) {
+	return null;
+	}
+
+	if (cParsed.Signature !== pSignature) {
+	return null;
+	}
+
+	if (Date.now() - cParsed.SavedAt > cStorageMaxAge) {
+	return null;
+	}
+
+	return cParsed.Pages;
+	}
+	catch {
+	return null;
+	}
+	}
+
+	function TryStoreIndex(pSignature: string): void {
+	try {
+	const cPayload: StoredSearchIndex = {
+	Signature: pSignature,
+	SavedAt: Date.now(),
+	Pages: cIndexedPages,
+	};
+
+	window.localStorage.setItem(cStorageKey, JSON.stringify(cPayload));
+	}
+	catch {
+	window.localStorage.removeItem(cStorageKey);
+	}
+	}
+
+	function IsStoredSearchIndex(pValue: unknown): pValue is StoredSearchIndex {
+	if (!pValue || typeof pValue !== "object") {
+	return false;
+	}
+
+	const cValue = pValue as Partial<StoredSearchIndex>;
+
+	return (
+	typeof cValue.Signature === "string" &&
+	typeof cValue.SavedAt === "number" &&
+	Array.isArray(cValue.Pages)
+	);
+	}
+
+	function ClearResults(): void {
+	cResults?.replaceChildren();
+	}
+
+	function SetStatus(pText: string): void {
+	if (cStatus) {
+	cStatus.textContent = pText;
+	}
+	}
+
+	function CountTerm(pText: string, pTerm: string): number {
+	if (!pText || !pTerm) {
+	return 0;
+	}
+
+	return pText.split(pTerm).length - 1;
+	}
+
+	function BuildSnippet(pText: string): string {
+	const cText = CleanText(pText);
+
+	if (cText.length <= 260) {
+	return cText;
+	}
+
+	return cText.slice(0, 260) + " ...";
+	}
+
+	function CleanText(pValue: string | null | undefined): string {
+	return String(pValue || "")
+	.replace(/\s+/g, " ")
+	.trim();
+	}
+
+	function NormalizeText(pValue: string | null | undefined): string {
+	return CleanText(pValue)
+	.toLowerCase()
+	.replace(/[إأآا]/g, "ا")
+	.replace(/ى/g, "ي")
+	.replace(/ؤ/g, "و")
+	.replace(/ئ/g, "ي")
+	.replace(/ة/g, "ه")
+	.replace(/[\u064B-\u065F\u0670]/g, "")
+	.replace(/\u0640/g, "")
+	.replace(/[^\p{L}\p{N}\s]/gu, " ")
+	.replace(/\s+/g, " ")
+	.trim();
+	}
+</script>

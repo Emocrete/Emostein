@@ -1,0 +1,137 @@
+---
+const {
+    fTitle = "مؤشر النشاط",
+    fValue = "84%",
+    fText = "موجة حية داخل البوكس.",
+    fColor = "#F2C11A",
+} = Astro.props;
+
+const fId = "wav_" + Math.random().toString(36).slice(2);
+---
+
+<article class="wmCard reveal" data-reveal="up">
+    <div class="wmTop">
+        <div>
+            <div class="wmTitle">{fTitle}</div>
+            <div class="wmText">{fText}</div>
+        </div>
+        <div class="wmValue">{fValue}</div>
+    </div>
+
+    <div class="wmScreen" aria-hidden="true">
+        <svg viewBox="0 0 600 120" preserveAspectRatio="none">
+            <defs>
+                <linearGradient id={`${fId}_g`} x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0" stop-color={fColor} stop-opacity="0.25"
+                    ></stop>
+                    <stop offset="1" stop-color={fColor} stop-opacity="0.95"
+                    ></stop>
+                </linearGradient>
+
+                <clipPath id={`${fId}_clip`}>
+                    <rect x="0" y="0" width="600" height="120" rx="18"></rect>
+                </clipPath>
+            </defs>
+
+            <rect x="0" y="0" width="600" height="120" rx="18" fill="#0f1115"
+            ></rect>
+            <g clip-path={`url(#${fId}_clip)`}>
+                <g class="waveMove" opacity="0.95">
+                    <!-- Wave path طويلة ومكررة -->
+                    <path
+                        fill={`url(#${fId}_g)`}
+                        d="M0,78 C60,52 120,104 180,78 C240,52 300,104 360,78 C420,52 480,104 540,78 C600,52 660,104 720,78 L720,120 L0,120 Z"
+                    ></path>
+                    <path
+                        fill={`url(#${fId}_g)`}
+                        opacity="0.45"
+                        d="M0,88 C60,64 120,112 180,88 C240,64 300,112 360,88 C420,64 480,112 540,88 C600,64 660,112 720,88 L720,120 L0,120 Z"
+                    ></path>
+                </g>
+
+                <!-- خط لامع فوق -->
+                <g class="shineMove" opacity="0.8">
+                    <path
+                        stroke={fColor}
+                        stroke-width="2"
+                        fill="none"
+                        d="M0,76 C60,50 120,102 180,76 C240,50 300,102 360,76 C420,50 480,102 540,76 C600,50 660,102 720,76"
+                    ></path>
+                </g>
+            </g>
+        </svg>
+    </div>
+</article>
+
+<style>
+    .wmCard {
+        border-radius: 22px;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.1);
+        background: #fff;
+        padding: 16px;
+    }
+
+    .wmTop {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        align-items: flex-start;
+        margin-bottom: 12px;
+    }
+    .wmTitle {
+        font-weight: 900;
+        font-size: 18px;
+        margin-bottom: 6px;
+    }
+    .wmText {
+        color: rgba(16, 17, 20, 0.72);
+        line-height: 1.7;
+    }
+    .wmValue {
+        font-weight: 1000;
+        font-size: 22px;
+        background: rgba(242, 193, 26, 0.16);
+        color: #111;
+        padding: 10px 12px;
+        border-radius: 16px;
+        border: 1px solid rgba(242, 193, 26, 0.3);
+        white-space: nowrap;
+    }
+
+    .wmScreen {
+        border-radius: 18px;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .wmScreen svg {
+        width: 100%;
+        height: 140px;
+        display: block;
+    }
+
+    .waveMove {
+        transform: translateX(0);
+        animation: waveX 3.2s linear infinite;
+    }
+    .shineMove {
+        transform: translateX(0);
+        animation: waveX 2.2s linear infinite;
+    }
+    @keyframes waveX {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(-120px);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .waveMove,
+        .shineMove {
+            animation: none !important;
+        }
+    }
+</style>

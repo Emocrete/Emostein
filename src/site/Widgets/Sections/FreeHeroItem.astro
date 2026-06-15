@@ -1,0 +1,167 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Size, Location, RespString } from "@/TypesLib";
+
+export interface Props extends HTMLAttributes<"div"> {
+	pLoc?: Location;
+	pSize?: Size;
+	pRot?: string | RespString;
+	pZ?: number;
+	pOrigin?: string;
+	pFit?: boolean;
+	pPointer?: boolean;
+	pHideLand?: boolean;
+	pHidePort?: boolean;
+	pLandOnly?: boolean;
+	pPortOnly?: boolean;
+	pOpacity?: number | RespString;
+}
+
+const {
+	pLoc = new Location(0, 0, 0, 0),
+	pSize: pBox = new Size(),
+	pRot: pRotate = "0deg",
+	pZ = 1,
+	pOrigin = "center center",
+	pFit = false,
+	pPointer = true,
+	pHideLand = false,
+	pHidePort = false,
+	pLandOnly = false,
+	pPortOnly = false,
+	pOpacity = 1,
+
+	id: pGivenID = GetWidgetId("FreeHeroItem"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cRotateL = pRotate instanceof RespString ? pRotate.Landscape : pRotate;
+const cRotateP = pRotate instanceof RespString ? pRotate.Portrait : pRotate;
+const cOpacityL = pOpacity instanceof RespString ? pOpacity.Landscape : `${pOpacity}`;
+const cOpacityP = pOpacity instanceof RespString ? pOpacity.Portrait : `${pOpacity}`;
+const cHideL = pHideLand || pPortOnly;
+const cHideP = pHidePort || pLandOnly;
+
+const cStyle = `
+--FreeHeroItemXL:${pLoc.XL};
+--FreeHeroItemXP:${pLoc.XP};
+--FreeHeroItemYL:${pLoc.YL};
+--FreeHeroItemYP:${pLoc.YP};
+--FreeHeroItemWidthL:${pBox.WidthL};
+--FreeHeroItemWidthP:${pBox.WidthP};
+--FreeHeroItemHeightL:${pBox.HeightL};
+--FreeHeroItemHeightP:${pBox.HeightP};
+--FreeHeroItemRotateL:${cRotateL};
+--FreeHeroItemRotateP:${cRotateP};
+--FreeHeroItemOpacityL:${cOpacityL};
+--FreeHeroItemOpacityP:${cOpacityP};
+--FreeHeroItemDisplayL:${cHideL ? "none" : "block"};
+--FreeHeroItemDisplayP:${cHideP ? "none" : "block"};
+--FreeHeroItemZ:${pZ};
+--FreeHeroItemOrigin:${pOrigin};
+--FreeHeroItemPointer:${pPointer ? "auto" : "none"};
+${pGivenStyle || ""}
+`;
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div
+	class = {`FreeHeroItem ${pGivenClass}`}
+	style = {cStyle}
+	data-free-hero-item="true"
+	data-fit={pFit ? "Fill" : "Content"}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	<slot />
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.FreeHeroItem {
+		position: absolute;
+		left: var(--FreeHeroItemXL);
+		top: var(--FreeHeroItemYL);
+		width: var(--FreeHeroItemWidthL);
+		height: var(--FreeHeroItemHeightL);
+		z-index: var(--FreeHeroItemZ);
+		display: var(--FreeHeroItemDisplayL);
+		opacity: var(--FreeHeroItemOpacityL);
+		transform: rotate(var(--FreeHeroItemRotateL));
+		transform-origin: var(--FreeHeroItemOrigin);
+		pointer-events: var(--FreeHeroItemPointer);
+		box-sizing: border-box;
+		min-width: 0;
+	}
+
+	.FreeHeroItem > :global(*) {
+		box-sizing: border-box;
+		max-width: 100%;
+		max-height: 100%;
+	}
+
+	@media (orientation: portrait) {
+		.FreeHeroItem {
+			left: var(--FreeHeroItemXP);
+			top: var(--FreeHeroItemYP);
+			width: var(--FreeHeroItemWidthP);
+			height: var(--FreeHeroItemHeightP);
+			display: var(--FreeHeroItemDisplayP);
+			opacity: var(--FreeHeroItemOpacityP);
+			transform: rotate(var(--FreeHeroItemRotateP));
+		}
+	}
+
+
+
+	.FreeHeroItem[data-fit="Fill"] > :global(*) {
+		width: 100%;
+		height: 100%;
+	}
+
+
+
+</style>

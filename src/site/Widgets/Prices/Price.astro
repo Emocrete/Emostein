@@ -1,0 +1,321 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Text, Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"div">, PlaceProps {
+
+	/**
+	 * Service title that priced
+	 * DefVal = العنوان
+	 */
+	pTitle?: Text;
+	pTitlePlace?: "side" | "top";
+	pPrice?: string | number;
+	pPriceLabel?: string;
+}
+
+const {
+	pTitle = Text.Body.OfText("العنوان"),
+	pTitlePlace = "side",
+	pPrice = "0000",
+	pPriceLabel = "",
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	class: className = "",
+	style: externalStyle = "",
+	...cAttrs
+} = Astro.props as Props;
+
+const cTitleTag = pTitle.GetTag() as keyof astroHTML.JSX.DefinedIntrinsicElements;
+const cTitleStyle = pTitle.GetStyle();
+const cIsTopTitle = pTitlePlace === "top";
+const cPlace = new Place(Astro.props as PlaceProps, externalStyle);
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{ cIsTopTitle ? (
+
+	<div
+	class = {`isTopTitle ${cPlace.Class} ${className}`.trim()}
+	style = {cPlace.Style}
+	{...cAttrs}
+>
+	
+		<cTitleTag class = " Title " style = {cTitleStyle}>
+	
+			{pTitle.text}
+	
+		</cTitleTag>
+	
+		<div class = " MainRow ">
+	
+			<div class = " PriceBox ">
+	
+				{ pPriceLabel &&
+	
+					<div class = " PriceLabel ">
+	
+						{pPriceLabel}
+	
+					</div>
+	
+				}
+	
+				<div class = " PriceValue ">
+	
+					{pPrice}
+	
+				</div>
+	
+				<div class = " PriceUnit ">
+	
+					جنيه
+	
+				</div>
+	
+			</div>
+	
+			<div class = " BodyBox ">
+	
+				<slot />
+	
+			</div>
+	
+		</div>
+	
+	</div>
+) : (
+
+	<div
+	class = {`isSideTitle ${cPlace.Class} ${className}`.trim()}
+	style = {cPlace.Style}
+	{...cAttrs}
+>
+	
+		<cTitleTag class = " Title " style = {cTitleStyle}>
+	
+			{pTitle.text}
+	
+		</cTitleTag>
+	
+		<div class = " BodyBox ">
+	
+			<slot />
+	
+		</div>
+	
+		<div class = " PriceBox ">
+	
+			{ pPriceLabel &&
+	
+				<div class = " PriceLabel ">
+	
+					{pPriceLabel}
+	
+				</div>
+	
+			}
+	
+			<div class = " PriceValue ">
+	
+				{pPrice}
+	
+			</div>
+	
+			<div class = " PriceUnit ">
+	
+				جنيه
+	
+			</div>
+	
+		</div>
+	
+	</div>
+) }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.isSideTitle {
+		display: grid;
+		grid-template-columns: 180px minmax(0, 1fr) 150px;
+		align-items: stretch;
+		width: 80%;
+		margin-inline: auto;
+	}
+
+	.isSideTitle .Title {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		padding: 20px 24px;
+	}
+
+
+	.isTopTitle {
+		display: grid;
+		grid-template-rows: auto 1fr;
+		width: 80%;
+		margin-inline: auto;
+	}
+
+
+	.MainRow {
+		display: grid;
+		grid-template-columns: 150px minmax(0, 1fr);
+		align-items: stretch;
+	}
+
+
+	.PriceBox {
+		background: #6f6b7c;
+		color: #fff;
+		padding: 22px 18px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+	}
+
+
+	.PriceLabel {
+		font-size: 20px;
+		font-weight: 700;
+		line-height: 1.4;
+		margin: 0 0 14px;
+	}
+
+
+	.PriceValue {
+		font-size: 58px;
+		font-weight: 800;
+		line-height: 1;
+		color: #b8d85e;
+		margin: 0 0 14px;
+	}
+
+
+	.PriceUnit {
+		font-size: 20px;
+		font-weight: 700;
+		line-height: 1.4;
+		margin: 0;
+	}
+
+
+	.BodyBox {
+		background: #c9def0;
+		color: #2f3340;
+		padding: 22px 28px;
+		line-height: 1.9;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+
+	.Title {
+		display: flex;
+		align-items: center;
+	}
+
+
+
+	.PriceBox,
+	.BodyBox,
+	.Title
+	{
+		box-sizing: border-box;
+		min-width: 0;
+		height: 100%;
+	}
+
+
+	.BodyBox :global(p:first-child),
+	.BodyBox :global(ul:first-child),
+	.BodyBox :global(ol:first-child)
+	{
+		margin-top: 0;
+	}
+
+
+	.BodyBox :global(p:last-child),
+	.BodyBox :global(ul:last-child),
+	.BodyBox :global(ol:last-child)
+	{
+		margin-bottom: 0;
+	}
+
+
+	@media (orientation: portrait) {
+		.isSideTitle {
+			grid-template-columns: 1fr;
+			width: 90%;
+		}
+
+		.isTopTitle {
+			width: 90%;
+		}
+
+		.MainRow {
+			grid-template-columns: 1fr;
+		}
+
+		.isSideTitle .Title,
+		.isTopTitle .Title
+		{
+			padding: 20px;
+		}
+	}
+
+
+
+</style>

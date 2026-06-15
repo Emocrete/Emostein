@@ -1,0 +1,1647 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"section">, PlaceProps {
+	pTitle?: string;
+	pDesc?: string;
+	pOfferTitle?: string;
+	pOfferDesc?: string;
+	pOfferButtonText?: string;
+	pShowOffer?: boolean;
+	pFooterMode?: boolean;
+	pCycleSeconds?: number;
+}
+
+const {
+	pTitle = "مؤشرات نشاط الموقع",
+	pDesc = "متابعة مختصرة للصفحة والقسم والموقع، قابلة للربط لاحقًا بسجل إحصائي حقيقي.",
+	pOfferTitle = "فرصة متابعة مبكرة",
+	pOfferDesc = "أنت ضمن مجموعة زوار مؤهلة للحصول على متابعة خاصة عند تفعيل عروض هذا القسم.",
+	pOfferButtonText = "سجّل اهتمامك",
+	pShowOffer = true,
+	pFooterMode = false,
+	pCycleSeconds = 5,
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("EmoStatsStrip"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+
+const cPathParts = Astro.url.pathname.split("/").filter(Boolean);
+const cSectionKey = cPathParts[0] ?? "home";
+const cSubSectionKey = cPathParts[1] ?? "";
+
+const cSectionName = GetSectionName(cSectionKey);
+const cSubSectionName = GetSubSectionName(cSectionKey, cSubSectionKey);
+
+function GetSectionName(pSectionKey: string): string {
+	switch (pSectionKey.toLowerCase()) {
+		case "emodsign":
+			return "التصميمات";
+		case "emocrete":
+			return "المقاولات";
+		case "emormission":
+			return "التراخيص";
+		case "emonsult":
+			return "الاستشارات";
+		case "emomedical":
+			return "المنشآت الطبية";
+		case "emostone":
+			return "الرخام والجرانيت";
+		case "emopply":
+			return "التوريدات";
+		case "emostate":
+			return "العقارات";
+		default:
+			return "الموقع";
+	}
+}
+
+function GetSubSectionName(pSectionKey: string, pSubSectionKey: string): string {
+	const cKey = `${pSectionKey.toLowerCase()}/${pSubSectionKey.toLowerCase()}`;
+
+	switch (cKey) {
+		case "emodsign/des":
+			return "خدمات التصميم";
+		case "emodsign/tech":
+			return "الخدمات الفنية";
+		case "emormission/retail":
+			return "تراخيص المحلات";
+		case "emormission/building":
+			return "تراخيص البناء";
+		case "emormission/factory":
+			return "تراخيص المصانع";
+		case "emomedical/clinic":
+			return "العيادات";
+		case "emomedical/hospital":
+			return "المستشفيات";
+		case "emocrete/finishing":
+			return "التشطيبات";
+		case "emocrete/contracting":
+			return "المقاولات";
+		case "emostone/marble":
+			return "الرخام";
+		case "emostone/granit":
+			return "الجرانيت";
+		default:
+			return cSectionName;
+	}
+}
+
+const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
+const cFooterModeClass = pFooterMode ? "IsFooterMode" : "";
+const cCycleMs = Math.max(1000, Number(pCycleSeconds || 5) * 1000);
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section
+	class = {`EmoStatsStrip ${cFooterModeClass} ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	data-emo-stats-strip="true"
+	data-section-key={cSectionKey}
+	data-section-name={cSectionName}
+	data-footer-mode={pFooterMode ? "true" : "false"}
+	data-cycle-ms={String(cCycleMs)}
+	{...RemAttr}
+>
+
+	<svg class = " SvgDefs " aria-hidden="true">
+
+		<symbol id="StatsIconPage" viewBox="0 0 24 24">
+
+			<path d="M6 2.5h8.4L20 8.1v13.4H6v-19Zm7.5 1.8v4.6h4.6l-4.6-4.6ZM8.4 12h7.2v1.5H8.4V12Zm0 3.2h7.2v1.5H8.4v-1.5Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="StatsIconGrid" viewBox="0 0 24 24">
+
+			<path d="M3.5 4h7v7h-7V4Zm10 0h7v7h-7V4Zm-10 9h7v7h-7v-7Zm10 0h7v7h-7v-7Zm2-7v3h3V6h-3Zm-10 0v3h3V6h-3Zm0 9v3h3v-3h-3Zm10 0v3h3v-3h-3Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="StatsIconDomain" viewBox="0 0 24 24">
+
+			<path
+				d="M12 2.5a9.5 9.5 0 1 0 0 19 9.5 9.5 0 0 0 0-19Zm6.9 8.5h-3a14.4 14.4 0 0 0-1.1-4.6A7.7 7.7 0 0 1 18.9 11ZM12 4.4c.7 1 1.6 3 1.9 6.6h-3.8c.3-3.6 1.2-5.6 1.9-6.6ZM5.1 13h3a14.4 14.4 0 0 0 1.1 4.6A7.7 7.7 0 0 1 5.1 13Zm3-2h-3a7.7 7.7 0 0 1 4.1-4.6A14.4 14.4 0 0 0 8.1 11Zm3.9 8.6c-.7-1-1.6-3-1.9-6.6h3.8c-.3 3.6-1.2 5.6-1.9 6.6Zm2.8-2A14.4 14.4 0 0 0 15.9 13h3a7.7 7.7 0 0 1-4.1 4.6Z"
+			>
+
+			</path>
+
+		</symbol>
+
+		<symbol id="StatsIconUser" viewBox="0 0 24 24">
+
+			<path d="M12 12a4.4 4.4 0 1 0 0-8.8 4.4 4.4 0 0 0 0 8.8Zm0 2c-4.2 0-7.5 2.2-7.5 5v1h15v-1c0-2.8-3.3-5-7.5-5Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="StatsIconEye" viewBox="0 0 24 24">
+
+			<path
+				d="M12 5C6.8 5 3.4 9 2.2 12c1.2 3 4.6 7 9.8 7s8.6-4 9.8-7C20.6 9 17.2 5 12 5Zm0 11.2a4.2 4.2 0 1 1 0-8.4 4.2 4.2 0 0 1 0 8.4Zm0-1.8a2.4 2.4 0 1 0 0-4.8 2.4 2.4 0 0 0 0 4.8Z"
+			>
+
+			</path>
+
+		</symbol>
+
+		<symbol id="StatsIconCalendar" viewBox="0 0 24 24">
+
+			<path d="M7 2h2v2h6V2h2v2h3v17H4V4h3V2Zm11 8H6v9h12v-9ZM6 6v2h12V6H6Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="StatsIconTrend" viewBox="0 0 24 24">
+
+			<path d="M4 18h16v2H4v-2Zm1-3.8 4.6-4.6 3.2 3.2L19 6.6 20.4 8l-7.6 7.6-3.2-3.2L6.4 15.6 5 14.2Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="StatsIconShare" viewBox="0 0 24 24">
+
+			<path d="M18 16.2c-1.1 0-2 .6-2.6 1.4L8.8 14a3.4 3.4 0 0 0 0-4l6.6-3.6A3 3 0 1 0 14.5 5L8 8.6a3 3 0 1 0 0 6.8l6.5 3.6A3 3 0 1 0 18 16.2Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="StatsIconSpark" viewBox="0 0 24 24">
+
+			<path d="m12 2 2.3 6.5L21 11l-6.7 2.5L12 20l-2.3-6.5L3 11l6.7-2.5L12 2Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="StatsIconDownload" viewBox="0 0 24 24">
+
+			<path d="M11 3h2v9l3.4-3.4 1.4 1.4-5.8 5.8L6.2 10l1.4-1.4L11 12V3ZM5 18h14v2H5v-2Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="StatsIconMail" viewBox="0 0 24 24">
+
+			<path d="M3 5h18v14H3V5Zm2 3.1V17h14V8.1l-7 5-7-5Zm1.5-.9L12 11l5.5-3.8h-11Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="StatsIconCheck" viewBox="0 0 24 24">
+
+			<path d="m9.3 16.6-4.2-4.2 1.4-1.4 2.8 2.8 8.2-8.2 1.4 1.4-9.6 9.6Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="StatsIconStar" viewBox="0 0 24 24">
+
+			<path d="m12 2.8 2.8 5.7 6.3.9-4.6 4.5 1.1 6.3-5.6-3-5.6 3 1.1-6.3-4.6-4.5 6.3-.9L12 2.8Z">
+
+			</path>
+
+		</symbol>
+
+	</svg>
+
+	<div class = " StatsShell ">
+
+		<div class = " StatsTop ">
+
+			<div class = " StatsTitleBox ">
+
+				<strong class = " StatsKicker ">
+					متابعة النشاط
+				</strong>
+
+				<h2>
+					{pTitle}
+				</h2>
+
+				<p>
+					{pDesc}
+				</p>
+
+			</div>
+
+			<div class = " StatsLive ">
+
+				<span>
+
+				</span>
+
+				قراءة حية
+
+			</div>
+
+		</div>
+
+		<div class = " StatsGroups ">
+
+			<section class = " StatsGroup PageGroup IsActive ">
+
+				<div class = " GroupTitle ">
+
+					<span class = " GroupIcon ">
+
+						<svg>
+
+							<use href="#StatsIconPage">
+
+							</use>
+
+						</svg>
+
+					</span>
+
+					<div>
+
+						<h3>
+							الصفحة الحالية
+						</h3>
+
+						<p>
+							نشاط هذه الصفحة فقط
+						</p>
+
+					</div>
+
+				</div>
+
+				<div class = " MetricsList ">
+
+					<div class = " MetricItem " data-stat-key="pageVisitorsToday">
+
+						<span class = " MetricIcon ">
+
+							<svg>
+
+								<use href="#StatsIconUser">
+
+								</use>
+
+							</svg>
+
+						</span>
+
+						<span class = " MetricLabel ">
+							زوار اليوم
+						</span>
+
+						<strong class = " MetricValue ">
+							24
+						</strong>
+
+					</div>
+
+					<div class = " MetricItem " data-stat-key="pageViewsToday">
+
+						<span class = " MetricIcon ">
+
+							<svg>
+
+								<use href="#StatsIconEye">
+
+								</use>
+
+							</svg>
+
+						</span>
+
+						<span class = " MetricLabel ">
+							مشاهدات
+						</span>
+
+						<strong class = " MetricValue ">
+							39
+						</strong>
+
+					</div>
+
+					<div class = " MetricItem " data-stat-key="pageVisitorsMonth">
+
+						<span class = " MetricIcon ">
+
+							<svg>
+
+								<use href="#StatsIconCalendar">
+
+								</use>
+
+							</svg>
+
+						</span>
+
+						<span class = " MetricLabel ">
+							زوار الشهر
+						</span>
+
+						<strong class = " MetricValue ">
+							186
+						</strong>
+
+					</div>
+
+					<div class = " MetricItem " data-stat-key="pageVisitorsTotal">
+
+						<span class = " MetricIcon ">
+
+							<svg>
+
+								<use href="#StatsIconTrend">
+
+								</use>
+
+							</svg>
+
+						</span>
+
+						<span class = " MetricLabel ">
+							زوار العمر
+						</span>
+
+						<strong class = " MetricValue ">
+							1,420
+						</strong>
+
+					</div>
+
+					<div class = " MetricItem " data-stat-key="pageShares">
+
+						<span class = " MetricIcon ">
+
+							<svg>
+
+								<use href="#StatsIconShare">
+
+								</use>
+
+							</svg>
+
+						</span>
+
+						<span class = " MetricLabel ">
+							مشاركات
+						</span>
+
+						<strong class = " MetricValue ">
+							17
+						</strong>
+
+					</div>
+
+					<div class = " MetricItem " data-stat-key="pageInteractions">
+
+						<span class = " MetricIcon ">
+
+							<svg>
+
+								<use href="#StatsIconSpark">
+
+								</use>
+
+							</svg>
+
+						</span>
+
+						<span class = " MetricLabel ">
+							تفاعلات
+						</span>
+
+						<strong class = " MetricValue ">
+							64
+						</strong>
+
+					</div>
+
+				</div>
+
+			</section>
+
+			<section class = " StatsGroup SectionGroup ">
+
+				<div class = " GroupTitle ">
+
+					<span class = " GroupIcon ">
+
+						<svg>
+
+							<use href="#StatsIconGrid">
+
+							</use>
+
+						</svg>
+
+					</span>
+
+					<div>
+
+						<h3>
+							{cSectionName}
+						</h3>
+
+						<p>
+							{cSubSectionName}
+						</p>
+
+					</div>
+
+				</div>
+
+				<div class = " MetricsList ">
+
+					<div class = " MetricItem " data-stat-key="sectionVisitorsToday">
+
+						<span class = " MetricIcon ">
+
+							<svg>
+
+								<use href="#StatsIconUser">
+
+								</use>
+
+							</svg>
+
+						</span>
+
+						<span class = " MetricLabel ">
+							زوار اليوم
+						</span>
+
+						<strong class = " MetricValue ">
+							71
+						</strong>
+
+					</div>
+
+					<div class = " MetricItem " data-stat-key="sectionVisitorsMonth">
+
+						<span class = " MetricIcon ">
+
+							<svg>
+
+								<use href="#StatsIconCalendar">
+
+								</use>
+
+							</svg>
+
+						</span>
+
+						<span class = " MetricLabel ">
+							زوار الشهر
+						</span>
+
+						<strong class = " MetricValue ">
+							642
+						</strong>
+
+					</div>
+
+					<div class = " MetricItem " data-stat-key="sectionVisitorsTotal">
+
+						<span class = " MetricIcon ">
+
+							<svg>
+
+								<use href="#StatsIconTrend">
+
+								</use>
+
+							</svg>
+
+						</span>
+
+						<span class = " MetricLabel ">
+							زوار إجمالي
+						</span>
+
+						<strong class = " MetricValue ">
+							5,820
+						</strong>
+
+					</div>
+
+					<div class = " MetricItem " data-stat-key="sectionActivePages">
+
+						<span class = " MetricIcon ">
+
+							<svg>
+
+								<use href="#StatsIconGrid">
+
+								</use>
+
+							</svg>
+
+						</span>
+
+						<span class = " MetricLabel ">
+							صفحات نشطة
+						</span>
+
+						<strong class = " MetricValue ">
+							18
+						</strong>
+
+					</div>
+
+					<div class = " MetricItem " data-stat-key="sectionDownloads">
+
+						<span class = " MetricIcon ">
+
+							<svg>
+
+								<use href="#StatsIconDownload">
+
+								</use>
+
+							</svg>
+
+						</span>
+
+						<span class = " MetricLabel ">
+							تحميلات
+						</span>
+
+						<strong class = " MetricValue ">
+							93
+						</strong>
+
+					</div>
+
+					<div class = " MetricItem " data-stat-key="sectionLeads">
+
+						<span class = " MetricIcon ">
+
+							<svg>
+
+								<use href="#StatsIconMail">
+
+								</use>
+
+							</svg>
+
+						</span>
+
+						<span class = " MetricLabel ">
+							طلبات
+						</span>
+
+						<strong class = " MetricValue ">
+							12
+						</strong>
+
+					</div>
+
+				</div>
+
+			</section>
+
+			<section class = " StatsGroup DomainGroup ">
+
+				<div class = " GroupTitle ">
+
+					<span class = " GroupIcon ">
+
+						<svg>
+
+							<use href="#StatsIconDomain">
+
+							</use>
+
+						</svg>
+
+					</span>
+
+					<div>
+
+						<h3>
+							كامل الموقع
+						</h3>
+
+						<p>
+							مؤشرات عامة للدومين
+						</p>
+
+					</div>
+
+				</div>
+
+				<div class = " MetricsList ">
+
+					<div class = " MetricItem " data-stat-key="domainVisitorsToday">
+
+						<span class = " MetricIcon ">
+
+							<svg>
+
+								<use href="#StatsIconDomain">
+
+								</use>
+
+							</svg>
+
+						</span>
+
+						<span class = " MetricLabel ">
+							زوار اليوم
+						</span>
+
+						<strong class = " MetricValue ">
+							214
+						</strong>
+
+					</div>
+
+					<div class = " MetricItem " data-stat-key="domainVisitorsMonth">
+
+						<span class = " MetricIcon ">
+
+							<svg>
+
+								<use href="#StatsIconCalendar">
+
+								</use>
+
+							</svg>
+
+						</span>
+
+						<span class = " MetricLabel ">
+							زوار الشهر
+						</span>
+
+						<strong class = " MetricValue ">
+							3,870
+						</strong>
+
+					</div>
+
+					<div class = " MetricItem " data-stat-key="domainVisitorsTotal">
+
+						<span class = " MetricIcon ">
+
+							<svg>
+
+								<use href="#StatsIconTrend">
+
+								</use>
+
+							</svg>
+
+						</span>
+
+						<span class = " MetricLabel ">
+							زوار إجمالي
+						</span>
+
+						<strong class = " MetricValue ">
+							42,900
+						</strong>
+
+					</div>
+
+					<div class = " MetricItem " data-stat-key="domainDownloads">
+
+						<span class = " MetricIcon ">
+
+							<svg>
+
+								<use href="#StatsIconDownload">
+
+								</use>
+
+							</svg>
+
+						</span>
+
+						<span class = " MetricLabel ">
+							تحميلات
+						</span>
+
+						<strong class = " MetricValue ">
+							1,240
+						</strong>
+
+					</div>
+
+					<div class = " MetricItem " data-stat-key="domainBeneficiariesMonth">
+
+						<span class = " MetricIcon ">
+
+							<svg>
+
+								<use href="#StatsIconCheck">
+
+								</use>
+
+							</svg>
+
+						</span>
+
+						<span class = " MetricLabel ">
+							مستفيدون
+						</span>
+
+						<strong class = " MetricValue ">
+							148
+						</strong>
+
+					</div>
+
+					<div class = " MetricItem " data-stat-key="domainClientsTotal">
+
+						<span class = " MetricIcon ">
+
+							<svg>
+
+								<use href="#StatsIconStar">
+
+								</use>
+
+							</svg>
+
+						</span>
+
+						<span class = " MetricLabel ">
+							عملاء
+						</span>
+
+						<strong class = " MetricValue ">
+							690
+						</strong>
+
+					</div>
+
+				</div>
+
+			</section>
+
+		</div>
+
+		{ pShowOffer && (
+
+			<div class = " OfferPanel " data-emo-offer-panel="true">
+			
+				<div class = " OfferText ">
+			
+					<strong>
+						{pOfferTitle}
+					</strong>
+			
+					<p>
+						{pOfferDesc}
+					</p>
+			
+				</div>
+			
+				<div class = " OfferStatus ">
+			
+					<span>
+						الحالة
+					</span>
+			
+					<b>
+			
+						مؤهل
+			
+					</b>
+			
+				</div>
+			
+				<a class = " OfferButton " href="#EmoContactStrip" data-emo-offer-action="true">
+					{pOfferButtonText}
+				</a>
+			
+			</div>
+		) }
+
+	</div>
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.EmoStatsStrip {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		width: 100%;
+		height: min(400px, 46vw);
+		min-height: 300px;
+		box-sizing: border-box;
+		direction: rtl;
+		background: radial-gradient(circle at 4% 26%, rgba(255, 209, 92, 0.10), transparent 20%),
+			radial-gradient(circle at 96% 42%, rgba(38, 181, 255, 0.13), transparent 24%),
+			linear-gradient(135deg, #071426 0%, #081b31 55%, #06101e 100%);
+		color: #f8fbff;
+		border-block: 1px solid rgba(125, 190, 255, 0.18);
+	}
+
+	.EmoStatsStrip::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		pointer-events: none;
+		background: linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+			linear-gradient(0deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+		background-size: 36px 36px;
+		opacity: 0.26;
+	}
+
+
+	.SvgDefs {
+		position: absolute;
+		width: 0;
+		height: 0;
+		overflow: hidden;
+	}
+
+
+	.StatsShell {
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+		gap: 9px;
+		width: min(1880px, calc(100% - 18px));
+		height: 100%;
+		margin-inline: auto;
+		padding-block: 12px;
+		box-sizing: border-box;
+	}
+
+
+	.StatsTop {
+		display: grid;
+		grid-template-columns: minmax(300px, 1fr) auto;
+		align-items: center;
+		gap: 12px;
+		min-height: 48px;
+	}
+
+
+	.StatsTitleBox {
+		display: grid;
+		grid-template-columns: auto auto 1fr;
+		align-items: center;
+		gap: 10px;
+		min-width: 0;
+	}
+
+	.StatsTitleBox h2 {
+		margin: 0;
+		color: #ffffff;
+		font-size: 21px;
+		font-weight: 950;
+		line-height: 1.25;
+		white-space: nowrap;
+	}
+
+	.StatsTitleBox p {
+		margin: 0;
+		color: rgba(248, 251, 255, 0.64);
+		font-size: 12px;
+		font-weight: 700;
+		line-height: 1.6;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+
+	.StatsKicker {
+		display: inline-flex;
+		width: fit-content;
+		padding: 4px 10px;
+		border: 1px solid rgba(255, 209, 92, 0.34);
+		border-radius: 999px;
+		background: rgba(255, 209, 92, 0.10);
+		color: #ffd15c;
+		font-size: 11px;
+		font-weight: 950;
+		line-height: 1.2;
+		white-space: nowrap;
+	}
+
+
+	.StatsLive {
+		display: inline-flex;
+		align-items: center;
+		gap: 7px;
+		width: fit-content;
+		padding: 7px 11px;
+		border: 1px solid rgba(125, 211, 255, 0.22);
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.065);
+		color: rgba(248, 251, 255, 0.76);
+		font-size: 11px;
+		font-weight: 850;
+		white-space: nowrap;
+	}
+
+	.StatsLive span {
+		width: 7px;
+		height: 7px;
+		border-radius: 999px;
+		background: #42ff9f;
+		box-shadow: 0 0 0 4px rgba(66, 255, 159, 0.12), 0 0 12px rgba(66, 255, 159, 0.64);
+	}
+
+
+	.StatsGroups {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 10px;
+		min-height: 0;
+	}
+
+
+	.StatsGroup {
+		display: grid;
+		grid-template-rows: auto 1fr;
+		gap: 8px;
+		min-width: 0;
+		min-height: 0;
+		padding: 10px;
+		border: 1px solid rgba(125, 190, 255, 0.18);
+		border-radius: 18px;
+		background: rgba(255, 255, 255, 0.052);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08),
+			0 10px 24px rgba(0, 0, 0, 0.17);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+	}
+
+
+	.PageGroup {
+		border-color: rgba(125, 211, 255, 0.24);
+	}
+
+
+	.SectionGroup {
+		border-color: rgba(255, 209, 92, 0.24);
+	}
+
+	.SectionGroup .GroupIcon {
+		background: rgba(255, 209, 92, 0.13);
+		color: #ffd15c;
+	}
+
+	.SectionGroup .MetricIcon {
+		background: rgba(255, 209, 92, 0.11);
+		color: #ffd15c;
+	}
+
+
+	.DomainGroup {
+		border-color: rgba(66, 255, 159, 0.20);
+	}
+
+	.DomainGroup .GroupIcon {
+		background: rgba(66, 255, 159, 0.12);
+		color: #42ff9f;
+	}
+
+	.DomainGroup .MetricIcon {
+		background: rgba(66, 255, 159, 0.10);
+		color: #42ff9f;
+	}
+
+
+	.GroupTitle {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		align-items: center;
+		gap: 9px;
+		min-width: 0;
+		padding: 7px 8px;
+		border-radius: 14px;
+		background: rgba(2, 12, 28, 0.22);
+	}
+
+	.GroupTitle h3 {
+		margin: 0;
+		color: #ffffff;
+		font-size: 14px;
+		font-weight: 950;
+		line-height: 1.25;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.GroupTitle p {
+		margin: 2px 0 0;
+		color: rgba(248, 251, 255, 0.52);
+		font-size: 10px;
+		font-weight: 750;
+		line-height: 1.3;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+
+	.GroupIcon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 34px;
+		height: 34px;
+		border-radius: 12px;
+		background: rgba(125, 211, 255, 0.12);
+		color: #7dd3ff;
+	}
+
+
+	.MetricsList {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		grid-auto-rows: minmax(42px, 1fr);
+		gap: 7px;
+		min-height: 0;
+	}
+
+
+	.MetricItem {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr) auto;
+		align-items: center;
+		gap: 7px;
+		min-width: 0;
+		min-height: 0;
+		padding: 6px 8px;
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		border-radius: 12px;
+		background: rgba(2, 12, 28, 0.32);
+		box-sizing: border-box;
+	}
+
+
+	.MetricIcon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 26px;
+		height: 26px;
+		border-radius: 9px;
+		background: rgba(125, 211, 255, 0.11);
+		color: #7dd3ff;
+	}
+
+
+	.MetricLabel {
+		min-width: 0;
+		color: rgba(248, 251, 255, 0.70);
+		font-size: 11px;
+		font-weight: 850;
+		line-height: 1.25;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+
+	.MetricValue {
+		color: #ffffff;
+		font-size: 16px;
+		font-weight: 950;
+		line-height: 1;
+		direction: ltr;
+		text-align: left;
+		white-space: nowrap;
+	}
+
+
+	.OfferPanel {
+		display: grid;
+		grid-template-columns: minmax(280px, 1fr) auto auto;
+		align-items: center;
+		gap: 10px;
+		min-height: 46px;
+		padding: 8px 12px;
+		border: 1px solid rgba(255, 209, 92, 0.24);
+		border-radius: 16px;
+		background: linear-gradient(135deg, rgba(255, 209, 92, 0.10), rgba(38, 181, 255, 0.06)),
+			rgba(255, 255, 255, 0.045);
+		box-sizing: border-box;
+	}
+
+
+	.OfferText {
+		display: grid;
+		gap: 2px;
+		min-width: 0;
+	}
+
+	.OfferText strong {
+		color: #ffd15c;
+		font-size: 13px;
+		font-weight: 950;
+		line-height: 1.25;
+	}
+
+	.OfferText p {
+		margin: 0;
+		color: rgba(248, 251, 255, 0.68);
+		font-size: 11px;
+		font-weight: 750;
+		line-height: 1.45;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+
+	.OfferStatus {
+		display: grid;
+		justify-items: center;
+		gap: 1px;
+		padding: 6px 10px;
+		border-radius: 12px;
+		background: rgba(2, 12, 28, 0.32);
+		white-space: nowrap;
+	}
+
+	.OfferStatus span {
+		color: rgba(248, 251, 255, 0.55);
+		font-size: 9px;
+		font-weight: 800;
+	}
+
+	.OfferStatus b {
+		color: #42ff9f;
+		font-size: 11px;
+		font-weight: 950;
+	}
+
+
+	.OfferButton {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 120px;
+		height: 32px;
+		padding-inline: 12px;
+		border-radius: 11px;
+		background: linear-gradient(135deg, #ffd15c, #ff9f1f);
+		color: #101827;
+		text-decoration: none;
+		font-size: 11px;
+		font-weight: 950;
+		white-space: nowrap;
+		box-shadow: 0 8px 18px rgba(255, 169, 31, 0.16);
+		transition: transform 0.12s ease, filter 0.12s ease;
+	}
+
+
+
+	.GroupIcon svg,
+	.MetricIcon svg
+	{
+		width: 18px;
+		height: 18px;
+		fill: currentColor;
+	}
+
+
+	@media (hover: hover) and (pointer: fine) {
+		.MetricItem:hover {
+			border-color: rgba(125, 211, 255, 0.28);
+		}
+
+		.OfferButton:hover {
+			filter: brightness(1.04);
+			transform: translateY(-1px);
+		}
+	}
+
+
+	@media (max-width: 1320px) {
+		.MetricsList {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.EmoStatsStrip {
+			height: min(400px, 58vw);
+		}
+	}
+
+
+	@media (max-width: 1050px) {
+		.EmoStatsStrip {
+			height: auto;
+			min-height: 100svh;
+			overflow: visible;
+		}
+
+		.StatsShell {
+			height: auto;
+			width: min(760px, calc(100% - 24px));
+			padding-block: 14px;
+		}
+
+		.StatsTop {
+			grid-template-columns: 1fr;
+			justify-items: center;
+			text-align: center;
+		}
+
+		.StatsTitleBox {
+			grid-template-columns: 1fr;
+			justify-items: center;
+		}
+
+		.StatsTitleBox h2,
+		.StatsTitleBox p
+		{
+			white-space: normal;
+			text-align: center;
+		}
+
+		.StatsGroups {
+			grid-template-columns: 1fr;
+		}
+
+		.MetricsList {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+
+		.OfferPanel {
+			grid-template-columns: 1fr auto auto;
+		}
+	}
+
+
+	@media (orientation: portrait) {
+		.EmoStatsStrip {
+			min-height: 100svh;
+		}
+
+		.StatsShell {
+			width: min(430px, calc(100% - 18px));
+			gap: 9px;
+		}
+
+		.StatsTitleBox h2 {
+			font-size: 20px;
+		}
+
+		.StatsTitleBox p {
+			font-size: 11px;
+		}
+
+		.StatsGroups {
+			gap: 9px;
+		}
+
+		.StatsGroup {
+			padding: 8px;
+			border-radius: 16px;
+		}
+
+		.MetricsList {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 6px;
+		}
+
+		.MetricItem {
+			min-height: 38px;
+			padding: 5px 7px;
+		}
+
+		.MetricIcon {
+			width: 24px;
+			height: 24px;
+		}
+
+		.MetricIcon svg {
+			width: 16px;
+			height: 16px;
+		}
+
+		.MetricLabel {
+			font-size: 10px;
+		}
+
+		.MetricValue {
+			font-size: 14px;
+		}
+
+		.OfferPanel {
+			grid-template-columns: 1fr;
+			justify-items: center;
+			text-align: center;
+		}
+
+		.OfferText {
+			justify-items: center;
+		}
+
+		.OfferText p {
+			white-space: normal;
+		}
+
+		.OfferButton {
+			width: 100%;
+		}
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	.EmoStatsStrip.IsFooterMode {
+		width: 100%;
+		height: 100%;
+		min-height: 0;
+		border: 1px solid rgba(255, 255, 255, 0.10);
+		border-radius: 24px;
+		background: radial-gradient(circle at 12% 16%, rgba(255, 255, 255, 0.055), transparent 28%),
+			radial-gradient(circle at 88% 28%, rgba(255, 209, 92, 0.065), transparent 30%),
+			linear-gradient(135deg, #171a1f 0%, #101318 52%, #090b0f 100%);
+		border-block: 1px solid rgba(255, 255, 255, 0.10);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07),
+			0 18px 38px rgba(0, 0, 0, 0.28);
+	}
+
+	.EmoStatsStrip.IsFooterMode::before {
+		background: linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+			linear-gradient(0deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+			url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='92' height='92' viewBox='0 0 92 92'%3E%3Cpath d='M14 14h64v64H14z' fill='none' stroke='%23ffffff' stroke-opacity='.055' stroke-width='1'/%3E%3Cpath d='M0 46h92M46 0v92' stroke='%23ffffff' stroke-opacity='.035' stroke-width='1'/%3E%3Ccircle cx='46' cy='46' r='1.8' fill='%23ffffff' fill-opacity='.08'/%3E%3C/svg%3E");
+		background-size: 38px 38px, 38px 38px, 92px 92px;
+		opacity: 0.36;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsShell {
+		width: 100%;
+		height: 100%;
+		padding: 18px;
+		gap: 12px;
+		grid-template-rows: auto 1fr;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsTop {
+		grid-template-columns: 1fr auto;
+		min-height: 0;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsTitleBox {
+		grid-template-columns: 1fr;
+		gap: 5px;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsKicker {
+		width: fit-content;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsTitleBox h2 {
+		font-size: 19px;
+		white-space: normal;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsTitleBox p {
+		display: none;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsLive {
+		padding: 6px 9px;
+		font-size: 10px;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsGroups {
+		position: relative;
+		display: block;
+		min-height: 0;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsGroup {
+		position: absolute;
+		inset: 0;
+		display: grid;
+		grid-template-rows: auto 1fr;
+		gap: 9px;
+		padding: 12px;
+		opacity: 0;
+		pointer-events: none;
+		transform: translateY(8px) scale(0.99);
+		transition: opacity 0.45s ease, transform 0.45s ease;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsGroup.IsActive {
+		opacity: 1;
+		pointer-events: auto;
+		transform: translateY(0) scale(1);
+	}
+
+	.EmoStatsStrip.IsFooterMode .GroupTitle {
+		padding: 8px;
+	}
+
+	.EmoStatsStrip.IsFooterMode .GroupTitle h3 {
+		font-size: 15px;
+	}
+
+	.EmoStatsStrip.IsFooterMode .GroupTitle p {
+		font-size: 10px;
+	}
+
+	.EmoStatsStrip.IsFooterMode .MetricsList {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		grid-auto-rows: minmax(46px, 1fr);
+		gap: 8px;
+	}
+
+	.EmoStatsStrip.IsFooterMode .MetricItem {
+		grid-template-columns: auto minmax(0, 1fr);
+		grid-template-areas: "Icon Label"
+			"Icon Value";
+		align-content: center;
+		padding: 8px;
+	}
+
+	.EmoStatsStrip.IsFooterMode .MetricIcon {
+		grid-area: Icon;
+	}
+
+	.EmoStatsStrip.IsFooterMode .MetricLabel {
+		grid-area: Label;
+		font-size: 10px;
+	}
+
+	.EmoStatsStrip.IsFooterMode .MetricValue {
+		grid-area: Value;
+		font-size: 16px;
+		text-align: right;
+	}
+
+	.EmoStatsStrip.IsFooterMode .OfferPanel {
+		display: none;
+	}
+
+
+	@media (max-width: 1050px), (orientation: portrait) {
+		.EmoStatsStrip.IsFooterMode {
+			height: 410px;
+			min-height: 410px;
+			border-radius: 22px;
+		}
+
+		.EmoStatsStrip.IsFooterMode .StatsShell {
+			height: 100%;
+			width: 100%;
+			padding: 16px;
+		}
+
+		.EmoStatsStrip.IsFooterMode .StatsTop {
+			grid-template-columns: 1fr;
+		}
+
+		.EmoStatsStrip.IsFooterMode .StatsGroups {
+			position: relative;
+			display: block;
+			min-height: 0;
+		}
+
+		.EmoStatsStrip.IsFooterMode .StatsGroup {
+			position: absolute;
+			inset: 0;
+			opacity: 0;
+			pointer-events: none;
+			transform: translateY(8px) scale(0.99);
+		}
+
+		.EmoStatsStrip.IsFooterMode .StatsGroup.IsActive {
+			opacity: 1;
+			pointer-events: auto;
+			transform: translateY(0) scale(1);
+		}
+	}
+
+
+
+</style>
+
+
+
+
+<script>
+	type StatsWindow = Window & {
+	__EmoStatsStripCycleReady?: boolean;
+	};
+
+	const cStatsWindow = window as StatsWindow;
+
+	if (!cStatsWindow.__EmoStatsStripCycleReady) {
+	cStatsWindow.__EmoStatsStripCycleReady = true;
+	document.addEventListener("astro:page-load", SetupStatsStripCycles);
+	window.addEventListener("load", SetupStatsStripCycles);
+	SetupStatsStripCycles();
+	}
+
+	function SetupStatsStripCycles(): void {
+	const cStrips = document.querySelectorAll<HTMLElement>("[data-emo-stats-strip='true'][data-footer-mode='true']:not([data-stats-cycle-ready='true'])");
+
+	cStrips.forEach(SetupStatsStripCycle);
+	}
+
+	function SetupStatsStripCycle(pRoot: HTMLElement): void {
+	pRoot.dataset.statsCycleReady = "true";
+
+	const cGroups = Array.from(pRoot.querySelectorAll<HTMLElement>(".StatsGroup"));
+	if (!cGroups.length) return;
+
+	let cIndex = 0;
+	const cCycleMs = Number(pRoot.dataset.cycleMs || 5000);
+
+	ActivateStatsGroup(cGroups, cIndex);
+
+	window.setInterval(function MoveStatsGroup(): void {
+	if (!pRoot.isConnected) return;
+
+	cIndex = (cIndex + 1) % cGroups.length;
+	ActivateStatsGroup(cGroups, cIndex);
+	}, cCycleMs);
+	}
+
+	function ActivateStatsGroup(pGroups: HTMLElement[], pIndex: number): void {
+	pGroups.forEach(function ToggleGroup(pGroup, pGroupIndex): void {
+	pGroup.classList.toggle("IsActive", pGroupIndex === pIndex);
+	});
+	}
+</script>

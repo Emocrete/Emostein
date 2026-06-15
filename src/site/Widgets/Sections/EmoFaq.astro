@@ -1,0 +1,761 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Pixel, Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"section">, PlaceProps {
+	pGap?: Pixel;
+	pPad?: Pixel;
+	pMinHeight?: Pixel;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+
+if ("pItems" in cProps || "pTitle" in cProps || "pDesc" in cProps || "pMode" in cProps || "pOpenFirst" in cProps) {
+	throw new Error("EmoFaq اتغير: استخدم <FaqItem pQuestion=\"...\" pAnswer=\"...\" /> كأبناء داخل <EmoFaq>، ولا تستخدم pItems أو pTitle أو pDesc أو pMode.");
+}
+
+const {
+	pGap = new Pixel(16, 12),
+	pPad = new Pixel(70, 26),
+	pMinHeight = new Pixel(520, 0),
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("EmoFaq"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = cProps;
+
+const cGivenStyle = GetStyleText(pGivenStyle);
+
+const cStyle = [
+	`--FaqGapL:${pGap.Landscape};`,
+	`--FaqGapP:${pGap.Portrait};`,
+	`--FaqPadL:${pPad.Landscape};`,
+	`--FaqPadP:${pPad.Portrait};`,
+	`--FaqMinHeightL:${pMinHeight.Landscape};`,
+	`--FaqMinHeightP:${pMinHeight.Portrait};`,
+	cGivenStyle,
+].filter(Boolean).join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cStyle);
+const cClass = [`EmoFaq`, cPlace.Class, pGivenClass].filter(Boolean).join(" ");
+
+function GetStyleText(pStyle: unknown) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+	if (typeof pStyle !== "object") return "";
+
+	return Object.entries(pStyle as Record<string, string | number | null | undefined>)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section
+	class = {cClass}
+	style = {cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+
+
+
+
+
+
+	<div class = " FaqDecor FaqDecorQuestion " aria-hidden="true">
+
+		<svg viewBox="0 0 72 82" preserveAspectRatio="xMidYMid meet">
+
+			<path
+				class = " FaqDecorPath Orange "
+				d="M20 41 C-1 20 14 -2 37 2 C55 6 60 23 53 38 C48 50 41 54 44 66 M55 75 m-7 0 a7 7 0 1 0 14 0 a7 7 0 1 0 -14 0"
+			/>
+
+		</svg>
+
+	</div>
+
+
+
+
+
+
+
+	<div class = " FaqDecor FaqDecorCallTop " aria-hidden="true">
+
+		<svg viewBox="0 0 154 122" preserveAspectRatio="xMidYMid meet">
+
+			<path
+				class = " FaqDecorPath Red "
+				d="M38 79 C24 82 16 76 9 63 L2 48 C-2 39 3 31 13 24 L89 5 C106 -3 121 0 128 18 L150 73 C155 86 147 98 132 101 L60 113 C40 117 21 108 32 94 C37 88 47 91 58 94"
+			/>
+
+		</svg>
+
+	</div>
+
+
+
+
+
+
+
+	<div class = " FaqDecor FaqDecorStepTop " aria-hidden="true">
+
+		<svg viewBox="0 0 34 34" preserveAspectRatio="xMidYMid meet">
+
+			<path
+				class = "
+						FaqDecorPath
+						Yellow
+						Thin
+					"
+				d="M3 24 H10 V17 H17 V10 H24 V3 H31"
+			/>
+
+		</svg>
+
+	</div>
+
+
+
+
+
+
+
+	<div class = " FaqDecor FaqDecorCallRight " aria-hidden="true">
+
+		<svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet">
+
+			<path
+				class = " FaqDecorPath Gray "
+				d="M28 96 L52 52 C33 22 51 5 82 10 C137 13 189 29 218 59 C245 87 229 128 198 141 C176 151 159 142 139 121 L80 60 C65 45 48 53 28 96 M82 60 C118 60 162 88 190 120"
+			/>
+
+		</svg>
+
+	</div>
+
+
+
+
+
+
+
+	<div class = " FaqDecor FaqDecorCallLeft " aria-hidden="true">
+
+		<svg viewBox="0 0 138 132" preserveAspectRatio="xMidYMid meet">
+
+			<path
+				class = " FaqDecorPath Yellow "
+				d="M5 68 C9 35 61 14 103 15 C127 16 135 31 123 47 C118 54 116 57 124 70 C105 63 94 64 82 75 L41 116 C23 133 5 120 1 92 C0 83 1 75 5 68"
+			/>
+
+		</svg>
+
+	</div>
+
+
+
+
+
+
+
+	<div class = " FaqDecor FaqDecorStepBottom " aria-hidden="true">
+
+		<svg viewBox="0 0 38 38" preserveAspectRatio="xMidYMid meet">
+
+			<path
+				class = "
+						FaqDecorPath
+						Red
+						Thin
+					"
+				d="M35 7 H28 V14 H21 V21 H14 V28 H7"
+			/>
+
+		</svg>
+
+	</div>
+
+
+
+
+
+
+
+	<div class = " FaqDecor FaqDecorPlus " aria-hidden="true">
+
+		<svg viewBox="0 0 34 34" preserveAspectRatio="xMidYMid meet">
+
+			<path
+				class = "
+						FaqDecorPath
+						Yellow
+						Thin
+					"
+				d="M17 7 V27 M7 17 H27"
+			/>
+
+		</svg>
+
+	</div>
+
+
+
+
+
+
+
+	<div class = " FaqDecor FaqDecorCallSmall " aria-hidden="true">
+
+		<svg viewBox="0 0 104 94" preserveAspectRatio="xMidYMid meet">
+
+			<path
+				class = " FaqDecorPath Red "
+				d="M14 26 C31 24 58 24 75 28 C91 32 101 46 95 63 C92 71 77 75 60 80 L25 90 C10 94 3 84 1 64 C-1 39 3 29 14 26 M63 26 C75 16 65 7 51 3"
+			/>
+
+		</svg>
+
+	</div>
+
+
+
+
+
+
+
+	<div class = " FaqDecor FaqDecorSquare " aria-hidden="true">
+
+		<svg viewBox="0 0 28 28" preserveAspectRatio="xMidYMid meet">
+
+			<path
+				class = "
+						FaqDecorPath
+						Red
+						Thin
+					"
+				d="M8 8 H20 V20 H8 Z"
+			/>
+
+		</svg>
+
+	</div>
+
+
+
+
+
+
+
+	<div class = " FaqDecor FaqDecorArc " aria-hidden="true">
+
+		<svg viewBox="0 0 94 94" preserveAspectRatio="xMidYMid meet">
+
+			<path class = " FaqDecorPath Light " d="M87 20 C58 20 28 39 16 70 M83 0 C40 4 8 31 2 59 C-2 76 5 87 17 92" />
+
+		</svg>
+
+	</div>
+
+
+
+
+
+
+
+	<header class = " FaqTitlePane ">
+
+		<h2 class = " FaqTitle ">
+			الأسئلة الشائعة
+		</h2>
+
+	</header>
+
+
+
+
+
+
+
+	<div class = " FaqLayout ">
+
+		<div class = " FaqItems ">
+
+			<slot />
+
+		</div>
+
+	</div>
+
+
+
+
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.EmoFaq {
+		position: relative;
+		isolation: isolate;
+		width: 100%;
+		min-height: var(--FaqMinHeightL);
+		overflow: hidden;
+		direction: ltr;
+		background: radial-gradient(circle at 11% 8%, rgb(105 182 255 / 18%) 0, rgb(105 182 255 / 9%) 15%, transparent 34%),
+			linear-gradient(180deg, #0d1116 0%, #090b0d 58%, #08090b 100%);
+		box-sizing: border-box;
+	}
+
+
+	.FaqDecor {
+		position: absolute;
+		z-index: 0;
+		pointer-events: none;
+		user-select: none;
+	}
+
+	.FaqDecor svg {
+		display: block;
+		width: 100%;
+		height: 100%;
+		overflow: visible;
+	}
+
+
+	.FaqDecorPath {
+		fill: none;
+		stroke-width: 2.35;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		vector-effect: non-scaling-stroke;
+		opacity: 0.78;
+	}
+
+
+	.FaqDecorQuestion {
+		left: clamp(46px, 8.3vw, 150px);
+		top: 150px;
+		width: clamp(58px, 5.7vw, 78px);
+		height: clamp(68px, 6.5vw, 90px);
+	}
+
+
+	.FaqDecorCallTop {
+		left: clamp(310px, 31.5vw, 520px);
+		top: 106px;
+		width: clamp(122px, 12.2vw, 160px);
+		height: clamp(96px, 9.7vw, 126px);
+	}
+
+
+	.FaqDecorStepTop {
+		left: 56.3%;
+		top: 178px;
+		width: 34px;
+		height: 34px;
+	}
+
+
+	.FaqDecorCallRight {
+		right: -54px;
+		top: 118px;
+		width: clamp(170px, 18vw, 236px);
+		height: clamp(112px, 12.2vw, 158px);
+	}
+
+
+	.FaqDecorCallLeft {
+		left: clamp(10px, 7.6vw, 120px);
+		top: 335px;
+		width: clamp(112px, 12.8vw, 160px);
+		height: clamp(106px, 12vw, 150px);
+	}
+
+
+	.FaqDecorStepBottom {
+		left: 36.3%;
+		top: 466px;
+		width: 38px;
+		height: 38px;
+	}
+
+
+	.FaqDecorPlus {
+		right: 19.8%;
+		top: 302px;
+		width: 34px;
+		height: 34px;
+	}
+
+
+	.FaqDecorCallSmall {
+		right: 13.8%;
+		top: 410px;
+		width: clamp(92px, 9vw, 122px);
+		height: clamp(82px, 8.2vw, 110px);
+	}
+
+
+	.FaqDecorSquare {
+		right: 5.1%;
+		top: 462px;
+		width: 28px;
+		height: 28px;
+	}
+
+
+	.FaqDecorArc {
+		right: -18px;
+		top: 454px;
+		width: 92px;
+		height: 92px;
+	}
+
+
+	.FaqTitlePane {
+		position: absolute;
+		z-index: 2;
+		right: 0;
+		top: clamp(118px, 13vw, 190px);
+		width: 33.333%;
+		direction: rtl;
+		display: flex;
+		align-items: flex-start;
+		justify-content: center;
+		min-width: 0;
+		padding-inline: clamp(18px, 2.6vw, 52px);
+		box-sizing: border-box;
+		pointer-events: none;
+	}
+
+
+	.FaqTitle {
+		margin: 0;
+		color: #f5f7fb;
+		font-size: clamp(40px, 3.55vw, 64px);
+		font-weight: 900;
+		line-height: 1.16;
+		text-align: center;
+		letter-spacing: -0.045em;
+		text-shadow: 0 18px 38px rgb(0 0 0 / 55%);
+	}
+
+
+	.FaqLayout {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		align-items: center;
+		width: 100%;
+		min-height: inherit;
+		padding-block: var(--FaqPadL);
+		padding-left: max(28px, 4vw);
+		padding-right: calc(33.333% + clamp(18px, 2.5vw, 46px));
+		box-sizing: border-box;
+		direction: rtl;
+	}
+
+
+	.FaqItems {
+		direction: rtl;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		justify-content: center;
+		gap: var(--FaqGapL);
+		width: 100%;
+		min-width: 0;
+		box-sizing: border-box;
+	}
+
+	.FaqItems > :global(*) {
+		width: 100% !important;
+		max-width: 100% !important;
+		box-sizing: border-box !important;
+		margin: 0 !important;
+	}
+
+
+
+	.FaqDecorPath.Thin {
+		stroke-width: 2.05;
+		opacity: 0.82;
+	}
+
+
+	.FaqDecorPath.Orange {
+		stroke: #d8894b;
+	}
+
+
+	.FaqDecorPath.Red {
+		stroke: #ee6d57;
+	}
+
+
+	.FaqDecorPath.Yellow {
+		stroke: #c8a52f;
+	}
+
+
+	.FaqDecorPath.Gray {
+		stroke: #6d7179;
+	}
+
+
+	.FaqDecorPath.Light {
+		stroke: #c4c7ce;
+	}
+
+
+	.EmoFaq.IsPlaced {
+		position: absolute;
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait), (max-width: 920px) {
+		.EmoFaq {
+			min-height: var(--FaqMinHeightP);
+		}
+
+		.FaqDecorQuestion {
+			left: 18px;
+			top: 86px;
+			width: 50px;
+			height: 64px;
+		}
+
+		.FaqDecorCallTop {
+			left: auto;
+			right: 12px;
+			top: 60px;
+			width: 112px;
+			height: 88px;
+		}
+
+		.FaqDecorStepTop {
+			left: 43%;
+			top: 138px;
+			width: 28px;
+			height: 28px;
+		}
+
+		.FaqDecorCallRight,
+		.FaqDecorCallLeft,
+		.FaqDecorStepBottom,
+		.FaqDecorPlus,
+		.FaqDecorCallSmall,
+		.FaqDecorSquare,
+		.FaqDecorArc
+		{
+			display: none;
+		}
+
+		.FaqTitlePane {
+			position: relative;
+			right: auto;
+			top: auto;
+			width: 100%;
+			padding: var(--FaqPadP) 14px 0;
+			pointer-events: none;
+		}
+
+		.FaqTitle {
+			font-size: clamp(34px, 10vw, 48px);
+			line-height: 1.25;
+		}
+
+		.FaqLayout {
+			width: 100%;
+			min-height: 0;
+			padding: 22px 14px var(--FaqPadP);
+			direction: rtl;
+		}
+
+		.FaqItems {
+			gap: var(--FaqGapP);
+		}
+
+		.EmoFaq.IsPlaced {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+	type FontReadyDocument = Document & { fonts?: { ready: Promise<unknown> } };
+
+	function SyncFaqQuestionHeights(pRoot: HTMLElement) {
+	const cQuestions = Array.from(pRoot.querySelectorAll<HTMLElement>(".FaqQuestion"));
+	if (cQuestions.length === 0) return;
+
+	pRoot.style.removeProperty("--FaqQuestionHeight");
+
+	let cMax = 0;
+	for (const cQuestion of cQuestions) cMax = Math.max(cMax, cQuestion.scrollHeight);
+
+	pRoot.style.setProperty("--FaqQuestionHeight", `${Math.ceil(cMax)}px`);
+	}
+
+	function CloseFaqItems(pItems: HTMLDetailsElement[]) {
+	for (const cItem of pItems) cItem.open = false;
+	}
+
+	function SetFaqOpenItem(pItems: HTMLDetailsElement[], pNextItem: HTMLDetailsElement | null, pSync: () => void) {
+	const cShouldCloseOnly = pNextItem?.open ?? false;
+
+	CloseFaqItems(pItems);
+
+	if (pNextItem && !cShouldCloseOnly) pNextItem.open = true;
+
+	pSync();
+	}
+
+	function InitFaq(pRoot: HTMLElement) {
+	const cItems = Array.from(pRoot.querySelectorAll<HTMLDetailsElement>(".FaqItem"));
+	if (cItems.length === 0) return;
+
+	const cSync = () => SyncFaqQuestionHeights(pRoot);
+
+	for (const cItem of cItems) {
+	const cQuestion = cItem.querySelector<HTMLElement>(".FaqQuestion");
+	if (!cQuestion) continue;
+
+	cQuestion.addEventListener("click", (pEvent: MouseEvent) => {
+	pEvent.preventDefault();
+	pEvent.stopPropagation();
+	SetFaqOpenItem(cItems, cItem, cSync);
+	});
+	}
+
+	pRoot.addEventListener("click", (pEvent: MouseEvent) => {
+	const cTarget = pEvent.target instanceof Element ? pEvent.target : null;
+	if (!cTarget || cTarget.closest(".FaqItem")) return;
+	SetFaqOpenItem(cItems, null, cSync);
+	});
+
+	cSync();
+	window.addEventListener("load", cSync, { once: true });
+	window.addEventListener("resize", cSync);
+	(document as FontReadyDocument).fonts?.ready.then(cSync);
+	}
+
+	for (const cRoot of document.querySelectorAll<HTMLElement>(".EmoFaq")) InitFaq(cRoot);
+</script>

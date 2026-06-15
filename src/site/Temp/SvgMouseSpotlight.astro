@@ -1,0 +1,139 @@
+---
+const {
+    fTitle = "Spotlight يتبع الماوس",
+    fText = "الهالة تتحرك مع الماوس داخل البوكس.",
+    fColor = "#F2C11A",
+} = Astro.props;
+const fId = "sp_" + Math.random().toString(36).slice(2);
+---
+
+<article class="spCard" data-sp-root>
+    <div class="spBg" aria-hidden="true">
+        <svg viewBox="0 0 600 240" preserveAspectRatio="none">
+            <defs>
+                <radialGradient id={`${fId}_rg`} cx="0.5" cy="0.5" r="0.65">
+                    <stop offset="0" stop-color={fColor} stop-opacity="0.35"
+                    ></stop>
+                    <stop offset="0.55" stop-color={fColor} stop-opacity="0.12"
+                    ></stop>
+                    <stop offset="1" stop-color={fColor} stop-opacity="0"
+                    ></stop>
+                </radialGradient>
+            </defs>
+
+            <rect x="0" y="0" width="600" height="240" rx="26" fill="#0f1115"
+            ></rect>
+            <rect
+                class="halo"
+                x="0"
+                y="0"
+                width="600"
+                height="240"
+                rx="26"
+                fill={`url(#${fId}_rg)`}></rect>
+            <path
+                d="M0 165 C 140 125 240 210 360 170 C 480 130 520 190 600 165"
+                stroke="rgba(255,255,255,.18)"
+                stroke-width="2"
+                fill="none"></path>
+        </svg>
+    </div>
+
+    <div class="spBody">
+        <h3 class="spTitle">{fTitle}</h3>
+        <p class="spText">{fText}</p>
+        <a class="spBtn" href="#">تجربة</a>
+    </div>
+
+    <script is:inline>
+        // @ts-nocheck
+        (function () {
+            const fRoot =
+                document.currentScript &&
+                document.currentScript.closest("[data-sp-root]");
+            if (!fRoot) return;
+
+            const fGrad = fRoot.querySelector("radialGradient");
+            if (!fGrad) return;
+
+            const fCoarse =
+                window.matchMedia &&
+                window.matchMedia("(pointer: coarse)").matches;
+            const fReduce =
+                window.matchMedia &&
+                window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+            function fClamp(v, a, b) {
+                return Math.max(a, Math.min(b, v));
+            }
+
+            function fMove(e) {
+                const r = fRoot.getBoundingClientRect();
+                const x = fClamp((e.clientX - r.left) / r.width, 0, 1);
+                const y = fClamp((e.clientY - r.top) / r.height, 0, 1);
+                fGrad.setAttribute("cx", x.toFixed(3));
+                fGrad.setAttribute("cy", y.toFixed(3));
+            }
+
+            if (!fCoarse && !fReduce) {
+                fRoot.addEventListener("pointermove", fMove, { passive: true });
+                fRoot.addEventListener(
+                    "pointerleave",
+                    () => {
+                        fGrad.setAttribute("cx", "0.5");
+                        fGrad.setAttribute("cy", "0.5");
+                    },
+                    { passive: true },
+                );
+            }
+        })();
+    </script>
+</article>
+
+<style>
+    .spCard {
+        position: relative;
+        border-radius: 26px;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.1);
+        background: #0f1115;
+        color: #fff;
+        min-height: 220px;
+    }
+    .spBg {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+    }
+    .spBg svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
+    .spBody {
+        position: relative;
+        z-index: 1;
+        padding: 18px;
+        max-width: 62ch;
+    }
+    .spTitle {
+        margin: 0 0 8px 0;
+        font-weight: 1000;
+    }
+    .spText {
+        margin: 0 0 14px 0;
+        opacity: 0.88;
+        line-height: 1.8;
+    }
+    .spBtn {
+        display: inline-flex;
+        padding: 11px 14px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.92);
+        color: #111;
+        font-weight: 900;
+        text-decoration: none;
+    }
+</style>

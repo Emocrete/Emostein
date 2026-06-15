@@ -1,0 +1,39 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"article">, PlaceProps { pBg?: string; pColor?: string; pTilt?: number; }
+const { pBg = "#353535", pColor = "#FAFAFA", pTilt = -3, pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly, id: pGivenID = GetWidgetId("TiltCard"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cPlace = new Place(Astro.props as PlaceProps, `--TiltBg:${pBg}; --TiltColor:${pColor}; --TiltDeg:${pTilt}deg; ${cGivenStyle}`);
+---
+<article class={`TiltCard ${cPlace.Class} ${pGivenClass}`.trim()} style={cPlace.Style} id={pGivenID} {...RemAttr}><slot /></article>
+<style>
+	.TiltCard { position: relative; display: flex; flex-direction: column; justify-content: center; width: 100%; height: auto; padding: clamp(18px, 2.6vw, 34px); border-radius: 26px; background: var(--TiltBg); color: var(--TiltColor); box-shadow: 0 28px 50px rgba(0,0,0,.22); transform: rotate(var(--TiltDeg)); box-sizing: border-box; }
+	.TiltCard::before { content: ""; position: absolute; inset: 10px; border: 1px solid rgba(255,255,255,.24); border-radius: 20px; pointer-events: none; }
+.TiltCard.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+		z-index: var(--PlaceZ, 1);
+		opacity: var(--PlaceOpacityL, 100%);
+		transform: rotate(var(--PlaceRotateL, var(--TiltDeg)));
+		transform-origin: var(--PlaceOrigin, center center);
+		pointer-events: var(--PlaceClickable, auto);
+		min-width: 0;
+		box-sizing: border-box;
+	}
+
+	@media (orientation: portrait) {
+		.TiltCard.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+			opacity: var(--PlaceOpacityP, var(--PlaceOpacityL, 100%));
+			transform: rotate(var(--PlaceRotateP, var(--PlaceRotateL, var(--TiltDeg))));
+		}
+	}
+</style>

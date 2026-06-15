@@ -1,0 +1,213 @@
+---
+const {
+    fTitle = "تفاعل Mouse + Scroll",
+    fText = "حرّك الماوس فوق البوكس… وانزل سكرول.",
+    fHue = 38,
+} = Astro.props;
+const fId = "ms_" + Math.random().toString(36).slice(2);
+---
+
+<article class="msCard" data-ms-root>
+    <div class="msBody">
+        <h3 class="msTitle">{fTitle}</h3>
+        <p class="msText">{fText}</p>
+        <div class="msHint">Mouse: Tilt • Scroll: Progress</div>
+    </div>
+
+    <div class="msViz" aria-hidden="true">
+        <svg viewBox="0 0 260 260">
+            <defs>
+                <radialGradient id={`${fId}_g`} cx="45%" cy="38%" r="70%">
+                    <stop
+                        offset="0"
+                        stop-color={`hsl(${fHue} 95% 65%)`}
+                        stop-opacity="1"></stop>
+                    <stop
+                        offset="1"
+                        stop-color={`hsl(${(fHue + 50) % 360} 92% 45%)`}
+                        stop-opacity="1"></stop>
+                </radialGradient>
+
+                <filter
+                    id={`${fId}_glow`}
+                    x="-30%"
+                    y="-30%"
+                    width="160%"
+                    height="160%"
+                >
+                    <feGaussianBlur stdDeviation="8" result="b"
+                    ></feGaussianBlur>
+                    <feMerge>
+                        <feMergeNode in="b"></feMergeNode>
+                        <feMergeNode in="SourceGraphic"></feMergeNode>
+                    </feMerge>
+                </filter>
+            </defs>
+
+            <g class="orbGroup">
+                <circle
+                    cx="130"
+                    cy="130"
+                    r="78"
+                    fill={`url(#${fId}_g)`}
+                    filter={`url(#${fId}_glow)`}></circle>
+                <circle cx="105" cy="100" r="18" fill="rgba(255,255,255,.20)"
+                ></circle>
+                <circle cx="155" cy="165" r="12" fill="rgba(255,255,255,.12)"
+                ></circle>
+            </g>
+
+            <circle class="ringBg" cx="130" cy="130" r="104" fill="none"
+            ></circle>
+            <circle class="ring" cx="130" cy="130" r="104" fill="none"></circle>
+        </svg>
+    </div>
+
+    <script is:inline>
+        // @ts-nocheck
+        (function () {
+            const fRoot =
+                document.currentScript &&
+                document.currentScript.closest("[data-ms-root]");
+            if (!fRoot) return;
+
+            const fOrb = fRoot.querySelector(".orbGroup");
+            const fRing = fRoot.querySelector(".ring");
+            if (!fOrb || !fRing) return;
+
+            const fR = 104;
+            const fLen = 2 * Math.PI * fR;
+            fRing.style.strokeDasharray = String(fLen);
+            fRing.style.strokeDashoffset = String(fLen);
+
+            let fMx = 0,
+                fMy = 0;
+            let fProg = 0;
+
+            const fCoarse =
+                window.matchMedia &&
+                window.matchMedia("(pointer: coarse)").matches;
+            const fReduce =
+                window.matchMedia &&
+                window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+            function fClamp(v, a, b) {
+                return Math.max(a, Math.min(b, v));
+            }
+
+            function fUpdateScroll() {
+                const r = fRoot.getBoundingClientRect();
+                const vh = window.innerHeight || 1;
+                const c = r.top + r.height * 0.5;
+                const t = 1 - c / vh;
+                fProg = fClamp(t, 0, 1);
+            }
+
+            function fOnMove(e) {
+                const r = fRoot.getBoundingClientRect();
+                const x = (e.clientX - r.left) / r.width;
+                const y = (e.clientY - r.top) / r.height;
+                fMx = fClamp(x * 2 - 1, -1, 1);
+                fMy = fClamp(y * 2 - 1, -1, 1);
+            }
+
+            function fLoop() {
+                const rx = -fMy * 8;
+                const ry = fMx * 10;
+                fRoot.style.setProperty("--rx", rx + "deg");
+                fRoot.style.setProperty("--ry", ry + "deg");
+
+                const tx = fMx * 8;
+                const ty = fMy * 8;
+                fOrb.setAttribute("transform", `translate(${tx} ${ty})`);
+
+                const off = fLen * (1 - fProg);
+                fRing.style.strokeDashoffset = String(off);
+
+                const hue =
+                    Number(fRoot.getAttribute("data-base-hue") || "38") +
+                    Math.round(fProg * 40);
+
+                fRoot.style.setProperty("--hue", hue);
+
+                requestAnimationFrame(fLoop);
+            }
+
+            fUpdateScroll();
+            window.addEventListener("scroll", fUpdateScroll, { passive: true });
+
+            if (!fCoarse) {
+                fRoot.addEventListener("pointermove", fOnMove, {
+                    passive: true,
+                });
+                fRoot.addEventListener(
+                    "pointerleave",
+                    () => {
+                        fMx = 0;
+                        fMy = 0;
+                    },
+                    { passive: true },
+                );
+            }
+
+            if (!fReduce) requestAnimationFrame(fLoop);
+        })();
+    </script>
+</article>
+
+<style>
+    .msCard {
+        display: grid;
+        grid-template-columns: 1fr 260px;
+        gap: 14px;
+        align-items: center;
+        padding: 16px;
+        border-radius: 22px;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.1);
+        background: #fff;
+        transform: perspective(900px) rotateX(var(--rx, 0deg))
+            rotateY(var(--ry, 0deg));
+        transition: transform 0.12s ease;
+    }
+    @media (max-width: 900px) {
+        .msCard {
+            grid-template-columns: 1fr;
+        }
+        .msViz {
+            justify-self: start;
+        }
+    }
+    .msTitle {
+        margin: 0 0 6px 0;
+        font-weight: 900;
+    }
+    .msText {
+        margin: 0 0 10px 0;
+        color: rgba(16, 17, 20, 0.72);
+        line-height: 1.8;
+    }
+    .msHint {
+        font-weight: 800;
+        opacity: 0.75;
+    }
+
+    .msViz svg {
+        width: 260px;
+        height: 260px;
+        display: block;
+    }
+
+    .ringBg {
+        stroke: rgba(0, 0, 0, 0.1);
+        stroke-width: 10;
+    }
+    .ring {
+        stroke: hsl(var(--hue, 38) 92% 45%);
+        stroke-width: 10;
+        stroke-linecap: round;
+        transform: rotate(-90deg);
+        transform-origin: 130px 130px;
+        filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.18));
+    }
+</style>

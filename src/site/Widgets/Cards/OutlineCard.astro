@@ -1,0 +1,39 @@
+---
+import { Place, type PlaceProps } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"div">, PlaceProps {
+	fTitle?: string;
+}
+
+const {
+	fTitle,
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	id: pGivenID = GetWidgetId("OutlineCard"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+
+const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
+---
+<div class={`cardOutline reveal ${cPlace.Class} ${pGivenClass}`.trim()} style={cPlace.Style} id={pGivenID} {...RemAttr}>
+  <div class="cardOutlineIcon" aria-hidden="true">📄</div>
+  <div class="cardOutlineTitle">{fTitle}</div>
+
+  <div style="margin-top:14px;">
+    <a class="btn" href="#" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.45);">
+      المزيد
+    </a>
+  </div>
+</div>

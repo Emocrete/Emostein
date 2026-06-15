@@ -1,0 +1,365 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Text, Topic , RespString , ElemBg,Pixel, Place, type PlaceProps } from "../../TypesLib";
+import Emograph from "../Comp/Emograph.astro";
+import Stack from "../Comp/Stack.astro";
+import EmoList from "../Comp/EmoList.astro";
+
+/**
+ * CardsGr
+ *
+ * A reusable widget for displaying a group of information cards.
+ * Each card is generated from a Topic object and rendered internally through the Emograph widget.
+ *
+ * This widget is suitable for service highlights, feature lists, process steps,
+ * short comparisons, benefits sections, or any repeated content blocks that share
+ * the same title/body structure.
+ *
+ * The cards are arranged using the Stack widget, so the group can be displayed
+ * either horizontally or vertically depending on pStackDir.
+ *
+ * The widget also includes a client-side sync script that measures card titles
+ * and card heights after load, resize, and font loading, then applies shared CSS
+ * variables to help keep the cards visually aligned.
+ *
+ * Props:
+ *
+ * pWidth:
+ * Controls the overall width of the cards group.
+ * Accepts Pixel or RespString.
+ *
+ * pBg:
+ * Optional background data for the group.
+ * Currently available as a prop for background configuration.
+ *
+ * pCardBg:
+ * Background data for each individual card.
+ * Accepts ElemBg.
+ *
+ * pCardRadius:
+ * Controls the border radius of each card in pixels.
+ * Default value: 10.
+ *
+ * pGrTitle:
+ * Text settings for the group title displayed above the cards.
+ * Accepts Text.
+ * Default value: Text.Body.
+ *
+ * pCardTitleFnt:
+ * Text settings used for each card title.
+ * The actual title text is taken from Topic.Title.
+ * Accepts Text.
+ * Default value: Text.Body.
+ *
+ * pCardBodyFnt:
+ * Text settings used for each card body.
+ * The actual body text is taken from Topic.Body.
+ * Accepts Text.
+ * Default value: Text.Body.
+ *
+ * pStackDir:
+ * Controls the Stack direction used to arrange the cards.
+ * Accepted values: "Row" or "Col".
+ * Default value: "Row".
+ *
+ * pSpacing:
+ * Spacing value used by the widget CSS variables.
+ * Accepts number or Pixel.
+ * Default value: 10.
+ *
+ * pTopic1 to pTopic8:
+ * Card content items.
+ * Each item accepts a Topic object with Title and Body values.
+ * Empty topics are ignored automatically.
+ *
+ * id:
+ * Optional custom widget ID.
+ * If not provided, the widget generates an ID using GetWidgetId("CardsGr").
+ *
+ * class / style / remaining HTML attributes:
+ * Passed through from HTMLAttributes and forwarded to the root element.
+ */
+export interface Props extends HTMLAttributes<"div">, PlaceProps {
+	/**Controls the overall width of the cards group. Accepts Pixel or RespString.*/
+	pWidth?: Pixel|RespString;
+	pBg? :ElemBg ;
+	pCardBg?: ElemBg;
+	pCardRadius?: Pixel;
+	pGrTitle?: Text;
+	pCardTitleFnt? : Text;
+	pCardBodyFnt?: Text;
+	pStackDir?: "Row" | "Col";
+	pSpacing? : number|Pixel;
+	pTopic1?: Topic;
+	pTopic2?: Topic;
+	pTopic3?: Topic;
+	pTopic4?: Topic;
+	pTopic5?: Topic;
+	pTopic6?: Topic;
+	pTopic7?: Topic;
+	pTopic8?: Topic;
+}
+
+const {
+	pWidth ,
+	pBg ,
+	pCardBg ,
+	pCardRadius = 10,
+	pGrTitle = Text.Body,
+	pCardTitleFnt = Text.Body,
+	pCardBodyFnt = Text.Body,
+	pStackDir = "Row",
+	pSpacing = 20,
+	pTopic1 = new Topic("عنوان الكرت","محتوى الكرت"),
+	pTopic2= new Topic("عنوان الكرت","محتوى الكرت"),
+	pTopic3,
+	pTopic4,
+	pTopic5,
+	pTopic6,
+	pTopic7,
+	pTopic8,
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id:pGivenID = "",
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+
+const cTopics = GetValidTopics();
+
+function GetValidTopics(): Topic[] {
+
+	const cRawCards = [pTopic1, pTopic2, pTopic3, pTopic4, pTopic5, pTopic6, pTopic7, pTopic8];
+
+	return cRawCards.filter(
+		(pItem): pItem is Topic =>
+		!!pItem && ((pItem.Title ?? "").trim() !== "" || (pItem.Body ?? "").trim() !== ""),
+	);
+}
+
+const GrTitleTag = pGrTitle.GetTag() as keyof HTMLElementTagNameMap;
+const WidgetID = pGivenID || GetWidgetId("CardsGr");
+
+
+const GrCssVar = [
+	`--pGroupWidth:${pWidth?.Landscape};`,
+	`--pCardCount:${cTopics.length};`,
+	`--pTitleGap:${pSpacing}px;`,
+].filter(Boolean).join(" ");
+
+const cPlace = new Place(Astro.props as PlaceProps, GrCssVar);
+
+const CardCssVar = [
+	`--pCardBg:${pCardBg?.Color};`,
+	`--pCardRadius:${pCardRadius}px;`,
+].filter(Boolean).join(" ");
+
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div
+	class = {`MainBox ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={WidgetID}
+	{...RemAttr}
+>
+
+	{ pGrTitle &&
+
+		<GrTitleTag class = " GrTitle " style = {pGrTitle.GetStyle()}>
+
+			{pGrTitle.text}
+
+		</GrTitleTag>
+
+	}
+
+	{ cTopics.length > 0 && (
+
+		<Stack
+			class = " MainBox "
+			pDir={pStackDir}
+			pGap="30px"
+			pFlipNarrow={true}
+		>
+		
+			{ cTopics.map((pTopic) => (
+				(pTopic.Title || pTopic.Body || pTopic.Items) && (
+		
+					<article class = " CardsGrCard " style = {CardCssVar}>
+		
+						{ pTopic.Title && pTopic.Body && pTopic.Items && (
+		
+							<Emograph pTitle={pCardTitleFnt.OfText(pTopic.Title)} pText={pCardBodyFnt.OfText(pTopic.Body)}>
+		
+								<EmoList pItems={pTopic.Items}>
+		
+								</EmoList>
+		
+							</Emograph>
+		
+						) }
+		
+						{ pTopic.Title && pTopic.Body && !pTopic.Items && (
+		
+							<Emograph pTitle={pCardTitleFnt.OfText(pTopic.Title)} pText={pCardBodyFnt.OfText(pTopic.Body)} />
+		
+						) }
+		
+						{ pTopic.Title && (!pTopic.Body || pTopic.Body=="") && !pTopic.Items && (
+		
+							<Emograph pTitle={pCardTitleFnt.OfText(pTopic.Title)} />
+		
+						) }
+		
+					</article>
+		
+				))) }
+		
+		</Stack>
+	) }
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.MainBox {
+		width: min(var(--pGroupWidth), 100%);
+		margin-inline: auto;
+	}
+
+
+	.GrTitle {
+		margin: 0 0 20px 0;
+		line-height: 1.35;
+	}
+
+
+	.CardsGrCard {
+		background: var(--pCardBg);
+		border-radius: var(--pCardRadius);
+		padding: 26px 22px;
+		display: grid;
+		grid-template-rows: auto 1fr;
+		align-items: start;
+		min-height: var(--pCardHeight);
+		box-sizing: border-box;
+	}
+
+	@media (orientation: portrait) {
+		.CardsGrCard {
+			min-height: auto;
+		}
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script is:inline define:vars={{ WidgetID }}>
+	const cRoot = document.getElementById(WidgetID);
+	const cGroup = cRoot?.querySelector(".MainBox");
+
+	window.addEventListener("load", SyncCardsLayout);
+	window.addEventListener("resize", SyncCardsLayout);
+
+	SyncCardsLayout();
+
+	if (document.fonts) {
+	document.fonts.ready.then(SyncCardsLayout);
+	}
+
+	function SyncCardsLayout() {
+	if (!cGroup) return;
+
+	const cTitleWraps = Array.from(cGroup.querySelectorAll(".TopicTitlePart"));
+	const cCards = Array.from(cGroup.querySelectorAll(".CardsGrCard"));
+
+	cGroup.style.removeProperty("--pCardTitleRowHeight");
+	cGroup.style.removeProperty("--pCardHeight");
+
+	let cMaxTitleHeight = 0;
+	for (const cTitleWrap of cTitleWraps) {
+	cMaxTitleHeight = Math.max(cMaxTitleHeight, cTitleWrap.scrollHeight);
+	}
+
+	cGroup.style.setProperty("--pCardTitleRowHeight", `${cMaxTitleHeight}px`);
+
+	let cMaxCardHeight = 0;
+	for (const cCard of cCards) {
+	cMaxCardHeight = Math.max(cMaxCardHeight, cCard.scrollHeight);
+	}
+
+	cGroup.style.setProperty("--pCardHeight", `${cMaxCardHeight}px`);
+	}
+</script>

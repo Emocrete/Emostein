@@ -1,0 +1,67 @@
+---
+import SubMenuHead from "../../Menu/SubMenuHead.astro";
+import SubMenuItem from "../../Menu/SubMenuItem.astro";
+
+const cMenuIconsList = import.meta.glob("./*.webp", {
+	eager: true,
+	import: "default",
+	query: "?url",
+});
+
+const cMenuIcons = Object.fromEntries(
+	Object.entries(cMenuIconsList).map(([fPath, fUrl]) => {
+		const fFileName = fPath.split("/").pop() ?? "";
+		const fBaseName = fFileName.replace(/\.[^.]+$/, "");
+		return [fBaseName, fUrl];
+	}),
+);
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<SubMenuHead fTitle="تصميم هندسي" fLink="" fIcon={cMenuIcons.Lab}>
+
+	<SubMenuItem fTitle="معماري" fLink="/emodsign/des/eng/arch" />
+
+	<SubMenuItem fTitle="إنشائي" fLink="/emodsign/des/eng/struc" />
+
+	<SubMenuItem fTitle="ميكانيكا" fLink="/emodsign/des/eng/mech" />
+
+	<SubMenuItem fTitle="كهرباء" fLink="/emodsign/des/eng/elec" />
+
+</SubMenuHead>
+
+<SubMenuHead fTitle="تصميم إبداعي" fLink="" fIcon={cMenuIcons.Lab}>
+
+	<SubMenuItem fTitle="تصميم داخلي" fLink="/emodsign/des/cr/int" />
+
+	<SubMenuItem fTitle="تصميم خارجي" fLink="/emodsign/des/cr/ext" />
+
+</SubMenuHead>
+
+<SubMenuHead fTitle="مكتب فني" fLink="" fIcon={cMenuIcons.Lab}>
+
+	<SubMenuItem fTitle="رسومات تنفيذية" fLink="/emodsign/tech/shopdwg" />
+
+	<SubMenuItem fTitle="حصر كميات" fLink="/emodsign/tech/takeoff" />
+
+	<SubMenuItem fTitle="إدارة مشروعات" fLink="/emodsign/tech/manage" />
+
+</SubMenuHead>

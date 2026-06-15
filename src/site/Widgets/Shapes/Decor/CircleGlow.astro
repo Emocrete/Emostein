@@ -1,0 +1,42 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"div">, PlaceProps { pColor?: string; pColor2?: string; pBlur?: number; }
+
+const { pColor = "rgba(167,196,92,.75)", pColor2 = "rgba(251,255,0,.26)", pBlur = 28, pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly, id: pGivenID = GetWidgetId("CircleGlow"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cStyle = `--Glow1:${pColor}; --Glow2:${pColor2}; --GlowBlur:${pBlur}px; --ShapePointer:${pClickable === true ? "auto" : "none"}; ${cGivenStyle}`;
+const cPlace = new Place(Astro.props as PlaceProps, cStyle);
+---
+
+<div class={`CircleGlow ${cPlace.Class} ${pGivenClass}`.trim()} style={cPlace.Style} id={pGivenID} aria-hidden="true" {...RemAttr}></div>
+
+<style>
+	.CircleGlow { position: relative; display: block; width: 100%; height: 100%; border-radius: 999px; background: radial-gradient(circle at 35% 32%, var(--Glow2), var(--Glow1) 42%, transparent 72%); filter: blur(var(--GlowBlur)); pointer-events: var(--ShapePointer, none); box-sizing: border-box; }
+.CircleGlow.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+		z-index: var(--PlaceZ, 1);
+		opacity: var(--PlaceOpacityL, 100%);
+		transform: rotate(var(--PlaceRotateL, 0deg));
+		transform-origin: var(--PlaceOrigin, center center);
+		pointer-events: var(--ShapePointer, none);
+		min-width: 0;
+		box-sizing: border-box;
+	}
+
+	@media (orientation: portrait) {
+		.CircleGlow.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+			opacity: var(--PlaceOpacityP, var(--PlaceOpacityL, 100%));
+			transform: rotate(var(--PlaceRotateP, var(--PlaceRotateL, 0deg)));
+		}
+	}
+</style>

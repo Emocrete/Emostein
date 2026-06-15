@@ -1,0 +1,103 @@
+---
+import { Place, type PlaceProps } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"div">, PlaceProps {
+	fHeight?: number;
+	fColor1?: string;
+	fColor2?: string;
+	fFlip?: boolean;
+	fSpeed1?: number;
+	fSpeed2?: number;
+}
+
+const {
+    fHeight = 80,
+    fColor1 = "#2d2f32",
+    fColor2 = "rgba(45,47,50,.55)",
+    fFlip = false,
+    fSpeed1 = 10, // ثواني (كلما أقل أسرع)
+    fSpeed2 = 14,
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	id: pGivenID = GetWidgetId("Waves"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+
+// مسافة الحركة الأفقية (نص عرض التصميم) عشان تكرار الموجة يبقى seamless
+const fShift = 600;
+const cStyle = [`height:${fHeight}px;`, fFlip ? "transform: rotate(180deg);" : "", cGivenStyle].filter(Boolean).join(" ");
+const cPlace = new Place(Astro.props as PlaceProps, cStyle);
+---
+
+<div
+    class={`wavesWrap ${cPlace.Class} ${pGivenClass}`.trim()}
+    style={cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+    <svg viewBox={`0 0 1200 120`} preserveAspectRatio="none" aria-hidden="true">
+        <!-- Layer 1 -->
+        <g>
+            <animateTransform
+                attributeName="transform"
+                type="translate"
+                from={`0 0`}
+                to={`-${fShift} 0`}
+                dur={`${fSpeed1}s`}
+                repeatCount="indefinite"></animateTransform>
+            <path
+                fill={fColor1}
+                d="M0,50 C150,10 350,90 600,50 C850,10 1050,90 1200,50 L1200,120 L0,120 Z"
+            ></path>
+            <!-- نفس الموجة مكررة جنبها عشان الحركة تبقى بدون فاصل -->
+            <path
+                fill={fColor1}
+                d="M0,50 C150,10 350,90 600,50 C850,10 1050,90 1200,50 L1200,120 L0,120 Z"
+                transform="translate(1200 0)"></path>
+        </g>
+
+        <!-- Layer 2 (overlay) حركة أبطأ وشفافية -->
+        <g>
+            <animateTransform
+                attributeName="transform"
+                type="translate"
+                from={`0 0`}
+                to={`${fShift} 0`}
+                dur={`${fSpeed2}s`}
+                repeatCount="indefinite"></animateTransform>
+            <path
+                fill={fColor2}
+                d="M0,62 C170,92 330,25 600,62 C870,98 1030,30 1200,62 L1200,120 L0,120 Z"
+            ></path>
+            <path
+                fill={fColor2}
+                d="M0,62 C170,92 330,25 600,62 C870,98 1030,30 1200,62 L1200,120 L0,120 Z"
+                transform="translate(1200 0)"></path>
+        </g>
+    </svg>
+</div>
+
+<style>
+    .wavesWrap {
+        width: 100%;
+        overflow: hidden;
+        line-height: 0;
+    }
+    svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+</style>

@@ -1,0 +1,191 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { RespString, Text, ElemBg, EmoMediaData, Place, type PlaceProps } from "@/TypesLib";
+
+export interface Props extends HTMLAttributes<"div">, PlaceProps {
+	pImg?: EmoMediaData;
+	pVid?:EmoMediaData;
+}
+
+const {
+	pImg ,
+	pVid,
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("BgMedia"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+
+const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div
+	class = {`BgMediaBox ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	{ pVid ? (
+
+		<video
+			class = " BgMedia "
+			id="Vid"
+			data-src-l={pVid.LinkL}
+			data-src-p={pVid.LinkP || pVid.LinkL}
+			crossorigin="anonymous"
+			playsinline
+			preload="auto"
+			loop
+			autoplay
+			muted
+			src={pVid.LinkL}
+		/>
+
+		) : pImg ? (
+
+			<picture class = " BgMedia ">
+
+				<source media="(max-width: 460px) and (orientation: portrait)" srcset={pImg.LinkP} />
+
+				<img
+					class = " BgMedia "
+					style = " object-fit : cover "
+					src={pImg.LinkL}
+					alt={pImg.Alt}
+					loading="lazy"
+					decoding="async"
+				/>
+
+			</picture>
+
+			) : null }
+
+		</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.BgMediaBox {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		overflow: hidden;
+		align-items: center;
+		align-content: center;
+		pointer-events: none;
+	}
+
+
+	.BgMedia {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script is:inline define:vars={{ pGivenID }}>
+	const Widget = document.getElementById(pGivenID)
+	const VElem = Widget.querySelector("#Vid");
+	const DirQuery = window.matchMedia("(orientation: portrait)");
+
+	if (VElem instanceof HTMLVideoElement) {
+	window.addEventListener("resize", UpdateVideoLink);
+	DirQuery.addEventListener("change", UpdateVideoLink);
+
+	UpdateVideoLink();
+	}
+
+	function UpdateVideoLink() {
+	const cIsPortrait = DirQuery.matches;
+
+	const cNewSrc = cIsPortrait
+	? VElem.getAttribute("data-src-p") || ""
+	: VElem.getAttribute("data-src-l") || "";
+
+	VElem.setAttribute("src", cNewSrc);
+	VElem.load();
+	VElem.play().catch(() => {});
+	}
+</script>

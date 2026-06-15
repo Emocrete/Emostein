@@ -1,0 +1,691 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Colors, HoverColors, HoverImg, Place, type PlaceProps } from "@/TypesLib";
+
+export interface Props extends HTMLAttributes<"a">, PlaceProps {
+	/** النص الظاهر داخل زر الاتصال. */
+	pText?: string;
+
+	/** Preset: خلفية سوداء مع هوفر برتقالي. */
+	Black?: boolean;
+	BlackOrange?: boolean;
+
+	/** Preset: خلفية سوداء مع هوفر سماوي. */
+	BlackSky?: boolean;
+
+	/** صور الأيقونة في الحالات الثلاث: Normal / Hover / Click. */
+	pIconImgs?: HoverImg;
+
+	/** مكان الأيقونة داخل الزر. */
+	pIconPos?: "right" | "left" | "top" | "bottom";
+
+	pWidth?: string;
+	pHeight?: string;
+	pRadius?: string;
+
+	/** ألوان خلفية الزر في الحالات الثلاث: Normal / Hover / Click. */
+	pBgColors?: HoverColors;
+
+	/** صور خلفية الزر في الحالات الثلاث: Normal / Hover / Click. */
+	pBgImgs?: HoverImg;
+
+	/** ألوان عنوان الزر في الحالات الثلاث: Normal / Hover / Click. */
+	pTitleColors?: HoverColors;
+
+	pFontSize?: string;
+}
+
+const cCallPhoneText = "01014490054";
+const cCallPhoneHref = "tel:+201014490054";
+const cCallQrImg = "/Media/EmoCall.svg";
+
+const {
+	pText,
+	Black = false,
+	BlackOrange = false,
+	BlackSky = false,
+	pIconImgs,
+	pIconPos = "right",
+
+	pWidth = "250px",
+	pHeight = "50px",
+	pRadius = "5px",
+
+	pBgColors,
+	pBgImgs,
+
+	pTitleColors,
+	pFontSize = "18px",
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pId = GetWidgetId("EmoCall"),
+	class: pClass = "",
+	style: pStyle = "",
+	...cAttrs
+} = Astro.props as Props;
+
+const cCallPresets = {
+	BlackOrange: {
+		BgColors: new HoverColors(Colors.Black, Colors.OrangeDark),
+		TitleColors: new HoverColors("#ffffff"),
+	},
+	BlackSky: {
+		BgColors: new HoverColors(Colors.Black, Colors.Sky),
+		TitleColors: new HoverColors("#ffffff"),
+	},
+};
+
+const cPreset = GetPreset();
+const cText = pText ?? "تواصل معنا";
+const cLayoutClass = GetLayoutClass(pIconPos);
+const cIconSize = `calc(${pHeight} - 5px)`;
+
+const cBgColors = pBgColors ?? cPreset?.BgColors ?? new HoverColors(Colors.WhiteOff);
+const cTitleColors = pTitleColors ?? cPreset?.TitleColors ?? new HoverColors(Colors.BlackOff);
+const cIconImgs = pIconImgs ?? new HoverImg("");
+const cBgImgs = pBgImgs ?? new HoverImg("");
+
+const cBgImgNormal = BuildCssUrl(cBgImgs.Normal);
+const cBgImgHover = BuildCssUrl(cBgImgs.Hover);
+const cBgImgActive = BuildCssUrl(cBgImgs.Click);
+
+const cIconNormal = BuildCssUrl(cIconImgs.Normal);
+const cIconHover = BuildCssUrl(cIconImgs.Hover);
+const cIconActive = BuildCssUrl(cIconImgs.Click);
+
+const cHasIcon = Boolean(cIconImgs.Normal);
+
+const cStyle = [
+	`--Width:${pWidth};`,
+	`--Height:${pHeight};`,
+	`--Radius:${pRadius};`,
+
+	`--BgClr:${cBgColors.Normal};`,
+	`--BgClr-hover:${cBgColors.Hover};`,
+	`--BgClr-active:${cBgColors.Click};`,
+
+	`--BgImg:${cBgImgNormal};`,
+	`--BgImg-hover:${cBgImgHover};`,
+	`--BgImg-active:${cBgImgActive};`,
+
+	`--TitleCrl:${cTitleColors.Normal};`,
+	`--TitleCrl-hover:${cTitleColors.Hover};`,
+	`--TitleCrl-active:${cTitleColors.Click};`,
+	`--TitleSize:${pFontSize};`,
+
+	`--btn-icon-size:${cIconSize};`,
+	`--IconNormal:${cIconNormal};`,
+	`--btn-icon-hover:${cIconHover};`,
+	`--btn-icon-active:${cIconActive};`,
+
+	GetStyleText(pStyle),
+].filter(Boolean).join("\n");
+
+const cPlace = new Place({
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+}, cStyle);
+
+function GetPreset() {
+	if (Black || BlackOrange) return cCallPresets.BlackOrange;
+	if (BlackSky) return cCallPresets.BlackSky;
+	return undefined;
+}
+
+function BuildCssUrl(pValue?: string) {
+	return pValue ? `url("${pValue}")` : "none";
+}
+
+function GetLayoutClass(pValue: "right" | "left" | "top" | "bottom") {
+	if (pValue === "left") return "isIconLeft";
+	if (pValue === "top") return "isIconTop";
+	if (pValue === "bottom") return "isIconBottom";
+	return "isIconRight";
+}
+
+function GetStyleText(pStyle: Props["style"]) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+
+	return Object.entries(pStyle)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<a
+	class = {`CallBtn ${cLayoutClass} ${cHasIcon ? "hasIcon" : "noIcon"} ${cPlace.Class} ${pClass}`.trim()}
+	style = {cPlace.Style}
+	id={pId}
+	href={cCallPhoneHref}
+	data-call-btn="true"
+	{...cAttrs}
+>
+
+	{ cHasIcon && (
+
+		<span class = " BtnIcon " />
+	) }
+
+	{ cText && (
+
+		<span class = " BtnText BtnTextNormal ">
+			{cText}
+		</span>
+	) }
+
+	<span class = " BtnText BtnTextPhone ">
+		{cCallPhoneText}
+	</span>
+
+
+
+
+
+
+
+</a>
+
+<span
+	class = " CallQrOverlay "
+	data-call-overlay="true"
+	popover="manual"
+>
+
+
+
+
+
+
+
+	<span class = " CallQrBox ">
+
+		<button
+			class = " CallQrClose "
+			type="button"
+			data-call-close="true"
+		>
+
+			إغلاق
+
+		</button>
+
+		<span class = " CallQrTitle ">
+			امسح الكود، ثم اضغط زر الاتصال من هاتفك
+		</span>
+
+		<img
+			class = " CallQrImg "
+			src={cCallQrImg}
+			alt="QR Code للاتصال بالمجموعة الهندسية"
+			loading="lazy"
+			decoding="async"
+		/>
+
+		<span class = " CallQrPhone ">
+			{cCallPhoneText}
+		</span>
+
+	</span>
+
+
+
+
+
+
+
+</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.CallBtn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: var(--Width);
+		height: var(--Height);
+		min-height: var(--Height);
+		border-radius: var(--Radius);
+		background-color: var(--BgClr);
+		background-image: var(--BgImg);
+		background-repeat: no-repeat;
+		font-family: inherit;
+		cursor: pointer;
+		position: relative;
+		appearance: none;
+		border: 0;
+		text-decoration: none;
+		box-sizing: border-box;
+		transition: background-color 0.1s ease,
+			border-color 0.1s ease,
+			box-shadow 0.1s ease,
+			color 0.1s ease,
+			transform 0.1s ease;
+	}
+
+	.CallBtn:hover {
+		background-color: var(--BgClr-hover);
+		background-image: var(--BgImg-hover);
+		color: var(--TitleCrl-hover);
+	}
+
+	.CallBtn:active {
+		background-color: var(--BgClr-active);
+		background-image: var(--BgImg-active);
+		color: var(--TitleCrl-active);
+		transform: scale(0.985);
+	}
+
+	.CallBtn:hover .BtnIcon {
+		background-image: var(--btn-icon-hover);
+	}
+
+	.CallBtn:active .BtnIcon {
+		background-image: var(--btn-icon-active);
+	}
+
+
+	.BtnIcon {
+		flex: 0 0 auto;
+		width: var(--btn-icon-size);
+		height: var(--btn-icon-size);
+		background-image: var(--IconNormal);
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
+
+
+	.BtnText {
+		display: block;
+		line-height: 1.2;
+		white-space: nowrap;
+		color: var(--TitleCrl);
+		font-size: var(--TitleSize);
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+
+	.BtnTextPhone {
+		display: none;
+		direction: ltr;
+	}
+
+
+	.CallQrOverlay {
+		position: fixed;
+		inset: 0;
+		z-index: 2147483647;
+		width: 100vw;
+		height: 100dvh;
+		max-width: none;
+		max-height: none;
+		margin: 0;
+		padding: 20px;
+		border: 0;
+		background-color: rgba(0, 0, 0, 0.65);
+		box-sizing: border-box;
+		align-items: center;
+		justify-content: center;
+		overflow: auto;
+		overscroll-behavior: contain;
+	}
+
+	.CallQrOverlay:popover-open {
+		display: flex;
+	}
+
+	.CallQrOverlay:not(:popover-open) {
+		display: none;
+	}
+
+	.CallQrOverlay::backdrop {
+		background: transparent;
+	}
+
+
+	.CallQrBox {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: min(450px, 100%);
+		padding: 22px;
+		border-radius: 18px;
+		background-color: #ffffff;
+		box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+		text-align: center;
+		direction: rtl;
+		box-sizing: border-box;
+	}
+
+
+	.CallQrClose {
+		align-self: flex-start;
+		border: 0;
+		border-radius: 999px;
+		padding: 7px 14px;
+		background-color: #222222;
+		color: #ffffff;
+		font-family: inherit;
+		font-size: 14px;
+		font-weight: 700;
+		cursor: pointer;
+	}
+
+
+	.CallQrTitle {
+		margin-top: 14px;
+		color: #222222;
+		font-size: 19px;
+		font-weight: 800;
+		line-height: 1.45;
+	}
+
+
+	.CallQrImg {
+		display: block;
+		width: 260px;
+		max-width: 100%;
+		height: auto;
+		margin-top: 18px;
+		border-radius: 12px;
+	}
+
+
+	.CallQrPhone {
+		margin-top: 14px;
+		color: #111111;
+		font-size: 21px;
+		font-weight: 900;
+		direction: ltr;
+	}
+
+
+
+	.CallBtn.IsPlaced {
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+		min-height: var(--PlaceHeightL);
+	}
+
+
+	.CallBtn.isIconLeft {
+		flex-direction: row-reverse;
+	}
+
+
+	.CallBtn.isIconTop {
+		flex-direction: column;
+	}
+
+
+	.CallBtn.isIconBottom {
+		flex-direction: column-reverse;
+	}
+
+
+
+	.CallBtn.hasIcon.isIconRight .BtnIcon {
+		right: 20px;
+	}
+
+	.CallBtn.hasIcon.isIconRight .BtnText {
+		margin-right: calc(15px + var(--btn-icon-size) + 8px);
+		padding-left: 15px;
+	}
+
+
+	.CallBtn.hasIcon.isIconLeft .BtnIcon {
+		left: 20px;
+	}
+
+	.CallBtn.hasIcon.isIconLeft .BtnText {
+		padding-left: calc(15px + var(--btn-icon-size) + 8px);
+		padding-right: 15px;
+	}
+
+
+
+	.CallBtn.hasIcon.isIconRight .BtnIcon,
+	.CallBtn.hasIcon.isIconLeft .BtnIcon
+	{
+		position: absolute;
+	}
+
+
+	.CallBtn.hasIcon.isIconTop,
+	.CallBtn.hasIcon.isIconBottom
+	{
+		gap: 5px;
+	}
+
+
+	.CallBtn.hasIcon.isIconTop .BtnText,
+	.CallBtn.hasIcon.isIconBottom .BtnText
+	{
+		padding: 0;
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	@media (hover: hover) and (pointer: fine) {
+		.CallBtn:hover .BtnTextNormal {
+			display: none;
+		}
+
+		.CallBtn:hover .BtnTextPhone {
+			display: block;
+		}
+	}
+
+
+
+	@media (orientation: portrait) {
+		.CallBtn.IsPlaced {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+			min-height: var(--PlaceHeightP);
+		}
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+	const cCallButtons = document.querySelectorAll<HTMLElement>("[data-call-btn='true']");
+
+	cCallButtons.forEach(SetupCallButton);
+
+	window.addEventListener("keydown", HandleWindowKeyDown);
+
+	function SetupCallButton(pButton: HTMLElement): void {
+	const cOverlay = pButton.nextElementSibling;
+
+	if (!(cOverlay instanceof HTMLElement)) return;
+	if (cOverlay.dataset.callOverlay !== "true") return;
+	if (pButton.dataset.callReady === "true") return;
+
+	pButton.dataset.callReady = "true";
+
+	pButton.addEventListener("click", function HandleCallButtonClick(pEvent: MouseEvent): void {
+	if (IsMobileDevice()) return;
+
+	pEvent.preventDefault();
+	ShowCallOverlay(cOverlay);
+	});
+
+	cOverlay.addEventListener("click", function HandleCallOverlayClick(pEvent: MouseEvent): void {
+	const cTarget = pEvent.target;
+
+	if (!(cTarget instanceof Element)) return;
+
+	if (cTarget === cOverlay || cTarget.closest("[data-call-close='true']")) {
+	HideCallOverlay(cOverlay);
+	}
+	});
+	}
+
+	function HandleWindowKeyDown(pEvent: KeyboardEvent): void {
+	if (pEvent.key !== "Escape") return;
+
+	document
+	.querySelectorAll<HTMLElement>("[data-call-overlay='true']:popover-open")
+	.forEach(HideCallOverlay);
+	}
+
+	type PopoverElement = HTMLElement & {
+	showPopover?: () => void;
+	hidePopover?: () => void;
+	};
+
+	function ShowCallOverlay(pOverlay: HTMLElement): void {
+	const cOverlay = pOverlay as PopoverElement;
+
+	if (typeof cOverlay.showPopover !== "function") {
+	cOverlay.style.display = "flex";
+	return;
+	}
+
+	if (cOverlay.matches(":popover-open")) return;
+
+	cOverlay.showPopover();
+	}
+
+	function HideCallOverlay(pOverlay: HTMLElement): void {
+	const cOverlay = pOverlay as PopoverElement;
+
+	if (typeof cOverlay.hidePopover !== "function") {
+	cOverlay.style.display = "none";
+	return;
+	}
+
+	if (!cOverlay.matches(":popover-open")) return;
+
+	cOverlay.hidePopover();
+	}
+
+	function IsMobileDevice(): boolean {
+	const cNavigator = navigator as Navigator & {
+	userAgentData?: {
+	mobile?: boolean;
+	};
+	};
+
+	const cUserAgent = navigator.userAgent || "";
+	const cByUserAgentData = cNavigator.userAgentData?.mobile === true;
+	const cByUserAgent = /Android|iPhone|iPad|iPod|IEMobile|Opera Mini|Mobile/i.test(cUserAgent);
+
+	return cByUserAgentData || cByUserAgent;
+	}
+</script>

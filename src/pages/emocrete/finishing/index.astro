@@ -1,0 +1,462 @@
+---
+import BLayout from "@/Layout.astro";
+import { Text, Topic, ElemBg, EmoMediaData, Colors, RespString, Size, Align } from "@/TypesLib";
+import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, DataCard, CardsGr, EmoContactStrip, EmoList, Emograph, SecTitle, VrStack, HzStack } from "@/Widgets";
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<BLayout
+	pSchemaType="CollectionPage"
+	pTitle="خدمات التشطيبات"
+	pDescr="خدمات تشطيب الشقق والفلل والمحلات والصيدليات من خلال إدارة هندسية منظمة تبدأ من المعاينة والمقايسة واختيار مستوى التشطيب وتنتهي بالتسليم النهائي."
+>
+
+	<Hero
+		pTitle="خدمات التشطيبات"
+		pTitleClr="#ffffff"
+		pDesc="مدخل واحد لاختيار خدمة التشطيب المناسبة حسب نوع المشروع: شقة، فيلا، محل تجاري أو صيدلية"
+		pDescClr="#ffffff"
+		pAlign="right"
+		pPosL="34% 46% 12% 6%"
+		pPosP="46% 8% 8% 8%"
+		pBlurL="on"
+		pBlurP="on"
+	>
+
+		<HzStack>
+
+			<EmoBtn
+				pText="اختيار نوع التشطيب"
+				pWidth="230px"
+				pHeight="50px"
+				pRadius="14px"
+				pBgColor="#f7ca34"
+				pBgColorHover="#ffffff"
+				pBgColorActive="#b8d85e"
+				pTextColor="#111111"
+				pFontSize="17px"
+				onclick="location.href='#finishing-branches'"
+			/>
+
+			<EmoBtn
+				pText="طريقة حساب التكلفة"
+				pWidth="230px"
+				pHeight="50px"
+				pRadius="14px"
+				pBgColor="#17345C"
+				pBgColorHover="#ffffff"
+				pBgColorActive="#f7ca34"
+				pTextColor="#ffffff"
+				pTextColorHover="#17345C"
+				pFontSize="17px"
+				onclick="location.href='#cost-logic'"
+			/>
+
+		</HzStack>
+
+	</Hero>
+
+	<IndexSec
+		pMedia={new EmoMediaData("Vid", "/Media/", "IndexBgVid.mp4")}
+		pTitleClr="white"
+		pBlurL="on"
+		pBlurP="on"
+	>
+
+		<VrStack>
+
+			<EmoBtn
+				pText="خدمات التشطيب حسب نوع المشروع"
+				pBgImg="/Media/IndexBtn.webp"
+				pTextColor="white"
+				pTextColorHover={Colors.OrangeDark}
+				pWidth="370px"
+				pHeight="44px"
+				onclick="location.href='#finishing-branches'"
+			/>
+
+			<EmoBtn
+				pText="كيف تختلف المقايسة من حالة لأخرى"
+				pBgImg="/Media/IndexBtn.webp"
+				pTextColor="white"
+				pTextColorHover={Colors.OrangeDark}
+				pWidth="370px"
+				pHeight="44px"
+				onclick="location.href='#scope-difference'"
+			/>
+
+			<EmoBtn
+				pText="خطوات تنفيذ خدمة التشطيب"
+				pBgImg="/Media/IndexBtn.webp"
+				pTextColor="white"
+				pTextColorHover={Colors.OrangeDark}
+				pWidth="370px"
+				pHeight="44px"
+				onclick="location.href='#work-steps'"
+			/>
+
+			<EmoBtn
+				pText="صفحات تكلفة التشطيب"
+				pBgImg="/Media/IndexBtn.webp"
+				pTextColor="white"
+				pTextColorHover={Colors.OrangeDark}
+				pWidth="370px"
+				pHeight="44px"
+				onclick="location.href='#cost-pages'"
+			/>
+
+		</VrStack>
+
+	</IndexSec>
+
+	<ESec
+		pBg={new ElemBg("#FFFDF8")}
+		pAlign={Align.Center}
+	>
+		<SecTitle
+			pTitle="صفحة عامة لتوجيه العميل إلى خدمة التشطيب المناسبة"
+			pDesc="ليست كل خدمات التشطيب تبدأ من نفس النقطة، وليست كل المقايسات يتم حسابها بنفس الطريقة"
+			style="--StripBg:#F6F1E8;"
+		/>
+
+		<EmoStrip pBg={new ElemBg("#FFFDF8")} pAlign={Align.Center}>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#17345C").OfText("التشطيب خدمة واحدة في الاسم، لكنها أربع خدمات مختلفة في الواقع")}
+				pText={Text.Body.WithColor("#333333").OfText("الغرض من هذه الصفحة هو توزيع الزائر على المسار الصحيح قبل الدخول في تفاصيل فرعية. تشطيب الشقة السكنية يركز على استغلال المساحة والميزانية اليومية للأسرة. تشطيب الفيلا يضيف طبقات أكبر من الواجهات واللاندسكيب والمداخل والأنظمة. تشطيب المحل التجاري يرتبط بالهوية البصرية وتجربة العميل ومتطلبات النشاط. أما تشطيب الصيدلية فيحتاج قراءة مختلفة بسبب اشتراطات النشاط الطبي، حركة الجمهور، مناطق التخزين، وأسلوب عرض الدواء والمنتجات.")}
+				pSize={new Size(980, "auto", "100%", "auto")}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+	<ESec
+		id="finishing-branches"
+		pBg={new ElemBg("#F6F1E8")}
+		pAlign={Align.Center}
+	>
+		<SecTitle
+			pTitle="اختر نوع مشروع التشطيب"
+			pDesc="كل صفحة فرعية مصممة لتشرح طبيعة المشروع، بنوده، طريقة حسابه، والمشاكل المتوقعة فيه"
+			style="--StripBg:#17345C;"
+		/>
+
+		<EmoStrip pBg={new ElemBg("#F6F1E8")} pAlign={Align.Center}>
+
+			<HzStack>
+
+				<DataCard
+					TitleTag="h3"
+					pTitle="تشطيب شقق"
+					pBody="المسار المناسب للشقق السكنية من الاستلام على الطوب الأحمر أو نصف تشطيب إلى التسليم النهائي. التركيز هنا على توزيع الميزانية بين الكهرباء والسباكة والمحارة والجبس والأرضيات والدهانات والنجارة، مع ضبط الاختيارات حتى لا تتحول التكلفة إلى أرقام مفتوحة."
+					pLink="/emocrete/finishing/apartment"
+				/>
+
+				<DataCard
+					TitleTag="h3"
+					pTitle="تشطيب فلل"
+					pBody="المسار المناسب للفلل والدوبلكسات والمنازل الكبيرة، حيث لا يكون التشطيب الداخلي وحده كافيا. يتم التعامل مع الواجهات، المداخل، السلالم، اللاندسكيب، الأسوار، الإنارة الخارجية، وأحيانا أنظمة ذكية أو أعمال ميكانيكا وكهرباء أوسع."
+					pLink="/emocrete/finishing/villa"
+				/>
+
+				<DataCard
+					TitleTag="h3"
+					pTitle="تشطيب محلات"
+					pBody="المسار المناسب للأنشطة التجارية التي تحتاج تشطيب يخدم البيع وليس الشكل فقط. التصميم والتنفيذ هنا يدوران حول الواجهة، حركة العميل، الإضاءة، أماكن العرض، سهولة التشغيل، وتحقيق صورة تجارية واضحة بتكلفة محسوبة."
+					pLink="/emocrete/finishing/retail"
+				/>
+
+				<DataCard
+					TitleTag="h3"
+					pTitle="تشطيب صيدليات"
+					pBody="المسار المناسب للصيدليات ومنافذ النشاط الطبي، وفيه يتم التعامل مع التشطيب كجزء من ملف تشغيل مهني منظم: مناطق بيع، كاونتر، تخزين، تهوية، إضاءة، خامات سهلة التنظيف، وواجهة تعطي ثقة ووضوح للعميل."
+					pLink="/emocrete/finishing/pharmacy"
+				/>
+
+			</HzStack>
+
+		</EmoStrip>
+
+	</ESec>
+
+	<ESec
+		id="scope-difference"
+		pBg={new ElemBg("#ffffff")}
+		pAlign={Align.Center}
+	>
+		<SecTitle
+			pTitle="كيف تختلف المقايسة حسب نوع التشطيب؟"
+			pDesc="نفس البند قد يحمل معنى مختلفا تماما من شقة إلى فيلا أو محل أو صيدلية"
+			style="--StripBg:#FFFDF8;"
+		/>
+
+		<EmoStrip pBg={new ElemBg("#ffffff")} pAlign={Align.Center}>
+
+			<HzStack>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#17345C").OfText("الشقق")}
+					pText={Text.Body.WithColor("#333333").OfText("حساب الشقة يبدأ غالبا من المساحة الداخلية الصافية، ثم حالة الاستلام، وعدد الحمامات، ونوع الأرضيات، ومستوى الجبس والدهانات، ونطاق أعمال المطبخ والنجارة. الهدف الأساسي هو تسليم وحدة عملية ومريحة بدون هدر في بنود لا تضيف قيمة حقيقية للسكن.")}
+					pSize={new Size(520, "auto", "100%", "auto")}
+				/>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#17345C").OfText("الفلل")}
+					pText={Text.Body.WithColor("#333333").OfText("حساب الفيلا لا يعتمد على المساحة الداخلية فقط، لأن هناك بنودا خارجية ومناطق انتقالية كثيرة: واجهات، تراسات، سلالم، أسوار، مداخل، حدائق، غرف خدمات، وأحيانا حمامات سباحة أو أنظمة ري وإنارة خارجية. لذلك تحتاج الفيلا مقايسة مقسمة على مناطق لا على رقم إجمالي مبهم.")}
+					pSize={new Size(520, "auto", "100%", "auto")}
+				/>
+
+			</HzStack>
+
+			<HzStack>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#17345C").OfText("المحلات")}
+					pText={Text.Body.WithColor("#333333").OfText("في المحلات التجارية لا يكفي أن تكون الخامات جيدة؛ المهم أن تخدم طريقة البيع. يتم حساب الواجهة، اللافتة، الإضاءة، أماكن العرض، مسار العميل، التشطيبات المقاومة للاستخدام الكثيف، ونقاط الكهرباء والإنترنت والكاميرات بطريقة مرتبطة بالنشاط التجاري نفسه.")}
+					pSize={new Size(520, "auto", "100%", "auto")}
+				/>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#17345C").OfText("الصيدليات")}
+					pText={Text.Body.WithColor("#333333").OfText("تشطيب الصيدلية يجمع بين الشكل التجاري والانضباط الوظيفي. يتم الاهتمام بمناطق عرض الدواء والمنتجات، الكاونتر، التخزين، الإضاءة البيضاء الواضحة، سهولة الحركة، النظافة البصرية، وأي تجهيزات خاصة يحتاجها النشاط قبل التشغيل.")}
+					pSize={new Size(520, "auto", "100%", "auto")}
+				/>
+
+			</HzStack>
+
+		</EmoStrip>
+
+	</ESec>
+
+	<ESec
+		id="cost-logic"
+		pBg={new ElemBg("#F6F1E8")}
+		pAlign={Align.Center}
+	>
+		<SecTitle
+			pTitle="من أين يبدأ حساب تكلفة التشطيب؟"
+			pDesc="السعر المحترم لا يبدأ من رقم متر عشوائي، لكنه يبدأ من تفكيك المشروع إلى بنود قابلة للقياس"
+			style="--StripBg:#B78A25;"
+		/>
+
+		<EmoStrip pBg={new ElemBg("#F6F1E8")} pAlign={Align.Center}>
+
+			<CardsGr
+				pWidth={new RespString("min(1120px, 100%)", "100%")}
+				pGrTitle={Text.H3.Centered.WithColor("#17345C").OfText("أربع مفاتيح أساسية قبل أي رقم")}
+				pCardTitleFnt={Text.H4.WithColor("#17345C")}
+				pCardBodyFnt={Text.Body.WithColor("#333333")}
+				pCardBg={new ElemBg("#ffffff")}
+				pCardRadius={18 as any}
+				pSpacing={24}
+				pTopic1={new Topic("حالة الاستلام", "هل الوحدة على الطوب الأحمر، نصف تشطيب، تشطيب قديم يحتاج تكسير، أم جاهزة لتجديد محدود؟ حالة الاستلام تغير حجم أعمال الكهرباء والسباكة والمحارة والعزل وتؤثر مباشرة على مدة التنفيذ.")}
+				pTopic2={new Topic("مستوى الخامات", "نفس البند يمكن تنفيذه بأكثر من مستوى. السيراميك، البورسلين، الدهانات، الإضاءة، الأبواب، الأدوات الصحية، والرخام كلها تحتاج تصنيف واضح حتى لا يختلط الاقتصادي بالمتوسط بالفندقي.")}
+				pTopic3={new Topic("نطاق الأعمال", "هل المطلوب تشطيب كامل، تصميم وتنفيذ، إشراف فقط، توريد وتركيب، تجديد جزئي، أم معالجة مشاكل قائمة؟ كل نطاق له طريقة تسعير والتزام مختلف.")}
+				pTopic4={new Topic("طبيعة الاستخدام", "السكن اليومي لا يشبه الاستخدام التجاري، والفيلا لا تشبه الصيدلية. ضغط الاستخدام وعدد الزوار ومتطلبات التشغيل تحدد نوع الخامات والتفاصيل الفنية المطلوبة.")}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+	<ESec
+		id="work-steps"
+		pBg={new ElemBg("#ffffff")}
+		pAlign={Align.Center}
+	>
+		<SecTitle
+			pTitle="مسار العمل في خدمة التشطيب"
+			pDesc="الهدف أن يعرف العميل أين يبدأ المشروع، ومتى يتم تثبيت التكلفة، وكيف يتم التسليم"
+			style="--StripBg:#FFFDF8;"
+		/>
+
+		<VrStack>
+
+			<EmoList
+				pWidth={new RespString("min(1080px, 100%)", "100%") as any}
+				pTitle={Text.H3.WithAlign("right").WithColor("#17345C").OfText("خطوات منظمة من المعاينة إلى التسليم")}
+				pDesc={Text.Body.WithAlign("right").WithColor("#333333").OfText("يتم التعامل مع التشطيب كمشروع له نطاق وتكلفة وجدول، وليس كمجموعة مشتريات وقرارات متفرقة أثناء التنفيذ.")}
+				pItems={[
+					{
+						Title: "المعاينة وفهم الحالة",
+						Items: [
+							"تحديد حالة الوحدة أو المكان عند الاستلام، ورصد العيوب الظاهرة أو التعارضات المحتملة.",
+							"تحديد نوع الخدمة المناسبة: تشطيب كامل، تجديد، تصميم وتنفيذ، أو إشراف على مقاولين.",
+						],
+					},
+					{
+						Title: "تحديد مستوى التشطيب",
+						Items: [
+							"اختيار مستوى خامات مناسب للميزانية وطبيعة الاستخدام.",
+							"فصل البنود الأساسية عن البنود الجمالية حتى يكون القرار المالي واضحا.",
+						],
+					},
+					{
+						Title: "إعداد تصور ومقايسة",
+						Items: [
+							"تحويل الكلام العام إلى بنود قابلة للقياس مثل الكهرباء والسباكة والعزل والجبس والأرضيات والدهانات.",
+							"توضيح ما يدخل في السعر وما يحتاج اختيارا لاحقا أو تسعيرا منفصلا.",
+						],
+					},
+					{
+						Title: "التنفيذ والمتابعة",
+						Items: [
+							"تنظيم ترتيب المراحل حتى لا يحدث تعارض بين البنود أو تكسير بعد التركيب.",
+							"استلام الأعمال فنيا قبل الانتقال من مرحلة إلى المرحلة التالية.",
+						],
+					},
+					{
+						Title: "التسليم النهائي",
+						Items: [
+							"مراجعة الملاحظات النهائية والتشغيل التجريبي للنقاط الأساسية.",
+							"تسليم العميل صورة واضحة لما تم تنفيذه وما يحتاج صيانة دورية لاحقا.",
+						],
+					},
+				]}
+				pNumbered={true}
+				pItemFnt={Text.Body.WithColor("#222222")}
+				pHeadBg={new ElemBg("#F6F1E8")}
+				pItemsBg={new ElemBg("#ffffff")}
+			/>
+
+		</VrStack>
+
+	</ESec>
+
+	<ESec
+		id="cost-pages"
+		pBg={new ElemBg("#FFFDF8")}
+		pAlign={Align.Center}
+	>
+		<SecTitle
+			pTitle="صفحات تفصيلية لتكلفة التشطيب"
+			pDesc="بعد اختيار نوع المشروع، انتقل للصفحة المتخصصة لفهم البنود والأرقام التقريبية بطريقة أوضح"
+			style="--StripBg:#17345C;"
+		/>
+
+		<EmoStrip pBg={new ElemBg("#FFFDF8")} pAlign={Align.Center}>
+
+			<HzStack>
+
+				<DataCard
+					TitleTag="h3"
+					pTitle="تكلفة تشطيب شقة"
+					pBody="صفحة مخصصة لتفكيك تكلفة تشطيب الشقق إلى بنود عملية، مع توضيح أثر المساحة ومستوى الخامات وحالة الاستلام على الرقم النهائي."
+					pLink="/emocrete/finishing/apartment/cost"
+				/>
+
+				<DataCard
+					TitleTag="h3"
+					pTitle="تكلفة تشطيب فيلا"
+					pBody="صفحة مخصصة لتوضيح بنود تكلفة تشطيب الفيلا من الطوب الأحمر حتى التسليم، مع فصل الداخلي عن الخارجي والواجهات واللاندسكيب والتجهيزات الخاصة."
+					pLink="/emocrete/finishing/villa/cost"
+				/>
+
+				<DataCard
+					TitleTag="h3"
+					pTitle="تكلفة تشطيب محل"
+					pBody="تكلفة المحل ترتبط بالنشاط التجاري ومساحة الواجهة وطريقة العرض والإضاءة وتجهيزات التشغيل، لذلك تبدأ من تحديد النشاط قبل تثبيت البنود."
+					pLink="/emocrete/finishing/retail"
+				/>
+
+				<DataCard
+					TitleTag="h3"
+					pTitle="تكلفة تشطيب صيدلية"
+					pBody="تكلفة الصيدلية تحتاج قراءة تجمع بين التشطيب التجاري والاشتراطات المهنية، مع ضبط الواجهة والكاونتر والتخزين والإضاءة ومناطق الخدمة."
+					pLink="/emocrete/finishing/pharmacy"
+				/>
+
+			</HzStack>
+
+		</EmoStrip>
+
+	</ESec>
+
+	<ESec
+		pBg={new ElemBg("#ffffff")}
+		pAlign={Align.Center}
+	>
+		<SecTitle
+			pTitle="هل تحتاج اختيار المسار الأنسب؟"
+			pDesc="ابدأ بتحديد نوع المشروع وحالة الاستلام والميزانية التقريبية، ثم يتم تحويلها إلى نطاق أعمال ومقايسة واضحة"
+			style="--StripBg:#F6F1E8;"
+		/>
+
+		<HzStack>
+
+			<EmoBtn
+				pText="تشطيب شقة"
+				pWidth="210px"
+				pHeight="50px"
+				pRadius="14px"
+				pBgColor="#17345C"
+				pBgColorHover="#f7ca34"
+				pTextColor="#ffffff"
+				pTextColorHover="#111111"
+				pFontSize="17px"
+				onclick="location.href='/emocrete/finishing/apartment'"
+			/>
+
+			<EmoBtn
+				pText="تشطيب فيلا"
+				pWidth="210px"
+				pHeight="50px"
+				pRadius="14px"
+				pBgColor="#17345C"
+				pBgColorHover="#f7ca34"
+				pTextColor="#ffffff"
+				pTextColorHover="#111111"
+				pFontSize="17px"
+				onclick="location.href='/emocrete/finishing/villa'"
+			/>
+
+			<EmoBtn
+				pText="تشطيب محل"
+				pWidth="210px"
+				pHeight="50px"
+				pRadius="14px"
+				pBgColor="#17345C"
+				pBgColorHover="#f7ca34"
+				pTextColor="#ffffff"
+				pTextColorHover="#111111"
+				pFontSize="17px"
+				onclick="location.href='/emocrete/finishing/retail'"
+			/>
+
+			<EmoBtn
+				pText="تشطيب صيدلية"
+				pWidth="210px"
+				pHeight="50px"
+				pRadius="14px"
+				pBgColor="#17345C"
+				pBgColorHover="#f7ca34"
+				pTextColor="#ffffff"
+				pTextColorHover="#111111"
+				pFontSize="17px"
+				onclick="location.href='/emocrete/finishing/pharmacy'"
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+</BLayout>

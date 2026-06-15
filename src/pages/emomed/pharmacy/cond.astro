@@ -1,0 +1,823 @@
+---
+import BLayout from "@/Layout.astro";
+import { Text, Topic, ElemBg, EmoMediaData, Colors, RespString, Pixel, Size, Align } from "@/TypesLib";
+import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, EmoFaq, ReadAlso, RelServices, SecTitle, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<BLayout
+	pSchemaType="Article"
+	pTitle="شروط ترخيص صيدلية"
+	pDescr="شرح شامل لشروط ترخيص صيدلية في مصر، يشمل شروط الصيدلي طالب الترخيص، شروط مقر الصيدلية، المسافة، المساحة، الارتفاع، حدود العين، المعاينة الأولى، المعاينة الثانية، المياه، الكهرباء، التهوية، الحمام، المعمل، وموقف العقار."
+	pSchemaImages={[
+		"/Media/Emomed/Pharmacy/Cond/HeroL.webp",
+		"/Media/Emomed/Pharmacy/Inspection.webp",
+		"/Media/Emomed/Pharmacy/PhRet.webp"
+	]}
+>
+
+
+
+
+
+
+
+	<Hero
+		pImgF="/Media/Emomed/Pharmacy/Cond/"
+		pTitle="شروط ترخيص صيدلية"
+		pDesc="قبل اختيار محل الصيدلية أو توقيع عقد الإيجار، يجب التأكد من شروط الترخيص الأساسية: أهلية الصيدلي، المسافة، المساحة، الارتفاع، حدود العين، صلاحية العقار، والتجهيزات المطلوبة للمعاينة الثانية."
+		pTitleClr={Colors.WhiteOff}
+		pDescClr={Colors.WhiteOff}
+		pAlign="right"
+		pPosL="18% 50% 12% 8%"
+		pPosP="12% 8% 42% 8%"
+		pBlurL="on"
+		pBlurP="on"
+	>
+
+		<EmoCall BlackSky pText="افحص صلاحية الصيدلية" />
+
+	</Hero>
+
+
+
+
+
+
+
+	<ESec
+		id="intro"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.SkyLite};`}
+			pTitle="شروط الصيدلية تبدأ قبل التعاقد على المحل"
+			pDesc="كثير من مشاكل ترخيص الصيدليات تظهر بعد دفع مقدم الإيجار أو تنفيذ التشطيبات. لذلك يجب فحص شروط الترخيص مبكرًا، لأن بعض العيوب لا تعالج باستكمال ورقة أو تعديل بسيط."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<Emograph
+				pSize={new Size(620, "auto", 320, "auto")}
+				pTitle={Text.H3.OfText("لماذا يجب فحص الشروط قبل الملف؟")}
+				pText={Text.Body.OfText("ترخيص الصيدلية ليس موافقة إدارية على اسم النشاط فقط. الملف يمر بفحص الصيدلي، وفحص العين، ومعاينة أولى للشروط الجوهرية، ثم معاينة ثانية للتشطيب والتجهيز. إذا كان المكان غير مطابق في المسافة أو المساحة أو الارتفاع، فالمشكلة تكون في أصل اختيار المقر وليس في نقص مستند.")}
+			/>
+
+			<RespImg
+				pImg={new EmoMediaData(
+					"Img",
+					"/Media/Emomed/Pharmacy/",
+					"Inspection.webp",
+					false,
+					"معاينة شروط ترخيص صيدلية",
+					new Size(420, "auto", 300, "auto")
+				)}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="conditions-map"
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.Gray5};`}
+			pTitle="خريطة شروط ترخيص الصيدلية"
+			pDesc="الشروط لا تقع كلها في مرحلة واحدة. بعضها يخص الصيدلي، وبعضها يخص المقر قبل التجهيز، وبعضها يظهر عند المعاينة الأولى، ثم تأتي اشتراطات التشغيل في المعاينة الثانية."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "100%")}
+			pGrTitle={Text.H3.Centered.OfText("أربع مجموعات يجب مراجعتها")}
+			pCardBg={new ElemBg(Colors.WhiteOff)}
+			pCardTitleFnt={Text.H4}
+			pCardBodyFnt={Text.Body}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("شروط الصيدلي", "ترخيص مزاولة المهنة، الخبرة، القيد النقابي، وعدد الصيدليات التي يملكها أو يشارك فيها طالب الترخيص.")}
+			pTopic2={new Topic("شروط المكان", "المسافة، المساحة، الارتفاع، حدود العين، استقلال الصيدلية، وموقف العقار من الترخيص أو التصالح.")}
+			pTopic3={new Topic("المعاينة الأولى", "الفحص الحاسم لصلاحية المقر قبل التشطيب النهائي، ويشمل المسافة والمساحة والارتفاع وحدود العين.")}
+			pTopic4={new Topic("المعاينة الثانية", "فحص التشطيبات والتجهيزات والمياه والكهرباء والتهوية والحمام والمعمل والصرف ومطابقة الرسم النهائي.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		id="pharmacist-conditions"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg(Colors.BistageLite)}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.OfText("شروط الصيدلي طالب الترخيص")}
+				pText={Text.Body.Centered.OfText("صلاحية المكان وحدها لا تكفي. ترخيص الصيدلية يصدر لصيدلي مستوفٍ للشروط المهنية، لذلك يجب مراجعة موقف طالب الترخيص قبل بدء الملف.")}
+				pSize={new Size(980, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("620px", "100%")}
+				pTitle={Text.H3.OfText("الشروط الأساسية في طالب الترخيص")}
+				pDesc={Text.Body.OfText("هذه البنود تخص الشخص طالب الترخيص، ويجب تجهيز ما يثبتها ضمن الملف.")}
+				pHeadBg={new ElemBg(Colors.SkyLite)}
+				pItemsBg={new ElemBg(Colors.WhiteOff)}
+				pItemFnt={Text.Body}
+				pNumbered={true}
+				pItems={[
+					"أن يكون طالب الترخيص صيدليًا حاصلًا على ترخيص مزاولة المهنة.",
+					"أن تكون له خبرة فعلية لا تقل عن سنة في مؤسسة حكومية أو أهلية.",
+					"ألا يكون مالكًا أو شريكًا في أكثر من صيدليتين.",
+					"أن تكون بياناته النقابية والمهنية قابلة للاستكمال أمام الجهة المختصة.",
+					"أن يكون الترخيص والإدارة الفنية باسم الصيدلي الحقيقي، وليس مجرد استخدام اسم صيدلي لصالح ممول أو شريك غير صيدلي."
+				]}
+			/>
+
+			<CardsGr
+				pWidth={new RespString("500px", "100%")}
+				pGrTitle={Text.H3.Centered.OfText("نقاط يجب الانتباه لها")}
+				pCardBg={new ElemBg(Colors.Gray1)}
+				pCardTitleFnt={Text.H4.Centered}
+				pCardBodyFnt={Text.Body.Centered}
+				pStackDir="Col"
+				pSpacing={15}
+				pTopic1={new Topic("غير الصيدلي", "لا يتعامل ترخيص الصيدلية كترخيص تجاري عادي يصدر لأي مستثمر. يمكن تنظيم المشاركة المالية قانونيًا، لكن الترخيص والإدارة الفنية للصيدلي.")}
+				pTopic2={new Topic("عدد الصيدليات", "إذا كان الصيدلي مالكًا أو شريكًا في الحد الأقصى المسموح به، فقد يصبح الطلب غير مقبول حتى لو كان المكان نفسه مطابقًا.")}
+				pTopic3={new Topic("الخبرة", "يجب مراجعة شرط الخبرة الفعلية قبل الاعتماد على اسم الصيدلي في طلب الترخيص.")}
+			/>
+
+		</HzStack>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec
+		id="place-conditions"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.SkyLite};`}
+			pTitle="شروط مقر الصيدلية قبل التعاقد"
+			pDesc="المكان التجاري الناجح لا يعني بالضرورة أنه يصلح للترخيص كصيدلية. يجب فحص العين هندسيًا وقانونيًا قبل الإيجار أو الشراء."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "100%")}
+			pGrTitle={Text.H3.Centered.OfText("أسئلة المقر الحاسمة")}
+			pCardBg={new ElemBg(Colors.Gray1)}
+			pCardTitleFnt={Text.H4}
+			pCardBodyFnt={Text.Body}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("هل المسافة مطابقة؟", "يجب ألا تقل المسافة إلى أقرب صيدلية مرخصة عن 100 متر وفق طريقة القياس المتبعة في المعاينة.")}
+			pTopic2={new Topic("هل المساحة صافية؟", "المطلوب 25 مترًا مربعًا كمساحة صافية داخلية، وليس مجرد رقم مكتوب في عقد الإيجار.")}
+			pTopic3={new Topic("هل الارتفاع كافٍ؟", "يجب مراجعة الارتفاع الصافي بعد التشطيب والسقف المستعار، وليس الارتفاع قبل التنفيذ فقط.")}
+			pTopic4={new Topic("هل العين مستقلة؟", "يجب أن تكون الصيدلية محددة الحدود وغير مفتوحة على وحدة سكنية أو محل آخر أو مدخل عقار بصورة مخالفة.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="distance-condition"
+		pBg={new ElemBg(Colors.SkyLite)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.Gray5};`}
+			pTitle="شرط المسافة بين الصيدليات"
+			pDesc="شرط المسافة هو أكثر شرط يسبب خسائر عملية، لأنه مرتبط بالموقع نفسه، ولا يمكن علاجه عادة بعد التعاقد على المحل."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<Emograph
+				pSize={new Size(520, "auto", 320, "auto")}
+				pTitle={Text.H3.OfText("المسافة لا تقاس بالنظر")}
+				pText={Text.Body.OfText("يجب فحص أقرب صيدلية مرخصة من كل الاتجاهات، وليس من نفس الشارع فقط. الصيدلية الأقرب قد تكون في شارع جانبي أو شارع موازٍ أو في الجهة المقابلة. لذلك لا يكفي تقدير المسافة بالعين أو الاعتماد على خريطة الهاتف وحدها.")}
+			/>
+
+			<EmoList
+				pWidth={new RespString("580px", "100%")}
+				pTitle={Text.H3.OfText("ما الذي يراجع في شرط المسافة؟")}
+				pDesc={Text.Body.OfText("يجب توثيق قراءة المسافة قبل دفع مقدم أو تجهيز ملف الترخيص.")}
+				pHeadBg={new ElemBg(Colors.BistageLite)}
+				pItemsBg={new ElemBg(Colors.WhiteOff)}
+				pItemFnt={Text.Body}
+				pNumbered={true}
+				pItems={[
+					"تحديد أقرب الصيدليات المرخصة من جميع الاتجاهات المحيطة.",
+					"قياس المسار العملي للمشاة من باب الصيدلية إلى باب أقرب صيدلية.",
+					"مراجعة التقاطعات والشوارع الجانبية والشوارع الموازية.",
+					"توضيح المسار داخل كروكي الموقع أو الرسم الهندسي عند الحاجة.",
+					"تجنب التعاقد على محل قبل حسم شرط المسافة."
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		id="area-height"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg(Colors.BistageLite)}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.OfText("المساحة والارتفاع في ترخيص الصيدلية")}
+				pText={Text.Body.Centered.OfText("المساحة والارتفاع يتم فحصهما على الطبيعة، لذلك يجب الاعتماد على رفع مقاسات هندسي وليس على وصف المالك أو بيانات العقد فقط.")}
+				pSize={new Size(980, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "100%")}
+				pTitle={Text.H3.OfText("شرط المساحة الصافية")}
+				pDesc={Text.Body.OfText("أقل مساحة مطلوبة لترخيص الصيدلية 25 مترًا مربعًا كمساحة صافية داخلية.")}
+				pHeadBg={new ElemBg(Colors.SkyLite)}
+				pItemsBg={new ElemBg(Colors.Gray1)}
+				pItemFnt={Text.Body}
+				pNumbered={true}
+				pItems={[
+					"المساحة المعتمدة هي المساحة الصافية القابلة للاستخدام داخل حدود الصيدلية.",
+					"لا يتم الاعتماد على المساحة المكتوبة في عقد الإيجار وحدها.",
+					"يجب مراعاة تأثير الأعمدة والحوائط والبروزات وفروق المناسيب.",
+					"الحمام أو المعمل إذا وجدا داخل حدود الصيدلية يجب أن يظهرا في الرسم.",
+					"يجب أن تكون الأبعاد والمساحة واضحة في الرسم الهندسي المقدم."
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "100%")}
+				pTitle={Text.H3.OfText("شرط الارتفاع الصافي")}
+				pDesc={Text.Body.OfText("أقل ارتفاع صالح لترخيص الصيدلية 2.60 متر، ويجب حسابه بعد أي تشطيبات مؤثرة.")}
+				pHeadBg={new ElemBg(Colors.SkyLite)}
+				pItemsBg={new ElemBg(Colors.Gray1)}
+				pItemFnt={Text.Body}
+				pNumbered={true}
+				pItems={[
+					"يقاس الارتفاع من منسوب تشطيب الأرضية إلى باطن السقف المؤثر.",
+					"السقف المستعار قد يقلل الارتفاع المقبول في المعاينة.",
+					"رفع الأرضية أو تركيب دكتات تكييف قد يؤثر في نقاط محددة من الفراغ.",
+					"يجب حساب الارتفاع قبل تنفيذ الديكورات النهائية.",
+					"في حالة وجود أكثر من مستوى يجب مراجعة كل مستوى على حدة."
+				]}
+			/>
+
+		</HzStack>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec
+		id="independent-unit"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.SkyLite};`}
+			pTitle="حدود العين واستقلال الصيدلية"
+			pDesc="الصيدلية يجب أن تكون عينًا واضحة مستقلة، وليست جزءًا مفتوحًا من محل أكبر أو وحدة متصلة بنشاط آخر."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<RespImg
+				pImg={new EmoMediaData(
+					"Img",
+					"/Media/Emomed/Pharmacy/",
+					"PhRet.webp",
+					false,
+					"استقلال مقر الصيدلية",
+					new Size(440, "auto", 300, "auto")
+				)}
+			/>
+
+			<EmoList
+				pWidth={new RespString("620px", "100%")}
+				pTitle={Text.H3.OfText("متى تكون العين غير مناسبة؟")}
+				pDesc={Text.Body.OfText("هذه الحالات يجب علاجها قبل المعاينة، أو تجنب المكان إذا كان العلاج غير ممكن.")}
+				pHeadBg={new ElemBg(Colors.BistageLite)}
+				pItemsBg={new ElemBg(Colors.Gray1)}
+				pItemFnt={Text.Body}
+				pNumbered={true}
+				pItems={[
+					"إذا كانت الصيدلية مفتوحة على وحدة سكنية أو محل آخر.",
+					"إذا كان الدخول أو التشغيل مرتبطًا بمدخل عقار بصورة مخالفة.",
+					"إذا لم تكن حدود العين واضحة بحوائط وسقف وفتحة دخول.",
+					"إذا كان الحمام أو المعمل تابعًا لوحدة أخرى خارج حدود الصيدلية.",
+					"إذا كانت العين جزءًا من مساحة أكبر لم يتم فصلها فعليًا."
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="two-floors"
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.Gray5};`}
+			pTitle="ترخيص صيدلية على دورين أو بميزانين"
+			pDesc="وجود ميزانين أو صندرة أو دور علوي لا يعني قبوله تلقائيًا ضمن الصيدلية. يجب فحص المساحة والارتفاع والاتصال الداخلي والاستقلال."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "100%")}
+			pGrTitle={Text.H3.Centered.OfText("نقاط فحص الصيدلية متعددة المستويات")}
+			pCardBg={new ElemBg(Colors.WhiteOff)}
+			pCardTitleFnt={Text.H4}
+			pCardBodyFnt={Text.Body}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("الدور الأرضي", "يجب مراجعة مساحة الدور الأرضي وحدوده، لأنه هو أساس التعامل مع الصيدلية ومدخلها وتشغيلها.")}
+			pTopic2={new Topic("السلم الداخلي", "الاتصال بين المستويات يجب أن يكون داخليًا ضمن حدود الصيدلية، وليس من خلال مدخل خارجي أو وحدة أخرى.")}
+			pTopic3={new Topic("الارتفاع", "كل مستوى مستخدم يجب أن يراجع من حيث الارتفاع الصافي، خصوصًا تحت الميزانين أو الصندرة.")}
+			pTopic4={new Topic("الاستقلال", "لا يصح أن يتصل أي مستوى بنشاط آخر أو مسكن أو مساحة غير داخلة في الترخيص.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		id="first-inspection"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg(Colors.BistageLite)}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.OfText("شروط المعاينة الأولى للصيدلية")}
+				pText={Text.Body.Centered.OfText("المعاينة الأولى تفحص صلاحية المقر مبدئيًا. هذه المرحلة تحسم أغلب المخاطر التي لا يمكن إصلاحها بسهولة بعد اختيار المكان.")}
+				pSize={new Size(1000, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<EmoList
+			pWidth={new RespString("1000px", "100%")}
+			pTitle={Text.H3.Centered.OfText("ما الذي تفحصه المعاينة الأولى؟")}
+			pDesc={Text.Body.Centered.OfText("إذا فشل المكان في شرط جوهري من هذه البنود فقد يتم حفظ الطلب أو رفض استكماله.")}
+			pHeadBg={new ElemBg(Colors.SkyLite)}
+			pItemsBg={new ElemBg(Colors.Gray1)}
+			pItemFnt={Text.Body}
+			pNumbered={true}
+			pItems={[
+				"تحقق شرط المسافة عن أقرب صيدلية مرخصة.",
+				"تحقق الحد الأدنى للمساحة الصافية.",
+				"تحقق الحد الأدنى للارتفاع الصافي.",
+				"وضوح حدود العين ووجود جوانب وسقف وفتحة دخول.",
+				"مطابقة الرسم الهندسي المقدم للحالة الفعلية.",
+				"عدم وجود اتصال مخالف بوحدة سكنية أو محل آخر أو مدخل عقار.",
+				"إمكانية استكمال التجهيزات المطلوبة للمعاينة الثانية دون مخالفة شروط الترخيص."
+			]}
+		/>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec
+		id="second-inspection"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.SkyLite};`}
+			pTitle="شروط المعاينة الثانية للصيدلية"
+			pDesc="بعد قبول المكان مبدئيًا، يتم تجهيز الصيدلية للمعاينة الثانية. هنا يتم فحص الحالة النهائية للتشطيب والتشغيل وليس مجرد صلاحية الموقع."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "100%")}
+				pTitle={Text.H3.OfText("التجهيزات الصحية والتشطيب")}
+				pDesc={Text.Body.OfText("بنود تظهر غالبًا عند فحص الحالة النهائية للصيدلية.")}
+				pHeadBg={new ElemBg(Colors.BistageLite)}
+				pItemsBg={new ElemBg(Colors.Gray1)}
+				pItemFnt={Text.Body}
+				pNumbered={true}
+				pItems={[
+					"توفير حوض معمل مناسب مع رخامة جانبية عند الحاجة.",
+					"تغطية الحائط أعلى الحوض بمواد قابلة للغسيل مثل السيراميك.",
+					"استخدام أرضيات غير قابلة للاشتعال مثل السيراميك أو البورسلين أو ما يماثلهما.",
+					"فصل الحمام عن فراغ الصيدلية بطرقة أو باب مستقل عند وجوده.",
+					"عدم تنفيذ ديكورات أو تقسيمات تقلل الارتفاع أو تعطل التهوية أو تخالف الرسم النهائي."
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "100%")}
+				pTitle={Text.H3.OfText("المرافق والتشغيل")}
+				pDesc={Text.Body.OfText("هذه البنود تثبت أن الصيدلية قابلة للتشغيل الآمن والصحي.")}
+				pHeadBg={new ElemBg(Colors.BistageLite)}
+				pItemsBg={new ElemBg(Colors.Gray1)}
+				pItemFnt={Text.Body}
+				pNumbered={true}
+				pItems={[
+					"توفير مصدر مياه دائم مقبول.",
+					"توفير مصدر كهرباء دائم.",
+					"تحقيق التهوية الطبيعية أو الاعتماد على تكييف مناسب عند عدم كفاية التهوية الطبيعية.",
+					"مراجعة منسوب الأرضية بالنسبة للطريق العام وتنفيذ صرف وقائي عند الحاجة.",
+					"مطابقة الرسم الهندسي النهائي للحالة التي سيتم تشغيل الصيدلية عليها."
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="building-status"
+		pBg={new ElemBg(Colors.SkyLite)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.Gray5};`}
+			pTitle="موقف العقار من الترخيص أو التصالح"
+			pDesc="صلاحية الصيدلية من الداخل لا تكفي إذا كان العقار نفسه لديه مشكلة في الترخيص أو الاستخدام."
+		/>
+
+		<EmoList
+			pWidth={new RespString("1000px", "100%")}
+			pTitle={Text.H3.Centered.OfText("حالات يجب مراجعتها قبل تقديم الملف")}
+			pDesc={Text.Body.Centered.OfText("مستندات العقار تختلف حسب حالة المبنى والحي أو الجهاز المختص.")}
+			pHeadBg={new ElemBg(Colors.BistageLite)}
+			pItemsBg={new ElemBg(Colors.WhiteOff)}
+			pItemFnt={Text.Body}
+			pNumbered={true}
+			pItems={[
+				{ Title: "عقار مرخص ومطابق", Items: ["تراجع رخصة البناء أو ما يثبت سلامة موقف العقار حسب الجهة المختصة."] },
+				{ Title: "عقار غير مرخص أو مخالف", Items: ["قد يلزم مستند تصالح نهائي أو ما يثبت تقنين الوضع للجزء الخاص بالصيدلية."] },
+				{ Title: "اختلاف الاستخدام", Items: ["إذا كان العقار أو الجزء المطلوب غير مثبت كنشاط مناسب، فقد يلزم مستند يوضح التصالح أو تحويل الاستخدام."] },
+				{ Title: "مبنى قديم أو محل مشكوك في حالته", Items: ["قد تظهر الحاجة إلى تقرير هندسي أو مستند إضافي يثبت سلامة المبنى أو عدم وجود مانع جوهري."] }
+			]}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="rejection"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.BistageLite};`}
+			pTitle="أسباب قد تؤدي إلى حفظ أو رفض طلب ترخيص الصيدلية"
+			pDesc="هذه الأسباب يجب التعامل معها قبل تقديم الطلب، لأنها لا تعالج غالبًا بمجرد استكمال مستند ناقص."
+		/>
+
+		<EmoList
+			pWidth={new RespString("1000px", "100%")}
+			pTitle={Text.H3.Centered.OfText("أخطاء جوهرية في شروط الصيدلية")}
+			pDesc={Text.Body.Centered.OfText("يفضل فحص هذه البنود قبل التعاقد، وقبل تجهيز ملف الترخيص.")}
+			pHeadBg={new ElemBg(Colors.SkyLite)}
+			pItemsBg={new ElemBg(Colors.Gray1)}
+			pItemFnt={Text.Body}
+			pNumbered={true}
+			pItems={[
+				"المسافة إلى أقرب صيدلية مرخصة أقل من 100 متر.",
+				"المساحة الصافية أقل من الحد الأدنى المطلوب.",
+				"الارتفاع الصافي أقل من 2.60 متر بعد التشطيب أو السقف المستعار.",
+				"عدم وضوح حدود العين أو اتصالها بنشاط آخر.",
+				"وجود فتحات مخالفة على وحدة سكنية أو محل آخر أو مدخل عقار.",
+				"عدم إمكانية توفير المياه أو الكهرباء أو الصرف أو التهوية المطلوبة.",
+				"عدم مطابقة الرسم الهندسي للحالة الفعلية.",
+				"وجود مشكلة جوهرية في موقف العقار من الترخيص أو التصالح."
+			]}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		id="checklist"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg(Colors.SkyLite)}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.OfText("قائمة فحص قبل اختيار محل الصيدلية")}
+				pText={Text.Body.Centered.OfText("استخدم هذه القائمة قبل الإيجار أو الشراء أو تنفيذ التشطيب. أي إجابة غير واضحة تحتاج فحصًا قبل بدء الملف.")}
+				pSize={new Size(980, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "100%")}
+				pTitle={Text.H3.OfText("قبل التعاقد")}
+				pDesc={Text.Body.OfText("بنود حاسمة في اختيار المكان.")}
+				pHeadBg={new ElemBg(Colors.BistageLite)}
+				pItemsBg={new ElemBg(Colors.Gray1)}
+				pItemFnt={Text.Body}
+				pNumbered={true}
+				pItems={[
+					"هل تم قياس المسافة فعليًا؟",
+					"هل توجد صيدلية قريبة في شارع جانبي أو موازٍ؟",
+					"هل المساحة الصافية لا تقل عن 25 مترًا مربعًا؟",
+					"هل الارتفاع الصافي لا يقل عن 2.60 متر بعد التشطيب؟",
+					"هل حدود العين واضحة ومستقلة؟",
+					"هل يمكن تنفيذ الحمام أو المعمل عند الحاجة دون مخالفة؟"
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "100%")}
+				pTitle={Text.H3.OfText("قبل المعاينة الثانية")}
+				pDesc={Text.Body.OfText("بنود التشغيل والتجهيز النهائي.")}
+				pHeadBg={new ElemBg(Colors.BistageLite)}
+				pItemsBg={new ElemBg(Colors.Gray1)}
+				pItemFnt={Text.Body}
+				pNumbered={true}
+				pItems={[
+					"هل مصدر المياه واضح ومقبول؟",
+					"هل مصدر الكهرباء دائم؟",
+					"هل التهوية أو التكييف مناسب؟",
+					"هل منسوب الأرضية آمن بالنسبة للطريق؟",
+					"هل الحمام مفصول بطريقة صحيحة؟",
+					"هل الرسم النهائي مطابق تمامًا لما تم تنفيذه؟"
+				]}
+			/>
+
+		</HzStack>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<EmoFaq>
+
+		<FaqItem
+			pQuestion="ما أهم شروط ترخيص صيدلية؟"
+			pAnswer="أهم الشروط هي أن يكون طالب الترخيص صيدليًا مستوفيًا للشروط المهنية، وأن تكون المسافة إلى أقرب صيدلية مرخصة لا تقل عن 100 متر، وأن تكون المساحة الصافية لا تقل عن 25 مترًا مربعًا، وأن يكون الارتفاع الصافي لا يقل عن 2.60 متر، مع استيفاء شروط المعاينة الثانية الخاصة بالتجهيز والتشطيب والمرافق."
+		/>
+
+		<FaqItem
+			pQuestion="هل المساحة المكتوبة في عقد الإيجار تكفي؟"
+			pAnswer="لا. المساحة المعتمدة في الترخيص هي المساحة الصافية الفعلية بعد رفع المقاسات، وليس الرقم المكتوب في عقد الإيجار فقط. يجب حساب تأثير الحوائط والأعمدة والبروزات والمساحات غير القابلة للاستخدام."
+		/>
+
+		<FaqItem
+			pQuestion="هل يمكن علاج مشكلة المسافة بعد تقديم الطلب؟"
+			pAnswer="غالبًا لا. شرط المسافة مرتبط بموقع الصيدلية نفسه. إذا كانت المسافة غير مطابقة، فلن يكون الحل في استكمال ورقة، لذلك يجب قياس المسافة قبل التعاقد على المحل."
+		/>
+
+		<FaqItem
+			pQuestion="هل السقف المستعار يؤثر على الترخيص؟"
+			pAnswer="نعم. إذا قلل السقف المستعار الارتفاع الصافي عن الحد المطلوب، فقد يؤثر على قبول الصيدلية. لذلك يجب حساب الارتفاع بعد التشطيب وليس قبله فقط."
+		/>
+
+		<FaqItem
+			pQuestion="هل يمكن ترخيص صيدلية في محل بميزانين؟"
+			pAnswer="يمكن دراسة الحالة إذا تحققت شروط المساحة والارتفاع والاتصال الداخلي والاستقلال، لكن وجود الميزانين أو الصندرة لا يعني قبوله تلقائيًا ضمن مساحة الصيدلية."
+		/>
+
+		<FaqItem
+			pQuestion="هل يجوز ترخيص صيدلية لغير صيدلي؟"
+			pAnswer="ترخيص الصيدلية يصدر للصيدلي المستوفي للشروط. وجود ممول أو شريك غير صيدلي لا يجعله صاحب الترخيص أو المدير الفني للصيدلية."
+		/>
+
+		<FaqItem
+			pQuestion="ما الفرق بين المعاينة الأولى والثانية؟"
+			pAnswer="المعاينة الأولى تفحص صلاحية المقر من حيث المسافة والمساحة والارتفاع وحدود العين. المعاينة الثانية تفحص الحالة النهائية بعد التشطيب والتجهيز، مثل المياه والكهرباء والتهوية والحمام والمعمل ومطابقة الرسم النهائي."
+		/>
+
+		<FaqItem
+			pQuestion="متى يجب فحص شروط الصيدلية؟"
+			pAnswer="الأفضل فحص الشروط قبل توقيع عقد الإيجار أو دفع مقدم أو تنفيذ تشطيبات. الفحص المبكر يقلل خطر اختيار محل غير قابل للترخيص."
+		/>
+
+	</EmoFaq>
+
+
+
+
+
+
+
+	<ReadAlso
+		pTitle={Text.H2.Centered.OfText("اقرأ أيضًا")}
+		pDesc={Text.Body.Centered.OfText("صفحات مرتبطة بشروط الصيدلية ومسار الترخيص والرسم الهندسي.")}
+		pHeadBg={new ElemBg(Colors.SkyLite)}
+		pBodyBg={new ElemBg(Colors.WhiteOff)}
+		pCardBg={new ElemBg(Colors.WhiteOff)}
+	>
+
+		<ReadAlsoItem
+			pTitle="ترخيص صيدلية"
+			pDesc="الصفحة الرئيسية لخدمة ترخيص الصيدليات وتجهيز الملف."
+			pHref="/emomed/pharmacy"
+		/>
+
+		<ReadAlsoItem
+			pTitle="إجراءات ترخيص صيدلية"
+			pDesc="خطوات تقديم الطلب والمعاينات والاستكمال حتى إصدار الترخيص."
+			pHref="/emomed/pharmacy/proc"
+		/>
+
+		<ReadAlsoItem
+			pTitle="رسم هندسي لصيدلية"
+			pDesc="الرسم المطلوب للمعاينة الأولى والثانية وبيانات اللوحة الهندسية."
+			pHref="/emomed/pharmacy/dwg"
+		/>
+
+		<ReadAlsoItem
+			pTitle="قياس المسافة بين صيدليتين"
+			pDesc="فحص شرط المسافة قبل التعاقد على مقر الصيدلية."
+			pHref="/emomed/pharmacy/distance"
+		/>
+
+	</ReadAlso>
+
+
+
+
+
+
+
+	<RelServices
+		pTitle={Text.H2.Centered.WithColor(Colors.BistageLite).OfText("خدمات مرتبطة بشروط الصيدلية")}
+		pDesc={Text.Body.Centered.White.OfText("خدمات فعلية تساعد في فحص صلاحية المقر وتجهيز ملف الترخيص.")}
+		pHeadBg={new ElemBg(Colors.Gray5)}
+		pBodyBg={new ElemBg(Colors.SkyLite)}
+		pCardBg={new ElemBg(Colors.WhiteOff)}
+	>
+
+		<RelServiceItem
+			pTitle="استخراج ترخيص صيدلية"
+			pDesc="متابعة ملف ترخيص الصيدلية وتجهيز المستندات وملاحظات المعاينة."
+			pHref="/emomed/pharmacy"
+			pBtnText="اطلب الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="رسم هندسي لصيدلية"
+			pDesc="إعداد الرسم الهندسي المطلوب للمعاينة الأولى أو الرسم النهائي."
+			pHref="/emomed/pharmacy/dwg"
+			pBtnText="اطلب الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="قياس المسافة بين صيدليتين"
+			pDesc="فحص شرط المسافة قبل الإيجار أو الشراء أو بدء ملف الترخيص."
+			pHref="/emomed/pharmacy/distance"
+			pBtnText="اطلب الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="تقرير هندسي عن حالة مبنى"
+			pDesc="تقرير فني عند الحاجة لمراجعة حالة العقار أو موقفه الإنشائي."
+			pHref="/emonsult/report"
+			pBtnText="اطلب الخدمة"
+		/>
+
+	</RelServices>
+
+
+
+
+
+
+
+</BLayout>

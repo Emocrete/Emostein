@@ -1,0 +1,866 @@
+---
+import BLayout from "@/Layout.astro";
+import { Text, Topic, ElemBg, EmoMediaData, Colors, RespString, Pixel, Size, Align } from "@/TypesLib";
+import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, EmoFaq, ReadAlso, RelServices, SecTitle, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<BLayout
+	pSchemaType="Article"
+	pTitle="إجراءات ترخيص صيدلية"
+	pDescr="شرح تفصيلي لإجراءات ترخيص صيدلية في مصر من فحص المقر قبل التقديم، تجهيز المستندات، رفع طلب الترخيص عبر برنامج ميكنة التراخيص، المعاينة الأولى، المعاينة الثانية، الاستكمال، إصدار الترخيص، وفتح الصيدلية خلال المهلة القانونية."
+	pSchemaImages={[
+		"/Media/Emomed/Pharmacy/Proc/HeroD.webp",
+		"/Media/Emomed/Pharmacy/PreparePharmacyFile.webp",
+		"/Media/Emomed/Pharmacy/SendReq.webp",
+		"/Media/Emomed/Pharmacy/Inspection.webp"
+	]}
+>
+
+
+
+
+
+
+
+	<Hero
+		pImgF="/Media/Emomed/Pharmacy/Proc/"
+		pImgL="HeroD.webp"
+		pImgP="HeroM.webp"
+		pTitle="إجراءات ترخيص صيدلية"
+		pDesc="خطوات عملية لترخيص صيدلية من فحص المكان وتجهيز المستندات، إلى رفع الطلب عبر برنامج ميكنة التراخيص، ثم المعاينة الأولى، والمعاينة الثانية، واستكمال المستندات حتى إصدار الرخصة."
+		pTitleClr={Colors.WhiteOff}
+		pDescClr={Colors.WhiteOff}
+		pAlign="right"
+		pPosL="18% 50% 12% 8%"
+		pPosP="12% 8% 42% 8%"
+		pBlurL="on"
+		pBlurP="on"
+	>
+
+		<EmoCall BlackSky pText="ابدأ ملف الترخيص" />
+
+	</Hero>
+
+
+
+
+
+
+
+	<ESec
+		id="intro"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.SkyLite};`}
+			pTitle="إجراءات الترخيص تبدأ قبل رفع الطلب"
+			pDesc="رفع الطلب خطوة مهمة، لكنها ليست البداية الحقيقية. البداية الصحيحة هي التأكد من صلاحية المكان وتجهيز المستندات والرسم الهندسي حتى لا يدخل الملف في ملاحظات كان يمكن تجنبها."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<Emograph
+				pSize={new Size(620, "auto", 320, "auto")}
+				pTitle={Text.H3.OfText("المسار العملي لترخيص الصيدلية")}
+				pText={Text.Body.OfText("إجراءات الترخيص تمر بمسار واضح: فحص مقر الصيدلية، تجهيز مستندات الصيدلي والمقر، إعداد الرسم الهندسي، رفع الطلب عبر برنامج ميكنة التراخيص، مراجعة الملف، المعاينة الأولى، تجهيز الصيدلية، المعاينة الثانية، ثم الاستكمال وإصدار الترخيص.")}
+			/>
+
+			<RespImg
+				pImg={new EmoMediaData(
+					"Img",
+					"/Media/Emomed/Pharmacy/",
+					"PreparePharmacyFile.webp",
+					false,
+					"تجهيز ملف ترخيص صيدلية",
+					new Size(420, "auto", 300, "auto")
+				)}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="procedure-map"
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.Gray5};`}
+			pTitle="خريطة إجراءات ترخيص صيدلية"
+			pDesc="هذه هي الصورة المختصرة للمسار الكامل قبل الدخول في تفاصيل كل مرحلة."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "100%")}
+			pGrTitle={Text.H3.Centered.OfText("مراحل الملف")}
+			pCardBg={new ElemBg(Colors.WhiteOff)}
+			pCardTitleFnt={Text.H4}
+			pCardBodyFnt={Text.Body}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("قبل التقديم", "فحص المسافة والمساحة والارتفاع وحدود العين وموقف العقار قبل رفع الطلب أو دفع مقدم إيجار.")}
+			pTopic2={new Topic("تجهيز الملف", "مستندات الصيدلي، مستندات العين، الرسم الهندسي، وبيانات الطلب المطلوب رفعها على برنامج الميكنة.")}
+			pTopic3={new Topic("المعاينات", "المعاينة الأولى لصلاحية المقر، ثم المعاينة الثانية بعد تنفيذ التجهيزات والتشطيبات المطلوبة.")}
+			pTopic4={new Topic("إصدار الترخيص", "استكمال المستندات النهائية، مراجعة الملاحظات، إصدار الترخيص، ثم فتح الصيدلية خلال المهلة القانونية.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		id="pre-check"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg(Colors.BistageLite)}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.OfText("المرحلة الأولى: فحص مقر الصيدلية قبل التقديم")}
+				pText={Text.Body.Centered.OfText("هذه المرحلة تقلل احتمال رفض الملف أو حفظه بسبب عيب جوهري في المكان. لا تبدأ بإجراءات رسمية قبل قراءة صلاحية المقر.")}
+				pSize={new Size(980, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("620px", "100%")}
+				pTitle={Text.H3.OfText("ما الذي يتم فحصه قبل الطلب؟")}
+				pDesc={Text.Body.OfText("الفحص المبكر يحسم هل المقر يستحق الدخول في إجراءات الترخيص أم يجب البحث عن بديل.")}
+				pHeadBg={new ElemBg(Colors.SkyLite)}
+				pItemsBg={new ElemBg(Colors.Gray1)}
+				pItemFnt={Text.Body}
+				pNumbered={true}
+				pItems={[
+					"تحديد أقرب الصيدليات المرخصة من كل اتجاه.",
+					"قياس المسافة إلى أقرب صيدلية مرخصة.",
+					"رفع أبعاد المحل وحساب المساحة الصافية.",
+					"قياس الارتفاع الصافي قبل وبعد أي تشطيب مؤثر.",
+					"مراجعة حدود العين واستقلالها عن أي نشاط آخر.",
+					"مراجعة موقف العقار من الترخيص أو التصالح أو تحويل الاستخدام.",
+					"تقدير إمكانية تنفيذ الحمام أو المعمل أو الصرف والتهوية عند الحاجة."
+				]}
+			/>
+
+			<RespImg
+				pImg={new EmoMediaData(
+					"Img",
+					"/Media/Emomed/Pharmacy/",
+					"Inspection.webp",
+					false,
+					"معاينة مقر الصيدلية قبل الترخيص",
+					new Size(420, "auto", 300, "auto")
+				)}
+			/>
+
+		</HzStack>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec
+		id="pharmacist-docs"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.SkyLite};`}
+			pTitle="المرحلة الثانية: تجهيز مستندات الصيدلي"
+			pDesc="مستندات طالب الترخيص تثبت أهلية الصيدلي وتطابق بياناته مع الطلب المقدم."
+		/>
+
+		<EmoList
+			pWidth={new RespString("1000px", "100%")}
+			pTitle={Text.H3.Centered.OfText("مستندات الصيدلي الأساسية")}
+			pDesc={Text.Body.Centered.OfText("قد تختلف التفاصيل أو الصيغة حسب متطلبات الجهة المختصة وقت التقديم، لكن هذه هي المستندات التي يجب الاستعداد بها مبكرًا.")}
+			pHeadBg={new ElemBg(Colors.BistageLite)}
+			pItemsBg={new ElemBg(Colors.Gray1)}
+			pItemFnt={Text.Body}
+			pNumbered={true}
+			pItems={[
+				"صورة بطاقة الرقم القومي أو جواز السفر، ويجب أن يكون المستند ساريًا.",
+				"صورة ترخيص مزاولة المهنة.",
+				"صورة كارنيه النقابة العامة للصيادلة أو ما يثبت القيد أو سداد الاشتراك حسب المطلوب.",
+				"مستخرج شهادة ميلاد كمبيوتر عند طلبه ضمن الملف.",
+				"صحيفة حالة جنائية حديثة وموجهة للجهة المختصة.",
+				"شهادة أو مستند يوضح موقف الصيدلي من التكليف عند طلبه.",
+				"شهادة بعدد الصيدليات المملوكة أو التي يشارك فيها الصيدلي.",
+				"بيانات اتصال واضحة لأن الجهة المختصة قد تستخدمها في الإخطارات أو الملاحظات."
+			]}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="place-docs"
+		pBg={new ElemBg(Colors.SkyLite)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.Gray5};`}
+			pTitle="المرحلة الثالثة: تجهيز مستندات مقر الصيدلية"
+			pDesc="مستندات المقر تثبت حق شغل العين وموقف العقار والمرافق التي تؤثر في صلاحية الصيدلية للتشغيل."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "100%")}
+				pTitle={Text.H3.OfText("مستندات حق شغل العين")}
+				pDesc={Text.Body.OfText("يجب أن يكون لصاحب الملف سند واضح لاستعمال المكان محل الترخيص.")}
+				pHeadBg={new ElemBg(Colors.BistageLite)}
+				pItemsBg={new ElemBg(Colors.WhiteOff)}
+				pItemFnt={Text.Body}
+				pNumbered={true}
+				pItems={[
+					"عقد ملكية أو عقد إيجار للعين محل الصيدلية.",
+					"مراعاة مدة الإيجار المطلوبة لقبول الملف.",
+					"تطابق بيانات العنوان في العقد مع العنوان الذي سيتم رفعه في الطلب.",
+					"توضيح حدود العين محل الترخيص إذا كان العقار يضم أكثر من محل أو وحدة.",
+					"مراجعة أي قيود تعاقدية تمنع تغيير النشاط أو تنفيذ تعديلات لازمة للترخيص."
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "100%")}
+				pTitle={Text.H3.OfText("مستندات العقار والمرافق")}
+				pDesc={Text.Body.OfText("هذه المستندات قد تظهر في مرحلة التقديم أو الاستكمال حسب حالة العقار.")}
+				pHeadBg={new ElemBg(Colors.BistageLite)}
+				pItemsBg={new ElemBg(Colors.WhiteOff)}
+				pItemFnt={Text.Body}
+				pNumbered={true}
+				pItems={[
+					"مستند يوضح موقف العقار من الترخيص أو التصالح أو التقنين.",
+					"مستند يثبت وجود مورد مائي مقبول.",
+					"مستند يثبت وجود مصدر كهرباء دائم.",
+					"مستندات تحويل الاستخدام أو التصالح عند وجود اختلاف في استخدام العقار.",
+					"أي مستند إضافي تطلبه الجهة المختصة حسب موقع الصيدلية وحالة المبنى."
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		id="drawing"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg(Colors.BistageLite)}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.OfText("المرحلة الرابعة: إعداد الرسم الهندسي للصيدلية")}
+				pText={Text.Body.Centered.OfText("الرسم الهندسي ليس ملحقًا شكليًا. هو المستند الذي يربط بين بيانات الطلب والمعاينة على الطبيعة.")}
+				pSize={new Size(980, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<Emograph
+				pSize={new Size(520, "auto", 320, "auto")}
+				pTitle={Text.H3.OfText("رسم للمعاينة الأولى ورسم نهائي")}
+				pText={Text.Body.OfText("يستخدم الرسم الأول في إثبات صلاحية المقر مبدئيًا من حيث المساحة والارتفاع والحدود والموقع. بعد التجهيز قد يلزم رسم نهائي مطابق للحالة التي سيتم تشغيل الصيدلية عليها، خاصة إذا حدثت تعديلات في الحمام أو المعمل أو التقسيمات الداخلية.")}
+			/>
+
+			<EmoList
+				pWidth={new RespString("580px", "100%")}
+				pTitle={Text.H3.OfText("بيانات يجب ظهورها في الرسم")}
+				pDesc={Text.Body.OfText("كل بند من هذه البنود يساعد في ربط الرسم بالمعاينة.")}
+				pHeadBg={new ElemBg(Colors.SkyLite)}
+				pItemsBg={new ElemBg(Colors.Gray1)}
+				pItemFnt={Text.Body}
+				pNumbered={true}
+				pItems={[
+					"المسقط الأفقي للصيدلية.",
+					"الأبعاد الداخلية والمساحة الصافية.",
+					"أماكن الأعمدة والبروزات والمداخل.",
+					"القطاع الرأسي والارتفاع الصافي.",
+					"واجهة الصيدلية ومكان المدخل.",
+					"كروكي الموقع العام وأقرب صيدلية عند الحاجة.",
+					"موضع الحمام أو المعمل إذا وجدا."
+				]}
+			/>
+
+		</HzStack>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec
+		id="digital-application"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.SkyLite};`}
+			pTitle="المرحلة الخامسة: رفع الطلب عبر برنامج ميكنة التراخيص"
+			pDesc="يجب تحديث الصفحة هنا بوضوح: المسار الحديث لطلبات ترخيص الصيدليات العامة أصبح من خلال برنامج ميكنة التراخيص، وليس الاعتماد على نص البريد المسجل كطريقة تقديم أساسية."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<RespImg
+				pImg={new EmoMediaData(
+					"Img",
+					"/Media/Emomed/Pharmacy/",
+					"SendReq.webp",
+					false,
+					"رفع طلب ترخيص صيدلية",
+					new Size(420, "auto", 300, "auto")
+				)}
+			/>
+
+			<EmoList
+				pWidth={new RespString("620px", "100%")}
+				pTitle={Text.H3.OfText("قبل رفع الطلب إلكترونيًا")}
+				pDesc={Text.Body.OfText("رفع الطلب لا يعوض نقص التجهيز. يجب مراجعة الملف قبل إدخال البيانات حتى لا يبدأ المسار بملاحظات مباشرة.")}
+				pHeadBg={new ElemBg(Colors.BistageLite)}
+				pItemsBg={new ElemBg(Colors.Gray1)}
+				pItemFnt={Text.Body}
+				pNumbered={true}
+				pItems={[
+					"تجهيز بيانات الصيدلي طالب الترخيص بدقة.",
+					"تجهيز عنوان الصيدلية وبيانات العين محل الترخيص.",
+					"رفع المستندات المطلوبة بالصيغة والجودة المقبولة.",
+					"إرفاق الرسم الهندسي المطلوب للمرحلة.",
+					"مراجعة بيانات التواصل لأن الإخطارات والملاحظات قد ترتبط بها.",
+					"الاحتفاظ بما يثبت رفع الطلب ورقم المعاملة أو القيد عند ظهوره."
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="review-first-inspection"
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.Gray5};`}
+			pTitle="المرحلة السادسة: مراجعة الطلب والمعاينة الأولى"
+			pDesc="بعد رفع الطلب ومراجعته، تأتي مرحلة المعاينة الأولى التي تختبر صلاحية المقر الأساسية."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "100%")}
+			pGrTitle={Text.H3.Centered.OfText("ما يحدث في هذه المرحلة")}
+			pCardBg={new ElemBg(Colors.WhiteOff)}
+			pCardTitleFnt={Text.H4}
+			pCardBodyFnt={Text.Body}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("مراجعة الملف", "تراجع الجهة المختصة البيانات والمستندات المرفوعة، وقد تطلب استكمالًا أو تصحيحًا قبل تحديد المعاينة.")}
+			pTopic2={new Topic("تحديد المعاينة", "يتم إخطار طالب الترخيص بموعد المعاينة أو المرحلة التالية وفق النظام والإجراءات المعمول بها.")}
+			pTopic3={new Topic("المعاينة الأولى", "يتم فحص المسافة، المساحة، الارتفاع، حدود العين، ومدى مطابقة الرسم للحالة الفعلية.")}
+			pTopic4={new Topic("نتيجة المعاينة", "قد يتم قبول المكان مبدئيًا، أو تسجيل ملاحظات، أو حفظ الطلب إذا ظهر عيب جوهري لا يمكن استيفاؤه.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		id="after-first-inspection"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg(Colors.BistageLite)}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.OfText("بعد اجتياز المعاينة الأولى")}
+				pText={Text.Body.Centered.OfText("بعد قبول المكان مبدئيًا لا يبدأ التشغيل، بل تبدأ مرحلة التجهيز للمعاينة الثانية واستكمال المستندات النهائية.")}
+				pSize={new Size(980, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<EmoList
+			pWidth={new RespString("1000px", "100%")}
+			pTitle={Text.H3.Centered.OfText("ما الذي يتم بعد المعاينة الأولى؟")}
+			pDesc={Text.Body.Centered.OfText("هذه المرحلة تتحول من فحص صلاحية المكان إلى تجهيز الصيدلية فعليًا للتشغيل.")}
+			pHeadBg={new ElemBg(Colors.SkyLite)}
+			pItemsBg={new ElemBg(Colors.Gray1)}
+			pItemFnt={Text.Body}
+			pNumbered={true}
+			pItems={[
+				"مراجعة ملاحظات المعاينة الأولى إن وجدت.",
+				"تنفيذ التعديلات المطلوبة في حدود ما يسمح به الترخيص.",
+				"تجهيز الحوض أو المعمل أو الحمام حسب حالة الصيدلية.",
+				"مراجعة المياه والكهرباء والتهوية والصرف.",
+				"تنفيذ التشطيبات النهائية دون التأثير على المساحة أو الارتفاع.",
+				"إعداد الرسم الهندسي النهائي المطابق للحالة بعد التجهيز.",
+				"تجهيز مستندات الاستكمال النهائية قبل طلب أو حضور المعاينة الثانية."
+			]}
+		/>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec
+		id="second-inspection"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.SkyLite};`}
+			pTitle="المرحلة السابعة: المعاينة الثانية"
+			pDesc="المعاينة الثانية تفحص الحالة النهائية للصيدلية، وتراجع هل أصبحت جاهزة للتشغيل وفق شروط الترخيص."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "100%")}
+				pTitle={Text.H3.OfText("بنود تفحص في المعاينة الثانية")}
+				pDesc={Text.Body.OfText("تظهر هنا جودة التجهيز ومدى مطابقته للشروط.")}
+				pHeadBg={new ElemBg(Colors.BistageLite)}
+				pItemsBg={new ElemBg(Colors.Gray1)}
+				pItemFnt={Text.Body}
+				pNumbered={true}
+				pItems={[
+					"موقع الحوض أو المعمل وطريقة تنفيذهما.",
+					"خامات الأرضيات والحوائط المؤثرة في الاشتراطات الصحية.",
+					"مصدر المياه ومصدر الكهرباء.",
+					"التهوية الطبيعية أو التكييف.",
+					"الصرف ومنسوب الأرضية بالنسبة للطريق.",
+					"الحمام والفصل المطلوب أمامه عند وجوده."
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "100%")}
+				pTitle={Text.H3.OfText("ملاحظات شائعة في المعاينة الثانية")}
+				pDesc={Text.Body.OfText("هذه الأخطاء تؤدي غالبًا إلى طلب استيفاء أو تعديل قبل إصدار الترخيص.")}
+				pHeadBg={new ElemBg(Colors.BistageLite)}
+				pItemsBg={new ElemBg(Colors.Gray1)}
+				pItemFnt={Text.Body}
+				pNumbered={true}
+				pItems={[
+					"اختلاف الحالة المنفذة عن الرسم النهائي.",
+					"فتح الحمام مباشرة على فراغ الصيدلية.",
+					"عدم كفاية التهوية أو عدم وضوح بديل التكييف.",
+					"تقليل الارتفاع الصافي بسبب سقف مستعار أو دكتات.",
+					"عدم وضوح مستندات المياه أو الكهرباء.",
+					"تنفيذ تشطيبات لا تناسب الاشتراطات الصحية."
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="final-docs"
+		pBg={new ElemBg(Colors.SkyLite)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.Gray5};`}
+			pTitle="المرحلة الثامنة: مستندات الاستكمال قبل إصدار الترخيص"
+			pDesc="بعد المعاينات، يتم استكمال المستندات النهائية التي تربط بين صاحب الترخيص والمقر والحالة النهائية للصيدلية."
+		/>
+
+		<EmoList
+			pWidth={new RespString("1000px", "100%")}
+			pTitle={Text.H3.Centered.OfText("مستندات يجب تجهيزها للاستكمال")}
+			pDesc={Text.Body.Centered.OfText("تختلف الصياغة النهائية حسب متطلبات الجهة المختصة، لكن هذه البنود تمثل جوهر ملف الاستكمال.")}
+			pHeadBg={new ElemBg(Colors.BistageLite)}
+			pItemsBg={new ElemBg(Colors.WhiteOff)}
+			pItemFnt={Text.Body}
+			pNumbered={true}
+			pItems={[
+				"الرسم الهندسي النهائي المطابق للحالة المنفذة.",
+				"شهادة قيد من النقابة العامة للصيادلة عند طلبها.",
+				"ما يفيد الموافقة على الاسم التجاري من النقابة الفرعية عند طلبه.",
+				"شهادة بالموقف من التكليف أو ما يقوم مقامها حسب الحالة.",
+				"شهادة بعدد الصيدليات المملوكة أو التي يشارك فيها الصيدلي.",
+				"عقد الملكية أو عقد الإيجار للعين محل الصيدلية.",
+				"مستندات المياه والكهرباء.",
+				"مستندات موقف العقار من الترخيص أو التصالح أو التقنين.",
+				"أي ملاحظات استيفاء وردت بعد المعاينة الأولى أو الثانية."
+			]}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		id="deadlines"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg(Colors.BistageLite)}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.OfText("المهل والملاحظات وحفظ الطلب")}
+				pText={Text.Body.Centered.OfText("إجراءات ترخيص الصيدلية لا تتوقف عند تقديم الطلب. يجب متابعة المهل والملاحظات حتى لا يتم حفظ الطلب أو تعطيله بسبب عدم الاستيفاء.")}
+				pSize={new Size(980, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "100%")}
+			pGrTitle={Text.H3.Centered.OfText("متى يتعطل ملف الترخيص؟")}
+			pCardBg={new ElemBg(Colors.Gray1)}
+			pCardTitleFnt={Text.H4}
+			pCardBodyFnt={Text.Body}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("نقص المستندات", "عدم رفع المستندات المطلوبة أو رفع صور غير واضحة أو بيانات غير مطابقة يؤدي إلى طلب استكمال.")}
+			pTopic2={new Topic("مشكلة في المكان", "المسافة أو المساحة أو الارتفاع أو حدود العين قد تؤدي إلى تعطل جوهري لا يحل بإضافة ورقة.")}
+			pTopic3={new Topic("عدم تنفيذ الملاحظات", "ملاحظات المعاينة الثانية يجب تنفيذها قبل إصدار الترخيص، وإلا يستمر الملف في التعطيل.")}
+			pTopic4={new Topic("انتهاء المهلة", "عدم متابعة المهل أو التأخر في طلب المعاينة أو الاستكمال قد يؤدي إلى حفظ الطلب حسب الحالة والإجراءات المعمول بها.")}
+		/>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec
+		id="after-license"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.SkyLite};`}
+			pTitle="المرحلة التاسعة: بعد إصدار ترخيص الصيدلية"
+			pDesc="إصدار الترخيص ليس نهاية الالتزام. توجد خطوات تشغيل ومتابعة يجب الانتباه لها بعد استلام الرخصة."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("620px", "100%")}
+				pTitle={Text.H3.OfText("خطوات بعد الترخيص")}
+				pDesc={Text.Body.OfText("يجب ترتيب التشغيل بعد استلام الرخصة حتى لا يتعرض الترخيص لمخاطر إدارية.")}
+				pHeadBg={new ElemBg(Colors.BistageLite)}
+				pItemsBg={new ElemBg(Colors.Gray1)}
+				pItemFnt={Text.Body}
+				pNumbered={true}
+				pItems={[
+					"استلام الترخيص ومراجعة بياناته.",
+					"تعيين المدير المسؤول أو استكمال بيانات الإدارة حسب المطلوب.",
+					"فتح الصيدلية وتشغيلها خلال المهلة القانونية.",
+					"الاحتفاظ بنسخ من الرسومات والمستندات المهمة.",
+					"عدم نقل الصيدلية أو تغيير الحالة الجوهرية دون إجراءات صحيحة.",
+					"متابعة أي اشتراطات تشغيلية أو تفتيشية لاحقة."
+				]}
+			/>
+
+			<Emograph
+				pSize={new Size(480, "auto", 320, "auto")}
+				pTitle={Text.H3.OfText("متى يصبح الترخيص في خطر؟")}
+				pText={Text.Body.OfText("قد يتأثر الترخيص إذا لم يتم تشغيل الصيدلية خلال المهلة المطلوبة، أو إذا أغلقت مدة طويلة، أو إذا تم نقل النشاط دون إجراء صحيح، أو إذا تغيرت الحالة الفعلية للصيدلية بصورة تخالف ما صدر الترخيص بناءً عليه.")}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="mistakes"
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.Gray5};`}
+			pTitle="أخطاء عملية في إجراءات ترخيص الصيدليات"
+			pDesc="تجنب هذه الأخطاء قبل رفع الطلب يوفر وقتًا كبيرًا في الملف ويقلل احتمال رفض المكان أو طلب استيفاءات متكررة."
+		/>
+
+		<EmoList
+			pWidth={new RespString("1000px", "100%")}
+			pTitle={Text.H3.Centered.OfText("أخطاء شائعة")}
+			pDesc={Text.Body.Centered.OfText("هذه الأخطاء تظهر كثيرًا في ملفات الترخيص وتؤدي إلى تعطيل غير ضروري.")}
+			pHeadBg={new ElemBg(Colors.BistageLite)}
+			pItemsBg={new ElemBg(Colors.WhiteOff)}
+			pItemFnt={Text.Body}
+			pNumbered={true}
+			pItems={[
+				"توقيع عقد إيجار قبل قياس المسافة.",
+				"الاعتماد على المساحة المكتوبة في العقد دون رفع فعلي.",
+				"تنفيذ سقف مستعار قبل مراجعة الارتفاع الصافي.",
+				"إعداد رسم هندسي لا يطابق الحالة على الطبيعة.",
+				"رفع طلب الترخيص قبل تجهيز المستندات الأساسية.",
+				"تجاهل موقف العقار من الترخيص أو التصالح.",
+				"تنفيذ حمام أو معمل بطريقة تحتاج تعديلًا لاحقًا.",
+				"عدم متابعة ملاحظات المعاينة في وقت مناسب.",
+				"الخلط بين الرسم الأول والرسم النهائي.",
+				"الاعتماد على إجراءات قديمة مثل البريد المسجل دون مراجعة تحديثات الميكنة."
+			]}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoFaq>
+
+		<FaqItem
+			pQuestion="ما أول خطوة في إجراءات ترخيص صيدلية؟"
+			pAnswer="أول خطوة عملية هي فحص مقر الصيدلية قبل التقديم، خاصة المسافة والمساحة والارتفاع وحدود العين. بعد التأكد من صلاحية المكان يتم تجهيز المستندات والرسم الهندسي ورفع الطلب."
+		/>
+
+		<FaqItem
+			pQuestion="هل ما زال تقديم طلب ترخيص الصيدلية بالبريد هو المسار الأساسي؟"
+			pAnswer="المسار الحديث بعد إعلان هيئة الدواء هو التقديم عبر برنامج ميكنة التراخيص لطلبات الصيدليات العامة، لذلك يجب عدم بناء الصفحة أو الإجراء على البريد المسجل كطريقة تقديم أساسية."
+		/>
+
+		<FaqItem
+			pQuestion="متى تتم المعاينة الأولى؟"
+			pAnswer="تتم بعد مراجعة الطلب والمستندات وتحديد الموعد وفق إجراءات الجهة المختصة. وظيفتها فحص صلاحية المكان من حيث المسافة والمساحة والارتفاع وحدود العين."
+		/>
+
+		<FaqItem
+			pQuestion="ما الفرق بين المعاينة الأولى والمعاينة الثانية؟"
+			pAnswer="المعاينة الأولى تفحص صلاحية المقر. المعاينة الثانية تفحص الحالة النهائية بعد التجهيز والتشطيب، مثل المياه والكهرباء والتهوية والحمام والمعمل ومطابقة الرسم النهائي."
+		/>
+
+		<FaqItem
+			pQuestion="هل يمكن تقديم الطلب قبل تجهيز الرسم الهندسي؟"
+			pAnswer="لا يفضل ذلك، لأن الرسم الهندسي من المستندات الأساسية التي توضح بيانات المقر وتساعد في المعاينة. يجب إعداد الرسم من واقع رفع المقاسات وليس من تقدير تقريبي."
+		/>
+
+		<FaqItem
+			pQuestion="ما أهم سبب لتعطيل ترخيص الصيدلية؟"
+			pAnswer="أهم الأسباب العملية هي اختيار مقر غير مطابق في المسافة أو المساحة أو الارتفاع، أو تقديم رسم غير مطابق، أو نقص مستندات العقار والمرافق، أو عدم تنفيذ ملاحظات المعاينة الثانية."
+		/>
+
+		<FaqItem
+			pQuestion="متى يتم تجهيز الرسم النهائي؟"
+			pAnswer="يتم تجهيز الرسم النهائي بعد تنفيذ التجهيزات والتشطيبات التي ستعمل عليها الصيدلية، حتى يكون مطابقًا للحالة الفعلية قبل إصدار الترخيص."
+		/>
+
+		<FaqItem
+			pQuestion="ماذا يحدث بعد إصدار الترخيص؟"
+			pAnswer="بعد إصدار الترخيص يجب استكمال بيانات الإدارة والتشغيل وفتح الصيدلية خلال المهلة القانونية، مع الحفاظ على حالة المكان وعدم تغييره أو نقله دون إجراءات صحيحة."
+		/>
+
+	</EmoFaq>
+
+
+
+
+
+
+
+	<ReadAlso
+		pTitle={Text.H2.Centered.OfText("اقرأ أيضًا")}
+		pDesc={Text.Body.Centered.OfText("صفحات تساعدك على فهم ملف ترخيص الصيدلية من ناحية الشروط والرسم والمسافة.")}
+		pHeadBg={new ElemBg(Colors.SkyLite)}
+		pBodyBg={new ElemBg(Colors.WhiteOff)}
+		pCardBg={new ElemBg(Colors.WhiteOff)}
+	>
+
+		<ReadAlsoItem
+			pTitle="ترخيص صيدلية"
+			pDesc="الصفحة الرئيسية لخدمة ترخيص الصيدليات وتجهيز الملف."
+			pHref="/emomed/pharmacy"
+		/>
+
+		<ReadAlsoItem
+			pTitle="شروط ترخيص صيدلية"
+			pDesc="شروط الصيدلي والمقر والمعاينة الأولى والثانية."
+			pHref="/emomed/pharmacy/cond"
+		/>
+
+		<ReadAlsoItem
+			pTitle="رسم هندسي لصيدلية"
+			pDesc="الرسم المطلوب للمعاينة الأولى والثانية ومكونات اللوحة."
+			pHref="/emomed/pharmacy/dwg"
+		/>
+
+		<ReadAlsoItem
+			pTitle="قياس المسافة بين صيدليتين"
+			pDesc="فحص شرط المسافة قبل اختيار مقر الصيدلية."
+			pHref="/emomed/pharmacy/distance"
+		/>
+
+	</ReadAlso>
+
+
+
+
+
+
+
+	<RelServices
+		pTitle={Text.H2.Centered.WithColor(Colors.BistageLite).OfText("خدمات مرتبطة بإجراءات الترخيص")}
+		pDesc={Text.Body.Centered.White.OfText("خدمات فعلية تساعد في تجهيز الملف وتجنب تعطله أثناء المعاينات.")}
+		pHeadBg={new ElemBg(Colors.Gray5)}
+		pBodyBg={new ElemBg(Colors.SkyLite)}
+		pCardBg={new ElemBg(Colors.WhiteOff)}
+	>
+
+		<RelServiceItem
+			pTitle="استخراج ترخيص صيدلية"
+			pDesc="متابعة إجراءات ترخيص الصيدلية وتجهيز الملف ومراجعة الملاحظات."
+			pHref="/emomed/pharmacy"
+			pBtnText="اطلب الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="رسم هندسي لصيدلية"
+			pDesc="إعداد الرسم المطلوب للمعاينة الأولى أو الرسم النهائي بعد التجهيز."
+			pHref="/emomed/pharmacy/dwg"
+			pBtnText="اطلب الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="قياس المسافة بين صيدليتين"
+			pDesc="فحص شرط المسافة قبل التعاقد على المحل أو رفع الطلب."
+			pHref="/emomed/pharmacy/distance"
+			pBtnText="اطلب الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="تقرير هندسي عن حالة مبنى"
+			pDesc="تقرير فني عند الحاجة لمراجعة حالة العقار أو موقفه الإنشائي."
+			pHref="/emonsult/report"
+			pBtnText="اطلب الخدمة"
+		/>
+
+	</RelServices>
+
+
+
+
+
+
+
+</BLayout>

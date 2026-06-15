@@ -1,0 +1,326 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+
+export interface Props extends HTMLAttributes<"button">, PlaceProps {
+	pText?: string;
+	pIcon?: string;
+	pIconHover?: string;
+	pIconActive?: string;
+	pIconPos?: "right" | "left" | "top" | "bottom";
+
+	pWidth?: string;
+	pHeight?: string;
+	pRadius?: string;
+
+	pBgColor?: string;
+	pBgColorHover?: string;
+	pBgColorActive?: string;
+
+	pBgImg?: string;
+	pBgImgHover?: string;
+	pBgImgActive?: string;
+
+	pTextColor?: string;
+	pTextColorHover?: string;
+	pTextColorActive?: string;
+	pFontSize?: string;
+}
+
+const {
+	pText = "",
+	pIcon = "",
+	pIconHover,
+	pIconActive,
+	pIconPos = "right",
+
+	pWidth = "fit-content",
+	pHeight = "auto",
+	pRadius = "5px",
+
+	pBgColor = "#ffffff",
+	pBgColorHover,
+	pBgColorActive,
+
+	pBgImg = "",
+	pBgImgHover,
+	pBgImgActive,
+
+	pTextColor = "#222222",
+	pTextColorHover,
+	pTextColorActive,
+	pFontSize = "16px",
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id:pId = "",
+	class: pClass = "",
+	style: pStyle = "",
+	type: pType = "button",
+	...cAttrs
+} = Astro.props as Props;
+
+const cLayoutClass = GetLayoutClass(pIconPos);
+
+const cIconSize = `calc(${pHeight} - 5px)`;
+
+const cBgColorHover = pBgColorHover ?? pBgColor;
+const cBgColorActive = pBgColorActive ?? cBgColorHover;
+
+const cTextColorHover = pTextColorHover ?? pTextColor;
+const cTextColorActive = pTextColorActive ?? cTextColorHover;
+
+const cBgImgNormal = BuildCssUrl(pBgImg);
+const cBgImgHover = BuildCssUrl(pBgImgHover ?? pBgImg);
+const cBgImgActive = BuildCssUrl(pBgImgActive ?? pBgImgHover ?? pBgImg);
+
+const cIconNormal = BuildCssUrl(pIcon);
+const cIconHover = BuildCssUrl(pIconHover ?? pIcon);
+const cIconActive = BuildCssUrl(pIconActive ?? pIconHover ?? pIcon);
+
+const cHasIcon = Boolean(pIcon);
+
+const cStyle = `
+	--Width: ${pWidth};
+
+	--Height: ${pHeight};
+	--Radius: ${pRadius};
+
+	--BgClr: ${pBgColor};
+	--BgClr-hover: ${cBgColorHover};
+	--BgClr-active: ${cBgColorActive};
+
+	--BgImg: ${cBgImgNormal};
+	--BgImg-hover: ${cBgImgHover};
+	--BgImg-active: ${cBgImgActive};
+
+	--TitleCrl: ${pTextColor};
+	--TitleCrl-hover: ${cTextColorHover};
+	--TitleCrl-active: ${cTextColorActive};
+	--TitleSize: ${pFontSize};
+
+	--btn-icon-size: ${cIconSize};
+	--IconNormal: ${cIconNormal};
+	--btn-icon-hover: ${cIconHover};
+	--btn-icon-active: ${cIconActive};
+
+	${pStyle}
+`;
+
+const cPlace = new Place(Astro.props as PlaceProps, cStyle);
+
+function BuildCssUrl(pValue?: string) {
+	return pValue ? `url("${pValue}")` : "none";
+}
+
+function GetLayoutClass(pValue: "right" | "left" | "top" | "bottom") {
+	if (pValue === "left") return "isIconLeft";
+	if (pValue === "top") return "isIconTop";
+	if (pValue === "bottom") return "isIconBottom";
+	return "isIconRight";
+}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<button
+	class = {`Btn ${cLayoutClass} ${cHasIcon ? "hasIcon" : "noIcon"} ${cPlace.Class} ${pClass}`.trim()}
+	style = {cPlace.Style}
+	id={pId}
+	type={pType}
+	{...cAttrs}
+>
+
+	{ cHasIcon &&
+
+		<span class = " BtnIcon " />
+
+	}
+
+	{ pText &&
+
+		<span class = " BtnText ">
+			{pText}
+		</span>
+
+	}
+
+</button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.Btn {
+		display: block flex;
+		align-items: center;
+		justify-content: center;
+		width: var(--Width);
+		height: var(--Height);
+		border-radius: var(--Radius);
+		background-color: var(--BgClr);
+		background-image: var(--BgImg);
+		background-repeat: no-repeat;
+		font-family: inherit;
+		cursor: pointer;
+		min-height: var(--Height);
+		position: relative;
+		appearance: none;
+		border-color: transparent;
+		transition: background-color 0.1s ease,
+			border-color 0.1s ease,
+			box-shadow 0.1s ease,
+			color 0.1s ease,
+			transform 0.1s ease;
+	}
+
+	.Btn:hover {
+		background-color: var(--BgClr-hover);
+		background-image: var(--BgImg-hover);
+		color: var(--TitleCrl-hover);
+		border-color: black;
+	}
+
+	.Btn:active {
+		background-color: var(--BgClr-active);
+		background-image: var(--BgImg-active);
+		color: var(--TitleCrl-active);
+		transform: scale(0.985);
+	}
+
+	.Btn:hover .BtnIcon {
+		background-image: var(--btn-icon-hover);
+	}
+
+	.Btn:active .BtnIcon {
+		background-image: var(--btn-icon-active);
+	}
+
+
+	.BtnIcon {
+		flex: 0 0 auto;
+		width: var(--btn-icon-size);
+		height: var(--btn-icon-size);
+		background-image: var(--IconNormal);
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
+
+
+	.BtnText {
+		display: block;
+		line-height: 1.2;
+		white-space: nowrap;
+		color: var(--TitleCrl);
+		font-size: var(--TitleSize);
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+
+
+	.Btn.isIconLeft {
+		flex-direction: row-reverse;
+	}
+
+
+	.Btn.isIconTop {
+		flex-direction: column;
+	}
+
+
+	.Btn.isIconBottom {
+		flex-direction: column-reverse;
+	}
+
+
+
+	.Btn.hasIcon.isIconRight .BtnIcon {
+		right: 20px;
+	}
+
+	.Btn.hasIcon.isIconRight .BtnText {
+		margin-right: calc(15px + var(--btn-icon-size) + 8px);
+		padding-left: 15px;
+	}
+
+
+	.Btn.hasIcon.isIconLeft .BtnIcon {
+		left: 20px;
+	}
+
+	.Btn.hasIcon.isIconLeft .BtnText {
+		padding-left: calc(15px + var(--btn-icon-size) + 8px);
+		padding-right: 15px;
+	}
+
+
+
+	.Btn.hasIcon.isIconRight .BtnIcon,
+	.Btn.hasIcon.isIconLeft .BtnIcon
+	{
+		position: absolute;
+	}
+
+
+	.Btn.hasIcon.isIconTop,
+	.Btn.hasIcon.isIconBottom
+	{
+		gap: 5px;
+	}
+
+
+	.Btn.hasIcon.isIconTop .BtnText,
+	.Btn.hasIcon.isIconBottom .BtnText
+	{
+		padding: 0;
+	}
+
+
+
+</style>

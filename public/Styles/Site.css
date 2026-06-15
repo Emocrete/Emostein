@@ -1,0 +1,749 @@
+html,
+
+
+
+body {
+    height: 100%;
+}
+
+:root {
+	--cTextOnLight: #292929;
+	--cTextOnDark: #ffffff;
+	--clrTxtSkyBlue: #3899ec;
+	--clrTxtYellow: #3899ec;
+	--clrSecCreamyBg: #ECECEC;
+	--clrSecLiteGreenBg: #A7C45C;
+}
+
+body {
+    margin: 0;
+    font-family: "Cairo", system-ui, Arial, sans-serif;
+}
+
+/* Sections full width + inner padding */
+.section {
+    width: 100%;
+    position: relative;
+}
+
+.sectionInner {
+    width: 100%;
+    box-sizing: border-box;
+    padding-inline: clamp(12px, 2.2vw, 32px);
+    padding-block: clamp(16px, 2vw, 28px);
+}
+
+/* CTA */
+.cta {
+    display: inline-block;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: #fff;
+    color: #111;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+/* Simple header/footer (اختياري) */
+.siteHeader {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.brandRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.brand {
+    font-weight: 800;
+    text-decoration: none;
+    color: #111;
+}
+
+.topNav {
+    display: flex;
+    gap: 14px;
+}
+
+.topNav a {
+    text-decoration: none;
+    color: #111;
+    opacity: 0.85;
+}
+
+.topNav a:hover {
+    opacity: 1;
+}
+
+.siteFooter {
+    background: #111;
+    color: #fff;
+    margin-top: 30px;
+}
+
+
+/* =========================
+   Design System (Global)
+========================= */
+:root {
+    --cBg: #ffffff;
+    --cText: #101114;
+    --cMuted: rgba(16, 17, 20, 0.70);
+
+    --cDark: #2d2f32;
+    /* زي السكشن الغامق في الصور */
+    --cDark2: #101114;
+    --cLine: rgba(255, 255, 255, 0.35);
+
+    --cBrand: #f2c11a;
+    /* زر أصفر */
+    --cBrandText: #111;
+
+    --rCard: 22px;
+    --rPill: 999px;
+
+    --sh1: 0 18px 45px rgba(0, 0, 0, .10);
+    --sh2: 0 10px 25px rgba(0, 0, 0, .12);
+}
+
+/* Titles */
+.hTitle {
+    font-size: clamp(22px, 2.2vw, 34px);
+    margin: 0 0 14px 0;
+}
+
+.hSub {
+    margin: 0;
+    color: var(--cMuted);
+    max-width: 75ch;
+}
+ 
+
+/* CTA button small */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, .12);
+    background: #fff;
+    color: var(--cText);
+    text-decoration: none;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.btn:hover {
+    border-color: rgba(0, 0, 0, .28);
+}
+
+/* =========================
+   Card (Dark Outline) - زي السكشن الغامق
+========================= */
+.cardOutline {
+    background: transparent;
+    border: 2px solid var(--cLine);
+    border-radius: var(--rCard);
+    padding: 18px;
+    position: relative;
+    min-height: 150px;
+    transition: transform .18s ease, border-color .18s ease;
+}
+
+.cardOutline:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, .65);
+}
+
+.cardOutlineTitle {
+    margin: 6px 0 0 0;
+    font-weight: 800;
+    color: #fff;
+}
+
+.cardOutlineIcon {
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    border: 2px solid rgba(255, 255, 255, .45);
+    color: #fff;
+}
+
+/* Section Dark */
+.sectionDark {
+    background: var(--cDark);
+    color: #fff;
+}
+
+.sectionDark .hSub {
+    color: rgba(255, 255, 255, .75);
+}
+
+/* Big CTA button (yellow) */
+.btnBrand {
+    background: var(--cBrand);
+    color: var(--cBrandText);
+    border: 0;
+    border-radius: 16px;
+    padding: 12px 18px;
+    font-weight: 900;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btnBrand:hover {
+    filter: brightness(0.95);
+}
+
+/* =========================
+   Grid helpers (you already have .grid/.grid.auto)
+   add variations for 4 cards tight like photos
+========================= */
+.grid.cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 1100px) {
+    .grid.cols-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .grid.cols-4 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================
+   WhatsApp floating button
+========================= */
+.waFloat {
+    position: fixed;
+    inset-inline-end: 16px;
+    inset-block-end: 16px;
+    z-index: 50;
+    width: 58px;
+    height: 58px;
+    border-radius: 999px;
+    background: #25D366;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, .22);
+    text-decoration: none;
+}
+
+.waFloat svg {
+    width: 28px;
+    height: 28px;
+    fill: #fff;
+}
+
+/* افتراضيًا: العناصر ظاهرة */
+.reveal {
+    opacity: 1;
+    transform: none;
+}
+
+.reveal.isVisible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+:where([data-debug]) {
+	outline: 3px solid red !important;
+	outline-offset: -3px !important;
+}
+
+
+:where([data-debugF]) {
+	outline: 3px solid rgb(32, 158, 216) !important;
+	outline-offset: -3px !important;
+}
+
+
+:where([data-debugG]) {
+	outline: 3px solid rgb(255, 166, 0) !important;
+	outline-offset: -3px !important;
+}
+
+
+/* =========================
+   Carousel (scroll-snap)
+========================= */
+.carousel {
+    position: relative;
+}
+
+.carouselTrack {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-block: 10px;
+    padding-inline: 2px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.carouselTrack::-webkit-scrollbar {
+    display: none;
+}
+
+.carouselItem {
+    flex: 0 0 min(360px, 86vw);
+    scroll-snap-align: start;
+}
+
+.carouselDots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.carouselDot {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, .18);
+}
+
+.carouselDot.isOn {
+    width: 18px;
+    background: rgba(0, 0, 0, .55);
+}
+
+/* لو JS شغال (هنضيف class js على <html>) نخليها تبدأ مخفية */
+.js .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .45s ease, transform .45s ease;
+    will-change: opacity, transform;
+}
+
+.js .reveal[data-reveal="right"] {
+    transform: translateX(26px);
+}
+
+.js .reveal[data-reveal="left"] {
+    transform: translateX(-26px);
+}
+
+.js .reveal[data-reveal="up"] {
+    transform: translateY(26px);
+}
+
+.js .reveal[data-reveal="scale"] {
+    transform: scale(.96);
+}
+
+.js .reveal.isVisible {
+    opacity: 1;
+    transform: none;
+}
+
+
+/* افتراضيًا: العناصر ظاهرة */
+.reveal {
+    opacity: 1;
+    transform: none;
+}
+
+/* لو JS شغال (هنضيف class js على <html>) نخليها تبدأ مخفية */
+.js .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .45s ease, transform .45s ease;
+    will-change: opacity, transform;
+}
+
+.js .reveal[data-reveal="right"] {
+    transform: translateX(26px);
+}
+
+.js .reveal[data-reveal="left"] {
+    transform: translateX(-26px);
+}
+
+.js .reveal[data-reveal="up"] {
+    transform: translateY(26px);
+}
+
+.js .reveal[data-reveal="scale"] {
+    transform: scale(.96);
+}
+
+.js .reveal.isVisible {
+    opacity: 1;
+    transform: none;
+}
+
+@keyframes kBounceIn {
+    0% {
+        opacity: 0;
+        transform: translateY(22px) scale(.98);
+    }
+
+    60% {
+        opacity: 1;
+        transform: translateY(-6px) scale(1);
+    }
+
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.js .reveal[data-reveal="bounce"].isVisible {
+    animation: kBounceIn .55s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .js .reveal,
+    .js .reveal.isVisible {
+        transition: none !important;
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+
+/* =========================
+   Scroll Reveal Variants
+========================= */
+.reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .45s ease, transform .45s ease;
+    will-change: opacity, transform;
+}
+
+.reveal[data-reveal="right"] {
+    transform: translateX(26px);
+}
+
+.reveal[data-reveal="left"] {
+    transform: translateX(-26px);
+}
+
+.reveal[data-reveal="up"] {
+    transform: translateY(26px);
+}
+
+.reveal[data-reveal="scale"] {
+    transform: scale(.96);
+}
+
+.reveal.isVisible {
+    opacity: 1;
+    transform: none;
+}
+
+@keyframes kBounceIn {
+    0% {
+        opacity: 0;
+        transform: translateY(22px) scale(.98);
+    }
+
+    60% {
+        opacity: 1;
+        transform: translateY(-6px) scale(1);
+    }
+
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.reveal[data-reveal="bounce"].isVisible {
+    animation: kBounceIn .55s ease both;
+}
+
+/* احترام تقليل الحركة */
+@media (prefers-reduced-motion: reduce) {
+
+    .reveal,
+    .reveal.isVisible {
+        transition: none !important;
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+
+
+
+
+
+
+/* =========================
+   Gallery Grid
+========================= */
+.galleryGrid {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.gItem {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, .10);
+    border: 1px solid rgba(0, 0, 0, .08);
+    transition: transform .18s ease;
+}
+
+.gItem:hover {
+    transform: translateY(-3px);
+}
+
+.gItem img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
+/* =========================
+   Lightbox Overlay
+========================= */
+.lb {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    display: none;
+}
+
+.lb.isOpen {
+    display: block;
+}
+
+.lbBack {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .75);
+}
+
+.lbPanel {
+    position: absolute;
+    inset: 24px;
+    display: grid;
+    place-items: center;
+}
+
+.lbImgWrap {
+    max-width: min(1100px, 92vw);
+    max-height: min(720px, 86vh);
+    position: relative;
+}
+
+.lbImg {
+    width: 100%;
+    height: 100%;
+    max-height: min(720px, 86vh);
+    object-fit: contain;
+    display: block;
+    background: rgba(255, 255, 255, .04);
+    border-radius: 16px;
+}
+
+.lbClose {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, .25);
+    background: rgba(0, 0, 0, .35);
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.lbNav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 46px;
+    height: 46px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, .25);
+    background: rgba(0, 0, 0, .35);
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.lbPrev {
+    left: -60px;
+}
+
+.lbNext {
+    right: -60px;
+}
+
+@media (max-width: 700px) {
+    .lbPrev {
+        left: 10px;
+    }
+
+    .lbNext {
+        right: 10px;
+    }
+}
+
+
+
+
+
+.ctaList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 520px;
+}
+
+.ctaRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, .12);
+    background: #d9ecff;
+    text-decoration: none;
+    color: #111;
+    font-weight: 800;
+}
+
+.ctaRow:hover {
+    filter: brightness(.98);
+}
+
+.ctaIcon {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .55);
+}
+
+
+
+
+
+
+
+.tableWrap {
+    overflow: auto;
+    border-radius: 18px;
+    border: 1px solid rgba(0, 0, 0, .10);
+    background: #fff;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, .08);
+}
+
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 900px;
+    /* زي جداول المقايسات */
+}
+
+.table th,
+.table td {
+    padding: 12px 12px;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 0, 0, .06);
+    white-space: nowrap;
+}
+
+.table th {
+    position: sticky;
+    top: 0;
+    background: #e8f3c5;
+    z-index: 2;
+    font-weight: 900;
+}
+
+.table tr:hover td {
+    background: rgba(0, 0, 0, .02);
+}
+
+
+@font-face {
+	font-family: "Cairo";
+	src: url("/Fonts/Cairo.ttf") format("truetype");
+	font-weight: 200 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* =========================
+   Optional placed widgets
+========================= */
+
+.IsPlaced {
+	position: absolute;
+	left: var(--PlaceXL);
+	top: var(--PlaceYL);
+	width: var(--PlaceWidthL);
+	height: var(--PlaceHeightL);
+	z-index: var(--PlaceZ, 1);
+	opacity: var(--PlaceOpacityL, 100%);
+	transform: rotate(var(--PlaceRotateL, 0deg));
+	transform-origin: var(--PlaceOrigin, center center);
+	pointer-events: var(--PlaceClickable, auto);
+	box-sizing: border-box;
+	min-width: 0;
+}
+
+.PlaceHideLand {
+	display: none !important;
+}
+
+@media (orientation: portrait) {
+	.IsPlaced {
+		left: var(--PlaceXP);
+		top: var(--PlaceYP);
+		width: var(--PlaceWidthP);
+		height: var(--PlaceHeightP);
+		opacity: var(--PlaceOpacityP, var(--PlaceOpacityL, 100%));
+		transform: rotate(var(--PlaceRotateP, var(--PlaceRotateL, 0deg)));
+	}
+
+	.PlaceHideLand {
+		display: initial !important;
+	}
+
+	.PlaceHidePort {
+		display: none !important;
+	}
+}
+

@@ -1,0 +1,383 @@
+---
+import { DirectSize, ElemBg, Percent, Pixel, Place, type PlaceProps } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"div">, PlaceProps {
+	pSize?: DirectSize;
+	pWidth?: Pixel;
+	pHeight?: Pixel;
+	pGap?: Pixel;
+	pPad?: Pixel;
+	pMargin?: Pixel;
+	pBg?: ElemBg;
+	pBgColor?: ElemBg;
+	pBgOpacity?: Percent;
+	pBlur?: Pixel;
+	pRadius?: Pixel;
+	pAlign?: "Start" | "Center" | "End";
+	pFitContent?: boolean;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+
+const {
+	pSize,
+	pWidth,
+	pHeight,
+	pGap = new Pixel(50,20),
+	pPad = new Pixel(50,5),
+	pMargin = new Pixel(0),
+	pBg,
+	pBgColor,
+	pBgOpacity = new Percent(100),
+	pBlur = new Pixel(0),
+	pRadius = new Pixel(0),
+	pAlign = "Start",
+	pFitContent = false,
+
+	pLoc,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("VrStack"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = cProps;
+
+const cFitContent = pFitContent || GetBoolAttr(cProps["data-fit-content"]);
+
+const cWidthL = cFitContent ? "fit-content" : pSize?.WidthL || pWidth?.Landscape || "100%";
+const cWidthP = cFitContent ? "fit-content" : pSize?.WidthP || pWidth?.Portrait || pSize?.WidthL || pWidth?.Landscape || "100%";
+const cHeightL = pSize?.HeightL || pHeight?.Landscape || "auto";
+const cHeightP = pSize?.HeightP || pHeight?.Portrait || pSize?.HeightL || pHeight?.Landscape || "auto";
+
+const cBgColor = pBg?.Color || pBgColor?.Color || "transparent";
+const cBgOpacityL = pBgOpacity.Landscape;
+const cBgOpacityP = pBgOpacity.Portrait;
+
+const cBgImgL = pBg?.Img?.LinkL || "";
+const cBgImgP = pBg?.Img?.LinkP || pBg?.Img?.LinkL || "";
+
+const cBgVidL = pBg?.Vid?.LinkL || "";
+const cBgVidP = pBg?.Vid?.LinkP || pBg?.Vid?.LinkL || "";
+
+const cBgAlt = pBg?.Img?.Alt || pBg?.Vid?.Alt || "";
+
+const cFinalBgImgL = cBgImgL || cBgImgP;
+const cFinalBgImgP = cBgImgP || cBgImgL;
+
+const cMainBgVid = cBgVidL || cBgVidP;
+const cHasBgImg = cFinalBgImgL !== "" || cFinalBgImgP !== "";
+const cHasBgVid = cMainBgVid !== "";
+
+const cAlignItems = pAlign === "Center" ? "center" : pAlign === "End" ? "flex-end" : "flex-start";
+const cJustifyContent = pAlign === "Center" ? "center" : pAlign === "End" ? "flex-end" : "flex-start";
+
+const cCoreStyle = [
+	`--VrWidthL:${cWidthL};`,
+	`--VrWidthP:${cWidthP};`,
+	`--VrHeightL:${cHeightL};`,
+	`--VrHeightP:${cHeightP};`,
+	`--VrGapL:${pGap.Landscape};`,
+	`--VrGapP:${pGap.Portrait};`,
+	`--VrPadL:${pPad.Landscape};`,
+	`--VrPadP:${pPad.Portrait};`,
+	`--VrMarginL:${pMargin.Landscape};`,
+	`--VrMarginP:${pMargin.Portrait};`,
+	`--VrBgColor:${cBgColor};`,
+	`--VrBgOpacityL:${cBgOpacityL};`,
+	`--VrBgOpacityP:${cBgOpacityP};`,
+	`--VrBlurL:${pBlur.Landscape};`,
+	`--VrBlurP:${pBlur.Portrait};`,
+	`--VrRadiusL:${pRadius.Landscape};`,
+	`--VrRadiusP:${pRadius.Portrait};`,
+	`--VrAlignItems:${cAlignItems};`,
+	`--VrJustifyContent:${cJustifyContent};`,
+	GetStyleText(pGivenStyle),
+].filter(Boolean).join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cCoreStyle);
+
+const cStackClass = [
+	"VrStack",
+	cFitContent ? "FitContent" : "",
+	cPlace.Class,
+	pGivenClass,
+].filter(Boolean).join(" ");
+
+function GetBoolAttr(pValue: unknown) {
+	return pValue === true || pValue === "" || pValue === "true";
+}
+
+function GetStyleText(pStyle: unknown) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+	if (typeof pStyle !== "object") return "";
+
+	return Object.entries(pStyle as Record<string, string | number | null | undefined>)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div
+	class = {cStackClass}
+	style = {cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	{ cHasBgVid ? (
+
+		<video
+			class = " VrStackBg VrStackBgVid "
+			crossorigin="anonymous"
+			playsinline
+			preload="auto"
+			loop
+			autoplay
+			muted
+		>
+
+			{ cBgVidP ?
+
+				<source media="(orientation: portrait)" src={cBgVidP} />
+
+				: null}
+
+				{ cBgVidL ?
+
+					<source media="(orientation: landscape)" src={cBgVidL} />
+
+					: null}
+
+					<source src={cMainBgVid} />
+
+				</video>
+
+				) : cHasBgImg ? (
+
+					<picture class = " VrStackBg VrStackBgPic ">
+
+						<source media="(orientation: portrait)" srcset={cFinalBgImgP} />
+
+						<img
+							class = " VrStackBgImg "
+							src={cFinalBgImgL}
+							alt={cBgAlt}
+							loading="lazy"
+							decoding="async"
+						/>
+
+					</picture>
+
+					) : null}
+
+					<slot />
+
+				</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.VrStack {
+		position: relative;
+		isolation: isolate;
+		display: flex;
+		flex-direction: column;
+		box-sizing: border-box;
+		width: var(--VrWidthL, 100%);
+		max-width: 100%;
+		height: var(--VrHeightL, auto);
+		margin: var(--VrMarginL, 0);
+		padding: var(--VrPadL, 0);
+		gap: var(--VrGapL, 0);
+		border-radius: var(--VrRadiusL, 0);
+		background-color: color-mix(in srgb, var(--VrBgColor) var(--VrBgOpacityL), transparent);
+		backdrop-filter: blur(var(--VrBlurL, 0));
+		-webkit-backdrop-filter: blur(var(--VrBlurL, 0));
+		overflow: visible;
+		align-items: var(--VrAlignItems, flex-start);
+		justify-content: var(--VrJustifyContent, flex-start);
+		min-width: 0;
+	}
+
+	.VrStack > .VrStackBg {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		display: block;
+		width: 100% !important;
+		height: 100% !important;
+		object-fit: cover;
+		pointer-events: none;
+		user-select: none;
+		flex: 0 0 auto !important;
+	}
+
+	.VrStack > :global(:not(.VrStackBg)) {
+		position: relative;
+		z-index: 1;
+		box-sizing: border-box !important;
+		min-width: 0 !important;
+		max-width: 100% !important;
+	}
+
+	.VrStack > :global(:not(.VrStackBg):not([data-own-size])) {
+		flex-grow: 0 !important;
+		flex-shrink: 0 !important;
+		flex-basis: auto !important;
+		width: 100% !important;
+		max-width: 100% !important;
+		height: auto;
+		margin: 0 !important;
+		align-self: stretch !important;
+	}
+
+	.VrStack > :global(:not(.VrStackBg):not([data-own-size]) > *) {
+		width: 100% !important;
+		max-width: 100% !important;
+		box-sizing: border-box !important;
+	}
+
+	.VrStack > :global(:not(.VrStackBg)[data-own-size]) {
+		flex-grow: 0 !important;
+		flex-shrink: 1 !important;
+		flex-basis: auto !important;
+		min-width: 0 !important;
+		max-width: 100% !important;
+	}
+
+
+	.VrStackBgImg {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		pointer-events: none;
+		user-select: none;
+	}
+
+
+
+	.VrStack.FitContent:not(.IsPlaced) {
+		width: fit-content;
+		max-width: 100%;
+	}
+
+	.VrStack.FitContent > :global(:not(.VrStackBg):not([data-own-size])) {
+		width: auto !important;
+		max-width: 100% !important;
+		align-self: var(--VrAlignItems, flex-start) !important;
+	}
+
+
+	.VrStack.IsPlaced {
+		position: absolute;
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.VrStack {
+			width: var(--VrWidthP, var(--VrWidthL, 100%));
+			height: var(--VrHeightP, var(--VrHeightL, auto));
+			margin: var(--VrMarginP, var(--VrMarginL, 0));
+			padding: var(--VrPadP, var(--VrPadL, 0));
+			gap: var(--VrGapP, var(--VrGapL, 0));
+			border-radius: var(--VrRadiusP, var(--VrRadiusL, 0));
+			background-color: color-mix(in srgb, var(--VrBgColor) var(--VrBgOpacityP), transparent);
+			backdrop-filter: blur(var(--VrBlurP, var(--VrBlurL, 0)));
+			-webkit-backdrop-filter: blur(var(--VrBlurP, var(--VrBlurL, 0)));
+		}
+
+		.VrStack.IsPlaced {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+	}
+
+
+
+</style>

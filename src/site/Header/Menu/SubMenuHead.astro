@@ -1,0 +1,233 @@
+---
+const { fTitle = "اسم العنصر", fLink = "", fIcon = "" } = Astro.props;
+const cIsDirect = !!fLink?.trim();
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class:list={["Box", { isDirect: cIsDirect }]} sub-head>
+
+	{ cIsDirect && (
+
+		<a
+			class = " SubMenuBtn "
+			href={fLink}
+		>
+
+			<span class = " Title ">
+				{fTitle}
+			</span>
+
+			<img class = " Icon " src={fIcon} alt="" />
+
+		</a>
+
+	) }
+
+	{ !cIsDirect && (
+
+		<button
+			class = " SubMenuBtn "
+			type="button"
+			sub-toggle
+		>
+
+			<span class = " Title ">
+				{fTitle}
+			</span>
+
+			<img class = " Arrow " alt="" />
+
+			<img class = " Icon " src={fIcon} alt="" />
+
+		</button>
+
+	) }
+
+	{ !cIsDirect && (
+
+		<div class = " SubMenu " sub-panel hidden>
+		
+			<slot />
+		
+		</div>
+
+	) }
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.Box {
+		width: 280px;
+		height: auto;
+		position: relative;
+		z-index: 2000;
+		display: grid;
+		font-family: inherit;
+		grid-template-rows: 35px auto;
+		justify-items: center;
+	}
+
+
+	.SubMenuBtn {
+		width: 280px;
+		height: 35px;
+		display: flex;
+		border: 0;
+		align-items: center;
+		justify-content: flex-end;
+		background-color: transparent;
+		background-position: center;
+		background-size: contain;
+		background-repeat: no-repeat;
+		font-family: inherit;
+		cursor: pointer;
+		padding: 0;
+		border-radius: 999px;
+		background-image: url("./SubMenuHead_Normal.webp");
+		text-decoration: none;
+		color: inherit;
+	}
+
+	.SubMenuBtn:hover {
+		background-image: url("./SubMenuHead_Hover.webp");
+	}
+
+
+	.Title {
+		font-weight: 700;
+		font-size: 16px;
+		color: #fff;
+		pointer-events: none;
+		position: absolute;
+		left: 0px;
+		right: 60px;
+		top: 8px;
+		bottom: 0px;
+		text-align: right;
+		line-height: 1;
+	}
+
+
+	.Arrow {
+		width: 25px;
+		aspect-ratio: 38/25;
+		position: absolute;
+		right: 20px;
+		top: 10px;
+		transition: transform 0.1s ease;
+		content: url("./OpenArrow.webp");
+	}
+
+
+	.Icon {
+		height: 35px;
+		position: absolute;
+		left: 10px;
+		top: 0px;
+	}
+
+
+	.SubMenu {
+		width: 240px;
+		height: auto;
+		display: flex;
+		flex-direction: column;
+		background-color: rgb(4, 13, 26);
+	}
+
+
+
+	[sub-head].isOpen .Arrow {
+		transform: rotate(180deg);
+		content: url("./CloseArrow.webp");
+	}
+
+
+	.SubMenu[hidden] {
+		display: none;
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script is:inline>
+	// @ts-check
+	(() => {
+	// امنع تكرار الربط لو SubMenuHead اتكرر
+	if (window.__subMenuHeadBound) return;
+	window.__subMenuHeadBound = true;
+
+	document.addEventListener("click", (e) => {
+	const fBtn = e.target.closest?.("[sub-toggle]");
+	if (!fBtn) return;
+
+	const fHead = fBtn.closest?.("[sub-head]");
+	const fPanel = fHead?.querySelector?.("[sub-panel]");
+	if (!fHead || !fPanel) return;
+
+	const fWillOpen = fPanel.hidden; // لو مخفي -> هيفتح
+	fPanel.hidden = !fWillOpen;
+	fHead.classList.toggle("isOpen", fWillOpen);
+
+	// ابعت Event لما يفتح عشان MainHeader يقفل الباقي
+	if (fWillOpen) {
+	fHead.dispatchEvent(
+	new CustomEvent("subMenuOpen", {
+	bubbles: true,
+	detail: { fHead },
+	}),
+	);
+	}
+	});
+	})();
+</script>

@@ -1,0 +1,1622 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"section">, PlaceProps {
+	pTitle?: string;
+	pDesc?: string;
+	pDetectedGovernorate?: string;
+	pDetectedArea?: string;
+	pCurrentServiceName?: string;
+	pPartnerTargetId?: string;
+}
+
+const {
+	pTitle = "خريطة تغطية الخدمة",
+	pDesc = "عرض سريع لنطاق التغطية الحالي للخدمة داخل مصر، مع قراءة مبدئية للمحافظة والمنطقة التي يزور منها العميل.",
+	pDetectedGovernorate = "القاهرة",
+	pDetectedArea = "التجمع الخامس",
+	pCurrentServiceName = "الخدمة الحالية",
+	pPartnerTargetId = "/emochain/partners",
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("EmoCoverageMapStrip"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+
+const cIsAlex = pDetectedGovernorate === "الإسكندرية";
+const cGovTitle = cIsAlex ? "خريطة الإسكندرية" : "خريطة القاهرة";
+const cGovDesc = cIsAlex ? "قراءة مبدئية لمناطق الإسكندرية حسب بيانات الزائر" : "قراءة مبدئية لمناطق القاهرة حسب بيانات الزائر";
+
+const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
+const cPartnerHref = GetPartnerHref(pPartnerTargetId);
+
+function GetPartnerHref(pTarget: string): string {
+	if (pTarget.startsWith("#") || pTarget.startsWith("/") || pTarget.startsWith("http")) {
+		return pTarget;
+	}
+
+	return `#${pTarget}`;
+}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section
+	class = {`EmoCoverageMapStrip ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	data-emo-coverage-map-strip="true"
+	data-current-map="local"
+	{...RemAttr}
+>
+
+
+
+
+
+
+
+	<svg class = " SvgDefs " aria-hidden="true">
+
+		<symbol id="CovIconMap" viewBox="0 0 24 24">
+
+			<path d="m15.5 4 5-2v16l-5 2-7-2.5-5 2V3.5l5-2L15.5 4Zm-1 13.5V6l-5-1.8v11.5l5 1.8Zm2-.1 2-0.8V5l-2 .8v11.6Zm-10-13-2 .8v11.6l2-.8V4.4Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="CovIconPin" viewBox="0 0 24 24">
+
+			<path
+				d="M12 2.5a6.3 6.3 0 0 0-6.3 6.3c0 4.7 6.3 12.7 6.3 12.7s6.3-8 6.3-12.7A6.3 6.3 0 0 0 12 2.5Zm0 8.5a2.2 2.2 0 1 1 0-4.4 2.2 2.2 0 0 1 0 4.4Z"
+			>
+
+			</path>
+
+		</symbol>
+
+		<symbol id="CovIconPartner" viewBox="0 0 24 24">
+
+			<path
+				d="M12 3a3 3 0 0 1 2.8 4.1l3.1 2.2a3 3 0 1 1-1.1 1.6l-3.2-2.2a3 3 0 0 1-3.2 0l-3.2 2.2a3 3 0 1 1-1.1-1.6l3.1-2.2A3 3 0 0 1 12 3Zm0 11a3 3 0 0 1 3 3v3H9v-3a3 3 0 0 1 3-3Z"
+			>
+
+			</path>
+
+		</symbol>
+
+		<symbol id="CovIconCheck" viewBox="0 0 24 24">
+
+			<path d="m9.3 16.6-4.2-4.2 1.4-1.4 2.8 2.8 8.2-8.2 1.4 1.4-9.6 9.6Z">
+
+			</path>
+
+		</symbol>
+
+	</svg>
+
+
+
+
+
+
+
+	<div class = " CoverageShell ">
+
+		<div class = " CoverageHead ">
+
+			<div class = " TitleBox ">
+
+				<strong>
+					تغطية جغرافية
+				</strong>
+
+				<h2>
+					{pTitle}
+				</h2>
+
+				<p>
+					{pDesc}
+				</p>
+
+			</div>
+
+			<div class = " DetectedBox ">
+
+				<span>
+					موقع الزيارة المبدئي
+				</span>
+
+				<b>
+
+					{pDetectedGovernorate} —
+
+					{pDetectedArea}
+
+				</b>
+
+			</div>
+
+			<button
+				class = " MobileToggle "
+				type="button"
+				data-map-toggle="true"
+			>
+
+				<span data-map-toggle-text="true">
+					عرض خريطة مصر
+				</span>
+
+			</button>
+
+		</div>
+
+		<div class = " MapsGrid ">
+
+			<div class = " MapCard EgyptMapCard " data-egypt-map="true">
+
+				<div class = " MapCardHead ">
+
+					<span>
+
+						<svg>
+
+							<use href="#CovIconMap">
+
+							</use>
+
+						</svg>
+
+					</span>
+
+					<div>
+
+						<h3>
+							مصر بالكامل
+						</h3>
+
+						<p>
+
+							لون المحافظة يوضح توفر
+
+							{pCurrentServiceName}
+
+						</p>
+
+					</div>
+
+				</div>
+
+				<div class = " MapBox EgyptMapBox ">
+
+					<svg
+						class = " EgyptSvg "
+						viewBox="0 0 430 560"
+						role="img"
+						aria-label="خريطة تغطية محافظات مصر"
+					>
+
+						<path
+							class = " MapShadow "
+							d="M190 20 250 30 290 75 306 130 290 182 315 242 296 315 325 394 290 535 160 535 132 430 150 330 128 245 152 170 137 95Z"
+						>
+
+						</path>
+
+						<g class = " EgyptRegions ">
+
+							<a class = " Region IsCovered " href={cPartnerHref}>
+
+								<path d="M184 53 230 51 248 88 226 122 178 118 164 82Z">
+
+								</path>
+
+								<text x="205" y="91">
+
+									القاهرة
+
+								</text>
+
+								<text
+									class = " Percent "
+									x="205"
+									y="108"
+								>
+
+									82%
+
+								</text>
+
+							</a>
+
+							<a class = " Region IsCovered " href={cPartnerHref}>
+
+								<path d="M138 94 176 84 178 120 154 154 123 136Z">
+
+								</path>
+
+								<text x="150" y="122">
+
+									الجيزة
+
+								</text>
+
+								<text
+									class = " Percent "
+									x="150"
+									y="139"
+								>
+
+									74%
+
+								</text>
+
+							</a>
+
+							<a class = " Region IsPartial " href={cPartnerHref}>
+
+								<path d="M228 126 270 112 292 150 262 186 224 168Z">
+
+								</path>
+
+								<text x="257" y="150">
+
+									الشرقية
+
+								</text>
+
+								<text
+									class = " Percent "
+									x="257"
+									y="167"
+								>
+
+									48%
+
+								</text>
+
+							</a>
+
+							<a class = " Region IsCovered " href={cPartnerHref}>
+
+								<path d="M170 24 232 30 232 52 176 54Z">
+
+								</path>
+
+								<text x="201" y="45">
+
+									إسكندرية
+
+								</text>
+
+								<text
+									class = " Percent "
+									x="201"
+									y="59"
+								>
+
+									69%
+
+								</text>
+
+							</a>
+
+							<a class = " Region IsPartial " href={cPartnerHref}>
+
+								<path d="M247 55 286 78 300 116 270 113 248 88Z">
+
+								</path>
+
+								<text x="278" y="96">
+
+									الدقهلية
+
+								</text>
+
+								<text
+									class = " Percent "
+									x="278"
+									y="113"
+								>
+
+									41%
+
+								</text>
+
+							</a>
+
+							<a class = " Region IsPartial " href={cPartnerHref}>
+
+								<path d="M120 140 154 156 146 204 104 202 92 164Z">
+
+								</path>
+
+								<text x="122" y="177">
+
+									الفيوم
+
+								</text>
+
+								<text
+									class = " Percent "
+									x="122"
+									y="194"
+								>
+
+									35%
+
+								</text>
+
+							</a>
+
+							<a class = " Region IsCovered " href={cPartnerHref}>
+
+								<path d="M154 170 222 170 232 232 170 244 145 205Z">
+
+								</path>
+
+								<text x="188" y="205">
+
+									بني سويف
+
+								</text>
+
+								<text
+									class = " Percent "
+									x="188"
+									y="222"
+								>
+
+									58%
+
+								</text>
+
+							</a>
+
+							<a class = " Region IsNotCovered " href={cPartnerHref}>
+
+								<path d="M172 248 232 236 256 310 202 332 150 310Z">
+
+								</path>
+
+								<text x="203" y="286">
+
+									المنيا
+
+								</text>
+
+								<text
+									class = " Percent "
+									x="203"
+									y="303"
+								>
+
+									18%
+
+								</text>
+
+							</a>
+
+							<a class = " Region IsNotCovered " href={cPartnerHref}>
+
+								<path d="M203 336 264 318 292 404 238 440 178 410Z">
+
+								</path>
+
+								<text x="235" y="382">
+
+									أسيوط
+
+								</text>
+
+								<text
+									class = " Percent "
+									x="235"
+									y="399"
+								>
+
+									12%
+
+								</text>
+
+							</a>
+
+							<a class = " Region IsNotCovered " href={cPartnerHref}>
+
+								<path d="M240 444 292 410 314 510 288 540 222 520Z">
+
+								</path>
+
+								<text x="270" y="486">
+
+									أسوان
+
+								</text>
+
+								<text
+									class = " Percent "
+									x="270"
+									y="503"
+								>
+
+									9%
+
+								</text>
+
+							</a>
+
+							<a class = " Region IsPartial " href={cPartnerHref}>
+
+								<path d="M292 170 345 190 360 285 318 312 296 245 270 188Z">
+
+								</path>
+
+								<text x="326" y="245">
+
+									البحر الأحمر
+
+								</text>
+
+								<text
+									class = " Percent "
+									x="326"
+									y="262"
+								>
+
+									31%
+
+								</text>
+
+							</a>
+
+							<a class = " Region IsNotCovered " href={cPartnerHref}>
+
+								<path d="M88 205 148 207 148 312 82 340 48 280Z">
+
+								</path>
+
+								<text x="103" y="270">
+
+									مطروح
+
+								</text>
+
+								<text
+									class = " Percent "
+									x="103"
+									y="287"
+								>
+
+									7%
+
+								</text>
+
+							</a>
+
+						</g>
+
+					</svg>
+
+				</div>
+
+				<div class = " LegendRow ">
+
+					<span class = " LegendItem Covered ">
+						متاحة
+					</span>
+
+					<span class = " LegendItem Partial ">
+						جزئية
+					</span>
+
+					<span class = " LegendItem Empty ">
+						نبحث عن شريك
+					</span>
+
+				</div>
+
+			</div>
+
+			<div class = " MapCard LocalMapCard " data-local-map="true">
+
+				<div class = " MapCardHead ">
+
+					<span>
+
+						<svg>
+
+							<use href="#CovIconPin">
+
+							</use>
+
+						</svg>
+
+					</span>
+
+					<div>
+
+						<h3>
+							{cGovTitle}
+						</h3>
+
+						<p>
+							{cGovDesc}
+						</p>
+
+					</div>
+
+				</div>
+
+				<div class = " MapBox LocalMapBox ">
+
+					{ !cIsAlex && (
+
+						<svg
+							class = " LocalSvg "
+							viewBox="0 0 560 410"
+							role="img"
+							aria-label="خريطة مناطق القاهرة"
+						>
+						
+						
+						
+						
+						
+						
+						
+							<g class = " LocalRegions ">
+						
+								<a class = " LocalRegion IsCovered " href={cPartnerHref}>
+						
+									<path d="M338 120 500 105 520 180 456 236 348 210Z">
+						
+									</path>
+						
+									<text x="438" y="163">
+						
+										مدينة نصر
+						
+									</text>
+						
+									<text
+										class = " Percent "
+										x="438"
+										y="181"
+									>
+						
+										76%
+						
+									</text>
+						
+								</a>
+						
+								<a class = " LocalRegion IsCovered " href={cPartnerHref}>
+						
+									<path d="M350 214 456 240 438 336 300 354 270 270Z">
+						
+									</path>
+						
+									<text x="365" y="286">
+						
+										التجمع الخامس
+						
+									</text>
+						
+									<text
+										class = " Percent "
+										x="365"
+										y="305"
+									>
+						
+										88%
+						
+									</text>
+						
+								</a>
+						
+								<a class = " LocalRegion IsPartial " href={cPartnerHref}>
+						
+									<path d="M220 80 338 118 346 210 248 212 190 150Z">
+						
+									</path>
+						
+									<text x="270" y="150">
+						
+										مصر الجديدة
+						
+									</text>
+						
+									<text
+										class = " Percent "
+										x="270"
+										y="169"
+									>
+						
+										52%
+						
+									</text>
+						
+								</a>
+						
+								<a class = " LocalRegion IsCovered " href={cPartnerHref}>
+						
+									<path d="M112 112 190 152 248 214 214 300 104 275 74 182Z">
+						
+									</path>
+						
+									<text x="153" y="215">
+						
+										وسط البلد
+						
+									</text>
+						
+									<text
+										class = " Percent "
+										x="153"
+										y="234"
+									>
+						
+										67%
+						
+									</text>
+						
+								</a>
+						
+								<a class = " LocalRegion IsNotCovered " href={cPartnerHref}>
+						
+									<path d="M216 304 268 272 298 356 238 392 136 354 104 278Z">
+						
+									</path>
+						
+									<text x="199" y="344">
+						
+										المعادي
+						
+									</text>
+						
+									<text
+										class = " Percent "
+										x="199"
+										y="363"
+									>
+						
+										24%
+						
+									</text>
+						
+								</a>
+						
+								<a class = " LocalRegion IsPartial " href={cPartnerHref}>
+						
+									<path d="M70 184 104 278 136 356 48 344 22 244Z">
+						
+									</path>
+						
+									<text x="74" y="280">
+						
+										حلوان
+						
+									</text>
+						
+									<text
+										class = " Percent "
+										x="74"
+										y="299"
+									>
+						
+										43%
+						
+									</text>
+						
+								</a>
+						
+								<g class = " VisitorArea ">
+						
+									<path d="M350 214 456 240 438 336 300 354 270 270Z">
+						
+									</path>
+						
+									<circle
+										cx="365"
+										cy="285"
+										r="7"
+									>
+						
+									</circle>
+						
+									<text x="365" y="258">
+						
+										أنت هنا تقريبًا
+						
+									</text>
+						
+								</g>
+						
+							</g>
+						
+						
+						
+						
+						
+						
+						
+						</svg>
+					) }
+
+					{ cIsAlex && (
+
+						<svg
+							class = " LocalSvg "
+							viewBox="0 0 560 410"
+							role="img"
+							aria-label="خريطة مناطق الإسكندرية"
+						>
+						
+						
+						
+						
+						
+						
+						
+							<g class = " LocalRegions ">
+						
+								<a class = " LocalRegion IsCovered " href={cPartnerHref}>
+						
+									<path d="M60 120 160 88 210 130 176 200 72 210Z">
+						
+									</path>
+						
+									<text x="130" y="150">
+						
+										العجمي
+						
+									</text>
+						
+									<text
+										class = " Percent "
+										x="130"
+										y="169"
+									>
+						
+										56%
+						
+									</text>
+						
+								</a>
+						
+								<a class = " LocalRegion IsCovered " href={cPartnerHref}>
+						
+									<path d="M212 132 330 116 374 168 326 228 178 202Z">
+						
+									</path>
+						
+									<text x="278" y="170">
+						
+										سموحة
+						
+									</text>
+						
+									<text
+										class = " Percent "
+										x="278"
+										y="189"
+									>
+						
+										72%
+						
+									</text>
+						
+								</a>
+						
+								<a class = " LocalRegion IsPartial " href={cPartnerHref}>
+						
+									<path d="M376 170 500 150 532 225 452 286 326 230Z">
+						
+									</path>
+						
+									<text x="438" y="218">
+						
+										سيدي بشر
+						
+									</text>
+						
+									<text
+										class = " Percent "
+										x="438"
+										y="237"
+									>
+						
+										45%
+						
+									</text>
+						
+								</a>
+						
+								<a class = " LocalRegion IsCovered " href={cPartnerHref}>
+						
+									<path d="M178 206 326 232 314 326 190 344 122 280Z">
+						
+									</path>
+						
+									<text x="244" y="282">
+						
+										محرم بك
+						
+									</text>
+						
+									<text
+										class = " Percent "
+										x="244"
+										y="301"
+									>
+						
+										63%
+						
+									</text>
+						
+								</a>
+						
+								<a class = " LocalRegion IsNotCovered " href={cPartnerHref}>
+						
+									<path d="M316 328 452 288 504 346 420 386 300 374Z">
+						
+									</path>
+						
+									<text x="410" y="340">
+						
+										المنتزه
+						
+									</text>
+						
+									<text
+										class = " Percent "
+										x="410"
+										y="359"
+									>
+						
+										19%
+						
+									</text>
+						
+								</a>
+						
+								<g class = " VisitorArea ">
+						
+									<path d="M212 132 330 116 374 168 326 228 178 202Z">
+						
+									</path>
+						
+									<circle
+										cx="278"
+										cy="170"
+										r="7"
+									>
+						
+									</circle>
+						
+									<text x="278" y="145">
+						
+										أنت هنا تقريبًا
+						
+									</text>
+						
+								</g>
+						
+							</g>
+						
+						
+						
+						
+						
+						
+						
+						</svg>
+					) }
+
+				</div>
+
+				<div class = " LocalActions ">
+
+					<span>
+						المناطق الرمادية أو الضعيفة يمكن فتحها عبر متعاون محلي.
+					</span>
+
+					<a href={cPartnerHref}>
+
+						<svg>
+
+							<use href="#CovIconPartner">
+
+							</use>
+
+						</svg>
+
+						كن شريك تغطية
+
+					</a>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+
+
+
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.EmoCoverageMapStrip {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		width: 100%;
+		min-height: 620px;
+		box-sizing: border-box;
+		direction: rtl;
+		background: radial-gradient(circle at 7% 24%, rgba(255, 209, 92, 0.13), transparent 24%),
+			radial-gradient(circle at 94% 48%, rgba(38, 181, 255, 0.15), transparent 25%),
+			linear-gradient(135deg, #071426 0%, #081b31 54%, #06101e 100%);
+		color: #f8fbff;
+		border-block: 1px solid rgba(125, 190, 255, 0.18);
+	}
+
+	.EmoCoverageMapStrip::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		pointer-events: none;
+		background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+			linear-gradient(0deg, rgba(255, 255, 255, 0.032) 1px, transparent 1px);
+		background-size: 38px 38px;
+		opacity: 0.28;
+	}
+
+
+	.SvgDefs {
+		position: absolute;
+		width: 0;
+		height: 0;
+		overflow: hidden;
+	}
+
+
+	.CoverageShell {
+		display: grid;
+		grid-template-rows: auto 1fr;
+		gap: 14px;
+		width: min(1600px, calc(100% - 30px));
+		min-height: 620px;
+		margin-inline: auto;
+		padding-block: 22px;
+		box-sizing: border-box;
+	}
+
+
+	.CoverageHead {
+		display: grid;
+		grid-template-columns: minmax(320px, 1fr) auto auto;
+		align-items: center;
+		gap: 14px;
+	}
+
+
+	.TitleBox {
+		display: grid;
+		grid-template-columns: auto auto 1fr;
+		align-items: center;
+		gap: 10px;
+		min-width: 0;
+	}
+
+	.TitleBox strong {
+		display: inline-flex;
+		width: fit-content;
+		padding: 5px 11px;
+		border: 1px solid rgba(255, 209, 92, 0.34);
+		border-radius: 999px;
+		background: rgba(255, 209, 92, 0.10);
+		color: #ffd15c;
+		font-size: 12px;
+		font-weight: 950;
+		white-space: nowrap;
+	}
+
+	.TitleBox h2 {
+		margin: 0;
+		color: #ffffff;
+		font-size: 24px;
+		font-weight: 950;
+		line-height: 1.25;
+		white-space: nowrap;
+	}
+
+	.TitleBox p {
+		margin: 0;
+		color: rgba(248, 251, 255, 0.65);
+		font-size: 13px;
+		font-weight: 700;
+		line-height: 1.7;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+
+	.DetectedBox {
+		display: grid;
+		gap: 2px;
+		padding: 8px 13px;
+		border: 1px solid rgba(125, 211, 255, 0.24);
+		border-radius: 15px;
+		background: rgba(255, 255, 255, 0.07);
+		white-space: nowrap;
+	}
+
+	.DetectedBox span {
+		color: rgba(248, 251, 255, 0.58);
+		font-size: 10px;
+		font-weight: 800;
+	}
+
+	.DetectedBox b {
+		color: #7dd3ff;
+		font-size: 13px;
+		font-weight: 950;
+	}
+
+
+	.MobileToggle {
+		display: none;
+		height: 36px;
+		padding-inline: 13px;
+		border: 1px solid rgba(255, 209, 92, 0.28);
+		border-radius: 13px;
+		background: rgba(255, 209, 92, 0.12);
+		color: #ffd15c;
+		font-family: inherit;
+		font-size: 12px;
+		font-weight: 950;
+		cursor: pointer;
+	}
+
+
+	.MapsGrid {
+		display: grid;
+		grid-template-columns: 0.78fr 1.22fr;
+		gap: 14px;
+		min-height: 0;
+	}
+
+
+	.MapCard {
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+		gap: 10px;
+		min-width: 0;
+		min-height: 0;
+		padding: 13px;
+		border: 1px solid rgba(125, 190, 255, 0.20);
+		border-radius: 24px;
+		background: rgba(255, 255, 255, 0.055);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08),
+			0 15px 34px rgba(0, 0, 0, 0.20);
+		backdrop-filter: blur(13px);
+		-webkit-backdrop-filter: blur(13px);
+		box-sizing: border-box;
+	}
+
+
+	.LocalMapCard {
+		border-color: rgba(255, 209, 92, 0.24);
+	}
+
+	.LocalMapCard .MapCardHead > span {
+		background: rgba(255, 209, 92, 0.13);
+		color: #ffd15c;
+	}
+
+
+	.MapCardHead {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		align-items: center;
+		gap: 9px;
+		min-width: 0;
+	}
+
+	.MapCardHead > span {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 38px;
+		height: 38px;
+		border-radius: 14px;
+		background: rgba(125, 211, 255, 0.12);
+		color: #7dd3ff;
+	}
+
+	.MapCardHead h3 {
+		margin: 0;
+		color: #ffffff;
+		font-size: 17px;
+		font-weight: 950;
+		line-height: 1.25;
+	}
+
+	.MapCardHead p {
+		margin: 3px 0 0;
+		color: rgba(248, 251, 255, 0.58);
+		font-size: 12px;
+		font-weight: 750;
+		line-height: 1.45;
+	}
+
+
+	.MapBox {
+		display: grid;
+		place-items: center;
+		min-height: 0;
+		border-radius: 20px;
+		background: radial-gradient(circle at 50% 45%, rgba(125, 211, 255, 0.10), transparent 45%),
+			rgba(2, 12, 28, 0.30);
+		overflow: hidden;
+	}
+
+
+	.MapShadow {
+		fill: rgba(0, 0, 0, 0.22);
+		transform: translate(8px, 8px);
+	}
+
+
+	.IsCovered path {
+		fill: rgba(43, 190, 120, 0.82);
+	}
+
+
+	.IsPartial path {
+		fill: rgba(255, 185, 65, 0.84);
+	}
+
+
+	.IsNotCovered path {
+		fill: rgba(120, 130, 145, 0.58);
+		stroke-dasharray: 5 4;
+	}
+
+
+	.VisitorArea path {
+		fill: transparent;
+		stroke: #ff4fd8;
+		stroke-width: 5;
+		vector-effect: non-scaling-stroke;
+		filter: drop-shadow(0 0 9px rgba(255, 79, 216, 0.72));
+		pointer-events: none;
+	}
+
+	.VisitorArea circle {
+		fill: #ff4fd8;
+		stroke: #ffffff;
+		stroke-width: 3;
+		filter: drop-shadow(0 0 10px rgba(255, 79, 216, 0.9));
+	}
+
+	.VisitorArea text {
+		fill: #ffffff;
+		font-size: 15px;
+		font-weight: 950;
+		text-anchor: middle;
+		paint-order: stroke;
+		stroke: rgba(0, 0, 0, 0.72);
+		stroke-width: 4px;
+		pointer-events: none;
+	}
+
+
+	.LegendItem {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		color: rgba(248, 251, 255, 0.70);
+		font-size: 11px;
+		font-weight: 850;
+		white-space: nowrap;
+	}
+
+	.LegendItem::before {
+		content: "";
+		width: 10px;
+		height: 10px;
+		border-radius: 999px;
+		background: currentColor;
+	}
+
+
+	.LocalActions span {
+		color: rgba(248, 251, 255, 0.62);
+		font-size: 11px;
+		font-weight: 750;
+		line-height: 1.5;
+	}
+
+	.LocalActions a {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 7px;
+		min-width: 130px;
+		height: 34px;
+		padding-inline: 12px;
+		border-radius: 12px;
+		background: linear-gradient(135deg, #ffd15c, #ff9f1f);
+		color: #101827;
+		text-decoration: none;
+		font-size: 11px;
+		font-weight: 950;
+		white-space: nowrap;
+		box-shadow: 0 10px 22px rgba(255, 169, 31, 0.17);
+	}
+
+
+
+	.LegendItem.Covered {
+		color: #42ff9f;
+	}
+
+
+	.LegendItem.Partial {
+		color: #ffd15c;
+	}
+
+
+	.LegendItem.Empty {
+		color: #c5ced9;
+	}
+
+
+
+	.MapCardHead svg,
+	.LocalActions a svg
+	{
+		width: 19px;
+		height: 19px;
+		fill: currentColor;
+	}
+
+
+	.EgyptSvg,
+	.LocalSvg
+	{
+		width: 100%;
+		height: 100%;
+		max-height: 470px;
+		padding: 10px;
+		box-sizing: border-box;
+	}
+
+
+	.Region path,
+	.LocalRegion path
+	{
+		stroke: rgba(255, 255, 255, 0.72);
+		stroke-width: 2;
+		vector-effect: non-scaling-stroke;
+		transition: filter 0.15s ease, transform 0.15s ease;
+	}
+
+
+	.Region text,
+	.LocalRegion text
+	{
+		fill: #ffffff;
+		font-size: 15px;
+		font-weight: 950;
+		text-anchor: middle;
+		pointer-events: none;
+		paint-order: stroke;
+		stroke: rgba(0, 0, 0, 0.58);
+		stroke-width: 4px;
+		stroke-linejoin: round;
+	}
+
+
+	.Region .Percent,
+	.LocalRegion .Percent
+	{
+		font-size: 13px;
+		fill: rgba(255, 255, 255, 0.78);
+	}
+
+
+	.LegendRow,
+	.LocalActions
+	{
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+		min-height: 34px;
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	@media (hover: hover) and (pointer: fine) {
+		.Region:hover path,
+		.LocalRegion:hover path
+		{
+			filter: brightness(1.12) drop-shadow(0 6px 14px rgba(0, 0, 0, 0.22));
+		}
+
+		.LocalActions a:hover {
+			filter: brightness(1.04);
+		}
+	}
+
+
+	@media (max-width: 1050px) {
+		.EmoCoverageMapStrip {
+			min-height: 100svh;
+			overflow: visible;
+		}
+
+		.CoverageShell {
+			width: min(760px, calc(100% - 24px));
+			min-height: 100svh;
+			padding-block: 16px;
+		}
+
+		.CoverageHead {
+			grid-template-columns: 1fr auto;
+			text-align: center;
+		}
+
+		.TitleBox {
+			grid-column: 1 / -1;
+			grid-template-columns: 1fr;
+			justify-items: center;
+		}
+
+		.TitleBox h2,
+		.TitleBox p
+		{
+			white-space: normal;
+			text-align: center;
+		}
+
+		.MobileToggle {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.MapsGrid {
+			grid-template-columns: 1fr;
+		}
+
+		.EmoCoverageMapStrip[data-current-map="local"] .EgyptMapCard {
+			display: none;
+		}
+
+		.EmoCoverageMapStrip[data-current-map="egypt"] .LocalMapCard {
+			display: none;
+		}
+
+		.EgyptSvg,
+		.LocalSvg
+		{
+			max-height: none;
+			height: 58svh;
+		}
+	}
+
+
+	@media (orientation: portrait) {
+		.CoverageShell {
+			width: min(430px, calc(100% - 18px));
+			gap: 10px;
+		}
+
+		.TitleBox h2 {
+			font-size: 21px;
+		}
+
+		.TitleBox p {
+			font-size: 12px;
+		}
+
+		.CoverageHead {
+			gap: 10px;
+		}
+
+		.DetectedBox {
+			justify-self: stretch;
+			text-align: center;
+		}
+
+		.MobileToggle {
+			width: 100%;
+		}
+
+		.MapCard {
+			padding: 10px;
+			border-radius: 20px;
+		}
+
+		.MapCardHead h3 {
+			font-size: 15px;
+		}
+
+		.MapCardHead p {
+			font-size: 11px;
+		}
+
+		.EgyptSvg,
+		.LocalSvg
+		{
+			height: 54svh;
+			padding: 5px;
+		}
+
+		.Region text,
+		.LocalRegion text
+		{
+			font-size: 13px;
+		}
+
+		.Region .Percent,
+		.LocalRegion .Percent
+		{
+			font-size: 11px;
+		}
+
+		.LocalActions {
+			display: grid;
+			grid-template-columns: 1fr;
+			text-align: center;
+		}
+
+		.LocalActions a {
+			width: 100%;
+		}
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+	if (!window.__EmoCoverageMapStripReady) {
+	window.__EmoCoverageMapStripReady = true;
+	document.addEventListener("astro:page-load", SetupCoverageMaps);
+	window.addEventListener("load", SetupCoverageMaps);
+	SetupCoverageMaps();
+	}
+
+	function SetupCoverageMaps(): void {
+	const cStrips = document.querySelectorAll<HTMLElement>("[data-emo-coverage-map-strip='true']:not([data-coverage-ready='true'])");
+
+	cStrips.forEach(function SetupStrip(pRoot): void {
+	pRoot.dataset.coverageReady = "true";
+
+	const cToggle = pRoot.querySelector<HTMLButtonElement>("[data-map-toggle='true']");
+	const cToggleText = pRoot.querySelector<HTMLElement>("[data-map-toggle-text='true']");
+
+	cToggle?.addEventListener("click", function HandleToggleClick(): void {
+	const cCurrentMap = pRoot.dataset.currentMap === "egypt" ? "local" : "egypt";
+
+	pRoot.dataset.currentMap = cCurrentMap;
+
+	if (cToggleText) {
+	cToggleText.textContent = cCurrentMap === "egypt"
+	? "عرض خريطة المحافظة"
+	: "عرض خريطة مصر";
+	}
+	});
+	});
+	}
+</script>

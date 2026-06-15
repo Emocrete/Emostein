@@ -1,0 +1,38 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"article">, PlaceProps { pBg?: string; pBorder?: string; pRadius?: number; pBlur?: number; }
+const { pBg = "rgba(255,255,255,.72)", pBorder = "rgba(255,255,255,.72)", pRadius = 28, pBlur = 16, pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly, id: pGivenID = GetWidgetId("GlassCard"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cPlace = new Place(Astro.props as PlaceProps, `--FrameBg:${pBg}; --FrameBorder:${pBorder}; --FrameRadius:${pRadius}px; --FrameBlur:${pBlur}px; ${cGivenStyle}`);
+---
+<article class={`GlassCard ${cPlace.Class} ${pGivenClass}`.trim()} style={cPlace.Style} id={pGivenID} {...RemAttr}><slot /></article>
+<style>
+	.GlassCard { position: relative; display: flex; flex-direction: column; justify-content: center; width: 100%; height: auto; padding: clamp(20px, 3vw, 42px); border: 1px solid var(--FrameBorder); border-radius: var(--FrameRadius); background: var(--FrameBg); box-shadow: 0 24px 65px rgba(0,0,0,.16); backdrop-filter: blur(var(--FrameBlur)); box-sizing: border-box; }
+.GlassCard.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+		z-index: var(--PlaceZ, 1);
+		opacity: var(--PlaceOpacityL, 100%);
+		transform: rotate(var(--PlaceRotateL, 0deg));
+		transform-origin: var(--PlaceOrigin, center center);
+		pointer-events: var(--PlaceClickable, auto);
+		min-width: 0;
+		box-sizing: border-box;
+	}
+
+	@media (orientation: portrait) {
+		.GlassCard.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+			opacity: var(--PlaceOpacityP, var(--PlaceOpacityL, 100%));
+			transform: rotate(var(--PlaceRotateP, var(--PlaceRotateL, 0deg)));
+		}
+	}
+</style>

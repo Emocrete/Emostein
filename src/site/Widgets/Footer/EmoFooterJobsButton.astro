@@ -1,0 +1,81 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+
+export interface Props extends HTMLAttributes<"a">, PlaceProps {
+	pText?: string;
+	pHref?: string;
+}
+
+const {
+	pText = "انضم للعمل معنا",
+	pHref = "/jobs",
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("EmoFooterJobsButton"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
+---
+
+
+
+
+<a
+	class = {`EmoFooterJobsButton ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	href={pHref}
+	{...RemAttr}
+>
+	{pText}
+</a>
+
+
+
+
+<style>
+
+
+
+	.EmoFooterJobsButton {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: fit-content;
+		min-height: 36px;
+		padding: 7px 18px;
+		border: 1px solid rgba(255, 255, 255, 0.26);
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.08);
+		color: rgba(255, 255, 255, 0.88);
+		font-size: 13px;
+		font-weight: 850;
+		line-height: 1.2;
+		text-decoration: none;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.24);
+		transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease, color 0.16s ease;
+	}
+
+	.EmoFooterJobsButton:hover {
+		transform: translateY(-1px);
+		border-color: rgba(255, 209, 92, 0.58);
+		background: rgba(255, 209, 92, 0.13);
+		color: #ffd15c;
+	}
+
+
+
+</style>

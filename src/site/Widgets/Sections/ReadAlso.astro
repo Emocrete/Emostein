@@ -1,0 +1,411 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Text, ElemBg, Colors, Pixel, Size, Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"section">, PlaceProps {
+	pTitle?: Text;
+	pDesc?: Text;
+	pHeadBg?: ElemBg;
+	pBodyBg?: ElemBg;
+	pCardBg?: ElemBg;
+	pTitleFnt?: Text;
+	pDescFnt?: Text;
+	pCardTitleFnt?: Text;
+	pCardDescFnt?: Text;
+	pWidth?: Size;
+	pGap?: Pixel;
+	pMax?: number | string;
+	pMaxP?: number | string;
+	pCardRadius?: Pixel;
+	pImgHeight?: Pixel;
+	pCentered?: boolean;
+	Centered?: boolean | string;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+
+const {
+	pTitle = Text.H2.Centered.OfText("اقرأ أيضًا"),
+	pDesc,
+	pHeadBg = new ElemBg(Colors.SkyLite),
+	pBodyBg = new ElemBg(Colors.WhiteOff),
+	pCardBg = new ElemBg(Colors.WhiteOff),
+	pTitleFnt,
+	pDescFnt,
+	pCardTitleFnt = Text.H4.WithColor(Colors.BlackOff),
+	pCardDescFnt = Text.Body.WithColor(Colors.BlackOff),
+	pWidth = new Size(1180, "auto", "calc(100% - 24px)", "auto"),
+	pGap = new Pixel(22, 14),
+	pMax = 4,
+	pMaxP = 1,
+	pCardRadius = new Pixel(18),
+	pImgHeight = new Pixel(190, 160),
+	pCentered = true,
+	Centered = false,
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("ReadAlso"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = cProps;
+
+const cMaxL = NormalizeMax(pMax, 3);
+const cMaxP = NormalizeMax(pMaxP, 1);
+const cCentered = pCentered || GetBoolAttr(Centered);
+const cGivenStyle = GetStyleText(pGivenStyle);
+const cItemWidthL = GetItemWidth(cMaxL, pGap.Landscape);
+const cItemWidthP = GetItemWidth(cMaxP, pGap.Portrait);
+
+const cDefaultTitleFnt = Text.H2.Centered.WithColor(Colors.BlackOff);
+const cDefaultDescFnt = Text.Body.Centered.WithColor(Colors.BlackOff);
+const cTitleFnt = pTitleFnt ?? pTitle;
+const cDescFnt = pDescFnt ?? pDesc ?? cDefaultDescFnt;
+const cTitleText = pTitle.text ?? "اقرأ أيضًا";
+const cDescText = pDesc?.text ?? "";
+
+const TitleTag = pTitle.GetTag() as keyof astroHTML.JSX.DefinedIntrinsicElements;
+
+const cStyle = [
+	`--ReadAlsoHeadBg:${pHeadBg.Color};`,
+	`--ReadAlsoBodyBg:${pBodyBg.Color};`,
+	`--ReadAlsoCardBg:${pCardBg.Color};`,
+	`--ReadAlsoWidthL:${pWidth.WidthL};`,
+	`--ReadAlsoWidthP:${pWidth.WidthP};`,
+	`--ReadAlsoGapL:${pGap.Landscape};`,
+	`--ReadAlsoGapP:${pGap.Portrait};`,
+	`--ReadAlsoItemWidthL:${cItemWidthL};`,
+	`--ReadAlsoItemWidthP:${cItemWidthP};`,
+	`--ReadAlsoCardRadiusL:${pCardRadius.Landscape};`,
+	`--ReadAlsoCardRadiusP:${pCardRadius.Portrait};`,
+	`--ReadAlsoImgHeightL:${pImgHeight.Landscape};`,
+	`--ReadAlsoImgHeightP:${pImgHeight.Portrait};`,
+	`--ReadAlsoBtnBg:${Colors.BlackOff};`,
+	`--ReadAlsoBtnClr:${Colors.WhiteOff};`,
+	`--ReadAlsoBtnHoverBg:${Colors.Bistage};`,
+	`--ReadAlsoBtnHoverClr:${Colors.BlackOff};`,
+	GetTextVars("ReadAlsoHeadTitle", cTitleFnt, cDefaultTitleFnt),
+	GetTextVars("ReadAlsoHeadDesc", cDescFnt, cDefaultDescFnt),
+	GetTextVars("ReadAlsoCardTitle", pCardTitleFnt, Text.H4.WithColor(Colors.BlackOff)),
+	GetTextVars("ReadAlsoCardDesc", pCardDescFnt, Text.Body.WithColor(Colors.BlackOff)),
+	cGivenStyle,
+].filter(Boolean).join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cStyle);
+
+const cClass = [
+	"ReadAlso",
+	cCentered ? "Centered" : "",
+	cPlace.Class,
+	pGivenClass,
+].filter(Boolean).join(" ");
+
+function NormalizeMax(pValue: unknown, pDefault: number) {
+	const cValue = typeof pValue === "number" ? pValue : Number.parseInt(`${pValue}`, 10);
+	if (!Number.isFinite(cValue) || cValue < 1) return Math.max(1, pDefault);
+	return Math.floor(cValue);
+}
+
+function GetBoolAttr(pValue: unknown) {
+	return pValue === true || pValue === "" || pValue === "true";
+}
+
+function GetItemWidth(pMax: number, pGap: string) {
+	const cGapNum = ParsePx(pGap);
+	const cPercent = 100 / pMax;
+	const cGapShare = cGapNum * ((pMax - 1) / pMax);
+
+	if (cGapShare === 0) return `${RoundCss(cPercent)}%`;
+	return `calc(${RoundCss(cPercent)}% - ${RoundCss(cGapShare)}px)`;
+}
+
+function ParsePx(pValue: string) {
+	const cMatch = `${pValue}`.trim().match(/^(-?\d+(?:\.\d+)?)px$/i);
+	return cMatch ? Number.parseFloat(cMatch[1]) : 0;
+}
+
+function RoundCss(pValue: number) {
+	return Number.parseFloat(pValue.toFixed(4));
+}
+
+function GetTextVars(pName: string, pText: Text, pFallback: Text) {
+	const cColor = pText.color ?? pFallback.color;
+	const cSize = pText.size ?? pFallback.size;
+	const cBold = pText.bold ?? pFallback.bold;
+	const cAlign = pText.align ?? pFallback.align;
+	const cFamily = pText.family ?? pFallback.family;
+
+	return [
+		cColor ? `--${pName}Color:${cColor};` : "",
+		cSize ? `--${pName}SizeL:${cSize.Landscape};` : "",
+		cSize ? `--${pName}SizeP:${cSize.Portrait};` : "",
+		`--${pName}Weight:${cBold ? 700 : 400};`,
+		`--${pName}Align:${cAlign};`,
+		`--${pName}Family:${cFamily};`,
+	].filter(Boolean).join(" ");
+}
+
+function GetStyleText(pStyle: unknown) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+	if (typeof pStyle !== "object") return "";
+
+	return Object.entries(pStyle as Record<string, string | number | null | undefined>)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section
+	class = {cClass}
+	style = {cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+
+
+
+
+
+
+	<header class = " ReadAlsoHead ">
+
+		<TitleTag class = " ReadAlsoTitle ">
+
+			{cTitleText}
+
+		</TitleTag>
+
+		{ cDescText && (
+
+			<p class = " ReadAlsoDesc ">
+				{cDescText}
+			</p>
+		) }
+
+	</header>
+
+
+
+
+
+
+
+	<div class = " ReadAlsoBody ">
+
+		<slot />
+
+	</div>
+
+
+
+
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.ReadAlso {
+		width: 100%;
+		background: var(--ReadAlsoBodyBg);
+	}
+
+
+	.ReadAlsoHead {
+		background: var(--ReadAlsoHeadBg);
+		padding: 32px 20px 26px;
+		box-sizing: border-box;
+		text-align: center;
+	}
+
+
+	.ReadAlsoTitle {
+		margin: 0;
+		color: var(--ReadAlsoHeadTitleColor, inherit) !important;
+		font-size: var(--ReadAlsoHeadTitleSizeL) !important;
+		font-weight: var(--ReadAlsoHeadTitleWeight) !important;
+		text-align: var(--ReadAlsoHeadTitleAlign) !important;
+		font-family: var(--ReadAlsoHeadTitleFamily) !important;
+		line-height: 2;
+	}
+
+
+	.ReadAlsoDesc {
+		margin: 0;
+		color: var(--ReadAlsoHeadDescColor, inherit) !important;
+		font-size: var(--ReadAlsoHeadDescSizeL) !important;
+		font-weight: var(--ReadAlsoHeadDescWeight) !important;
+		text-align: var(--ReadAlsoHeadDescAlign) !important;
+		font-family: var(--ReadAlsoHeadDescFamily) !important;
+		line-height: 2;
+	}
+
+
+	.ReadAlsoBody {
+		background: var(--ReadAlsoBodyBg);
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		direction: rtl;
+		box-sizing: border-box;
+		width: 100%;
+		padding-block: 34px;
+		padding-inline: max(12px, calc((100% - var(--ReadAlsoWidthL)) / 2));
+		gap: var(--ReadAlsoGapL);
+		align-items: stretch;
+		justify-content: flex-start;
+		align-content: flex-start;
+		overflow: visible;
+	}
+
+	.ReadAlsoBody > :global(*) {
+		box-sizing: border-box !important;
+		flex-grow: 0 !important;
+		flex-shrink: 1 !important;
+		flex-basis: var(--ReadAlsoItemWidthL) !important;
+		width: var(--ReadAlsoItemWidthL) !important;
+		max-width: var(--ReadAlsoItemWidthL) !important;
+		min-width: 0 !important;
+		margin: 0 !important;
+	}
+
+	.ReadAlsoBody > :global(* > *) {
+		max-width: 100%;
+		box-sizing: border-box;
+	}
+
+
+
+	.ReadAlso.Centered .ReadAlsoBody {
+		justify-content: center;
+	}
+
+
+	.ReadAlso.IsPlaced {
+		position: absolute;
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait), (max-width: 920px) {
+		.ReadAlsoHead {
+			padding: 26px 14px 20px;
+		}
+
+		.ReadAlsoTitle {
+			font-size: var(--ReadAlsoHeadTitleSizeP, var(--ReadAlsoHeadTitleSizeL)) !important;
+		}
+
+		.ReadAlsoDesc {
+			font-size: var(--ReadAlsoHeadDescSizeP, var(--ReadAlsoHeadDescSizeL)) !important;
+		}
+
+		.ReadAlsoBody {
+			padding-block: 24px;
+			padding-inline: max(12px, calc((100% - var(--ReadAlsoWidthP)) / 2));
+			gap: var(--ReadAlsoGapP);
+		}
+
+		.ReadAlsoBody > :global(*) {
+			flex-basis: var(--ReadAlsoItemWidthP) !important;
+			width: var(--ReadAlsoItemWidthP) !important;
+			max-width: var(--ReadAlsoItemWidthP) !important;
+		}
+
+		.ReadAlso.IsPlaced {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+	}
+
+
+
+</style>

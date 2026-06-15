@@ -1,0 +1,236 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Text, DirectSize, NumPer, Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"div"> , PlaceProps {
+
+	/**
+	 * Main title text displayed at the top of the Emograph widget.
+	 ** DefVal = Text.Body.WithText("العنوان") only when both pTitle and pText are not provided.
+	 */
+	pTitle?: Text;
+
+	/**
+	 * Body text displayed below the title.
+	 ** DefVal = Text.Body.WithText("الوصف") only when both pTitle and pText are not provided.
+	 ** Requires: Default slot content is rendered only when pText exists.
+	 */
+	pText?: Text;
+
+	/**
+	 * Responsive width box used to control the widget width in landscape and portrait orientations.
+	 ** DefVal = new Box()
+	 */
+	pSize?: DirectSize;
+
+	/**
+	 * Lets the widget keep its own size instead of being stretched by parent Stack row sizing.
+	 ** DefVal = false
+	 ** Requires: Effective only when this widget is a direct child of Stack with pDir="Row".
+	 */
+	"data-own-size"?: boolean;
+}
+
+let {
+	pTitle,
+	pText,
+	pSize = new DirectSize(),
+
+	pLoc,
+pRotate,
+pZ,
+pOrigin,
+pOpacity,
+pClickable,
+pLandOnly,
+pPortOnly,
+
+	id: pGivenID = GetWidgetId("Emograph"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+
+if (!pTitle && !pText) {
+	pTitle = Text.Body.OfText("العنوان");
+	pText = Text.Body.OfText("الوصف");
+}
+
+
+const TitleTag = pTitle?.GetTag() as keyof astroHTML.JSX.DefinedIntrinsicElements;
+
+const CssVar = `
+--WidthL:${pSize.WidthL};
+--WidthP:${pSize.WidthP};
+--HeightL:${pSize.HeightL};
+--HeightP:${pSize.HeightP};
+${pGivenStyle || ""}
+`;
+
+const cPlaceProps: PlaceProps = {
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+};
+
+const cPlace = new Place(Astro.props as PlaceProps, CssVar);
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div
+	class = {`Emograph ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	{ pTitle && (
+
+		<TitleTag style = {pTitle.GetStyle()}>
+		
+			{pTitle.text}
+		
+		</TitleTag>
+	) }
+
+	{ pText && (
+
+		<p style = {pText.GetStyle()}>
+			{pText.text}
+		</p>
+	) }
+
+	{ Astro.slots.has("default") && (
+		pText ? (
+
+			<div style = {pText.GetStyle()}>
+
+				<slot />
+
+			</div>
+
+			) : (
+
+				<slot />
+
+			)) }
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.Emograph {
+		width: var(--WidthL, auto);
+		height: var(--HeightL, auto);
+		max-width: 100%;
+		min-width: 0;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.Emograph > :global(*) {
+		box-sizing: border-box;
+		max-width: 100%;
+		--TextSize: var(--TextSizeL);
+	}
+
+
+
+	.Emograph > :global(p),
+	.Emograph > :global(div)
+	{
+		width: 100%;
+		overflow-wrap: break-word;
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.Emograph {
+			width: var(--WidthP, var(--WidthL, auto));
+			height: var(--HeightP, var(--HeightL, auto));
+			max-width: 100%;
+		}
+
+		.Emograph > :global(*) {
+			--TextSize: var(--TextSizeP);
+		}
+	}
+
+
+
+</style>

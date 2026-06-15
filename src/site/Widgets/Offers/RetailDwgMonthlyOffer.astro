@@ -1,0 +1,1944 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { EmoStrip, Stack, Emograph, EmoBtn } from "@/Widgets";
+import { Align, Size, ElemBg, Pixel, Text, Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"div">, PlaceProps {
+	pForceShow?: boolean;
+}
+
+const {
+	id: pGivenID = GetWidgetId("RetailDwgMonthlyOffer"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pForceShow = false,
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+
+const cWidgetId = pGivenID;
+
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<EmoStrip
+	class = {`RetailDwgMonthlyOffer ${pGivenClass}`.trim()}
+	style = {cGivenStyle}
+	id={cWidgetId}
+	hidden
+	data-retail-dwg-monthly-offer
+	pBg={new ElemBg("#102d25")}
+	pSize={new Size("100%", 400, "100%", "auto")}
+	pSlot={{ Size: new Size("100%", "100%", "100%", "auto"), Align: Align.Center }}
+	pLoc={pLoc}
+	pSize={pSize}
+	pRotate={pRotate}
+	pZ={pZ}
+	pOrigin={pOrigin}
+	pOpacity={pOpacity}
+	pClickable={pClickable}
+	pLandOnly={pLandOnly}
+	pPortOnly={pPortOnly}
+	{...RemAttr}
+>
+
+	<Stack
+		class = " RetailDwgMonthlyOffer__Main "
+		pDir="Row"
+		pPad={new Pixel(15, 10)}
+		pGap={new Pixel(15, 10)}
+	>
+
+		<Stack>
+
+			<Emograph pTitle={Text.Body.OfSize(30).White.Centered.OfText("خصم")} />
+
+			<Emograph pTitle={Text.Body.OfSize(80,60).DarkSky.Centered.OfText("1000 جنيه")} />
+
+			<Emograph pTitle={Text.Body.OfSize(30, 18).White.Centered.OfText("على الرسم الهندسي للمحل التجاري عند حجز معاينة خلال الأيام الثلاثة الأولى من الشهر")} />
+
+		</Stack>
+
+		<form
+			class = " RetailDwgMonthlyOffer__Form "
+			method="post"
+			autocomplete="on"
+			data-retail-form
+		>
+
+			<div class = " RetailDwgMonthlyOffer__TimePanel ">
+
+				<div class = " RetailDwgMonthlyOffer__TimeProgress " data-retail-time-progress>
+
+					<div class = " RetailDwgMonthlyOffer__TimeProgressFill " data-retail-time-fill>
+
+					</div>
+
+					<span class = " RetailDwgMonthlyOffer__TimeProgressText " data-retail-countdown>
+						جاري حساب الوقت المتبقي
+					</span>
+
+				</div>
+
+			</div>
+
+			<label class = " RetailDwgMonthlyOffer__Field " for={`${cWidgetId}-Name`}>
+
+				<span>
+					اسم صاحب المحل / اسم المحل
+				</span>
+
+				<input
+					id={`${cWidgetId}-Name`}
+					name="clientName"
+					type="text"
+					autocomplete="name"
+					required
+					placeholder="اكتب الاسم"
+					data-retail-name
+				/>
+
+			</label>
+
+			<label class = " RetailDwgMonthlyOffer__Field " for={`${cWidgetId}-Phone`}>
+
+				<span>
+					رقم التليفون
+				</span>
+
+				<input
+					id={`${cWidgetId}-Phone`}
+					name="phone"
+					type="tel"
+					inputmode="tel"
+					autocomplete="tel"
+					required
+					placeholder="01xxxxxxxxx"
+					data-retail-phone
+				/>
+
+			</label>
+
+			<label class = " RetailDwgMonthlyOffer__Field " for={`${cWidgetId}-Gov`}>
+
+				<span>
+					المحافظة
+				</span>
+
+				<select
+					id={`${cWidgetId}-Gov`}
+					name="governorate"
+					required
+					data-retail-governorate
+				>
+
+					<option value="">
+
+						اختر
+
+					</option>
+
+					<option value="القاهرة">
+
+						القاهرة
+
+					</option>
+
+					<option value="الجيزة">
+
+						الجيزة
+
+					</option>
+
+				</select>
+
+			</label>
+
+			<label class = " RetailDwgMonthlyOffer__Field " for={`${cWidgetId}-Area`}>
+
+				<span>
+					الحي أو المنطقة
+				</span>
+
+				<select
+					id={`${cWidgetId}-Area`}
+					name="area"
+					required
+					data-retail-area
+					disabled
+				>
+
+					<option value="">
+
+						اختر المحافظة أولًا
+
+					</option>
+
+				</select>
+
+			</label>
+
+			<label class = " RetailDwgMonthlyOffer__Field " for={`${cWidgetId}-Day`}>
+
+				<span>
+					اليوم
+				</span>
+
+				<select
+					id={`${cWidgetId}-Day`}
+					name="dayKey"
+					required
+					data-retail-day
+				>
+
+					<option value="">
+
+						اختر
+
+					</option>
+
+				</select>
+
+			</label>
+
+			<label class = " RetailDwgMonthlyOffer__Field " for={`${cWidgetId}-Slot`}>
+
+				<span>
+					الموعد
+				</span>
+
+				<select
+					id={`${cWidgetId}-Slot`}
+					name="slotKey"
+					required
+					data-retail-slot
+				>
+
+					<option value="">
+
+						اختر
+
+					</option>
+
+				</select>
+
+			</label>
+
+			<EmoBtn
+				class = " RetailDwgMonthlyOffer__Submit "
+				pText="تسجيل الطلب"
+				pWidth="100%"
+				pHeight="34px"
+				pRadius="9px"
+				pBgColor="#1f3d34"
+				pBgColorHover="#284f44"
+				pTextColor="#ffffff"
+				pFontSize="0.82rem"
+				type="submit"
+				data-retail-submit
+			/>
+
+			<p class = " RetailDwgMonthlyOffer__Note ">
+				التسجيل لا يعني تأكيد الموعد نهائيًا. سيتم التواصل مع صاحب المحل للتنسيق وتأكيد التفاصيل.
+			</p>
+
+			<div class = " RetailDwgMonthlyOffer__Message " role="status" data-retail-message>
+
+			</div>
+
+			<a
+				class = " RetailDwgMonthlyOffer__WhatsApp "
+				href="#"
+				target="_blank"
+				rel="noopener"
+				hidden
+				data-retail-whatsapp
+			>
+				متابعة الطلب على واتساب
+			</a>
+
+		</form>
+
+		<Stack
+			class = " RetailDwgMonthlyOffer__ScheduleArea "
+			pDir="Col"
+			pWidth={new Pixel(900, 360)}
+			pPad={new Pixel(0, 0)}
+			pGap={new Pixel(8, 8)}
+			pAlign="Start"
+			pFlipNarrow={false}
+		>
+
+			<header class = " RetailDwgMonthlyOffer__ScheduleTitle ">
+
+				<h3 data-retail-booked-title>
+					تم حجز 0 عروض من أصل 15 عرض
+				</h3>
+
+				<p>
+					اضغط على أي موعد متاح لاختياره مباشرة داخل النموذج.
+				</p>
+
+			</header>
+
+			<div class = " RetailDwgMonthlyOffer__Schedule " data-retail-schedule>
+
+			</div>
+
+		</Stack>
+
+	</Stack>
+
+</EmoStrip>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style is:global>
+
+
+
+	.RetailDwgMonthlyOffer__Kicker {
+		display: inline-flex;
+		width: fit-content;
+		padding: 6px 14px;
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.13);
+		border: 1px solid rgba(255, 255, 255, 0.22);
+		font-size: 0.82rem;
+		font-weight: 900;
+		line-height: 1.2;
+	}
+
+
+	.RetailDwgMonthlyOffer__Descr {
+		max-width: 100%;
+		margin: 0;
+		color: rgba(255, 255, 255, 0.82);
+		font-size: 0.9rem;
+		line-height: 1.55;
+		text-align: right;
+	}
+
+
+	.RetailDwgMonthlyOffer__Form {
+		flex: 0 0 420px;
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		align-content: start;
+		gap: 8px;
+		width: 420px;
+		height: 100%;
+		padding: 14px;
+		border-radius: 18px;
+		background: #ffffff;
+		color: #1b1b1b;
+		overflow: hidden;
+		box-shadow: 0 14px 35px rgba(0, 0, 0, 0.25);
+		direction: rtl;
+	}
+
+
+	.RetailDwgMonthlyOffer__TimePanel {
+		grid-column: 1 / -1;
+	}
+
+
+	.RetailDwgMonthlyOffer__TimeProgress {
+		position: relative;
+		width: 100%;
+		height: 34px;
+		overflow: hidden;
+		border-radius: 999px;
+		background: rgba(0, 0, 0, 0.10);
+		border: 1px solid rgba(0, 0, 0, 0.10);
+	}
+
+
+	.RetailDwgMonthlyOffer__TimeProgressFill {
+		position: absolute;
+		inset-block: 0;
+		right: 0;
+		width: 100%;
+		border-radius: inherit;
+		transition: width 0.45s linear, background 0.3s ease;
+	}
+
+
+	.RetailDwgMonthlyOffer__TimeProgressText {
+		position: absolute;
+		inset: 0;
+		z-index: 2;
+		display: grid;
+		place-items: center;
+		padding: 0 10px;
+		color: #111111;
+		font-size: 0.68rem;
+		font-weight: 950;
+		line-height: 1.2;
+		text-align: center;
+		white-space: nowrap;
+	}
+
+
+	.RetailDwgMonthlyOffer__Field {
+		display: grid;
+		gap: 3px;
+		min-width: 0;
+	}
+
+	.RetailDwgMonthlyOffer__Field span {
+		font-size: 0.68rem;
+		font-weight: 900;
+		color: #1f3d34;
+		white-space: nowrap;
+	}
+
+
+	.RetailDwgMonthlyOffer__Submit .BtnText {
+		font-weight: 950;
+	}
+
+
+	.RetailDwgMonthlyOffer__Note {
+		grid-column: 1 / -1;
+		margin: 0;
+		color: #5a5a5a;
+		font-size: 0.68rem;
+		line-height: 1.35;
+	}
+
+
+	.RetailDwgMonthlyOffer__Message {
+		grid-column: 1 / -1;
+		min-height: 26px;
+		max-height: 38px;
+		overflow: hidden;
+		padding: 5px 8px;
+		border-radius: 9px;
+		font-size: 0.68rem;
+		line-height: 1.35;
+	}
+
+
+	.RetailDwgMonthlyOffer__WhatsApp {
+		grid-column: 1 / -1;
+		display: grid;
+		place-items: center;
+		min-height: 28px;
+		border-radius: 9px;
+		background: #25d366;
+		color: #ffffff;
+		text-decoration: none;
+		font-size: 0.74rem;
+		font-weight: 900;
+	}
+
+
+	.RetailDwgMonthlyOffer__ScheduleTitle {
+		display: grid;
+		justify-items: start;
+		align-content: center;
+		gap: 3px;
+		min-height: 38px;
+		padding: 0;
+	}
+
+	.RetailDwgMonthlyOffer__ScheduleTitle h3 {
+		margin: 0;
+		font-size: 1rem;
+		font-weight: 950;
+	}
+
+	.RetailDwgMonthlyOffer__ScheduleTitle p {
+		margin: 0;
+		color: rgba(255, 255, 255, 0.75);
+		font-size: 0.74rem;
+		line-height: 1.3;
+	}
+
+
+	.RetailDwgMonthlyOffer__Schedule {
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-rows: repeat(3, minmax(0, 1fr));
+		gap: 8px;
+		width: 100%;
+		height: calc(100% - 46px);
+		min-height: 0;
+		padding: 0;
+	}
+
+
+	.RetailDwgMonthlyOffer__Day {
+		display: grid;
+		grid-template-rows: 28px minmax(0, 1fr);
+		min-height: 0;
+		overflow: hidden;
+		border-radius: 14px;
+		background: rgba(255, 255, 255, 0.10);
+		border: 1px solid rgba(255, 255, 255, 0.16);
+	}
+
+	.RetailDwgMonthlyOffer__Day h4 {
+		display: grid;
+		place-items: center;
+		margin: 0;
+		padding: 4px 8px;
+		background: linear-gradient(145deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.06));
+		font-size: 0.82rem;
+		font-weight: 950;
+		line-height: 1.1;
+	}
+
+
+	.RetailDwgMonthlyOffer__Slots {
+		display: grid;
+		grid-template-columns: repeat(5, minmax(0, 1fr));
+		gap: 8px;
+		min-height: 0;
+		padding: 8px;
+	}
+
+
+	.RetailDwgMonthlyOffer__Slot {
+		position: relative;
+		display: grid;
+		place-items: center;
+		min-width: 0;
+		min-height: 0;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		color: #10241f;
+		font: inherit;
+		cursor: pointer;
+		isolation: isolate;
+		overflow: hidden;
+		transition: transform 0.18s ease, filter 0.18s ease;
+	}
+
+	.RetailDwgMonthlyOffer__Slot:hover {
+		transform: translateY(-2px);
+		filter: brightness(1.03);
+	}
+
+	.RetailDwgMonthlyOffer__Slot:disabled {
+		cursor: not-allowed;
+		transform: none;
+	}
+
+
+	.RetailDwgMonthlyOffer__SlotSvg {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 0;
+	}
+
+
+	.RetailDwgMonthlyOffer__SlotContent {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		gap: 3px;
+		place-items: center;
+		padding: 5px;
+		text-align: center;
+	}
+
+
+	.RetailDwgMonthlyOffer__SlotTime {
+		display: block;
+		font-size: clamp(0.74rem, 0.9vw, 0.95rem);
+		line-height: 1.15;
+		font-weight: 950;
+	}
+
+
+	.RetailDwgMonthlyOffer__SlotState {
+		display: block;
+		font-size: 0.68rem;
+		line-height: 1.1;
+		font-weight: 900;
+	}
+
+
+
+	.EmoStrip.RetailDwgMonthlyOffer {
+		width: 100%;
+		max-width: 100%;
+		height: 400px;
+		margin-inline: 0;
+		background: radial-gradient(circle at 15% 0%, rgba(255, 255, 255, 0.10), transparent 35%),
+		linear-gradient(135deg, #102d25, #17382f);
+		overflow: hidden;
+		direction: rtl;
+		color: #ffffff;
+	}
+
+	.EmoStrip.RetailDwgMonthlyOffer {
+		box-sizing: border-box;
+	}
+
+	.EmoStrip.RetailDwgMonthlyOffer > .SlotBox {
+		width: 100%;
+		height: 100%;
+		align-items: stretch;
+	}
+
+	.EmoStrip.RetailDwgMonthlyOffer > .SlotBox > .SlotContent {
+		width: 100%;
+		height: 100%;
+		max-width: 100%;
+		align-items: stretch;
+		justify-content: stretch;
+		flex-wrap: nowrap;
+	}
+
+
+	.RetailDwgMonthlyOffer__Main.EmoStack {
+		width: 100%;
+		height: 100%;
+		max-width: 100%;
+		margin: 0;
+		padding: 15px;
+		gap: 15px;
+		align-items: stretch;
+		direction: rtl;
+	}
+
+	.RetailDwgMonthlyOffer__Main.EmoStack > * {
+		height: 100%;
+		min-width: 0;
+	}
+
+
+	.RetailDwgMonthlyOffer__IntroPane.EmoStack {
+		flex: 0 0 32%;
+		width: auto;
+		height: 100%;
+		margin: 0;
+		padding: 10px;
+		gap: 10px;
+		justify-content: center;
+		align-items: flex-start;
+		direction: rtl;
+	}
+
+
+	.RetailDwgMonthlyOffer__IntroGraph.Emograph {
+		align-items: flex-start;
+	}
+
+	.RetailDwgMonthlyOffer__IntroGraph.Emograph h2 {
+		font-size: clamp(1.7rem, 2.7vw, 3rem) !important;
+		line-height: 1.12 !important;
+		font-weight: 950 !important;
+		text-align: right !important;
+		text-wrap: balance;
+	}
+
+
+	.RetailDwgMonthlyOffer.is-time-blue .RetailDwgMonthlyOffer__TimeProgressFill {
+		background: linear-gradient(90deg, #5ee7ff, #23b7ff);
+	}
+
+
+	.RetailDwgMonthlyOffer.is-time-yellow .RetailDwgMonthlyOffer__TimeProgressFill {
+		background: linear-gradient(90deg, #fff07a, #ffd63d);
+	}
+
+
+	.RetailDwgMonthlyOffer.is-time-orange .RetailDwgMonthlyOffer__TimeProgressFill {
+		background: linear-gradient(90deg, #ffc06a, #ff982b);
+	}
+
+
+	.RetailDwgMonthlyOffer.is-time-red .RetailDwgMonthlyOffer__TimeProgressFill {
+		background: linear-gradient(90deg, #ff8a8a, #ff3f3f);
+	}
+
+
+	.RetailDwgMonthlyOffer__Submit.Btn {
+		grid-column: 1 / -1;
+		min-height: 34px;
+		font-weight: 950;
+	}
+
+
+	.RetailDwgMonthlyOffer__ScheduleArea.EmoStack {
+		flex: 1 1 0;
+		width: auto;
+		height: 100%;
+		margin: 0;
+		padding: 0;
+		gap: 8px;
+		align-items: stretch;
+		direction: rtl;
+	}
+
+
+	.RetailDwgMonthlyOffer__Slot.is-selected {
+		outline: 3px solid #ffffff;
+		outline-offset: -7px;
+		transform: translateY(-3px);
+	}
+
+
+
+	.EmoStrip.RetailDwgMonthlyOffer,
+	.EmoStrip.RetailDwgMonthlyOffer *
+	{
+		box-sizing: border-box;
+	}
+
+
+	.EmoStrip.RetailDwgMonthlyOffer[hidden] {
+		display: none;
+	}
+
+
+	.RetailDwgMonthlyOffer__Field input,
+	.RetailDwgMonthlyOffer__Field select
+	{
+		width: 100%;
+		height: 32px;
+		padding: 5px 8px;
+		border: 1px solid #d7dedb;
+		border-radius: 9px;
+		background: #ffffff;
+		color: #111111;
+		font: inherit;
+		font-size: 0.76rem;
+		outline: none;
+	}
+
+
+	.RetailDwgMonthlyOffer__Message[hidden] {
+		display: none;
+	}
+
+
+	.RetailDwgMonthlyOffer__Message[data-type="success"] {
+		background: #e8f7ee;
+		color: #176b3a;
+	}
+
+
+	.RetailDwgMonthlyOffer__Message[data-type="error"] {
+		background: #fdecec;
+		color: #a32828;
+	}
+
+
+	.RetailDwgMonthlyOffer__Message[data-type="warning"] {
+		background: #fff6df;
+		color: #8a5b00;
+	}
+
+
+	.RetailDwgMonthlyOffer__Message[data-type="info"] {
+		background: #eef4ff;
+		color: #244a86;
+	}
+
+
+	.RetailDwgMonthlyOffer__WhatsApp[hidden] {
+		display: none;
+	}
+
+
+	@media (max-width: 1100px) {
+		.EmoStrip.RetailDwgMonthlyOffer {
+			height: auto;
+			min-height: 400px;
+			overflow: visible;
+		}
+
+		.EmoStrip.RetailDwgMonthlyOffer > .SlotBox,
+		.EmoStrip.RetailDwgMonthlyOffer > .SlotBox > .SlotContent
+		{
+			height: auto;
+		}
+
+		.RetailDwgMonthlyOffer__Main.EmoStack {
+			height: auto;
+			flex-direction: column;
+		}
+
+		.RetailDwgMonthlyOffer__IntroPane.EmoStack,
+		.RetailDwgMonthlyOffer__Form,
+		.RetailDwgMonthlyOffer__ScheduleArea.EmoStack
+		{
+			flex: none;
+			width: 100%;
+			height: auto;
+		}
+
+		.RetailDwgMonthlyOffer__Form {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.RetailDwgMonthlyOffer__Schedule {
+			height: auto;
+			grid-template-rows: auto;
+		}
+
+		.RetailDwgMonthlyOffer__Day {
+			min-height: 90px;
+		}
+	}
+
+
+	@media (max-width: 650px) {
+		.EmoStrip.RetailDwgMonthlyOffer {
+			height: auto !important;
+			min-height: 0;
+			padding: 12px 10px;
+			overflow: visible;
+		}
+
+		.EmoStrip.RetailDwgMonthlyOffer > .SlotBox,
+		.EmoStrip.RetailDwgMonthlyOffer > .SlotBox > .SlotContent
+		{
+			height: auto !important;
+			min-height: 0;
+			overflow: visible;
+		}
+
+		.RetailDwgMonthlyOffer__Main.EmoStack {
+			height: auto !important;
+			padding: 10px;
+			gap: 10px;
+			overflow: visible;
+		}
+
+		.RetailDwgMonthlyOffer__IntroPane.EmoStack {
+			height: auto !important;
+			padding: 0;
+			gap: 6px;
+		}
+
+		.RetailDwgMonthlyOffer__IntroGraph.Emograph h2 {
+			font-size: 1.65rem !important;
+			line-height: 1.12 !important;
+			text-align: center !important;
+		}
+
+		.RetailDwgMonthlyOffer__Descr {
+			font-size: 0.78rem;
+			line-height: 1.35;
+			text-align: center;
+		}
+
+		.RetailDwgMonthlyOffer__Kicker {
+			margin-inline: auto;
+			font-size: 0.72rem;
+			padding: 5px 12px;
+		}
+
+		.RetailDwgMonthlyOffer__Form {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 7px;
+			width: 100%;
+			height: auto !important;
+			max-height: none;
+			padding: 10px;
+			border-radius: 14px;
+			overflow: visible;
+		}
+
+		.RetailDwgMonthlyOffer__TimePanel,
+		.RetailDwgMonthlyOffer__Submit,
+		.RetailDwgMonthlyOffer__Note,
+		.RetailDwgMonthlyOffer__Message,
+		.RetailDwgMonthlyOffer__WhatsApp
+		{
+			grid-column: 1 / -1;
+		}
+
+		.RetailDwgMonthlyOffer__TimeProgress {
+			height: 30px;
+		}
+
+		.RetailDwgMonthlyOffer__TimeProgressText {
+			font-size: 0.58rem;
+			white-space: normal;
+			line-height: 1.15;
+		}
+
+		.RetailDwgMonthlyOffer__Field {
+			gap: 2px;
+		}
+
+		.RetailDwgMonthlyOffer__Field span {
+			font-size: 0.58rem;
+			line-height: 1.1;
+		}
+
+		.RetailDwgMonthlyOffer__Field input,
+		.RetailDwgMonthlyOffer__Field select
+		{
+			height: 30px;
+			padding: 4px 6px;
+			border-radius: 8px;
+			font-size: 0.66rem;
+		}
+
+		.RetailDwgMonthlyOffer__Submit.Btn {
+			min-height: 30px;
+			height: 30px;
+		}
+
+		.RetailDwgMonthlyOffer__Submit .BtnText {
+			font-size: 0.72rem;
+		}
+
+		.RetailDwgMonthlyOffer__Note {
+			font-size: 0.58rem;
+			line-height: 1.25;
+			text-align: center;
+		}
+
+		.RetailDwgMonthlyOffer__Message {
+			min-height: 24px;
+			max-height: none;
+			padding: 5px 7px;
+			font-size: 0.58rem;
+			line-height: 1.25;
+		}
+
+		.RetailDwgMonthlyOffer__ScheduleArea.EmoStack {
+			width: 100%;
+			height: auto !important;
+			gap: 5px;
+			overflow: visible;
+		}
+
+		.RetailDwgMonthlyOffer__ScheduleTitle {
+			min-height: auto;
+			gap: 2px;
+			text-align: right;
+		}
+
+		.RetailDwgMonthlyOffer__ScheduleTitle h3 {
+			font-size: 0.9rem;
+			line-height: 1.15;
+		}
+
+		.RetailDwgMonthlyOffer__ScheduleTitle p {
+			font-size: 0.62rem;
+			line-height: 1.2;
+		}
+
+		.RetailDwgMonthlyOffer__Schedule {
+			display: grid;
+			grid-template-columns: 1fr;
+			grid-template-rows: repeat(3, 62px);
+			gap: 6px;
+			width: 100%;
+			height: auto;
+		}
+
+		.RetailDwgMonthlyOffer__Day {
+			grid-template-rows: 18px 44px;
+			min-height: 62px;
+			border-radius: 10px;
+		}
+
+		.RetailDwgMonthlyOffer__Day h4 {
+			padding: 2px 6px;
+			font-size: 0.62rem;
+			line-height: 1;
+		}
+
+		.RetailDwgMonthlyOffer__Slots {
+			grid-template-columns: repeat(5, minmax(0, 1fr));
+			gap: 3px;
+			padding: 4px;
+		}
+
+		.RetailDwgMonthlyOffer__Slot {
+			min-height: 40px;
+		}
+
+		.RetailDwgMonthlyOffer__SlotContent {
+			gap: 1px;
+			padding: 2px;
+		}
+
+		.RetailDwgMonthlyOffer__SlotTime {
+			font-size: 0.46rem;
+			line-height: 1.05;
+			font-weight: 950;
+		}
+
+		.RetailDwgMonthlyOffer__SlotState {
+			font-size: 0.44rem;
+			line-height: 1;
+			font-weight: 900;
+		}
+
+		.RetailDwgMonthlyOffer__Slot.is-selected {
+			outline: 2px solid #ffffff;
+			outline-offset: -4px;
+		}
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script define:vars={{ cWidgetId, pForceShow }}>
+	const cApiUrl = "https://script.google.com/macros/s/AKfycbzeTnfUKH9Y3shjoCq9FUsYTxTf7FvUImLcwQZEx2ppnX1EHirIuOZTiLxnQB_HpVfNXQ/exec";
+	const cWhatsAppNumber = "201014490054";
+
+	const cRoot = document.getElementById(cWidgetId);
+	const cUrlParams = new URLSearchParams(window.location.search);
+
+	const cForceShow =
+	Boolean(pForceShow) ||
+	cRoot?.dataset.forceShow === "true" ||
+	cUrlParams.get("retailOffer") === "show";
+
+	const cForm = cRoot?.querySelector("[data-retail-form]");
+	const cNameInput = cRoot?.querySelector("[data-retail-name]");
+	const cPhoneInput = cRoot?.querySelector("[data-retail-phone]");
+	const cGovernorateSelect = cRoot?.querySelector("[data-retail-governorate]");
+	const cAreaSelect = cRoot?.querySelector("[data-retail-area]");
+	const cDaySelect = cRoot?.querySelector("[data-retail-day]");
+	const cSlotSelect = cRoot?.querySelector("[data-retail-slot]");
+	const cSubmitButton = cRoot?.querySelector("[data-retail-submit]");
+	const cMessage = cRoot?.querySelector("[data-retail-message]");
+	const cSchedule = cRoot?.querySelector("[data-retail-schedule]");
+	const cOfferText = cRoot?.querySelector("[data-retail-offer-text]");
+	const cBookedTitle = cRoot?.querySelector("[data-retail-booked-title]");
+	const cCountdown = cRoot?.querySelector("[data-retail-countdown]");
+	const cTimeFill = cRoot?.querySelector("[data-retail-time-fill]");
+	const cWhatsApp = cRoot?.querySelector("[data-retail-whatsapp]");
+
+	const cSlots = [
+	{ key: "12:00", label: "12:00 ظهرًا" },
+	{ key: "14:00", label: "2:00 مساءً" },
+	{ key: "16:00", label: "4:00 مساءً" },
+	{ key: "18:00", label: "6:00 مساءً" },
+	{ key: "20:00", label: "8:00 مساءً" }
+	];
+
+	const cAreas = {
+	"القاهرة": [
+	"مدينة نصر",
+	"مصر الجديدة",
+	"النزهة",
+	"المعادي",
+	"التجمع الخامس",
+	"القاهرة الجديدة",
+	"الشروق",
+	"بدر",
+	"مدينتي",
+	"الرحاب",
+	"حلوان",
+	"المقطم",
+	"الزيتون",
+	"حدائق القبة",
+	"شبرا",
+	"الساحل",
+	"روض الفرج",
+	"وسط البلد",
+	"باب الشعرية",
+	"السيدة زينب",
+	"مصر القديمة",
+	"المرج",
+	"عين شمس",
+	"السلام",
+	"العباسية"
+	],
+	"الجيزة": [
+	"الدقي",
+	"المهندسين",
+	"العجوزة",
+	"الهرم",
+	"فيصل",
+	"حدائق الأهرام",
+	"العمرانية",
+	"الطالبية",
+	"بولاق الدكرور",
+	"إمبابة",
+	"الوراق",
+	"6 أكتوبر",
+	"الشيخ زايد",
+	"حدائق أكتوبر",
+	"أكتوبر الجديدة",
+	"الواحات",
+	"البدرشين",
+	"أبو النمرس",
+	"المنيب",
+	"كرداسة"
+	]
+	};
+
+	let fCampaign = null;
+	let fBookings = [];
+	let fSelectedDayKey = "";
+	let fSelectedSlotKey = "";
+	let fCountdownTimer = null;
+
+	if (cGovernorateSelect) {
+	cGovernorateSelect.addEventListener("change", HandleGovernorateChange);
+	}
+
+	if (cDaySelect) {
+	cDaySelect.addEventListener("change", HandleDayChange);
+	}
+
+	if (cSlotSelect) {
+	cSlotSelect.addEventListener("change", HandleSlotChange);
+	}
+
+	if (cForm) {
+	cForm.addEventListener("submit", HandleSubmit);
+	}
+
+	InitWidget();
+
+	async function InitWidget() {
+	if (!cRoot) return;
+
+	const cNow = GetCairoDate();
+	fCampaign = GetCampaign(cNow);
+
+	if (!fCampaign.isActive && cForceShow) {
+	fCampaign = GetForcedCampaign(cNow);
+	}
+
+	if (!fCampaign.isActive) {
+	cRoot.hidden = true;
+	return;
+	}
+
+	cRoot.hidden = false;
+
+	RenderOfferText();
+	RenderDayOptions();
+	RenderSlotOptions();
+	RenderSchedule();
+	StartCountdown();
+
+	await LoadBookings();
+	}
+
+	async function LoadBookings() {
+	if (!IsApiReady()) {
+	SetMessage("لم يتم ضبط رابط Google Apps Script الخاص بعرض رسم المحلات حتى الآن. الودجت تعمل للمعاينة فقط، ولن تحفظ الطلبات قبل ضبط الرابط.", "warning");
+	RenderSchedule();
+	UpdateCounters();
+	return;
+	}
+
+	SetMessage("جاري تحميل حالة الحجوزات...", "info");
+
+	try {
+	const cData = await CallApi({
+	action: "getBookings",
+	campaignKey: fCampaign.key,
+	campaignYear: fCampaign.year,
+	campaignMonth: fCampaign.month,
+	days: fCampaign.days,
+	slots: cSlots
+	});
+
+	if (!cData.ok) {
+	throw new Error(cData.message || "تعذر تحميل الحجوزات.");
+	}
+
+	fBookings = Array.isArray(cData.bookings) ? cData.bookings : [];
+
+	RenderSlotOptions();
+	RenderSchedule();
+	UpdateCounters();
+	SetMessage("", "");
+	} catch (cError) {
+	SetMessage("تعذر تحميل حالة الحجوزات حاليًا. يمكن المحاولة مرة أخرى بعد قليل.", "error");
+	}
+	}
+
+	async function HandleSubmit(cEvent) {
+	cEvent.preventDefault();
+
+	if (!fCampaign?.isActive) return;
+
+	const cName = GetInputValue(cNameInput);
+	const cPhoneRaw = GetInputValue(cPhoneInput);
+	const cPhone = NormalizeEgyptPhone(cPhoneRaw);
+	const cGovernorate = GetInputValue(cGovernorateSelect);
+	const cArea = GetInputValue(cAreaSelect);
+	const cDayKey = GetInputValue(cDaySelect);
+	const cSlotKey = GetInputValue(cSlotSelect);
+
+	if (!cName || !cPhoneRaw || !cGovernorate || !cArea || !cDayKey || !cSlotKey) {
+	SetMessage("برجاء استكمال البيانات المطلوبة قبل تسجيل الطلب.", "error");
+	return;
+	}
+
+	if (!IsValidEgyptPhone(cPhone)) {
+	SetMessage("برجاء كتابة رقم موبايل مصري صحيح يبدأ بـ 01 ويتكون من 11 رقمًا.", "error");
+	return;
+	}
+
+	if (IsPhoneAlreadySubmitted(cPhone)) {
+	SetMessage("تم تسجيل طلب سابق بهذا الرقم. سيتم التواصل معك للتنسيق.", "warning");
+	ShowWhatsAppButton(cName, cPhone, cGovernorate, cArea, cDayKey, cSlotKey);
+	return;
+	}
+
+	if (IsSlotTaken(cDayKey, cSlotKey)) {
+	SetMessage("هذا الموعد تم طلبه بالفعل. اختر موعدًا آخر من المواعيد المتاحة.", "error");
+	RenderSlotOptions();
+	RenderSchedule();
+	return;
+	}
+
+	if (!IsApiReady()) {
+	SetMessage("لم يتم ضبط رابط Google Apps Script بعد، لذلك لا يمكن حفظ الطلب حاليًا.", "error");
+	return;
+	}
+
+	SetSubmitState(true);
+	SetMessage("جاري تسجيل طلب المعاينة...", "info");
+
+	try {
+	const cDay = GetDayByKey(cDayKey);
+	const cSlot = GetSlotByKey(cSlotKey);
+
+	const cData = await CallApi({
+	action: "createBooking",
+	campaignKey: fCampaign.key,
+	campaignYear: fCampaign.year,
+	campaignMonth: fCampaign.month,
+	clientName: cName,
+	phone: cPhone,
+	phoneRaw: cPhoneRaw,
+	governorate: cGovernorate,
+	area: cArea,
+	dayKey: cDayKey,
+	dayLabel: cDay?.label || cDayKey,
+	slotKey: cSlotKey,
+	slotLabel: cSlot?.label || cSlotKey,
+	status: "pending",
+	pageUrl: window.location.href,
+	pageTitle: document.title,
+	createdAtIso: new Date().toISOString(),
+	userAgent: navigator.userAgent,
+	createdAtCairo: GetCairoDateText()
+	});
+
+	if (!cData.ok) {
+	if (cData.code === "DUPLICATE_PHONE") {
+	SetMessage("تم تسجيل طلب سابق بهذا الرقم. سيتم التواصل معك للتنسيق.", "warning");
+	ShowWhatsAppButton(cName, cPhone, cGovernorate, cArea, cDayKey, cSlotKey);
+	return;
+	}
+
+	if (cData.code === "SLOT_TAKEN") {
+	SetMessage("هذا الموعد لم يعد متاحًا. اختر موعدًا آخر من الشريط.", "error");
+	await LoadBookings();
+	return;
+	}
+
+	throw new Error(cData.message || "تعذر تسجيل الطلب.");
+	}
+
+	if (Array.isArray(cData.bookings)) {
+	fBookings = cData.bookings;
+	} else {
+	fBookings.push({
+	campaignKey: fCampaign.key,
+	clientName: cName,
+	phone: cPhone,
+	governorate: cGovernorate,
+	area: cArea,
+	dayKey: cDayKey,
+	slotKey: cSlotKey,
+	status: "pending"
+	});
+	}
+
+	RenderSlotOptions();
+	RenderSchedule();
+	UpdateCounters();
+	ShowWhatsAppButton(cName, cPhone, cGovernorate, cArea, cDayKey, cSlotKey);
+
+	SetMessage("تم تسجيل طلب المعاينة بنجاح. سيتم التواصل معك للتنسيق وتأكيد الموعد.", "success");
+
+	cForm.reset();
+	ResetAreaSelect();
+	RenderDayOptions();
+	RenderSlotOptions();
+	fSelectedDayKey = "";
+	fSelectedSlotKey = "";
+	MarkSelectedSlot();
+	} catch (cError) {
+	console.error("RetailDwgMonthlyOffer submit error:", cError);
+	SetMessage(`تعذر تسجيل الطلب: ${cError?.message || cError}`, "error");
+	} finally {
+	SetSubmitState(false);
+	}
+	}
+
+	function HandleGovernorateChange() {
+	const cGovernorate = GetInputValue(cGovernorateSelect);
+	RenderAreaOptions(cGovernorate);
+	}
+
+	function HandleDayChange() {
+	fSelectedDayKey = GetInputValue(cDaySelect);
+	fSelectedSlotKey = "";
+	RenderSlotOptions();
+	MarkSelectedSlot();
+	}
+
+	function HandleSlotChange() {
+	fSelectedDayKey = GetInputValue(cDaySelect);
+	fSelectedSlotKey = GetInputValue(cSlotSelect);
+	MarkSelectedSlot();
+	}
+
+	function RenderOfferText() {
+	if (!cOfferText || !fCampaign) return;
+
+	if (fCampaign.phase === "pre") {
+	cOfferText.textContent = "احجز معاينة الرسم الهندسي للمحل التجاري الجديدة خلال أول 3 أيام من الشهر القادم، واستفد من خصم 1000 جنيه على الخدمة.";
+	return;
+	}
+
+	if (fCampaign.phase === "dev") {
+	cOfferText.textContent = "وضع المعاينة مفعل لأغراض التطوير. هذه النسخة تظهر خارج فترة العرض عند استخدام pForceShow أو retailOffer=show.";
+	return;
+	}
+
+	cOfferText.textContent = "العرض متاح الآن لحجوزات معاينة الرسم الهندسي للمحلات التجارية الجديدة خلال أول 3 أيام من هذا الشهر.";
+	}
+
+	function RenderDayOptions() {
+	if (!cDaySelect || !fCampaign) return;
+
+	cDaySelect.innerHTML = `<option value="">اختر</option>`;
+
+	for (const cDay of fCampaign.days) {
+	const cOption = document.createElement("option");
+	cOption.value = cDay.key;
+	cOption.textContent = cDay.label;
+	cDaySelect.appendChild(cOption);
+	}
+	}
+
+	function RenderSlotOptions() {
+	if (!cSlotSelect) return;
+
+	const cDayKey = GetInputValue(cDaySelect);
+	cSlotSelect.innerHTML = `<option value="">اختر</option>`;
+
+	for (const cSlot of cSlots) {
+	const cBooking = cDayKey ? GetBooking(cDayKey, cSlot.key) : null;
+	const cOption = document.createElement("option");
+
+	cOption.value = cSlot.key;
+	cOption.textContent = cBooking
+	? `${cSlot.label} - ${GetStatusLabel(cBooking.status)}`
+	: cSlot.label;
+
+	cOption.disabled = Boolean(cBooking && cBooking.status !== "cancelled");
+
+	cSlotSelect.appendChild(cOption);
+	}
+	}
+
+	function RenderAreaOptions(cGovernorate) {
+	if (!cAreaSelect) return;
+
+	const cSelectedAreas = cAreas[cGovernorate] || [];
+
+	cAreaSelect.innerHTML = "";
+
+	if (!cSelectedAreas.length) {
+	ResetAreaSelect();
+	return;
+	}
+
+	const cEmptyOption = document.createElement("option");
+	cEmptyOption.value = "";
+	cEmptyOption.textContent = "اختر";
+	cAreaSelect.appendChild(cEmptyOption);
+
+	for (const cArea of cSelectedAreas) {
+	const cOption = document.createElement("option");
+	cOption.value = cArea;
+	cOption.textContent = cArea;
+	cAreaSelect.appendChild(cOption);
+	}
+
+	cAreaSelect.disabled = false;
+	}
+
+	function ResetAreaSelect() {
+	if (!cAreaSelect) return;
+
+	cAreaSelect.innerHTML = `<option value="">اختر المحافظة أولًا</option>`;
+	cAreaSelect.disabled = true;
+	}
+
+	function RenderSchedule() {
+	if (!cSchedule || !fCampaign) return;
+
+	cSchedule.innerHTML = "";
+
+	for (const cDay of fCampaign.days) {
+	const cDayEl = document.createElement("article");
+	cDayEl.className = "RetailDwgMonthlyOffer__Day";
+	cDayEl.dataset.dayKey = cDay.key;
+
+	const cTitle = document.createElement("h4");
+	cTitle.textContent = cDay.label;
+
+	const cSlotsEl = document.createElement("div");
+	cSlotsEl.className = "RetailDwgMonthlyOffer__Slots";
+
+	for (const cSlot of cSlots) {
+	const cBooking = GetBooking(cDay.key, cSlot.key);
+	const cStatus = NormalizeStatus(cBooking?.status || "available");
+	const cColors = GetSlotColors(cStatus);
+	const cSvgId = `RetailSlotGrad-${cDay.key}-${cSlot.key}`.replace(/[^\w-]/g, "");
+
+	const cButton = document.createElement("button");
+	cButton.type = "button";
+	cButton.className = `RetailDwgMonthlyOffer__Slot is-${cStatus}`;
+	cButton.dataset.dayKey = cDay.key;
+	cButton.dataset.slotKey = cSlot.key;
+	cButton.dataset.status = cStatus;
+
+	cButton.innerHTML = `
+	<svg class="RetailDwgMonthlyOffer__SlotSvg" viewBox="0 0 220 110" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+	<defs>
+	<linearGradient id="${cSvgId}" x1="0" y1="0" x2="1" y2="1">
+	<stop offset="0%" stop-color="${cColors.start}" />
+	<stop offset="100%" stop-color="${cColors.end}" />
+	</linearGradient>
+	</defs>
+	<polygon points="16,0 220,0 204,110 0,110" fill="url(#${cSvgId})"></polygon>
+	<polygon points="28,10 210,10 196,100 10,100" fill="rgba(255,255,255,0.22)"></polygon>
+	</svg>
+
+	<span class="RetailDwgMonthlyOffer__SlotContent">
+	<span class="RetailDwgMonthlyOffer__SlotTime">${cSlot.label}</span>
+	<span class="RetailDwgMonthlyOffer__SlotState">${GetStatusLabel(cStatus)}</span>
+	</span>
+	`;
+
+	if (cStatus === "available" || cStatus === "cancelled") {
+	cButton.addEventListener("click", HandleSlotButtonClick);
+	} else {
+	cButton.disabled = true;
+	}
+
+	cSlotsEl.appendChild(cButton);
+	}
+
+	cDayEl.appendChild(cTitle);
+	cDayEl.appendChild(cSlotsEl);
+	cSchedule.appendChild(cDayEl);
+	}
+
+	MarkSelectedSlot();
+	UpdateCounters();
+	}
+
+	function HandleSlotButtonClick(cEvent) {
+	const cButton = cEvent.currentTarget;
+	const cDayKey = cButton.dataset.dayKey || "";
+	const cSlotKey = cButton.dataset.slotKey || "";
+
+	if (!cDayKey || !cSlotKey || IsSlotTaken(cDayKey, cSlotKey)) return;
+
+	fSelectedDayKey = cDayKey;
+	fSelectedSlotKey = cSlotKey;
+
+	if (cDaySelect) {
+	cDaySelect.value = cDayKey;
+	}
+
+	RenderSlotOptions();
+
+	if (cSlotSelect) {
+	cSlotSelect.value = cSlotKey;
+	}
+
+	MarkSelectedSlot();
+	}
+
+	function MarkSelectedSlot() {
+	if (!cSchedule) return;
+
+	const cButtons = cSchedule.querySelectorAll(".RetailDwgMonthlyOffer__Slot");
+
+	for (const cButton of cButtons) {
+	const cIsSelected =
+	cButton.dataset.dayKey === fSelectedDayKey &&
+	cButton.dataset.slotKey === fSelectedSlotKey;
+
+	cButton.classList.toggle("is-selected", cIsSelected);
+	}
+	}
+
+	function UpdateCounters() {
+	const cTotal = fCampaign ? fCampaign.days.length * cSlots.length : 15;
+
+	const cBooked = fBookings.filter(function (cBooking) {
+	return NormalizeStatus(cBooking.status) !== "cancelled";
+	}).length;
+
+	if (cBookedTitle) {
+	cBookedTitle.textContent = `تم حجز ${cBooked} عروض من أصل ${cTotal} عرض`;
+	}
+	}
+
+	function StartCountdown() {
+	if (fCountdownTimer) {
+	clearInterval(fCountdownTimer);
+	}
+
+	UpdateCountdown();
+	fCountdownTimer = window.setInterval(UpdateCountdown, 1000);
+	}
+
+	function UpdateCountdown() {
+	if (!cCountdown || !fCampaign) return;
+
+	const cNow = GetCairoDate();
+	const cStartsAt = fCampaign.startsAt;
+	const cEndsAt = fCampaign.endsAt;
+	const cTotalOfferMs = 3 * 24 * 60 * 60 * 1000;
+	const cRemainingMs = cEndsAt.getTime() - cNow.getTime();
+
+	if (cRemainingMs <= 0 && !cForceShow) {
+	cCountdown.textContent = "انتهى العرض";
+	if (cRoot) cRoot.hidden = true;
+	return;
+	}
+
+	if (cRemainingMs <= 0 && cForceShow) {
+	SetTimeProgress(0, "red");
+	cCountdown.textContent = "انتهى العرض - وضع تطوير";
+	return;
+	}
+
+	let cPercent = 100;
+	let cColorState = "blue";
+
+	if (cNow.getTime() >= cStartsAt.getTime()) {
+	cPercent = Math.max(0, Math.min(100, (cRemainingMs / cTotalOfferMs) * 100));
+
+	const cElapsedMs = cNow.getTime() - cStartsAt.getTime();
+	const cOneDayMs = 24 * 60 * 60 * 1000;
+	const cThreeHoursMs = 3 * 60 * 60 * 1000;
+
+	if (cRemainingMs <= cThreeHoursMs) {
+	cColorState = "red";
+	} else if (cElapsedMs >= cOneDayMs * 2) {
+	cColorState = "orange";
+	} else if (cElapsedMs >= cOneDayMs) {
+	cColorState = "yellow";
+	} else {
+	cColorState = "blue";
+	}
+	}
+
+	SetTimeProgress(cPercent, cColorState);
+	cCountdown.textContent = `ينتهي العرض خلال ${FormatRemainingTime(cRemainingMs)}`;
+	}
+
+	function SetTimeProgress(cPercent, cColorState) {
+	if (cTimeFill) {
+	cTimeFill.style.width = `${cPercent}%`;
+	}
+
+	if (!cRoot) return;
+
+	cRoot.classList.remove(
+	"is-time-blue",
+	"is-time-yellow",
+	"is-time-orange",
+	"is-time-red"
+	);
+
+	cRoot.classList.add(`is-time-${cColorState}`);
+	}
+
+	function FormatRemainingTime(cRemainingMs) {
+	const cTotalSeconds = Math.max(0, Math.floor(cRemainingMs / 1000));
+	const cDays = Math.floor(cTotalSeconds / 86400);
+	const cHours = Math.floor((cTotalSeconds % 86400) / 3600);
+	const cMinutes = Math.floor((cTotalSeconds % 3600) / 60);
+	const cSeconds = cTotalSeconds % 60;
+
+	return `${cDays} يوم ${Pad2(cHours)} ساعة ${Pad2(cMinutes)} دقيقة ${Pad2(cSeconds)} ثانية`;
+	}
+
+	function GetCampaign(cNow) {
+	const cCurrentYear = cNow.getFullYear();
+	const cCurrentMonthIndex = cNow.getMonth();
+	const cCurrentDay = cNow.getDate();
+	const cLastDayInMonth = new Date(cCurrentYear, cCurrentMonthIndex + 1, 0).getDate();
+
+	const cInLastWeek = cCurrentDay >= cLastDayInMonth - 6;
+	const cInFirstThreeDays = cCurrentDay <= 3;
+
+	if (!cInLastWeek && !cInFirstThreeDays) {
+	return { isActive: false };
+	}
+
+	if (cInLastWeek && !cInFirstThreeDays) {
+	return BuildCampaign(cCurrentYear, cCurrentMonthIndex + 1, "pre");
+	}
+
+	return BuildCampaign(cCurrentYear, cCurrentMonthIndex, "active");
+	}
+
+	function GetForcedCampaign(cNow) {
+	let cTargetYear = cNow.getFullYear();
+	let cTargetMonthIndex = cNow.getMonth();
+
+	if (cNow.getDate() > 3) {
+	cTargetMonthIndex += 1;
+	}
+
+	return BuildCampaign(cTargetYear, cTargetMonthIndex, "dev");
+	}
+
+	function BuildCampaign(cYear, cMonthIndex, cPhase) {
+	while (cMonthIndex > 11) {
+	cMonthIndex -= 12;
+	cYear += 1;
+	}
+
+	while (cMonthIndex < 0) {
+	cMonthIndex += 12;
+	cYear -= 1;
+	}
+
+	const cMonth = cMonthIndex + 1;
+	const cCampaignKey = `${cYear}-${Pad2(cMonth)}`;
+	const cDays = [];
+
+	for (let cDay = 1; cDay <= 3; cDay += 1) {
+	const cDate = new Date(cYear, cMonthIndex, cDay);
+	const cKey = `${cYear}-${Pad2(cMonth)}-${Pad2(cDay)}`;
+
+	cDays.push({
+	key: cKey,
+	label: FormatArabicDay(cDate),
+	day: cDay
+	});
+	}
+
+	return {
+	isActive: true,
+	key: cCampaignKey,
+	year: cYear,
+	month: cMonth,
+	monthIndex: cMonthIndex,
+	phase: cPhase,
+	days: cDays,
+	startsAt: new Date(cYear, cMonthIndex, 1, 0, 0, 0),
+	endsAt: new Date(cYear, cMonthIndex, 4, 0, 0, 0)
+	};
+	}
+
+	function GetCairoDate() {
+	const cFormatter = new Intl.DateTimeFormat("en-CA", {
+	timeZone: "Africa/Cairo",
+	year: "numeric",
+	month: "2-digit",
+	day: "2-digit",
+	hour: "2-digit",
+	minute: "2-digit",
+	second: "2-digit",
+	hourCycle: "h23"
+	});
+
+	const cParts = cFormatter.formatToParts(new Date());
+	const cMap = {};
+
+	for (const cPart of cParts) {
+	if (cPart.type !== "literal") {
+	cMap[cPart.type] = cPart.value;
+	}
+	}
+
+	return new Date(
+	Number(cMap.year),
+	Number(cMap.month) - 1,
+	Number(cMap.day),
+	Number(cMap.hour),
+	Number(cMap.minute),
+	Number(cMap.second)
+	);
+	}
+
+	function GetCairoDateText() {
+	return GetCairoDate().toLocaleString("ar-EG", {
+	dateStyle: "medium",
+	timeStyle: "short"
+	});
+	}
+
+	function FormatArabicDay(cDate) {
+	return cDate.toLocaleDateString("ar-EG", {
+	weekday: "long",
+	day: "numeric",
+	month: "long"
+	});
+	}
+
+	function Pad2(cValue) {
+	return String(cValue).padStart(2, "0");
+	}
+
+	function GetBooking(cDayKey, cSlotKey) {
+	const cCampaignKey = String(fCampaign?.key || "").trim();
+	const cDay = String(cDayKey || "").trim();
+	const cSlot = String(cSlotKey || "").trim();
+
+	return fBookings.find(function (cBooking) {
+	return (
+	String(cBooking.campaignKey || "").trim() === cCampaignKey &&
+	String(cBooking.dayKey || "").trim() === cDay &&
+	String(cBooking.slotKey || "").trim() === cSlot &&
+	NormalizeStatus(cBooking.status) !== "cancelled"
+	);
+	});
+	}
+
+	function NormalizeStatus(cStatus) {
+	const cValue = String(cStatus || "available").trim().toLowerCase();
+
+	if (cValue === "pending") return "pending";
+	if (cValue === "confirmed") return "confirmed";
+	if (cValue === "cancelled") return "cancelled";
+
+	return "available";
+	}
+
+	function IsSlotTaken(cDayKey, cSlotKey) {
+	return Boolean(GetBooking(cDayKey, cSlotKey));
+	}
+
+	function IsPhoneAlreadySubmitted(cPhone) {
+	return fBookings.some(function (cBooking) {
+	return NormalizeEgyptPhone(cBooking.phone || "") === cPhone && cBooking.status !== "cancelled";
+	});
+	}
+
+	function GetDayByKey(cDayKey) {
+	return fCampaign?.days.find(function (cDay) {
+	return cDay.key === cDayKey;
+	});
+	}
+
+	function GetSlotByKey(cSlotKey) {
+	return cSlots.find(function (cSlot) {
+	return cSlot.key === cSlotKey;
+	});
+	}
+
+	function GetStatusLabel(cStatus) {
+	if (cStatus === "pending") return "تم طلبه";
+	if (cStatus === "confirmed") return "محجوز";
+	if (cStatus === "cancelled") return "متاح";
+	return "متاح";
+	}
+
+	function GetSlotColors(cStatus) {
+	if (cStatus === "pending") {
+	return {
+	start: "#FFE8A3",
+	end: "#FFC83D"
+	};
+	}
+
+	if (cStatus === "confirmed") {
+	return {
+	start: "#FFC6C6",
+	end: "#FF7E7E"
+	};
+	}
+
+	return {
+	start: "#A8F5C4",
+	end: "#27D86F"
+	};
+	}
+
+	async function CallApi(cPayload) {
+	console.log("RetailDwgMonthlyOffer request:", cPayload);
+
+	const cResponse = await fetch(cApiUrl, {
+	method: "POST",
+	headers: {
+	"Content-Type": "text/plain;charset=utf-8"
+	},
+	body: JSON.stringify(cPayload)
+	});
+
+	const cText = await cResponse.text();
+
+	console.log("RetailDwgMonthlyOffer response status:", cResponse.status);
+	console.log("RetailDwgMonthlyOffer response text:", cText);
+
+	try {
+	return JSON.parse(cText);
+	} catch (cError) {
+	return {
+	ok: false,
+	code: "INVALID_RESPONSE",
+	message: "Invalid JSON response",
+	raw: cText
+	};
+	}
+	}
+
+	function IsApiReady() {
+	const cUrl = String(cApiUrl || "").trim();
+
+	if (!cUrl) return false;
+	if (cUrl.includes("PUT_")) return false;
+	if (!cUrl.startsWith("https://script.google.com/macros/s/")) return false;
+	if (!cUrl.endsWith("/exec")) return false;
+
+	return true;
+	}
+
+	function NormalizeEgyptPhone(cPhone) {
+	return String(cPhone || "")
+	.replace(/[^\d+]/g, "")
+	.replace(/^0020/, "0")
+	.replace(/^\+20/, "0");
+	}
+
+	function IsValidEgyptPhone(cPhone) {
+	return /^01[0125][0-9]{8}$/.test(cPhone);
+	}
+
+	function GetInputValue(cElement) {
+	return String(cElement?.value || "").trim();
+	}
+
+	function SetSubmitState(cIsLoading) {
+	if (!cSubmitButton) return;
+
+	cSubmitButton.disabled = cIsLoading;
+
+	const cTextEl = cSubmitButton.querySelector(".BtnText");
+
+	if (cTextEl) {
+	cTextEl.textContent = cIsLoading ? "جاري التسجيل..." : "تسجيل الطلب";
+	return;
+	}
+
+	cSubmitButton.textContent = cIsLoading ? "جاري التسجيل..." : "تسجيل الطلب";
+	}
+
+	function SetMessage(cText, cType) {
+	if (!cMessage) return;
+
+	cMessage.textContent = cText || "";
+	cMessage.dataset.type = cType || "";
+	cMessage.hidden = !cText;
+	}
+
+	function ShowWhatsAppButton(cName, cPhone, cGovernorate, cArea, cDayKey, cSlotKey) {
+	if (!cWhatsApp) return;
+
+	const cDay = GetDayByKey(cDayKey);
+	const cSlot = GetSlotByKey(cSlotKey);
+
+	const cText = [
+	"مرحبًا، قمت بتسجيل طلب معاينة الرسم الهندسي للمحل التجاري الجديدة.",
+	`الاسم: ${cName}`,
+	`رقم الهاتف: ${cPhone}`,
+	`المحافظة: ${cGovernorate}`,
+	`المنطقة: ${cArea}`,
+	`اليوم: ${cDay?.label || cDayKey}`,
+	`الموعد: ${cSlot?.label || cSlotKey}`
+	].join("\n");
+
+	cWhatsApp.href = `https://wa.me/${cWhatsAppNumber}?text=${encodeURIComponent(cText)}`;
+	cWhatsApp.hidden = false;
+	}
+</script>

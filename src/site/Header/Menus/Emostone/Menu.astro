@@ -1,0 +1,49 @@
+---
+import SubMenuHead from "../../Menu/SubMenuHead.astro";
+import SubMenuItem from "../../Menu/SubMenuItem.astro";
+
+const cMenuIconsList = import.meta.glob("./*.webp", {
+	eager: true,
+	import: "default",
+	query: "?url",
+});
+
+const cMenuIcons = Object.fromEntries(
+	Object.entries(cMenuIconsList).map(([fPath, fUrl]) => {
+		const fFileName = fPath.split("/").pop() ?? "";
+		const fBaseName = fFileName.replace(/\.[^.]+$/, "");
+		return [fBaseName, fUrl];
+	}),
+);
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<SubMenuHead fTitle="رخام مصري" fLink="/emostone/marble/eg" fIcon={cMenuIcons.Lab} />
+
+<SubMenuHead fTitle="رخام مستورد" fLink="/emostone/marble/imp" fIcon={cMenuIcons.Lab} />
+
+<SubMenuHead fTitle="جرانيت مصري" fLink="/emostone/granit/eg" fIcon={cMenuIcons.Lab} />
+
+<SubMenuHead fTitle="جرانيت مستورد" fLink="/emostone/granit/imp" fIcon={cMenuIcons.Lab} />
+
+<SubMenuHead fTitle="حجر طبيعي" fLink="/emostone/stone" fIcon={cMenuIcons.Lab} />
+
+<SubMenuHead fTitle="كوارتز" fLink="/emostone/quartz" fIcon={cMenuIcons.Lab} />

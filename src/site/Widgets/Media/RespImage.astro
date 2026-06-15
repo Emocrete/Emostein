@@ -1,0 +1,176 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { EmoMediaData, Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"div">, PlaceProps {
+	pImg?: EmoMediaData;
+}
+
+const {
+	pImg,
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+
+const cCssVars = [
+	`--WidthL:${pImg?.Size?.WidthL || "200px"};`,
+	`--WidthP:${pImg?.Size?.WidthP || "200px"};`,
+	`--HeightL:${pImg?.Size?.HeightL || "200px"};`,
+	`--HeightP:${pImg?.Size?.HeightP || "200px"};`,
+	pGivenStyle || "",
+].join("\n");
+
+const cPlace = new Place(Astro.props as PlaceProps, cCssVars);
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class = {`RespImg ${cPlace.Class} ${pGivenClass}`.trim()} style = {cPlace.Style} {...RemAttr}>
+
+	<picture class = " RespImgPicBox ">
+
+		<source srcset={pImg?.LinkP ||"/Media/ErrorImg.webp"} media="(orientation: portrait)" />
+
+		<img class = " RespImgImg " src={pImg?.LinkL ||"/Media/ErrorImg.webp"} alt={pImg?.Alt} />
+
+	</picture>
+
+	<div class = " RespImgSlot ">
+
+		<slot />
+
+	</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.RespImg {
+		position: relative;
+		display: inline-block;
+		line-height: 0;
+		background-color: transparent;
+		height: 100%;
+		width: auto;
+		object-fit: contain;
+	}
+
+
+	.RespImgImg {
+		height: 100%;
+		width: auto;
+		object-fit: contain;
+		display: block;
+	}
+
+	@media (orientation: landscape) {
+		.RespImgImg {
+			width: var(--WidthL, auto);
+			height: var(--HeightL, auto);
+		}
+	}
+
+
+	.RespImgSlot {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+	}
+
+	.RespImgSlot > :global(*) {
+		position: absolute;
+		pointer-events: auto;
+	}
+
+
+	.RespImgPicBox {
+		height: 100%;
+		width: auto;
+		object-fit: contain;
+		display: block;
+	}
+
+
+
+	.RespImg.IsPlaced {
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+	@media (orientation: portrait) {
+		.RespImgImg {
+			width: var(--WidthP, auto);
+			height: var(--HeightP, auto);
+		}
+
+		.RespImg.IsPlaced {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+	}
+
+
+	.RespImg.IsPlaced .RespImgPicBox,
+	.RespImg.IsPlaced .RespImgImg
+	{
+		width: 100%;
+		height: 100%;
+	}
+
+
+
+</style>

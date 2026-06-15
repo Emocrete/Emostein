@@ -1,0 +1,221 @@
+---
+import BLayout from "@/Layout.astro";
+import { Text, ElemBg, Colors, Pixel } from "@/TypesLib";
+import { Hero, ESec, EmoBtn, Emograph, Price, EmoList, SecTitle, VrStack } from "@/Widgets";
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="ختم مهندس استشاري ( إنشائي - ميكانيكا - كهرباء )"
+	pDescr="خدمات الختم الهندسي للرسومات والتقارير الهندسية من مهندسين استشاريين لجميع التخصصات"
+>
+
+	<Hero
+		pTitle="ختم مهندس استشاري"
+		pDesc="خدمات الختم الهندسي للرسومات والتقارير الهندسية من مهندسين استشاريين لجميع التخصصات"
+		pPosL="30% 5% 30% 45%"
+		pPosP="15% 3% 55% 3%"
+		pBlurL="off"
+		pBlurP="off"
+	>
+
+		<Emograph pText={Text.Body.OfSize(22).OfText("( إنشائي - ميكانيكا - كهرباء )")} />
+
+		<EmoBtn
+			pText="التفاصيل"
+			pWidth="200px"
+			pHeight="50px"
+			pRadius="50px"
+			pBgColor={Colors.BlackOff}
+			pBgColorHover={Colors.Gray4}
+			pTextColor={Colors.WhiteOff}
+			pFontSize="20px"
+			onclick="location.href='#PageTopics'"
+		/>
+
+	</Hero>
+
+	<ESec
+		id="PageTopics"
+		pBg={new ElemBg(Colors.BlackOff)}
+	>
+		<SecTitle
+			pTitle="موضوعات الصفحة"
+			style={`--StripBg:${Colors.BlackOff};`}
+		/>
+
+		<VrStack>
+
+			<Emograph pText={Text.Body.OfSize(18, 15).AtRight.DarkSky.OfText("تعريف معنى المهندس الاستشاري")} />
+
+			<Emograph pText={Text.Body.OfSize(18, 15).AtRight.DarkSky.OfText("تكلفة ختم مهندسي استشاري إنشائي للرسومات الهندسية")} />
+
+			<Emograph pText={Text.Body.OfSize(18, 15).AtRight.DarkSky.OfText("تكلفة ختم مهندسي استشاري إنشائي لتقارير هندسية")} />
+
+		</VrStack>
+
+	</ESec>
+
+	<ESec
+		id="secConsDef"
+		pBg={new ElemBg(Colors.WhiteOff)}
+	>
+		<SecTitle
+			pTitle="ما المقصود بـ مهندس استشاري ؟"
+			style={`--StripBg:${Colors.WhiteOff};`}
+		/>
+
+		<VrStack>
+
+			<Emograph
+				pText={Text.Body.OfText("​المهندس الاستشاري هو مهندس نقابي مقيد بنقابة المهندسين ذو خبرة 15 سنة فأعلى وحاصل على سجل هندسي وشهادة استشارية من نقابة المهندسين")}
+			/>
+
+			<EmoList
+				pDesc={Text.Body.OfText("تختلف تخصصات المهندسين الاستشاريين المطلوب الحصول على الختم الهندسي الخاص بهم حسب الغرض من الختم ونوع المستند المطلوب ختمه ومنها التخصصات التالية :")}
+				pItems={[
+				"مهندس استشاري إنشائي",
+				"مهندس استشاري ميكانيكا ( استشاري أعمال صحية - استشاري أعمال حريق وحماية مدنية )",
+				"مهندس استشاري كهرباء وإنذار الحريق"
+			]}
+			/>
+
+		</VrStack>
+
+	</ESec>
+
+	<ESec
+		id="secDwgCost"
+		pBg={new ElemBg(Colors.BlackOff)}
+	>
+		<SecTitle
+			pTitle="تكلفة ختم مهندسي استشاري إنشائي للرسومات الهندسية"
+			style={`--StripBg:${Colors.Black};`}
+		/>
+
+		<VrStack>
+
+			<Price pTitle={Text.H3.Centered.White.OfText("ختم مهندس استشاري لرسومات ترخيص محل تجاري")} pPrice={"1500"} pTitlePlace="top">
+
+				<VrStack>
+
+					<Emograph
+						pText={Text.Body.Red.OfText("لا يطلب ختم مهندس استشاري لرسومات ترخيص المحلات التجارية إلا لبعض الحالات حسب طلب الجهة التي سيسلم إليها الرسومات صراحة ، عادة يكفي فقط ختم مهندس نقابي غير استشاري لاعتماد رسومات تراخيص المحلات التجارية")}
+					/>
+
+					<EmoBtn
+						pText="نعم أريد ختم مهندس نقابي فقط"
+						pWidth="350px"
+						pHeight="50px"
+						pRadius="5px"
+						pBgColor={Colors.BlackOff}
+						pBgColorHover={Colors.BistageDark}
+						pTextColor={Colors.WhiteOff}
+						pFontSize="18px"
+						onclick="location.href='/emonsult/stamp/eng/'"
+					/>
+
+				</VrStack>
+
+			</Price>
+
+			<Price
+				pTitle={Text.H3.Centered.White.OfText("ختم مهندس استشاري لرسومات لأغراض عامة")}
+				pPrice={"1500"}
+				pPriceLabel="تبدأ من"
+				pTitlePlace="top"
+			>
+
+				<Emograph pText={Text.Body.OfText("يتم تقديرها لكل حالة تبعًا لمحتوى الرسومات وعدد اللوحات")} />
+
+			</Price>
+
+		</VrStack>
+
+	</ESec>
+
+	<ESec
+		id="secReportCost"
+		pBg={new ElemBg(Colors.BlackOff)}
+	>
+		<SecTitle
+			pTitle="تكلفة ختم مهندسي استشاري إنشائي لتقارير هندسية"
+			style={`--StripBg:${Colors.Black};`}
+		/>
+
+		<VrStack>
+
+			<Price
+				pTitle={Text.H3.Centered.White.OfText("ختم مهندس استشاري لتقرير سلامة مبنى لترخيص محل تجاري أو ترخيص صيدلية")}
+				pPrice={"2000"}
+				pTitlePlace="top"
+				pPriceLabel="يبدأ من"
+			>
+
+				<VrStack>
+
+					<EmoBtn
+						pText="التفاصيل"
+						pWidth="120px"
+						pHeight="50px"
+						pRadius="0px"
+						pBgColor={Colors.BlackOff}
+						pBgColorHover={Colors.Gray4}
+						pTextColor={Colors.WhiteOff}
+						pFontSize="20px"
+						onclick="location.href='/emonsult/report/safety/'"
+					/>
+
+				</VrStack>
+
+			</Price>
+
+			<Price
+				pTitle={Text.H3.Centered.White.OfText("ختم مهندس استشاري لتقرير سلامة مبنى لترخيص تركيب مصعد")}
+				pPrice={"3000"}
+				pTitlePlace="top"
+				pPriceLabel="يبدأ من"
+			>
+
+				<VrStack>
+
+					<EmoBtn
+						pText="التفاصيل"
+						pWidth="120px"
+						pHeight="50px"
+						pRadius="0px"
+						pBgColor={Colors.BlackOff}
+						pBgColorHover={Colors.Gray4}
+						pTextColor={Colors.WhiteOff}
+						pFontSize="20px"
+						onclick="location.href='/emonsult/report/elevator/'"
+					/>
+
+				</VrStack>
+
+			</Price>
+
+		</VrStack>
+
+	</ESec>
+
+</BLayout>

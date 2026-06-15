@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Emo Preview</title>
+
+		<style>
+			html,
+			body {
+				margin: 0;
+				width: 100vw;
+				height: 100vh;
+				overflow: hidden;
+				background: #000000;
+			}
+
+			body {
+				position: relative;
+			}
+
+			#stage {
+				display: grid;
+				grid-template-rows: 36px 1fr;
+				width: 100vw;
+				height: 100vh;
+				overflow: hidden;
+			}
+
+			.tools-bar {
+				position: relative;
+				z-index: 10;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 8px;
+				height: 36px;
+				padding: 3px 8px;
+				box-sizing: border-box;
+				border-bottom: 1px solid #333333;
+				background: #111111;
+				color: #ffffff;
+				font-family: Arial, sans-serif;
+				font-size: 12px;
+				direction: rtl;
+				overflow: hidden;
+			}
+
+			body.IsProdPreview .tools-bar {
+	background: #073b1f;
+	border-bottom-color: #126b3a;
+}
+
+			.tool-group {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				gap: 4px;
+				white-space: nowrap;
+			}
+
+			.tool-group label {
+				color: #d8d8d8;
+				font-size: 11px;
+				line-height: 1;
+			}
+
+			.tool-group select,
+			.tool-group input,
+			.reset-btn,
+			.copy-btn,
+			.frame-toggle-btn {
+				height: 24px;
+				box-sizing: border-box;
+				border: 1px solid #555555;
+				border-radius: 5px;
+				background: #111111;
+				color: #ffffff;
+				font-size: 12px;
+			}
+
+			.tool-group select {
+				min-width: 150px;
+			}
+
+			.size-input {
+				width: 60px;
+				text-align: center;
+			}
+
+			.port-group {
+				flex: 0 0 auto;
+			}
+
+			.port-input {
+				width: 58px;
+				direction: ltr;
+				text-align: center;
+			}
+
+			.path-group {
+				flex: 1 1 420px;
+				min-width: 220px;
+				max-width: 760px;
+			}
+
+			.link-input {
+				width: 100%;
+				direction: ltr;
+				text-align: left;
+			}
+
+			.reset-btn,
+			.copy-btn,
+			.frame-toggle-btn {
+				width: 28px;
+				padding: 0;
+				cursor: pointer;
+				background: #2b2b2b;
+				text-align: center;
+			}
+
+			.frame-toggle-btn {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				color: #ffffff;
+			}
+
+			.frame-toggle-btn.is-active {
+				color: #008fa3;
+			}
+
+			.frame-toggle-btn svg {
+				display: block;
+				width: 18px;
+				height: 18px;
+			}
+
+			.frame-toggle-btn svg * {
+				stroke: currentColor;
+			}
+
+			.preview-area {
+				position: relative;
+				width: 100vw;
+				height: 100%;
+				overflow: hidden;
+			}
+
+			.pane {
+				position: absolute;
+				top: 0;
+				height: 100%;
+				overflow: hidden;
+			}
+
+			.separator {
+				position: absolute;
+				top: 0;
+				height: 100%;
+				width: 30px;
+				pointer-events: none;
+				background: transparent;
+			}
+
+			.scale-wrapper {
+				position: absolute;
+				transform-origin: top left;
+			}
+
+			.scale-wrapper.landscape {
+				width: 1920px;
+				height: 911px;
+			}
+
+			.scale-wrapper.portrait {
+				width: 360px;
+				height: 680px;
+			}
+
+			iframe {
+				display: block;
+				width: 100%;
+				height: 100%;
+				border: none;
+				background: #ffffff;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="stage">
+
+			<div id="toolsBar" class="tools-bar">
+
+				<div class="tool-group">
+					<select id="mobileModelSelect"></select>
+					<label for="mobileModelSelect">M</label>
+				</div>
+
+				<div class="tool-group">
+					<select id="desktopSizeSelect"></select>
+					<label for="desktopSizeSelect">D</label>
+				</div>
+
+			
+
+				<div class="tool-group">
+					<input id="desktopHeightInput" class="size-input" type="number" min="1" step="50">
+					<label for="desktopHeightInput">H</label>
+				</div>
+
+				<div class="tool-group">
+					<input id="desktopWidthInput" class="size-input" type="number" min="1" step="50">
+					<label for="desktopWidthInput">W</label>
+				</div>
+
+				<div class="tool-group path-group">
+					<input id="previewPathInput" class="link-input" type="text">
+					<label for="previewPathInput">P</label>
+				</div>
+
+				<div class="tool-group port-group">
+					<input id="previewPortInput" class="port-input" type="number" min="1" max="65535" step="1">
+					<label for="previewPortInput">S</label>
+				</div>
+
+				<button id="mobileFrameBtn" class="frame-toggle-btn is-active" type="button" title="إظهار / إخفاء فريم الموبايل" aria-label="إظهار أو إخفاء فريم الموبايل" aria-pressed="true">
+					<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<rect x="7" y="2.5" width="10" height="19" rx="2.2"></rect>
+						<line x1="10" y1="18.5" x2="14" y2="18.5"></line>
+					</svg>
+				</button>
+
+				<button id="desktopFrameBtn" class="frame-toggle-btn is-active" type="button" title="إظهار / إخفاء فريم الديسكتوب" aria-label="إظهار أو إخفاء فريم الديسكتوب" aria-pressed="true">
+					<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<rect x="3" y="4" width="18" height="12" rx="1.5"></rect>
+						<line x1="9" y1="20" x2="15" y2="20"></line>
+						<line x1="12" y1="16" x2="12" y2="20"></line>
+					</svg>
+				</button>
+
+				<button id="copyBtn" class="copy-btn" type="button" title="Copy final URL">C</button>
+				<button id="resetBtn" class="reset-btn" type="button" title="Reset">R</button>
+
+			</div>
+
+			<div id="previewArea" class="preview-area">
+
+				<div id="landPane" class="pane">
+					<div id="landWrapper" class="scale-wrapper landscape">
+						<iframe
+	id="landFrame"
+	name="EmoPreviewLandscape"
+	class="preview-frame"
+	title="Landscape Preview"
+></iframe>
+					</div>
+				</div>
+
+				<div id="separator" class="separator"></div>
+
+				<div id="portPane" class="pane">
+					<div id="portWrapper" class="scale-wrapper portrait">
+						<iframe
+	id="portFrame"
+	name="EmoPreviewPortrait"
+	class="preview-frame"
+	title="Portrait Preview"
+></iframe>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+		<script>
+			const cDefaultPreviewPort = "4321";
+			const cDefaultRelativeSrc = "";
+
+			const cDefaultMobileKey = "CurrentMobile";
+			const cDefaultDesktopKey = "CurrentDesktop";
+			const cCustomDesktopKey = "CustomDesktop";
+
+			const cDefaultLandscape = {
+				Width: 1920,
+				Height: 911
+			};
+
+			const cDefaultPortrait = {
+				Width: 360,
+				Height: 680
+			};
+
+			const cMobileModels = {
+				CurrentMobile: {
+					Title: "الحالي - 360 × 680",
+					Width: 360,
+					Height: 680
+				},
+
+				IphoneSE: {
+					Title: "iPhone SE - 375 × 667",
+					Width: 375,
+					Height: 667
+				},
+
+				GalaxyS20: {
+					Title: "Galaxy S20 - 360 × 800",
+					Width: 360,
+					Height: 800
+				}
+			};
+
+			const cDesktopSizes = {
+				CurrentDesktop: {
+					Title: "الحالي - 1920 × 911",
+					Width: 1920,
+					Height: 911
+				},
+
+				FullHD: {
+					Title: "Full HD - 1920 × 1080",
+					Width: 1920,
+					Height: 1080
+				},
+
+				Laptop1366: {
+					Title: "Laptop - 1366 × 768",
+					Width: 1366,
+					Height: 768
+				}
+			};
+
+			const cLandscape = {
+				Width: cDefaultLandscape.Width,
+				Height: cDefaultLandscape.Height
+			};
+
+			const cPortrait = {
+				Width: cDefaultPortrait.Width,
+				Height: cDefaultPortrait.Height
+			};
+
+			const cGap = 30;
+
+			const cPreviewArea = document.getElementById("previewArea");
+
+			const cLandPane = document.getElementById("landPane");
+			const cPortPane = document.getElementById("portPane");
+			const cSeparator = document.getElementById("separator");
+
+			const cLandWrapper = document.getElementById("landWrapper");
+			const cPortWrapper = document.getElementById("portWrapper");
+
+			const cLandFrame = document.getElementById("landFrame");
+const cPortFrame = document.getElementById("portFrame");
+
+			const cMobileModelSelect = document.getElementById("mobileModelSelect");
+			const cDesktopSizeSelect = document.getElementById("desktopSizeSelect");
+
+			const cDesktopWidthInput = document.getElementById("desktopWidthInput");
+			const cDesktopHeightInput = document.getElementById("desktopHeightInput");
+
+			const cPreviewPortInput = document.getElementById("previewPortInput");
+			const cPreviewPathInput = document.getElementById("previewPathInput");
+
+			const cMobileFrameBtn = document.getElementById("mobileFrameBtn");
+			const cDesktopFrameBtn = document.getElementById("desktopFrameBtn");
+
+			const cCopyBtn = document.getElementById("copyBtn");
+			const cResetBtn = document.getElementById("resetBtn");
+
+			let cPreviewSrc = BuildPreviewSource(cDefaultPreviewPort, cDefaultRelativeSrc);
+			let cShowLandscapeFrame = true;
+			let cShowPortraitFrame = true;
+			let cResizeFrame = 0;
+
+			InitializeTools();
+SetPreviewSources();
+UpdateLayout();
+UpdatePreviewMode();
+
+window.addEventListener("resize", RequestUpdateLayout);
+
+			function InitializeTools() {
+				FillMobileSelect();
+				FillDesktopSelect();
+
+				cMobileModelSelect.value = cDefaultMobileKey;
+				cDesktopSizeSelect.value = cDefaultDesktopKey;
+
+				cPreviewPortInput.value = cDefaultPreviewPort;
+				cPreviewPathInput.value = cDefaultRelativeSrc;
+
+				SyncDesktopInputs();
+				ApplyWrapperBaseSizes();
+				SetFrameToggleButtonStates();
+				RegisterToolEvents();
+			}
+
+			function FillMobileSelect() {
+				FillSelectFromDictionary(cMobileModelSelect, cMobileModels);
+			}
+
+			function FillDesktopSelect() {
+				cDesktopSizeSelect.textContent = "";
+
+				const cCustomOption = document.createElement("option");
+				cCustomOption.value = cCustomDesktopKey;
+				cCustomOption.textContent = "مخصص من الخانات";
+				cDesktopSizeSelect.appendChild(cCustomOption);
+
+				AppendDictionaryOptions(cDesktopSizeSelect, cDesktopSizes);
+			}
+
+			function FillSelectFromDictionary(pSelect, pDictionary) {
+				pSelect.textContent = "";
+				AppendDictionaryOptions(pSelect, pDictionary);
+			}
+
+			function AppendDictionaryOptions(pSelect, pDictionary) {
+				for (const [cKey, cItem] of Object.entries(pDictionary)) {
+					const cOption = document.createElement("option");
+					cOption.value = cKey;
+					cOption.textContent = cItem.Title;
+					pSelect.appendChild(cOption);
+				}
+			}
+
+			function RegisterToolEvents() {
+	cMobileModelSelect.addEventListener("change", ApplySelectedMobileModel);
+	cDesktopSizeSelect.addEventListener("change", ApplySelectedDesktopSize);
+
+	cDesktopWidthInput.addEventListener("input", ApplyDesktopInputs);
+	cDesktopHeightInput.addEventListener("input", ApplyDesktopInputs);
+
+	cPreviewPortInput.addEventListener("input", ApplyPreviewSourceInputs);
+	cPreviewPathInput.addEventListener("input", ApplyPreviewSourceInputs);
+
+	cPreviewPathInput.addEventListener("focus", SelectPathInputText);
+	cPreviewPathInput.addEventListener("mouseup", KeepPathInputSelection);
+cPreviewPathInput.addEventListener("paste", HandlePathInputPaste);
+
+	cMobileFrameBtn.addEventListener("click", TogglePortraitFrame);
+	cDesktopFrameBtn.addEventListener("click", ToggleLandscapeFrame);
+
+	cCopyBtn.addEventListener("click", CopyPreviewSource);
+	cResetBtn.addEventListener("click", ResetPreviewSystem);
+}
+
+
+  function SelectPathInputText() {
+
+	window.setTimeout(() => {
+		cPreviewPathInput.select();
+	}, 0);
+}
+
+function KeepPathInputSelection(pEvent) {
+	pEvent.preventDefault();
+}
+
+function HandlePathInputPaste(pEvent) {
+	pEvent.preventDefault();
+
+	const cText = pEvent.clipboardData.getData("text/plain");
+
+	cPreviewPathInput.value = cText;
+	ApplyPreviewSourceInputs();
+
+	window.setTimeout(() => {
+		cPreviewPathInput.focus();
+		cPreviewPathInput.select();
+	}, 0);
+}
+
+function PastePathInputByMouse(pEvent) {
+	const cIsRightClick = pEvent.button === 2;
+	const cIsDoubleLeftClick = pEvent.button === 0 && pEvent.detail === 2;
+
+	if (!cIsRightClick && !cIsDoubleLeftClick) {
+		return;
+	}
+
+	PasteIntoPathInput(pEvent);
+}
+
+function PreventDefaultEvent(pEvent) {
+	pEvent.preventDefault();
+}
+
+async function PasteIntoPathInput(pEvent) {
+
+	cPreviewPathInput.focus();
+	cPreviewPathInput.select();
+
+	if (!navigator.clipboard || !navigator.clipboard.readText) {
+		return;
+	}
+
+	try {
+		const cText = await navigator.clipboard.readText();
+
+		cPreviewPathInput.value = cText;
+		ApplyPreviewSourceInputs();
+		cPreviewPathInput.select();
+	}
+	catch {
+		cPreviewPathInput.focus();
+		cPreviewPathInput.select();
+	}
+}
+
+			function TogglePortraitFrame() {
+				SetPortraitFrameVisibility(!cShowPortraitFrame);
+			}
+
+			function ToggleLandscapeFrame() {
+				SetLandscapeFrameVisibility(!cShowLandscapeFrame);
+			}
+
+			function SetPortraitFrameVisibility(pVisible) {
+				if (!pVisible && !cShowLandscapeFrame) {
+					return;
+				}
+
+				cShowPortraitFrame = pVisible;
+				SetFrameToggleButtonStates();
+				RequestUpdateLayout();
+			}
+
+			function SetLandscapeFrameVisibility(pVisible) {
+				if (!pVisible && !cShowPortraitFrame) {
+					return;
+				}
+
+				cShowLandscapeFrame = pVisible;
+				SetFrameToggleButtonStates();
+				RequestUpdateLayout();
+			}
+
+			function SetFrameToggleButtonStates() {
+				SetToggleButtonState(cMobileFrameBtn, cShowPortraitFrame);
+				SetToggleButtonState(cDesktopFrameBtn, cShowLandscapeFrame);
+			}
+
+			function SetToggleButtonState(pButton, pIsActive) {
+				pButton.classList.toggle("is-active", pIsActive);
+				pButton.setAttribute("aria-pressed", pIsActive ? "true" : "false");
+			}
+
+			function ApplySelectedMobileModel() {
+				const cModel = cMobileModels[cMobileModelSelect.value];
+
+				if (!cModel) {
+					return;
+				}
+
+				cPortrait.Width = cModel.Width;
+				cPortrait.Height = cModel.Height;
+
+				ApplyWrapperBaseSizes();
+				RequestUpdateLayout();
+			}
+
+			function ApplySelectedDesktopSize() {
+				if (cDesktopSizeSelect.value === cCustomDesktopKey) {
+					return;
+				}
+
+				const cSize = cDesktopSizes[cDesktopSizeSelect.value];
+
+				if (!cSize) {
+					return;
+				}
+
+				cLandscape.Width = cSize.Width;
+				cLandscape.Height = cSize.Height;
+
+				SyncDesktopInputs();
+				ApplyWrapperBaseSizes();
+				RequestUpdateLayout();
+			}
+
+			function ApplyDesktopInputs() {
+				cDesktopSizeSelect.value = cCustomDesktopKey;
+
+				cLandscape.Width = GetPositiveNumber(cDesktopWidthInput.value, cLandscape.Width);
+				cLandscape.Height = GetPositiveNumber(cDesktopHeightInput.value, cLandscape.Height);
+
+				ApplyWrapperBaseSizes();
+				RequestUpdateLayout();
+			}
+
+			function ApplyPreviewSourceInputs() {
+				cPreviewSrc = BuildPreviewSource(cPreviewPortInput.value, cPreviewPathInput.value);
+				SetPreviewSources();
+			}
+
+			function ResetPreviewSystem() {
+				cLandscape.Width = cDefaultLandscape.Width;
+				cLandscape.Height = cDefaultLandscape.Height;
+
+				cPortrait.Width = cDefaultPortrait.Width;
+				cPortrait.Height = cDefaultPortrait.Height;
+
+				cPreviewSrc = BuildPreviewSource(cDefaultPreviewPort, cDefaultRelativeSrc);
+				cShowLandscapeFrame = true;
+				cShowPortraitFrame = true;
+
+				cMobileModelSelect.value = cDefaultMobileKey;
+				cDesktopSizeSelect.value = cDefaultDesktopKey;
+
+				cPreviewPortInput.value = cDefaultPreviewPort;
+				cPreviewPathInput.value = cDefaultRelativeSrc;
+
+				SyncDesktopInputs();
+				SetFrameToggleButtonStates();
+				SetPreviewSources();
+				ApplyWrapperBaseSizes();
+				RequestUpdateLayout();
+			}
+
+			function SetPreviewSources() {
+	const cSource = cPreviewSrc || "about:blank";
+
+	SetFrameSource(cLandFrame, cSource);
+	SetFrameSource(cPortFrame, cSource);
+}
+
+function SetFrameSource(pFrame, pSource) {
+	if (!pFrame) {
+		return;
+	}
+
+	pFrame.src = pSource;
+}
+
+			function BuildPreviewSource(pPreviewPort, pRelativeSrc) {
+				const cServer = BuildLocalServerSource(pPreviewPort);
+				const cRelative = CleanRelativePreviewPath(pRelativeSrc);
+
+				if (!cServer && !cRelative) {
+					return "";
+				}
+
+				if (!cServer) {
+					return cRelative;
+				}
+
+				if (!cRelative) {
+					return cServer;
+				}
+
+				try {
+					return new URL(cRelative, cServer).href;
+				}
+				catch {
+					return `${cServer}${cRelative.replace(/^\/+/, "")}`;
+				}
+			}
+
+			function BuildLocalServerSource(pPreviewPort) {
+				const cPort = CleanPreviewPort(pPreviewPort);
+
+				if (!cPort) {
+					return "";
+				}
+
+				return `http://localhost:${cPort}/`;
+			}
+
+			function CleanPreviewPort(pPreviewPort) {
+				const cPortText = String(pPreviewPort || "").trim().replace(/[^\d]/g, "");
+				const cPort = Number(cPortText);
+
+				if (!Number.isInteger(cPort) || cPort < 1 || cPort > 65535) {
+					return cDefaultPreviewPort;
+				}
+
+				return cPortText;
+			}
+
+			function CleanRelativePreviewPath(pRelativeSrc) {
+	let cPath = String(pRelativeSrc || "").trim();
+
+	if (!cPath) {
+		return "";
+	}
+
+	cPath = cPath.replace(/^["']+|["']+$/g, "");
+	cPath = cPath.replace(/\\/g, "/");
+	cPath = cPath.replace(/\/+/g, "/");
+
+	cPath = cPath.replace(/^.*?src\/pages\//i, "");
+	cPath = cPath.replace(/^\/+/, "");
+	cPath = cPath.replace(/^pages\//i, "");
+
+	cPath = cPath.replace(/\.astro$/i, "");
+
+	if (/^index$/i.test(cPath)) {
+		cPath = "";
+	}
+	else {
+		cPath = cPath.replace(/\/index$/i, "");
+	}
+
+	cPath = cPath.replace(/^\/+/, "");
+	cPath = cPath.replace(/\/+$/, "");
+
+	return cPath;
+}
+
+			async function CopyPreviewSource() {
+				const cSource = cPreviewSrc || BuildPreviewSource(cPreviewPortInput.value, cPreviewPathInput.value);
+
+				if (!cSource) {
+					ShowCopyButtonFeedback(false);
+					return;
+				}
+
+				try {
+					await navigator.clipboard.writeText(cSource);
+					ShowCopyButtonFeedback(true);
+				}
+				catch {
+					const cCopied = CopyTextFallback(cSource);
+					ShowCopyButtonFeedback(cCopied);
+				}
+			}
+
+			function CopyTextFallback(pText) {
+				const cTextArea = document.createElement("textarea");
+
+				cTextArea.value = pText;
+				cTextArea.setAttribute("readonly", "");
+				cTextArea.style.position = "fixed";
+				cTextArea.style.left = "-9999px";
+				cTextArea.style.top = "-9999px";
+
+				document.body.appendChild(cTextArea);
+				cTextArea.focus();
+				cTextArea.select();
+
+				let cCopied = false;
+
+				try {
+					cCopied = document.execCommand("copy");
+				}
+				catch {
+					cCopied = false;
+				}
+
+				document.body.removeChild(cTextArea);
+
+				return cCopied;
+			}
+
+			function ShowCopyButtonFeedback(pSucceeded) {
+				cCopyBtn.textContent = pSucceeded ? "✓" : "!";
+
+				window.setTimeout(() => {
+					cCopyBtn.textContent = "C";
+				}, 800);
+			}
+
+			function SyncDesktopInputs() {
+				cDesktopWidthInput.value = cLandscape.Width;
+				cDesktopHeightInput.value = cLandscape.Height;
+			}
+
+			function ApplyWrapperBaseSizes() {
+	ApplyFrameBaseSize(cLandWrapper, cLandFrame, cLandscape.Width, cLandscape.Height);
+	ApplyFrameBaseSize(cPortWrapper, cPortFrame, cPortrait.Width, cPortrait.Height);
+}
+
+function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
+	pWrapper.style.width = `${pWidth}px`;
+	pWrapper.style.height = `${pHeight}px`;
+
+	pFrame.style.width = `${pWidth}px`;
+	pFrame.style.height = `${pHeight}px`;
+
+	pFrame.setAttribute("width", String(pWidth));
+	pFrame.setAttribute("height", String(pHeight));
+}
+
+			function GetPositiveNumber(pValue, pFallback) {
+				const cValue = Number(pValue);
+
+				if (!Number.isFinite(cValue) || cValue <= 0) {
+					return pFallback;
+				}
+
+				return cValue;
+			}
+
+			function GetScale(pPaneWidth, pPaneHeight, pBaseWidth, pBaseHeight) {
+				return Math.min(pPaneWidth / pBaseWidth, pPaneHeight / pBaseHeight);
+			}
+
+			function FindBestSplit(pTotalWidth, pTotalHeight) {
+				const cUsableWidth = Math.max(0, pTotalWidth - cGap);
+
+				const cLandScaleByHeight = pTotalHeight / cLandscape.Height;
+				const cPortScaleByHeight = pTotalHeight / cPortrait.Height;
+
+				const cLandNeedWidth = cLandscape.Width * cLandScaleByHeight;
+				const cPortNeedWidth = cPortrait.Width * cPortScaleByHeight;
+
+				const cNeededGroupWidth = cLandNeedWidth + cGap + cPortNeedWidth;
+
+				if (cNeededGroupWidth <= pTotalWidth) {
+					return {
+						StartX: (pTotalWidth - cNeededGroupWidth) / 2,
+						LandPaneWidth: cLandNeedWidth,
+						PortPaneWidth: cPortNeedWidth
+					};
+				}
+
+				let cBestLeftWidth = Math.max(1, Math.floor(cUsableWidth / 2));
+				let cBestMinScale = -1;
+				let cBestSumScale = -1;
+				let cBestBalance = Infinity;
+
+				for (let i = 1; i < cUsableWidth; i++) {
+					const cLeftWidth = i;
+					const cRightWidth = cUsableWidth - i;
+
+					const cLandScale = GetScale(
+						cLeftWidth,
+						pTotalHeight,
+						cLandscape.Width,
+						cLandscape.Height
+					);
+
+					const cPortScale = GetScale(
+						cRightWidth,
+						pTotalHeight,
+						cPortrait.Width,
+						cPortrait.Height
+					);
+
+					const cMinScale = Math.min(cLandScale, cPortScale);
+					const cSumScale = cLandScale + cPortScale;
+					const cBalance = Math.abs(cLandScale - cPortScale);
+
+					const cIsBetter =
+						(cMinScale > cBestMinScale) ||
+						(cMinScale === cBestMinScale && cSumScale > cBestSumScale) ||
+						(cMinScale === cBestMinScale && cSumScale === cBestSumScale && cBalance < cBestBalance);
+
+					if (cIsBetter) {
+						cBestLeftWidth = cLeftWidth;
+						cBestMinScale = cMinScale;
+						cBestSumScale = cSumScale;
+						cBestBalance = cBalance;
+					}
+				}
+
+				return {
+					StartX: 0,
+					LandPaneWidth: cBestLeftWidth,
+					PortPaneWidth: cUsableWidth - cBestLeftWidth
+				};
+			}
+
+			function ApplyPaneLayout(pPane, pWrapper, pLeft, pWidth, pHeight, pBaseWidth, pBaseHeight) {
+				const cScale = GetScale(pWidth, pHeight, pBaseWidth, pBaseHeight);
+
+				const cScaledWidth = pBaseWidth * cScale;
+				const cScaledHeight = pBaseHeight * cScale;
+
+				const cOffsetX = (pWidth - cScaledWidth) / 2;
+				const cOffsetY = (pHeight - cScaledHeight) / 2;
+
+				pPane.style.left = `${pLeft}px`;
+				pPane.style.width = `${pWidth}px`;
+				pPane.style.height = `${pHeight}px`;
+
+				pWrapper.style.transform = `translate(${cOffsetX}px, ${cOffsetY}px) scale(${cScale})`;
+			}
+
+			function UpdateLayout() {
+				const cTotalWidth = cPreviewArea.clientWidth;
+				const cTotalHeight = cPreviewArea.clientHeight;
+
+				if (cShowLandscapeFrame && !cShowPortraitFrame) {
+					cLandPane.style.display = "block";
+					cPortPane.style.display = "none";
+					cSeparator.style.display = "none";
+
+					ApplyPaneLayout(
+						cLandPane,
+						cLandWrapper,
+						0,
+						cTotalWidth,
+						cTotalHeight,
+						cLandscape.Width,
+						cLandscape.Height
+					);
+
+					return;
+				}
+
+				if (!cShowLandscapeFrame && cShowPortraitFrame) {
+					cLandPane.style.display = "none";
+					cPortPane.style.display = "block";
+					cSeparator.style.display = "none";
+
+					ApplyPaneLayout(
+						cPortPane,
+						cPortWrapper,
+						0,
+						cTotalWidth,
+						cTotalHeight,
+						cPortrait.Width,
+						cPortrait.Height
+					);
+
+					return;
+				}
+
+				cLandPane.style.display = "block";
+				cPortPane.style.display = "block";
+				cSeparator.style.display = "block";
+
+				const cSplit = FindBestSplit(cTotalWidth, cTotalHeight);
+
+				const cLandLeft = cSplit.StartX;
+				const cSepLeft = cLandLeft + cSplit.LandPaneWidth;
+				const cPortLeft = cSepLeft + cGap;
+
+				ApplyPaneLayout(
+					cLandPane,
+					cLandWrapper,
+					cLandLeft,
+					cSplit.LandPaneWidth,
+					cTotalHeight,
+					cLandscape.Width,
+					cLandscape.Height
+				);
+
+				ApplyPaneLayout(
+					cPortPane,
+					cPortWrapper,
+					cPortLeft,
+					cSplit.PortPaneWidth,
+					cTotalHeight,
+					cPortrait.Width,
+					cPortrait.Height
+				);
+
+				cSeparator.style.left = `${cSepLeft}px`;
+				cSeparator.style.height = `${cTotalHeight}px`;
+			}
+
+			function RequestUpdateLayout() {
+				cancelAnimationFrame(cResizeFrame);
+				cResizeFrame = requestAnimationFrame(UpdateLayout);
+			}
+
+			async function UpdatePreviewMode() {
+	let cIsProd = false;
+
+	try {
+		const cResponse = await fetch("/__emo_preview_mode.json", {
+			cache: "no-store"
+		});
+
+		if (cResponse.ok) {
+			const cData = await cResponse.json();
+			cIsProd = cData && cData.mode === "prod";
+		}
+	}
+	catch {
+		cIsProd = false;
+	}
+
+	document.body.classList.toggle("IsProdPreview", cIsProd);
+}
+
+
+		</script>
+	</body>
+
+</html>

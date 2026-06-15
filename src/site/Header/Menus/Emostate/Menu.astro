@@ -1,0 +1,63 @@
+---
+import SubMenuHead from "../../Menu/SubMenuHead.astro";
+import SubMenuItem from "../../Menu/SubMenuItem.astro";
+
+const cMenuIconsList = import.meta.glob("./*.webp", {
+	eager: true,
+	import: "default",
+	query: "?url",
+});
+
+const cMenuIcons = Object.fromEntries(
+	Object.entries(cMenuIconsList).map(([fPath, fUrl]) => {
+		const fFileName = fPath.split("/").pop() ?? "";
+		const fBaseName = fFileName.replace(/\.[^.]+$/, "");
+		return [fBaseName, fUrl];
+	}),
+);
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<SubMenuHead fTitle="شقق" fLink="" fIcon={cMenuIcons.Lab}>
+
+	<SubMenuItem fTitle="بيع" fLink="/emostate/apartment" />
+
+	<SubMenuItem fTitle="إيجار" fLink="/emostate/apartment/rent" />
+
+	<SubMenuItem fTitle="مفروش" fLink="/emostate/apartment/furn" />
+
+</SubMenuHead>
+
+<SubMenuHead fTitle="محلات" fLink="" fIcon={cMenuIcons.Lab}>
+
+	<SubMenuItem fTitle="بيع" fLink="/emostate/retail" />
+
+	<SubMenuItem fTitle="إيجار" fLink="/emostate/retail/rent" />
+
+</SubMenuHead>
+
+<SubMenuHead fTitle="صيدليات" fLink="" fIcon={cMenuIcons.Lab}>
+
+	<SubMenuItem fTitle="بيع" fLink="" />
+
+	<SubMenuItem fTitle="إيجار" fLink="" />
+
+</SubMenuHead>

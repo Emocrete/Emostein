@@ -1,0 +1,44 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"div">, PlaceProps { pText?: string; pBg?: string; pColor?: string; }
+
+const { pText = "Emostein", pBg = "#A7C45C", pColor = "#111111", pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly, id: pGivenID = GetWidgetId("Ribbon"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cPlace = new Place(Astro.props as PlaceProps, `--RibbonBg:${pBg}; --RibbonColor:${pColor}; --ShapePointer:${pClickable === true ? "auto" : "none"}; ${cGivenStyle}`);
+---
+
+<div class={`Ribbon ${cPlace.Class} ${pGivenClass}`.trim()} style={cPlace.Style} id={pGivenID} aria-hidden="true" {...RemAttr}><span>{pText}</span></div>
+
+<style>
+	.Ribbon { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; padding-inline: 32px; background: linear-gradient(90deg, color-mix(in srgb, var(--RibbonBg), #000 16%), var(--RibbonBg), color-mix(in srgb, var(--RibbonBg), #fff 14%)); color: var(--RibbonColor); box-shadow: 0 18px 38px rgba(0,0,0,.22); font-weight: 800; letter-spacing: .08em; text-transform: uppercase; pointer-events: var(--ShapePointer, none); box-sizing: border-box; }
+	.Ribbon::before, .Ribbon::after { content: ""; position: absolute; top: 0; width: 0; height: 0; border-block: calc(var(--PlaceHeightL, 70px) / 2) solid transparent; }
+	.Ribbon::before { inset-inline-start: -34px; border-inline-end: 34px solid var(--RibbonBg); }
+	.Ribbon::after { inset-inline-end: -34px; border-inline-start: 34px solid var(--RibbonBg); }
+.Ribbon.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+		z-index: var(--PlaceZ, 1);
+		opacity: var(--PlaceOpacityL, 100%);
+		transform: rotate(var(--PlaceRotateL, 0deg));
+		transform-origin: var(--PlaceOrigin, center center);
+		pointer-events: var(--ShapePointer, none);
+		min-width: 0;
+		box-sizing: border-box;
+	}
+
+	@media (orientation: portrait) {
+		.Ribbon.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+			opacity: var(--PlaceOpacityP, var(--PlaceOpacityL, 100%));
+			transform: rotate(var(--PlaceRotateP, var(--PlaceRotateL, 0deg)));
+		}
+	}
+</style>

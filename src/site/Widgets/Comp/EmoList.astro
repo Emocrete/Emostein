@@ -1,0 +1,467 @@
+---
+import { RespString, Text, ElemBg, Place, type PlaceProps } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+
+type TSubListItem = {
+	Title: string;
+	Items: string[];
+};
+
+type TItem = string | TSubListItem;
+
+interface Props extends HTMLAttributes<"div">, PlaceProps {
+	pWidth?: RespString;
+	pTitle?: Text;
+	pDesc?: Text;
+	pHeadBg?: ElemBg;
+	pItems?: TItem[];
+	pItemFnt?: Text;
+	pItemsBg?: ElemBg;
+	pNumbered?: boolean;
+	pBulletIcon?: string;
+}
+
+let {
+	pWidth = new RespString("50%", "100%"),
+	pTitle ,
+	pDesc ,
+	pHeadBg = new ElemBg("transparent"),
+	pItems = [],
+	pItemFnt = Text.Body,
+	pItemsBg = new ElemBg("transparent"),
+	pNumbered = true,
+	pBulletIcon = "",
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("EmoList"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+
+if (!pTitle && !pDesc) {
+	pTitle = Text.Body.OfText("العنوان");
+	pDesc = Text.Body.OfText("الوصف")
+}
+
+const cHasBulletIcon = pBulletIcon.trim() !== "";
+
+const TitleTag = pTitle?.GetTag() as keyof astroHTML.JSX.DefinedIntrinsicElements;
+
+const cHeadStyle = [
+	`--HeadBg:${pHeadBg.Color};`,
+].filter(Boolean).join(" ");
+
+const cBodyStyle = [
+	`--BodyBg:${pItemsBg.Color};`,
+	`--WidthL:${pWidth.Landscape};`,
+	`--WidthP:${pWidth.Portrait};`,
+	`--ItemColor:${pItemFnt.color};`,
+	`--ItemSize:${pItemFnt.size}px;`,
+].filter(Boolean).join(" ");
+
+const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
+
+function IsSubListItem(pItem: TItem): pItem is TSubListItem {
+	return typeof pItem !== "string";
+}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div
+	class = {`AutoNumList ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	<div class = " EmoListHead " style = {cHeadStyle}>
+
+		{ pTitle  &&
+
+			<TitleTag style = {pTitle.GetStyle()}>
+
+				{pTitle.text}
+
+			</TitleTag>
+
+		}
+
+		{ pDesc  &&
+
+			<p style = {pDesc.GetStyle()}>
+				{pDesc.text}
+			</p>
+
+		}
+
+	</div>
+
+	<div class = " EmoListBodyBox " style = {cBodyStyle}>
+
+		{ pNumbered ? (
+
+			<ol class = " EmoList Numbered ">
+			
+				{ pItems.map((cItem) => (
+			
+					<li class = " EmoListItem ">
+			
+						<div class = " EmoListItemBox ">
+			
+							{ IsSubListItem(cItem) ? (
+			
+								<>
+			
+									<span class = " EmoListItemText ">
+										{cItem.Title}
+									</span>
+			
+									{ cItem.Items.length > 0 &&
+			
+										<ul class = {`SubList ${cHasBulletIcon ? "HasIcon" : ""}`}>
+			
+											{ cItem.Items.map((cSubItem) => (
+			
+												<li class = " EmoListSubItem ">
+			
+													{ cHasBulletIcon &&
+			
+														<img
+															class = " SubBulletIcon "
+															src={pBulletIcon}
+															alt=""
+															loading="lazy"
+															decoding="async"
+														/>
+			
+													}
+			
+													<span class = " EmoListSubItemText ">
+														{cSubItem}
+													</span>
+			
+												</li>
+			
+											)) }
+			
+										</ul>
+			
+									}
+			
+								</>
+							) : (
+			
+								<span class = " EmoListItemText ">
+									{cItem}
+								</span>
+							) }
+			
+						</div>
+			
+					</li>
+			
+				)) }
+			
+			</ol>
+		) : (
+
+			<ul class = {`EmoList Bulleted ${cHasBulletIcon ? "HasIcon" : ""}`}>
+			
+				{ pItems.map((cItem) => (
+			
+					<li class = " EmoListItem ">
+			
+						{ cHasBulletIcon &&
+			
+							<img
+								class = " BulletIcon "
+								src={pBulletIcon}
+								alt=""
+								loading="lazy"
+								decoding="async"
+							/>
+			
+						}
+			
+						<div class = " EmoListItemBox ">
+			
+							{ IsSubListItem(cItem) ? (
+			
+								<>
+			
+									<span class = " EmoListItemText ItemTitle ">
+										{cItem.Title}
+									</span>
+			
+									{ cItem.Items.length > 0 &&
+			
+										<ul class = {`SubList ${cHasBulletIcon ? "HasIcon" : ""}`}>
+			
+											{ cItem.Items.map((cSubItem) => (
+			
+												<li class = " EmoListSubItem ">
+			
+													{ cHasBulletIcon &&
+			
+														<img
+															class = " SubBulletIcon "
+															src={pBulletIcon}
+															alt=""
+															loading="lazy"
+															decoding="async"
+														/>
+			
+													}
+			
+													<span class = " EmoListSubItemText ">
+														{cSubItem}
+													</span>
+			
+												</li>
+			
+											)) }
+			
+										</ul>
+			
+									}
+			
+								</>
+							) : (
+			
+								<span class = " EmoListItemText ">
+									{cItem}
+								</span>
+							) }
+			
+						</div>
+			
+					</li>
+			
+				)) }
+			
+			</ul>
+		) }
+
+	</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.AutoNumList {
+		width: var(--WidthL);
+	}
+
+
+	.EmoListHead {
+		background: var(--HeadBg, transparent);
+		line-height: 2;
+	}
+
+
+	.EmoListBodyBox {
+		background: var(--BodyBg, transparent);
+	}
+
+
+	.EmoList {
+		margin: 0;
+		color: var(--ItemColor, inherit);
+		font-size: var(--ItemSize, 18px);
+		line-height: 2;
+	}
+
+
+	.Numbered {
+		padding: 0 32px 0 0;
+	}
+
+	.Numbered .EmoListItem {
+		margin: 0 0 10px;
+	}
+
+
+	.Bulleted {
+		padding: 0 28px 0 0;
+		list-style: disc;
+		list-style-position: outside;
+	}
+
+	.Bulleted .EmoListItem {
+		margin: 0 0 10px;
+	}
+
+
+	.BulletIcon {
+		width: 18px;
+		height: 18px;
+		flex: 0 0 18px;
+		margin-top: 8px;
+		object-fit: contain;
+	}
+
+
+	.EmoListItemBox {
+		display: block;
+		width: 100%;
+		max-width: 100%;
+	}
+
+
+	.EmoListItemText {
+		display: block;
+		width: 100%;
+		max-width: 100%;
+		color: var(--ItemColor, inherit);
+		font-size: var(--ItemSize, 18px);
+		line-height: 2;
+		text-align: right;
+	}
+
+
+	.ItemTitle {
+		font-weight: 700;
+		margin-bottom: 8px;
+	}
+
+
+	.SubList {
+		margin: 8px 0 0;
+		padding: 0 24px 0 0;
+		list-style: disc;
+		list-style-position: outside;
+	}
+
+
+	.EmoListSubItem {
+		margin: 0 0 8px;
+	}
+
+
+	.SubBulletIcon {
+		width: 16px;
+		height: 16px;
+		flex: 0 0 16px;
+		margin-top: 9px;
+		object-fit: contain;
+	}
+
+
+	.EmoListSubItemText {
+		display: block;
+		width: var(--WidthL);
+		max-width: 100%;
+		color: var(--ItemColor);
+		font-size: var(--ItemSize);
+		line-height: 2;
+		text-align: right;
+	}
+
+
+
+	.Bulleted.HasIcon {
+		list-style: none;
+		padding: 0;
+	}
+
+	.Bulleted.HasIcon .EmoListItem {
+		display: flex;
+		align-items: flex-start;
+		justify-content: flex-start;
+		gap: 10px;
+		margin: 0 0 10px;
+	}
+
+
+	.SubList.HasIcon {
+		list-style: none;
+		padding: 0;
+	}
+
+	.SubList.HasIcon .EmoListSubItem {
+		display: flex;
+		align-items: flex-start;
+		justify-content: flex-start;
+		gap: 10px;
+	}
+
+
+
+	.EmoListItem:last-child,
+	.EmoListSubItem:last-child
+	{
+		margin-bottom: 0;
+	}
+
+
+	@media (orientation: portrait) {
+		.AutoNumList {
+			width: var(--WidthP);
+		}
+
+		.EmoListItemBox {
+			width: var(--WidthP);
+		}
+
+		.EmoListItemText {
+			width: var(--WidthP);
+		}
+
+		.EmoListSubItemText {
+			width: var(--WidthP);
+		}
+	}
+
+
+
+</style>

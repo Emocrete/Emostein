@@ -1,0 +1,50 @@
+---
+import BaseLayout from "../helpers/Layouts/BaseLayout.astro";
+import SvgBlobCard from "../helpers/Widgets/Cards/SvgBlobCard.astro";
+import SvgRadarCard from "../helpers/Widgets/Cards/SvgRadarCard.astro";
+import SvgWaveMeter from "../helpers/Widgets/SvgWaveMeter.astro";
+
+const fTitle = "SVG Playground | Emocrete";
+const fDescription = "تجارب SVG animation داخل Widgets.";
+---
+
+<BaseLayout fTitle={fTitle} fDescription={fDescription}>
+        <section class="section">
+                <div class="sectionInner">
+                        <h1 class="hTitle reveal" data-reveal="right">
+                                تجارب SVG Widgets
+                        </h1>
+                        <p
+                                class="hSub reveal"
+                                data-reveal="up"
+                                data-delay="120"
+                        >
+                                3 أمثلة داخل بوكسات مستقلة — تقدر تركبهم في أي
+                                مكان.
+                        </p>
+
+                        <div class="grid auto" style="margin-top:16px;">
+                                <SvgBlobCard
+                                        fTitle="Widget 1: Blob Glow"
+                                        fText="خلفية عضوية عائمة + CTA."
+                                        fCtaText="افتح"
+                                        fCtaHref="/pharmacy"
+                                        fHue={38}
+                                />
+
+                                <SvgRadarCard
+                                        fTitle="Widget 2: Radar Scan"
+                                        fText="Sweep دائري + blips نابضة."
+                                        fColor="#7CFFB2"
+                                />
+
+                                <SvgWaveMeter
+                                        fTitle="Widget 3: Wave Meter"
+                                        fValue="92%"
+                                        fText="موجة متحركة داخل شاشة + مؤشر."
+                                        fColor="#F2C11A"
+                                />
+                        </div>
+                </div>
+        </section>
+</BaseLayout>

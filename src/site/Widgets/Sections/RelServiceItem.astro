@@ -1,0 +1,211 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"article"> {
+	pTitle: string;
+	pDesc?: string;
+	pHref: string;
+	pImg?: string;
+	pBtnText?: string;
+	pExternal?: boolean;
+}
+
+const {
+	pTitle,
+	pDesc,
+	pHref,
+	pImg,
+	pBtnText = "افتح الخدمة",
+	pExternal = false,
+
+	id: pGivenID = GetWidgetId("RelServiceItem"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cTarget = pExternal ? "_blank" : undefined;
+const cRel = pExternal ? "noopener noreferrer" : undefined;
+---
+
+
+
+
+
+
+
+
+
+
+<article
+	class = {`RelServiceItem ${pGivenClass}`.trim()}
+	style = {cGivenStyle}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	{ pImg && (
+
+		<a
+			class = " RelServiceImgLink "
+			href={pHref}
+			target={cTarget}
+			rel={cRel}
+		>
+		
+			<img
+				class = " RelServiceImg "
+				src={pImg}
+				alt={pTitle}
+				loading="lazy"
+				decoding="async"
+			/>
+		
+		</a>
+	) }
+
+	<div class = " RelServiceText ">
+
+		<h4 class = " RelServiceTitle ">
+			{pTitle}
+		</h4>
+
+		{ pDesc && (
+
+			<p class = " RelServiceDesc ">
+				{pDesc}
+			</p>
+		) }
+
+	</div>
+
+	<a
+		class = " RelServiceBtn "
+		href={pHref}
+		target={cTarget}
+		rel={cRel}
+	>
+		{pBtnText}
+	</a>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.RelServiceItem {
+		background: var(--RelServiceCardBg);
+		border-radius: var(--RelServiceCardRadiusL);
+		overflow: hidden;
+		box-shadow: 0 12px 30px rgb(0 0 0 / 12%);
+		border: 1px solid rgb(0 0 0 / 8%);
+		display: flex;
+		flex-direction: column;
+		box-sizing: border-box;
+		direction: rtl;
+		min-height: 100%;
+	}
+
+
+	.RelServiceImgLink {
+		display: block;
+		width: 100%;
+		height: var(--RelServiceImgHeightL);
+		background: rgb(0 0 0 / 5%);
+		overflow: hidden;
+		text-decoration: none;
+	}
+
+
+	.RelServiceImg {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+
+	.RelServiceText {
+		padding: 22px 22px 8px;
+		box-sizing: border-box;
+		flex: 1;
+	}
+
+
+	.RelServiceTitle {
+		margin: 0;
+		color: var(--RelServiceCardTitleColor, inherit) !important;
+		font-size: var(--RelServiceCardTitleSizeL) !important;
+		font-weight: var(--RelServiceCardTitleWeight) !important;
+		text-align: var(--RelServiceCardTitleAlign) !important;
+		font-family: var(--RelServiceCardTitleFamily) !important;
+		line-height: 2;
+	}
+
+
+	.RelServiceDesc {
+		margin: 0;
+		color: var(--RelServiceCardDescColor, inherit) !important;
+		font-size: var(--RelServiceCardDescSizeL) !important;
+		font-weight: var(--RelServiceCardDescWeight) !important;
+		text-align: var(--RelServiceCardDescAlign) !important;
+		font-family: var(--RelServiceCardDescFamily) !important;
+		line-height: 2;
+	}
+
+
+	.RelServiceBtn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin: 16px 22px 22px;
+		min-height: 46px;
+		border-radius: 999px;
+		background: var(--RelServiceBtnBg);
+		color: var(--RelServiceBtnClr);
+		text-decoration: none;
+		font-weight: 700;
+		transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+	}
+
+
+	.RelServiceBtn:hover {
+		background: var(--RelServiceBtnHoverBg);
+		color: var(--RelServiceBtnHoverClr);
+		transform: translateY(-2px);
+	}
+
+
+
+	@media (orientation: portrait), (max-width: 920px) {
+		.RelServiceItem {
+			border-radius: var(--RelServiceCardRadiusP, var(--RelServiceCardRadiusL));
+		}
+
+		.RelServiceImgLink {
+			height: var(--RelServiceImgHeightP, var(--RelServiceImgHeightL));
+		}
+
+		.RelServiceTitle {
+			font-size: var(--RelServiceCardTitleSizeP, var(--RelServiceCardTitleSizeL)) !important;
+		}
+
+		.RelServiceDesc {
+			font-size: var(--RelServiceCardDescSizeP, var(--RelServiceCardDescSizeL)) !important;
+		}
+	}
+
+
+
+</style>

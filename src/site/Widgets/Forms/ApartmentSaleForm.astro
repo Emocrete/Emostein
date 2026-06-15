@@ -1,0 +1,1135 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Colors, Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"section">, PlaceProps {
+	pSubmitUrl?: string;
+	pSourcePage?: string;
+	pWhatsapp?: string;
+	pTitle?: string;
+	pDesc?: string;
+	pSuccessMsg?: string;
+}
+
+const {
+	pSubmitUrl = "",
+	pSourcePage = "شقق للبيع",
+	pWhatsapp = "201014490054",
+	pTitle = "اعرض شقتك للبيع",
+	pDesc = "سجل بيانات الشقة الأساسية، وسنتواصل معك لمراجعة السعر وترتيب المعاينة أو التصوير التسويقي عند الحاجة.",
+	pSuccessMsg = "تم تسجيل البيانات. سنتواصل معك لمراجعة تفاصيل الشقة وترتيب الخطوة التالية.",
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = "",
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+
+const cWidgetId = pGivenID || GetWidgetId("ApartmentSaleForm");
+const cStyle = `
+	--FormBg:${Colors.WhiteOff};
+
+	--FormHeadBg:${Colors.Gray5};
+	--FormPanelBg:${Colors.Gray1};
+	--FormText:${Colors.BlackOff};
+	--FormSoftText:${Colors.Gray4};
+	--FormAccent:${Colors.GreenLite};
+	--FormAccentHover:${Colors.Bistage};
+	--FormBorder:${Colors.Gray2};
+	${cGivenStyle}
+`;
+
+const cPlace = new Place(Astro.props as PlaceProps, cStyle);
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section
+	class = {`ApartmentSaleForm ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={cWidgetId}
+	data-apartment-sale-form="true"
+	data-submit-url={pSubmitUrl}
+	data-success-msg={pSuccessMsg}
+	data-whatsapp={pWhatsapp}
+	{...RemAttr}
+>
+
+	<div class = " FormShell ">
+
+		<div class = " FormHeader ">
+
+			<h2>
+				{pTitle}
+			</h2>
+
+			<p>
+				{pDesc}
+			</p>
+
+		</div>
+
+		<form
+			class = " FormBody "
+			method="post"
+			autocomplete="on"
+			data-form="true"
+		>
+
+			<input type="hidden" name="sourcePage" value={pSourcePage} />
+
+			<input
+				class = " Honey "
+				type="text"
+				name="website"
+				tabindex="-1"
+				autocomplete="off"
+			/>
+
+			<div class = " FieldGroup Full ">
+
+				<h3>
+					بيانات التواصل
+				</h3>
+
+				<p>
+					البيانات دي للاتصال بالمالك فقط، ولا تظهر في الإعلان.
+				</p>
+
+			</div>
+
+			<label class = " Field ">
+
+				<span>
+					اسم المالك
+				</span>
+
+				<input
+					name="ownerName"
+					type="text"
+					required
+					placeholder="مثال: أحمد محمد"
+				/>
+
+			</label>
+
+			<label class = " Field ">
+
+				<span>
+					رقم الموبايل
+				</span>
+
+				<input
+					name="ownerPhone"
+					type="tel"
+					inputmode="tel"
+					required
+					placeholder="01xxxxxxxxx"
+				/>
+
+			</label>
+
+			<label class = " Field ">
+
+				<span>
+					رقم واتساب إن وجد
+				</span>
+
+				<input
+					name="whatsappPhone"
+					type="tel"
+					inputmode="tel"
+					placeholder="اتركه فارغًا لو نفس رقم الاتصال"
+				/>
+
+			</label>
+
+			<label class = " Field ">
+
+				<span>
+					أفضل وقت للتواصل
+				</span>
+
+				<select name="callTime">
+
+					<option value="أي وقت">
+
+						أي وقت
+
+					</option>
+
+					<option value="صباحًا">
+
+						صباحًا
+
+					</option>
+
+					<option value="بعد الظهر">
+
+						بعد الظهر
+
+					</option>
+
+					<option value="مساءً">
+
+						مساءً
+
+					</option>
+
+				</select>
+
+			</label>
+
+			<div class = " FieldGroup Full ">
+
+				<h3>
+					بيانات الموقع
+				</h3>
+
+				<p>
+					اكتب المنطقة بدقة كافية لتقييم السعر، بدون إرسال عنوان تفصيلي حساس في المرحلة الأولى.
+				</p>
+
+			</div>
+
+			<label class = " Field ">
+
+				<span>
+					المحافظة / المدينة
+				</span>
+
+				<input
+					name="city"
+					type="text"
+					required
+					placeholder="مثال: القاهرة الجديدة"
+				/>
+
+			</label>
+
+			<label class = " Field ">
+
+				<span>
+					المنطقة / الحي
+				</span>
+
+				<input
+					name="district"
+					type="text"
+					required
+					placeholder="مثال: التجمع الخامس - النرجس"
+				/>
+
+			</label>
+
+			<label class = " Field Full ">
+
+				<span>
+					علامة قريبة أو شارع رئيسي
+				</span>
+
+				<input name="nearby" type="text" placeholder="مثال: قريب من شارع التسعين / الجامعة الأمريكية" />
+
+			</label>
+
+			<div class = " FieldGroup Full ">
+
+				<h3>
+					بيانات الشقة
+				</h3>
+
+				<p>
+					الهدف هنا تكوين صورة أولية عن الوحدة قبل المعاينة أو التصوير.
+				</p>
+
+			</div>
+
+			<label class = " Field ">
+
+				<span>
+					المساحة بالمتر
+				</span>
+
+				<input
+					name="areaM2"
+					type="number"
+					inputmode="numeric"
+					min="1"
+					required
+					placeholder="مثال: 150"
+				/>
+
+			</label>
+
+			<label class = " Field ">
+
+				<span>
+					عدد الغرف
+				</span>
+
+				<input
+					name="bedrooms"
+					type="number"
+					inputmode="numeric"
+					min="0"
+					placeholder="مثال: 3"
+				/>
+
+			</label>
+
+			<label class = " Field ">
+
+				<span>
+					عدد الحمامات
+				</span>
+
+				<input
+					name="bathrooms"
+					type="number"
+					inputmode="numeric"
+					min="0"
+					placeholder="مثال: 2"
+				/>
+
+			</label>
+
+			<label class = " Field ">
+
+				<span>
+					الدور
+				</span>
+
+				<input name="floor" type="text" placeholder="مثال: الثالث / أرضي / روف" />
+
+			</label>
+
+			<label class = " Field ">
+
+				<span>
+					حالة التشطيب
+				</span>
+
+				<select name="finishing">
+
+					<option value="غير محدد">
+
+						اختر الحالة
+
+					</option>
+
+					<option value="نصف تشطيب">
+
+						نصف تشطيب
+
+					</option>
+
+					<option value="تشطيب عادي">
+
+						تشطيب عادي
+
+					</option>
+
+					<option value="تشطيب جيد">
+
+						تشطيب جيد
+
+					</option>
+
+					<option value="تشطيب فاخر">
+
+						تشطيب فاخر
+
+					</option>
+
+					<option value="تحتاج تجديد">
+
+						تحتاج تجديد
+
+					</option>
+
+				</select>
+
+			</label>
+
+			<label class = " Field ">
+
+				<span>
+					المصعد
+				</span>
+
+				<select name="elevator">
+
+					<option value="غير محدد">
+
+						غير محدد
+
+					</option>
+
+					<option value="يوجد مصعد">
+
+						يوجد مصعد
+
+					</option>
+
+					<option value="لا يوجد مصعد">
+
+						لا يوجد مصعد
+
+					</option>
+
+					<option value="مصعد قيد التشغيل أو الصيانة">
+
+						مصعد قيد التشغيل أو الصيانة
+
+					</option>
+
+				</select>
+
+			</label>
+
+			<label class = " Field ">
+
+				<span>
+					نوع الملكية أو المستند
+				</span>
+
+				<select name="ownership">
+
+					<option value="غير محدد">
+
+						غير محدد
+
+					</option>
+
+					<option value="عقد مسجل">
+
+						عقد مسجل
+
+					</option>
+
+					<option value="عقد ابتدائي">
+
+						عقد ابتدائي
+
+					</option>
+
+					<option value="توكيل">
+
+						توكيل
+
+					</option>
+
+					<option value="ورثة">
+
+						ورثة
+
+					</option>
+
+					<option value="أخرى">
+
+						أخرى
+
+					</option>
+
+				</select>
+
+			</label>
+
+			<label class = " Field ">
+
+				<span>
+					التسليم
+				</span>
+
+				<select name="delivery">
+
+					<option value="فوري">
+
+						فوري
+
+					</option>
+
+					<option value="خلال شهر">
+
+						خلال شهر
+
+					</option>
+
+					<option value="حسب الاتفاق">
+
+						حسب الاتفاق
+
+					</option>
+
+					<option value="الشقة مؤجرة حاليًا">
+
+						الشقة مؤجرة حاليًا
+
+					</option>
+
+				</select>
+
+			</label>
+
+			<div class = " FieldGroup Full ">
+
+				<h3>
+					السعر وطريقة العرض
+				</h3>
+
+				<p>
+					السعر المبدئي يساعد على فرز المشتري الجاد قبل تحديد المعاينة.
+				</p>
+
+			</div>
+
+			<label class = " Field ">
+
+				<span>
+					السعر المطلوب
+				</span>
+
+				<input
+					name="price"
+					type="number"
+					inputmode="numeric"
+					min="1"
+					required
+					placeholder="مثال: 2500000"
+				/>
+
+			</label>
+
+			<label class = " Field ">
+
+				<span>
+					قابلية التفاوض
+				</span>
+
+				<select name="negotiable">
+
+					<option value="قابل للتفاوض">
+
+						قابل للتفاوض
+
+					</option>
+
+					<option value="تفاوض بسيط">
+
+						تفاوض بسيط
+
+					</option>
+
+					<option value="نهائي تقريبًا">
+
+						نهائي تقريبًا
+
+					</option>
+
+				</select>
+
+			</label>
+
+			<label class = " Field ">
+
+				<span>
+					طريقة السداد المفضلة
+				</span>
+
+				<select name="payment">
+
+					<option value="كاش">
+
+						كاش
+
+					</option>
+
+					<option value="كاش أو تقسيط قصير">
+
+						كاش أو تقسيط قصير
+
+					</option>
+
+					<option value="حسب الاتفاق">
+
+						حسب الاتفاق
+
+					</option>
+
+				</select>
+
+			</label>
+
+			<label class = " Field ">
+
+				<span>
+					إمكانية المعاينة
+				</span>
+
+				<select name="visitAvailability">
+
+					<option value="بميعاد مسبق">
+
+						بميعاد مسبق
+
+					</option>
+
+					<option value="متاحة أغلب الأيام">
+
+						متاحة أغلب الأيام
+
+					</option>
+
+					<option value="أيام محددة فقط">
+
+						أيام محددة فقط
+
+					</option>
+
+				</select>
+
+			</label>
+
+			<label class = " Field Full ">
+
+				<span>
+					ملاحظات مهمة عن الشقة
+				</span>
+
+				<textarea name="notes" rows="5" placeholder="اكتب أي مميزات أو عيوب مؤثرة: الواجهة، الجراج، النادي، حالة العمارة، احتياج صيانة، سبب البيع...">
+
+				</textarea>
+
+			</label>
+
+			<div class = " FormNote Full ">
+
+				<strong>
+					ملاحظة بخصوص الصور والفيديو
+				</strong>
+
+				<span>
+					النموذج الحالي لا يستقبل صورًا أو فيديو. بعد تسجيل البيانات سنتواصل معك، والأفضل غالبًا ترتيب معاينة وتصوير تسويقي واضح بدل الاعتماد على صور عشوائية لا توضح قيمة الشقة.
+				</span>
+
+			</div>
+
+			<label class = " Check Full ">
+
+				<input name="contactApproval" type="checkbox" required />
+
+				<span>
+					أوافق على التواصل معي بخصوص بيانات الشقة وترتيب الخطوة التالية.
+				</span>
+
+			</label>
+
+			<div class = " Actions Full ">
+
+				<button type="submit" data-submit-btn="true">
+
+					إرسال بيانات الشقة
+
+				</button>
+
+				<span class = " Status " data-form-status="true">
+
+				</span>
+
+			</div>
+
+		</form>
+
+	</div>
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.ApartmentSaleForm {
+		direction: rtl;
+		width: 100%;
+		background: var(--FormPanelBg);
+		box-sizing: border-box;
+		padding: 40px 20px;
+		color: var(--FormText);
+	}
+
+
+	.FormShell {
+		width: min(1200px, 100%);
+		margin-inline: auto;
+		background: var(--FormBg);
+		border: 1px solid var(--FormBorder);
+		border-radius: 20px;
+		overflow: hidden;
+		box-shadow: 0 14px 40px rgba(0, 0, 0, 0.12);
+	}
+
+
+	.FormHeader {
+		background: var(--FormHeadBg);
+		color: #ffffff;
+		padding: 35px 40px;
+		text-align: center;
+	}
+
+	.FormHeader h2 {
+		margin: 0 0 10px;
+		font-size: 35px;
+		line-height: 1.5;
+	}
+
+	.FormHeader p {
+		margin: 0;
+		font-size: 18px;
+		line-height: 2;
+	}
+
+
+	.FormBody {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 20px;
+		padding: 35px;
+		box-sizing: border-box;
+	}
+
+
+	.Full {
+		grid-column: 1 / -1;
+	}
+
+
+	.FieldGroup {
+		background: var(--FormAccent);
+		border-radius: 14px;
+		padding: 18px 22px;
+		border: 1px solid color-mix(in srgb, var(--FormAccent), #000 10%);
+	}
+
+	.FieldGroup h3 {
+		margin: 0 0 5px;
+		font-size: 24px;
+		line-height: 1.6;
+	}
+
+	.FieldGroup p {
+		margin: 0;
+		font-size: 16px;
+		line-height: 2;
+		color: var(--FormText);
+	}
+
+
+	.Field {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.Field textarea {
+		resize: vertical;
+		min-height: 130px;
+	}
+
+
+	.FormNote {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		background: var(--FormPanelBg);
+		border: 1px dashed var(--FormBorder);
+		border-radius: 14px;
+		padding: 18px 22px;
+		line-height: 2;
+	}
+
+	.FormNote strong {
+		font-size: 18px;
+	}
+
+	.FormNote span {
+		font-size: 16px;
+		color: var(--FormSoftText);
+	}
+
+
+	.Check {
+		display: flex;
+		align-items: flex-start;
+		gap: 10px;
+		line-height: 2;
+	}
+
+	.Check input {
+		width: 20px;
+		height: 20px;
+		margin-top: 8px;
+		accent-color: var(--FormAccentHover);
+		flex: 0 0 auto;
+	}
+
+
+	.Actions {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 20px;
+		flex-wrap: wrap;
+		padding-top: 10px;
+	}
+
+	.Actions button {
+		border: 0;
+		border-radius: 14px;
+		background: var(--FormAccent);
+		color: var(--FormText);
+		font: inherit;
+		font-size: 18px;
+		font-weight: 700;
+		line-height: 1.6;
+		padding: 14px 40px;
+		cursor: pointer;
+		transition: transform 0.2s ease, background-color 0.2s ease, opacity 0.2s ease;
+	}
+
+	.Actions button:hover {
+		background: var(--FormAccentHover);
+		transform: translateY(-2px);
+	}
+
+	.Actions button:disabled {
+		cursor: wait;
+		opacity: 0.7;
+		transform: none;
+	}
+
+
+	.Status {
+		font-size: 16px;
+		font-weight: 700;
+		line-height: 2;
+		text-align: center;
+	}
+
+
+	.Honey {
+		display: none;
+	}
+
+
+
+	.FieldGroup,
+	.Field,
+	.FormNote,
+	.Check,
+	.Actions
+	{
+		box-sizing: border-box;
+	}
+
+
+	.Field span,
+	.Check span
+	{
+		font-size: 16px;
+		font-weight: 700;
+		line-height: 1.8;
+	}
+
+
+	.Field input,
+	.Field select,
+	.Field textarea
+	{
+		width: 100%;
+		box-sizing: border-box;
+		border: 1px solid var(--FormBorder);
+		border-radius: 12px;
+		background: #ffffff;
+		color: var(--FormText);
+		font: inherit;
+		font-size: 16px;
+		line-height: 1.8;
+		padding: 12px 14px;
+		outline: none;
+	}
+
+
+	.Field input:focus,
+	.Field select:focus,
+	.Field textarea:focus
+	{
+		border-color: var(--FormAccentHover);
+		box-shadow: 0 0 0 3px color-mix(in srgb, var(--FormAccent), transparent 35%);
+	}
+
+
+	.Status[data-mode="success"] {
+		color: #116b28;
+	}
+
+
+	.Status[data-mode="error"] {
+		color: #a32222;
+	}
+
+
+	.Status[data-mode="work"] {
+		color: var(--FormSoftText);
+	}
+
+
+	@media (max-width: 900px) {
+		.ApartmentSaleForm {
+			padding: 30px 15px;
+		}
+
+		.FormHeader {
+			padding: 25px 20px;
+		}
+
+		.FormHeader h2 {
+			font-size: 24px;
+		}
+
+		.FormHeader p {
+			font-size: 15px;
+		}
+
+		.FormBody {
+			grid-template-columns: 1fr;
+			gap: 15px;
+			padding: 20px;
+		}
+
+		.FieldGroup h3 {
+			font-size: 20px;
+		}
+
+		.FieldGroup p,
+		.Field span,
+		.Check span,
+		.Field input,
+		.Field select,
+		.Field textarea,
+		.FormNote span,
+		.Status
+		{
+			font-size: 14px;
+		}
+
+		.Actions button {
+			width: 100%;
+			font-size: 16px;
+		}
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script is:inline>
+	(function () {
+	const cRoots = document.querySelectorAll("[data-apartment-sale-form='true']");
+
+	for (const cRoot of cRoots) {
+	RegisterForm(cRoot);
+	}
+
+	function RegisterForm(pRoot) {
+	const cForm = pRoot.querySelector("[data-form='true']");
+	const cStatus = pRoot.querySelector("[data-form-status='true']");
+	const cSubmitBtn = pRoot.querySelector("[data-submit-btn='true']");
+
+	if (!cForm || cForm.dataset.ready === "true") return;
+
+	cForm.dataset.ready = "true";
+	cForm.addEventListener("submit", function SubmitApartmentSaleForm(pEvent) {
+	pEvent.preventDefault();
+	SendForm(pRoot, cForm, cStatus, cSubmitBtn);
+	});
+	}
+
+	async function SendForm(pRoot, pForm, pStatus, pSubmitBtn) {
+	const cPayload = BuildPayload(pForm);
+	const cSubmitUrl = pRoot.dataset.submitUrl || "";
+	const cSuccessMsg = pRoot.dataset.successMsg || "تم تسجيل البيانات.";
+
+	if (!cPayload) return;
+
+	SetStatus(pStatus, "جارٍ إرسال البيانات...", "work");
+	SetBusy(pSubmitBtn, true);
+
+	try {
+	if (cSubmitUrl.trim()) {
+	await fetch(cSubmitUrl, {
+	method: "POST",
+	mode: "no-cors",
+	headers: { "Content-Type": "text/plain;charset=utf-8" },
+	body: JSON.stringify(cPayload),
+	});
+
+	pForm.reset();
+	SetStatus(pStatus, cSuccessMsg, "success");
+	} else {
+	OpenWhatsapp(pRoot, cPayload);
+	SetStatus(pStatus, "تم فتح واتساب برسالة البيانات. راجع الرسالة ثم أرسلها.", "success");
+	}
+	} catch (pError) {
+	SetStatus(pStatus, "تعذر إرسال البيانات الآن. يمكنك الاتصال بنا مباشرة أو إعادة المحاولة.", "error");
+	} finally {
+	SetBusy(pSubmitBtn, false);
+	}
+	}
+
+	function BuildPayload(pForm) {
+	const cData = new FormData(pForm);
+
+	if ((cData.get("website") || "").toString().trim()) return null;
+
+	return {
+	submittedAt: new Date().toISOString(),
+	sourcePage: GetValue(cData, "sourcePage"),
+	ownerName: GetValue(cData, "ownerName"),
+	ownerPhone: GetValue(cData, "ownerPhone"),
+	whatsappPhone: GetValue(cData, "whatsappPhone"),
+	callTime: GetValue(cData, "callTime"),
+	city: GetValue(cData, "city"),
+	district: GetValue(cData, "district"),
+	nearby: GetValue(cData, "nearby"),
+	areaM2: GetValue(cData, "areaM2"),
+	bedrooms: GetValue(cData, "bedrooms"),
+	bathrooms: GetValue(cData, "bathrooms"),
+	floor: GetValue(cData, "floor"),
+	finishing: GetValue(cData, "finishing"),
+	elevator: GetValue(cData, "elevator"),
+	ownership: GetValue(cData, "ownership"),
+	delivery: GetValue(cData, "delivery"),
+	price: GetValue(cData, "price"),
+	negotiable: GetValue(cData, "negotiable"),
+	payment: GetValue(cData, "payment"),
+	visitAvailability: GetValue(cData, "visitAvailability"),
+	notes: GetValue(cData, "notes"),
+	pageUrl: window.location.href,
+	userAgent: navigator.userAgent,
+	};
+	}
+
+	function GetValue(pData, pName) {
+	return (pData.get(pName) || "").toString().trim();
+	}
+
+	function OpenWhatsapp(pRoot, pPayload) {
+	const cWhatsapp = (pRoot.dataset.whatsapp || "201014490054").replace(/\D/g, "");
+	const cText = BuildWhatsappText(pPayload);
+	const cUrl = `https://wa.me/${cWhatsapp}?text=${encodeURIComponent(cText)}`;
+	window.open(cUrl, "_blank", "noopener,noreferrer");
+	}
+
+	function BuildWhatsappText(pPayload) {
+	return [
+	"طلب عرض شقة للبيع",
+	`الاسم: ${pPayload.ownerName}`,
+	`الهاتف: ${pPayload.ownerPhone}`,
+	`واتساب: ${pPayload.whatsappPhone || "نفس رقم الاتصال"}`,
+	`المدينة: ${pPayload.city}`,
+	`المنطقة: ${pPayload.district}`,
+	`علامة قريبة: ${pPayload.nearby || "غير محدد"}`,
+	`المساحة: ${pPayload.areaM2} م²`,
+	`الغرف: ${pPayload.bedrooms || "غير محدد"}`,
+	`الحمامات: ${pPayload.bathrooms || "غير محدد"}`,
+	`الدور: ${pPayload.floor || "غير محدد"}`,
+	`التشطيب: ${pPayload.finishing}`,
+	`المصعد: ${pPayload.elevator}`,
+	`المستند: ${pPayload.ownership}`,
+	`السعر المطلوب: ${pPayload.price}`,
+	`التفاوض: ${pPayload.negotiable}`,
+	`السداد: ${pPayload.payment}`,
+	`المعاينة: ${pPayload.visitAvailability}`,
+	`ملاحظات: ${pPayload.notes || "لا توجد"}`,
+	].join("\n");
+	}
+
+	function SetBusy(pButton, pBusy) {
+	if (!pButton) return;
+	pButton.disabled = pBusy;
+	pButton.textContent = pBusy ? "جارٍ الإرسال..." : "إرسال بيانات الشقة";
+	}
+
+	function SetStatus(pStatus, pText, pMode) {
+	if (!pStatus) return;
+	pStatus.textContent = pText;
+	pStatus.dataset.mode = pMode;
+	}
+	})();
+</script>

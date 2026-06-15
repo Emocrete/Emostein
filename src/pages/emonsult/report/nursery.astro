@@ -1,0 +1,168 @@
+---
+import BLayout from "@/Layout.astro";
+import { Colors } from "@/TypesLib";
+import { DirectSize, NumPer, Text ,Pixel, Loc,HoverColors } from "@/TypesLib";
+import { Hero, IndexSec, ESec, EmoStrip, IncLineSep, BottTriSep, RespImg, EmoBtn, YTPlayer, DataCard, CardsGr, EmoList, EmoContactStrip, Tree, Emograph, EmoCall, VrStack, HzStack, SecTitle } from "@/Widgets";
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="تقرير استشاري لترخيص حضانة أطفال"
+	pDescr="خدمة إعداد تقرير استشاري هندسي عن مبنى حضانة معتمد من مهندس استشاري يفيد بسلامة المبنى وعدم وجود عيوب به تشكل خطورة على الأرواح والممتلكات وملائمة المكان لاستقبال الأطفال"
+>
+
+
+
+
+
+
+
+	<Hero>
+
+		<VrStack
+			pAlign="Center"
+			pSize={new DirectSize(new NumPer("50%","95%"))}
+			pLoc={new Loc(new NumPer("5%","5%"),new NumPer("67%","65%"))}
+			pGap={new Pixel(20)}
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("تقرير استشاري لترخيص حضانة أطفال")}
+				pText={Text.Body.Centered.OfText("خدمة إعداد تقرير استشاري هندسي يفيد بسلامة المبنى وصلاحيته لاستقبال الأطفال")}
+			/>
+
+			<EmoCall
+				data-own-size
+				BlackSky
+				pText="للطلب والاستفسار"
+			/>
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
+
+	<ESec id="secDef">
+
+		<EmoStrip pMinH={new NumPer(300)}>
+
+			<Emograph
+				pSize={new DirectSize(new NumPer("80%","90%"))}
+				pTitle={Text.H2.OfText("ما هو التقرير الهندسي لسلامة المبنى المطلوب لترخيص حضانة ؟")}
+				pText={Text.Body.Centered.OfText("تقرير استشاري هندسي يتم إعداده من مهندس استشاري معتمد يفيد بمعاينة و سلامة حالة المبنى وعدم وجود عيوب به تشكل خطورة على الأرواح والممتلكات ويفيد بمطابقته للمواصفات الفنية المعتمدة ، وصلاحية موقع الحضانة لمزاولة النشاط وملائمته لاستقبال الأطفال .")}
+			/>
+
+		</EmoStrip>
+
+		<EmoStrip pMinH={new NumPer(500,700)}>
+
+			<EmoList
+				pTitle={Text.H2.OfText("ما هي العناصر المؤهلة للمهندس الاستشاري ليكون معتمدا ؟")}
+				pDesc={Text.Body.OfText("يجب أن يتمتع المهندس الاستشاري المؤهل لاعتماد تقرير ترخيص حضانة أطفال بالمواصفات التالية :")}
+				pNumbered={false}
+				pItems={[
+				"أن يكون مقيدا بنقابة المهندسين",
+				"أن يكون لديه سجل هندسي استشاري",
+				"أن يكون حاصلا على شهادة استشارية من نقابة المهندسين في أحد التخصصات الإنشائية",
+				"أن يكون ختمه شاملاً جميع البيانات الشخصية كمهندس استشاري ( رقم العضوية - رقم الاستشاري - رقم السجل الهندسي )"
+			]}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec id="secCost">
+
+		<SecTitle Sky pTitle="تكلفة تقرير ترخيص حضانة" />
+
+		<HzStack id="stkAll">
+
+			<VrStack id="stkMain">
+
+				<HzStack id="stkOffers">
+
+					<VrStack id="stkOffer1">
+
+						<Emograph pTitle={Text.H3.Centered.OfText("تقرير معتمد من مهندس استشاري فقط")} />
+
+						<Emograph pTitle={Text.Body.Centered.OfSize(50,30).OfText("يبدأ من 3000 جنيه")} />
+
+					</VrStack>
+
+					<VrStack id="stkOffer2">
+
+						<Emograph pTitle={Text.H3.Centered.OfText("تقرير معتمد من مهندس استشاري ونقابة المهندسين")} />
+
+						<Emograph pTitle={Text.Body.Centered.OfSize(50,30).OfText("يبدأ من 6000 جنيه")} />
+
+					</VrStack>
+
+				</HzStack>
+
+				<EmoCall data-own-size BlackOrange />
+
+			</VrStack>
+
+			<VrStack
+				id="stkSample"
+				data-own-size
+				pWidth={new Pixel(300)}
+			>
+
+				<RespImg />
+
+				<EmoBtn
+					pText="تحميل"
+					pWidth="150px"
+					pHeight="44px"
+					pRadius="0"
+					pBgColor="#164363"
+					pBgColorHover="#328fe8"
+					pTextColor="#ffffff"
+					pFontSize="18px"
+				/>
+
+			</VrStack>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+</BLayout>

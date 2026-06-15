@@ -1,0 +1,177 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Colors, ElemBg, Text, type PlaceProps } from "@/TypesLib";
+import EmoStrip from "../Strips/EmoStrip.astro";
+import Emograph from "../Comp/Emograph.astro";
+
+type BoolAttr = boolean | "" | "true";
+
+interface ColorFlagProps {
+	BlackOff?: BoolAttr;
+	Black?: BoolAttr;
+	WhiteOff?: BoolAttr;
+
+	Gray1?: BoolAttr;
+	Gray2?: BoolAttr;
+	Gray3?: BoolAttr;
+	Gray4?: BoolAttr;
+	Gray5?: BoolAttr;
+
+	GreenLite?: BoolAttr;
+	GreenDark?: BoolAttr;
+
+	OrangeLite?: BoolAttr;
+	OrangeDark?: BoolAttr;
+	Red?: BoolAttr;
+
+	SkyLite?: BoolAttr;
+	Sky?: BoolAttr;
+	SkyDark?: BoolAttr;
+
+	BistageLite?: BoolAttr;
+	Bistage?: BoolAttr;
+	BistageDark?: BoolAttr;
+
+	Creamy?: BoolAttr;
+	Yellow?: BoolAttr;
+}
+
+interface Props extends HTMLAttributes<"div">, PlaceProps, ColorFlagProps {
+	pTitle?: string;
+	pDesc?: string;
+}
+
+const cRawProps = Astro.props as Props & Record<string, unknown>;
+
+const {
+	pTitle = "",
+	pDesc,
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	BlackOff,
+	Black,
+	WhiteOff,
+
+	Gray1,
+	Gray2,
+	Gray3,
+	Gray4,
+	Gray5,
+
+	GreenLite,
+	GreenDark,
+
+	OrangeLite,
+	OrangeDark,
+	Red,
+
+	SkyLite,
+	Sky,
+	SkyDark,
+
+	BistageLite,
+	Bistage,
+	BistageDark,
+
+	Creamy,
+	Yellow,
+
+	id: pGivenID = GetWidgetId("SecTitle"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = cRawProps;
+
+const cColorMap: Array<[keyof ColorFlagProps, string]> = [
+	["BlackOff", Colors.BlackOff],
+	["Black", Colors.Black],
+	["WhiteOff", Colors.WhiteOff],
+
+	["Gray1", Colors.Gray1],
+	["Gray2", Colors.Gray2],
+	["Gray3", Colors.Gray3],
+	["Gray4", Colors.Gray4],
+	["Gray5", Colors.Gray5],
+
+	["GreenLite", Colors.GreenLite],
+	["GreenDark", Colors.GreenDark],
+
+	["OrangeLite", Colors.OrangeLite],
+	["OrangeDark", Colors.OrangeDark],
+	["Red", Colors.Red],
+
+	["SkyLite", Colors.SkyLite],
+	["Sky", Colors.Sky],
+	["SkyDark", Colors.SkyDark],
+
+	["BistageLite", Colors.BistageLite],
+	["Bistage", Colors.Bistage],
+	["BistageDark", Colors.BistageDark],
+
+	["Creamy", Colors.Creamy],
+	["Yellow", Colors.Yellow],
+];
+
+const cActiveColor = cColorMap.find(([pName]) => IsActiveAttr(cRawProps[pName]));
+const cBg = new ElemBg(cActiveColor?.[1] ?? Colors.WhiteOff);
+
+const cTitleText = Text.H2.Centered.OfText(pTitle);
+const cDescText = HasText(pDesc) ? Text.Body.Centered.OfText(pDesc as string) : undefined;
+
+function IsActiveAttr(pValue: unknown) {
+	return pValue === true || pValue === "" || pValue === "true";
+}
+
+function HasText(pValue: unknown) {
+	return pValue !== undefined && pValue !== null && String(pValue).trim() !== "";
+}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<EmoStrip
+	class = {pGivenClass}
+	style = {pGivenStyle}
+	{...RemAttr}
+	pBg={cBg}
+	pLoc={pLoc}
+	pSize={pSize}
+	pRotate={pRotate}
+	pZ={pZ}
+	pOrigin={pOrigin}
+	pOpacity={pOpacity}
+	pClickable={pClickable}
+	pLandOnly={pLandOnly}
+	pPortOnly={pPortOnly}
+	id={pGivenID}
+>
+
+	<Emograph pTitle={cTitleText} pText={cDescText} />
+
+</EmoStrip>

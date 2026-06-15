@@ -1,0 +1,257 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+
+export interface Props extends HTMLAttributes<"div">, PlaceProps {
+	pTitle?: string;
+	pShareText?: string;
+}
+
+const {
+	pTitle = "تجدنا على",
+	pShareText = "",
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("EmoFooterShareBar"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
+
+const cPageUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
+const cEncodedUrl = encodeURIComponent(cPageUrl);
+const cEncodedTitle = encodeURIComponent(pShareText);
+
+const cWhatsAppShareLink = `https://wa.me/?text=${cEncodedTitle}%20${cEncodedUrl}`;
+const cFacebookShareLink = `https://www.facebook.com/sharer/sharer.php?u=${cEncodedUrl}`;
+const cXShareLink = `https://twitter.com/intent/tweet?url=${cEncodedUrl}&text=${cEncodedTitle}`;
+const cLinkedInShareLink = `https://www.linkedin.com/sharing/share-offsite/?url=${cEncodedUrl}`;
+---
+
+
+
+
+<div
+	class = {`EmoFooterShareBar ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	<p class = " FooterBarTitle ">
+		{pTitle}
+	</p>
+
+	<div class = " ShareIcons ">
+
+		<a
+			class = " ShareIcon IsWhatsapp "
+			href={cWhatsAppShareLink}
+			target="_blank"
+			rel="noopener"
+			title="واتساب"
+		>
+
+			<span>
+				☎
+			</span>
+
+		</a>
+
+		<a
+			class = " ShareIcon IsFacebook "
+			href={cFacebookShareLink}
+			target="_blank"
+			rel="noopener"
+			title="فيسبوك"
+		>
+
+			<span>
+				f
+			</span>
+
+		</a>
+
+		<a
+			class = " ShareIcon IsX "
+			href={cXShareLink}
+			target="_blank"
+			rel="noopener"
+			title="إكس"
+		>
+
+			<span>
+				𝕏
+			</span>
+
+		</a>
+
+		<a
+			class = " ShareIcon IsLinkedIn "
+			href={cLinkedInShareLink}
+			target="_blank"
+			rel="noopener"
+			title="لينكدإن"
+		>
+
+			<span>
+				in
+			</span>
+
+		</a>
+
+		<button
+			class = " ShareIcon IsCopy "
+			type="button"
+			title="نسخ الرابط"
+			data-emo-footer-copy-link="true"
+		>
+
+			<span>
+				↗
+			</span>
+
+		</button>
+
+	</div>
+
+</div>
+
+
+
+
+<style>
+
+
+
+	.EmoFooterShareBar {
+		display: grid;
+		justify-items: center;
+		gap: 10px;
+		width: 100%;
+		direction: rtl;
+	}
+
+	.FooterBarTitle {
+		margin: 0;
+		font-size: 16px;
+		line-height: 1.25;
+		font-weight: 900;
+		color: #ffffff;
+		text-align: center;
+		text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+	}
+
+	.ShareIcons {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: row;
+		gap: 6px;
+		direction: ltr;
+	}
+
+	.ShareIcon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		box-sizing: border-box;
+		width: 35px;
+		height: 35px;
+		border: 0;
+		border-radius: 999px;
+		background: #ffffff;
+		color: #111111;
+		font-family: Arial, Helvetica, sans-serif;
+		font-weight: 900;
+		line-height: 1;
+		text-decoration: none;
+		cursor: pointer;
+		transition: transform 0.16s ease, filter 0.16s ease, box-shadow 0.16s ease;
+	}
+
+	.ShareIcon.IsWhatsapp {
+		color: #25d366;
+		font-size: 21px;
+	}
+
+	.ShareIcon.IsFacebook {
+		color: #1877f2;
+		font-size: 26px;
+	}
+
+	.ShareIcon.IsX {
+		font-size: 23px;
+	}
+
+	.ShareIcon.IsLinkedIn {
+		color: #0a66c2;
+		font-size: 18px;
+		letter-spacing: -1px;
+	}
+
+	.ShareIcon.IsCopy {
+		font-size: 22px;
+	}
+
+	.ShareIcon.IsCopied {
+		background: #25d366;
+		color: #ffffff;
+	}
+
+	.ShareIcon span {
+		display: inline-block;
+		transform: translateY(-1px);
+	}
+
+
+	@media (hover: hover) and (pointer: fine) {
+		.ShareIcon:hover {
+			transform: translateY(-2px);
+			filter: brightness(1.06);
+			box-shadow: 0 6px 16px rgba(0, 0, 0, 0.34);
+		}
+	}
+
+
+
+</style>
+
+
+
+
+<script is:inline>
+	(() => {
+	if (window.__EmoFooterShareCopyReady) return;
+	window.__EmoFooterShareCopyReady = true;
+
+	document.addEventListener("click", async (pEvent) => {
+	const cButton = pEvent.target?.closest?.("[data-emo-footer-copy-link='true']");
+	if (!cButton) return;
+
+	try {
+	await navigator.clipboard.writeText(window.location.href);
+	cButton.classList.add("IsCopied");
+	setTimeout(() => cButton.classList.remove("IsCopied"), 900);
+	} catch {
+	const cTempInput = document.createElement("input");
+	cTempInput.value = window.location.href;
+	document.body.appendChild(cTempInput);
+	cTempInput.select();
+	document.execCommand("copy");
+	cTempInput.remove();
+	}
+	});
+	})();
+</script>

@@ -1,0 +1,374 @@
+---
+import { DirectSize, ElemBg, Pixel, Place, type PlaceProps } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"div">, PlaceProps {
+	pSize?: DirectSize;
+	pGap?: Pixel;
+	pPad?: Pixel;
+	pMargin?: Pixel;
+	pBg?: ElemBg;
+	pRadius?: Pixel;
+	pForceHz?: boolean;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+
+const {
+	pSize,
+	pGap = new Pixel(0),
+	pPad = new Pixel(0),
+	pMargin = new Pixel(0),
+	pBg,
+	pRadius = new Pixel(0),
+	pForceHz = false,
+
+	pLoc,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("HzStack"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = cProps;
+
+const cFitContent = GetBoolAttr(cProps["data-fit-content"]);
+const cForceHz = pForceHz || GetBoolAttr(cProps["data-force-hz"]);
+
+const cWidthL = cFitContent ? "fit-content" : pSize?.WidthL || "100%";
+const cWidthP = cFitContent ? "fit-content" : pSize?.WidthP || pSize?.WidthL || "100%";
+const cHeightL = pSize?.HeightL || "auto";
+const cHeightP = pSize?.HeightP || pSize?.HeightL || "auto";
+
+const cBgColor = pBg?.Color || "transparent";
+
+const cBgImgL = pBg?.Img?.LinkL || "";
+const cBgImgP = pBg?.Img?.LinkP || pBg?.Img?.LinkL || "";
+
+const cBgVidL = pBg?.Vid?.LinkL || "";
+const cBgVidP = pBg?.Vid?.LinkP || pBg?.Vid?.LinkL || "";
+
+const cBgAlt = pBg?.Img?.Alt || pBg?.Vid?.Alt || "";
+
+const cFinalBgImgL = cBgImgL || cBgImgP;
+const cFinalBgImgP = cBgImgP || cBgImgL;
+
+const cMainBgVid = cBgVidL || cBgVidP;
+const cHasBgImg = cFinalBgImgL !== "" || cFinalBgImgP !== "";
+const cHasBgVid = cMainBgVid !== "";
+
+const cCoreStyle = [
+	`--HzWidthL:${cWidthL};`,
+	`--HzWidthP:${cWidthP};`,
+	`--HzHeightL:${cHeightL};`,
+	`--HzHeightP:${cHeightP};`,
+	`--HzGapL:${pGap.Landscape};`,
+	`--HzGapP:${pGap.Portrait};`,
+	`--HzPadL:${pPad.Landscape};`,
+	`--HzPadP:${pPad.Portrait};`,
+	`--HzMarginL:${pMargin.Landscape};`,
+	`--HzMarginP:${pMargin.Portrait};`,
+	`--HzBgColor:${cBgColor};`,
+	`--HzRadiusL:${pRadius.Landscape};`,
+	`--HzRadiusP:${pRadius.Portrait};`,
+	GetStyleText(pGivenStyle),
+].filter(Boolean).join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cCoreStyle);
+
+const cStackClass = [
+	"HzStack",
+	cForceHz ? "ForceHz" : "",
+	cFitContent ? "FitContent" : "",
+	cPlace.Class,
+	pGivenClass,
+].filter(Boolean).join(" ");
+
+function GetBoolAttr(pValue: unknown) {
+	return pValue === true || pValue === "" || pValue === "true";
+}
+
+function GetStyleText(pStyle: unknown) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+	if (typeof pStyle !== "object") return "";
+
+	return Object.entries(pStyle as Record<string, string | number | null | undefined>)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div
+	class = {cStackClass}
+	style = {cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	{ cHasBgVid ? (
+
+		<video
+			class = " HzStackBg HzStackBgVid "
+			crossorigin="anonymous"
+			playsinline
+			preload="auto"
+			loop
+			autoplay
+			muted
+		>
+
+			{ cBgVidP ? (
+
+				<source media="(orientation: portrait)" src={cBgVidP} />
+
+				) : null}
+
+				{ cBgVidL ? (
+
+					<source media="(orientation: landscape)" src={cBgVidL} />
+
+					) : null}
+
+					<source src={cMainBgVid} />
+
+				</video>
+
+				) : cHasBgImg ? (
+
+					<picture class = " HzStackBg HzStackBgPic ">
+
+						<source media="(orientation: portrait)" srcset={cFinalBgImgP} />
+
+						<img
+							class = " HzStackBgImg "
+							src={cFinalBgImgL}
+							alt={cBgAlt}
+							loading="lazy"
+							decoding="async"
+						/>
+
+					</picture>
+
+					) : null}
+
+					<slot />
+
+				</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.HzStack {
+		position: relative;
+		isolation: isolate;
+		display: flex;
+		flex-direction: row;
+		box-sizing: border-box;
+		width: var(--HzWidthL, 100%);
+		max-width: 100%;
+		height: var(--HzHeightL, auto);
+		margin: var(--HzMarginL, 0);
+		padding: var(--HzPadL, 0);
+		gap: var(--HzGapL, 0);
+		border-radius: var(--HzRadiusL, 0);
+		background-color: var(--HzBgColor, transparent);
+		overflow: hidden;
+		align-items: stretch;
+		justify-content: flex-start;
+		min-width: 0;
+	}
+
+
+	.HzStackBgImg {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		pointer-events: none;
+		user-select: none;
+	}
+
+
+
+	.HzStack.FitContent {
+		width: fit-content;
+		max-width: 100%;
+	}
+
+
+	.HzStack.IsPlaced {
+		position: absolute;
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+	.HzStack.HzStack.HzStack > .HzStackBg {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		display: block;
+		width: 100% !important;
+		height: 100% !important;
+		object-fit: cover;
+		pointer-events: none;
+		user-select: none;
+		flex: 0 0 auto !important;
+	}
+
+	.HzStack.HzStack.HzStack > :global(:not(.HzStackBg)) {
+		position: relative;
+		z-index: 1;
+		box-sizing: border-box !important;
+		min-width: 0 !important;
+	}
+
+	.HzStack.HzStack.HzStack > :global(:not(.HzStackBg):not([data-own-size])) {
+		flex-grow: 1 !important;
+		flex-shrink: 1 !important;
+		flex-basis: 0 !important;
+		width: 0 !important;
+		min-width: 0 !important;
+		max-width: none !important;
+		margin: 0 !important;
+		align-self: stretch !important;
+	}
+
+	.HzStack.HzStack.HzStack > :global(:not(.HzStackBg):not([data-own-size]) > *) {
+		width: 100% !important;
+		max-width: 100% !important;
+		box-sizing: border-box !important;
+	}
+
+	.HzStack.HzStack.HzStack > :global(:not(.HzStackBg)[data-own-size]) {
+		flex-grow: 0 !important;
+		flex-shrink: 1 !important;
+		flex-basis: auto !important;
+		min-width: 0 !important;
+		max-width: 100% !important;
+	}
+
+
+
+	.HzStack.HzStack.HzStack.FitContent > :global(:not(.HzStackBg):not([data-own-size])) {
+		flex-grow: 0 !important;
+		flex-shrink: 1 !important;
+		flex-basis: auto !important;
+		width: auto !important;
+		max-width: 100% !important;
+	}
+
+
+	@media (orientation: portrait) {
+		.HzStack {
+			width: var(--HzWidthP, var(--HzWidthL, 100%));
+			height: var(--HzHeightP, var(--HzHeightL, auto));
+			margin: var(--HzMarginP, var(--HzMarginL, 0));
+			padding: var(--HzPadP, var(--HzPadL, 0));
+			gap: var(--HzGapP, var(--HzGapL, 0));
+			border-radius: var(--HzRadiusP, var(--HzRadiusL, 0));
+		}
+
+		.HzStack.IsPlaced {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.HzStack:not(.ForceHz) {
+			flex-direction: column;
+		}
+
+		.HzStack.HzStack.HzStack:not(.ForceHz) > :global(:not(.HzStackBg):not([data-own-size])) {
+			flex-grow: 0 !important;
+			flex-shrink: 0 !important;
+			flex-basis: auto !important;
+			width: 100% !important;
+			max-width: 100% !important;
+			margin: 0 !important;
+			align-self: stretch !important;
+		}
+
+		.HzStack.HzStack.HzStack:not(.ForceHz) > :global(:not(.HzStackBg):not([data-own-size]) > *) {
+			width: 100% !important;
+			max-width: 100% !important;
+			box-sizing: border-box !important;
+		}
+
+		.HzStack.HzStack.HzStack:not(.ForceHz) > :global(:not(.HzStackBg)[data-own-size]) {
+			flex-grow: 0 !important;
+			flex-shrink: 1 !important;
+			flex-basis: auto !important;
+			max-width: 100% !important;
+		}
+
+		.HzStack.HzStack.HzStack.ForceHz > :global(:not(.HzStackBg):not([data-own-size])) {
+			flex-grow: 1 !important;
+			flex-shrink: 1 !important;
+			flex-basis: 0 !important;
+			width: 0 !important;
+			min-width: 0 !important;
+			max-width: none !important;
+			margin: 0 !important;
+			align-self: stretch !important;
+		}
+	}
+
+
+
+</style>

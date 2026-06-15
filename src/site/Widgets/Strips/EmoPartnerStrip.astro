@@ -1,0 +1,1251 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"section">, PlaceProps {
+	pTitle?: string;
+	pDesc?: string;
+	pKicker?: string;
+	pSubmitText?: string;
+	pPrivacyText?: string;
+	pSourceName?: string;
+	pTitleTag?: "h1" | "h2";
+}
+
+const {
+	pTitle = "انضم إلى شبكة المتعاونين مع Emocrete",
+	pDesc = "لو كنت مهندسًا، استشاريًا، مقاولًا، صنايعيًا، موردًا، أو مندوب خدمات في محافظة مختلفة، اترك بياناتك ومجال تعاونك لفرز الطلبات والتواصل مع المناسبين عند الحاجة.",
+	pKicker = "توسيع شبكة التنفيذ",
+	pSubmitText = "إرسال بيانات التعاون",
+	pPrivacyText = "هذه البيانات مخصصة لدراسة فرص التعاون فقط، وليست طلب توظيف ملزم أو تعاقد مباشر.",
+	pSourceName = "موقع Emocrete",
+	pTitleTag = "h2",
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("EmoPartnerStrip"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+
+const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section
+	class = {`EmoPartnerStrip ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	data-emo-partner-strip="true"
+	data-source-name={pSourceName}
+	{...RemAttr}
+>
+
+
+
+
+
+
+
+	<svg class = " SvgDefs " aria-hidden="true">
+
+		<symbol id="PartnerIconNetwork" viewBox="0 0 24 24">
+
+			<path
+				d="M12 3a3 3 0 0 1 2.8 4.1l3.1 2.2a3 3 0 1 1-1.1 1.6l-3.2-2.2a3 3 0 0 1-3.2 0l-3.2 2.2a3 3 0 1 1-1.1-1.6l3.1-2.2A3 3 0 0 1 12 3Zm0 2a1 1 0 1 0 0 2 1 1 0 0 0 0-2ZM5 11a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm14 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2ZM12 14a3 3 0 0 1 3 3v3H9v-3a3 3 0 0 1 3-3Zm0 2a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1Z"
+			>
+
+			</path>
+
+		</symbol>
+
+		<symbol id="PartnerIconUser" viewBox="0 0 24 24">
+
+			<path d="M12 12a4.2 4.2 0 1 0 0-8.4 4.2 4.2 0 0 0 0 8.4Zm0 2c-4.2 0-7.6 2.1-7.6 4.8V20h15.2v-1.2c0-2.7-3.4-4.8-7.6-4.8Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="PartnerIconPhone" viewBox="0 0 24 24">
+
+			<path
+				d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1v3.6c0 .6-.4 1-1 1C10.7 21.7 2.3 13.3 2.3 3.7c0-.6.4-1 1-1h3.6c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1l-2.2 2.2Z"
+			>
+
+			</path>
+
+		</symbol>
+
+		<symbol id="PartnerIconMap" viewBox="0 0 24 24">
+
+			<path
+				d="M12 2.5a6.2 6.2 0 0 0-6.2 6.2c0 4.6 6.2 12.8 6.2 12.8s6.2-8.2 6.2-12.8A6.2 6.2 0 0 0 12 2.5Zm0 8.4a2.2 2.2 0 1 1 0-4.4 2.2 2.2 0 0 1 0 4.4Z"
+			>
+
+			</path>
+
+		</symbol>
+
+		<symbol id="PartnerIconWork" viewBox="0 0 24 24">
+
+			<path d="M9 4h6l1 3h4v13H4V7h4l1-3Zm1.5 2-.3 1h3.6l-.3-1h-3ZM6 9v9h12V9H6Zm4 2h4v2h-4v-2Z">
+
+			</path>
+
+		</symbol>
+
+		<symbol id="PartnerIconSend" viewBox="0 0 24 24">
+
+			<path
+				d="M21.7 3.4 2.9 10.8c-.8.3-.8 1.5.1 1.8l4.8 1.5 1.8 5.6c.3.8 1.4.9 1.8.2l2.6-4.2 4.9 3.6c.7.5 1.7.1 1.8-.8l2.4-13.7c.2-.9-.7-1.6-1.4-1.4ZM9 13.5l8.5-5.3-6.9 6.9-.4 2.2L9 13.5Z"
+			>
+
+			</path>
+
+		</symbol>
+
+	</svg>
+
+
+
+
+
+
+
+	<div class = " PartnerShell ">
+
+		<div class = " PartnerIntro ">
+
+			<strong class = " PartnerKicker ">
+				{pKicker}
+			</strong>
+
+			{ pTitleTag === "h1" ? (
+
+				<h1 class = " PartnerTitle ">
+					{pTitle}
+				</h1>
+			) : (
+
+				<h2 class = " PartnerTitle ">
+					{pTitle}
+				</h2>
+			) }
+
+			<p>
+				{pDesc}
+			</p>
+
+			<div class = " PartnerSignals ">
+
+				<span>
+					استشاريون
+				</span>
+
+				<span>
+					مقاولون
+				</span>
+
+				<span>
+					موردون
+				</span>
+
+				<span>
+					مندوبو محافظات
+				</span>
+
+			</div>
+
+		</div>
+
+		<form
+			class = " PartnerForm "
+			data-partner-form="true"
+			autocomplete="on"
+		>
+
+			<label class = " FieldBox WideField ">
+
+				<span class = " FieldIcon ">
+
+					<svg>
+
+						<use href="#PartnerIconUser">
+
+						</use>
+
+					</svg>
+
+				</span>
+
+				<input
+					type="text"
+					name="partner_name"
+					placeholder="الاسم أو اسم الشركة"
+					autocomplete="name"
+					data-partner-name="true"
+				/>
+
+			</label>
+
+			<label class = " FieldBox ">
+
+				<span class = " FieldIcon ">
+
+					<svg>
+
+						<use href="#PartnerIconPhone">
+
+						</use>
+
+					</svg>
+
+				</span>
+
+				<input
+					type="tel"
+					name="partner_phone"
+					placeholder="رقم الهاتف / واتساب"
+					inputmode="tel"
+					autocomplete="tel"
+					data-partner-phone="true"
+				/>
+
+			</label>
+
+			<label class = " FieldBox ">
+
+				<span class = " FieldIcon ">
+
+					<svg>
+
+						<use href="#PartnerIconMap">
+
+						</use>
+
+					</svg>
+
+				</span>
+
+				<select name="partner_governorate" data-partner-governorate="true">
+
+					<option value="">
+
+						المحافظة
+
+					</option>
+
+					<option value="القاهرة">
+
+						القاهرة
+
+					</option>
+
+					<option value="الجيزة">
+
+						الجيزة
+
+					</option>
+
+					<option value="القليوبية">
+
+						القليوبية
+
+					</option>
+
+					<option value="الإسكندرية">
+
+						الإسكندرية
+
+					</option>
+
+					<option value="الدقهلية">
+
+						الدقهلية
+
+					</option>
+
+					<option value="الغربية">
+
+						الغربية
+
+					</option>
+
+					<option value="الشرقية">
+
+						الشرقية
+
+					</option>
+
+					<option value="المنوفية">
+
+						المنوفية
+
+					</option>
+
+					<option value="البحيرة">
+
+						البحيرة
+
+					</option>
+
+					<option value="كفر الشيخ">
+
+						كفر الشيخ
+
+					</option>
+
+					<option value="دمياط">
+
+						دمياط
+
+					</option>
+
+					<option value="بورسعيد">
+
+						بورسعيد
+
+					</option>
+
+					<option value="الإسماعيلية">
+
+						الإسماعيلية
+
+					</option>
+
+					<option value="السويس">
+
+						السويس
+
+					</option>
+
+					<option value="الفيوم">
+
+						الفيوم
+
+					</option>
+
+					<option value="بني سويف">
+
+						بني سويف
+
+					</option>
+
+					<option value="المنيا">
+
+						المنيا
+
+					</option>
+
+					<option value="أسيوط">
+
+						أسيوط
+
+					</option>
+
+					<option value="سوهاج">
+
+						سوهاج
+
+					</option>
+
+					<option value="قنا">
+
+						قنا
+
+					</option>
+
+					<option value="الأقصر">
+
+						الأقصر
+
+					</option>
+
+					<option value="أسوان">
+
+						أسوان
+
+					</option>
+
+					<option value="البحر الأحمر">
+
+						البحر الأحمر
+
+					</option>
+
+					<option value="مطروح">
+
+						مطروح
+
+					</option>
+
+					<option value="شمال سيناء">
+
+						شمال سيناء
+
+					</option>
+
+					<option value="جنوب سيناء">
+
+						جنوب سيناء
+
+					</option>
+
+					<option value="الوادي الجديد">
+
+						الوادي الجديد
+
+					</option>
+
+				</select>
+
+			</label>
+
+			<label class = " FieldBox ">
+
+				<span class = " FieldIcon ">
+
+					<svg>
+
+						<use href="#PartnerIconWork">
+
+						</use>
+
+					</svg>
+
+				</span>
+
+				<select name="partner_type" data-partner-type="true">
+
+					<option value="">
+
+						نوع التعاون
+
+					</option>
+
+					<option value="مهندس استشاري">
+
+						مهندس استشاري
+
+					</option>
+
+					<option value="مهندس تصميم">
+
+						مهندس تصميم
+
+					</option>
+
+					<option value="مهندس تنفيذ أو إشراف">
+
+						مهندس تنفيذ أو إشراف
+
+					</option>
+
+					<option value="مقاول عام">
+
+						مقاول عام
+
+					</option>
+
+					<option value="مقاول تشطيبات">
+
+						مقاول تشطيبات
+
+					</option>
+
+					<option value="صنايعي أو فريق تنفيذ">
+
+						صنايعي أو فريق تنفيذ
+
+					</option>
+
+					<option value="مورد خامات أو منتجات">
+
+						مورد خامات أو منتجات
+
+					</option>
+
+					<option value="مندوب محافظة">
+
+						مندوب محافظة
+
+					</option>
+
+					<option value="مسوق أو وسيط خدمات">
+
+						مسوق أو وسيط خدمات
+
+					</option>
+
+				</select>
+
+			</label>
+
+			<label class = " FieldBox ">
+
+				<span class = " FieldIcon ">
+
+					<svg>
+
+						<use href="#PartnerIconNetwork">
+
+						</use>
+
+					</svg>
+
+				</span>
+
+				<select name="partner_service" data-partner-service="true">
+
+					<option value="">
+
+						الخدمة التي يمكنك المساعدة فيها
+
+					</option>
+
+					<option value="تقارير استشارية هندسية">
+
+						تقارير استشارية هندسية
+
+					</option>
+
+					<option value="شهادات صلاحية وختم استشاري">
+
+						شهادات صلاحية وختم استشاري
+
+					</option>
+
+					<option value="تراخيص محلات ومطاعم">
+
+						تراخيص محلات ومطاعم
+
+					</option>
+
+					<option value="تراخيص بناء ومصانع وحضانات">
+
+						تراخيص بناء ومصانع وحضانات
+
+					</option>
+
+					<option value="رسومات هندسية ومعمارية">
+
+						رسومات هندسية ومعمارية
+
+					</option>
+
+					<option value="Shop Drawing معماري">
+
+						Shop Drawing معماري
+
+					</option>
+
+					<option value="Shop Drawing إنشائي">
+
+						Shop Drawing إنشائي
+
+					</option>
+
+					<option value="Shop Drawing كهرباء">
+
+						Shop Drawing كهرباء
+
+					</option>
+
+					<option value="Shop Drawing ميكانيكا">
+
+						Shop Drawing ميكانيكا
+
+					</option>
+
+					<option value="حصر كميات ومقايسات">
+
+						حصر كميات ومقايسات
+
+					</option>
+
+					<option value="إدارة مشروعات وجداول زمنية">
+
+						إدارة مشروعات وجداول زمنية
+
+					</option>
+
+					<option value="إشراف هندسي على التنفيذ">
+
+						إشراف هندسي على التنفيذ
+
+					</option>
+
+					<option value="تشطيبات شقق وفيلات ومحلات">
+
+						تشطيبات شقق وفيلات ومحلات
+
+					</option>
+
+					<option value="مقاولات عامة أو بنود متخصصة">
+
+						مقاولات عامة أو بنود متخصصة
+
+					</option>
+
+					<option value="توريد وتركيب رخام وجرانيت">
+
+						توريد وتركيب رخام وجرانيت
+
+					</option>
+
+					<option value="توريدات تكييفات وأعمال ميكانيكا">
+
+						توريدات تكييفات وأعمال ميكانيكا
+
+					</option>
+
+					<option value="توريدات صحية وكهربائية">
+
+						توريدات صحية وكهربائية
+
+					</option>
+
+					<option value="أبواب وفرش وتجهيزات داخلية">
+
+						أبواب وفرش وتجهيزات داخلية
+
+					</option>
+
+					<option value="رسومات وتراخيص منشآت طبية">
+
+						رسومات وتراخيص منشآت طبية
+
+					</option>
+
+					<option value="تسويق عقاري أو إدارة وحدات">
+
+						تسويق عقاري أو إدارة وحدات
+
+					</option>
+
+				</select>
+
+			</label>
+
+			<label class = " FieldBox ">
+
+				<span class = " FieldIcon ">
+
+					<svg>
+
+						<use href="#PartnerIconTrend">
+
+						</use>
+
+					</svg>
+
+				</span>
+
+				<select name="partner_capacity" data-partner-capacity="true">
+
+					<option value="">
+
+						نطاق القدرة الحالية
+
+					</option>
+
+					<option value="أعمال فردية عند الطلب">
+
+						أعمال فردية عند الطلب
+
+					</option>
+
+					<option value="تعاون شهري منتظم">
+
+						تعاون شهري منتظم
+
+					</option>
+
+					<option value="فريق تنفيذ صغير">
+
+						فريق تنفيذ صغير
+
+					</option>
+
+					<option value="شركة أو مكتب قائم">
+
+						شركة أو مكتب قائم
+
+					</option>
+
+					<option value="تغطية محافظة أو أكثر">
+
+						تغطية محافظة أو أكثر
+
+					</option>
+
+				</select>
+
+			</label>
+
+			<textarea
+				name="partner_note"
+				placeholder="اكتب نبذة مختصرة عن خبرتك، نطاق شغلك، أهم المحافظات التي تستطيع خدمتها، وهل لديك أسعار أو عينات أعمال..."
+				data-partner-note="true"
+			>
+
+			</textarea>
+
+			<button
+				class = " PartnerSubmit "
+				type="submit"
+				data-partner-submit="true"
+			>
+
+				<span>
+					{pSubmitText}
+				</span>
+
+				<svg viewBox="0 0 24 24" aria-hidden="true">
+
+					<use href="#PartnerIconSend">
+
+					</use>
+
+				</svg>
+
+			</button>
+
+			<span class = " PartnerStatus " data-partner-status="true">
+				{pPrivacyText}
+			</span>
+
+		</form>
+
+	</div>
+
+
+
+
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.EmoPartnerStrip {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		width: 100%;
+		box-sizing: border-box;
+		direction: rtl;
+		background: radial-gradient(circle at 8% 25%, rgba(255, 209, 92, 0.14), transparent 24%),
+			radial-gradient(circle at 94% 45%, rgba(38, 181, 255, 0.16), transparent 25%),
+			linear-gradient(135deg, #071426 0%, #081c34 52%, #06101e 100%);
+		color: #f8fbff;
+		border-block: 1px solid rgba(125, 190, 255, 0.18);
+	}
+
+	.EmoPartnerStrip::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+			linear-gradient(0deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+		background-size: 38px 38px;
+		opacity: 0.25;
+		pointer-events: none;
+	}
+
+
+	.SvgDefs {
+		position: absolute;
+		width: 0;
+		height: 0;
+		overflow: hidden;
+	}
+
+
+	.PartnerShell {
+		display: grid;
+		grid-template-columns: minmax(320px, 0.78fr) minmax(620px, 1.22fr);
+		align-items: center;
+		gap: 24px;
+		width: min(1500px, calc(100% - 30px));
+		margin-inline: auto;
+		padding-block: 28px;
+		box-sizing: border-box;
+	}
+
+
+	.PartnerIntro {
+		display: grid;
+		gap: 12px;
+		min-width: 0;
+	}
+
+	.PartnerIntro .PartnerTitle {
+		margin: 0;
+		color: #ffffff;
+		font-size: 30px;
+		font-weight: 950;
+		line-height: 1.35;
+		letter-spacing: -0.3px;
+	}
+
+	.PartnerIntro p {
+		margin: 0;
+		max-width: 620px;
+		color: rgba(248, 251, 255, 0.74);
+		font-size: 15px;
+		font-weight: 700;
+		line-height: 1.9;
+	}
+
+
+	.PartnerKicker {
+		display: inline-flex;
+		width: fit-content;
+		padding: 6px 13px;
+		border: 1px solid rgba(255, 209, 92, 0.36);
+		border-radius: 999px;
+		background: rgba(255, 209, 92, 0.10);
+		color: #ffd15c;
+		font-size: 13px;
+		font-weight: 950;
+		line-height: 1.2;
+	}
+
+
+	.PartnerSignals {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+
+	.PartnerSignals span {
+		display: inline-flex;
+		padding: 6px 10px;
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.08);
+		color: rgba(248, 251, 255, 0.76);
+		font-size: 12px;
+		font-weight: 850;
+	}
+
+
+	.PartnerForm {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 10px;
+		padding: 14px;
+		border: 1px solid rgba(125, 190, 255, 0.22);
+		border-radius: 24px;
+		background: rgba(255, 255, 255, 0.06);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10),
+			0 16px 36px rgba(0, 0, 0, 0.22);
+		backdrop-filter: blur(13px);
+		-webkit-backdrop-filter: blur(13px);
+		box-sizing: border-box;
+	}
+
+	.PartnerForm textarea {
+		grid-column: span 3;
+		min-height: 82px;
+		resize: vertical;
+		padding: 11px 12px;
+		border: 1px solid rgba(255, 255, 255, 0.10);
+		border-radius: 16px;
+		background: rgba(2, 12, 28, 0.36);
+		box-sizing: border-box;
+		line-height: 1.75;
+	}
+
+
+	.FieldBox {
+		position: relative;
+		display: grid;
+		grid-template-columns: auto 1fr;
+		align-items: center;
+		gap: 7px;
+		min-height: 44px;
+		padding: 0 10px;
+		border: 1px solid rgba(255, 255, 255, 0.10);
+		border-radius: 14px;
+		background: rgba(2, 12, 28, 0.36);
+		box-sizing: border-box;
+	}
+
+	.FieldBox select {
+		cursor: pointer;
+	}
+
+	.FieldBox option {
+		color: #071426;
+		background: #ffffff;
+	}
+
+
+	.WideField {
+		grid-column: span 1;
+	}
+
+
+	.FieldIcon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 25px;
+		height: 25px;
+		border-radius: 9px;
+		background: rgba(125, 211, 255, 0.11);
+		color: #7dd3ff;
+	}
+
+
+	.PartnerSubmit {
+		grid-column: span 1;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		height: 42px;
+		padding-inline: 16px;
+		border: 0;
+		border-radius: 14px;
+		background: linear-gradient(135deg, #ffd15c, #ff9f1f);
+		color: #101827;
+		font-family: inherit;
+		font-size: 13px;
+		font-weight: 950;
+		cursor: pointer;
+		box-shadow: 0 12px 26px rgba(255, 169, 31, 0.18),
+			inset 0 1px 0 rgba(255, 255, 255, 0.34);
+		transition: transform 0.12s ease, filter 0.12s ease;
+	}
+
+
+	.PartnerStatus {
+		grid-column: span 2;
+		align-self: center;
+		color: rgba(248, 251, 255, 0.62);
+		font-size: 12px;
+		font-weight: 750;
+		line-height: 1.6;
+	}
+
+
+
+	.PartnerStatus.IsDone {
+		color: #42ff9f;
+	}
+
+
+	.PartnerStatus.IsError {
+		color: #ffd15c;
+	}
+
+
+
+	.FieldIcon svg,
+	.PartnerSubmit svg
+	{
+		width: 16px;
+		height: 16px;
+		fill: currentColor;
+	}
+
+
+	.FieldBox input,
+	.FieldBox select,
+	.PartnerForm textarea
+	{
+		width: 100%;
+		min-width: 0;
+		border: 0;
+		outline: 0;
+		background: transparent;
+		color: #ffffff;
+		font-family: inherit;
+		font-size: 13px;
+		font-weight: 750;
+		line-height: 1.4;
+		direction: rtl;
+	}
+
+
+	.FieldBox input::placeholder,
+	.PartnerForm textarea::placeholder
+	{
+		color: rgba(248, 251, 255, 0.52);
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	@media (hover: hover) and (pointer: fine) {
+		.FieldBox:hover,
+		.PartnerForm textarea:hover
+		{
+			border-color: rgba(125, 211, 255, 0.24);
+		}
+
+		.PartnerSubmit:hover {
+			filter: brightness(1.04);
+			transform: translateY(-1px);
+		}
+	}
+
+
+	@media (max-width: 1100px) {
+		.PartnerShell {
+			grid-template-columns: 1fr;
+		}
+
+		.PartnerIntro {
+			justify-items: center;
+			text-align: center;
+		}
+
+		.PartnerIntro p {
+			text-align: center;
+		}
+	}
+
+
+	@media (orientation: portrait) {
+		.PartnerShell {
+			width: min(430px, calc(100% - 22px));
+			padding-block: 24px;
+			gap: 18px;
+		}
+
+		.PartnerIntro .PartnerTitle {
+			font-size: 24px;
+			text-align: center;
+		}
+
+		.PartnerIntro p {
+			font-size: 14px;
+			line-height: 1.8;
+		}
+
+		.PartnerSignals {
+			justify-content: center;
+		}
+
+		.PartnerForm {
+			grid-template-columns: 1fr;
+			gap: 9px;
+			padding: 12px;
+			border-radius: 22px;
+		}
+
+		.PartnerForm textarea,
+		.PartnerSubmit,
+		.PartnerStatus
+		{
+			grid-column: span 1;
+		}
+
+		.PartnerSubmit {
+			width: 100%;
+		}
+
+		.PartnerStatus {
+			text-align: center;
+		}
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+	type PartnerFormData = {
+	partner_name: string;
+	partner_phone: string;
+	partner_governorate: string;
+	partner_type: string;
+	partner_service: string;
+	partner_capacity: string;
+	partner_note: string;
+	page_title: string;
+	page_url: string;
+	page_path: string;
+	source_name: string;
+	};
+
+	if (!window.__EmoPartnerStripReady) {
+	window.__EmoPartnerStripReady = true;
+	document.addEventListener("astro:page-load", SetupPartnerStrips);
+	window.addEventListener("load", SetupPartnerStrips);
+	SetupPartnerStrips();
+	}
+
+	function SetupPartnerStrips(): void {
+	const cStrips = document.querySelectorAll<HTMLElement>("[data-emo-partner-strip='true']:not([data-partner-ready='true'])");
+
+	cStrips.forEach(SetupPartnerStrip);
+	}
+
+	function SetupPartnerStrip(pRoot: HTMLElement): void {
+	pRoot.dataset.partnerReady = "true";
+
+	const cForm = pRoot.querySelector<HTMLFormElement>("[data-partner-form='true']");
+
+	cForm?.addEventListener("submit", function HandlePartnerSubmit(pEvent): void {
+	pEvent.preventDefault();
+	HandleSubmit(pRoot);
+	});
+	}
+
+	function HandleSubmit(pRoot: HTMLElement): void {
+	const cStatus = pRoot.querySelector<HTMLElement>("[data-partner-status='true']");
+	const cData = GetPartnerFormData(pRoot);
+
+	if (!cData.partner_name || !cData.partner_phone || !cData.partner_type || !cData.partner_service) {
+	ShowStatus(cStatus, "اكتب الاسم ورقم الهاتف ونوع التعاون والخدمة المناسبة.", "IsError");
+	return;
+	}
+
+	console.log("Partner application preview:", cData);
+
+	ShowStatus(cStatus, "تم تجهيز نموذج التعاون مبدئيًا. الربط الفعلي بالإيميل والشيت يتم في الخطوة التالية.", "IsDone");
+	}
+
+	function GetPartnerFormData(pRoot: HTMLElement): PartnerFormData {
+	return {
+	partner_name: GetValue(pRoot, "[data-partner-name='true']"),
+	partner_phone: GetValue(pRoot, "[data-partner-phone='true']"),
+	partner_governorate: GetValue(pRoot, "[data-partner-governorate='true']"),
+	partner_type: GetValue(pRoot, "[data-partner-type='true']"),
+	partner_service: GetValue(pRoot, "[data-partner-service='true']"),
+	partner_capacity: GetValue(pRoot, "[data-partner-capacity='true']"),
+	partner_note: GetValue(pRoot, "[data-partner-note='true']"),
+	page_title: document.title,
+	page_url: location.href,
+	page_path: NormalizePath(location.pathname),
+	source_name: pRoot.dataset.sourceName || "موقع Emocrete"
+	};
+	}
+
+	function GetValue(pRoot: HTMLElement, pSelector: string): string {
+	const cField = pRoot.querySelector<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(pSelector);
+
+	return (cField?.value || "").trim();
+	}
+
+	function NormalizePath(pValue: string): string {
+	let cValue = pValue.trim();
+
+	if (!cValue.startsWith("/")) {
+	cValue = `/${cValue}`;
+	}
+
+	if (!cValue.endsWith("/")) {
+	cValue = `${cValue}/`;
+	}
+
+	return cValue.toLowerCase();
+	}
+
+	function ShowStatus(pStatus: HTMLElement | null, pText: string, pClassName: "IsDone" | "IsError"): void {
+	if (!pStatus) return;
+
+	pStatus.textContent = pText;
+	pStatus.classList.remove("IsDone", "IsError");
+	pStatus.classList.add(pClassName);
+	}
+</script>

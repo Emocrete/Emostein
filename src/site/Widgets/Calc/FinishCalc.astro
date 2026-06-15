@@ -1,0 +1,268 @@
+---
+import { Place, type PlaceProps } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"section">, PlaceProps {
+	fVideo?: string;
+}
+
+const {
+	fVideo = "/assets/worker-loop.mp4",
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	id: pGivenID = GetWidgetId("FinishCalc"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+
+const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section
+	class = {`card reveal ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {`padding:18px; ${cPlace.Style}`}
+	data-reveal="up"
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	<div
+		style = "
+				display : flex ;
+				align-items : center ;
+				justify-content : space-between ;
+				gap : 14px ;
+				flex-wrap : wrap
+			"
+	>
+
+		<h3 class = " cardTitle " style = " margin : 0 ">
+			حاسبة تكلفة تشطيب شقة
+		</h3>
+
+		<video
+			style = "
+					width : 64px ;
+					height : 64px ;
+					border-radius : 16px ;
+					object-fit : cover ;
+					border : 1px solid rgba(0,0,0,.12)
+				"
+			src={fVideo}
+			autoplay
+			muted
+			loop
+			playsinline
+		>
+
+		</video>
+
+	</div>
+
+	<div
+		style = "
+				display : grid ;
+				gap : 12px ;
+				grid-template-columns : repeat(auto-fit, minmax(220px, 1fr)) ;
+				margin-top : 14px
+			"
+	>
+
+		<label>
+
+			المساحة (م²)
+
+			<input
+				style = "
+						width : 100% ;
+						padding : 10px ;
+						border-radius : 12px ;
+						border : 1px solid rgba(0,0,0,.12)
+					"
+				id="fArea"
+				type="number"
+				value="120"
+			/>
+
+		</label>
+
+		<label>
+
+			مستوى التشطيب
+
+			<select
+				style = "
+						width : 100% ;
+						padding : 10px ;
+						border-radius : 12px ;
+						border : 1px solid rgba(0,0,0,.12)
+					"
+				id="fLevel"
+			>
+
+				<option value="5500">
+
+					اقتصادي
+
+				</option>
+
+				<option value="7500" selected>
+
+					متوسط
+
+				</option>
+
+				<option value="10500">
+
+					فاخر
+
+				</option>
+
+			</select>
+
+		</label>
+
+		<label
+			style = "
+					display : flex ;
+					align-items : center ;
+					gap : 10px ;
+					padding-top : 22px
+				"
+		>
+
+			<input id="fKitchen" type="checkbox" checked />
+
+			مطبخ (زيادة تقديرية)
+
+		</label>
+
+		<label
+			style = "
+					display : flex ;
+					align-items : center ;
+					gap : 10px ;
+					padding-top : 22px
+				"
+		>
+
+			<input id="fAc" type="checkbox" />
+
+			تأسيس تكييف
+
+		</label>
+
+	</div>
+
+	<div
+		style = "
+				margin-top : 14px ;
+				display : flex ;
+				align-items : center ;
+				justify-content : space-between ;
+				gap : 12px ;
+				flex-wrap : wrap
+			"
+	>
+
+		<div class = " cardText " style = " font-weight : 900 ">
+
+			الإجمالي التقريبي:
+
+			<span id="fOut">
+				0
+			</span>
+
+			جنيه
+
+		</div>
+
+		<a class = " btnBrand " href="#cta" data-ga="calc_cta">
+			اطلب عرض سعر دقيق
+		</a>
+
+	</div>
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script is:inline>
+	const fRoot = document.currentScript.closest("section");
+
+	const fAreaEl = fRoot.querySelector("#fArea");
+	const fLevelEl = fRoot.querySelector("#fLevel");
+	const fKitchenEl = fRoot.querySelector("#fKitchen");
+	const fAcEl = fRoot.querySelector("#fAc");
+	const fOutEl = fRoot.querySelector("#fOut");
+
+	function fFmt(n) {
+	return Math.round(n).toLocaleString("ar-EG");
+	}
+
+	function fCalc() {
+	const fArea = Number(fAreaEl.value || 0);
+	const fRate = Number(fLevelEl.value || 0);
+	let fTotal = fArea * fRate;
+
+	if (fKitchenEl.checked) fTotal += fArea * 450; // تقديري
+	if (fAcEl.checked) fTotal += fArea * 250; // تقديري
+
+	fOutEl.textContent = fFmt(fTotal);
+	}
+
+	["input", "change"].forEach((ev) => {
+	fAreaEl.addEventListener(ev, fCalc);
+	fLevelEl.addEventListener(ev, fCalc);
+	fKitchenEl.addEventListener(ev, fCalc);
+	fAcEl.addEventListener(ev, fCalc);
+	});
+
+	fCalc();
+</script>

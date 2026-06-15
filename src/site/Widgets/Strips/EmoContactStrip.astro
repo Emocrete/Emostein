@@ -1,0 +1,1166 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"section">, PlaceProps {
+	pTitle?: string;
+	pDesc?: string;
+	pPhone?: string;
+	pCallText?: string;
+	pWhatsappText?: string;
+	pLeadTitle?: string;
+	pPhonePlaceHolder?: string;
+	pLeadButtonText?: string;
+	pPrivacyText?: string;
+	pSourceName?: string;
+	pVideoSrc?: string;
+	pPosterSrc?: string;
+}
+
+const {
+	pTitle = "تحتاج تواصل سريع؟",
+	pDesc = "اتصل أو واتساب الآن، ولو الوقت غير مناسب اترك رقمك وسنرد عليك في أقرب وقت.",
+	pPhone = "01014490054",
+	pCallText = "اتصال فوري",
+	pWhatsappText = "واتساب فوري",
+	pLeadTitle = "اترك بياناتك للتواصل في الوقت المناسب لك",
+	pPhonePlaceHolder = "رقم الهاتف",
+	pLeadButtonText = "تسجيل التواصل",
+	pPrivacyText = "لن يتم استخدام رقمك إلا للرد على طلبك فقط",
+	pSourceName = "موقع Emocrete",
+	pVideoSrc = "/Media/PhoneLoop.mp4",
+	pPosterSrc = "",
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("EmoContactStrip"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+
+const cOwnerWhatsapp = GetWhatsappNumber(pPhone);
+const cCallHref = GetCallHref(pPhone);
+
+function GetWhatsappNumber(pValue: string): string {
+	const cDigits = pValue.replace(/\D/g, "");
+
+	if (cDigits.startsWith("20")) return cDigits;
+	if (cDigits.startsWith("0")) return `2${cDigits}`;
+
+	return cDigits;
+}
+
+function GetCallHref(pValue: string): string {
+	const cDigits = pValue.replace(/\D/g, "");
+
+	if (cDigits.startsWith("20")) return `tel:+${cDigits}`;
+	if (cDigits.startsWith("0")) return `tel:+2${cDigits}`;
+
+	return `tel:${pValue}`;
+}
+
+const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section
+	class = {`EmoContactStrip ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	data-emo-contact-strip="true"
+	data-owner-whatsapp={cOwnerWhatsapp}
+	data-source-name={pSourceName}
+	{...RemAttr}
+>
+
+	<video
+		class = " ContactVideo "
+		autoplay
+		muted
+		loop
+		playsinline
+		preload="metadata"
+		poster={pPosterSrc}
+	>
+
+		<source src={pVideoSrc} type="video/mp4" />
+
+	</video>
+
+	<div class = " ContactLayout ">
+
+		<div class = " InstantZone ">
+
+			<strong class = " InstantTitle ">
+				تواصل معنا
+			</strong>
+
+			<span class = " InstantPhone ">
+				{pPhone}
+			</span>
+
+			<div class = " InstantActions ">
+
+				<a class = " InstantBtn CallNow " href={cCallHref}>
+
+					<span>
+						اتصال فوري
+					</span>
+
+					<svg viewBox="0 0 24 24" aria-hidden="true">
+
+						<path
+							d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1v3.6c0 .6-.4 1-1 1C10.7 21.7 2.3 13.3 2.3 3.7c0-.6.4-1 1-1h3.6c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1l-2.2 2.2Z"
+						>
+
+						</path>
+
+					</svg>
+
+				</a>
+
+				<a
+					class = " InstantBtn WhatsappNow "
+					href={`https://wa.me/${cOwnerWhatsapp}`}
+					target="_blank"
+					rel="noopener noreferrer"
+					data-whatsapp-instant="true"
+				>
+
+					<span>
+						واتساب فوري
+					</span>
+
+					<svg viewBox="0 0 24 24" aria-hidden="true">
+
+						<path
+							d="M12 2.3A9.6 9.6 0 0 0 3.7 16.8L2.5 21.5l4.8-1.2A9.6 9.6 0 1 0 12 2.3Zm0 17.4c-1.6 0-3.1-.5-4.4-1.3l-.3-.2-2.8.7.8-2.7-.2-.3A7.8 7.8 0 1 1 12 19.7Z"
+						>
+
+						</path>
+
+					</svg>
+
+				</a>
+
+			</div>
+
+		</div>
+
+		<div class = " OrBadge ">
+
+			أو
+
+		</div>
+
+		<div class = " LeadZone ">
+
+			<strong class = " LeadTitle ">
+				{pLeadTitle}
+			</strong>
+
+			<label class = " PhoneField ">
+
+				<span class = " FieldIcon ">
+
+					<svg viewBox="0 0 24 24" aria-hidden="true">
+
+						<path d="M7 4.5C7 3.7 7.7 3 8.5 3h7c.8 0 1.5.7 1.5 1.5v15c0 .8-.7 1.5-1.5 1.5h-7c-.8 0-1.5-.7-1.5-1.5v-15Zm2 1V18h6V5.5H9Zm2 13.2h2v.8h-2v-.8Z">
+
+						</path>
+
+					</svg>
+
+				</span>
+
+				<input
+					type="tel"
+					inputmode="tel"
+					autocomplete="tel"
+					placeholder={pPhonePlaceHolder}
+					data-lead-phone="true"
+				/>
+
+			</label>
+
+			<div class = " OptionsGrid ">
+
+				<div class = " OptionGroup ">
+
+					<span class = " GroupTitle ">
+						اختر وسيلة التواصل المفضلة
+					</span>
+
+					<div class = " ChoiceRow ">
+
+						<label class = " ChoiceItem MethodChoice ">
+
+							<input
+								type="radio"
+								name={`${pGivenID}-Method`}
+								value="اتصال"
+								data-lead-method="true"
+								checked
+							/>
+
+							<span>
+
+								<svg viewBox="0 0 24 24" aria-hidden="true">
+
+									<path
+										d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1v3.6c0 .6-.4 1-1 1C10.7 21.7 2.3 13.3 2.3 3.7c0-.6.4-1 1-1h3.6c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1l-2.2 2.2Z"
+									>
+
+									</path>
+
+								</svg>
+
+								اتصال
+
+							</span>
+
+						</label>
+
+						<label class = " ChoiceItem MethodChoice ">
+
+							<input
+								type="radio"
+								name={`${pGivenID}-Method`}
+								value="واتساب"
+								data-lead-method="true"
+							/>
+
+							<span>
+
+								<svg viewBox="0 0 24 24" aria-hidden="true">
+
+									<path
+										d="M12 2.3A9.6 9.6 0 0 0 3.7 16.8L2.5 21.5l4.8-1.2A9.6 9.6 0 1 0 12 2.3Zm0 17.4c-1.6 0-3.1-.5-4.4-1.3l-.3-.2-2.8.7.8-2.7-.2-.3A7.8 7.8 0 1 1 12 19.7Zm4.4-5.8c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.6.1-.2.2-.6.8-.8.9-.1.2-.3.2-.6.1-.2-.1-1-.4-2-1.2-.7-.6-1.2-1.4-1.4-1.6-.1-.2 0-.4.1-.5l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.6-1.5-.8-2-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.2-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9.6.3 1.1.4 1.5.5.6.2 1.2.2 1.6.1.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .2-1.1 0-.1-.2-.2-.4-.3Z"
+									>
+
+									</path>
+
+								</svg>
+
+								واتساب
+
+							</span>
+
+						</label>
+
+					</div>
+
+				</div>
+
+				<div class = " OptionGroup ">
+
+					<span class = " GroupTitle ">
+						اختر الوقت المناسب
+					</span>
+
+					<div class = " ChoiceRow ">
+
+						<label class = " ChoiceItem TimeChoice MorningChoice ">
+
+							<input
+								type="radio"
+								name={`${pGivenID}-Time`}
+								value="صباحًا"
+								data-lead-time="true"
+								checked
+							/>
+
+							<span>
+
+								<svg viewBox="0 0 24 24" aria-hidden="true">
+
+									<path
+										d="M6.8 19h10.4a5.2 5.2 0 0 0-10.4 0ZM12 2l1.1 3.3h-2.2L12 2Zm0 4.8a7.2 7.2 0 0 1 7.2 7.2H4.8A7.2 7.2 0 0 1 12 6.8ZM3 13l3.3 1.1v-2.2L3 13Zm18 0-3.3-1.1v2.2L21 13ZM5.1 5.1l3.1 1.6-1.5 1.5-1.6-3.1Zm13.8 0-1.6 3.1-1.5-1.5 3.1-1.6Z"
+									>
+
+									</path>
+
+								</svg>
+
+								صباحًا
+
+							</span>
+
+						</label>
+
+						<label class = " ChoiceItem TimeChoice NightChoice ">
+
+							<input
+								type="radio"
+								name={`${pGivenID}-Time`}
+								value="مساءً"
+								data-lead-time="true"
+							/>
+
+							<span>
+
+								<svg viewBox="0 0 24 24" aria-hidden="true">
+
+									<path d="M20.4 15.1A7.7 7.7 0 0 1 8.9 3.6 9 9 0 1 0 20.4 15.1Z">
+
+									</path>
+
+								</svg>
+
+								مساءً
+
+							</span>
+
+						</label>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<button class = " SubmitBtn " type="button" data-lead-submit="true">
+
+				<span>
+					{pLeadButtonText}
+				</span>
+
+				<svg viewBox="0 0 24 24" aria-hidden="true">
+
+					<path
+						d="M21.7 3.4 2.9 10.8c-.8.3-.8 1.5.1 1.8l4.8 1.5 1.8 5.6c.3.8 1.4.9 1.8.2l2.6-4.2 4.9 3.6c.7.5 1.7.1 1.8-.8l2.4-13.7c.2-.9-.7-1.6-1.4-1.4ZM9 13.5l8.5-5.3-6.9 6.9-.4 2.2L9 13.5Z"
+					>
+
+					</path>
+
+				</svg>
+
+			</button>
+
+			<span class = " PrivacyText " data-lead-status="true">
+				{pPrivacyText}
+			</span>
+
+		</div>
+
+	</div>
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.EmoContactStrip {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		width: 100%;
+		height: 400px;
+		box-sizing: border-box;
+		direction: rtl;
+		background: #020915;
+		color: #f7fbff;
+		border-block: 1px solid rgba(90, 160, 230, 0.32);
+		box-shadow: 0 18px 45px rgba(0, 16, 42, 0.24);
+	}
+
+	.EmoContactStrip::before {
+		z-index: -2;
+		background: linear-gradient(
+				90deg,
+				rgba(2, 10, 12, 0.30) 0%,
+				rgba(2, 10, 18, 0.46) 32%,
+				rgba(3, 16, 24, 0.82) 56%,
+				rgba(3, 17, 28, 0.94) 100%
+			);
+	}
+
+	.EmoContactStrip::after {
+		z-index: -1;
+		background: radial-gradient(circle at 82% 50%, rgba(33, 122, 255, 0.20), transparent 34%),
+			radial-gradient(circle at 50% 20%, rgba(74, 190, 255, 0.12), transparent 32%);
+	}
+
+
+	.ContactVideo {
+		position: absolute;
+		inset: 0;
+		z-index: -3;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: left center;
+		opacity: 0.35;
+		filter: saturate(0.45) contrast(1.05) brightness(0.75);
+	}
+
+
+	.ContactLayout {
+		position: relative;
+		display: grid;
+		grid-template-columns: 500px 38px 270px;
+		grid-template-areas: "LeadZone OrBadge InstantZone";
+		align-items: stretch;
+		gap: 14px;
+		width: fit-content;
+		height: calc(100% - 60px);
+		margin-block: 30px;
+		margin-inline-start: auto;
+		margin-inline-end: 3.5%;
+		box-sizing: border-box;
+		direction: ltr;
+	}
+
+	.ContactLayout::before {
+		display: none;
+	}
+
+
+	.InstantZone {
+		grid-area: InstantZone;
+		display: grid;
+		grid-template-rows: auto auto 1fr;
+		align-content: center;
+		justify-items: center;
+		gap: 12px;
+		padding: 26px 20px;
+	}
+
+
+	.OrBadge {
+		grid-area: OrBadge;
+		justify-self: center;
+		align-self: center;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		border: 1px solid rgba(120, 190, 255, 0.34);
+		background: radial-gradient(circle, rgba(255, 255, 255, 0.20), rgba(25, 85, 155, 0.28));
+		color: #ffffff;
+		font-size: 15px;
+		font-weight: 950;
+		box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+		direction: rtl;
+	}
+
+
+	.LeadZone {
+		grid-area: LeadZone;
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-areas: "title"
+			"phone"
+			"options"
+			"submit"
+			"status";
+		align-content: center;
+		gap: 12px;
+		padding: 22px 24px;
+	}
+
+
+	.InstantTitle {
+		color: #ffffff;
+		font-size: 24px;
+		font-weight: 950;
+		line-height: 1.1;
+		text-align: center;
+	}
+
+
+	.InstantPhone {
+		color: #70ceff;
+		font-size: 15px;
+		font-weight: 950;
+		line-height: 1;
+		direction: ltr;
+		text-align: center;
+	}
+
+
+	.InstantActions {
+		display: grid;
+		grid-template-columns: 1fr;
+		justify-items: center;
+		align-content: center;
+		gap: 12px;
+		width: 100%;
+	}
+
+
+	.InstantBtn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		width: 210px;
+		max-width: 100%;
+		height: 42px;
+		padding: 0 14px;
+		box-sizing: border-box;
+		border-radius: 13px;
+		text-decoration: none;
+		font-size: 15px;
+		font-weight: 950;
+		white-space: nowrap;
+		transition: transform 0.12s ease, filter 0.12s ease;
+	}
+
+
+	.CallNow {
+		border: 1px solid rgba(110, 180, 255, 0.34);
+		background: linear-gradient(135deg, rgba(18, 66, 132, 0.94), rgba(4, 18, 42, 0.9));
+		color: #ffffff;
+	}
+
+
+	.WhatsappNow {
+		border: 1px solid rgba(70, 225, 120, 0.38);
+		background: linear-gradient(135deg, #10c95a, #047d35);
+		color: #ffffff;
+		box-shadow: 0 12px 22px rgba(0, 160, 72, 0.22);
+	}
+
+
+	.LeadTitle {
+		grid-area: title;
+		text-align: center;
+		color: #f8fbff;
+		font-size: 17px;
+		font-weight: 950;
+		line-height: 1.22;
+		letter-spacing: -0.15px;
+		white-space: nowrap;
+	}
+
+
+	.PhoneField {
+		grid-area: phone;
+		position: relative;
+		display: flex;
+		align-items: center;
+		height: 40px;
+		border: 1px solid rgba(130, 190, 255, 0.24);
+		border-radius: 13px;
+		background: rgba(245, 250, 255, 0.92);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9),
+			0 10px 22px rgba(0, 18, 42, 0.2);
+		overflow: hidden;
+	}
+
+	.PhoneField input {
+		width: 100%;
+		height: 100%;
+		border: 0;
+		outline: 0;
+		padding: 0 10px;
+		box-sizing: border-box;
+		background: transparent;
+		color: #07182d;
+		font-family: inherit;
+		font-size: 14px;
+		font-weight: 850;
+		text-align: right;
+		direction: ltr;
+	}
+
+	.PhoneField input::placeholder {
+		color: rgba(7, 24, 45, 0.58);
+	}
+
+
+	.FieldIcon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 42px;
+		height: 100%;
+		color: #176dff;
+		background: rgba(23, 109, 255, 0.08);
+	}
+
+
+	.OptionsGrid {
+		grid-area: options;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 14px;
+	}
+
+
+	.OptionGroup {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		min-width: 0;
+		padding: 10px;
+		box-sizing: border-box;
+		border: 1px solid rgba(125, 190, 255, 0.26);
+		border-radius: 15px;
+		background: linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.035));
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08),
+			0 8px 18px rgba(0, 0, 0, 0.14);
+	}
+
+
+	.GroupTitle {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 16px;
+		color: rgba(246, 251, 255, 0.88);
+		font-size: 12px;
+		font-weight: 950;
+		line-height: 1.2;
+		white-space: nowrap;
+	}
+
+
+	.ChoiceRow {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 7px;
+	}
+
+
+	.ChoiceItem {
+		position: relative;
+		display: block;
+		min-width: 0;
+	}
+
+	.ChoiceItem input {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.ChoiceItem span {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 7px;
+		width: 100%;
+		height: 34px;
+		box-sizing: border-box;
+		border: 1px solid rgba(140, 195, 255, 0.22);
+		border-radius: 11px;
+		background: rgba(255, 255, 255, 0.08);
+		color: rgba(246, 251, 255, 0.88);
+		font-size: 13px;
+		font-weight: 950;
+		cursor: pointer;
+		transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease, color 0.12s ease;
+	}
+
+
+	.MethodChoice input:checked + span {
+		border-color: rgba(78, 150, 255, 0.85);
+		background: linear-gradient(135deg, #247cff, #0d48c7);
+		color: #ffffff;
+		box-shadow: 0 10px 20px rgba(12, 89, 255, 0.26);
+	}
+
+
+	.MorningChoice input:checked + span {
+		border-color: rgba(255, 209, 92, 0.86);
+		background: linear-gradient(135deg, #ffd15c, #d79014);
+		color: #061a33;
+		box-shadow: 0 10px 20px rgba(255, 174, 33, 0.24);
+	}
+
+
+	.NightChoice input:checked + span {
+		border-color: rgba(74, 152, 255, 0.92);
+		background: linear-gradient(135deg, #2386ff, #0a3a91);
+		color: #ffffff;
+		box-shadow: 0 10px 20px rgba(22, 108, 255, 0.32);
+	}
+
+
+	.SubmitBtn {
+		grid-area: submit;
+		justify-self: center;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		width: 210px;
+		height: 40px;
+		padding: 0 16px;
+		border: 0;
+		border-radius: 13px;
+		background: linear-gradient(135deg, #26b5ff, #176dff 56%, #1835d8);
+		color: #ffffff;
+		font-family: inherit;
+		font-size: 14px;
+		font-weight: 950;
+		white-space: nowrap;
+		cursor: pointer;
+		box-shadow: 0 12px 26px rgba(23, 109, 255, 0.34),
+			inset 0 1px 0 rgba(255, 255, 255, 0.22);
+		transition: transform 0.12s ease, filter 0.12s ease;
+	}
+
+	.SubmitBtn:disabled {
+		opacity: 0.68;
+		cursor: wait;
+	}
+
+
+	.PrivacyText {
+		grid-area: status;
+		justify-self: center;
+		text-align: center;
+		color: rgba(246, 251, 255, 0.68);
+		font-size: 12px;
+		font-weight: 750;
+		line-height: 1.35;
+	}
+
+
+
+	.PrivacyText.IsError {
+		color: #ffbd5c;
+	}
+
+
+	.PrivacyText.IsDone {
+		color: #7dd3ff;
+	}
+
+
+
+	.EmoContactStrip::before,
+	.EmoContactStrip::after
+	{
+		content: "";
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+	}
+
+
+	.InstantZone,
+	.LeadZone
+	{
+		box-sizing: border-box;
+		height: 100%;
+		min-height: 0;
+		max-height: none;
+		border: 1px solid rgba(125, 190, 255, 0.25);
+		border-radius: 24px;
+		background: linear-gradient(145deg, rgba(5, 20, 44, 0.68), rgba(5, 18, 38, 0.48));
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1),
+			0 16px 35px rgba(0, 0, 0, 0.24);
+		backdrop-filter: blur(13px);
+		-webkit-backdrop-filter: blur(13px);
+		direction: rtl;
+	}
+
+
+	.FieldIcon svg,
+	.InstantBtn svg,
+	.ChoiceItem svg,
+	.SubmitBtn svg
+	{
+		width: 17px;
+		height: 17px;
+		fill: currentColor;
+		flex: 0 0 auto;
+	}
+
+
+	@media (hover: hover) and (pointer: fine) {
+		.InstantBtn:hover,
+		.SubmitBtn:hover,
+		.ChoiceItem span:hover
+		{
+			filter: brightness(1.08);
+			transform: translateY(-1px);
+		}
+	}
+
+
+	@media (orientation: portrait) {
+		.EmoContactStrip {
+			height: min(92vh, 630px);
+			min-height: 520px;
+		}
+
+		.EmoContactStrip::before {
+			background: linear-gradient(
+					180deg,
+					rgba(1, 10, 23, 0.9) 0%,
+					rgba(2, 16, 36, 0.94) 44%,
+					rgba(2, 12, 28, 0.96) 100%
+				);
+		}
+
+		.ContactVideo {
+			object-position: center center;
+		}
+
+		.ContactLayout {
+			grid-template-columns: 1fr;
+			grid-template-areas: "InstantZone"
+				"OrBadge"
+				"LeadZone";
+			align-content: center;
+			gap: 10px;
+			width: min(390px, calc(100% - 22px));
+			height: auto;
+			margin: 0 auto;
+			padding-block: 12px;
+			direction: rtl;
+		}
+
+		.InstantZone {
+			height: auto;
+			padding: 14px;
+			text-align: center;
+		}
+
+		.InstantTitle {
+			font-size: 24px;
+			text-align: center;
+		}
+
+		.InstantPhone {
+			text-align: center;
+			font-size: 16px;
+		}
+
+		.InstantActions {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.InstantBtn {
+			width: 100%;
+			height: 42px;
+			font-size: 14px;
+		}
+
+		.OrBadge {
+			width: 42px;
+			height: 42px;
+			font-size: 16px;
+		}
+
+		.LeadZone {
+			height: auto;
+			grid-template-columns: 1fr;
+			grid-template-areas: "title"
+				"phone"
+				"options"
+				"submit"
+				"status";
+			padding: 14px;
+		}
+
+		.LeadTitle {
+			font-size: 19px;
+			line-height: 1.45;
+			white-space: normal;
+		}
+
+		.PhoneField {
+			height: 42px;
+		}
+
+		.OptionsGrid {
+			grid-template-columns: 1fr;
+			gap: 12px;
+		}
+
+		.OptionGroup {
+			padding: 10px;
+		}
+
+		.GroupTitle {
+			font-size: 13px;
+		}
+
+		.ChoiceRow {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.ChoiceItem span {
+			height: 38px;
+			font-size: 14px;
+		}
+
+		.SubmitBtn {
+			width: 100%;
+			height: 44px;
+			font-size: 16px;
+		}
+
+		.PrivacyText {
+			text-align: center;
+			font-size: 12px;
+		}
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+	const cEmailJsPublicKey = "OleHS6UOuh_Wj_5p_";
+	const cEmailJsServiceId = "EmoMail";
+	const cEmailJsTemplateId = "EmoMailTempID20015161";
+	const cNotifyEmail = "emocrete@gmail.com";
+
+	const cEmailJsSrc = "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
+
+	type EmailJsBrowser = {
+	init: (pOptions: { publicKey: string }) => void;
+	send: (pServiceId: string, pTemplateId: string, pTemplateParams: Record<string, string>) => Promise<unknown>;
+	};
+
+	type ContactWindow = Window & {
+	__EmoContactStripReady?: boolean;
+	__EmoContactStripEmailJsLoading?: Promise<EmailJsBrowser>;
+	emailjs?: EmailJsBrowser;
+	};
+
+	const cWindow = window as ContactWindow;
+
+	if (!cWindow.__EmoContactStripReady) {
+	cWindow.__EmoContactStripReady = true;
+	document.addEventListener("astro:page-load", SetupContactStrips);
+	window.addEventListener("load", SetupContactStrips);
+	SetupContactStrips();
+	}
+
+	function SetupContactStrips(): void {
+	const cStrips = document.querySelectorAll<HTMLElement>("[data-emo-contact-strip='true']:not([data-contact-ready='true'])");
+
+	cStrips.forEach(SetupContactStrip);
+	}
+
+	function SetupContactStrip(pRoot: HTMLElement): void {
+	pRoot.dataset.contactReady = "true";
+
+	const cSubmitButton = pRoot.querySelector<HTMLButtonElement>("[data-lead-submit='true']");
+	const cInstantWhatsapp = pRoot.querySelector<HTMLAnchorElement>("[data-whatsapp-instant='true']");
+
+	cSubmitButton?.addEventListener("click", function HandleSubmitClick(): void {
+	void SendLeadEmail(pRoot);
+	});
+
+	if (cInstantWhatsapp) {
+	cInstantWhatsapp.href = GetWhatsappUrl(pRoot, BuildInstantWhatsappMessage(pRoot));
+	}
+	}
+
+	async function SendLeadEmail(pRoot: HTMLElement): Promise<void> {
+	const cPhoneInput = pRoot.querySelector<HTMLInputElement>("[data-lead-phone='true']");
+	const cStatus = pRoot.querySelector<HTMLElement>("[data-lead-status='true']");
+	const cSubmitButton = pRoot.querySelector<HTMLButtonElement>("[data-lead-submit='true']");
+	const cClientPhone = NormalizePhone(cPhoneInput?.value || "");
+
+	if (!cClientPhone) {
+	ShowStatus(cStatus, "اكتب رقم الهاتف فقط، ثم اضغط تسجيل التواصل.", "IsError");
+	cPhoneInput?.focus();
+	return;
+	}
+
+	if (!cEmailJsPublicKey || !cEmailJsServiceId || !cEmailJsTemplateId || !cNotifyEmail) {
+	ShowStatus(cStatus, "إعدادات تسجيل الطلب غير مكتملة.", "IsError");
+	return;
+	}
+
+	const cMethod = GetCheckedValue(pRoot, "[data-lead-method='true']", "اتصال");
+	const cTime = GetCheckedValue(pRoot, "[data-lead-time='true']", "صباحًا");
+	const cCreatedAt = GetEgyptTimeText();
+
+	SetSubmitBusy(cSubmitButton, true);
+	ShowStatus(cStatus, "جاري تسجيل طلب التواصل...", "IsDone");
+
+	try {
+	const cEmailJs = await LoadEmailJs();
+
+	cEmailJs.init({
+	publicKey: cEmailJsPublicKey
+	});
+
+	await cEmailJs.send(cEmailJsServiceId, cEmailJsTemplateId, {
+	to_email: cNotifyEmail,
+	subject: "طلب تواصل جديد من موقع Emocrete",
+	page_title: document.title,
+	page_url: location.href,
+	client_phone: cClientPhone,
+	preferred_method: cMethod,
+	preferred_time: cTime,
+	source_name: pRoot.dataset.sourceName || "موقع Emocrete",
+	created_at: cCreatedAt
+	});
+
+	if (cPhoneInput) cPhoneInput.value = "";
+
+	ShowStatus(cStatus, "تم تسجيل طلب التواصل، وسنرد عليك في الموعد المناسب.", "IsDone");
+
+	} catch (pError) {
+	console.error("EmailJS Error:", pError);
+	ShowStatus(cStatus, "تعذر تسجيل الطلب حاليًا. جرب الاتصال أو واتساب مباشر.", "IsError");
+
+	} finally {
+	SetSubmitBusy(cSubmitButton, false);
+	}
+	}
+
+	function LoadEmailJs(): Promise<EmailJsBrowser> {
+	if (cWindow.emailjs) return Promise.resolve(cWindow.emailjs);
+	if (cWindow.__EmoContactStripEmailJsLoading) return cWindow.__EmoContactStripEmailJsLoading;
+
+	cWindow.__EmoContactStripEmailJsLoading = new Promise<EmailJsBrowser>(function HandleEmailJsLoad(pResolve, pReject): void {
+	const cScript = document.createElement("script");
+
+	cScript.src = cEmailJsSrc;
+	cScript.async = true;
+
+	cScript.addEventListener("load", function HandleLoad(): void {
+	if (cWindow.emailjs) {
+	pResolve(cWindow.emailjs);
+	return;
+	}
+
+	pReject(new Error("EmailJS library did not load."));
+	});
+
+	cScript.addEventListener("error", function HandleError(): void {
+	pReject(new Error("EmailJS library loading failed."));
+	});
+
+	document.head.appendChild(cScript);
+	});
+
+	return cWindow.__EmoContactStripEmailJsLoading;
+	}
+
+	function BuildInstantWhatsappMessage(pRoot: HTMLElement): string {
+	return [
+	"أهلا، أحتاج تواصل سريع.",
+	`المصدر: ${pRoot.dataset.sourceName || "موقع Emocrete"}`,
+	`الصفحة: ${document.title}`,
+	`الرابط: ${location.href}`,
+	].join("\n");
+	}
+
+	function GetWhatsappUrl(pRoot: HTMLElement, pMessage: string): string {
+	const cOwnerWhatsapp = pRoot.dataset.ownerWhatsapp || "201014490054";
+
+	return `https://wa.me/${cOwnerWhatsapp}?text=${encodeURIComponent(pMessage)}`;
+	}
+
+	function GetCheckedValue(pRoot: HTMLElement, pSelector: string, pDefaultValue: string): string {
+	const cCheckedInput = pRoot.querySelector<HTMLInputElement>(`${pSelector}:checked`);
+
+	return cCheckedInput?.value || pDefaultValue;
+	}
+
+	function NormalizePhone(pValue: string): string {
+	const cDigits = pValue.replace(/\D/g, "");
+
+	if (cDigits.length < 8) return "";
+
+	return cDigits;
+	}
+
+	function GetEgyptTimeText(): string {
+	return new Intl.DateTimeFormat("ar-EG", {
+	timeZone: "Africa/Cairo",
+	dateStyle: "medium",
+	timeStyle: "short"
+	}).format(new Date());
+	}
+
+	function SetSubmitBusy(pButton: HTMLButtonElement | null, pIsBusy: boolean): void {
+	if (!pButton) return;
+
+	pButton.disabled = pIsBusy;
+	}
+
+	function ShowStatus(pStatus: HTMLElement | null, pText: string, pClassName: "IsError" | "IsDone"): void {
+	if (!pStatus) return;
+
+	pStatus.textContent = pText;
+	pStatus.classList.remove("IsError", "IsDone");
+	pStatus.classList.add(pClassName);
+	}
+</script>

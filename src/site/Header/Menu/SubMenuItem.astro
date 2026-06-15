@@ -1,0 +1,124 @@
+---
+const { fTitle = "اسم العنصر", fLink = "" } = Astro.props;
+const cHasLink = !!fLink?.trim();
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class = " Box ">
+
+	{ cHasLink && (
+
+		<a class = " ItemBtn " href={fLink}>
+
+			<span class = " Title ">
+				{fTitle}
+			</span>
+
+		</a>
+
+	) }
+
+	{ !cHasLink && (
+
+		<span class = " ItemBtn isDisabled ">
+
+			<span class = " Title ">
+				{fTitle}
+			</span>
+
+		</span>
+
+	) }
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.Box {
+		width: 240px;
+		height: 35px;
+		display: flex;
+		position: relative;
+		z-index: 2000;
+	}
+
+
+	.ItemBtn {
+		width: 240px;
+		height: 35px;
+		display: block;
+		border: 0;
+		background-color: transparent;
+		background-position: center;
+		background-size: contain;
+		background-repeat: no-repeat;
+		cursor: pointer;
+		background-image: url("./SubMenuHead_Normal.webp");
+		padding: 0;
+		border-radius: 999px;
+		font-family: inherit;
+		text-decoration: none;
+		color: inherit;
+	}
+
+	.ItemBtn:hover {
+		background-image: url("./SubMenuHead_Hover.webp");
+	}
+
+	.ItemBtn.isDisabled {
+		cursor: default;
+		opacity: 0.55;
+	}
+
+	.ItemBtn.isDisabled:hover {
+		background-image: url("./SubMenuHead_Normal.webp");
+	}
+
+
+	.Title {
+		font-weight: 700;
+		font-size: 16px;
+		color: #fff;
+		pointer-events: none;
+		width: 280px;
+		height: 35px;
+		text-align: right;
+		line-height: 1;
+	}
+
+
+
+</style>

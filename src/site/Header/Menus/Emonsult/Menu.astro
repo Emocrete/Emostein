@@ -1,0 +1,67 @@
+---
+import SubMenuHead from "../../Menu/SubMenuHead.astro";
+import SubMenuItem from "../../Menu/SubMenuItem.astro";
+
+const cMenuIconsList = import.meta.glob("./*.webp", {
+	eager: true,
+	import: "default",
+	query: "?url",
+});
+
+const cMenuIcons = Object.fromEntries(
+	Object.entries(cMenuIconsList).map(([fPath, fUrl]) => {
+		const fFileName = fPath.split("/").pop() ?? "";
+		const fBaseName = fFileName.replace(/\.[^.]+$/, "");
+		return [fBaseName, fUrl];
+	}),
+);
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<SubMenuHead fTitle="تقارير هندسية" fLink="" fIcon={cMenuIcons.Lab}>
+
+	<SubMenuItem fTitle="تقرير السلامة الإنشائية" fLink="/emonsult/report/safety" />
+
+	<SubMenuItem fTitle="تقرير حضانة" fLink="/emonsult/report/nursery" />
+
+	<SubMenuItem fTitle="تقرير مصعد" fLink="/emonsult/report/elevator" />
+
+	<SubMenuItem fTitle="تقرير مدخنة" fLink="/emonsult/report/chimney" />
+
+</SubMenuHead>
+
+<SubMenuHead fTitle="شهادات هندسية" fLink="" fIcon={cMenuIcons.Lab}>
+
+	<SubMenuItem fTitle="شهادة إشراف على البناء" fLink="/emonsult/certificate/con-supervision" />
+
+	<SubMenuItem fTitle="شهادة إشراف على الهدم" fLink="/emonsult/certificate/dem-supervision" />
+
+	<SubMenuItem fTitle="شهادة صلاحية المبنى للإشغال" fLink="/emonsult/certificate/validity" />
+
+</SubMenuHead>
+
+<SubMenuHead fTitle="ختم هندسي" fLink="" fIcon={cMenuIcons.Lab}>
+
+	<SubMenuItem fTitle="ختم مهندس نقابي" fLink="/emonsult/stamp/eng" />
+
+	<SubMenuItem fTitle="ختم مهندس استشاري" fLink="/emonsult/stamp/consultant" />
+
+</SubMenuHead>

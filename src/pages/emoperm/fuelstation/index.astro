@@ -1,0 +1,516 @@
+---
+import BLayout from "@/Layout.astro";
+import { Text, ElemBg, EmoMediaData, Colors, Pixel, Topic, Size, Align, RespString } from "@/TypesLib";
+import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, EmoCall, CardsGr, EmoList, Emograph, RespImg, EmoFaq, ReadAlso, RelServices, EmoPipelineStrip, SecTitle, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="ترخيص محطة وقود"
+	pDescr="خدمة مراجعة ومتابعة ملف ترخيص محطة وقود، تشمل فحص الموقع والواجهة والمساحة والمسافات البينية ومخططات المحطة وموافقات الجهات المختصة والحماية المدنية قبل السير في الترخيص."
+	pSchemaImages={[
+		"/Media/Emoperm/FuelStation/HeroD.webp",
+		"/Media/Emoperm/FuelStation/HeroM.webp"
+	]}
+>
+
+
+
+
+
+
+
+	<Hero
+		pImgF="/Media/Emoperm/FuelStation/"
+		pImgL="HeroD.webp"
+		pImgP="HeroM.webp"
+		pTitle="ترخيص محطة وقود"
+		pDesc="مراجعة موقع محطة الوقود ومخططها وموافقاتها قبل التقديم، لتقليل مخاطر رفض الموقع أو توقف الملف عند الحماية المدنية أو الجهات المختصة"
+		pTitleClr={Colors.WhiteOff}
+		pDescClr={Colors.WhiteOff}
+		pAlign="center"
+		pBlurL="on"
+		pBlurP="on"
+		pPosL="42% 8% 12% 8%"
+		pPosP="28% 5% 24% 5%"
+	>
+
+		<EmoCall BlackSky pText="اطلب ترخيص محطة وقود" />
+
+	</Hero>
+
+
+
+
+
+
+
+	<IndexSec
+		pMedia={new EmoMediaData("Img", "/Media/Emoperm/FuelStation/", "HeroD.webp")}
+		pTitleClr={Colors.WhiteOff}
+		pBlurL="on"
+		pBlurP="on"
+	>
+
+		<EmoBtn
+			pText="طبيعة الملف"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor={Colors.WhiteOff}
+			pTextColorHover={Colors.BlackOff}
+			pWidth="230px"
+			pHeight="44px"
+			onclick="location.href='#station-nature'"
+		/>
+
+		<EmoBtn
+			pText="اشتراطات الموقع"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor={Colors.WhiteOff}
+			pTextColorHover={Colors.BlackOff}
+			pWidth="230px"
+			pHeight="44px"
+			onclick="location.href='#station-site'"
+		/>
+
+		<EmoBtn
+			pText="الموافقات"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor={Colors.WhiteOff}
+			pTextColorHover={Colors.BlackOff}
+			pWidth="230px"
+			pHeight="44px"
+			onclick="location.href='#station-approvals'"
+		/>
+
+		<EmoBtn
+			pText="الحريق والسلامة"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor={Colors.WhiteOff}
+			pTextColorHover={Colors.BlackOff}
+			pWidth="230px"
+			pHeight="44px"
+			onclick="location.href='#station-fire'"
+		/>
+
+		<EmoBtn
+			pText="اطلب الخدمة"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor={Colors.WhiteOff}
+			pTextColorHover={Colors.BlackOff}
+			pWidth="230px"
+			pHeight="44px"
+			onclick="location.href='#station-service'"
+		/>
+
+	</IndexSec>
+
+
+
+
+
+
+
+	<ESec
+		id="station-nature"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.GreenLite};`}
+			pTitle="ترخيص محطة الوقود يبدأ من صلاحية الموقع"
+			pDesc="المحطة ليست مبنى تجاريًا فقط؛ هي موقع حركة سيارات وتخزين وقود وبيع وتشغيل ومخاطر حريق ومسافات أمان ومداخل ومخارج، لذلك يتم تقييم الأرض قبل الدخول في تكلفة التصميم والتعاقدات."
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+			<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+				<RespImg
+					pImg={new EmoMediaData("Img", "/Media/Emoperm/FuelStation/", "HeroD.webp", false, "ترخيص محطة وقود ومراجعة موقع محطة تموين سيارات", new Size(540, 360, 320, 210))}
+				/>
+
+				<Emograph
+					pTitle={Text.H3.OfText("لماذا لا يكفي وجود قطعة أرض؟")}
+					pText={Text.Body.OfText(`قطعة الأرض قد تكون مملوكة ومطلة على طريق واضح، ومع ذلك لا تصلح لمحطة وقود. الفحص لا يقتصر على الملكية، بل يشمل المساحة والواجهة، علاقة الموقع بالطريق، المسافة بينه وبين المحطات القائمة على نفس الاتجاه، حركة الدخول والخروج، قربه من منشآت حساسة، إمكانية تنفيذ الخزانات والطرمبات والمظلات والمباني الخدمية، وقدرة الموقع على استيفاء اشتراطات الحماية المدنية والجهات ذات الولاية. لذلك تبدأ الخدمة بقراءة الموقع قبل إنتاج رسومات نهائية.`)}
+					pSize={new Size(600, "auto", 320, "auto")}
+				/>
+
+			</HzStack>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="station-site"
+		pBg={new ElemBg(Colors.BlackOff)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.Gray5};`}
+			pTitle="اشتراطات موقع محطة الوقود"
+			pDesc="الموقع الجيد في التسويق قد لا يكون موقعًا صالحًا للترخيص؛ لذلك يجب مراجعة القيود الهندسية والتنظيمية قبل اعتماد الفكرة الاستثمارية."
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+
+			<CardsGr
+				pWidth={new RespString("1200px", "100%")}
+				pCardBg={new ElemBg(Colors.WhiteOff)}
+				pGrTitle={Text.H3.Centered.White.OfText("نقاط الفحص قبل التقديم")}
+				pCardTitleFnt={Text.H4}
+				pCardBodyFnt={Text.Body}
+				pStackDir="Row"
+				pSpacing={20}
+				pTopic1={new Topic("المساحة والواجهة", "تراجع مساحة الأرض وطول الواجهة وقدرة الموقع على استيعاب الطرمبات والخزانات والمظلة والمداخل والمخارج والمباني الملحقة دون تزاحم.")}
+				pTopic2={new Topic("المسافة البينية", "يفحص موقع المحطة بالنسبة للمنافذ القائمة على نفس اتجاه الطريق، لأن المسافة البينية من أسباب رفض الموقع حتى لو كانت الأرض مناسبة تجاريًا.")}
+				pTopic3={new Topic("الدخول والخروج", "توزيع المداخل والمخارج ودوران السيارات داخل الأرض يجب أن يخدم التشغيل ولا يسبب تعارضًا مروريًا أو خطورة على الطريق.")}
+				pTopic4={new Topic("الجهات ذات الولاية", "طريق عام، زراعة، ري، آثار، بيئة، مرور، حي أو مجلس مدينة، أو جهاز مدينة؛ كل جهة قد تغير مسار الملف حسب موقع الأرض.")}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="station-approvals"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.SkyLite};`}
+			pTitle="مسار موافقات محطة الوقود"
+			pDesc="الملف يتحرك بين شركة التسويق والهيئة المختصة والجهات المحلية والفنية، ولا يصح اختزال الترخيص في رخصة مباني أو رسم هندسي فقط."
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+			<EmoList
+				pWidth={new RespString("1050px", "100%")}
+				pTitle={Text.H3.Centered.OfText("ترتيب العمل على ملف محطة الوقود")}
+				pDesc={Text.Body.Centered.OfText("الترتيب التالي يساعد على فصل صلاحية الموقع عن التصميم وعن رخصة التشغيل النهائية.")}
+				pHeadBg={new ElemBg(Colors.Creamy)}
+				pItemsBg={new ElemBg(Colors.Gray1)}
+				pNumbered={true}
+				pItems={[
+					"تجميع بيانات الأرض: الملكية أو التخصيص أو الحيازة، المساحة، الواجهة، الطريق، والجهة الإدارية التابعة لها.",
+					"مراجعة مبدئية لصلاحية الموقع هندسيًا وتسويقيًا وتنظيميًا قبل الدخول في الرسومات النهائية.",
+					"التعامل مع شركة تسويق معتمدة أو المسار المناسب للحصول على موافقة مبدئية على منفذ التسويق بالموقع المقترح.",
+					"معاينة الموقع على الطبيعة للتأكد من الاشتراطات الأساسية والمسافات والواجهة وإمكانية التشغيل.",
+					"تجهيز المخطط العام للمحطة وتوزيع الخزانات والطرمبات والمظلات ومباني الخدمة والمداخل والمخارج.",
+					"استكمال موافقات الجهات المختصة مثل الجهة المحلية، الطرق، المرور، البيئة، الدفاع المدني، والزراعة أو غيرها حسب موقع الأرض.",
+					"إدخال ملاحظات الجهات على التصميم والتشغيل ثم تجهيز ملف الترخيص النهائي.",
+					"متابعة إصدار رخصة التشغيل أو تحديد الاستيفاءات المطلوبة قبل التشغيل الفعلي."
+				]}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="station-fire"
+		pBg={new ElemBg(Colors.BlackOff)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.BistageDark};`}
+			pTitle="الحماية المدنية والسلامة داخل محطة الوقود"
+			pDesc="موافقة الحماية المدنية في محطة الوقود مرتبطة بتصميم الموقع نفسه: الخزانات، نقاط التموين، مصادر الكهرباء، معدات الإطفاء، مسارات الحركة، وعدم وجود مصادر خطورة غير مسموح بها."
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+
+			<HzStack pGap={new Pixel(24, 16)} pPad={new Pixel(30, 15)}>
+
+				<EmoList
+					pWidth={new RespString("580px", "100%")}
+					pTitle={Text.H3.Centered.White.OfText("نقاط يجب إظهارها في المخطط")}
+					pHeadBg={new ElemBg(Colors.Gray5)}
+					pItemsBg={new ElemBg(Colors.WhiteOff)}
+					pNumbered={true}
+					pItems={[
+						"أماكن خزانات الوقود وفتحات الملء والتهوية.",
+						"أماكن الطرمبات ونقاط التموين ومسارات السيارات.",
+						"مسافات الأمان بين مصادر الخطورة والعناصر الأخرى داخل المحطة.",
+						"شبكة أو وسائل مكافحة الحريق ومواقع طفايات الحريق ولوحات الكهرباء.",
+						"مخارج ومداخل المحطة ومسارات الإخلاء والحركة."
+					]}
+				/>
+
+				<EmoList
+					pWidth={new RespString("580px", "100%")}
+					pTitle={Text.H3.Centered.White.OfText("مخاطر شائعة توقف الملف")}
+					pHeadBg={new ElemBg(Colors.Gray5)}
+					pItemsBg={new ElemBg(Colors.WhiteOff)}
+					pNumbered={false}
+					pItems={[
+						"توزيع خزانات أو طرمبات دون مراعاة المسافات المطلوبة.",
+						"تعارض الدخول والخروج مع الطريق أو الحركة المرورية.",
+						"إضافة أنشطة ملحقة لا تراعي حدود السلامة داخل المحطة.",
+						"عدم وضوح مصادر الكهرباء ومنع الشرر والصواعق والتأريض.",
+						"تقديم مخطط تجاري جميل لكنه غير قابل للدفاع أمام فحص الحماية المدنية."
+					]}
+				/>
+
+			</HzStack>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.OrangeLite};`}
+			pTitle="مستندات ومخططات ملف محطة الوقود"
+			pDesc="الملف النهائي يتغير حسب موقع الأرض وشركة التسويق والجهات المطلوبة، لكن هذه العناصر تمثل العمود الأساسي للتحضير قبل التقديم."
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+			<CardsGr
+				pWidth={new RespString("1200px", "100%")}
+				pCardBg={new ElemBg(Colors.Gray1)}
+				pGrTitle={Text.H3.Centered.OfText("الملف المطلوب قبل المتابعة الجادة")}
+				pCardTitleFnt={Text.H4}
+				pCardBodyFnt={Text.Body}
+				pStackDir="Row"
+				pSpacing={20}
+				pTopic1={new Topic("مستندات الأرض", "عقد الملكية أو التخصيص أو سند الحيازة، كروكي الموقع، بيانات الطريق، الواجهة، المساحة، والجهة الإدارية المختصة.")}
+				pTopic2={new Topic("مخطط عام", "توزيع الطرمبات والخزانات والمظلة ومبنى الخدمة والميني ماركت إن وجد والمداخل والمخارج ومسارات السيارات.")}
+				pTopic3={new Topic("ملف السلامة", "تحديد الخزانات ومصادر الخطورة ومسافات الأمان ومعدات الإطفاء والتأريض والصواعق ولوحات الكهرباء طبقًا لملاحظات الجهة المختصة.")}
+				pTopic4={new Topic("موافقات الجهات", "الدفاع المدني، المرور، البيئة، الطرق، الزراعة، الآثار، الجهة المحلية أو جهاز المدينة، وأي جهة تظهر بسبب موقع الأرض أو طبيعة الطريق.")}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoPipelineStrip
+		pTitle="جاهزية موقع محطة الوقود"
+		pDesc="قبل تقديم الملف نحدد هل الأرض مرشحة للقبول مبدئيًا، وما هي الملاحظات التي يجب حلها في المخطط أو المستندات أو موافقات الجهات."
+		pServiceName="ترخيص محطة وقود"
+	/>
+
+
+
+
+
+
+
+	<ESec
+		id="station-service"
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.Gray5};`}
+			pTitle="خدمة ترخيص محطة وقود"
+			pDesc="الخدمة موجهة لمالك أرض أو مستثمر يريد تقييم موقعه وتجهيز ملفه الهندسي والإداري قبل التقديم أو أثناء الاستيفاءات."
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+
+			<HzStack pGap={new Pixel(24, 16)} pPad={new Pixel(30, 15)}>
+
+				<EmoList
+					pWidth={new RespString("560px", "100%")}
+					pTitle={Text.H3.Centered.OfText("بنود الخدمة")}
+					pHeadBg={new ElemBg(Colors.GreenLite)}
+					pItemsBg={new ElemBg(Colors.WhiteOff)}
+					pNumbered={true}
+					pItems={[
+						"فحص مبدئي لموقع الأرض والمساحة والواجهة والجهة التابعة لها.",
+						"مراجعة صلاحية الموقع بالنسبة للمسافات والمداخل والمخارج واشتراطات التشغيل.",
+						"إعداد أو مراجعة المخطط العام للمحطة قبل عرضه على الجهات.",
+						"تحديد قائمة الموافقات المطلوبة حسب موقع الأرض.",
+						"متابعة الاستيفاءات الفنية والإدارية وربطها بالمخطط والمستندات.",
+						"تنسيق التعديلات الهندسية اللازمة للوصول إلى ملف قابل للفحص."
+					]}
+				/>
+
+				<EmoList
+					pWidth={new RespString("560px", "100%")}
+					pTitle={Text.H3.Centered.OfText("الخدمة لا تشمل")}
+					pHeadBg={new ElemBg(Colors.OrangeLite)}
+					pItemsBg={new ElemBg(Colors.WhiteOff)}
+					pNumbered={false}
+					pItems={[
+						"رسوم الجهات الحكومية أو رسوم المعاينات الرسمية.",
+						"تكلفة تنفيذ المحطة أو المظلات أو الخزانات أو معدات الإطفاء.",
+						"أتعاب شركة التسويق أو أي جهة فنية خارج نطاق الاتفاق.",
+						"ضمان قبول موقع يخالف اشتراطات جوهرية لا يمكن تعديلها هندسيًا."
+					]}
+				/>
+
+			</HzStack>
+
+			<EmoCall BlackSky pText="ابدأ مراجعة موقع المحطة" />
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<RelServices
+		pTitle={Text.H2.Centered.White.OfText("خدمات مرتبطة بمحطة الوقود")}
+		pDesc={Text.Body.Centered.White.OfText("هذه خدمات قد يحتاجها المستثمر عند تجهيز الأرض أو إعداد المخطط أو معالجة ملاحظات الجهات.")}
+	>
+
+		<RelServiceItem
+			pTitle="تصميم هندسي"
+			pDesc="إعداد الرسومات المعمارية والإنشائية والكهرباء والميكانيكا اللازمة للمباني والمظلات والمرافق."
+			pHref="/emodsign/des/eng"
+			pImg="/Media/Emodsign/Des/Eng/HeroL.webp"
+			pBtnText="افتح الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="إشراف هندسي"
+			pDesc="متابعة تنفيذ الأعمال أو التعديلات المطلوبة بالموقع بعد اعتماد المخطط أو أثناء الاستيفاءات."
+			pHref="/emocrete/supervision"
+			pImg="/Media/Emocrete/Supervision/HeroL.webp"
+			pBtnText="افتح الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="تقرير سلامة"
+			pDesc="تقرير أو مراجعة هندسية عند الحاجة إلى توضيح عناصر السلامة أو حالة منشآت قائمة بالموقع."
+			pHref="/emonsult/report/safety"
+			pImg="/Media/Emonsult/Report/Safety/HeroL.webp"
+			pBtnText="افتح الخدمة"
+		/>
+
+	</RelServices>
+
+
+
+
+
+
+
+	<ReadAlso
+		pTitle={Text.H2.Centered.OfText("اقرأ أيضًا")}
+		pDesc={Text.Body.Centered.OfText("صفحات قريبة من مسارات التراخيص والمراجعات الهندسية.")}
+	>
+
+		<ReadAlsoItem
+			pTitle="تراخيص إدارية"
+			pDesc="مدخل عام لخدمات التراخيص الإدارية داخل الموقع."
+			pHref="/emoperm"
+			pImg="/Media/Emoperm/HeroD.webp"
+		/>
+
+		<ReadAlsoItem
+			pTitle="ترخيص مصنع"
+			pDesc="خدمة تجهيز ومتابعة ملف رخصة تشغيل مصنع أو منشأة صناعية."
+			pHref="/emoperm/factory"
+			pImg="/Media/Emoperm/Factory/HeroD.webp"
+		/>
+
+		<ReadAlsoItem
+			pTitle="ترخيص بناء"
+			pDesc="خدمات تراخيص البناء والرسومات والمراجعات الهندسية للأراضي والمباني."
+			pHref="/emoperm/building"
+			pImg="/Media/Emoperm/Building/HeroD.webp"
+		/>
+
+	</ReadAlso>
+
+
+
+
+
+
+
+	<EmoFaq>
+
+		<FaqItem
+			pQuestion="هل يكفي أن تكون الأرض على طريق رئيسي؟"
+			pAnswer="لا. الطريق ميزة تجارية، لكن الترخيص يحتاج فحص المساحة والواجهة والمسافة البينية والمداخل والمخارج والجهات ذات الولاية وملاحظات الحماية المدنية."
+		/>
+
+		<FaqItem
+			pQuestion="ما أول خطوة قبل عمل رسومات محطة الوقود؟"
+			pAnswer="الأفضل مراجعة صلاحية الموقع مبدئيًا، لأن إنتاج رسومات نهائية لموقع غير صالح قد يهدر وقتًا وتكلفة دون نتيجة."
+		/>
+
+		<FaqItem
+			pQuestion="هل محطة الوقود تحتاج موافقات كثيرة؟"
+			pAnswer="نعم غالبًا؛ لأن الملف قد يمر على جهات مرتبطة بالطريق والمرور والبيئة والدفاع المدني والجهة المحلية وجهات أخرى حسب موقع الأرض."
+		/>
+
+		<FaqItem
+			pQuestion="هل يمكن تعديل المخطط بعد ملاحظات الجهات؟"
+			pAnswer="نعم إذا كانت الملاحظات قابلة للحل داخل حدود الأرض. أما إذا كان سبب الرفض متعلقًا بمسافة أو ولاية أو قيد جوهري فقد لا يكفي تعديل المخطط وحده."
+		/>
+
+	</EmoFaq>
+
+
+
+
+
+
+
+</BLayout>

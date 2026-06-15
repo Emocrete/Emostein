@@ -1,0 +1,1948 @@
+---
+import BLayout from "@/Layout.astro";
+import { Text, Topic, ElemBg, EmoMediaData, RespString, Pixel, Size, Align } from "@/TypesLib";
+import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, EmoBtn, EmoFaq, ReadAlso, RelServices, SecTitle, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="إعداد الجداول الزمنية للمشروعات الهندسية"
+	pDescr="خدمة إعداد جدول زمني هندسي للمشروع تشمل تقسيم نطاق العمل، ترتيب الأنشطة، العلاقات المنطقية، المدد، المسار الحرج، خط الأساس، خطة التوريدات، تحديثات التقدم، وتقارير المتابعة للمشروعات السكنية والتجارية وأعمال البناء والتشطيبات."
+	pSchemaImages={[
+		"/Media/Emodsign/Tech/Manage/Table/HeroL.webp",
+		"/Media/Emodsign/Tech/Manage/HeroL.webp",
+		"https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&fm=jpg&q=70&w=1600",
+		"https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&fm=jpg&q=70&w=1600",
+		"https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&fm=jpg&q=70&w=1600"
+	]}
+>
+
+
+
+
+
+
+
+	<Hero
+		pImgF="/Media/Emodsign/Tech/Manage/Table/"
+		pTitle="إعداد الجداول الزمنية"
+		pDesc="جدول زمني هندسي يترجم الرسومات والبنود والتوريدات إلى خطة تنفيذ قابلة للمتابعة: أنشطة، علاقات، مدد، مراحل، مسار حرج، تحديثات، ومؤشرات تأخير مبكرة."
+		pTitleClr="#F4E5C4"
+		pDescClr="#FFFFFF"
+		pAlign="right"
+		pPosL="18% 50% 12% 8%"
+		pPosP="12% 8% 44% 8%"
+		pBlurL="on"
+		pBlurP="on"
+	>
+
+		<EmoCall BlackSky pText="اطلب جدولًا زمنيًا" />
+
+	</Hero>
+
+
+
+
+
+
+
+	<IndexSec
+		pMedia={new EmoMediaData("Img", "/Media/Emodsign/Tech/Manage/Table/", "HeroL.webp")}
+		pTitleClr="#FFFFFF"
+		pBlurL="on"
+		pBlurP="on"
+	>
+
+		<EmoBtn
+			pText="مشكلة الوقت"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor="#FFFFFF"
+			pTextColorHover="#111318"
+			pWidth="250px"
+			pHeight="44px"
+			onclick="location.href='#schedule-problem'"
+		/>
+
+		<EmoBtn
+			pText="مكونات الجدول"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor="#FFFFFF"
+			pTextColorHover="#111318"
+			pWidth="250px"
+			pHeight="44px"
+			onclick="location.href='#schedule-components'"
+		/>
+
+		<EmoBtn
+			pText="المسار الحرج"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor="#FFFFFF"
+			pTextColorHover="#111318"
+			pWidth="250px"
+			pHeight="44px"
+			onclick="location.href='#critical-path'"
+		/>
+
+		<EmoBtn
+			pText="مخرجات الخدمة"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor="#FFFFFF"
+			pTextColorHover="#111318"
+			pWidth="250px"
+			pHeight="44px"
+			onclick="location.href='#deliverables'"
+		/>
+
+	</IndexSec>
+
+
+
+
+
+
+
+	<ESec
+		id="schedule-problem"
+		pBg={new ElemBg("#F7F1E6")}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="الجدول الزمني ليس شكلًا على ورقة"
+			pDesc="المشكلة في كثير من المشروعات أن الوقت يدار بالكلام: هنبدأ بعد يومين، التشطيب بعد السقف، الكهرباء مع السباكة، الخامات لما تيجي. هذا الأسلوب يصلح للمحادثة، لكنه لا يصلح لإدارة مشروع فيه مالك ومقاول ومورد ومهندس ودفعات وتوريدات واعتمادات. الجدول الزمني يحول التوقعات إلى خطة يمكن اختبارها ومتابعتها."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<Emograph
+				pSize={new Size(560, "auto", 320, "auto")}
+				pTitle={Text.H3.WithColor("#111318").OfText("ما الذي تشتريه فعليًا عند طلب جدول زمني؟")}
+				pText={Text.Body.WithColor("#333333").OfText("أنت لا تشتري ملفًا مرسومًا على برنامج فقط. أنت تشتري طريقة تفكير منظمة: تقسيم المشروع إلى أنشطة قابلة للمتابعة، ترتيب العلاقات بينها، تقدير مدد منطقية، كشف الأعمال التي تتحكم في تاريخ التسليم، وربط التوريدات والاعتمادات والدفعات بنقاط واضحة. الجدول الجيد يجعل التأخير ظاهرًا مبكرًا، بدل أن يكتشف المالك المشكلة عندما يتوقف الموقع فعلًا.")}
+			/>
+
+			<RespImg
+				pImg={new EmoMediaData(
+					"Img",
+					"https://images.unsplash.com/",
+					"photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&fm=jpg&q=70&w=1400",
+					false,
+					"إعداد خطة زمنية ومتابعة مؤشرات المشروع",
+					new Size(560, 360, 320, 230)
+				)}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#111318")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="متى تحتاج إلى إعداد جدول زمني هندسي؟"
+			pDesc="كل مشروع له تاريخ بداية ونهاية، لكن ليس كل مشروع لديه جدول يمكن الاعتماد عليه. الخدمة تكون مهمة عندما يتحول المشروع من فكرة عامة إلى تنفيذ يحتاج التزامًا ومتابعة وقرارات مالية."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("حالات عملية تستدعي جدولًا واضحًا")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("قبل التعاقد", "عندما يريد المالك معرفة مدة المشروع الواقعية قبل اختيار المقاول أو الموافقة على عرض السعر. الجدول هنا يكشف هل مدة المقاول منطقية أم مجرد وعد تجاري.")}
+			pTopic2={new Topic("بعد استلام عرض المقاول", "عندما يقدم المقاول مدة إجمالية دون تفاصيل كافية. يتم تحويل المدة إلى أنشطة وعلاقات ومراحل حتى يمكن متابعة التزامه.")}
+			pTopic3={new Topic("قبل بدء التشطيبات", "التشطيبات أكثر حساسية للتداخل بين الخامات والنجارة والجبس والدهانات والكهرباء النهائية. الجدول يمنع ازدحام الفرق داخل الموقع دون ترتيب.")}
+			pTopic4={new Topic("عند وجود تأخير", "عندما يبدأ الموقع في الانحراف عن الخطة، يصبح مطلوبًا تحديث البرنامج وتحليل سبب التأخير واقتراح خطة تعويض أو إعادة ترتيب الأعمال.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		id="schedule-components"
+		pBg={new ElemBg("#0E1118")}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg("#151923")}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("مكونات الجدول الزمني القابل للاستخدام")}
+				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("الجدول الجيد لا يبدأ من التاريخ النهائي. يبدأ من نطاق العمل، ثم تقسيمه إلى أنشطة، ثم ترتيب العلاقات، ثم حساب المدد، ثم تثبيت خط أساس يمكن المقارنة به أثناء التنفيذ.")}
+				pSize={new Size(1000, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<CardsGr
+				pWidth={new RespString("560px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("البناء الداخلي للجدول")}
+				pCardBg={new ElemBg("#F7F1E6")}
+				pCardTitleFnt={Text.H4.WithColor("#111318")}
+				pCardBodyFnt={Text.Body.WithColor("#333333")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("تقسيم العمل", "تحويل المشروع إلى مراحل وأنشطة: تصميم، اعتمادات، مشتريات، أعمال موقع، تشطيبات، اختبارات، وتسليم.")}
+				pTopic2={new Topic("العلاقات المنطقية", "ربط كل نشاط بما قبله وما بعده، حتى لا تظهر أعمال متزامنة على الورق وهي غير قابلة للتزامن في الموقع.")}
+				pTopic3={new Topic("المدد والموارد", "تقدير مدة كل نشاط بناءً على حجم العمل وطبيعة البند وعدد الفرق وإمكانات المورد أو المقاول.")}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#F4E5C4").OfText("ملفات يعتمد عليها الجدول")}
+				pDesc={Text.Body.WithColor("#F8F4EA").OfText("الجدول لا ينفصل عن باقي مستندات المشروع. كل ملف ناقص يتحول إلى افتراض داخل الخطة.")}
+				pHeadBg={new ElemBg("transparent")}
+				pItemsBg={new ElemBg("transparent")}
+				pItemFnt={Text.Body.WithColor("#F8F4EA")}
+				pNumbered={false}
+				pItems={[
+					"رسومات التصميم أو الشوب دروينج المعتمدة أو المتاحة.",
+					"حصر الكميات أو المقايسة أو عرض المقاول التفصيلي.",
+					"تاريخ بداية متوقع وتاريخ تسليم مستهدف.",
+					"عدد فرق التنفيذ المتاحة أو المتوقع توفيرها.",
+					"الخامات طويلة التوريد والمعدات الخاصة والأعمال التي تحتاج اعتمادًا مسبقًا.",
+					"قيود الموقع: أوقات العمل، الجيران، التصاريح، التشوين، الرافعات، والمداخل."
+				]}
+			/>
+
+		</HzStack>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #F7F1E6 "
+			pTitle="مستويات الجداول الزمنية التي يمكن إعدادها"
+			pDesc="ليس كل عميل يحتاج نفس مستوى التفصيل. جدول فيلا صغيرة يختلف عن جدول مبنى متعدد الأدوار، وجدول تشطيبات شقة يختلف عن برنامج مشروع تجاري له توريدات وموافقات وتشغيل."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("اختيار مستوى الجدول حسب الاستخدام")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("جدول مبدئي", "يناسب مرحلة دراسة المشروع قبل التعاقد. يوضح المدة العامة والمراحل الرئيسية ويكشف مدى واقعية تاريخ التسليم المطلوب.")}
+			pTopic2={new Topic("جدول تعاقدي", "يستخدم قبل أو مع التعاقد مع المقاول. يحدد مراحل العمل ونقاط التسليم والاعتمادات والقيود الأساسية التي يجب الالتزام بها.")}
+			pTopic3={new Topic("جدول تفصيلي", "يقسم الأعمال إلى أنشطة أكثر دقة، ويصلح لمتابعة الموقع أسبوعيًا أو كل أسبوعين حسب حجم المشروع.")}
+			pTopic4={new Topic("جدول تحديثات", "يبدأ من جدول أساس ثم يتم إدخال التقدم الفعلي، والانحرافات، والتأخيرات، والأنشطة المتبقية، وخطة التعويض.")}
+			pTopic5={new Topic("جدول توريدات", "يركز على الخامات والمعدات التي تتحكم في سير الموقع، مثل المصاعد، الأبواب، الرخام، وحدات التكييف، الزجاج، والمعدات الخاصة.")}
+			pTopic6={new Topic("برنامج استرداد", "يستخدم عند تأخر المشروع، ويعيد ترتيب الأعمال والموارد والتداخلات للوصول إلى أقرب تاريخ تسليم ممكن دون إفساد الجودة.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="critical-path"
+		pBg={new ElemBg("#F7F1E6")}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="المسار الحرج: الأنشطة التي تتحكم في تاريخ التسليم"
+			pDesc="داخل أي مشروع توجد أنشطة يمكن تأخيرها قليلًا دون أثر مباشر، وأنشطة أخرى يؤدي تأخيرها إلى تأخير المشروع كله. وظيفة التحليل الزمني أن يميز بين الاثنين، حتى لا ينشغل الفريق ببند عادي ويترك بندًا يتحكم في التسليم."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<RespImg
+				pImg={new EmoMediaData(
+					"Img",
+					"https://images.unsplash.com/",
+					"photo-1503387762-592deb58ef4e?auto=format&fit=crop&fm=jpg&q=70&w=1400",
+					false,
+					"موقع تنفيذ يحتاج برنامجًا زمنيًا واضحًا",
+					new Size(560, 380, 320, 230)
+				)}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("كيف نقرأ المسار الحرج عمليًا؟")}
+				pDesc={Text.Body.WithColor("#333333").OfText("القراءة العملية أهم من لون النشاط على الشاشة. المطلوب فهم سبب خطورة النشاط وتأثيره على باقي الأعمال.")}
+				pHeadBg={new ElemBg("#FFFFFF")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={true}
+				pItems={[
+					{ Title: "تحديد أطول مسار منطقي", Items: ["ليس بالضرورة أن يكون أطول بند منفرد، بل أطول سلسلة أنشطة مترابطة تنتهي بتاريخ التسليم."] },
+					{ Title: "تمييز الأنشطة ذات السماحية", Items: ["بعض البنود لديها مساحة تأخير محدودة دون أثر مباشر، وهذه المساحة يجب استخدامها بحذر."] },
+					{ Title: "متابعة التغير بعد التحديث", Items: ["المسار الحرج قد يتغير بعد إدخال التقدم الفعلي أو تأخر التوريدات أو تغيير طريقة التنفيذ."] },
+					{ Title: "ربط التحليل بالقرار", Items: ["النشاط الحرج يحتاج قرارًا أسرع وموارد أكثر وضبطًا أعلى من النشاط غير المؤثر على تاريخ التسليم."] }
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		pBg={new ElemBg("#F7F1E6")}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg("#111318")}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("الفرق بين مدة المشروع وجدول المشروع")}
+				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("مدة المشروع رقم واحد: ٤ أشهر، ٦ أشهر، سنة. أما جدول المشروع فهو تفسير هذا الرقم: ماذا سيحدث؟ بأي ترتيب؟ من المسؤول؟ ما الأنشطة التي يمكن أن تتداخل؟ وما الأنشطة التي لا يمكن ضغطها؟")}
+				pSize={new Size(1000, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<CardsGr
+				pWidth={new RespString("560px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("المدة العامة")}
+				pCardBg={new ElemBg("#FFFFFF")}
+				pCardTitleFnt={Text.H4.WithColor("#111318")}
+				pCardBodyFnt={Text.Body.WithColor("#333333")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("رقم لا يكشف التفاصيل", "قول المقاول إن المشروع يحتاج ٥ أشهر لا يوضح هل الأساسات ستستغرق شهرًا أم شهرين، ولا يوضح أين ستدخل التوريدات.")}
+				pTopic2={new Topic("يصعب محاسبته", "إذا تأخر الموقع أسبوعًا، لا توجد طريقة واضحة لمعرفة هل التأخير مؤثر على النهاية أم يمكن تعويضه من نشاط آخر.")}
+				pTopic3={new Topic("يعتمد على الثقة فقط", "المدة العامة تصلح كبداية تفاوض، لكنها لا تصلح وحدها كأداة إدارة ومتابعة.")}
+			/>
+
+			<CardsGr
+				pWidth={new RespString("560px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("الجدول الزمني")}
+				pCardBg={new ElemBg("#111318")}
+				pCardTitleFnt={Text.H4.WithColor("#D9B86C")}
+				pCardBodyFnt={Text.Body.WithColor("#F8F4EA")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("خطة قابلة للفحص", "كل مرحلة لها بداية ونهاية وعلاقات ومسؤوليات، فيمكن اختبار منطق الخطة قبل التنفيذ.")}
+				pTopic2={new Topic("أداة متابعة", "يتم إدخال التقدم الفعلي ومقارنة الموقع بخط الأساس لمعرفة الانحراف مبكرًا.")}
+				pTopic3={new Topic("مرجع للقرارات", "عند ظهور تأخير أو تغيير، يساعد الجدول على اختيار القرار الأقل ضررًا على تاريخ التسليم.")}
+			/>
+
+		</HzStack>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="جدول البناء وجدول التشطيبات"
+			pDesc="أعمال البناء والتشطيبات لا تدار بنفس المنطق. البناء يعتمد أكثر على التسلسل الإنشائي والخرسانة والمباني، بينما التشطيبات تعتمد على التداخلات، الاعتمادات، الخامات، والتسليمات الجزئية."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("جدول أعمال البناء والخرسانات")}
+				pDesc={Text.Body.WithColor("#333333").OfText("يركز على تسلسل الموقع والعناصر التي يصعب تجاوزها أو تنفيذها خارج ترتيبها الطبيعي.")}
+				pHeadBg={new ElemBg("#F7F1E6")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={true}
+				pItems={[
+					{ Title: "تجهيز الموقع", Items: ["تسليم الأرض، الرفع، تحديد المحاور، التشوين، مصدر المياه والكهرباء، وتجهيز مناطق العمل."] },
+					{ Title: "الحفر والأساسات", Items: ["الحفر، الإحلال أو الدمك عند الحاجة، النظافة، الحدادة، النجارة، الصب، العزل، والردم."] },
+					{ Title: "الأعمدة والأسقف", Items: ["دورات النجارة والحدادة والصب والمعالجة وفك الشدات والانتقال للدور التالي."] },
+					{ Title: "المباني والمسارات", Items: ["مباني الطوب، فتحات الخدمات، التكسير المنظم، تأسيس الكهرباء والسباكة قبل الإغلاق."] }
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("جدول أعمال التشطيبات")}
+				pDesc={Text.Body.WithColor("#333333").OfText("يركز على التداخل الدقيق بين الفرق والاعتمادات والخامات، لأن بندًا صغيرًا قد يحجز مساحة أو يؤخر أكثر من مرحلة.")}
+				pHeadBg={new ElemBg("#F7F1E6")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={true}
+				pItems={[
+					{ Title: "التأسيس", Items: ["كهرباء، سباكة، تكييف، دكتات، صرف تكثيف، اختبارات ضغط، وقرارات قبل المحارة أو الغلق."] },
+					{ Title: "الأعمال الرطبة", Items: ["محارة، عزل، لياسة، أرضيات، سيراميك، رخام، ومواعيد جفاف أو اختبار قبل الانتقال."] },
+					{ Title: "الأعمال الجافة", Items: ["جبس بورد، نجارة، أبواب، شبابيك، دهانات، ورق حائط، إضاءة، وتشطيبات نهائية."] },
+					{ Title: "التسليم النهائي", Items: ["تشغيل، اختبارات، ملاحظات، تنظيف، إصلاحات، وتسليم مفاتيح أو مناطق على مراحل."] }
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="أدوات الجداول الزمنية: برنامج أم منطق؟"
+			pDesc="يمكن إخراج الجدول على برامج مختلفة مثل بريمافيرا أو مايكروسوفت بروجكت أو حتى ملف مبسط حسب حجم المشروع. الأهم أن يكون منطق الأنشطة والعلاقات صحيحًا قبل الاهتمام بشكل الإخراج."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<RespImg
+				pImg={new EmoMediaData(
+					"Img",
+					"https://images.unsplash.com/",
+					"photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&fm=jpg&q=70&w=1400",
+					false,
+					"اجتماع مراجعة جدول زمني للمشروع",
+					new Size(560, 360, 320, 230)
+				)}
+			/>
+
+			<CardsGr
+				pWidth={new RespString("560px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("ما الذي يسبق البرنامج؟")}
+				pCardBg={new ElemBg("#FFFFFF")}
+				pCardTitleFnt={Text.H4.WithColor("#111318")}
+				pCardBodyFnt={Text.Body.WithColor("#333333")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("فهم نطاق العمل", "البرنامج لن يعرف وحده أن الرخام يحتاج توريدًا مسبقًا، أو أن المصعد يحتاج فتحة ومقايسة ومراجعة قبل التنفيذ.")}
+				pTopic2={new Topic("منطق العلاقات", "خطأ بسيط في علاقة بين نشاطين قد يجعل الجدول يبدو قصيرًا جدًا أو طويلًا جدًا دون أن يشعر المستخدم.")}
+				pTopic3={new Topic("قيود الموقع", "الموقع الصغير، الجيران، التشوين، المداخل، أوقات العمل، وتوفر العمالة كلها قيود لا تظهر في البرنامج إلا إذا أدخلها المخطط.")}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		pBg={new ElemBg("#111318")}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg("#0E1118")}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("خط الأساس والتحديثات")}
+				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("الجدول الذي لا يتم تثبيته ومقارنته بالتقدم الفعلي يتحول إلى صورة قديمة. لذلك يتم التعامل مع البرنامج الزمني كوثيقة حية: يتم تثبيت خط أساس، ثم تحديثه بالموقع، ثم تحليل الانحرافات.")}
+				pSize={new Size(1000, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#F4E5C4").OfText("خط الأساس")}
+				pDesc={Text.Body.WithColor("#F8F4EA").OfText("النسخة المعتمدة التي نقيس عليها الأداء. بدونها لا توجد مقارنة عادلة بين المخطط والمنفذ.")}
+				pHeadBg={new ElemBg("transparent")}
+				pItemsBg={new ElemBg("transparent")}
+				pItemFnt={Text.Body.WithColor("#F8F4EA")}
+				pNumbered={false}
+				pItems={[
+					"يحدد البداية والنهاية المتفق عليها لكل مرحلة.",
+					"يحفظ المسار الحرج الأصلي قبل تغييرات التنفيذ.",
+					"يستخدم لمراجعة مطالبات التأخير أو خطط التعويض.",
+					"يساعد المالك على معرفة هل التقدم الحالي كافٍ لتاريخ التسليم أم لا.",
+					"يمنع تبديل الخطة كل أسبوع دون تسجيل سبب التغيير."
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#F4E5C4").OfText("تحديث التقدم")}
+				pDesc={Text.Body.WithColor("#F8F4EA").OfText("النسخة التي تسجل ما حدث فعليًا: ما بدأ، ما انتهى، ما تأخر، وما تبقى من مدة.")}
+				pHeadBg={new ElemBg("transparent")}
+				pItemsBg={new ElemBg("transparent")}
+				pItemFnt={Text.Body.WithColor("#F8F4EA")}
+				pNumbered={false}
+				pItems={[
+					"نسبة إنجاز الأنشطة أو تواريخ البداية والنهاية الفعلية.",
+					"الأنشطة المتأخرة وأسبابها الظاهرة.",
+					"تأثير التأخير على المسار الحرج وتاريخ التسليم.",
+					"التوريدات أو الاعتمادات التي أصبحت قيدًا على الموقع.",
+					"اقتراح إعادة ترتيب أو زيادة موارد أو تعديل تسلسل العمل."
+				]}
+			/>
+
+		</HzStack>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="كيف نبني جدولًا زمنيًا لمشروعك؟"
+			pDesc="المسار العملي يبدأ من جمع البيانات، ثم بناء الهيكل، ثم اختبار المنطق، ثم إخراج نسخة قابلة للمراجعة، ثم اعتماد خط أساس، ثم التحديث عند الحاجة."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("خطوات إعداد البرنامج الزمني")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("جمع البيانات", "نستلم الرسومات، المقايسة، عروض المقاولين، القيود، تاريخ البداية، وتاريخ التسليم المطلوب.")}
+			pTopic2={new Topic("تقسيم المشروع", "يتم بناء هيكل مراحل واضح حسب طبيعة المشروع: تصميم، توريدات، بناء، تشطيبات، اختبارات، وتسليم.")}
+			pTopic3={new Topic("تعريف الأنشطة", "كل نشاط يجب أن يكون قابلًا للمتابعة وله بداية ونهاية ومسؤول واضح ومعيار إنجاز مفهوم.")}
+			pTopic4={new Topic("ربط العلاقات", "نحدد علاقات التتابع والتداخل والقيود، ونراجع هل العلاقات منطقية داخل الموقع أم مجرد اختصار على الورق.")}
+			pTopic5={new Topic("تحليل المسار الحرج", "يتم فحص الأنشطة التي تتحكم في تاريخ التسليم وتحديد البنود التي تحتاج متابعة قريبة.")}
+			pTopic6={new Topic("إخراج البرنامج", "نسخة PDF أو ملف قابل للتعديل أو تقرير مختصر حسب الاتفاق، مع توصيات للمتابعة والتحديث.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="مدخلات نحتاجها من العميل أو المقاول"
+			pDesc="ليس مطلوبًا أن تكون كل البيانات مكتملة من أول تواصل، لكن اكتمالها يرفع دقة الجدول ويقلل الافتراضات."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("مستندات فنية")}
+				pDesc={Text.Body.WithColor("#333333").OfText("هذه المستندات تربط الجدول بحجم العمل الحقيقي بدل التخمين العام.")}
+				pHeadBg={new ElemBg("#FFFFFF")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"الرسومات المعمارية والإنشائية والكهربائية والميكانيكية المتاحة.",
+					"حصر الكميات أو المقايسة أو عرض السعر التفصيلي إن وجد.",
+					"مواصفات الخامات أو مستوى التشطيب المطلوب.",
+					"بيانات الموقع والصور الحالية وحالة الأعمال المنفذة إن كان المشروع قائمًا.",
+					"قائمة الخامات طويلة التوريد أو الموردين المعتمدين.",
+					"أي قيود ترخيص أو موافقات أو تصاريح تؤثر على البداية أو التشغيل."
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("بيانات إدارية")}
+				pDesc={Text.Body.WithColor("#333333").OfText("هذه البيانات تحدد كيف سيتم استخدام الجدول ومن سيتابع تنفيذه.")}
+				pHeadBg={new ElemBg("#FFFFFF")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"تاريخ البداية المتوقع وتاريخ التسليم المستهدف.",
+					"نوع التعاقد: مقاول واحد، مقاولون منفصلون، أو إدارة مباشرة من المالك.",
+					"عدد فرق العمل المتوقعة أو المتاحة لكل بند.",
+					"طريقة متابعة التقدم: أسبوعية، نصف شهرية، شهرية، أو عند كل مرحلة.",
+					"هل الجدول مطلوب للتعاقد، المتابعة، التحكيم الودي، أم إعادة التخطيط؟",
+					"مستوى التفصيل المطلوب في النسخة النهائية."
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		id="deliverables"
+		pBg={new ElemBg("#F7F1E6")}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg("#111318")}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("مخرجات خدمة إعداد الجدول الزمني")}
+				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("صيغة التسليم تختلف حسب حجم المشروع والغرض من الخدمة. قد يكون المطلوب ملفًا بصريًا بسيطًا للمالك، أو برنامجًا تفصيليًا للمقاول، أو تقرير تحديث وتحليل تأخير.")}
+				pSize={new Size(1000, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("ما الذي يمكن تسليمه؟")}
+			pCardBg={new ElemBg("#FFFFFF")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("مخطط جانت", "عرض بصري للأنشطة على خط زمني يوضح البداية والنهاية والتداخل بين البنود والمراحل الرئيسية.")}
+			pTopic2={new Topic("قائمة أنشطة", "جدول يحتوي على كود النشاط، اسمه، مدته، بدايته، نهايته، علاقاته، وحالته عند التحديث.")}
+			pTopic3={new Topic("مراحل وميلستون", "تحديد نقاط تسليم واضحة مثل انتهاء الأساسات، انتهاء الهيكل، بدء التشطيبات، تركيب الخامات، والتسليم النهائي.")}
+			pTopic4={new Topic("تقرير مسار حرج", "توضيح الأنشطة التي تتحكم في تاريخ التسليم، والأنشطة التي لديها سماحية محدودة.")}
+			pTopic5={new Topic("خطة توريدات", "جدول يربط طلب الخامات والاعتماد والتوريد والتركيب بالأنشطة التي تعتمد عليها.")}
+			pTopic6={new Topic("تقرير تحديث", "مقارنة المخطط بالفعلي، مع توضيح الانحرافات وأثرها على تاريخ التسليم وخيارات التعويض.")}
+		/>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="خطة التوريدات داخل الجدول"
+			pDesc="كثير من المشروعات لا تتأخر بسبب ضعف العمالة فقط، بل بسبب خامة أو معدة لم يتم طلبها في موعدها. لذلك يتم إدخال التوريدات كأنشطة مؤثرة لا كملاحظات جانبية."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<RespImg
+				pImg={new EmoMediaData(
+					"Img",
+					"https://images.unsplash.com/",
+					"photo-1551836022-d5d88e9218df?auto=format&fit=crop&fm=jpg&q=70&w=1400",
+					false,
+					"اجتماع تنسيق التوريدات والبرنامج الزمني",
+					new Size(560, 360, 320, 230)
+				)}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("بنود توريد تتحكم في المشروع")}
+				pDesc={Text.Body.WithColor("#333333").OfText("هذه البنود تحتاج قرارًا مبكرًا لأن تأخير اعتمادها أو تصنيعها يؤثر على أعمال لاحقة كثيرة.")}
+				pHeadBg={new ElemBg("#F7F1E6")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"المصاعد ومستلزماتها وفتحاتها وغرفة الماكينة إن وجدت.",
+					"الألوميتال والزجاج والواجهات الخارجية.",
+					"الأبواب الخشبية والمصفحة وأعمال النجارة الخاصة.",
+					"الرخام والجرانيت والبورسلين والكميات ذات التصنيع المسبق.",
+					"وحدات التكييف والدكتات والمراوح والمعدات الميكانيكية.",
+					"لوحات الكهرباء والكابلات الخاصة وأنظمة التيار الخفيف.",
+					"الأدوات الصحية والخلاطات والأحواض والبنود المستوردة أو النادرة."
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="ربط الجدول بالتكلفة والدفعات"
+			pDesc="البرنامج الزمني لا يحدد الوقت فقط. عند ربطه بالبند والكمية والمستخلص، يصبح أداة لمراجعة التدفق النقدي والدفعات وتوقع ضغط المصروفات قبل حدوثه."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("فوائد ربط الوقت بالتكلفة")}
+			pCardBg={new ElemBg("#FFFFFF")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("توقع الدفعات", "يعرف المالك الفترات التي ستحتاج سيولة أعلى، مثل صب الأسقف، توريد الرخام، أو شراء وحدات التكييف.")}
+			pTopic2={new Topic("مراجعة المستخلص", "يمكن مقارنة ما يطلبه المقاول بما تم تنفيذه فعليًا داخل الفترة، بدل مراجعة المستخلص كرقم منفصل.")}
+			pTopic3={new Topic("منع ضغط الخامات", "الجدول يوضح متى يجب طلب الخامة حتى لا يتم شراؤها متأخرًا بسعر أعلى أو جودة أقل بسبب الاستعجال.")}
+			pTopic4={new Topic("قرارات تمويل أوضح", "عندما يعرف العميل منحنى الصرف المتوقع، يستطيع ترتيب المدفوعات والتوريدات دون تعطيل الموقع.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		pBg={new ElemBg("#111318")}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg("#0E1118")}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("نماذج تطبيقية حسب نوع المشروع")}
+				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("نفس خدمة الجدول الزمني تتغير حسب نوع المشروع. جدول فيلا لا يساوي جدول تشطيب شقة، وجدول مطعم أو عيادة يحتاج عناية خاصة بالتوريدات والأنظمة والاعتمادات.")}
+				pSize={new Size(1000, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("كيف يختلف الجدول؟")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("فيلا أو منزل", "يركز على التسلسل بين الهيكل والواجهات والعزل والتشطيبات الداخلية والخارجية واللاندسكيب والتسليم الجزئي عند الحاجة.")}
+			pTopic2={new Topic("تشطيب شقة", "يركز على سرعة دوران الفرق داخل مساحة محدودة، وتوقيت التأسيس والجبس والدهانات والأرضيات والنجارة والكهرباء النهائية.")}
+			pTopic3={new Topic("مطعم أو كافيه", "يركز على المطبخ والتهوية والمدخنة والصرف والكهرباء والتشطيبات والتجهيزات التي تؤثر على الافتتاح التجاري.")}
+			pTopic4={new Topic("عيادة أو مركز طبي", "يركز على التقسيمات والأجهزة والكهرباء والتهوية والتشطيبات الصحية والاعتمادات المرتبطة بالتشغيل.")}
+			pTopic5={new Topic("عمارة سكنية", "يركز على تكرار الأدوار ودورة الهيكل والمباني والتأسيسات والواجهات والمداخل والمصاعد والتسليم النهائي.")}
+			pTopic6={new Topic("محل تجاري", "يركز على موعد الافتتاح، التوريدات السريعة، واجهة العرض، الإضاءة، التشطيبات النهائية، وتجهيزات النشاط.")}
+		/>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="مراجعة جدول المقاول"
+			pDesc="إذا كان لديك جدول مقدم من المقاول، يمكن مراجعته قبل اعتماده. الهدف ليس رفض الجدول، بل كشف النقاط الضعيفة التي قد تسبب نزاعًا أو تأخيرًا لاحقًا."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("ملاحظات شائعة على جداول المقاولين")}
+				pDesc={Text.Body.WithColor("#333333").OfText("هذه الملاحظات تظهر كثيرًا في الجداول التي يتم إعدادها لأغراض شكلية فقط.")}
+				pHeadBg={new ElemBg("#F7F1E6")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"أنشطة عامة جدًا مثل: أعمال التشطيبات، دون تقسيم قابل للمتابعة.",
+					"علاقات غير منطقية تسمح بتداخل لا يمكن تنفيذه داخل الموقع.",
+					"مدد قصيرة جدًا لا تتناسب مع حجم العمل أو عدد الفرق المتاح.",
+					"غياب التوريدات والاعتمادات رغم أنها تتحكم في التنفيذ.",
+					"مسار حرج غير مقنع أو غير قابل للتفسير.",
+					"عدم وجود نقاط تسليم واضحة أو طريقة لتحديث التقدم."
+				]}
+			/>
+
+			<Emograph
+				pSize={new Size(560, "auto", 320, "auto")}
+				pTitle={Text.H3.WithColor("#111318").OfText("ماذا يحدث بعد المراجعة؟")}
+				pText={Text.Body.WithColor("#333333").OfText("يتم إصدار ملاحظات واضحة على الجدول: أنشطة تحتاج تفصيلًا، علاقات تحتاج تصحيحًا، مدد تحتاج تبريرًا، توريدات يجب إضافتها، أو مراحل تحتاج إعادة ترتيب. يمكن بعد ذلك اعتماد الجدول بعد التصحيح أو استخدامه كأساس للتفاوض مع المقاول حول المدة والموارد وطريقة التنفيذ.")}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="تحليل التأخير وخطة التعويض"
+			pDesc="عند تأخر المشروع، لا يكفي أن نقول الموقع متأخر. المطلوب معرفة أين حدث التأخير، وهل أثر على تاريخ التسليم، وما الخيارات الواقعية لتقليل الضرر دون خلق مشاكل جودة."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("محاور خطة التعويض")}
+			pCardBg={new ElemBg("#FFFFFF")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("تحديث الحالة الفعلية", "إدخال ما تم تنفيذه فعلًا، وما لم يبدأ، وما بدأ ولم ينته، وتاريخ كل نقطة مؤثرة.")}
+			pTopic2={new Topic("تحديد أثر التأخير", "تمييز التأخير المؤثر على التسليم من التأخير الموجود في نشاط لديه سماحية أو يمكن امتصاصه.")}
+			pTopic3={new Topic("إعادة ترتيب الأعمال", "تقديم بعض الأنشطة أو تداخلها بشكل منطقي إذا كان الموقع يسمح بذلك دون تضارب بين الفرق.")}
+			pTopic4={new Topic("زيادة الموارد", "اقتراح زيادة عمالة أو ورديات أو مقاول فرعي فقط في الأنشطة التي تعطي أثرًا حقيقيًا على المسار الحرج.")}
+			pTopic5={new Topic("تسريع الاعتمادات", "تقليل زمن انتظار الخامات والرسومات والموافقات التي أصبحت عائقًا أمام استمرار العمل.")}
+			pTopic6={new Topic("تاريخ تسليم معدل", "إصدار توقع جديد واقعي عند تعذر تعويض التأخير بالكامل، بدل الاستمرار بوعد غير قابل للتحقيق.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="أخطاء شائعة في الجداول الزمنية"
+			pDesc="الجدول قد يبدو احترافيًا من الخارج، لكنه يفشل في الموقع بسبب أخطاء في بناء المنطق لا في شكل الرسم."
+		/>
+
+		<HzStack pGap={new Pixel(25, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("575px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("أخطاء في البناء المنطقي")}
+				pDesc={Text.Body.WithColor("#333333").OfText("هذه الأخطاء تجعل الجدول غير صالح للتنفيذ حتى لو كان شكله منظمًا.")}
+				pHeadBg={new ElemBg("#F7F1E6")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={true}
+				pItems={[
+					{ Title: "أنشطة ضخمة", Items: ["نشاط مدته شهر باسم أعمال التشطيبات لا يمكن متابعته ولا معرفة سبب تأخره."] },
+					{ Title: "علاقات ناقصة", Items: ["نشاط يبدأ دون ربطه بتوريد أو اعتماد أو نشاط سابق يتحكم فيه."] },
+					{ Title: "تداخل وهمي", Items: ["وضع أكثر من فريق في نفس المكان في نفس الوقت دون إمكانية تشغيل حقيقية."] },
+					{ Title: "غياب القيود", Items: ["عدم إدخال إجازات، مواعيد توريد، أوقات عمل، قيود جيران، أو موافقات مطلوبة."] }
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("575px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("أخطاء في المتابعة")}
+				pDesc={Text.Body.WithColor("#333333").OfText("هذه الأخطاء تجعل الجدول يفقد قيمته بعد بداية التنفيذ.")}
+				pHeadBg={new ElemBg("#F7F1E6")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={true}
+				pItems={[
+					{ Title: "تحديث شكلي", Items: ["تلوين الأنشطة دون إدخال تاريخ فعلي أو نسبة إنجاز مفهومة."] },
+					{ Title: "تغيير الخطة دون تسجيل", Items: ["تعديل الجدول الأصلي كل مرة حتى يختفي أثر التأخير بدل تحليله."] },
+					{ Title: "متابعة البنود السهلة", Items: ["التركيز على الأنشطة الكثيرة الظاهرة وترك بند حرج متأخر لأنه أقل وضوحًا."] },
+					{ Title: "غياب قرار التعويض", Items: ["معرفة وجود تأخير دون اقتراح موارد أو ترتيب أو تاريخ معدل."] }
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		pBg={new ElemBg("#0E1118")}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg("#151923")}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("الجدول الزمني مع الإشراف وإدارة المشروع")}
+				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("يمكن طلب الجدول كخدمة مستقلة، ويمكن دمجه مع إدارة المشروع أو الإشراف. عند الدمج، لا يكون الجدول وثيقة تسليم فقط، بل أداة متابعة مستمرة داخل الموقع.")}
+				pSize={new Size(1000, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("طرق استخدام الخدمة")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("جدول فقط", "مناسب عند وجود مالك أو مقاول يحتاج خطة واضحة قبل بدء المشروع أو قبل التعاقد.")}
+			pTopic2={new Topic("جدول مع تحديثات", "مناسب لمشروع بدأ فعليًا ويحتاج متابعة أسبوعية أو شهرية لمقارنة المخطط بالفعلي.")}
+			pTopic3={new Topic("جدول ضمن إدارة مشروع", "مناسب للمالك الذي يحتاج تنظيم الوقت والتكلفة والتوريدات والقرارات والمستندات معًا.")}
+			pTopic4={new Topic("جدول ضمن إشراف", "مناسب عند وجود مهندس يتابع الموقع ويريد ربط الزيارات والتقارير بمراحل زمنية واضحة.")}
+		/>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="كيف يتم تسعير خدمة إعداد الجدول؟"
+			pDesc="السعر يتأثر بحجم المشروع ومستوى التفصيل والغرض من الجدول وهل هو إعداد أولي فقط أم متابعة وتحديثات. جدول بسيط لتشطيب شقة لا يساوي برنامجًا تفصيليًا لمبنى أو مشروع تجاري متعدد الأطراف."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<CardsGr
+				pWidth={new RespString("560px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("عوامل فنية")}
+				pCardBg={new ElemBg("#F7F1E6")}
+				pCardTitleFnt={Text.H4.WithColor("#111318")}
+				pCardBodyFnt={Text.Body.WithColor("#333333")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("عدد الأنشطة", "كلما زاد مستوى التفصيل زاد وقت بناء العلاقات ومراجعة منطق البرنامج.")}
+				pTopic2={new Topic("حالة المستندات", "وجود رسومات وحصر واضح يقلل الافتراضات. أما الملفات الناقصة فتحتاج تحليلًا أوسع قبل الجدولة.")}
+				pTopic3={new Topic("تعقيد المشروع", "المباني متعددة التخصصات أو الأنشطة التجارية تحتاج توريدات واعتمادات وتنسيقًا أكثر من الأعمال البسيطة.")}
+			/>
+
+			<CardsGr
+				pWidth={new RespString("560px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("عوامل خدمية")}
+				pCardBg={new ElemBg("#111318")}
+				pCardTitleFnt={Text.H4.WithColor("#D9B86C")}
+				pCardBodyFnt={Text.Body.WithColor("#F8F4EA")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("الغرض من الجدول", "جدول للتصور العام أرخص من جدول تعاقدي أو تحديثات تقدم أو تحليل تأخير.")}
+				pTopic2={new Topic("صيغة التسليم", "ملف PDF بصري يختلف عن ملف قابل للتعديل مع تقارير ومخرجات إضافية.")}
+				pTopic3={new Topic("عدد التحديثات", "المتابعة الدورية تضيف عملًا متكررًا: جمع تقدم، إدخال بيانات، تحليل، وتقرير.")}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="مخرجات تصلح للمالك والمقاول"
+			pDesc="الصفحة تستهدف مالكًا يريد ضبط مشروعه، ومقاولًا يريد تقديم برنامج أوضح، ومهندسًا يحتاج خطة متابعة. لذلك يمكن تشكيل التسليم حسب الطرف الذي سيستخدمه."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("للمالك")}
+				pDesc={Text.Body.WithColor("#333333").OfText("المالك يحتاج فهمًا واضحًا لا ملفًا تقنيًا معقدًا فقط.")}
+				pHeadBg={new ElemBg("#FFFFFF")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"ملخص مراحل المشروع بلغة مفهومة.",
+					"تاريخ بداية ونهاية لكل مرحلة رئيسية.",
+					"نقاط قرار واعتماد يجب أن يلتزم بها المالك.",
+					"تحذير مبكر للخامات أو القرارات التي قد تؤخر المشروع.",
+					"مقارنة مبسطة بين المخطط والفعلي عند التحديث."
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("للمقاول أو المهندس")}
+				pDesc={Text.Body.WithColor("#333333").OfText("المقاول والمهندس يحتاجان تفاصيل تشغيلية يمكن استخدامها في الاجتماع والموقع.")}
+				pHeadBg={new ElemBg("#FFFFFF")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"قائمة أنشطة وروابط منطقية بين البنود.",
+					"مراحل وميلستون ومواعيد تسليم جزئي.",
+					"تحديد الأنشطة الحرجة والأنشطة ذات السماحية.",
+					"ملاحظات على التداخل بين الفرق والتوريدات.",
+					"تقرير تحديث أو خطة تعويض عند الحاجة."
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="مثال عملي مبسط لتشطيب وحدة"
+			pDesc="هذا المثال يوضح طريقة التفكير، وليس مدة ثابتة لكل مشروع. المدد تتغير حسب المساحة وعدد العمالة والخامات والرسومات وحالة الموقع."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("تسلسل تشطيب قابل للمراجعة")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("المعاينة والرفع", "مراجعة حالة الوحدة والرسومات وقياس الفروق قبل وضع مدد التأسيس والتكسير.")}
+			pTopic2={new Topic("التأسيسات", "كهرباء وسباكة وتكييف واختبارات قبل المحارة أو الغلق.")}
+			pTopic3={new Topic("الأعمال الرطبة", "محارة وعزل وأرضيات وحوائط، مع مراعاة أزمنة الجفاف والاختبار.")}
+			pTopic4={new Topic("الأسقف والدهانات", "جبس بورد ومعالجة ودهانات أولية ونهائية حسب تداخلها مع الكهرباء والتكييف.")}
+			pTopic5={new Topic("النجارة والتوريدات", "أبواب ومطابخ وخزائن وأعمال تحتاج مقاسات نهائية واعتماد خامات قبل التركيب.")}
+			pTopic6={new Topic("التشغيل والتسليم", "تركيب نهائي، اختبار، ملاحظات، إصلاحات، تنظيف، وتسليم. هذه المرحلة تحتاج وقتًا حقيقيًا لا يترك لآخر يوم.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="مثال عملي مبسط لأعمال البناء"
+			pDesc="في أعمال البناء، تسلسل الخرسانة والمباني والتأسيسات يفرض نفسه. لذلك يركز الجدول على دورات العمل والعناصر التي لا يمكن تجاوزها."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("تسلسل بناء قابل للفحص")}
+			pCardBg={new ElemBg("#FFFFFF")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("استلام الموقع", "تحديد الحدود، المحاور، مصادر الخدمات المؤقتة، أماكن التشوين، ومسار المعدات.")}
+			pTopic2={new Topic("الحفر والأساسات", "الحفر، تجهيز القاع، حدادة ونجارة وصب الأساسات، عزل وردم حسب التصميم.")}
+			pTopic3={new Topic("الهيكل", "أعمدة وكمرات وبلاطات لكل دور مع دورة نجارة وحدادة وصب ومعالجة وفك شدات.")}
+			pTopic4={new Topic("المباني", "حوائط داخلية وخارجية وفتحات خدمات ومراجعة مناسيب قبل التأسيسات.")}
+			pTopic5={new Topic("التأسيسات", "كهرباء وسباكة وتكييف وحريق عند الحاجة، قبل المحارة أو الغلق النهائي.")}
+			pTopic6={new Topic("الواجهات والعزل", "عزل أسطح وواجهات وفتحات وشبابيك حسب ترتيب التشطيبات الخارجية والداخلية.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="لوحة متابعة أسبوعية للجدول"
+			pDesc="في المشروعات التي تحتاج متابعة دورية، لا يكفي إرسال ملف الجدول مرة واحدة. يتم تلخيص حالة الأسبوع في نقاط تساعد المالك والمقاول على اتخاذ قرارات سريعة."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("مؤشرات المتابعة")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("أنشطة مخططة", "ما كان يجب تنفيذه خلال الفترة الحالية، وما تم تنفيذه فعلًا، وما بقي مفتوحًا.")}
+			pTopic2={new Topic("أنشطة متأخرة", "قائمة مختصرة بالبنود المتأخرة وأسباب التأخير الظاهرة وتأثيرها المتوقع.")}
+			pTopic3={new Topic("أنشطة الأسبوع التالي", "ما يجب أن يبدأ أو ينتهي في الفترة القادمة، ومن المسؤول عن كل بند.")}
+			pTopic4={new Topic("قرارات مطلوبة", "خامات تحتاج اعتمادًا، دفعات تحتاج ترتيبًا، رسومات تحتاج ردًا، أو مورد يحتاج تأكيدًا.")}
+			pTopic5={new Topic("مخاطر قريبة", "أي نشاط أو توريد أو قرار قد يتحول إلى تأخير مؤثر إذا لم يتم التعامل معه مبكرًا.")}
+			pTopic6={new Topic("توصية عملية", "إجراء واضح للمالك أو المقاول: زيادة فريق، تقديم توريد، اعتماد خامة، أو تعديل ترتيب الأعمال.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="الجدول والقرارات اليومية في الموقع"
+			pDesc="القيمة الحقيقية للجدول تظهر عندما يستخدمه الفريق في قرارات يومية: أي بند يبدأ أولًا، أي خامة تطلب الآن، وأي مشكلة تحتاج تدخلًا سريعًا."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<Emograph
+				pSize={new Size(560, "auto", 320, "auto")}
+				pTitle={Text.H3.WithColor("#111318").OfText("من يتخذ القرار؟")}
+				pText={Text.Body.WithColor("#333333").OfText("الجدول لا يلغي دور المالك أو المهندس أو المقاول. لكنه يجعل القرار أكثر وضوحًا. عندما يتأخر بند، يصبح السؤال محددًا: هل نزيد الموارد؟ هل نغير ترتيب الأعمال؟ هل ننتظر خامة؟ هل نعدل تاريخ التسليم؟ وجود جدول يجعل النقاش مبنيًا على أثر زمني لا على انطباع عام.")}
+			/>
+
+			<RespImg
+				pImg={new EmoMediaData(
+					"Img",
+					"https://images.unsplash.com/",
+					"photo-1497366754035-f200968a6e72?auto=format&fit=crop&fm=jpg&q=70&w=1400",
+					false,
+					"مكتب متابعة مشروع وجدول زمني",
+					new Size(560, 360, 320, 230)
+				)}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="تقرير تسليم الجدول"
+			pDesc="عند تسليم البرنامج، لا يتم الاكتفاء بصورة جانت. التقرير يشرح طريقة القراءة والافتراضات والقيود والنقاط التي يجب متابعتها."
+		/>
+
+		<HzStack pGap={new Pixel(25, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("575px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("محتوى التقرير")}
+				pDesc={Text.Body.WithColor("#333333").OfText("تقرير قصير يجعل الجدول قابلًا للفهم من غير فتح البرنامج نفسه.")}
+				pHeadBg={new ElemBg("#F7F1E6")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"ملخص نطاق المشروع والافتراضات المستخدمة.",
+					"تاريخ البداية والنهاية والمدة الكلية.",
+					"المراحل الرئيسية ونقاط التسليم.",
+					"الأنشطة الحرجة أو البنود عالية المخاطر.",
+					"التوريدات والاعتمادات المؤثرة على الجدول.",
+					"ملاحظات على الموارد أو التداخلات أو القيود."
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("575px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("متى تحتاج تقريرًا مفصلًا؟")}
+				pDesc={Text.Body.WithColor("#333333").OfText("التقرير التفصيلي مطلوب عندما يكون الجدول أداة تفاوض أو متابعة أو تحليل تأخير.")}
+				pHeadBg={new ElemBg("#F7F1E6")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"وجود خلاف حول مدة المقاول أو واقعية التسليم.",
+					"الحاجة لاعتماد جدول قبل توقيع عقد.",
+					"وجود تأخير قائم يحتاج توثيقًا وتحليلًا.",
+					"وجود أكثر من مقاول أو مورد داخل نفس المشروع.",
+					"ربط الجدول بالمستخلصات أو الدفعات.",
+					"عرض الخطة على شريك أو مستثمر أو جهة إدارية."
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		pBg={new ElemBg("#111318")}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg("#0E1118")}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("هيكل تقسيم العمل قبل الجدولة")}
+				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("قبل وضع الأنشطة على خط زمني، يجب تقسيم المشروع بطريقة يمكن متابعتها. التقسيم الضعيف يجعل الجدول إما عامًّا جدًا أو مليئًا بتفاصيل غير مفيدة.")}
+				pSize={new Size(1000, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<CardsGr
+				pWidth={new RespString("560px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("مستويات التقسيم")}
+				pCardBg={new ElemBg("#F7F1E6")}
+				pCardTitleFnt={Text.H4.WithColor("#111318")}
+				pCardBodyFnt={Text.Body.WithColor("#333333")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("المشروع", "العنوان العام: فيلا، عمارة، تشطيب وحدة، مطعم، عيادة، محل، أو مشروع تطوير قائم.")}
+				pTopic2={new Topic("المراحل", "تصميم، تراخيص، مشتريات، بناء، تشطيبات، تشغيل، وتسليم حسب نطاق المشروع.")}
+				pTopic3={new Topic("الحزم", "أعمال ترابية، خرسانة، مباني، كهرباء، سباكة، تكييف، أرضيات، دهانات، نجارة، واجهات.")}
+			/>
+
+			<CardsGr
+				pWidth={new RespString("560px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("مستوى النشاط")}
+				pCardBg={new ElemBg("#F7F1E6")}
+				pCardTitleFnt={Text.H4.WithColor("#111318")}
+				pCardBodyFnt={Text.Body.WithColor("#333333")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("قابل للقياس", "كل نشاط يجب أن يمكن معرفة هل بدأ، هل انتهى، وما نسبة تقدمه تقريبًا.")}
+				pTopic2={new Topic("له مسؤول", "نشاط دون مسؤول واضح يتحول إلى ملاحظة عامة لا يمكن محاسبة أحد عليها.")}
+				pTopic3={new Topic("له أثر", "لا يتم تفتيت الجدول إلى تفاصيل لا تؤثر على المتابعة ولا تساعد على القرار.")}
+			/>
+
+		</HzStack>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="أنواع العلاقات بين الأنشطة"
+			pDesc="العلاقات هي قلب الجدول. نفس قائمة الأنشطة قد تنتج مدة مختلفة تمامًا إذا تغير ترتيبها أو درجة تداخلها. لذلك يتم بناء العلاقات بناءً على منطق الموقع لا على الرغبة في تقصير المدة فقط."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("العلاقة لا تعني مجرد سهم")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("تتابع كامل", "نشاط لا يبدأ إلا بعد انتهاء السابق، مثل صب الخرسانة بعد انتهاء الحدادة والنجارة والمراجعة.")}
+			pTopic2={new Topic("تداخل جزئي", "نشاط يمكن أن يبدأ بعد تقدم سابقه بنسبة كافية، مثل بدء بعض أعمال الكهرباء بعد تقدم المباني في منطقة معينة.")}
+			pTopic3={new Topic("اعتماد سابق", "نشاط ينتظر قرارًا أو خامة أو موافقة قبل بدء التنفيذ، مثل اعتماد عينة الرخام قبل التوريد.")}
+			pTopic4={new Topic("قيد مكاني", "نشاطان لا يمكن تشغيلهما معًا في نفس الغرفة أو الدور، حتى لو سمحت العلاقات النظرية بذلك.")}
+			pTopic5={new Topic("قيد فني", "نشاط يحتاج اختبارًا أو جفافًا أو معالجة قبل استمرار بند لاحق، مثل العزل أو الخرسانة أو الدهانات.")}
+			pTopic6={new Topic("قيد توريد", "نشاط تنفيذه قصير، لكن انتظاره طويل بسبب تصنيع أو استيراد أو اعتماد مسبق.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="تقدير مدد الأنشطة"
+			pDesc="مدة النشاط ليست رقمًا عشوائيًا. يتم تقديرها بناءً على الكمية والإنتاجية والموارد وقيود الموقع وأزمنة الانتظار الطبيعية. المدة القصيرة غير الواقعية لا تجعل المشروع أسرع؛ تجعل التأخير مؤكدًا."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("مصادر تقدير المدة")}
+				pDesc={Text.Body.WithColor("#333333").OfText("كل مصدر له درجة دقة، ويتم اختيار الأنسب حسب حالة المشروع.")}
+				pHeadBg={new ElemBg("#FFFFFF")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"خبرة مشروعات مشابهة في الحجم والنوع.",
+					"إنتاجية فرق العمل المتاحة فعلًا لدى المقاول.",
+					"الكميات المستخرجة من الحصر أو المقايسة.",
+					"قيود الموقع والمداخل والتشوين وأوقات العمل.",
+					"زمن توريد الخامات أو تصنيعها أو اعتمادها.",
+					"أزمنة فنية مثل المعالجة والجفاف والاختبارات."
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("علامات مدة غير واقعية")}
+				pDesc={Text.Body.WithColor("#333333").OfText("هذه العلامات تستدعي مراجعة الجدول قبل اعتماده.")}
+				pHeadBg={new ElemBg("#FFFFFF")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"مدة لا تتناسب مع كمية البند أو عدد العمالة.",
+					"أنشطة كثيرة تعمل في نفس المكان في نفس الوقت.",
+					"إهمال وقت اعتماد العينات أو مراجعة الرسومات.",
+					"غياب أيام الاختبار أو الجفاف أو المعالجة.",
+					"عدم وجود أي هامش للمخاطر المعروفة.",
+					"مطابقة المدة لرغبة تجارية لا لمنطق التنفيذ."
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="جدول الاعتمادات والرسومات"
+			pDesc="في المشروعات المنظمة، التنفيذ لا ينتظر الموقع فقط؛ ينتظر رسومات، عينات، ألوان، خامات، موافقات، وتفاصيل. لذلك يتم إدخال الاعتمادات ضمن الجدول حتى لا تظهر كمفاجأة أثناء التنفيذ."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("اعتمادات تؤثر على الوقت")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("رسومات الشوب دروينج", "تحتاج اعتمادًا قبل تنفيذ تفاصيل دقيقة أو تصنيع عناصر مرتبطة بالموقع.")}
+			pTopic2={new Topic("عينات الخامات", "الأرضيات والدهانات والرخام والأخشاب والإكسسوارات تحتاج قرارًا مبكرًا حتى لا توقف التوريد.")}
+			pTopic3={new Topic("الألوان والتشطيبات", "قرار اللون أو الخامة قد يبدو بسيطًا، لكنه يتحكم في طلبات شراء وترتيب فرق التنفيذ.")}
+			pTopic4={new Topic("المعدات", "التكييف والمصاعد والمضخات واللوحات تحتاج بيانات ومراجعات وتوافقًا مع الموقع.")}
+			pTopic5={new Topic("الموردون", "تثبيت المورد مبكرًا يؤثر على زمن التصنيع والتوريد والدفع والاستلام.")}
+			pTopic6={new Topic("قرارات المالك", "تأخر قرار واحد من المالك قد يتحول إلى توقف في أكثر من بند، لذلك توضع القرارات على الجدول بوضوح.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		pBg={new ElemBg("#0E1118")}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg("#151923")}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("جدولة مشروع بتعاقد مقاول واحد أو مقاولين منفصلين")}
+				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("طريقة التعاقد تغير طريقة الجدولة. المقاول الواحد يتحمل تنسيقًا أكبر، أما المقاولون المنفصلون فيحتاجون خطة تفصيلية لتفادي فراغات المسؤولية بين الفرق.")}
+				pSize={new Size(1000, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<CardsGr
+				pWidth={new RespString("560px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("مقاول عام")}
+				pCardBg={new ElemBg("#F7F1E6")}
+				pCardTitleFnt={Text.H4.WithColor("#111318")}
+				pCardBodyFnt={Text.Body.WithColor("#333333")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("مسؤولية واضحة", "المقاول يدير فرق التنفيذ داخليًا، والجدول يركز على مراحل التسليم والتقدم العام.")}
+				pTopic2={new Topic("اعتماد أسهل", "يمكن اعتماد برنامج واحد ومتابعة المقاول عليه، مع تحديثات دورية عند الحاجة.")}
+				pTopic3={new Topic("رقابة على الالتزام", "المالك يراجع الأداء مقابل خط الأساس بدل الدخول في تفاصيل كل فريق بشكل يومي.")}
+			/>
+
+			<CardsGr
+				pWidth={new RespString("560px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("مقاولون منفصلون")}
+				pCardBg={new ElemBg("#F7F1E6")}
+				pCardTitleFnt={Text.H4.WithColor("#111318")}
+				pCardBodyFnt={Text.Body.WithColor("#333333")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("تنسيق أعلى", "كل فريق يحتاج موعد دخول وخروج ونقطة استلام من الفريق السابق.")}
+				pTopic2={new Topic("مخاطر أكبر", "أي تأخير من فريق يؤثر على فرق أخرى، خاصة في التشطيبات والخدمات.")}
+				pTopic3={new Topic("متابعة أدق", "الجدول يجب أن يوضح المسؤوليات والفواصل بين الأعمال حتى لا تضيع المسؤولية بين الأطراف.")}
+			/>
+
+		</HzStack>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="نقاط تسليم مرحلية داخل الجدول"
+			pDesc="تقسيم المشروع إلى نقاط تسليم يحول المتابعة من سؤال عام إلى مراجعة مرحلة محددة. كل نقطة لها نتيجة واضحة يمكن قبولها أو تسجيل ملاحظات عليها."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("أمثلة نقاط تسليم")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("اعتماد التصميم", "نقطة تثبيت الرسومات أو التعديلات قبل تحويلها إلى تنفيذ أو توريد.")}
+			pTopic2={new Topic("استلام الهيكل", "انتهاء الأعمال الإنشائية الرئيسية واستعداد المشروع للمباني والتأسيسات.")}
+			pTopic3={new Topic("إقفال التأسيس", "انتهاء الكهرباء والسباكة والتكييف والاختبارات قبل المحارة أو الجبس أو الأرضيات.")}
+			pTopic4={new Topic("اعتماد الخامات", "انتهاء اختيارات الأرضيات والدهانات والأبواب والرخام والإضاءة قبل طلب الشراء.")}
+			pTopic5={new Topic("تسليم منطقة", "تسليم دور أو شقة أو فراغ أو واجهة بما يسمح بتشغيل أعمال لاحقة أو استلام جزئي.")}
+			pTopic6={new Topic("التسليم النهائي", "انتهاء الملاحظات والتنظيف والتشغيل وتسليم المفاتيح أو المستندات المطلوبة.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="الجدول الزمني كأداة تفاوض مع المقاول"
+			pDesc="قبل التعاقد، يساعد الجدول على تحويل الوعد إلى التزام قابل للمراجعة. بعد التعاقد، يساعد على فصل التأخير الحقيقي عن الانطباع العام، ويعطي الطرفين لغة مشتركة في الاجتماعات."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("قبل توقيع العقد")}
+				pDesc={Text.Body.WithColor("#333333").OfText("الجدول يساعد في قراءة العرض الفني والزمني للمقاول قبل الالتزام المالي.")}
+				pHeadBg={new ElemBg("#FFFFFF")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"مراجعة هل مدة المقاول واقعية بالنسبة لنطاق العمل.",
+					"كشف البنود التي لم تظهر في العرض الزمني.",
+					"تحديد نقاط تسليم تصلح كمعالم تعاقدية.",
+					"ربط الدفعات بمراحل وليس بتواريخ منفصلة عن التقدم.",
+					"تحديد مسؤولية الخامات والتوريدات طويلة المدة.",
+					"تسجيل افتراضات المقاول قبل بدء التنفيذ."
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("بعد بداية التنفيذ")}
+				pDesc={Text.Body.WithColor("#333333").OfText("الجدول يتحول إلى مرجع متابعة واجتماعات وقرارات تعويض.")}
+				pHeadBg={new ElemBg("#FFFFFF")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"مقارنة التقدم الفعلي بخط الأساس.",
+					"تحديد هل التأخير مؤثر على تاريخ التسليم أم لا.",
+					"طلب خطة تعويض مبنية على أنشطة واضحة.",
+					"مراجعة تأثير التغييرات الجديدة على مدة المشروع.",
+					"تحديد قرارات المالك المطلوبة حتى لا يتحمل المقاول وحده التأخير.",
+					"تجهيز ملخص زمني للاجتماعات الدورية."
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="أنواع التقارير الزمنية الممكنة"
+			pDesc="التقرير الزمني يجب أن يناسب حجم المشروع. بعض العملاء يحتاجون صفحة ملخص، وآخرون يحتاجون تقريرًا تفصيليًا بالمسار الحرج والانحرافات والتوصيات."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("اختر التقرير المناسب")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("ملخص تنفيذي", "صفحة أو صفحتان للمالك توضح الموقف العام ونسبة التقدم والمخاطر القريبة والقرارات المطلوبة.")}
+			pTopic2={new Topic("تقرير تفصيلي", "يشمل الأنشطة المتأخرة والمسار الحرج والتحديثات والتغيرات وخطة الفترة القادمة.")}
+			pTopic3={new Topic("تقرير توريدات", "يركز على الخامات والمعدات المطلوبة وتواريخ الاعتماد والطلب والتوريد والتركيب.")}
+			pTopic4={new Topic("تقرير تأخير", "يحلل أثر التأخير على تاريخ التسليم ويقترح خطة تعويض أو تاريخًا معدلًا.")}
+			pTopic5={new Topic("تقرير اجتماع", "يحول النقاش إلى قرارات واضحة: من سيفعل ماذا؟ ومتى؟ وما أثر عدم التنفيذ؟")}
+			pTopic6={new Topic("تقرير إغلاق", "يلخص تاريخ المشروع، المراحل، التأخيرات، الملاحظات، والدروس المستفادة بعد التسليم.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		pBg={new ElemBg("#111318")}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg("#0E1118")}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("متى لا يكون الجدول وحده كافيًا؟")}
+				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("الجدول أداة قوية، لكنه لا يحل كل شيء وحده. أحيانًا يكون المشروع محتاجًا إدارة أو إشرافًا أو حصرًا أو مراجعة رسومات قبل أن يصبح الجدول قابلًا للتطبيق.")}
+				pSize={new Size(1000, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("خدمات قد تحتاجها قبل أو مع الجدول")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("حصر الكميات", "عندما تكون الكميات غير واضحة، يصعب تقدير مدد منطقية للأنشطة والفرق والدفعات.")}
+			pTopic2={new Topic("شوب دروينج", "عندما تكون الرسومات غير كافية للتنفيذ، يصبح الجدول مليئًا بافتراضات قد تتغير لاحقًا.")}
+			pTopic3={new Topic("إدارة مشروع", "عندما يحتاج المالك من يتابع القرارات والدفعات والتوريدات والتغييرات وليس التاريخ فقط.")}
+			pTopic4={new Topic("إشراف هندسي", "عندما يحتاج الموقع متابعة جودة ومطابقة رسومات بجانب متابعة الزمن.")}
+			pTopic5={new Topic("مراجعة فنية", "عندما يكون هناك ملف قائم أو مشروع متوقف ويحتاج تحديد سبب المشكلة قبل إعادة الجدولة.")}
+			pTopic6={new Topic("تقرير تأخير", "عندما يكون النزاع حول من تسبب في التأخير وما أثره على تاريخ التسليم.")}
+		/>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="أسئلة نطرحها قبل بناء الجدول"
+			pDesc="هذه الأسئلة تختصر وقتًا كبيرًا في بداية الخدمة، لأنها تكشف هل المطلوب جدولًا للتخطيط، للتعاقد، للمتابعة، أم لتحليل تأخير قائم."
+		/>
+
+		<HzStack pGap={new Pixel(25, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("575px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("أسئلة عن المشروع")}
+				pDesc={Text.Body.WithColor("#333333").OfText("تحدد طبيعة الجدول ومستوى تفصيله.")}
+				pHeadBg={new ElemBg("#F7F1E6")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={true}
+				pItems={[
+					{ Title: "ما نوع المشروع؟", Items: ["بناء، تشطيب، تطوير قائم، مشروع تجاري، فيلا، عمارة، عيادة، مطعم، أو محل."] },
+					{ Title: "ما مرحلة المشروع الآن؟", Items: ["فكرة، تصميم، تسعير، تعاقد، بداية تنفيذ، توقف، تأخير، أو قرب التسليم."] },
+					{ Title: "ما المستندات المتاحة؟", Items: ["رسومات، مقايسة، حصر، عرض مقاول، صور موقع، جدول سابق، أو تقارير متابعة."] },
+					{ Title: "ما تاريخ التسليم المطلوب؟", Items: ["تاريخ مستهدف تجاري أو تعاقدي أو شخصي، ومدى مرونته عند التحليل."] }
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("575px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("أسئلة عن طريقة الاستخدام")}
+				pDesc={Text.Body.WithColor("#333333").OfText("تحدد صيغة التسليم والتحديث والتقرير.")}
+				pHeadBg={new ElemBg("#F7F1E6")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={true}
+				pItems={[
+					{ Title: "من سيستخدم الجدول؟", Items: ["مالك فقط، مقاول، مهندس مشرف، مدير مشروع، أو أكثر من طرف."] },
+					{ Title: "هل مطلوب تحديثات؟", Items: ["إعداد مرة واحدة، تحديث أسبوعي، تحديث شهري، أو تحديث عند مراحل معينة."] },
+					{ Title: "هل مطلوب ملف قابل للتعديل؟", Items: ["PDF للعرض، ملف برنامج زمني، جدول مبسط، أو تقرير تفصيلي."] },
+					{ Title: "هل يوجد خلاف أو تأخير؟", Items: ["عند وجود خلاف، يتغير دور الجدول من تخطيط إلى تحليل موقف وتوثيق أثر زمني."] }
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="لغة الجدول التي يفهمها غير المتخصص"
+			pDesc="المالك لا يحتاج أن يتحول إلى مخطط زمني محترف حتى يفهم مشروعه. لذلك يتم تبسيط المخرجات بلغة واضحة بجانب النسخة الفنية عند الحاجة."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("تبسيط بدون إضعاف")}
+			pCardBg={new ElemBg("#FFFFFF")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("ملخص مراحل", "عرض المراحل الكبرى بطريقة مفهومة: تصميم، توريد، تنفيذ، تشطيبات، تشغيل، تسليم.")}
+			pTopic2={new Topic("تواريخ فاصلة", "إظهار التواريخ التي تهم المالك بدل غرقه في عشرات الأنشطة الفنية.")}
+			pTopic3={new Topic("قرارات مطلوبة", "تحديد ما يجب أن يقرره المالك ومتى، حتى لا يصبح هو سبب التأخير دون قصد.")}
+			pTopic4={new Topic("مخاطر واضحة", "ترجمة الخطر الزمني إلى جملة مباشرة: إذا تأخر هذا البند، سيتأخر التسليم أو يتأثر بند آخر.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoFaq>
+
+		<FaqItem
+			pQuestion="هل يمكن إعداد جدول زمني قبل اختيار المقاول؟"
+			pAnswer="نعم، وهذا مفيد جدًا في مرحلة دراسة العروض. يمكن إعداد جدول مبدئي يساعد المالك على تقييم مدة المقاول ومعرفة هل تاريخ التسليم المقترح واقعي أم مبالغ فيه."
+		/>
+
+		<FaqItem
+			pQuestion="هل الجدول الزمني يصلح للتعاقد؟"
+			pAnswer="يمكن إعداد جدول تعاقدي عند توفر نطاق عمل واضح ورسومات أو مقايسة. يجب أن يحدد العقد طريقة اعتماد الجدول والتحديثات والتغييرات حتى يكون استخدامه واضحًا للطرفين."
+		/>
+
+		<FaqItem
+			pQuestion="هل يمكن عمل جدول من غير رسومات كاملة؟"
+			pAnswer="يمكن إعداد جدول مبدئي، لكن دقته تكون أقل. كل نقص في الرسومات أو الكميات يتحول إلى افتراض يجب ذكره بوضوح حتى لا يفهم الجدول على أنه مدة نهائية مؤكدة."
+		/>
+
+		<FaqItem
+			pQuestion="هل الجدول يتم على بريمافيرا أم مايكروسوفت بروجكت؟"
+			pAnswer="يعتمد على حجم المشروع والغرض من التسليم. بعض المشروعات تحتاج برنامجًا احترافيًا قابلًا للتحديث، وبعضها يكفيه ملف بصري أو جدول مبسط. الأهم هو صحة المنطق والعلاقات قبل اسم البرنامج."
+		/>
+
+		<FaqItem
+			pQuestion="ما الفرق بين الجدول الزمني والجدول التنفيذي؟"
+			pAnswer="الجدول الزمني قد يكون عامًا أو تفصيليًا حسب الحاجة. الجدول التنفيذي عادة يدخل في أنشطة ومراحل أكثر قربًا من الموقع، ويحتاج تحديثًا مستمرًا مع تقدم الأعمال."
+		/>
+
+		<FaqItem
+			pQuestion="هل يمكن تحديث جدول مشروع بدأ بالفعل؟"
+			pAnswer="نعم، يتم إدخال الحالة الفعلية للأعمال، ثم مقارنة المتبقي بالمدة المطلوبة وتحليل التأخير واقتراح ترتيب جديد أو خطة تعويض عند الحاجة."
+		/>
+
+		<FaqItem
+			pQuestion="هل الجدول يحدد عدد العمالة المطلوبة؟"
+			pAnswer="يمكن أن يتضمن افتراضات للموارد أو ملاحظات على الحاجة لفرق إضافية. تحديد الموارد بدقة يحتاج معرفة طريقة التنفيذ والمقاول وعدد الفرق المتاحة وإنتاجيتها."
+		/>
+
+		<FaqItem
+			pQuestion="هل يتم ربط الجدول بالدفعات؟"
+			pAnswer="يمكن ربط المراحل بالدفعات أو المستخلصات عند توفر المقايسة أو التعاقد. هذا يساعد المالك على توقع التدفق النقدي ومراجعة المطالبات."
+		/>
+
+		<FaqItem
+			pQuestion="هل الخدمة مناسبة لتشطيب شقة صغيرة؟"
+			pAnswer="نعم إذا كانت الشقة تحتاج ضبطًا واضحًا للخامات والفرق والمدة، خصوصًا عند وجود أكثر من مقاول أو موعد تسليم مهم أو ميزانية محددة."
+		/>
+
+		<FaqItem
+			pQuestion="هل يمكن تحليل سبب تأخير المقاول؟"
+			pAnswer="يمكن تحليل التأخير بشكل فني مبدئي من خلال البرنامج والتقدم الفعلي والمستندات المتاحة. مستوى التحليل القانوني أو التعاقدي يعتمد على مستندات العقد ومحاضر الموقع والتحديثات السابقة."
+		/>
+
+		<FaqItem
+			pQuestion="ما أسرع طريقة لطلب الخدمة؟"
+			pAnswer="أرسل نوع المشروع، المساحة، الرسومات المتاحة، عرض المقاول إن وجد، تاريخ البداية، تاريخ التسليم المطلوب، وهل المطلوب جدول جديد أم مراجعة أو تحديث جدول قائم."
+		/>
+
+		<FaqItem
+			pQuestion="هل يتم تسليم ملف قابل للتعديل؟"
+			pAnswer="يمكن الاتفاق على صيغة التسليم: PDF فقط، أو ملف قابل للتعديل، أو تقرير مع الجداول. يتم تحديد ذلك قبل بدء الخدمة حسب احتياج العميل."
+		/>
+
+	</EmoFaq>
+
+
+
+
+
+
+
+	<ReadAlso
+		pTitle={Text.H2.Centered.WithColor("#111318").OfText("اقرأ أيضًا")}
+		pDesc={Text.Body.Centered.WithColor("#333333").OfText("صفحات مرتبطة تساعدك على فهم علاقة الجدول الزمني بباقي الخدمات الفنية داخل المشروع.")}
+		pHeadBg={new ElemBg("#E7D3A1")}
+		pBodyBg={new ElemBg("#F7F1E6")}
+		pCardBg={new ElemBg("#FFFFFF")}
+	>
+
+		<ReadAlsoItem
+			pTitle="إدارة المشروعات الهندسية"
+			pDesc="الصفحة الرئيسية لإدارة المشروع وربط النطاق والوقت والتكلفة والمخاطر والتقارير."
+			pHref="/emodsign/tech/manage"
+			pImg="/Media/Emodsign/Tech/Manage/HeroL.webp"
+		/>
+
+		<ReadAlsoItem
+			pTitle="حصر الكميات"
+			pDesc="مدخل خدمات الحصر التي تساعد في بناء جدول أكثر واقعية مرتبط بحجم العمل."
+			pHref="/emodsign/tech/takeoff"
+			pImg="/Media/Emodsign/Tech/Takeoff/HeroL.webp"
+		/>
+
+		<ReadAlsoItem
+			pTitle="حصر كميات أعمال البناء"
+			pDesc="حصر الخرسانات والمباني والبنود الإنشائية التي تؤثر على مدد البناء."
+			pHref="/emodsign/tech/takeoff/construction"
+			pImg="/Media/Emodsign/Tech/Takeoff/Construction/HeroL.webp"
+		/>
+
+		<ReadAlsoItem
+			pTitle="حصر كميات التشطيبات"
+			pDesc="حصر الأرضيات والحوائط والأسقف والخامات النهائية قبل التوريد والشراء."
+			pHref="/emodsign/tech/takeoff/finishing"
+			pImg="/Media/Emodsign/Tech/Takeoff/Finishing/HeroL.webp"
+		/>
+
+		<ReadAlsoItem
+			pTitle="شوب دروينج"
+			pDesc="تفصيل الرسومات التنفيذية لتقليل القرارات المفتوحة أثناء الموقع."
+			pHref="/emodsign/tech/shopdwg"
+			pImg="/Media/Emodsign/Tech/Shopdwg/HeroL.webp"
+		/>
+
+		<ReadAlsoItem
+			pTitle="إشراف هندسي على البناء"
+			pDesc="متابعة تنفيذ أعمال البناء والخرسانة والمباني طبقًا للرسومات والمواصفات."
+			pHref="/emocrete/supervision/construction"
+			pImg="/Media/Emocrete/Supervision/Construction/HeroL.webp"
+		/>
+
+	</ReadAlso>
+
+
+
+
+
+
+
+	<RelServices
+		pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("خدمات مرتبطة بالجدول الزمني")}
+		pDesc={Text.Body.Centered.WithColor("#F8F4EA").OfText("هذه خدمات تجارية مباشرة يمكن طلبها مع إعداد الجدول الزمني أو بعده حسب مرحلة المشروع.")}
+		pHeadBg={new ElemBg("#0E1118")}
+		pBodyBg={new ElemBg("#F7F1E6")}
+		pCardBg={new ElemBg("#FFFFFF")}
+	>
+
+		<RelServiceItem
+			pTitle="إعداد جدول زمني"
+			pDesc="بناء برنامج زمني للمشروع مع الأنشطة والعلاقات والمدد والمسار الحرج ومخرجات المتابعة."
+			pHref="/emodsign/tech/manage/table"
+			pImg="/Media/Emodsign/Tech/Manage/Table/HeroL.webp"
+			pBtnText="اطلب الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="إدارة مشروع هندسي"
+			pDesc="إدارة النطاق والوقت والتكلفة والتقارير والتوريدات والتغييرات بين أطراف المشروع."
+			pHref="/emodsign/tech/manage"
+			pImg="/Media/Emodsign/Tech/Manage/HeroL.webp"
+			pBtnText="اطلب الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="حصر كميات البناء"
+			pDesc="حصر الخرسانات والمباني والبنود الإنشائية لتجهيز التسعير أو بناء مدد أكثر واقعية."
+			pHref="/emodsign/tech/takeoff/construction"
+			pImg="/Media/Emodsign/Tech/Takeoff/Construction/HeroL.webp"
+			pBtnText="اطلب الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="حصر كميات التشطيبات"
+			pDesc="حصر الخامات النهائية وربطها بخطة الشراء والتوريد والتنفيذ."
+			pHref="/emodsign/tech/takeoff/finishing"
+			pImg="/Media/Emodsign/Tech/Takeoff/Finishing/HeroL.webp"
+			pBtnText="اطلب الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="شوب دروينج معماري"
+			pDesc="تفصيل الرسومات المعمارية قبل الجدولة التنفيذية لتقليل التعارضات والقرارات المفتوحة."
+			pHref="/emodsign/tech/shopdwg/arch"
+			pImg="/Media/Emodsign/Tech/Shopdwg/Arch/HeroL.webp"
+			pBtnText="اطلب الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="إشراف التشطيبات"
+			pDesc="متابعة مراحل التشطيب والخامات والملاحظات وربطها بتواريخ تسليم واضحة."
+			pHref="/emocrete/supervision/finishing"
+			pImg="/Media/Emocrete/Supervision/Finishing/HeroL.webp"
+			pBtnText="اطلب الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="إشراف هندسي على البناء"
+			pDesc="متابعة أعمال البناء والخرسانات والمباني حسب الرسومات والمواصفات ومراحل التنفيذ."
+			pHref="/emocrete/supervision/construction"
+			pImg="/Media/Emocrete/Supervision/Construction/HeroL.webp"
+			pBtnText="اطلب الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="تقارير واستشارات هندسية"
+			pDesc="مراجعة موقف فني أو تأخير أو مشكلة قائمة وإعداد تقرير يساعد المالك على اتخاذ قرار."
+			pHref="/emonsult/report"
+			pImg="/Media/Emonsult/Report/HeroL.webp"
+			pBtnText="اطلب الخدمة"
+		/>
+
+	</RelServices>
+
+
+
+
+
+
+
+</BLayout>

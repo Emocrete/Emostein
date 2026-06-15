@@ -1,0 +1,313 @@
+---
+import BLayout from "@/Layout.astro";
+import { Text, ElemBg, Size, Align, Colors, RespString, Topic, Pixel, EmoMediaData } from "@/TypesLib";
+import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, EmoFaq, ReadAlso, RelServices, EmoPipelineStrip, ApartmentSaleForm, SecTitle, VrStack, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="شقق للبيع"
+	pDescr="خدمة تسويق شقق للبيع، تشمل تجهيز بيانات الوحدة، تصويرها، تحديد نقاط القوة، فرز المشترين، ترتيب المعاينات، ومتابعة التفاوض على السعر وشروط البيع."
+>
+
+	<Hero
+		pImgL="/Media/Emostate/Apartment/Sell/HeroD.webp"
+		pImgP="/Media/Emostate/Apartment/Sell/HeroM.webp"
+		pTitle="شقق للبيع"
+		pDesc="تسويق شقتك للبيع بعرض واضح يجذب المشتري الجاد ويقلل المعاينات العشوائية"
+		pTitleClr={Colors.WhiteOff}
+		pDescClr={Colors.WhiteOff}
+		pAlign="center"
+		pBlurL="on"
+		pBlurP="on"
+		pPosL="44% 8% 12% 8%"
+		pPosP="42% 5% 10% 5%"
+	>
+
+		<EmoCall BlackSky pText="اعرض شقتك للبيع" />
+
+	</Hero>
+
+	<ApartmentSaleForm pSourcePage="شقق للبيع" pWhatsapp="201014490054" />
+
+	<ESec
+		id="Intro"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+		<SecTitle
+			pTitle="تسويق شقة للبيع"
+			pDesc="بيع الشقة يحتاج عرضًا يجيب على أسئلة المشتري قبل المعاينة: أين تقع؟ ما مساحتها؟ ما حالتها؟ ما السعر؟ وما سبب تميزها؟"
+			style={`--StripBg:${Colors.GreenLite};`}
+		/>
+
+		<EmoStrip
+			pBg={new ElemBg(Colors.WhiteOff)}
+
+			pAlign={Align.Center}
+>
+
+			<HzStack
+
+
+				pGap={new Pixel(30, 15)}
+				pPad={new Pixel(30, 15)}
+>
+
+				<RespImg pImg={new EmoMediaData("Img", "/Media/Emostate/Apartment/Sell/", "HeroD.webp", false, "شقق للبيع", new Size(520, "auto", "100%", "auto"))} />
+
+				<VrStack
+
+					pWidth={new Pixel(700, 340)}
+					pGap={new Pixel(20, 15)}
+					pPad={new Pixel(0, 0)}
+>
+
+					<Emograph
+						pTitle={Text.H3.OfText("المشتري الجاد لا يبحث عن عنوان فقط")}
+						pText={Text.Body.OfText("المشتري يقارن بين السعر والموقع والمساحة والتشطيب والدور والمرافق وحالة العمارة. كل معلومة ناقصة تفتح باب أسئلة متكررة أو تجعل العميل يؤجل الاتصال. لذلك يتم تجهيز عرض الشقة بطريقة منظمة قبل نشرها.")}
+						pSize={new Size(700, "auto", "100%", "auto")}
+					/>
+
+					<CardsGr
+						pWidth={new RespString("700px", "100%")}
+						pCardBg={new ElemBg(Colors.Gray1)}
+						pCardTitleFnt={Text.H4.Centered}
+						pCardBodyFnt={Text.Body.Centered}
+						pTopic1={new Topic("ملف عرض", "وصف وصور وسعر وموقع ومميزات وعيوب واضحة")}
+						pTopic2={new Topic("فرز مشتري", "سؤال عن الميزانية وطريقة السداد والغرض من الشراء")}
+						pTopic3={new Topic("تفاوض منظم", "متابعة العروض والردود بدون حرق السعر من أول اتصال")}
+					/>
+
+				</VrStack>
+
+			</HzStack>
+
+		</EmoStrip>
+
+	</ESec>
+
+	<ESec
+		id="Data"
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+	>
+		<SecTitle
+			pTitle="بيانات الشقة قبل الإعلان"
+			pDesc="كلما كان ملف الشقة واضحًا زادت جودة الاتصالات وقلت المعاينات غير الجادة"
+			style={`--StripBg:${Colors.Gray5};`}
+		/>
+
+		<EmoStrip
+			pBg={new ElemBg(Colors.Gray1)}
+
+			pAlign={Align.Center}
+>
+
+			<EmoList
+				pWidth={new RespString("1000px", "100%")}
+				pTitle={Text.H3.Centered.OfText("المطلوب من المالك")}
+				pDesc={Text.Body.Centered.OfText("هذه البيانات لا تغني عن مراجعة المستندات عند الوصول إلى اتفاق، لكنها تجعل العرض الأولي أكثر جدية")}
+				pHeadBg={new ElemBg(Colors.GreenLite)}
+				pItemsBg={new ElemBg(Colors.WhiteOff)}
+				pNumbered={true}
+				pItems={[
+					{ Title: "بيانات الموقع", Items: ["المنطقة والشارع والعلامات القريبة", "الدور والواجهة وحالة المصعد أو المدخل"] },
+					{ Title: "بيانات المساحة", Items: ["المساحة التعاقدية أو الفعلية إن وجدت", "عدد الغرف والحمامات والريسيبشن والبلكونات"] },
+					{ Title: "حالة الشقة", Items: ["التشطيب الحالي", "حالة الكهرباء والسباكة والأرضيات والأبواب والشبابيك"] },
+					{ Title: "بيانات السعر", Items: ["السعر المطلوب", "نطاق التفاوض المقبول", "طريقة السداد المفضلة"] },
+					{ Title: "بيانات الملكية", Items: ["نوع المستند المتاح", "هل هناك توكيل أو ورثة أو مالك واحد", "موعد التسليم الممكن"] }
+				]}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+	<ESec
+		id="Process"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+		<SecTitle
+			pTitle="خطوات تسويق الشقة"
+			pDesc="العملية مرتبة من تجهيز البيانات حتى التفاوض النهائي"
+			style={`--StripBg:${Colors.SkyLite};`}
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.OfText("مراحل العمل")}
+			pCardBg={new ElemBg(Colors.WhiteOff)}
+			pCardTitleFnt={Text.H4.Centered}
+			pCardBodyFnt={Text.Body.Centered}
+			pStackDir="Row"
+			pTopic1={new Topic("1. مراجعة البيانات", "تجميع معلومات الشقة وتحديد ما يحتاج توضيحًا قبل الإعلان.")}
+			pTopic2={new Topic("2. تجهيز العرض", "صياغة وصف واضح واختيار الصور المناسبة ونقطة البيع الأساسية.")}
+			pTopic3={new Topic("3. نشر موجه", "توجيه الإعلان للجمهور الأقرب للشراء حسب المنطقة والسعر ونوع الوحدة.")}
+			pTopic4={new Topic("4. فرز الاتصالات", "سؤال المشتري عن الميزانية وطريقة السداد والغرض من الشراء قبل تحديد المعاينة.")}
+			pTopic5={new Topic("5. إدارة المعاينة", "ترتيب ميعاد مناسب وإرسال الموقع والمعلومات الأساسية قبل الزيارة.")}
+			pTopic6={new Topic("6. متابعة العرض", "تسجيل عروض الشراء وملاحظات العملاء ومراجعة السعر عند الحاجة.")}
+		/>
+
+	</ESec>
+
+	<ESec
+		id="BuyerFilter"
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+	>
+		<SecTitle
+			pTitle="فرز المشتري قبل المعاينة"
+			pDesc="المعاينة الجيدة تبدأ من مكالمة جيدة"
+			style={`--StripBg:${Colors.Gray5};`}
+		/>
+
+		<EmoStrip
+			pBg={new ElemBg(Colors.Gray1)}
+
+			pAlign={Align.Center}
+>
+
+			<HzStack
+
+
+				pGap={new Pixel(30, 15)}
+				pPad={new Pixel(30, 15)}
+>
+
+				<Emograph
+					pTitle={Text.H3.OfText("ما الذي نتحقق منه؟")}
+					pText={Text.Body.OfText("قبل فتح باب المعاينات، يتم سؤال العميل عن الميزانية، المنطقة المطلوبة، توقيت الشراء، طريقة السداد، وهل يبحث للسكن أم الاستثمار. هذه الأسئلة تقلل الزيارات غير الجادة وتساعد على فهم رد فعل السوق الحقيقي على السعر.")}
+					pSize={new Size(560, "auto", "100%", "auto")}
+				/>
+
+				<EmoList
+					pWidth={new RespString("560px", "100%")}
+					pTitle={Text.H3.Centered.OfText("أسئلة الفرز")}
+					pDesc={Text.Body.Centered.OfText("تحدد جدية المشتري قبل إرسال العنوان التفصيلي")}
+					pHeadBg={new ElemBg(Colors.SkyLite)}
+					pItemsBg={new ElemBg(Colors.WhiteOff)}
+					pNumbered={false}
+					pItems={[
+						"هل السعر داخل الميزانية المتاحة؟",
+						"هل طريقة السداد مناسبة؟",
+						"هل الدور أو الواجهة أو المصعد شرط أساسي؟",
+						"هل الشراء للسكن الفوري أم للاستثمار؟",
+						"هل لدى العميل قرار قريب أم يجمع معلومات فقط؟"
+					]}
+				/>
+
+			</HzStack>
+
+		</EmoStrip>
+
+	</ESec>
+
+	<EmoPipelineStrip
+		pTitle="طلبات بيع الشقق المفتوحة"
+		pDesc="بيع الشقة يحتاج متابعة عروض ومواعيد ومعاينات؛ لذلك يتم ترتيب الأولوية حسب جاهزية الصور والبيانات ومدى واقعية السعر المطلوب."
+		pServiceName="شقق للبيع"
+	/>
+
+	<ReadAlso
+		pTitle={Text.H2.Centered.OfText("اقرأ أيضًا")}
+		pDesc={Text.Body.Centered.OfText("صفحات مرتبطة داخل مجموعة التسويق العقاري")}
+
+>
+
+	<ReadAlsoItem
+		pTitle="تسويق عقاري"
+		pDesc="الصفحة الرئيسية لمجموعة التسويق العقاري."
+		pHref="/emostate"
+		pImg="/Media/Emostate/HeroD.webp"
+	/>
+
+	<ReadAlsoItem
+		pTitle="شقق للإيجار"
+		pDesc="تسويق شقة للإيجار وفرز المستأجرين."
+		pHref="/emostate/apartment/rent"
+		pImg="/Media/Emostate/Apartment/Rent/HeroD.webp"
+	/>
+
+	<ReadAlsoItem
+		pTitle="شقق مفروش"
+		pDesc="تسويق شقة مفروشة لفترات مناسبة مع ضبط المنقولات."
+		pHref="/emostate/apartment/furn"
+		pImg="/Media/Emostate/Apartment/Furn/HeroD.webp"
+	/>
+
+</ReadAlso>
+
+	<RelServices
+		pTitle={Text.H2.Centered.White.OfText("خدمات قد تساعد في البيع")}
+		pDesc={Text.Body.Centered.White.OfText("خدمات فعلية مرتبطة بتحسين قيمة الوحدة قبل عرضها")}
+	>
+
+		<RelServiceItem
+			pTitle="تشطيب شقق"
+			pDesc="تحسين حالة الشقة قبل البيع أو تجهيزها للسكن."
+			pHref="/emocrete/finishing/apartment"
+			pImg="/Media/Emocrete/Finishing/Apartment/HeroL.webp"
+		/>
+
+		<RelServiceItem
+			pTitle="تكلفة تشطيب شقة"
+			pDesc="تقدير تكلفة الأعمال قبل قرار البيع أو التشطيب."
+			pHref="/emocrete/finishing/apartment/cost"
+			pImg="/Media/Emocrete/Finishing/Apartment/Cost/HeroL.webp"
+		/>
+
+		<RelServiceItem
+			pTitle="تصميم معماري"
+			pDesc="تقديم تصور توزيع أو تعديل معماري للوحدة عند الحاجة."
+			pHref="/emodsign/des/eng/arch"
+			pImg="/Media/Emodsign/Des/Eng/Arch/HeroL.webp"
+		/>
+
+	</RelServices>
+
+	<EmoFaq>
+
+		<FaqItem
+			pQuestion="هل يجب تحديد السعر قبل الإعلان؟"
+			pAnswer="نعم. وجود سعر ابتدائي واضح يزيد جدية الاتصالات، ويمكن ترك مساحة تفاوض محسوبة بدل إعلان غير محدد السعر."
+		/>
+
+		<FaqItem
+			pQuestion="هل يتم ذكر عيوب الشقة؟"
+			pAnswer="يجب توضيح العوامل المؤثرة في القرار مثل الدور أو عدم وجود مصعد أو احتياج الشقة لصيانة، لأن إخفاءها يضيع وقت المعاينة ويضعف الثقة."
+		/>
+
+		<FaqItem
+			pQuestion="هل الصور ضرورية؟"
+			pAnswer="الصور الواضحة عنصر أساسي في بيع الشقة، لأنها تحدد هل العميل سيطلب المعاينة أو يتجاوز الإعلان."
+		/>
+
+		<FaqItem
+			pQuestion="هل يتم التفاوض نيابة عن المالك؟"
+			pAnswer="تتم المتابعة ونقل العروض بوضوح، مع الالتزام بحدود السعر والمرونة التي يحددها المالك مسبقًا."
+		/>
+
+	</EmoFaq>
+
+</BLayout>

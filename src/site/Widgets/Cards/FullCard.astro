@@ -1,0 +1,175 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { RespString, Text, ElemBg, EmoMediaData ,Size,Align, Colors, Place, type PlaceProps } from "@/TypesLib";
+import {BgMedia,RespImg} from "@/Widgets";
+
+export interface Props extends HTMLAttributes<"div">, PlaceProps {
+	pTitle?: Text;
+	pText?:Text;
+	pMedia?: EmoMediaData;
+	pBgMedia?: EmoMediaData;
+	pBgClr?: string;
+}
+
+let {
+	pBgMedia ,
+	pBgClr = "rgb(247, 202, 52)",
+	pMedia ,
+	pTitle = Text.Body.OfText("عنوان الكرت") ,
+	pText = Text.Body.OfText("محتوى الكرت") ,
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("FullCard"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+
+const TitleTag = pTitle?.GetTag() as keyof astroHTML.JSX.DefinedIntrinsicElements;
+
+pMedia = pMedia || new EmoMediaData("/Media/","ErrorImg.webp")
+
+const CardBoxCssVar = [
+	`--BgColor:${pBgClr};`,
+	cGivenStyle,
+].filter(Boolean).join(" ");
+
+const cPlace = new Place(Astro.props as PlaceProps, CardBoxCssVar);
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div
+	class = {`FullCard ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	<div class = " FullCardContentBox ">
+
+		{ pMedia &&
+
+			<RespImg pImg={pMedia}>
+
+			</RespImg>
+
+		}
+
+		<TitleTag style = {pTitle.GetStyle()}>
+
+			{pTitle.text}
+
+		</TitleTag>
+
+		{ pText &&
+
+			<p style = {pText.GetStyle()}>
+				{pText.text}
+			</p>
+
+		}
+
+	</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.FullCard {
+		position: relative;
+		display: flex;
+		flex: 1 1 0;
+		width: 50%;
+		padding: 10px;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		overflow: hidden;
+		align-items: center;
+		outline: 1px solid red;
+		min-height: 600px;
+		background-color: var(--BgColor);
+	}
+
+
+	.FullCardContentBox {
+		position: absolute;
+		width: 50%;
+		height: 30%;
+		padding: 30px;
+		left: 50%;
+		bottom: 50px;
+		transform: translateX(-50%);
+		align-items: center;
+		background: rgba(255, 255, 255, 0.8);
+		backdrop-filter: blur(2px);
+	}
+
+
+
+	@media (max-width: 768px) {
+		.FullCard {
+			width: 100%;
+			flex: none;
+			height: 600px;
+		}
+
+		.FullCardContentBox {
+			width: 80%;
+			padding: 10px;
+			height: 40%;
+		}
+	}
+
+
+
+</style>

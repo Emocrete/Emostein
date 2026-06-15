@@ -1,0 +1,640 @@
+---
+import Header from "@/Header/Header.astro";
+import GoogleAnalytics from "./GoogleAnalytics.astro";
+import { Schema, type LayoutSchemaType } from "@/Schema";
+import OrientationVisibility from "@/Scripts/OrientationVisibility.astro";
+import Clarity from "@/Scripts/Clarity.astro";
+import {Hero,IndexSec,ESec,EmoStrip ,IncLineSep,BottTriSep,	EmoBtn,	YTPlayer,DataCard,CardsGr,EmoList,Tree,EmoPipelineStrip,EmoContactStrip,EmoRatingStrip,EmoStatsStrip,EmoCoverageMapStrip} from "@/Widgets";
+import EmoFooter from "@/Widgets/EmoFooter.astro";
+import { GetPageRating } from "@/PageRatings";
+import SpeedInsights from "@vercel/speed-insights/astro"
+import SiteIntro from "@/Widgets/Intro/SiteIntro.astro";
+import OpsVisitTracker from "@/Scripts/OpsVisitTracker.astro";
+
+
+export interface Props {
+	pTitle?: string;
+	pDescr?: string;
+	pSchema?: string;
+	pSchemaType?: LayoutSchemaType;
+	pSchemaImages?: string[];
+	pSchemaHeroFolder?: string;
+	pSchemaHeroImageNames?: string[];
+
+	pIntro?: boolean;
+	pIntroLogo?: string;
+	pIntroBaseClr?: string;
+	pIntroSweepClr?: string;
+	pIntroLogoBgClr?: string;
+	pIntroTotalMs?: number;
+	pIntroOnceKey?: string;
+}
+
+
+const {
+		pTitle,
+	 	pDescr,
+	  	pSchema ,
+	  	pSchemaType,
+		pSchemaImages,
+		pSchemaHeroFolder,
+		pSchemaHeroImageNames,
+
+pIntro = true,
+pIntroLogo = "/Media/Emostein.svg",
+pIntroBaseClr = "#bbdeff",
+pIntroSweepClr = "#ffffff",
+pIntroLogoBgClr = "transparent",
+pIntroTotalMs = 2600,
+pIntroOnceKey = "",
+
+	} = Astro.props as Props;
+
+const cFounder = "م. أيمن عاشور";
+const cPhone = "01014490054";
+
+/* const cAllDep = ["Emostein", "Emodsign", "Emocrete", "EmoStone","Emopply", "Emormission", "EmoMedical", "Emonsult", "Emostate"];
+const cCanonical = Astro.url.origin + Astro.url.pathname;
+const cDep = cAllDep.find((x) => cCanonical.includes(x.toLowerCase())) ?? cAllDep[0];
+const cFinalTitle = `${pTitle} | ${cDep} | ${cFounder} | ${new Date().getFullYear()}`; */
+
+const cAllDep = ["Emostein", "Emodsign", "Emocrete", "Emostone","Emochain", "Emoperm", "Emomed", "Emonsult", "Emostate"];
+const cCanonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
+const cPath = Astro.url.pathname.toLowerCase();
+const cDep = cAllDep.find((x) => cPath.includes(`/${x.toLowerCase()}/`) || cPath === `/${x.toLowerCase()}`) ?? cAllDep[0];
+const cFinalTitle = `${pTitle} | ${cDep} | ${cFounder} | ${new Date().getFullYear()}`;
+
+
+const cPageUrl = new URL(Astro.url.pathname,Astro.site ?? Astro.url.origin).href;
+
+const cPageRating = await GetPageRating(cPageUrl);
+const cRatingApiUrl = import.meta.env.PUBLIC_EMO_RATING_API_URL ?? "";
+
+function GetLayoutSchema(): string {
+	if (pSchema !== undefined) {
+		return pSchema;
+	}
+
+	switch (pSchemaType) {
+		case "Organization":
+			return Schema.GetOrganization(pTitle ?? "", pDescr ?? "", cPageUrl, {
+				pImages: pSchemaImages,
+				pHeroFolder: pSchemaHeroFolder,
+				pHeroImageNames: pSchemaHeroImageNames
+			});
+
+		case "Person":
+			return Schema.GetFreelancer(pTitle ?? "", pDescr ?? "", cPageUrl, {
+				pImages: pSchemaImages,
+				pHeroFolder: pSchemaHeroFolder,
+				pHeroImageNames: pSchemaHeroImageNames
+			});
+
+		case "CollectionPage":
+			return Schema.GetCollection(pTitle ?? "", pDescr ?? "", cPageUrl, {
+				pImages: pSchemaImages,
+				pHeroFolder: pSchemaHeroFolder,
+				pHeroImageNames: pSchemaHeroImageNames
+			});
+
+		case "Service":
+			return Schema.GetService(pTitle ?? "", pDescr ?? "", cPageUrl, {
+				pImages: pSchemaImages,
+				pHeroFolder: pSchemaHeroFolder,
+				pHeroImageNames: pSchemaHeroImageNames
+			});
+
+		case "Article":
+			return Schema.GetArticle(pTitle ?? "", pDescr ?? "", cPageUrl, {
+				pImages: pSchemaImages,
+				pHeroFolder: pSchemaHeroFolder,
+				pHeroImageNames: pSchemaHeroImageNames
+			});
+
+		default:
+			return Schema.GetSection(pTitle ?? "", pDescr ?? "", cPageUrl, {
+				pSchemaType,
+				pImages: pSchemaImages,
+				pHeroFolder: pSchemaHeroFolder,
+				pHeroImageNames: pSchemaHeroImageNames
+			});
+	}
+}
+
+const cSchema = GetLayoutSchema();
+const cPreviewImageUrl = Schema.GetPrimaryImageUrl(pTitle ?? "", cPageUrl, {
+	pImages: pSchemaImages,
+	pHeroFolder: pSchemaHeroFolder,
+	pHeroImageNames: pSchemaHeroImageNames
+});
+const cOgType = pSchemaType === "Article" ? "article" : "website";
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!doctype html>
+
+	<html lang="ar" dir="rtl">
+
+		<head>
+
+			<title>
+
+				{cFinalTitle}
+
+			</title>
+
+			<link rel="canonical" href={cCanonical} />
+
+			<link
+				rel="icon"
+				type="image/svg+xml"
+				href="/Media/EmoLogo.svg"
+			/>
+
+			<link rel="stylesheet" href="/Styles/Site.css" />
+
+			<meta charset="utf-8" />
+
+			<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+			<meta name="description" content={pDescr} />
+
+			<meta name="robots" content="index, follow, max-image-preview:large" />
+
+			<meta property="og:locale" content="ar_EG" />
+
+			<meta property="og:type" content={cOgType} />
+
+			<meta property="og:title" content={cFinalTitle} />
+
+			<meta property="og:description" content={pDescr} />
+
+			<meta property="og:url" content={cCanonical} />
+
+			<meta property="og:site_name" content="Emostein" />
+
+			{ cPreviewImageUrl && (
+
+				<>
+				
+				
+				
+				
+				
+				
+				
+					<meta property="og:image" content={cPreviewImageUrl} />
+				
+				
+				
+				
+				
+				
+				
+					<meta property="og:image:secure_url" content={cPreviewImageUrl} />
+				
+				
+				
+				
+				
+				
+				
+					<meta name="twitter:card" content="summary_large_image" />
+				
+				
+				
+				
+				
+				
+				
+					<meta name="twitter:title" content={cFinalTitle} />
+				
+				
+				
+				
+				
+				
+				
+					<meta name="twitter:description" content={pDescr} />
+				
+				
+				
+				
+				
+				
+				
+					<meta name="twitter:image" content={cPreviewImageUrl} />
+				
+				
+				
+				
+				
+				
+				
+				</>
+			) }
+
+			{ cSchema && (
+
+				<script type="application/ld+json" set:html={cSchema} />
+			) }
+
+			<meta name="google-site-verification" content="5mv4GuAj1jxBUrKh0glnhAlWEouDCWg3nC51R_WqmzY" />
+
+			<GoogleAnalytics />
+
+			<Clarity />
+
+		</head>
+
+		<body style = " font-family : Cairo, system-ui, sans-serif ">
+
+			{ pIntro &&
+
+				<SiteIntro
+					pLogo={pIntroLogo}
+					pBaseClr={pIntroBaseClr}
+					pSweepClr={pIntroSweepClr}
+					pLogoBgClr={pIntroLogoBgClr}
+					pTotalMs={pIntroTotalMs}
+					pOnceKey={pIntroOnceKey}
+				/>
+
+			}
+
+			<Header fMenuLabel="الخدمات" />
+
+			<main>
+
+				<slot />
+
+			</main>
+
+			<EmoFooter pRatingData={cPageRating} pRatingStorageUrl={cRatingApiUrl} />
+
+			<nav class = " FloatContact " aria-label="وسائل التواصل السريعة">
+
+				<a
+					class = " FloatContactLink IsCall "
+					href="tel:+201014490054"
+					aria-label="اتصال مباشر"
+				>
+
+					<span class = " FloatContactIcon " aria-hidden="true">
+
+						<svg viewBox="0 0 24 24">
+
+							<path
+								d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1v3.6c0 .6-.4 1-1 1C10.7 21.7 2.3 13.3 2.3 3.7c0-.6.4-1 1-1h3.6c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1l-2.2 2.2Z"
+							/>
+
+						</svg>
+
+					</span>
+
+					<span class = " FloatContactArrow " aria-hidden="true">
+
+						<svg viewBox="0 0 24 24">
+
+							<path d="M8 5l8 7-8 7" />
+
+						</svg>
+
+					</span>
+
+					<span class = " FloatContactText ">
+						اتصل الآن
+					</span>
+
+				</a>
+
+				<a
+					class = " FloatContactLink IsWhatsapp "
+					href="https://wa.me/201014490054"
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label="مراسلة واتساب"
+				>
+
+					<span class = " FloatContactIcon " aria-hidden="true">
+
+						<svg class = " WhatsappLogo " viewBox="0 0 448 512">
+
+							<path
+								d="M380.9 97.1C339 55.1 283.2 32 223.9 32 101.2 32 1.5 131.7 1.5 254.4c0 39.2 10.2 77.5 29.6 111.3L0 480l117-30.7c32.4 17.7 68.9 27 106.8 27h.1c122.6 0 222.3-99.7 222.3-222.4 0-59.3-23.1-115.1-65.3-156.8zM223.9 438.8h-.1c-33.7 0-66.8-9.1-95.7-26.2l-6.9-4.1-69.4 18.2 18.5-67.7-4.5-7c-18.8-29.9-28.8-64.5-28.8-99.6 0-103.1 83.9-187 187-187 50 0 97 19.5 132.4 54.8 35.3 35.4 54.8 82.4 54.8 132.5-.1 103.1-84 186.1-187.3 186.1zm101.5-138.8c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.5-14.3 18-17.6 21.7-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2s-9.7 1.4-14.8 6.9c-5.1 5.5-19.4 19-19.4 46.3s19.9 53.7 22.6 57.4c2.8 3.7 39.1 59.7 94.8 83.8 13.2 5.7 23.5 9.1 31.5 11.7 13.2 4.2 25.3 3.6 34.8 2.2 10.6-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.2-6.5z"
+							/>
+
+						</svg>
+
+					</span>
+
+					<span class = " FloatContactArrow " aria-hidden="true">
+
+						<svg viewBox="0 0 24 24">
+
+							<path d="M8 5l8 7-8 7" />
+
+						</svg>
+
+					</span>
+
+					<span class = " FloatContactText ">
+						تحدث واتساب
+					</span>
+
+				</a>
+
+			</nav>
+
+			<OrientationVisibility />
+
+			<OpsVisitTracker />
+
+			<SpeedInsights />
+
+		</body>
+
+	</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.FloatContact {
+		position: fixed;
+		left: 0;
+		bottom: 90px;
+		z-index: 9999;
+		width: 55px;
+		height: 108px;
+		pointer-events: none;
+	}
+
+
+	.FloatContactLink {
+		position: absolute;
+		left: 0;
+		width: 55px;
+		height: 50px;
+		overflow: hidden;
+		display: block;
+		color: #ffffff;
+		text-decoration: none;
+		border-radius: 0 10px 10px 0;
+		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+		font-family: inherit;
+		pointer-events: auto;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+
+	.FloatContactIcon {
+		position: absolute;
+		left: 0;
+		top: 0;
+		z-index: 3;
+		width: 35px;
+		height: 50px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.FloatContactIcon svg {
+		display: block;
+	}
+
+
+	.IsCall .FloatContactIcon svg {
+		width: 27px;
+		height: 27px;
+		fill: currentColor;
+	}
+
+
+	.IsWhatsapp .FloatContactIcon svg {
+		width: 29px;
+		height: 29px;
+	}
+
+	.IsWhatsapp .FloatContactIcon svg.WhatsappLogo {
+		width: 27px;
+		height: 27px;
+		fill: currentColor;
+	}
+
+
+	.FloatContactArrow {
+		position: absolute;
+		left: 35px;
+		top: 0;
+		z-index: 3;
+		width: 20px;
+		height: 50px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.FloatContactArrow svg {
+		display: block;
+		width: 18px;
+		height: 18px;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 4;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+
+	.FloatContactText {
+		position: absolute;
+		left: 55px;
+		top: 0;
+		z-index: 2;
+		width: 150px;
+		height: 50px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 16px;
+		font-weight: 900;
+		line-height: 1.35;
+		white-space: nowrap;
+		opacity: 0;
+		transform: translateX(-10px);
+	}
+
+
+
+	.FloatContactLink.IsCall {
+		top: 0;
+		background-color: #1596d4;
+	}
+
+
+	.FloatContactLink.IsWhatsapp {
+		top: 58px;
+		background-color: #087b68;
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	@media (hover: hover) and (pointer: fine) {
+		.FloatContactLink {
+			transition: width 0.22s ease,
+					filter 0.22s ease,
+					box-shadow 0.22s ease;
+		}
+
+		.FloatContactText {
+			transition: opacity 0.16s ease,
+					transform 0.22s ease;
+		}
+
+		.FloatContactLink:hover {
+			width: 210px;
+			filter: brightness(1.04);
+			box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
+		}
+
+		.FloatContactLink:hover .FloatContactText {
+			opacity: 1;
+			transform: translateX(0);
+		}
+	}
+
+
+	@media (hover: none), (pointer: coarse), (max-width: 700px) {
+		.FloatContact {
+			bottom: 95px;
+			width: 55px;
+			height: 118px;
+		}
+
+		.FloatContactLink {
+			width: 55px;
+			height: 55px;
+			transition: none;
+		}
+
+		.FloatContactLink.IsWhatsapp {
+			top: 63px;
+		}
+
+		.FloatContactIcon,
+		.FloatContactArrow
+		{
+			height: 55px;
+		}
+
+		.FloatContactText {
+			display: none;
+		}
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script defer src="/Scripts/Reveal.js">
+</script>
+
+
+
+<script defer src="/Scripts/Carousel.js">
+</script>
+
+
+
+<script defer src="/Scripts/Lightbox.js">
+</script>
+
+
+
+<script is:inline>
+	document.documentElement.classList.add("js");
+</script>

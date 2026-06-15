@@ -1,0 +1,219 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+import EmoRatingStrip from "@/Widgets/Strips/EmoRatingStrip.astro";
+import EmoStatsStrip from "@/Widgets/Strips/EmoStatsStrip.astro";
+import EmoFooterPanel from "@/Widgets/Footer/EmoFooterPanel.astro";
+
+interface PageReviewData {
+	ratingValue: number;
+	ratingComment: string;
+	datePublished: string;
+	authorName: string;
+}
+
+interface PageRatingData {
+	hasRating: boolean;
+	pagePath: string;
+	ratingValue: number;
+	ratingCount: number;
+	bestRating: number;
+	worstRating: number;
+	review: PageReviewData | null;
+}
+
+export interface Props extends HTMLAttributes<"footer">, PlaceProps {
+	pShareTitle?: string;
+	pFollowTitle?: string;
+	pBgImg?: string;
+	pShareText?: string;
+	pFacebookFollow?: string;
+	pInstagramFollow?: string;
+	pLinkedInFollow?: string;
+	pYouTubeFollow?: string;
+	pTikTokFollow?: string;
+	pPartnerText?: string;
+	pPartnerHref?: string;
+	pRatingData?: PageRatingData | null;
+	pRatingStorageUrl?: string;
+}
+
+const {
+	pShareTitle = "تجدنا على",
+	pFollowTitle = "تابع الجديد",
+	pBgImg = "",
+	pShareText = "",
+	pFacebookFollow = "#",
+	pInstagramFollow = "https://www.instagram.com/emocrete",
+	pLinkedInFollow = "https://www.linkedin.com/in/ayman-ashoor-998433128",
+	pYouTubeFollow = "https://www.youtube.com/@aymanashoor7410",
+	pTikTokFollow = "#",
+	pPartnerText = "انضم للعمل معنا",
+	pPartnerHref = "/jobs",
+	pRatingData = null,
+	pRatingStorageUrl = "",
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("EmoFooter"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cCssVars = [
+	`--FooterBgImg:${BuildCssUrl(pBgImg)};`,
+	cGivenStyle,
+].filter(Boolean).join(" ");
+
+const cPlace = new Place(Astro.props as PlaceProps, cCssVars);
+
+function BuildCssUrl(pValue?: string) {
+	return pValue ? `url("${pValue}")` : "none";
+}
+---
+
+
+
+
+<footer
+	class = {`EmoFooter ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	<EmoRatingStrip
+		class="FooterRatingWidget"
+		id="page-rating"
+		pRatingData={pRatingData}
+		pStorageUrl={pRatingStorageUrl}
+		pFooterMode
+	/>
+
+	<EmoStatsStrip
+		class="FooterStatsWidget"
+		pShowOffer={false}
+		pFooterMode
+		pCycleSeconds={5}
+	/>
+
+	<EmoFooterPanel
+		class="FooterPanelWidget"
+		pShareTitle={pShareTitle}
+		pFollowTitle={pFollowTitle}
+		pShareText={pShareText}
+		pFacebookFollow={pFacebookFollow}
+		pInstagramFollow={pInstagramFollow}
+		pLinkedInFollow={pLinkedInFollow}
+		pYouTubeFollow={pYouTubeFollow}
+		pTikTokFollow={pTikTokFollow}
+		pPartnerText={pPartnerText}
+		pPartnerHref={pPartnerHref}
+	/>
+
+</footer>
+
+
+
+
+<style>
+
+
+
+	.EmoFooter {
+		position: relative;
+		isolation: isolate;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		grid-template-areas: "panel stats rating";
+		align-items: stretch;
+		direction: ltr;
+		gap: clamp(14px, 1.4vw, 24px);
+		overflow: hidden;
+		box-sizing: border-box;
+		width: 100%;
+		height: 500px;
+		min-height: 500px;
+		margin-block-start: 0;
+		padding: 26px clamp(16px, 3vw, 56px) 34px;
+		background-color: #05070a;
+		color: #ffffff;
+	}
+
+	.EmoFooter::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -2;
+		background-image: var(--FooterBgImg),
+			radial-gradient(circle at 17% 18%, rgba(255, 255, 255, 0.28) 0 1px, transparent 2px),
+			radial-gradient(circle at 36% 42%, rgba(255, 255, 255, 0.18) 0 1px, transparent 2px),
+			radial-gradient(circle at 58% 20%, rgba(255, 255, 255, 0.24) 0 1px, transparent 2px),
+			radial-gradient(circle at 78% 32%, rgba(255, 255, 255, 0.20) 0 1px, transparent 2px),
+			radial-gradient(circle at 92% 12%, rgba(255, 255, 255, 0.18) 0 1px, transparent 2px),
+			linear-gradient(180deg, #181818 0%, #070707 72%, #030609 100%);
+		background-size: cover,
+			210px 90px,
+			280px 120px,
+			190px 105px,
+			260px 115px,
+			230px 85px,
+			cover;
+		background-position: center;
+		opacity: 0.98;
+	}
+
+	.EmoFooter::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: radial-gradient(ellipse at 84% 34%, rgba(255, 255, 255, 0.10), transparent 28%),
+			linear-gradient(180deg, rgba(0, 0, 0, 0.10), rgba(0, 0, 0, 0.72));
+	}
+
+	.EmoFooter > :global(*) {
+		position: relative;
+		z-index: 1;
+		min-width: 0;
+		min-height: 0;
+	}
+
+	:global(.FooterRatingWidget) {
+		grid-area: rating;
+	}
+
+	:global(.FooterStatsWidget) {
+		grid-area: stats;
+	}
+
+	:global(.FooterPanelWidget) {
+		grid-area: panel;
+	}
+
+
+	@media (max-width: 1050px), (orientation: portrait) {
+		.EmoFooter {
+			grid-template-columns: 1fr;
+			grid-template-areas: "rating"
+				"stats"
+				"panel";
+			height: auto;
+			min-height: 0;
+			padding: 28px 14px 46px;
+			gap: 18px;
+		}
+	}
+
+
+
+</style>

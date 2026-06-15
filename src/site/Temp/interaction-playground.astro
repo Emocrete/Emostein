@@ -1,0 +1,40 @@
+---
+import BaseLayout from "../helpers/Layouts/BaseLayout.astro";
+import SvgMouseScrollOrb from "../helpers/Widgets/SvgMouseScrollOrb.astro";
+import SvgMouseSpotlight from "../helpers/Widgets/SvgMouseSpotlight.astro";
+import SvgScrollDirectionGauge from "../helpers/Widgets/SvgScrollDirectionGauge.astro";
+
+const fTitle = "Interaction Playground";
+---
+
+<BaseLayout
+        fTitle={fTitle}
+        fDescription="Mouse + Scroll interactive SVG widgets"
+        >git
+        <section class="section">
+                <div class="sectionInner">
+                        <h1 class="hTitle reveal" data-reveal="right">
+                                Interactive SVG Widgets
+                        </h1>
+                        <p
+                                class="hSub reveal"
+                                data-reveal="up"
+                                data-delay="120"
+                        >
+                                جرّب الماوس والـ scroll وشوف كل بوكس بيعمل إيه.
+                        </p>
+
+                        <div class="grid auto" style="margin-top:16px;">
+                                <SvgMouseSpotlight />
+                                <SvgScrollDirectionGauge />
+                                <SvgMouseScrollOrb />
+                        </div>
+
+                        <div style="height: 1200px;"></div>
+                        <p class="reveal" data-reveal="bounce">
+                                سكرول زيادة علشان الـ Scroll Gauge يبان قوي 👇
+                        </p>
+                        <div style="height: 900px;"></div>
+                </div>
+        </section>
+</BaseLayout>

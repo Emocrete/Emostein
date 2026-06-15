@@ -1,0 +1,198 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Align, DirectSize, ElemBg, NumPer, Pixel, type PlaceProps } from "@/TypesLib";
+import ESec from "./EmoSection.astro";
+
+interface Props extends HTMLAttributes<"div">, PlaceProps {
+	pBg?: ElemBg;
+	pBox?: DirectSize;
+	pMinH?: NumPer;
+	pAlign?: Align;
+	pImgF?: string;
+	pImgL?: string;
+	pImgP?: string;
+	pImgAlt?: string;
+	pContentSize?: DirectSize;
+	pGap?: Pixel;
+	pPad?: Pixel;
+}
+
+const {
+	pBg,
+	pBox,
+	pMinH,
+	pAlign = Align.Center,
+	pImgF = "",
+	pImgL = "",
+	pImgP = "",
+	pImgAlt = "",
+	pContentSize,
+	pGap = new Pixel(35, 18),
+	pPad = new Pixel(0),
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("DuoSec"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cDuoStyle = [
+	`--DuoWidthL:${pContentSize?.WidthL || "100%"};`,
+	`--DuoWidthP:${pContentSize?.WidthP || pContentSize?.WidthL || "100%"};`,
+	`--DuoGapL:${pGap.Landscape};`,
+	`--DuoGapP:${pGap.Portrait};`,
+	`--DuoPadL:${pPad.Landscape};`,
+	`--DuoPadP:${pPad.Portrait};`,
+	GetStyleText(pGivenStyle),
+].filter(Boolean).join(" ");
+
+function GetStyleText(pStyle: Props["style"]) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+
+	return Object.entries(pStyle)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ESec
+	class = {`DuoSec ${pGivenClass}`.trim()}
+	style = {cDuoStyle}
+	pBg={pBg}
+	pBox={pBox}
+	pMinH={pMinH}
+	pAlign={pAlign}
+	pImgF={pImgF}
+	pImgL={pImgL}
+	pImgP={pImgP}
+	pImgAlt={pImgAlt}
+	pLoc={pLoc}
+	pSize={pSize}
+	pRotate={pRotate}
+	pZ={pZ}
+	pOrigin={pOrigin}
+	pOpacity={pOpacity}
+	pClickable={pClickable}
+	pLandOnly={pLandOnly}
+	pPortOnly={pPortOnly}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	<slot />
+
+</ESec>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style is:global>
+
+
+
+	.EmoSection.DuoSec {
+		flex-direction: row !important;
+		flex-wrap: wrap !important;
+		align-items: stretch !important;
+		align-content: var(--SecJustifyL, center) !important;
+		justify-content: center !important;
+		gap: var(--DuoGapL, 0);
+		padding: var(--DuoPadL, 0);
+	}
+
+	.EmoSection.DuoSec::after {
+		content: "";
+		display: block;
+		flex: 0 0 100%;
+		width: 100%;
+		height: 0;
+	}
+
+	.EmoSection.DuoSec > :not(.EmoSectionBg):not(.DuoCol) {
+		flex: 0 0 100% !important;
+		width: 100% !important;
+		max-width: 100% !important;
+		box-sizing: border-box !important;
+	}
+
+	.EmoSection.DuoSec > .DuoCol {
+		flex: 1 1 calc((var(--DuoWidthL, 100%) - var(--DuoGapL, 0px)) / 2) !important;
+		width: calc((var(--DuoWidthL, 100%) - var(--DuoGapL, 0px)) / 2) !important;
+		max-width: calc((var(--DuoWidthL, 100%) - var(--DuoGapL, 0px)) / 2) !important;
+		min-width: 0 !important;
+		align-self: stretch !important;
+		box-sizing: border-box !important;
+	}
+
+	@media (orientation: portrait) {
+		.EmoSection.DuoSec {
+			align-content: var(--SecJustifyP, var(--SecJustifyL, center)) !important;
+			gap: var(--DuoGapP, var(--DuoGapL, 0));
+			padding: var(--DuoPadP, var(--DuoPadL, 0));
+		}
+
+		.EmoSection.DuoSec > .DuoCol {
+			flex: 0 0 var(--DuoWidthP, 100%) !important;
+			width: var(--DuoWidthP, 100%) !important;
+			max-width: var(--DuoWidthP, 100%) !important;
+		}
+	}
+
+
+
+</style>

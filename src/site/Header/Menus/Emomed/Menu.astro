@@ -1,0 +1,87 @@
+---
+import SubMenuHead from "../../Menu/SubMenuHead.astro";
+import SubMenuItem from "../../Menu/SubMenuItem.astro";
+
+const cMenuIconsList = import.meta.glob("./*.webp", {
+	eager: true,
+	import: "default",
+	query: "?url",
+});
+
+const cMenuIcons = Object.fromEntries(
+	Object.entries(cMenuIconsList).map(([fPath, fUrl]) => {
+		const fFileName = fPath.split("/").pop() ?? "";
+		const fBaseName = fFileName.replace(/\.[^.]+$/, "");
+		return [fBaseName, fUrl];
+	}),
+);
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<SubMenuHead fTitle="صيدلية" fLink="" fIcon={cMenuIcons.Pharmacy}>
+
+	<SubMenuItem fTitle="ترخيص صيدلية" fLink="/emomed/pharmacy" />
+
+	<SubMenuItem fTitle="رسم هندسي لصيدلية" fLink="/emomed/pharmacy/dwg" />
+
+	<SubMenuItem fTitle="قياس المسافة بين الصيدليات" fLink="/emomed/pharmacy/distance" />
+
+</SubMenuHead>
+
+<SubMenuHead fTitle="مخزن أدوية" fLink="" fIcon={cMenuIcons.Store}>
+
+	<SubMenuItem fTitle="ترخيص مخزن أدوية" fLink="/emomed/pharmastore" />
+
+	<SubMenuItem fTitle="رسم هندسي لمخزن أدوية" fLink="/emomed/pharmastore" />
+
+</SubMenuHead>
+
+<SubMenuHead fTitle="معمل تحاليل طبية" fLink="" fIcon={cMenuIcons.Lab}>
+
+	<SubMenuItem fTitle="ترخيص معمل تحاليل" fLink="/emomed/lab" />
+
+	<SubMenuItem fTitle="رسم هندسي لمعمل تحاليل" fLink="/emomed/lab" />
+
+</SubMenuHead>
+
+<SubMenuHead fTitle="عيادة" fLink="" fIcon={cMenuIcons.Clinic}>
+
+	<SubMenuItem fTitle="ترخيص عيادة" fLink="/emomed/clinic" />
+
+	<SubMenuItem fTitle="رسم هندسي لعيادة" fLink="/emomed/clinic/dwg" />
+
+</SubMenuHead>
+
+<SubMenuHead fTitle="مستشفى" fLink="" fIcon={cMenuIcons.Hospital}>
+
+	<SubMenuItem fTitle="ترخيص مستشفى" fLink="/emomed/hospital" />
+
+	<SubMenuItem fTitle="رسم هندسي لمستشفى" fLink="/emomed/hospital/dwg" />
+
+</SubMenuHead>
+
+<SubMenuHead fTitle="مكتب علمي" fLink="" fIcon={cMenuIcons.Office}>
+
+	<SubMenuItem fTitle="ترخيص مكتب علمي" fLink="/emomed/soffice" />
+
+	<SubMenuItem fTitle="رسم هندسي لمكتب علمي" fLink="/emomed/soffice/dwg" />
+
+</SubMenuHead>

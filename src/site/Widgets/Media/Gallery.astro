@@ -1,0 +1,27 @@
+---
+const { fId = "gallery1", fItems = [] } = Astro.props;
+// fItems: [{ fSrc, fAlt, fThumb? }]
+---
+
+<div class="galleryGrid">
+    {
+        fItems.map((fIt, fI) => (
+            <button
+                class="gItem reveal"
+                data-reveal="up"
+                type="button"
+                data-gallery={fId}
+                data-gallery-item="1"
+                data-index={fI}
+                data-src={fIt.fSrc}
+                data-alt={fIt.fAlt ?? ""}
+            >
+                <img
+                    src={fIt.fThumb ?? fIt.fSrc}
+                    alt={fIt.fAlt ?? ""}
+                    loading="lazy"
+                />
+            </button>
+        ))
+    }
+</div>

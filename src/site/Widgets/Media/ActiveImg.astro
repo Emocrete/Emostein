@@ -1,0 +1,279 @@
+---
+interface Props {
+	pImg?: string;
+	pImgHover?: string;
+	pImgActive?: string;
+	pAlt?: string;
+	pLink?: string;
+	pTarget?: "_self" | "_blank" | "_parent" | "_top";
+	pRel?: string;
+	pWidth?: string | number;
+	pHeight?: string | number;
+	pScale?: string | number;
+	pClass?: string;
+	pFollowParentHover?: boolean;
+}
+
+const {
+	pImg = "",
+	pImgHover = "",
+	pImgActive = "",
+	pAlt = "",
+	pLink = "",
+	pTarget = "_self",
+	pRel = "",
+	pWidth = "",
+	pHeight = "",
+	pScale = "",
+	pClass = "",
+	pFollowParentHover = false,
+} = Astro.props;
+
+const cId = `StateImg-${Math.random().toString(36).slice(2, 11)}`;
+const cImgNormal = pImg;
+const cImgHover = pImgHover || cImgNormal;
+const cImgActive = pImgActive || cImgHover || cImgNormal;
+const cHasLink = Boolean(pLink);
+const cRel = pRel || (pTarget === "_blank" ? "noopener noreferrer" : undefined);
+const cClass = `StateImg ${pClass}`.trim();
+const cMode = HasValue(pHeight) ? "height" : HasValue(pWidth) ? "width" : HasValue(pScale) ? "scale" : "auto";
+const cSizeValue = HasValue(pHeight)
+	? NormalizeUnit(pHeight)
+	: HasValue(pWidth)
+		? NormalizeUnit(pWidth)
+		: HasValue(pScale)
+			? String(pScale).trim()
+			: "";
+
+function HasValue(pValue: unknown) {
+	return pValue !== undefined && pValue !== null && String(pValue).trim() !== "";
+}
+
+function NormalizeUnit(pValue: string | number | undefined) {
+	if (typeof pValue === "number") return `${pValue}px`;
+
+	const cText = String(pValue ?? "").trim();
+
+	if (!cText) return "";
+	if (/^\d+(\.\d+)?$/.test(cText)) return `${cText}px`;
+
+	return cText;
+}
+---
+
+{
+	cHasLink ? (
+		<a
+			id={cId}
+			class={cClass}
+			href={pLink}
+			target={pTarget}
+			rel={cRel}
+			data-mode={cMode}
+			data-size={cSizeValue}
+			data-normal={cImgNormal}
+			data-hover={cImgHover}
+			data-active={cImgActive}
+			data-follow-parent-hover={pFollowParentHover ? "true" : "false"}
+		>
+			<img class="Img" src={cImgNormal} alt={pAlt} draggable="false" />
+		</a>
+	) : (
+		<div
+			id={cId}
+			class={cClass}
+			data-mode={cMode}
+			data-size={cSizeValue}
+			data-normal={cImgNormal}
+			data-hover={cImgHover}
+			data-active={cImgActive}
+			data-follow-parent-hover={pFollowParentHover ? "true" : "false"}
+		>
+			<img class="Img" src={cImgNormal} alt={pAlt} draggable="false" />
+		</div>
+	)
+}
+
+<script is:inline>
+	(() => {
+		const cScript = document.currentScript;
+		const cRoot = cScript?.previousElementSibling;
+		const cImg = cRoot?.querySelector(".Img");
+
+		if (!cRoot || !(cImg instanceof HTMLImageElement)) return;
+
+		const cMode = cRoot.dataset.mode || "auto";
+		const cSizeValue = cRoot.dataset.size || "";
+		const cNormal = cRoot.dataset.normal || "";
+		const cHover = cRoot.dataset.hover || cNormal;
+		const cActive = cRoot.dataset.active || cHover || cNormal;
+
+		const cFollowParentHover = cRoot.dataset.followParentHover === "true";
+		const cOwner = cFollowParentHover ? cRoot.parentElement : null;
+
+		let cIsInside = false;
+		let cIsPressed = false;
+
+		let cIsOwnerInside = false;
+		let cIsOwnerPressed = false;
+
+		cRoot.addEventListener("pointerenter", HandlePointerEnter);
+		cRoot.addEventListener("pointerleave", HandlePointerLeave);
+		cRoot.addEventListener("pointerdown", HandlePointerDown);
+		window.addEventListener("pointerup", HandlePointerUp);
+		window.addEventListener("pointercancel", HandlePointerCancel);
+
+		if (cOwner instanceof HTMLElement) {
+			cOwner.addEventListener("pointerenter", HandleOwnerPointerEnter);
+			cOwner.addEventListener("pointerleave", HandleOwnerPointerLeave);
+			cOwner.addEventListener("pointerdown", HandleOwnerPointerDown);
+		}
+
+		if (cImg.complete) {
+			ApplySize();
+		} else {
+			cImg.addEventListener("load", ApplySize, { once: true });
+		}
+
+		UpdateImage();
+
+		function HandlePointerEnter() {
+			cIsInside = true;
+			UpdateImage();
+		}
+
+		function HandlePointerLeave() {
+			cIsInside = false;
+			cIsPressed = false;
+			UpdateImage();
+		}
+
+		function HandlePointerDown(pEvent) {
+			if ("button" in pEvent && pEvent.button !== 0) return;
+			cIsPressed = true;
+			UpdateImage();
+		}
+
+		function HandlePointerUp() {
+			const cChanged = cIsPressed || cIsOwnerPressed;
+
+			cIsPressed = false;
+			cIsOwnerPressed = false;
+
+			if (cChanged) {
+				UpdateImage();
+			}
+		}
+
+		function HandlePointerCancel() {
+			cIsPressed = false;
+			cIsOwnerPressed = false;
+			UpdateImage();
+		}
+		function UpdateImage() {
+			const cHoverState = cIsInside || cIsOwnerInside;
+			const cActiveState = cIsPressed || cIsOwnerPressed;
+
+			if (cActiveState) {
+				cImg.src = cActive;
+				return;
+			}
+
+			if (cHoverState) {
+				cImg.src = cHover;
+				return;
+			}
+
+			cImg.src = cNormal;
+		}
+
+		function ApplySize() {
+			const cNaturalWidth = cImg.naturalWidth;
+			const cNaturalHeight = cImg.naturalHeight;
+
+			if (!cNaturalWidth || !cNaturalHeight) return;
+
+			cImg.style.width = "";
+			cImg.style.height = "";
+
+			if (cMode === "height" && cSizeValue) {
+				cImg.style.height = cSizeValue;
+				cImg.style.width = "auto";
+				return;
+			}
+
+			if (cMode === "width" && cSizeValue) {
+				cImg.style.width = cSizeValue;
+				cImg.style.height = "auto";
+				return;
+			}
+
+			if (cMode === "scale" && cSizeValue) {
+				const cScale = ResolveScale(cSizeValue);
+
+				if (cScale > 0) {
+					cImg.style.width = `${cNaturalWidth * cScale}px`;
+					cImg.style.height = "auto";
+				}
+
+				return;
+			}
+
+			cImg.style.width = "auto";
+			cImg.style.height = "auto";
+		}
+
+		function ResolveScale(pValue) {
+			const cText = String(pValue).trim();
+
+			if (!cText) return 0;
+
+			if (cText.endsWith("%")) {
+				const cPercent = parseFloat(cText);
+				return Number.isNaN(cPercent) ? 0 : cPercent / 100;
+			}
+
+			const cNumber = parseFloat(cText);
+
+			if (Number.isNaN(cNumber)) return 0;
+
+			return cNumber > 1 ? cNumber / 100 : cNumber;
+		}
+
+		function HandleOwnerPointerEnter() {
+			cIsOwnerInside = true;
+			UpdateImage();
+		}
+
+		function HandleOwnerPointerLeave() {
+			cIsOwnerInside = false;
+			cIsOwnerPressed = false;
+			UpdateImage();
+		}
+
+		function HandleOwnerPointerDown(pEvent) {
+			if ("button" in pEvent && pEvent.button !== 0) return;
+			cIsOwnerPressed = true;
+			UpdateImage();
+		}
+	})();
+</script>
+
+<style>
+	.StateImg {
+		display: inline-block;
+		line-height: 0;
+		vertical-align: top;
+		text-decoration: none;
+		user-select: none;
+		-webkit-user-drag: none;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	.StateImg .Img {
+		display: block;
+		max-width: none;
+		user-select: none;
+		-webkit-user-drag: none;
+	}
+</style>

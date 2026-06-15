@@ -1,0 +1,94 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Media } from "@/Media";
+
+export interface Props extends HTMLAttributes<"section"> {
+	pImgF?: string;
+	pImgL?: string;
+	pImgP?: string;
+}
+
+const {
+	pImgF = "",
+	pImgL = "",
+	pImgP = "",
+
+	id: pGivenID = GetWidgetId("FreeHero"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cPagePath = Astro.url.pathname;
+const cHeroFolder = pImgF || Media.GetPageFolder(cPagePath);
+
+const cImgL = pImgL
+	? Media.GetPageFile(cPagePath, pImgL, { pFolder: cHeroFolder })
+	: Media.GetHeroLandscape(cPagePath, { pFolder: cHeroFolder });
+
+const cImgP = pImgP
+	? Media.GetPageFile(cPagePath, pImgP, { pFolder: cHeroFolder })
+	: Media.GetHeroPortrait(cPagePath, { pFolder: cHeroFolder });
+---
+
+<section
+	class={`FreeHero ${pGivenClass}`}
+	style={pGivenStyle}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	<picture class="FreeHeroBg">
+
+		<source
+			media="(orientation: portrait)"
+			srcset={cImgP || cImgL}
+		/>
+
+		<img
+			class="FreeHeroImg"
+			src={cImgL || cImgP}
+			alt=""
+			loading="eager"
+			decoding="async"
+			fetchpriority="high"
+		/>
+
+	</picture>
+
+	<slot />
+
+</section>
+
+<style>
+
+	.FreeHero {
+		width: 100%;
+		height: 100svh;
+		min-height: 100svh;
+		position: relative;
+		overflow: hidden;
+		isolation: isolate;
+		box-sizing: border-box;
+	}
+
+	.FreeHeroBg {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		display: block;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+	}
+
+	.FreeHeroImg {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		pointer-events: none;
+		user-select: none;
+	}
+
+</style>

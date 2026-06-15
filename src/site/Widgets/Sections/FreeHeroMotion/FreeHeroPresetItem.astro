@@ -1,0 +1,107 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Size, Location, RespString } from "@/TypesLib";
+import FreeHeroMoveItem from "../FreeHeroMoveItem.astro";
+import {
+	BuildFreeHeroMotionPoints,
+	GetDefaultEase,
+	GetDefaultIntervals,
+	GetDefaultLoop,
+	type TFreeHeroMotion,
+} from "../FreeHeroMotion";
+
+export interface Props extends HTMLAttributes<"div"> {
+	pMotion: TFreeHeroMotion;
+	pLoc?: Location;
+	pBox?: Size;
+	pDistance?: string | RespString;
+	pDuration?: number;
+	pIntervals?: number[];
+	pDelay?: number;
+	pEase?: string;
+	pLoop?: boolean;
+	pLoopFor?: number;
+	pLoopInterval?: number;
+	pReverse?: boolean;
+	pZ?: number;
+	pOrigin?: string;
+	pFit?: boolean;
+	pPointer?: boolean;
+	pHideLand?: boolean;
+	pHidePort?: boolean;
+	pLandOnly?: boolean;
+	pPortOnly?: boolean;
+}
+
+const {
+	pMotion,
+	pLoc = new Location(0, 0, 0, 0),
+	pBox = new Size(),
+	pDistance = new RespString("180px", "90px"),
+	pDuration = 900,
+	pIntervals,
+	pDelay = 0,
+	pEase,
+	pLoop,
+	pLoopFor,
+	pLoopInterval,
+	pReverse = false,
+	pZ = 1,
+	pOrigin = "center center",
+	pFit = false,
+	pPointer = true,
+	pHideLand = false,
+	pHidePort = false,
+	pLandOnly = false,
+	pPortOnly = false,
+	...RemAttr
+} = Astro.props as Props;
+
+const cKeyPoints = BuildFreeHeroMotionPoints(pMotion, pLoc, pBox, pDistance);
+const cIntervals = pIntervals ?? GetDefaultIntervals(pMotion, pDuration);
+const cEase = pEase ?? GetDefaultEase(pMotion);
+const cLoop = pLoop ?? GetDefaultLoop(pMotion);
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<FreeHeroMoveItem
+	pKeyPoints={cKeyPoints}
+	pIntervals={cIntervals}
+	pDelay={pDelay}
+	pEase={cEase}
+	pLoop={cLoop}
+	pLoopFor={pLoopFor}
+	pLoopInterval={pLoopInterval}
+	pReverse={pReverse}
+	pZ={pZ}
+	pOrigin={pOrigin}
+	pFit={pFit}
+	pPointer={pPointer}
+	pHideLand={pHideLand}
+	pHidePort={pHidePort}
+	pLandOnly={pLandOnly}
+	pPortOnly={pPortOnly}
+	{...RemAttr}
+>
+
+	<slot />
+
+</FreeHeroMoveItem>

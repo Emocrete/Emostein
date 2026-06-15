@@ -1,0 +1,159 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+
+export interface Props extends HTMLAttributes<"div">, PlaceProps {
+	pTitle?: string;
+	pFacebookFollow?: string;
+	pInstagramFollow?: string;
+	pLinkedInFollow?: string;
+	pYouTubeFollow?: string;
+	pTikTokFollow?: string;
+}
+
+const {
+	pTitle = "تابع الجديد",
+	pFacebookFollow = "#",
+	pInstagramFollow = "https://www.instagram.com/emocrete",
+	pLinkedInFollow = "https://www.linkedin.com/in/ayman-ashoor-998433128",
+	pYouTubeFollow = "https://www.youtube.com/@aymanashoor7410",
+	pTikTokFollow = "#",
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("EmoFooterFollowBar"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
+---
+
+
+
+
+<div
+	class = {`EmoFooterFollowBar ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	<p class = " FooterBarTitle ">
+		{pTitle}
+	</p>
+
+	<div class = " FollowPill ">
+
+		<a class = " FollowIcon IsFacebook " href={pFacebookFollow} target="_blank" rel="noopener" title="فيسبوك">
+			<span>f</span>
+		</a>
+
+		<a class = " FollowIcon " href={pInstagramFollow} target="_blank" rel="noopener" title="إنستجرام">
+			<span>◎</span>
+		</a>
+
+		<a class = " FollowIcon " href={pLinkedInFollow} target="_blank" rel="noopener" title="لينكدإن">
+			<span>in</span>
+		</a>
+
+		<a class = " FollowIcon " href={pYouTubeFollow} target="_blank" rel="noopener" title="يوتيوب">
+			<span>▶</span>
+		</a>
+
+		<a class = " FollowIcon " href={pTikTokFollow} target="_blank" rel="noopener" title="تيك توك">
+			<span>♪</span>
+		</a>
+
+	</div>
+
+</div>
+
+
+
+
+<style>
+
+
+
+	.EmoFooterFollowBar {
+		display: grid;
+		justify-items: center;
+		gap: 10px;
+		width: 100%;
+		direction: rtl;
+	}
+
+	.FooterBarTitle {
+		margin: 0;
+		font-size: 16px;
+		line-height: 1.25;
+		font-weight: 900;
+		color: #ffffff;
+		text-align: center;
+		text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+	}
+
+	.FollowPill {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: row;
+		gap: 5px;
+		direction: ltr;
+		padding: 4px 8px;
+		border-radius: 999px;
+		background: #ffffff;
+		box-shadow: 0 5px 16px rgba(0, 0, 0, 0.45);
+	}
+
+	.FollowIcon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		box-sizing: border-box;
+		width: 32px;
+		height: 32px;
+		border: 0;
+		border-radius: 999px;
+		background: #050505;
+		color: #ffffff;
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 17px;
+		font-weight: 900;
+		line-height: 1;
+		text-decoration: none;
+		cursor: pointer;
+		transition: transform 0.16s ease, filter 0.16s ease, box-shadow 0.16s ease;
+	}
+
+	.FollowIcon.IsFacebook {
+		font-size: 24px;
+	}
+
+	.FollowIcon span {
+		display: inline-block;
+		transform: translateY(-1px);
+	}
+
+
+	@media (hover: hover) and (pointer: fine) {
+		.FollowIcon:hover {
+			transform: translateY(-2px);
+			filter: brightness(1.06);
+			box-shadow: 0 6px 16px rgba(0, 0, 0, 0.34);
+		}
+	}
+
+
+
+</style>

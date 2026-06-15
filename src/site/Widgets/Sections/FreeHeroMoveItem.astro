@@ -1,0 +1,654 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Size, Location, RespString } from "@/TypesLib";
+import { FreeHeroKeyPoint } from "./FreeHeroMotion";
+
+export interface Props extends HTMLAttributes<"div"> {
+	pKeyPoints?: FreeHeroKeyPoint[];
+	pIntervals?: number[];
+	pDelay?: number;
+	pEase?: string;
+	pLoop?: boolean;
+	pLoopFor?: number;
+	pLoopInterval?: number;
+	pReverse?: boolean;
+	pZ?: number;
+	pOrigin?: string;
+	pFit?: boolean;
+	pPointer?: boolean;
+	pHideLand?: boolean;
+	pHidePort?: boolean;
+	pLandOnly?: boolean;
+	pPortOnly?: boolean;
+	pStartOnView?: boolean;
+pReplayOnView?: boolean;
+pPauseWhenOut?: boolean;
+pViewThreshold?: number;
+pViewMargin?: string;
+pViewTarget?: "self" | "parent";
+}
+
+const {
+	pKeyPoints = [
+		new FreeHeroKeyPoint(
+			new Location(0, 0, 0, 0),
+			new Size(),
+			"0deg",
+			1
+		)
+	],
+	pIntervals = [800],
+	pDelay = 0,
+	pEase = "cubic-bezier(.42, 0, .18, 1)",
+	pLoop = false,
+	pLoopFor,
+	pLoopInterval,
+	pReverse = false,
+	pZ = 1,
+	pOrigin = "center center",
+	pFit = false,
+	pPointer = true,
+	pHideLand = false,
+	pHidePort = false,
+	pLandOnly = false,
+	pPortOnly = false,
+
+	pStartOnView = true,
+pReplayOnView = false,
+pPauseWhenOut = true,
+pViewThreshold = 0.15,
+pViewMargin = "0px 0px -10% 0px",
+pViewTarget = "parent",
+
+	id: pGivenID = GetWidgetId("FreeHeroMoveItem"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cSafeKeyPoints = pKeyPoints.length > 0
+	? pKeyPoints
+	: [new FreeHeroKeyPoint(new Location(0, 0, 0, 0), new Size(), "0deg", 1)];
+
+const cFirstPoint = cSafeKeyPoints[0];
+const cFirstRotateL = cFirstPoint.Rotate instanceof RespString ? cFirstPoint.Rotate.Landscape : cFirstPoint.Rotate;
+const cFirstRotateP = cFirstPoint.Rotate instanceof RespString ? cFirstPoint.Rotate.Portrait : cFirstPoint.Rotate;
+const cFirstOpacityL = cFirstPoint.Opacity instanceof RespString ? cFirstPoint.Opacity.Landscape : `${cFirstPoint.Opacity}`;
+const cFirstOpacityP = cFirstPoint.Opacity instanceof RespString ? cFirstPoint.Opacity.Portrait : `${cFirstPoint.Opacity}`;
+const cFirstTransformL = cFirstPoint.Transform instanceof RespString ? cFirstPoint.Transform.Landscape : cFirstPoint.Transform;
+const cFirstTransformP = cFirstPoint.Transform instanceof RespString ? cFirstPoint.Transform.Portrait : cFirstPoint.Transform;
+const cHideL = pHideLand || pPortOnly;
+const cHideP = pHidePort || pLandOnly;
+
+const cKeyPointsData = cSafeKeyPoints.map((pPoint) => {
+	const cRotateL = pPoint.Rotate instanceof RespString ? pPoint.Rotate.Landscape : pPoint.Rotate;
+	const cRotateP = pPoint.Rotate instanceof RespString ? pPoint.Rotate.Portrait : pPoint.Rotate;
+	const cOpacityL = pPoint.Opacity instanceof RespString ? pPoint.Opacity.Landscape : `${pPoint.Opacity}`;
+	const cOpacityP = pPoint.Opacity instanceof RespString ? pPoint.Opacity.Portrait : `${pPoint.Opacity}`;
+	const cTransformL = pPoint.Transform instanceof RespString ? pPoint.Transform.Landscape : pPoint.Transform;
+	const cTransformP = pPoint.Transform instanceof RespString ? pPoint.Transform.Portrait : pPoint.Transform;
+
+	return {
+		xL: pPoint.Loc.XL,
+		xP: pPoint.Loc.XP,
+		yL: pPoint.Loc.YL,
+		yP: pPoint.Loc.YP,
+		wL: pPoint.Box.WidthL,
+		wP: pPoint.Box.WidthP,
+		hL: pPoint.Box.HeightL,
+		hP: pPoint.Box.HeightP,
+		rL: cRotateL,
+		rP: cRotateP,
+		oL: cOpacityL,
+		oP: cOpacityP,
+		tL: cTransformL || `rotate(${cRotateL})`,
+		tP: cTransformP || `rotate(${cRotateP})`,
+	};
+});
+
+const cStyle = `
+--FreeHeroItemXL:${cFirstPoint.Loc.XL};
+--FreeHeroItemXP:${cFirstPoint.Loc.XP};
+--FreeHeroItemYL:${cFirstPoint.Loc.YL};
+--FreeHeroItemYP:${cFirstPoint.Loc.YP};
+--FreeHeroItemWidthL:${cFirstPoint.Box.WidthL};
+--FreeHeroItemWidthP:${cFirstPoint.Box.WidthP};
+--FreeHeroItemHeightL:${cFirstPoint.Box.HeightL};
+--FreeHeroItemHeightP:${cFirstPoint.Box.HeightP};
+--FreeHeroItemTransformL:${cFirstTransformL || `rotate(${cFirstRotateL})`};
+--FreeHeroItemTransformP:${cFirstTransformP || `rotate(${cFirstRotateP})`};
+--FreeHeroItemOpacityL:${cFirstOpacityL};
+--FreeHeroItemOpacityP:${cFirstOpacityP};
+--FreeHeroItemDisplayL:${cHideL ? "none" : "block"};
+--FreeHeroItemDisplayP:${cHideP ? "none" : "block"};
+--FreeHeroItemZ:${pZ};
+--FreeHeroItemOrigin:${pOrigin};
+--FreeHeroItemPointer:${pPointer ? "auto" : "none"};
+${pGivenStyle || ""}
+`;
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div
+	class = {`FreeHeroMoveItem ${pGivenClass}`}
+	style = {cStyle}
+	data-free-hero-move-item="true"
+	data-start-on-view={pStartOnView ? "true" : "false"}
+	data-replay-on-view={pReplayOnView ? "true" : "false"}
+	data-pause-when-out={pPauseWhenOut ? "true" : "false"}
+	data-view-threshold={pViewThreshold}
+	data-view-margin={pViewMargin}
+	data-view-target={pViewTarget}
+	data-fit={pFit ? "Fill" : "Content"}
+	data-key-points={JSON.stringify(cKeyPointsData)}
+	data-intervals={JSON.stringify(pIntervals)}
+	data-delay={pDelay}
+	data-ease={pEase}
+	data-loop={pLoop ? "true" : "false"}
+	data-loop-for={pLoopFor ?? ""}
+	data-loop-interval={pLoopInterval ?? ""}
+	data-reverse={pReverse ? "true" : "false"}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	<slot />
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.FreeHeroMoveItem {
+		position: absolute;
+		left: var(--FreeHeroItemXL);
+		top: var(--FreeHeroItemYL);
+		width: var(--FreeHeroItemWidthL);
+		height: var(--FreeHeroItemHeightL);
+		z-index: var(--FreeHeroItemZ);
+		display: var(--FreeHeroItemDisplayL);
+		opacity: var(--FreeHeroItemOpacityL);
+		transform: var(--FreeHeroItemTransformL);
+		transform-origin: var(--FreeHeroItemOrigin);
+		pointer-events: var(--FreeHeroItemPointer);
+		box-sizing: border-box;
+		min-width: 0;
+		will-change: left, top, width, height, transform, opacity;
+	}
+
+	.FreeHeroMoveItem > :global(*) {
+		box-sizing: border-box;
+		max-width: 100%;
+		max-height: 100%;
+	}
+
+	@media (orientation: portrait) {
+		.FreeHeroMoveItem {
+			left: var(--FreeHeroItemXP);
+			top: var(--FreeHeroItemYP);
+			width: var(--FreeHeroItemWidthP);
+			height: var(--FreeHeroItemHeightP);
+			display: var(--FreeHeroItemDisplayP);
+			opacity: var(--FreeHeroItemOpacityP);
+			transform: var(--FreeHeroItemTransformP);
+		}
+	}
+
+
+
+	.FreeHeroMoveItem[data-fit="Fill"] > :global(*) {
+		width: 100%;
+		height: 100%;
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script is:inline>
+	(() => {
+
+	const cScript = document.currentScript;
+	const cElem = cScript?.previousElementSibling;
+
+	if (!cElem || !(cElem instanceof HTMLElement) || !cElem.dataset) {
+	return;
+	}
+
+	const cMedia = window.matchMedia("(orientation: portrait)");
+	const cReduceMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+	const cStartOnView = cElem.dataset.startOnView !== "false";
+	const cReplayOnView = cElem.dataset.replayOnView === "true";
+	const cPauseWhenOut = cElem.dataset.pauseWhenOut !== "false";
+	const cViewTarget = cElem.dataset.viewTarget === "self"
+	? cElem
+	: cElem.parentElement || cElem;
+
+	let fMotion = null;
+	let fTimer = null;
+	let fObserver = null;
+	let fStarted = false;
+	let fInView = false;
+
+
+	ApplyFirstPoint();
+
+
+	if (cStartOnView && "IntersectionObserver" in window) {
+	SetupViewObserver();
+	}
+	else {
+	RunMotion();
+	}
+
+
+	if (cMedia.addEventListener) {
+	cMedia.addEventListener("change", HandleMediaChange);
+	cReduceMedia.addEventListener("change", HandleMediaChange);
+	}
+	else if (cMedia.addListener) {
+	cMedia.addListener(HandleMediaChange);
+	cReduceMedia.addListener(HandleMediaChange);
+	}
+
+
+	function HandleMediaChange() {
+	StopMotion(true);
+	fStarted = false;
+
+	ApplyFirstPoint();
+
+	if (!cStartOnView || fInView) {
+	RunMotion();
+	}
+	}
+
+
+	function SetupViewObserver() {
+	const cThreshold = ReadThreshold(cElem.dataset.viewThreshold, 0.15);
+	const cMargin = cElem.dataset.viewMargin || "0px 0px -10% 0px";
+
+	fObserver = new IntersectionObserver(
+	HandleViewChange,
+	{
+	root: null,
+	rootMargin: cMargin,
+	threshold: cThreshold,
+	}
+	);
+
+	fObserver.observe(cViewTarget);
+	}
+
+
+	function HandleViewChange(pEntries) {
+	const cEntry = pEntries.find((pEntry) => pEntry.target === cViewTarget);
+
+	if (!cEntry) {
+	return;
+	}
+
+	fInView = cEntry.isIntersecting;
+
+	if (fInView) {
+	if (!fStarted || cReplayOnView) {
+	RunMotion();
+	}
+	else if (fMotion && fMotion.playState === "paused") {
+	fMotion.play();
+	}
+
+	return;
+	}
+
+	if (cPauseWhenOut && fMotion && fMotion.playState === "running") {
+	fMotion.pause();
+	}
+
+	if (cReplayOnView) {
+	StopMotion(true);
+	fStarted = false;
+	ApplyFirstPoint();
+	}
+	}
+
+
+	function ReadJson(pValue, pFallback) {
+	try {
+	return JSON.parse(pValue || "");
+	}
+	catch {
+	return pFallback;
+	}
+	}
+
+
+	function ReadNumber(pValue, pFallback) {
+	const cNumber = Number(pValue);
+
+	return Number.isFinite(cNumber) && cNumber >= 0
+	? cNumber
+	: pFallback;
+	}
+
+
+	function ReadThreshold(pValue, pFallback) {
+	const cNumber = Number(pValue);
+
+	if (!Number.isFinite(cNumber)) {
+	return pFallback;
+	}
+
+	if (cNumber < 0) {
+	return 0;
+	}
+
+	if (cNumber > 1) {
+	return 1;
+	}
+
+	return cNumber;
+	}
+
+
+	function GetValue(pPoint, pLandKey, pPortKey) {
+	return cMedia.matches
+	? pPoint[pPortKey]
+	: pPoint[pLandKey];
+	}
+
+
+	function ToAnimFrame(pPoint) {
+	return {
+	left: GetValue(pPoint, "xL", "xP"),
+	top: GetValue(pPoint, "yL", "yP"),
+	width: GetValue(pPoint, "wL", "wP"),
+	height: GetValue(pPoint, "hL", "hP"),
+	transform: GetValue(pPoint, "tL", "tP"),
+	opacity: GetValue(pPoint, "oL", "oP"),
+	};
+	}
+
+
+	function GetInterval(pIntervals, pIndex) {
+	if (!Array.isArray(pIntervals) || pIntervals.length === 0) {
+	return 800;
+	}
+
+	const cValue = Number(pIntervals[pIndex]);
+
+	if (Number.isFinite(cValue) && cValue > 0) {
+	return cValue;
+	}
+
+	const cLast = Number(pIntervals[pIntervals.length - 1]);
+
+	return Number.isFinite(cLast) && cLast > 0
+	? cLast
+	: 800;
+	}
+
+
+	function BuildForwardPath(pPoints, pIntervals) {
+	const cPath = [...pPoints];
+	const cIntervals = [];
+
+	for (let i = 0; i < pPoints.length - 1; i++) {
+	cIntervals.push(GetInterval(pIntervals, i));
+	}
+
+	return {
+	Path: cPath,
+	Intervals: cIntervals,
+	};
+	}
+
+
+	function BuildReversePath(pPoints, pIntervals) {
+	const cPath = [...pPoints];
+	const cIntervals = [];
+
+	for (let i = 0; i < pPoints.length - 1; i++) {
+	cIntervals.push(GetInterval(pIntervals, i));
+	}
+
+	for (let i = pPoints.length - 2; i >= 0; i--) {
+	cPath.push(pPoints[i]);
+	cIntervals.push(GetInterval(pIntervals, i));
+	}
+
+	return {
+	Path: cPath,
+	Intervals: cIntervals,
+	};
+	}
+
+
+	function BuildLoopPath(pPoints, pIntervals) {
+	const cPath = [...pPoints];
+	const cIntervals = [];
+
+	for (let i = 0; i < pPoints.length - 1; i++) {
+	cIntervals.push(GetInterval(pIntervals, i));
+	}
+
+	const cLoopInterval = ReadNumber(
+	cElem.dataset.loopInterval,
+	GetInterval(pIntervals, pPoints.length - 2)
+	);
+
+	cPath.push(pPoints[0]);
+	cIntervals.push(cLoopInterval);
+
+	return {
+	Path: cPath,
+	Intervals: cIntervals,
+	};
+	}
+
+
+	function BuildOffsets(pIntervals) {
+	const cTotal = pIntervals.reduce((pTotal, pValue) => pTotal + pValue, 0);
+
+	if (cTotal <= 0) {
+	return {
+	Offsets: [0, 1],
+	Total: 1,
+	};
+	}
+
+	const cOffsets = [0];
+	let cCurrent = 0;
+
+	for (const cInterval of pIntervals) {
+	cCurrent += cInterval;
+	cOffsets.push(cCurrent / cTotal);
+	}
+
+	cOffsets[cOffsets.length - 1] = 1;
+
+	return {
+	Offsets: cOffsets,
+	Total: cTotal,
+	};
+	}
+
+
+	function ApplyFrame(pPoint) {
+	const cFrame = ToAnimFrame(pPoint);
+
+	cElem.style.left = cFrame.left;
+	cElem.style.top = cFrame.top;
+	cElem.style.width = cFrame.width;
+	cElem.style.height = cFrame.height;
+	cElem.style.transform = cFrame.transform;
+	cElem.style.opacity = cFrame.opacity;
+	}
+
+
+	function ApplyFirstPoint() {
+	const cPoints = ReadJson(cElem.dataset.keyPoints, []);
+
+	if (!Array.isArray(cPoints) || cPoints.length === 0) {
+	return;
+	}
+
+	ApplyFrame(cPoints[0]);
+	}
+
+
+	function StopMotion(pCancel) {
+	clearTimeout(fTimer);
+	fTimer = null;
+
+	if (!fMotion) {
+	return;
+	}
+
+	if (pCancel) {
+	fMotion.cancel();
+	}
+	else {
+	fMotion.pause();
+	}
+
+	fMotion = null;
+	}
+
+
+	function RunMotion() {
+	StopMotion(true);
+
+	const cPoints = ReadJson(cElem.dataset.keyPoints, []);
+	const cIntervals = ReadJson(cElem.dataset.intervals, []);
+	const cEase = cElem.dataset.ease || "cubic-bezier(.42, 0, .18, 1)";
+	const cLoop = cElem.dataset.loop === "true";
+	const cReverse = cElem.dataset.reverse === "true";
+	const cDelay = ReadNumber(cElem.dataset.delay, 0);
+
+	if (!Array.isArray(cPoints) || cPoints.length === 0) {
+	return;
+	}
+
+	fStarted = true;
+
+	if (cPoints.length === 1) {
+	ApplyFrame(cPoints[0]);
+	return;
+	}
+
+	let cMotionData;
+
+	if (cReverse) {
+	cMotionData = BuildReversePath(cPoints, cIntervals);
+	}
+	else if (cLoop) {
+	cMotionData = BuildLoopPath(cPoints, cIntervals);
+	}
+	else {
+	cMotionData = BuildForwardPath(cPoints, cIntervals);
+	}
+
+	const cOffsetData = BuildOffsets(cMotionData.Intervals);
+
+	if (cReduceMedia.matches) {
+	ApplyFrame(cMotionData.Path[cMotionData.Path.length - 1]);
+	return;
+	}
+
+	const cFrames = cMotionData.Path.map((pPoint, pIndex) => ({
+	...ToAnimFrame(pPoint),
+	offset: cOffsetData.Offsets[pIndex],
+	easing: pIndex < cMotionData.Path.length - 1
+	? cEase
+	: "linear",
+	}));
+
+	const cLoopFor = ReadNumber(cElem.dataset.loopFor, 0);
+
+	let cIterations = 1;
+
+	if (cLoop) {
+	cIterations = cLoopFor > 0
+	? cLoopFor / cOffsetData.Total
+	: Infinity;
+	}
+
+	ApplyFrame(cMotionData.Path[0]);
+
+	fTimer = setTimeout(() => {
+	fMotion = cElem.animate(
+	cFrames,
+	{
+	duration: cOffsetData.Total,
+	iterations: cIterations,
+	fill: "forwards",
+	}
+	);
+
+	fMotion.onfinish = () => {
+	ApplyFrame(cMotionData.Path[cMotionData.Path.length - 1]);
+	};
+	}, cDelay);
+	}
+
+	})();
+</script>

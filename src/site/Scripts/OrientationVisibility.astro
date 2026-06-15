@@ -1,0 +1,32 @@
+<script is:inline>
+	const cLandMedia = window.matchMedia("(orientation: landscape)");
+
+	cLandMedia.addEventListener("change", ApplyOrientationVisibility);
+
+	if (document.readyState === "loading") {
+	document.addEventListener("DOMContentLoaded", ApplyOrientationVisibility, { once: true });
+	} else {
+	ApplyOrientationVisibility();
+	}
+
+	function ApplyOrientationVisibility() {
+	document.querySelectorAll("[data-land-only]").forEach(function (pElem) {
+	SetVisible(pElem, cLandMedia.matches);
+	});
+
+	document.querySelectorAll("[data-port-only]").forEach(function (pElem) {
+	SetVisible(pElem, !cLandMedia.matches);
+	});
+	}
+
+	function SetVisible(pElem, pVisible) {
+	if (pVisible) {
+	pElem.style.removeProperty("display");
+	pElem.removeAttribute("aria-hidden");
+	return;
+	}
+
+	pElem.style.setProperty("display", "none", "important");
+	pElem.setAttribute("aria-hidden", "true");
+	}
+</script>

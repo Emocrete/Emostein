@@ -1,0 +1,1995 @@
+---
+import BLayout from "@/Layout.astro";
+import { Text, Topic, ElemBg, EmoMediaData, RespString, Pixel, Size, Align } from "@/TypesLib";
+import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, EmoBtn, EmoFaq, ReadAlso, RelServices, SecTitle, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="حصر كميات أعمال البناء"
+	pDescr="خدمة حصر كميات أعمال البناء والهيكل الخرساني من الرسومات المعمارية والإنشائية، تشمل الحفر والخرسانة العادية والمسلحة والشدات والحديد والمباني والبنود المرتبطة، مع إعداد جداول كميات واضحة للتسعير والمقايسة ومقارنة عروض المقاولين."
+	pSchemaImages={[
+		"/Media/Emodsign/Tech/Takeoff/Construction/HeroL.webp",
+		"https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&fm=jpg&q=70&w=1600",
+		"https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&fm=jpg&q=70&w=1600"
+	]}
+>
+
+
+
+
+
+
+
+	<Hero
+		pImgF="/Media/Emodsign/Tech/Takeoff/Construction/"
+		pTitle="حصر كميات أعمال البناء"
+		pDesc="تحويل رسومات المشروع إلى جداول كميات مفهومة: حفر، خرسانة، شدات، حديد، مباني، وبنود بناء قابلة للتسعير والمراجعة قبل التعاقد مع المقاول."
+		pTitleClr="#F4E5C4"
+		pDescClr="#FFFFFF"
+		pAlign="right"
+		pPosL="18% 50% 12% 8%"
+		pPosP="12% 8% 44% 8%"
+		pBlurL="on"
+		pBlurP="on"
+	>
+
+		<EmoCall BlackSky pText="اطلب حصر كميات البناء" />
+
+	</Hero>
+
+
+
+
+
+
+
+	<IndexSec
+		pMedia={new EmoMediaData("Img", "/Media/Emodsign/Tech/Takeoff/Construction/", "HeroL.webp")}
+		pTitleClr="#ffffff"
+		pBlurL="on"
+		pBlurP="on"
+	>
+
+		<EmoBtn
+			pText="فكرة الحصر"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor="#ffffff"
+			pTextColorHover="#111318"
+			pWidth="260px"
+			pHeight="44px"
+			onclick="location.href='#takeoff-meaning'"
+		/>
+
+		<EmoBtn
+			pText="بنود البناء"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor="#ffffff"
+			pTextColorHover="#111318"
+			pWidth="260px"
+			pHeight="44px"
+			onclick="location.href='#construction-items'"
+		/>
+
+		<EmoBtn
+			pText="طريقة العمل"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor="#ffffff"
+			pTextColorHover="#111318"
+			pWidth="260px"
+			pHeight="44px"
+			onclick="location.href='#workflow'"
+		/>
+
+		<EmoBtn
+			pText="مخرجات الخدمة"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor="#ffffff"
+			pTextColorHover="#111318"
+			pWidth="260px"
+			pHeight="44px"
+			onclick="location.href='#deliverables'"
+		/>
+
+		<EmoBtn
+			pText="أخطاء الحصر"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor="#ffffff"
+			pTextColorHover="#111318"
+			pWidth="260px"
+			pHeight="44px"
+			onclick="location.href='#risk-control'"
+		/>
+
+		<EmoBtn
+			pText="الأسئلة الشائعة"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor="#ffffff"
+			pTextColorHover="#111318"
+			pWidth="260px"
+			pHeight="44px"
+			onclick="location.href='#faq'"
+		/>
+
+	</IndexSec>
+
+
+
+
+
+
+
+	<ESec
+		id="takeoff-meaning"
+		pBg={new ElemBg("#F7F1E6")}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="حصر الكميات هو ترجمة الرسومات إلى أرقام قابلة للتعاقد"
+			pDesc="الرسومات وحدها لا تكفي لمقارنة عروض المقاولين. المقاول قد يرى في نفس اللوحة بنودًا مختلفة أو يهمل بندًا أو يضع تحفظات واسعة. حصر كميات أعمال البناء يحول الرسومات إلى جداول محددة الوحدات والكميات والملاحظات، بحيث يصبح التسعير مبنيًا على نطاق معروف بدل الانطباع العام عن مساحة المشروع."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<Emograph
+				pSize={new Size(560, "auto", 320, "auto")}
+				pTitle={Text.H3.WithColor("#111318").OfText("مشكلة العميل ليست معرفة كمية الخرسانة فقط")}
+				pText={Text.Body.WithColor("#333333").OfText("صاحب المشروع يحتاج أن يعرف أين ستذهب أمواله قبل التعاقد. الحصر الجيد لا يكتفي بعدّ الخرسانة والحديد، بل يربط كل كمية بمصدرها في الرسومات، وبندها في جدول الكميات، ووحدتها، وملاحظات القياس، وما إذا كانت الكمية صالحة للتسعير أو تحتاج رسومات أكثر تفصيلًا. لذلك تصبح خدمة الحصر أداة قرار مالي وفني وليست عملية حسابية معزولة.")}
+			/>
+
+			<RespImg
+				pImg={new EmoMediaData(
+					"Img",
+					"https://images.unsplash.com/",
+					"photo-1503387762-592deb58ef4e?auto=format&fit=crop&fm=jpg&q=70&w=1600",
+					false,
+					"مكتب هندسي يراجع رسومات ومخططات قبل إعداد حصر كميات البناء",
+					new Size(560, "auto", 320, "auto")
+				)}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#0E1118")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="متى تحتاج حصر كميات أعمال البناء؟"
+			pDesc="حصر الكميات مفيد قبل التنفيذ، قبل التعاقد، قبل شراء الخامات، وعند مراجعة عرض مقاول. كل مرحلة تستخدم الحصر بطريقة مختلفة، لكن الهدف المشترك هو تقليل الغموض المالي والفني."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("أسباب طلب حصر البناء")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("قبل طلب عروض المقاولين", "تجهيز جدول كميات موحد يرسل لأكثر من مقاول، حتى تصبح المقارنة على نفس البنود والكميات بدل أن يضع كل مقاول نطاقًا مختلفًا.")}
+			pTopic2={new Topic("قبل شراء الخامات", "تحديد كميات تقريبية أو تفصيلية للحديد والأسمنت والسن والرمل والطوب حسب مستوى الرسومات، مع فصل كميات التنفيذ عن الهالك أو الاحتياطي التجاري.")}
+			pTopic3={new Topic("عند مراجعة عرض مقاول", "فحص بنود العرض والكميات والأسعار لمعرفة هل المقاول أهمل بندًا، بالغ في كمية، جمع بنودًا غير متجانسة، أو وضع سعرًا منخفضًا مع نطاق ناقص.")}
+			pTopic4={new Topic("عند ضبط ميزانية المشروع", "ربط الرسومات بتقدير مالي أوضح، خصوصًا في الهيكل الخرساني حيث تظهر فروق كبيرة بسبب النظام الإنشائي والبحور وكمية الحديد والشدات.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		pBg={new ElemBg("#0E1118")}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg("#151923")}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("محتوى الصفحة مبني حول وظيفة الحصر في السوق الفعلي")}
+				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("خدمات الحصر العالمية تعرض القيمة عادة في تحويل الرسومات والمواصفات إلى كميات قابلة للتسعير، وإعداد جداول تفصيلية تساعد في المناقصات والميزانية وشراء الخامات وإدارة التكلفة. لذلك تم بناء الصفحة على هذه الوظائف لا على تعريف قصير للخدمة.")}
+				pSize={new Size(1000, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#F4E5C4").OfText("ماذا يفعل الحصر في القرار التجاري؟")}
+				pDesc={Text.Body.WithColor("#F8F4EA").OfText("الحصر لا يمنع التفاوض، لكنه يجعل التفاوض مبنيًا على كمية وبند ووحدة وملاحظة بدل رقم إجمالي غامض.")}
+				pHeadBg={new ElemBg("transparent")}
+				pItemsBg={new ElemBg("transparent")}
+				pItemFnt={Text.Body.WithColor("#F8F4EA")}
+				pNumbered={false}
+				pItems={[
+					"يفصل بين سعر المتر العام وسعر البنود الفعلية داخل المشروع.",
+					"يكشف البنود التي لا تظهر في المساحة مثل الشدات والنجارة والردم والنقل والهالك.",
+					"يجعل عروض المقاولين قابلة للمقارنة لأن كل عرض يرد على نفس الجدول.",
+					"يساعد في التخطيط لشراء الخامات على مراحل بدل شراء كميات عشوائية.",
+					"يفصل بين كمية التصميم وكمية التنفيذ وما يحتاج مراجعة أو اعتمادًا إضافيًا.",
+					"يعطي المالك أساسًا للتفاوض مع المقاول دون الدخول في تفاصيل لا يملك أدوات مراجعتها."
+				]}
+			/>
+
+			<RespImg
+				pImg={new EmoMediaData(
+					"Img",
+					"https://images.unsplash.com/",
+					"photo-1541888946425-d81bb19240f5?auto=format&fit=crop&fm=jpg&q=70&w=1600",
+					false,
+					"موقع بناء ورافعات كمثال على ارتباط الحصر بالتنفيذ والتكلفة",
+					new Size(560, "auto", 320, "auto")
+				)}
+			/>
+
+		</HzStack>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec
+		id="construction-items"
+		pBg={new ElemBg("#FFFFFF")}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = " --StripBg : #F7F1E6 "
+			pTitle="ما الذي يدخل في حصر أعمال البناء؟"
+			pDesc="نطاق أعمال البناء يختلف من مشروع لآخر، لكنه غالبًا يدور حول الهيكل الخرساني والبنود التي تسبقه وتتبعه مباشرة. يتم تحديد النطاق قبل بدء الحصر حتى لا تختلط بنود البناء ببنود التشطيب أو الأعمال الكهروميكانيكية."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("بنود رئيسية في حصر البناء")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("الحفر والردم والإحلال", "حصر كميات الحفر والردم والإحلال والرفع والنقل حسب المناسيب والقطاعات، مع توضيح الافتراضات عندما لا تكون بيانات الجسات أو المناسيب كاملة.")}
+			pTopic2={new Topic("الخرسانة العادية", "حصر فرشة النظافة أو الخرسانة العادية أسفل القواعد والميدات والعناصر التمهيدية، مع وحدات القياس المناسبة وسمك الطبقات.")}
+			pTopic3={new Topic("الخرسانة المسلحة", "حصر القواعد والميدات والرقاب والأعمدة والكمرات والبلاطات والسلالم والخزانات والعناصر الخاصة حسب الرسومات الإنشائية.")}
+			pTopic4={new Topic("حديد التسليح", "حصر أوزان الحديد أو أطواله حسب مستوى التفصيل المتاح، مع فصل الأقطار والعناصر وملاحظات الوصلات والتراكبات والهالك عند الحاجة.")}
+			pTopic5={new Topic("الشدات والنجارة", "حصر مساحات الشدات للعناصر الخرسانية عند الحاجة، لأن تكلفة الشدة قد تؤثر بقوة في المشاريع ذات الأسقف المتكررة أو العناصر الخاصة.")}
+			pTopic6={new Topic("المباني والطوب", "حصر الحوائط الخارجية والداخلية والبارابيت والمناور والفتحات حسب المساقط والقطاعات، مع فصل السماكات وأنواع الطوب إن وجدت.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="وحدات القياس التي تظهر في جدول الكميات"
+			pDesc="قيمة الحصر لا تكتمل إلا بوحدة صحيحة. تغيير الوحدة يغير طريقة التسعير بالكامل؛ فالمتر المكعب ليس مترًا مسطحًا، والطن ليس عددًا، والبند المقطوعية لا يراجع مثل البنود المقاسة."
+		/>
+
+		<HzStack pGap={new Pixel(25, 20)} pPad={new Pixel(35, 20)}>
+
+			<CardsGr
+				pWidth={new RespString("575px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("وحدات بنود الحجم والمساحة")}
+				pCardBg={new ElemBg("#FFFFFF")}
+				pCardTitleFnt={Text.H4.WithColor("#111318")}
+				pCardBodyFnt={Text.Body.WithColor("#333333")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("متر مكعب", "يستخدم عادة في الحفر والردم والإحلال والخرسانة، لأن البند يعتمد على طول وعرض وعمق أو سمك.")}
+				pTopic2={new Topic("متر مسطح", "يستخدم في الشدات وبعض أعمال العزل أو الطبقات، لأن البند يعتمد على مساحة سطح ظاهرة أو منفذة.")}
+				pTopic3={new Topic("متر طولي", "يستخدم في بعض البنود الخطية مثل الميدات الصغيرة أو الكوابيل أو فواصل معينة أو عناصر محصورة بطول.")}
+			/>
+
+			<CardsGr
+				pWidth={new RespString("575px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("وحدات بنود العدد والوزن")}
+				pCardBg={new ElemBg("#FFFFFF")}
+				pCardTitleFnt={Text.H4.WithColor("#111318")}
+				pCardBodyFnt={Text.Body.WithColor("#333333")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("طن أو كيلوجرام", "يستخدم في حصر حديد التسليح عند تحويل الأطوال والأقطار إلى أوزان، وقد يفصل حسب قطر السيخ أو العنصر.")}
+				pTopic2={new Topic("عدد", "يستخدم في العناصر المتكررة المحددة مثل قواعد معدنية أو أبواب مؤقتة أو عناصر تركيب منفصلة إن دخلت ضمن نطاق الحصر.")}
+				pTopic3={new Topic("بند مقطوعية", "يستخدم عند وجود أعمال عامة أو تحضيرية لا يمكن قياسها بدقة من الرسومات وحدها، ويجب وصفه بوضوح شديد.")}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="حصر الهيكل الخرساني خطوة بخطوة"
+			pDesc="أعمال الخرسانة المسلحة هي قلب خدمة حصر البناء، لأنها تجمع كميات خرسانة وحديد وشدات، وتتأثر بالنظام الإنشائي وارتفاعات الأدوار والبحور وعدد النماذج المتكررة وتفاصيل السلم والبدروم والسطح."
+		/>
+
+		<EmoList
+			pWidth={new RespString("1200px", "340px")}
+			pTitle={Text.H3.WithColor("#111318").OfText("مراحل حصر الخرسانة والحديد")}
+			pDesc={Text.Body.WithColor("#333333").OfText("يتم التعامل مع كل عنصر إنشائي كحالة قياس مستقلة، ثم تجمع النتائج في ملخصات قابلة للمراجعة.")}
+			pHeadBg={new ElemBg("#F7F1E6")}
+			pItemsBg={new ElemBg("#FFFFFF")}
+			pNumbered={true}
+			pItems={[
+				{ Title: "مراجعة اللوحات", Items: ["تجميع اللوحات المعمارية والإنشائية، التأكد من أحدث إصدار، ومراجعة المحاور والمناسيب والجداول والقطاعات قبل بدء القياس."] },
+				{ Title: "فصل العناصر", Items: ["تقسيم المشروع إلى حفر، قواعد، ميدات، رقاب أعمدة، أعمدة، كمرات، بلاطات، سلالم، خزانات، وحوائط إن وجدت."] },
+				{ Title: "حساب الخرسانة", Items: ["استخراج أحجام العناصر بالمتر المكعب مع توضيح طريقة التعامل مع التداخلات والفتحات والتكرارات."] },
+				{ Title: "حساب الشدات", Items: ["حصر الأسطح التي تحتاج نجارة وشدة عند إدراج هذا البند ضمن الخدمة، مع فصل الأسطح الرأسية والأفقية إذا احتاج التسعير ذلك."] },
+				{ Title: "حساب الحديد", Items: ["استخراج الحديد من الجداول أو الرسومات أو النسب التقديرية حسب مستوى البيانات، مع توضيح درجة الدقة والافتراضات."] },
+				{ Title: "تجميع الملخص", Items: ["إعداد ملخص عام للكميات حسب الدور أو العنصر أو البند، ثم تجهيز جدول قابل للتسعير والمراجعة."] }
+			]}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		pBg={new ElemBg("#F7F1E6")}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg("#111318")}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("حصر الحديد يحتاج وضوحًا في مستوى الدقة")}
+				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("حديد التسليح من أكثر البنود حساسية لأن الفارق بين الحصر التقديري والحصر التفصيلي قد يظهر بقوة في الشراء والتعاقد. لذلك لا يتم تقديم كمية الحديد كرقم مطلق دون شرح مصدرها: جداول تسليح، لوحات تفصيلية، نسب تقريبية، أو مراجعة تنفيذية.")}
+				pSize={new Size(1000, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<RespImg
+				pImg={new EmoMediaData(
+					"Img",
+					"https://images.unsplash.com/",
+					"photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&fm=jpg&q=70&w=1600",
+					false,
+					"حديد تسليح وموقع بناء مرتبط بحصر كميات الخرسانة والحديد",
+					new Size(560, "auto", 320, "auto")
+				)}
+			/>
+
+			<CardsGr
+				pWidth={new RespString("560px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("درجات حصر الحديد")}
+				pCardBg={new ElemBg("#FFFFFF")}
+				pCardTitleFnt={Text.H4.WithColor("#111318")}
+				pCardBodyFnt={Text.Body.WithColor("#333333")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("حصر تقريبي", "يستخدم في الميزانية الأولية عندما تكون الرسومات غير مكتملة، ويجب أن يوضح أنه ليس أمر شراء نهائي.")}
+				pTopic2={new Topic("حصر من جداول التسليح", "يعتمد على لوحات إنشائية فيها جداول وأقطار وأطوال، ويصلح أكثر للمراجعة والتسعير.")}
+				pTopic3={new Topic("حصر تنفيذي", "يدخل في تفاصيل التراكبات والكانات والأطوال والتشكيل والهالك، ويحتاج ملفًا إنشائيًا واضحًا أو شوب دروينج.")}
+			/>
+
+		</HzStack>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec
+		id="workflow"
+		pBg={new ElemBg("#0E1118")}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="طريقة العمل في خدمة حصر كميات البناء"
+			pDesc="الحصر لا يبدأ بفتح ملف إكسل. البداية الصحيحة هي ضبط مصدر القياس وإصدارات الرسومات والنطاق المطلوب، ثم استخراج الكميات ومراجعتها وتجميعها في صورة تصلح للاستخدام التجاري والفني."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("مسار الخدمة")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("استلام الملفات", "استلام الرسومات بصيغة PDF أو CAD إن وجدت، وتحديد هل المطلوب حصر خرسانة وحديد فقط أم كامل أعمال البناء.")}
+			pTopic2={new Topic("فحص قابلية القياس", "مراجعة هل الرسومات مكتملة بما يكفي للحصر، وهل توجد قطاعات وجداول ومحاور وأبعاد واضحة، وتسجيل النواقص قبل بدء الحساب.")}
+			pTopic3={new Topic("تحديد طريقة التقسيم", "تقسيم الحصر حسب الدور أو العنصر أو البند أو مرحلة التنفيذ، بحيث يخدم طريقة التسعير وشراء الخامات والمتابعة.")}
+			pTopic4={new Topic("استخراج الكميات", "قياس البنود من الرسومات وحساب الكميات مع فصل البنود المتكررة والبنود الخاصة والافتراضات التي لا تظهر صراحة في اللوحات.")}
+			pTopic5={new Topic("المراجعة والتدقيق", "مراجعة الأرقام منطقيًا بمقارنة المساحات والأدوار والتكرارات، وكشف البنود الشاذة أو الكميات غير المتناسبة.")}
+			pTopic6={new Topic("تسليم جدول الحصر", "تسليم ملف منظم يحتوي البنود والوحدات والكميات والملاحظات، مع ملخصات تساعد في التسعير والمقارنة.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="المدخلات المطلوبة لإعداد حصر كميات محترم"
+			pDesc="الحصر يتأثر مباشرة بجودة الرسومات. عندما تكون المدخلات ناقصة، لا يتم إخفاء النقص داخل رقم كاذب الدقة؛ بل يتم توضيح الافتراضات والملاحظات أو طلب البيانات اللازمة قبل التسليم النهائي."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("ملفات مفيدة قبل الحصر")}
+				pDesc={Text.Body.WithColor("#333333").OfText("كلما زادت جودة البيانات، زادت دقة الكمية وقابلية استخدامها في التعاقد.")}
+				pHeadBg={new ElemBg("#FFFFFF")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"المساقط المعمارية لكل دور مع الأبعاد والمحاور.",
+					"القطاعات والواجهات والمناسيب عند وجود حفر أو بدروم أو فروق مستويات.",
+					"اللوحات الإنشائية للقواعد والميدات والأعمدة والكمرات والبلاطات والسلالم.",
+					"جداول التسليح أو التفاصيل الإنشائية إن كانت مطلوبة في حصر الحديد.",
+					"ملف CAD عند توفره لتقليل احتمالات الخطأ في القياس من صورة أو PDF ضعيف.",
+					"أي تعديلات أو إصدار رسومات أحدث من الملفات القديمة حتى لا يتم الحصر على نسخة ملغاة."
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("قرارات يجب تحديدها")}
+				pDesc={Text.Body.WithColor("#333333").OfText("هذه القرارات تمنع الخلط بين حصر الميزانية وحصر التعاقد وحصر الشراء.")}
+				pHeadBg={new ElemBg("#FFFFFF")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"هل المطلوب حصر خرسانة وحديد فقط أم أعمال بناء كاملة؟",
+					"هل سيتم إدراج الشدات والنجارة ضمن الجدول أم الخرسانة والحديد فقط؟",
+					"هل المطلوب كميات صافية من الرسومات أم كميات شراء تشمل هالكًا أو احتياطيًا؟",
+					"هل الجدول موجه للمالك أم للمقاول أم للمقارنة بين عروض؟",
+					"هل يتم فصل كل دور وكل عنصر أم تقديم ملخصات عامة فقط؟",
+					"هل توجد بنود مستبعدة مثل العزل أو الردم أو المباني أو أعمال الموقع العام؟"
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="deliverables"
+		pBg={new ElemBg("#FFFFFF")}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="مخرجات خدمة حصر كميات أعمال البناء"
+			pDesc="المخرجات لا تكون ملف أرقام فقط. التسليم الجيد يوضح البند، الوحدة، الكمية، مصدر القياس، الافتراضات، وما الذي يصلح للتسعير وما الذي يحتاج رسومات أو مراجعة إضافية."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("ما الذي تستلمه؟")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("جدول كميات", "بنود منظمة بوحدات قياس وكميات واضحة، قابلة للاستخدام في المقارنة أو التسعير أو إعداد مقايسة أولية.")}
+			pTopic2={new Topic("ملخص كميات", "ملخص حسب البند أو الدور أو العنصر، لتسهيل فهم الأرقام الكبيرة مثل إجمالي الخرسانة أو الحديد أو المباني.")}
+			pTopic3={new Topic("ملاحظات القياس", "توضيح البنود التي تم قياسها بافتراضات معينة أو تحتاج تأكيدًا من الرسومات أو المصمم أو المقاول.")}
+			pTopic4={new Topic("قائمة نواقص", "تحديد الرسومات أو التفاصيل غير المتوفرة التي تؤثر في دقة الحصر، حتى لا تتحول إلى خلاف وقت التعاقد.")}
+			pTopic5={new Topic("نسخة قابلة للتسعير", "جدول يمكن إرسالُه للمقاولين لإضافة الأسعار، مع فصل واضح بين الكمية والسعر والإجمالي.")}
+			pTopic6={new Topic("توصيات مراجعة", "ملاحظات فنية مختصرة حول البنود الحساسة أو الكميات الشاذة أو نطاقات تحتاج تدقيقًا قبل الشراء أو التنفيذ.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		pBg={new ElemBg("#0E1118")}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg("#151923")}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("جدول الكميات ليس عرض سعر")}
+				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("خلط الحصر بالتسعير من أكثر أسباب سوء الفهم. الحصر يجيب عن سؤال: كم؟ أما التسعير فيجيب عن سؤال: بكام؟ وقد يختلف السعر حسب طريقة التنفيذ والخامات والموقع والمقاول وفترة التنفيذ والاشتراطات.")}
+				pSize={new Size(1000, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("الفصل بين الحصر والتسعير والمقايسة")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("الحصر", "استخراج الكمية والوحدة والبند من الرسومات والمواصفات، مع توضيح طريقة القياس والافتراضات.")}
+			pTopic2={new Topic("التسعير", "إضافة سعر الوحدة لكل بند بناءً على خامات ومصنعيات ومعدات ومصاريف وإدارة وربح ومخاطر.")}
+			pTopic3={new Topic("المقايسة", "تجميع البنود والكميات والأسعار في صورة مالية منظمة يمكن استخدامها للتعاقد أو المقارنة أو متابعة الدفعات.")}
+			pTopic4={new Topic("المستخلص", "قياس ما تم تنفيذه فعليًا في الموقع ومقارنته بالكميات التعاقدية أو المعتمدة لصرف دفعات مرحلية.")}
+		/>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #F7F1E6 "
+			pTitle="كيف يساعد الحصر في مقارنة عروض المقاولين؟"
+			pDesc="عند إرسال الرسومات فقط، قد يعود كل مقاول بعرض مختلف في البنود والشروط والتحفظات. أما عند إرسال جدول كميات موحد، يصبح الفرق الحقيقي أوضح: سعر وحدة، طريقة تنفيذ، خامة، مدة، أو نطاق خدمة."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<CardsGr
+				pWidth={new RespString("560px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("بدون جدول كميات")}
+				pCardBg={new ElemBg("#F7F1E6")}
+				pCardTitleFnt={Text.H4.WithColor("#111318")}
+				pCardBodyFnt={Text.Body.WithColor("#333333")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("عروض غير متجانسة", "كل مقاول يضع بنودًا مختلفة ويقارن نفسه بغيره على أساس غير ثابت.")}
+				pTopic2={new Topic("تحفظات كثيرة", "المقاول قد يستبعد بنودًا غير واضحة ثم تظهر لاحقًا كتغير سعر أو مطالبة إضافية.")}
+				pTopic3={new Topic("صعوبة التفاوض", "صاحب المشروع يتفاوض على رقم إجمالي دون معرفة أين توجد الزيادة أو النقص.")}
+			/>
+
+			<CardsGr
+				pWidth={new RespString("560px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("مع جدول كميات")}
+				pCardBg={new ElemBg("#111318")}
+				pCardTitleFnt={Text.H4.WithColor("#D9B86C")}
+				pCardBodyFnt={Text.Body.WithColor("#F8F4EA")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("نطاق موحد", "كل مقاول يضع سعره على نفس البنود والكميات، فتظهر فروق الأسعار لا فروق الفهم.")}
+				pTopic2={new Topic("كشف البنود الناقصة", "أي بند لم يسعر أو تحفظ عليه المقاول يظهر بوضوح قبل التعاقد.")}
+				pTopic3={new Topic("قرار أقوى", "المالك يستطيع معرفة هل العرض الأرخص أرخص فعلًا أم ناقص بنودًا مؤثرة.")}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="أمثلة عملية على حصر أعمال البناء"
+			pDesc="تختلف تفاصيل الحصر حسب نوع المشروع. فيلا صغيرة قد تحتاج فصلًا واضحًا للخرسانة والحديد والمباني، أما عمارة متعددة الأدوار فتحتاج اهتمامًا أكبر بالتكرار والنماذج، والمبنى التجاري يحتاج قراءة مختلفة لأحمال وتشغيل ومساحات مفتوحة."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("نماذج استخدام الخدمة")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("فيلا سكنية", "حصر القواعد والميدات والأعمدة والأسقف والسلم والمباني الخارجية والداخلية، مع فصل البنود التي تؤثر على تكلفة الهيكل والتشطيب لاحقًا.")}
+			pTopic2={new Topic("عمارة سكنية", "التركيز على الأدوار المتكررة، النماذج، البدروم إن وجد، المناور، السلالم، الأسطح، وحصر الحديد والخرسانة بدقة أكبر بسبب حجم التكرار.")}
+			pTopic3={new Topic("محل أو مبنى تجاري", "قراءة الحصر مع مراعاة المساحات المفتوحة والواجهات والتعديلات الإنشائية والبنود التي قد ترتبط بالترخيص والتشغيل.")}
+			pTopic4={new Topic("مراجعة عرض مقاول", "إعادة قراءة بنود العرض والكميات ومقارنتها بالرسومات لاكتشاف النقص أو التكرار أو البنود المجمعة بطريقة غير واضحة.")}
+			pTopic5={new Topic("شراء خامات", "إخراج ملخصات تساعد في شراء الحديد أو الطوب أو الخرسانة على مراحل، مع التمييز بين كمية الحصر وكمية الشراء.")}
+			pTopic6={new Topic("تجهيز مقايسة", "تحويل الكميات إلى جدول يصلح لإضافة أسعار الوحدة وإجمالي كل بند، مع ملاحظات تحمي المالك من الغموض.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="risk-control"
+		pBg={new ElemBg("#0E1118")}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="أخطاء شائعة في حصر كميات البناء"
+			pDesc="الأخطاء في الحصر لا تظهر دائمًا في نفس اليوم. أحيانًا تظهر عند شراء الحديد، أو صب السقف، أو مقارنة مستخلص المقاول، أو اكتشاف أن بندًا كاملًا لم يدخل في السعر."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#F4E5C4").OfText("أخطاء قياس")}
+				pDesc={Text.Body.WithColor("#F8F4EA").OfText("تحدث عند استخراج الكمية نفسها من اللوحات أو عند التعامل مع التكرارات والفتحات.")}
+				pHeadBg={new ElemBg("transparent")}
+				pItemsBg={new ElemBg("transparent")}
+				pItemFnt={Text.Body.WithColor("#F8F4EA")}
+				pNumbered={false}
+				pItems={[
+					"استخدام مقياس رسم خاطئ في PDF غير مضبوط.",
+					"إهمال فتحات السلالم أو المناور أو الخدمات عند حساب البلاطات أو المباني.",
+					"تكرار دور كامل دون الانتباه لاختلافات الأعمدة أو المناسيب أو الارتدادات.",
+					"خلط أبعاد المعماري مع أبعاد الإنشائي عند وجود اختلاف بين اللوحات.",
+					"إهمال العناصر الصغيرة المتكررة التي تصبح مؤثرة في الإجمالي.",
+					"حصر الحديد من نسب عامة رغم وجود تفاصيل كافية تسمح بحصر أفضل."
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#F4E5C4").OfText("أخطاء تجارية")}
+				pDesc={Text.Body.WithColor("#F8F4EA").OfText("تحدث عندما يستخدم الجدول بطريقة لا تناسب مستوى دقته أو نطاقه.")}
+				pHeadBg={new ElemBg("transparent")}
+				pItemsBg={new ElemBg("transparent")}
+				pItemFnt={Text.Body.WithColor("#F8F4EA")}
+				pNumbered={false}
+				pItems={[
+					"إرسال جدول ناقص للمقاولين ثم اعتبار السعر شاملًا كل شيء.",
+					"خلط كمية الشراء بالكمية الصافية دون تحديد الهالك أو الاحتياطي.",
+					"تجميع بنود مختلفة تحت وصف واحد يجعل سعر الوحدة غير قابل للمراجعة.",
+					"مقارنة مقاول سعر الخرسانة عنده شامل مضخة بآخر غير شامل.",
+					"اعتبار الحصر التقريبي أساسًا نهائيًا للتعاقد دون مراجعة تفصيلية.",
+					"عدم تثبيت إصدار الرسومات، فيتم الحصر على نسخة والتعاقد على نسخة أخرى."
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #F7F1E6 "
+			pTitle="تصنيف دقة الحصر قبل التسليم"
+			pDesc="لا نقدم كل الكميات بنفس درجة الثقة إذا كانت الرسومات متفاوتة الجودة. لذلك يفضل تصنيف دقة البنود حتى يعرف العميل ما يمكن الاعتماد عليه في التعاقد وما يحتاج تدقيقًا أو رسومات إضافية."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("درجات الاعتماد")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("كمية مؤكدة", "بند واضح في الرسومات، أبعاده متاحة، ووحدة قياسه مباشرة، ولا يحتاج افتراضًا مؤثرًا.")}
+			pTopic2={new Topic("كمية مشروطة", "بند يمكن حسابه لكن يعتمد على افتراض أو تفصيلة غير مؤكدة، فيتم ذكر الشرط بجواره.")}
+			pTopic3={new Topic("كمية تقديرية", "بند مطلوب في الميزانية لكن الرسومات لا تسمح بحصر تفصيلي، فيتم تقديمه كمؤشر لا كأمر شراء نهائي.")}
+			pTopic4={new Topic("بند يحتاج استكمال", "بند ظاهر في المشروع لكن لا توجد بيانات كافية لحصره، ويجب طلب رسومات أو قرار قبل إدراجه بدقة.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		pBg={new ElemBg("#F7F1E6")}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg("#111318")}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("استخدام الحصر في متابعة التنفيذ")}
+				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("عندما يبدأ التنفيذ، يتحول جدول الكميات إلى مرجع لفهم ما تم شراؤه وما تم تنفيذه وما يستحق صرفه. لذلك يفضل أن يكون الجدول منظمًا منذ البداية بطريقة تسمح بالمراجعة لا بمجرد جمع رقم إجمالي.")}
+				pSize={new Size(1000, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<Emograph
+				pSize={new Size(560, "auto", 320, "auto")}
+				pTitle={Text.H3.WithColor("#111318").OfText("من الحصر إلى المستخلص")}
+				pText={Text.Body.WithColor("#333333").OfText("الكمية التعاقدية لا تعني أن نفس الكمية تم تنفيذها بالفعل في الموقع. عند متابعة المشروع يتم قياس الأعمال المنفذة ومقارنتها بما كان مقدرًا أو متفقًا عليه. لذلك من المفيد أن يكون جدول الحصر الأصلي واضحًا في تقسيم البنود والوحدات حتى يسهل استخدامه لاحقًا في مراجعة الدفعات والمستخلصات وتغيرات الكميات.")}
+			/>
+
+			<CardsGr
+				pWidth={new RespString("560px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("فوائد أثناء التنفيذ")}
+				pCardBg={new ElemBg("#FFFFFF")}
+				pCardTitleFnt={Text.H4.WithColor("#111318")}
+				pCardBodyFnt={Text.Body.WithColor("#333333")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("ضبط الدفعات", "تحديد ما تم تنفيذه فعليًا بدل صرف دفعات مبنية على تقديرات عامة.")}
+				pTopic2={new Topic("متابعة الخامات", "ربط شراء الحديد والخرسانة والطوب بمراحل التنفيذ الفعلية.")}
+				pTopic3={new Topic("كشف التغييرات", "رصد البنود التي زادت أو نقصت بسبب تعديل تصميم أو قرار موقع.")}
+			/>
+
+		</HzStack>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="أنواع جداول الحصر الممكنة"
+			pDesc="اختيار شكل الجدول يعتمد على من سيستخدمه. المالك يحتاج ملخصًا واضحًا، المقاول يحتاج بنودًا قابلة للتسعير، والمهندس يحتاج تفاصيل مراجعة وربطًا باللوحات."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("اختيار شكل التسليم")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("جدول بنود مختصر", "مناسب للمالك في مرحلة مبكرة، يوضح الكميات الرئيسية دون الدخول في كل تفصيلة فرعية.")}
+			pTopic2={new Topic("جدول مقايسة", "مناسب لإرسال المقاولين، يحتوي وصف البند والوحدة والكمية وخانات السعر والإجمالي والملاحظات.")}
+			pTopic3={new Topic("ملخص حسب الدور", "مفيد في المباني المتكررة لمتابعة كميات كل دور ومقارنة النماذج والتغيرات بين الأدوار.")}
+			pTopic4={new Topic("ملخص حسب العنصر", "يفصل القواعد والأعمدة والكمرات والبلاطات والسلالم، ويخدم مراجعة الهيكل الخرساني.")}
+			pTopic5={new Topic("ملخص خامات", "يستخدم لقرارات شراء مبدئية مثل إجمالي الخرسانة أو الحديد أو الطوب، مع توضيح هل يشمل هالكًا أم لا.")}
+			pTopic6={new Topic("قائمة ملاحظات", "تسجل الافتراضات والتعارضات والنواقص، وهي جزء مهم من الحصر لا يقل قيمة عن الأرقام نفسها.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="ما الذي لا يدخل في حصر البناء إلا باتفاق؟"
+			pDesc="تحديد الاستبعادات مهم مثل تحديد المشمول. بعض البنود قد تبدو قريبة من أعمال البناء لكنها تحتاج رسومات أو تخصصًا آخر أو مستوى تفصيل مختلف، لذلك يجب إدراجها صراحة عند الحاجة."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("بنود تحتاج تحديدًا")}
+				pDesc={Text.Body.WithColor("#333333").OfText("يمكن إدراجها، لكن لا تفترض تلقائيًا داخل حصر الهيكل الخرساني.")}
+				pHeadBg={new ElemBg("#F7F1E6")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"العزل بأنواعه إذا لم تكن الرسومات أو المواصفات محددة.",
+					"أعمال الموقع العام والأسوار والبوابات وغرف الخدمات الخارجية.",
+					"الأعمال الصحية والكهربائية والميكانيكية.",
+					"بنود التشطيبات مثل المحارة والدهانات والسيراميك والنجارة.",
+					"اختبارات التربة أو الخرسانة أو الحديد أو الخدمات المعملية.",
+					"تكاليف النقل والونش والمعدات والمصاريف العامة إلا إذا كانت مطلوبة كمقايسة مسعرة."
+				]}
+			/>
+
+			<Emograph
+				pSize={new Size(560, "auto", 320, "auto")}
+				pTitle={Text.H3.WithColor("#111318").OfText("لماذا يتم فصل النطاقات؟")}
+				pText={Text.Body.WithColor("#333333").OfText("لأن العميل قد يطلب حصر البناء وهو يقصد الهيكل الخرساني فقط، أو يقصد كل ما يلزم حتى الطوب، أو يقصد مقايسة كاملة للبناء والتشطيب. لو لم يتم تثبيت النطاق، ستظهر فجوة بين ما يتوقعه العميل وما يحتويه الجدول. لذلك يتم توضيح المشمول والمستبعد قبل البدء، وتعديل الخدمة إذا كان المطلوب أوسع من حصر البناء.")}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="كيف نقرأ رسومات المشروع أثناء الحصر؟"
+			pDesc="الحصر الجيد لا يأخذ اللوحات كصور منفصلة. يتم قراءة المعماري والإنشائي معًا، لأن الكمية قد تبدأ من لوحة وتنتهي في أخرى، وقد يظهر التعارض بين اللوحات قبل ظهور أي رقم."
+		/>
+
+		<EmoList
+			pWidth={new RespString("1200px", "340px")}
+			pTitle={Text.H3.WithColor("#111318").OfText("تسلسل قراءة اللوحات")}
+			pDesc={Text.Body.WithColor("#333333").OfText("هذا التسلسل يقلل الخطأ الناتج عن قراءة لوحة واحدة دون سياقها.")}
+			pHeadBg={new ElemBg("#F7F1E6")}
+			pItemsBg={new ElemBg("#FFFFFF")}
+			pNumbered={true}
+			pItems={[
+				{ Title: "الموقع العام والمناسيب", Items: ["تحديد علاقة المبنى بالأرض، فروق المناسيب، وجود بدروم أو سور أو أعمال حفر خاصة."] },
+				{ Title: "المساقط المعمارية", Items: ["فهم حدود الدور والفتحات والحوائط والمناور والسلالم والمصاعد والنماذج المتكررة."] },
+				{ Title: "القطاعات والواجهات", Items: ["تأكيد الارتفاعات والمناسيب والسمكات والعناصر التي لا تظهر كاملة في المسقط."] },
+				{ Title: "لوحات الأساسات", Items: ["حصر القواعد والميدات والسملات والرقاب والعناصر الخاصة أسفل منسوب الأرض."] },
+				{ Title: "لوحات الأدوار", Items: ["حصر الأعمدة والكمرات والبلاطات والسلالم لكل دور مع الانتباه للتكرار والاختلافات."] },
+				{ Title: "الجداول والتفاصيل", Items: ["مراجعة جداول الأعمدة والتسليح والتفاصيل الخاصة لأنها قد تغير كمية الحديد أو الخرسانة أو الشدات."] }
+			]}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		pBg={new ElemBg("#0E1118")}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg("#151923")}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("حصر البناء للمالك يختلف عن حصر المقاول")}
+				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("المالك يريد أداة مقارنة وتحكم، بينما المقاول يريد كمية تساعده في التسعير والتنفيذ والشراء. يمكن للملف أن يخدم الطرفين، لكن يجب أن يكون الوصف واضحًا حتى لا يستخدم الجدول لغرض لم يصمم له.")}
+				pSize={new Size(1000, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("اختلاف زاوية الاستخدام")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("المالك", "يريد معرفة حجم المشروع ومقارنة المقاولين والتحكم في الميزانية والكشف عن البنود الناقصة أو الأسعار غير المنطقية.")}
+			pTopic2={new Topic("المقاول", "يريد تقسيم الكميات حسب طريقة التنفيذ والعمالة والمعدات ومراحل الصب والشراء والمخاطر التجارية.")}
+			pTopic3={new Topic("المهندس", "يريد ربط الكميات بالرسومات، وفحص التعارضات، وتوضيح البنود التي تحتاج تعديلًا أو تفصيلًا قبل التنفيذ.")}
+			pTopic4={new Topic("المشرف", "يريد مرجعًا يساعده عند مراجعة الخامات والدفعات والكميات المنفذة والتغييرات التي تظهر في الموقع.")}
+		/>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #F7F1E6 "
+			pTitle="باقات مقترحة لحصر أعمال البناء"
+			pDesc="الباقات التالية تساعد في تحديد مستوى الخدمة، ويتم ضبطها حسب مساحة المشروع وحالة الرسومات والغرض من الحصر."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("اختيار مستوى الخدمة")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("حصر مبدئي", "مناسب لميزانية أولية أو قرار شراء أرض أو مقارنة تصميمات. يعتمد على الرسومات المتاحة ويظهر درجة الدقة بوضوح.")}
+			pTopic2={new Topic("حصر تفصيلي", "مناسب للتعاقد وطلب عروض المقاولين. يفصل البنود والوحدات والكميات والملاحظات ويحتاج رسومات واضحة.")}
+			pTopic3={new Topic("حصر ومراجعة عرض", "مناسب إذا كان لديك عرض مقاول بالفعل وتريد معرفة هل الكميات والأسعار والنطاق متسقة مع الرسومات.")}
+			pTopic4={new Topic("حصر شراء خامات", "مناسب عند التحضير للتنفيذ وشراء الحديد أو الخرسانة أو الطوب، مع فصل الكمية الصافية عن الهالك أو الاحتياطي عند الحاجة.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="مؤشرات تكشف أن عرض المقاول يحتاج مراجعة كميات"
+			pDesc="ليس كل عرض رخيص فرصة، وليس كل عرض مرتفع مبالغة. أحيانًا يكون الفرق بسبب كمية ناقصة أو بند مدمج أو شرط غير واضح أو اختلاف في طريقة القياس."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("علامات في العرض نفسه")}
+				pDesc={Text.Body.WithColor("#333333").OfText("هذه العلامات تعني أن المقارنة تحتاج تفكيكًا قبل توقيع العقد.")}
+				pHeadBg={new ElemBg("#FFFFFF")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"عرض إجمالي دون جدول بنود واضح.",
+					"بند الخرسانة شامل أعمالًا كثيرة دون فصل الشدة أو الحديد أو الصب.",
+					"عدم ذكر هل الأسعار تشمل النقل والمضخة والهالك والمصاريف.",
+					"كميات دائرية جدًا لا تبدو مستخرجة من الرسومات.",
+					"استبعاد بنود مهمة في الملاحظات الصغيرة أسفل العرض.",
+					"اختلاف كبير بين عرضين دون تفسير واضح في البنود أو الخامات."
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("علامات في الرسومات")}
+				pDesc={Text.Body.WithColor("#333333").OfText("هذه العلامات تعني أن الحصر نفسه يحتاج تحفظات أو طلب استكمال قبل استخدامه في التعاقد.")}
+				pHeadBg={new ElemBg("#FFFFFF")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"عدم وجود قطاعات كافية للمناسيب والارتفاعات.",
+					"وجود اختلاف بين المحاور في المعماري والإنشائي.",
+					"عدم وضوح جداول الأعمدة أو التسليح.",
+					"وجود تعديلات يدوية أو نسخ متعددة غير محدد أحدثها.",
+					"غياب تفاصيل السلم أو البدروم أو الخزانات أو العناصر الخاصة.",
+					"وجود أعمال خارجية أو سور أو أرضيات لم تحدد ضمن نطاق الرسومات."
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="حصر البناء وعلاقته بخدمات المكتب الأخرى"
+			pDesc="خدمة الحصر تقف بين التصميم والتنفيذ والإشراف. كلما كان التصميم أوضح، كان الحصر أدق. وكلما كان الحصر منظمًا، أصبح التعاقد والتنفيذ والإشراف أكثر قابلية للمراجعة."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("الربط بين الخدمات")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("مع التصميم الإنشائي", "الرسومات الإنشائية الواضحة توفر تفاصيل العناصر والتسليح والقطاعات، وهي أساس حصر الخرسانة والحديد بدقة.")}
+			pTopic2={new Topic("مع الشوب دروينج", "الشوب دروينج يزيد دقة الكميات التنفيذية، خصوصًا في الحديد والتفاصيل والتراكبات والعناصر الخاصة.")}
+			pTopic3={new Topic("مع المقاولات", "جدول الكميات يساعد في صياغة عرض مقاولات أوضح ويقلل الخلاف حول نطاق الأعمال.")}
+			pTopic4={new Topic("مع الإشراف", "المشرف يستخدم الحصر كمرجع عند متابعة الخامات والدفعات والكميات المنفذة والتغييرات في الموقع.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="تجهيز جدول صالح للمقاولين"
+			pDesc="إذا كان الهدف إرسال الجدول للمقاولين، يجب أن يكون الوصف واضحًا بما يكفي حتى لا يرد كل مقاول على فهم مختلف. لذلك يتم ترتيب البنود بطريقة قابلة للتسعير لا بطريقة حسابية داخلية فقط."
+		/>
+
+		<EmoList
+			pWidth={new RespString("1200px", "340px")}
+			pTitle={Text.H3.WithColor("#111318").OfText("مكونات الجدول الصالح للتسعير")}
+			pDesc={Text.Body.WithColor("#333333").OfText("هذه الخانات تجعل الجدول مفهومًا للمقاول والمالك في نفس الوقت.")}
+			pHeadBg={new ElemBg("#F7F1E6")}
+			pItemsBg={new ElemBg("#FFFFFF")}
+			pNumbered={true}
+			pItems={[
+				{ Title: "رقم البند", Items: ["كود أو رقم واضح لكل بند لتسهيل المراسلات والمراجعات وتعديل الأسعار."] },
+				{ Title: "وصف البند", Items: ["وصف دقيق يحدد طبيعة العمل، ولا يخلط بنودًا مختلفة داخل عبارة عامة."] },
+				{ Title: "وحدة القياس", Items: ["متر مكعب أو متر مسطح أو طن أو عدد أو مقطوعية حسب طبيعة البند."] },
+				{ Title: "الكمية", Items: ["الكمية المستخرجة من الرسومات أو المقدرة مع توضيح درجة الدقة عند الحاجة."] },
+				{ Title: "ملاحظات", Items: ["أي شروط أو افتراضات أو حدود نطاق أو بنود مستبعدة من السعر."] },
+				{ Title: "خانات التسعير", Items: ["سعر الوحدة والإجمالي وخانة للملاحظات التجارية أو التحفظات إن كان الجدول موجهًا للمقاولين."] }
+			]}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#0E1118")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="نمط التعامل مع الرسومات غير المكتملة"
+			pDesc="في الواقع العملي، كثير من العملاء لا يملكون ملفًا كاملًا. لذلك يمكن تقديم خدمة مفيدة حتى مع نقص بعض البيانات، لكن بشرط الإعلان عن حدود الدقة وعدم بيع رقم تقريبي كأنه كمية تنفيذية نهائية."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("كيف نتعامل مع النقص؟")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("طلب استكمال", "عند غياب لوحة مؤثرة مثل قطاع أو جدول تسليح، يتم طلبها قبل إخراج كمية نهائية.")}
+			pTopic2={new Topic("افتراض موثق", "عند الحاجة لتقدير مبدئي، يتم تسجيل الافتراض بجوار البند بدل إخفائه داخل الرقم.")}
+			pTopic3={new Topic("فصل الدقة", "يتم فصل البنود المؤكدة عن البنود التقديرية حتى لا يختلط التسعير النهائي بالمؤشرات الأولية.")}
+			pTopic4={new Topic("مراجعة لاحقة", "يمكن تحديث الحصر بعد استكمال الرسومات أو صدور نسخة جديدة، بدل إعادة العمل من الصفر إذا كان الجدول منظمًا. ")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="لماذا لا تعتمد على سعر المتر فقط؟"
+			pDesc="سعر المتر يعطي مؤشرًا سريعًا، لكنه لا يكشف سبب ارتفاع أو انخفاض التكلفة. مشروعان بنفس المساحة قد يختلفان في كمية الحديد والخرسانة والحفر والشدات بسبب النظام الإنشائي والبحور والارتفاعات والتربة والبدروم وشكل المبنى."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<Emograph
+				pSize={new Size(560, "auto", 320, "auto")}
+				pTitle={Text.H3.WithColor("#111318").OfText("المتر لا يرى التفاصيل")}
+				pText={Text.Body.WithColor("#333333").OfText("عندما يقال إن تكلفة الهيكل كذا للمتر، فإن الرقم يخفي داخله مئات القرارات: عمق الحفر، نوع الأساسات، كمية الحديد، ارتفاع الدور، نوع البلاطة، عدد الكمرات، كثافة الأعمدة، وجود بدروم أو سلم خاص، وطريقة التنفيذ. لذلك يصلح سعر المتر للمؤشر الأولي، لكن الحصر هو الطريق العملي للمقارنة والتعاقد.")}
+			/>
+
+			<RespImg
+				pImg={new EmoMediaData(
+					"Img",
+					"https://images.unsplash.com/",
+					"photo-1581094794329-c8112a89af12?auto=format&fit=crop&fm=jpg&q=70&w=1600",
+					false,
+					"مهندس يراجع بيانات مشروع قبل إعداد تقدير أو حصر كميات",
+					new Size(560, "auto", 320, "auto")
+				)}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="أسئلة قبل إرسال الملفات"
+			pDesc="الإجابة عن هذه الأسئلة تختصر وقت المراجعة وتساعد في تحديد السعر والمدة ومخرجات الخدمة."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("حدد المطلوب بدقة")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("ما نوع المشروع؟", "فيلا، عمارة، محل، مطعم، مبنى إداري، مخزن، أو تعديل في مبنى قائم.")}
+			pTopic2={new Topic("ما مرحلة الرسومات؟", "تصميم مبدئي، رسومات ترخيص، رسومات تنفيذ، شوب دروينج، أو ملف قديم يحتاج مراجعة.")}
+			pTopic3={new Topic("ما الغرض من الحصر؟", "ميزانية، طلب عروض، مراجعة مقاول، شراء خامات، متابعة تنفيذ، أو تجهيز مقايسة.")}
+			pTopic4={new Topic("ما البنود المطلوبة؟", "خرسانة وحديد فقط، أعمال بناء كاملة، مباني وطوب، شدات، حفر وردم، أو إضافة بنود أخرى.")}
+			pTopic5={new Topic("هل توجد نسخة CAD؟", "وجود CAD يقلل مخاطر القياس من صور أو PDF، لكنه لا يغني عن مراجعة اللوحات والتفاصيل.")}
+			pTopic6={new Topic("ما مستوى التفصيل؟", "ملخص سريع، جدول بنود، فصل حسب الدور، فصل حسب العنصر، أو ملف مناسب لإرساله للمقاولين.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #F7F1E6 "
+			pTitle="حصر الكميات حسب مراحل تنفيذ الهيكل"
+			pDesc="تقسيم الحصر حسب مراحل التنفيذ يجعل الجدول أكثر فائدة في الشراء والمتابعة والمستخلصات. بدل أن يكون الرقم النهائي كتلة واحدة، يعرف العميل كمية كل مرحلة وما يسبقها وما يليها."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("تقسيم مرحلي عملي")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("مرحلة الحفر", "تحديد منسوب الحفر والعمق والمساحة والزيادة اللازمة للعمل حول القواعد، مع ملاحظات النقل أو الإحلال عند وجودها.")}
+			pTopic2={new Topic("مرحلة الأساسات", "حصر الخرسانة العادية والمسلحة والحديد والشدات للقواعد والميدات والسملات ورقاب الأعمدة وأي عناصر خاصة.")}
+			pTopic3={new Topic("مرحلة الأعمدة", "فصل كميات الأعمدة حسب الدور والقطاع والارتفاع، مع ربطها بجداول الأعمدة والتغيرات بين الأدوار.")}
+			pTopic4={new Topic("مرحلة الأسقف", "حصر البلاطات والكمرات والسلالم والفتحات والكانات والحديد والشدات، مع فصل كل سقف إذا كانت الأدوار غير متكررة.")}
+			pTopic5={new Topic("مرحلة المباني", "حصر حوائط الطوب حسب السمك والارتفاع والفتحات والدور، مع فصل الحوائط الخارجية والداخلية عند الحاجة.")}
+			pTopic6={new Topic("مرحلة السطح والخدمات", "حصر البارابيت وغرف السطح وقواعد الخزانات أو المعدات والعناصر الإنشائية الصغيرة التي تنسى كثيرًا في المقايسات المختصرة.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="بنود خاصة تؤثر في كمية البناء"
+			pDesc="بعض العناصر لا تبدو كبيرة في المسقط، لكنها تغير كمية الخرسانة أو الحديد أو الشدات أو الحفر بدرجة مؤثرة. لذلك يتم رصدها مبكرًا بدل تركها تظهر كزيادة مفاجئة في عرض المقاول."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("عناصر إنشائية حساسة")}
+				pDesc={Text.Body.WithColor("#333333").OfText("هذه العناصر تحتاج قراءة تفصيلية لأنها تغير منطق القياس والتسعير.")}
+				pHeadBg={new ElemBg("#FFFFFF")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"البدروم والحوائط الساندة والعزل حول المنشأ.",
+					"اللبشة أو القواعد المشتركة أو قواعد الجار.",
+					"الكمرات الساقطة أو المدفونة أو الكوابيل الكبيرة.",
+					"السلالم ذات التفاصيل الخاصة أو البسطات المتكررة.",
+					"الخزانات الأرضية أو العلوية وقواعد المعدات.",
+					"الفتحات الكبيرة في البلاطات أو الدكتات والرايزرات."
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("ظروف مشروع تغير الكمية")}
+				pDesc={Text.Body.WithColor("#333333").OfText("ليست كل الفروق ناتجة من الرسم؛ بعض الفروق تأتي من ظروف الموقع والتكرار وطريقة التنفيذ.")}
+				pHeadBg={new ElemBg("#FFFFFF")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"وجود دور متكرر مع تعديلات بسيطة غير ظاهرة للعميل.",
+					"اختلاف ارتفاعات الأدوار أو وجود ميزانين.",
+					"التنفيذ على حدود جار يحتاج شدة أو طريقة صب مختلفة.",
+					"وجود تربة تحتاج إحلالًا أو عمق حفر أكبر.",
+					"وجود مناور كثيرة أو فتحات خدمات تؤثر في البلاطات والمباني.",
+					"وجود واجهات مفتوحة أو بحور كبيرة تزيد كمية الحديد والكمرات."
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		pBg={new ElemBg("#0E1118")}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<EmoStrip
+			pBg={new ElemBg("#151923")}
+			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
+			pAlign={Align.Center}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("الحصر اليدوي والرقمي كلاهما يحتاج عقل هندسي")}
+				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("استخدام CAD أو أدوات قياس رقمية يسرع العمل، لكنه لا يضمن صحة الكمية إذا كانت اللوحات غير مفهومة أو النطاق غير محدد أو طريقة القياس خاطئة. الأداة تقيس، لكن المهندس يقرر ماذا يقاس وكيف يسجل ومتى يتحفظ.")}
+				pSize={new Size(1000, "auto", 320, "auto")}
+			/>
+
+		</EmoStrip>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<CardsGr
+				pWidth={new RespString("560px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("ما تفعله الأداة")}
+				pCardBg={new ElemBg("#F7F1E6")}
+				pCardTitleFnt={Text.H4.WithColor("#111318")}
+				pCardBodyFnt={Text.Body.WithColor("#333333")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("قياس المسافات والمساحات", "تسريع استخراج أطوال ومساحات من اللوحات الرقمية عند ضبط المقياس والطبقات.")}
+				pTopic2={new Topic("تجميع الأرقام", "تسهيل الجمع والفرز والتصفية ومقارنة الكميات بين العناصر والأدوار.")}
+				pTopic3={new Topic("تقليل التكرار", "حفظ الحسابات والمعادلات والتنسيقات بدل إعادة بناء الجدول من الصفر في كل مرة.")}
+			/>
+
+			<CardsGr
+				pWidth={new RespString("560px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("ما يقرره المهندس")}
+				pCardBg={new ElemBg("#F7F1E6")}
+				pCardTitleFnt={Text.H4.WithColor("#111318")}
+				pCardBodyFnt={Text.Body.WithColor("#333333")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("طريقة القياس", "هل تقاس الكمية صافية أم شاملة فتحات أو تراكبات أو هالك أو بنود مساعدة؟")}
+				pTopic2={new Topic("تفسير الرسومات", "هل اللوحة كافية؟ هل يوجد تعارض؟ هل هذا العنصر داخل نطاق الخدمة أم خارجها؟")}
+				pTopic3={new Topic("صلاحية الاستخدام", "هل الرقم يصلح لميزانية مبدئية أم للتعاقد أم لشراء خامات أم لمراجعة مستخلص؟")}
+			/>
+
+		</HzStack>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="مراجعة التغييرات بعد صدور الحصر"
+			pDesc="تعديل الرسومات بعد الحصر أمر شائع. المهم أن يكون هناك نظام واضح لتحديث الكميات حتى لا تتراكم التغييرات ثم تظهر فجأة في التنفيذ أو في مطالبة مالية من المقاول."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("كيف نحدّث الكميات؟")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("تحديد إصدار الرسومات", "لا يتم التحديث على ملف مجهول. يجب تحديد رقم الإصدار أو تاريخ اللوحات التي تغيرت.")}
+			pTopic2={new Topic("حصر فرق الكمية", "الأفضل توضيح الزيادة أو النقص لكل بند بدل استبدال الجدول بالكامل دون معرفة سبب التغيير.")}
+			pTopic3={new Topic("تحديث الملاحظات", "أي افتراض سابق قد يتغير بعد ظهور تفاصيل جديدة، لذلك يتم تحديث الملاحظات مع الأرقام.")}
+			pTopic4={new Topic("تأثير مالي", "إذا كان الجدول مسعرًا، يمكن ربط فرق الكمية بأثر مالي واضح قبل الموافقة على التعديل.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="حصر البناء قبل التعاقد يحمي الطرفين"
+			pDesc="الهدف ليس تضييق الخناق على المقاول ولا تحميل المالك تفاصيل لا يحتاجها. الهدف أن يكون نطاق العمل مفهومًا للطرفين قبل بدء التنفيذ، لأن الخلاف بعد الصب أو بعد شراء الخامات يكون أصعب وأغلى من حسمه على الورق."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("مصلحة المالك")}
+				pDesc={Text.Body.WithColor("#333333").OfText("المالك يحتاج ملفًا يقلل المفاجآت ويجعل العرض قابلاً للفهم.")}
+				pHeadBg={new ElemBg("#FFFFFF")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"يعرف البنود المؤثرة قبل توقيع العقد.",
+					"يقارن العروض على أساس موحد.",
+					"يكتشف البنود غير المسعرة أو المستبعدة.",
+					"يخطط للدفعات وشراء الخامات بصورة أفضل.",
+					"يمتلك مرجعًا عند حدوث تغيير أو مطالبة مالية.",
+					"يقلل قرارات اللحظة الأخيرة في الموقع."
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("مصلحة المقاول")}
+				pDesc={Text.Body.WithColor("#333333").OfText("المقاول الجاد يستفيد من جدول واضح لأنه يقلل سوء الفهم والتحفظات.")}
+				pHeadBg={new ElemBg("#FFFFFF")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"يسعر بنودًا محددة بدل افتراض نطاق واسع.",
+					"يوضح تحفظاته قبل التعاقد لا بعد التنفيذ.",
+					"يخطط للعمالة والخامات والمعدات على مراحل.",
+					"يعرف طريقة قياس المستخلصات لاحقًا.",
+					"يقلل الخلاف حول ما هو داخل العرض وما هو خارجه.",
+					"يبني عرضه على ملف يمكن الرجوع إليه عند التعديل."
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="قائمة مراجعة تفصيلية قبل اعتماد الحصر"
+			pDesc="قبل تسليم جدول الكميات، يتم المرور على عناصر المشروع بمنطق مراجعة لا بمنطق جمع أرقام فقط. هذه القائمة تقلل البنود المنسية، خصوصًا في المشروعات الصغيرة التي لا تحتوي دائمًا على رسومات تفصيلية كاملة."
+		/>
+
+		<HzStack pGap={new Pixel(25, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("575px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("مراجعة الأساسات")}
+				pDesc={Text.Body.WithColor("#333333").OfText("الأساسات أكثر مرحلة تختفي بعد التنفيذ، لذلك خطأ الحصر فيها يصعب إثباته لاحقًا.")}
+				pHeadBg={new ElemBg("#F7F1E6")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={true}
+				pItems={[
+					{ Title: "منسوب الحفر", Items: ["مراجعة العمق الفعلي من منسوب الأرض الطبيعية أو منسوب الصفر المعتمد."] },
+					{ Title: "أبعاد القواعد", Items: ["مطابقة أبعاد القواعد مع الجداول والقطاعات، وفصل القواعد المنفردة والمشتركة والجار."] },
+					{ Title: "الميدات والسملات", Items: ["حصر الأطوال والقطاعات والتقاطعات، وعدم تكرار الحجم عند التقاء العناصر."] },
+					{ Title: "رقاب الأعمدة", Items: ["فصل رقاب الأعمدة عن الأعمدة العلوية إذا كانت مرحلة التنفيذ والتسعير تحتاج ذلك."] },
+					{ Title: "العزل والإحلال", Items: ["تحديد هل يدخلان ضمن نطاق الحصر أو يخرجان لقائمة بنود مستقلة."] }
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("575px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("مراجعة الأعمدة والكمرات")}
+				pDesc={Text.Body.WithColor("#333333").OfText("الأعمدة والكمرات تتكرر كثيرًا، وأي خطأ صغير فيها يتضاعف مع عدد الأدوار.")}
+				pHeadBg={new ElemBg("#F7F1E6")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={true}
+				pItems={[
+					{ Title: "جداول الأعمدة", Items: ["مراجعة تغير القطاع والتسليح بين الأدوار وعدم افتراض التكرار الكامل."] },
+					{ Title: "ارتفاع الصب", Items: ["حساب ارتفاع العمود بين المناسيب الفعلية لا بمجرد ارتفاع الدور المعماري العام."] },
+					{ Title: "الكمرات الساقطة", Items: ["فصل الكمرات المؤثرة في الخرسانة والشدات عن البلاطات عند طريقة التسعير التي تتطلب ذلك."] },
+					{ Title: "الكمرات المخفية", Items: ["التعامل معها حسب الرسومات الإنشائية وطريقة حساب الخرسانة والحديد داخل البلاطة."] },
+					{ Title: "التداخلات", Items: ["مراجعة مناطق التقاء الكمرات بالأعمدة والبلاطات لتقليل تكرار الكمية أو حذفها بالخطأ."] }
+				]}
+			/>
+
+		</HzStack>
+
+		<HzStack pGap={new Pixel(25, 20)} pPad={new Pixel(0, 20)}>
+
+			<EmoList
+				pWidth={new RespString("575px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("مراجعة البلاطات والسلالم")}
+				pDesc={Text.Body.WithColor("#333333").OfText("البلاطات تبدو سهلة في المسقط، لكنها تتأثر بالفتحات والسلالم والسمك والكمرات والتكرار.")}
+				pHeadBg={new ElemBg("#F7F1E6")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={true}
+				pItems={[
+					{ Title: "سمك البلاطة", Items: ["مراجعة اختلاف السمك بين السقف العادي والبلكونات والأسطح أو مناطق خاصة."] },
+					{ Title: "الفتحات", Items: ["خصم فتحات السلالم والمناور والداكتات حسب طريقة القياس المتفق عليها."] },
+					{ Title: "السلالم", Items: ["فصل القلبات والبسطات والكمرات المرتبطة بها عند الحاجة لتسعير واضح."] },
+					{ Title: "البلكونات والكوابيل", Items: ["مراجعة الكوابيل لأنها قد تزيد الحديد أو تغير تفاصيل الشدة."] },
+					{ Title: "التكرارات", Items: ["عدم نسخ سقف دور على آخر إلا بعد مراجعة المناور والارتدادات والتغيرات."] }
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("575px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("مراجعة المباني والفتحات")}
+				pDesc={Text.Body.WithColor("#333333").OfText("حصر الطوب والمباني يحتاج قراءة المعماري بدقة، خصوصًا عند وجود فتحات كثيرة أو ارتفاعات مختلفة.")}
+				pHeadBg={new ElemBg("#F7F1E6")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={true}
+				pItems={[
+					{ Title: "سماكات الحوائط", Items: ["فصل الحوائط الخارجية والداخلية والبارابيت وأي حوائط خاصة بسماكات مختلفة."] },
+					{ Title: "الفتحات", Items: ["خصم الأبواب والشبابيك والفتحات الكبيرة حسب قواعد القياس المتفق عليها."] },
+					{ Title: "ارتفاعات الأدوار", Items: ["عدم استخدام ارتفاع موحد عند وجود دور أرضي أو ميزانين أو سطح بارتفاع مختلف."] },
+					{ Title: "المناور والداكتات", Items: ["مراجعة الحوائط حول المناور والرايزرات لأنها تتكرر وتؤثر في الإجمالي."] },
+					{ Title: "الفصل عن التشطيب", Items: ["عدم إدخال المحارة أو الدهانات أو السيراميك داخل حصر المباني إلا في خدمة حصر التشطيبات."] }
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="صياغة وصف البند أهم من الرقم وحده"
+			pDesc="رقم الكمية قد يكون صحيحًا، لكن وصف البند الضعيف يفتح باب الخلاف. البند الجيد يوضح ماذا يشمل السعر وماذا لا يشمل، وما هي الوحدة، وأين توجد حدود القياس."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("مكونات وصف البند")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("نوع العمل", "خرسانة عادية، خرسانة مسلحة، حفر، ردم، مباني، شدات، حديد، أو بند آخر محدد بوضوح.")}
+			pTopic2={new Topic("مكان العمل", "أساسات، أعمدة، سقف، سلم، سطح، سور، بدروم، أو دور محدد عند الحاجة لتفصيل التنفيذ.")}
+			pTopic3={new Topic("الوحدة", "الوحدة يجب أن تناسب طبيعة البند ولا تترك للمقاول حرية تفسير طريقة القياس.")}
+			pTopic4={new Topic("الملاحظات", "أي افتراض أو استبعاد أو شرط قياس أو علاقة ببند آخر يجب أن يظهر بجوار البند.")}
+			pTopic5={new Topic("حدود الشمول", "هل السعر يشمل النقل أو المعدات أو الضخ أو الهالك أو الشدة أو المصنعية أم أن هذه بنود مستقلة؟")}
+			pTopic6={new Topic("قابلية المراجعة", "الوصف الجيد يسمح بمراجعة الكمية والسعر لاحقًا دون الرجوع لسلسلة طويلة من التفسيرات الشفوية.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#0E1118")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="إعداد الحصر للمناقصات الصغيرة"
+			pDesc="حتى لو كان المشروع فيلا أو عمارة صغيرة وليس مناقصة رسمية، يمكن استخدام منطق المناقصات المصغرة: جدول واحد، نفس البنود، نفس الملاحظات، ثم مقارنة العروض بناءً على رد المقاولين على نفس المستند."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<CardsGr
+				pWidth={new RespString("560px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("قبل إرسال الجدول")}
+				pCardBg={new ElemBg("#F7F1E6")}
+				pCardTitleFnt={Text.H4.WithColor("#111318")}
+				pCardBodyFnt={Text.Body.WithColor("#333333")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("ثبت نسخة الرسومات", "أرسل نفس النسخة لكل المقاولين، ولا تقارن عرضًا مبنيًا على نسخة مختلفة.")}
+				pTopic2={new Topic("حدد طريقة الرد", "اطلب سعر وحدة وإجمالي وملاحظات، وليس رقمًا إجماليًا فقط.")}
+				pTopic3={new Topic("وضح الاستبعادات", "أي بند غير داخل النطاق يجب أن يكون واضحًا حتى لا يظهر كخلاف لاحق.")}
+			/>
+
+			<CardsGr
+				pWidth={new RespString("560px", "320px")}
+				pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("بعد استلام العروض")}
+				pCardBg={new ElemBg("#F7F1E6")}
+				pCardTitleFnt={Text.H4.WithColor("#111318")}
+				pCardBodyFnt={Text.Body.WithColor("#333333")}
+				pStackDir="Col"
+				pSpacing={20}
+				pTopic1={new Topic("راجع البنود غير المسعرة", "البند الذي يترك فارغًا قد يتحول لاحقًا إلى مطالبة إضافية.")}
+				pTopic2={new Topic("قارن سعر الوحدة", "السعر الإجمالي وحده لا يكشف أين يوجد الفرق الحقيقي بين المقاولين.")}
+				pTopic3={new Topic("افحص التحفظات", "تحفظ صغير في نهاية العرض قد يغير معنى السعر بالكامل.")}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="حالات لا ننصح فيها باستخدام الحصر كمرجع نهائي"
+			pDesc="الأمانة الفنية أهم من تسليم رقم سريع. هناك حالات يكون فيها الحصر مفيدًا كمؤشر، لكنه غير مناسب للتعاقد النهائي أو الشراء إلا بعد استكمال البيانات."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("حالات تستدعي تحفظًا واضحًا")}
+			pCardBg={new ElemBg("#FFFFFF")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("رسومات غير معتمدة", "إذا كانت الرسومات أفكارًا مبدئية أو نسخًا غير نهائية، فالحصر يصلح للميزانية أكثر من التعاقد.")}
+			pTopic2={new Topic("غياب التفاصيل الإنشائية", "بدون تفاصيل تسليح أو قطاعات كافية، لا يصح تقديم حصر حديد نهائي.")}
+			pTopic3={new Topic("مبنى قائم بلا رفع", "إذا كان المبنى قائمًا ولا توجد رسومات أو رفع دقيق، فالكمية ستكون محدودة الدقة.")}
+			pTopic4={new Topic("تعديلات متوقعة", "عندما يكون التصميم ما زال يتغير، يفضل تقديم حصر مرحلي قابل للتحديث بدل مرجع نهائي.")}
+			pTopic5={new Topic("نطاق غير محدد", "إذا لم يحدد العميل هل يريد بناء فقط أو بناء وتشطيب وخدمات، سيكون الجدول معرضًا لسوء الاستخدام.")}
+			pTopic6={new Topic("غرض غير مناسب", "حصر الميزانية لا يستخدم كأمر شراء، وحصر الشراء لا يستخدم كمستخلص، إلا بعد ضبطه للغرض المطلوب.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="كيف يتحول الحصر إلى قرار شراء خامات؟"
+			pDesc="كميات الشراء ليست دائمًا نفس كميات الحصر الصافية. الشراء يحتاج توقيتًا ومراحل وهالكًا واحتياطيًا وطريقة تخزين. لذلك يتم التعامل مع ملف الشراء كاستخدام مستقل لجدول الكميات لا كنسخة تلقائية منه."
+		/>
+
+		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("عند شراء الحديد")}
+				pDesc={Text.Body.WithColor("#333333").OfText("الحديد يحتاج قراءة مختلفة لأن الطلب قد يكون حسب الأقطار والأطوال ومراحل التنفيذ.")}
+				pHeadBg={new ElemBg("#F7F1E6")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"فصل الحديد حسب القطر عند توفر البيانات.",
+					"تحديد هل الكمية صافية أم تشمل هالكًا.",
+					"فصل كميات الأساسات عن الأدوار المتكررة عند الشراء المرحلي.",
+					"مراجعة التراكبات والتشكيل إذا كان الملف تنفيذيًا.",
+					"عدم شراء كامل الكمية عند احتمال تعديل التصميم.",
+					"مراجعة التخزين بالموقع حتى لا تتحول الكمية الصحيحة إلى فقد أو تلف."
+				]}
+			/>
+
+			<EmoList
+				pWidth={new RespString("560px", "320px")}
+				pTitle={Text.H3.WithColor("#111318").OfText("عند شراء الطوب والخرسانة")}
+				pDesc={Text.Body.WithColor("#333333").OfText("الخرسانة والطوب يتأثران بالتوقيت والمورد وطريقة التنفيذ وليس بالكمية النظرية فقط.")}
+				pHeadBg={new ElemBg("#F7F1E6")}
+				pItemsBg={new ElemBg("#FFFFFF")}
+				pNumbered={false}
+				pItems={[
+					"تقسيم الخرسانة حسب مراحل الصب لا حسب الإجمالي فقط.",
+					"فصل الخرسانة العادية عن المسلحة وعن أي عناصر خاصة.",
+					"مراجعة كميات الطوب حسب السمك والدور والفتحات.",
+					"إضافة احتياطي تجاري للطوب عند الشراء حسب ظروف النقل والهالك.",
+					"تحديد هل سعر الخرسانة يشمل المضخة أو الإضافات أو الانتظار.",
+					"ربط شراء الخامات بجدول التنفيذ لتقليل التخزين غير الضروري."
+				]}
+			/>
+
+		</HzStack>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="الفرق بين الكمية الصافية والكمية التعاقدية وكمية الشراء"
+			pDesc="استخدام كلمة كمية دون تحديد معناها يسبب خلافًا متكررًا. لذلك نفرق في الجداول بين ما تم قياسه من الرسومات، وما سيتم التعاقد عليه، وما سيطلب من الموردين عند التنفيذ."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("ثلاث قراءات لنفس البند")}
+			pCardBg={new ElemBg("#FFFFFF")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("الكمية الصافية", "هي الكمية المقاسة من الرسومات وفق طريقة قياس محددة، وغالبًا تكون أساس المقارنة الفنية.")}
+			pTopic2={new Topic("الكمية التعاقدية", "هي الكمية التي يتفق عليها الطرفان في العقد أو المقايسة، وقد تشمل شروط قياس أو بنودًا مقطوعية.")}
+			pTopic3={new Topic("كمية الشراء", "هي الكمية التي يطلبها الموقع من الموردين، وقد تزيد بسبب الهالك أو التغليف أو الحد الأدنى للطلب أو طريقة التنفيذ.")}
+			pTopic4={new Topic("الكمية المنفذة", "هي ما تم تنفيذه فعليًا في الموقع، وتستخدم في المستخلصات ومراجعة التغييرات.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="أمثلة على أسئلة المقاول التي يجيب عنها جدول الحصر"
+			pDesc="جدول الكميات الجيد لا يخدم المالك فقط، بل يجعل المقاول يرد بسعر أوضح لأنه يجد أمامه أسئلة منظمة بدل رسومات مفتوحة التفسير."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("أسئلة يختصرها الجدول")}
+			pCardBg={new ElemBg("#F7F1E6")}
+			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardBodyFnt={Text.Body.WithColor("#333333")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("هل السعر شامل الشدة؟", "عندما تكون الشدات مفصولة أو موضحة، لا يختلط سعر الخرسانة بسعر النجارة المسلحة.")}
+			pTopic2={new Topic("هل الكمية لكل دور؟", "فصل الأدوار يمنع الخلط بين الدور المتكرر والدور المختلف أو السطح أو البدروم.")}
+			pTopic3={new Topic("هل الحديد مفصول؟", "فصل الحديد حسب العنصر أو القطر يساعد في التسعير والشراء ومراجعة الهالك.")}
+			pTopic4={new Topic("هل المباني داخلة؟", "توضيح دخول أو خروج المباني والطوب يمنع اعتبارها جزءًا تلقائيًا من الهيكل الخرساني.")}
+			pTopic5={new Topic("هل توجد بنود مستبعدة؟", "الاستبعادات الواضحة أفضل من سعر منخفض يتحول لاحقًا إلى إضافات.")}
+			pTopic6={new Topic("هل الكمية نهائية؟", "ملاحظات درجة الدقة تمنع استخدام حصر مبدئي كمرجع نهائي للتنفيذ.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="faq"
+		pBg={new ElemBg("#F7F1E6")}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = " --StripBg : #F7F1E6 "
+			pTitle="أسئلة شائعة عن حصر كميات أعمال البناء"
+			pDesc="إجابات عملية قبل طلب الخدمة أو إرسال الرسومات."
+		/>
+
+		<EmoFaq>
+
+			<FaqItem
+				pQuestion="هل حصر كميات البناء يشمل الأسعار؟"
+				pAnswer="الحصر في أساسه يحدد الكميات والوحدات والبنود. يمكن إضافة التسعير أو تجهيز مقايسة مسعرة كخدمة إضافية إذا كان المطلوب معرفة التكلفة التقريبية أو مقارنة عروض المقاولين."
+			/>
+
+			<FaqItem
+				pQuestion="هل يمكن الحصر من PDF فقط؟"
+				pAnswer="يمكن الحصر من PDF إذا كان واضحًا ومضبوط المقاس ويحتوي الأبعاد والقطاعات والجداول اللازمة. وجود ملف CAD يساعد في القياس، لكنه لا يعوض نقص التفاصيل الفنية."
+			/>
+
+			<FaqItem
+				pQuestion="هل الحصر يصلح لشراء الحديد مباشرة؟"
+				pAnswer="يتوقف ذلك على مستوى الرسومات وطريقة الحصر. إذا كان الحصر تفصيليًا من جداول تسليح ورسومات واضحة يمكن استخدامه كأساس شراء مع إضافة الهالك والاحتياطي حسب الاتفاق. أما الحصر المبدئي فلا يستخدم كأمر شراء نهائي."
+			/>
+
+			<FaqItem
+				pQuestion="ما الفرق بين حصر الخرسانة وحصر الحديد؟"
+				pAnswer="حصر الخرسانة يعتمد غالبًا على أحجام العناصر بالمتر المكعب. حصر الحديد يحتاج أقطارًا وأطوالًا وتفاصيل تسليح وتراكبات وتشكيلًا، لذلك تكون درجة دقته مرتبطة بجودة اللوحات الإنشائية."
+			/>
+
+			<FaqItem
+				pQuestion="هل يتم حصر الشدات والنجارة؟"
+				pAnswer="يمكن إدراج الشدات ضمن نطاق الخدمة عند الحاجة. لا يتم افتراضها تلقائيًا داخل حصر الخرسانة والحديد إلا إذا تم الاتفاق على ذلك."
+			/>
+
+			<FaqItem
+				pQuestion="هل يشمل الحصر أعمال الطوب والمباني؟"
+				pAnswer="يمكن أن يشمل حصر المباني والطوب ضمن أعمال البناء عند وجود مساقط وقطاعات وفتحات واضحة. يتم فصل السماكات والأنواع إذا كانت الرسومات تحددها."
+			/>
+
+			<FaqItem
+				pQuestion="هل يصلح الحصر لمقارنة المقاولين؟"
+				pAnswer="نعم، وهذه من أهم وظائفه. يتم تجهيز جدول موحد يرسل للمقاولين لإضافة أسعارهم، وبذلك تصبح المقارنة بين أسعار الوحدات والتحفظات لا بين عروض مختلفة النطاق."
+			/>
+
+			<FaqItem
+				pQuestion="هل يمكن مراجعة عرض مقاول موجود بالفعل؟"
+				pAnswer="نعم. تتم مراجعة البنود والكميات والوحدات والتحفظات ومقارنتها بالرسومات، ثم توضيح البنود الناقصة أو غير الواضحة أو المجمعة بطريقة قد تسبب خلافًا لاحقًا."
+			/>
+
+			<FaqItem
+				pQuestion="هل الحصر يغني عن التصميم الإنشائي؟"
+				pAnswer="لا. الحصر يعتمد على التصميم ولا يحل محله. إذا كانت الرسومات الإنشائية ناقصة أو غير واضحة، فالحل هو استكمال التصميم أو الشوب دروينج قبل طلب كمية تنفيذية دقيقة."
+			/>
+
+			<FaqItem
+				pQuestion="ما الملفات التي أرسلها لبدء الخدمة؟"
+				pAnswer="أرسل المساقط المعمارية واللوحات الإنشائية والقطاعات والجداول وأحدث نسخة من الرسومات، ووضح هل الغرض ميزانية أو تسعير أو شراء خامات أو مراجعة عرض مقاول."
+			/>
+
+			<FaqItem
+				pQuestion="هل يتم تسليم ملف Excel؟"
+				pAnswer="يمكن تسليم جدول الكميات بصيغة Excel أو PDF حسب الاتفاق. غالبًا يكون Excel أنسب إذا كان المطلوب إضافة أسعار المقاولين أو تعديل البنود لاحقًا."
+			/>
+
+			<FaqItem
+				pQuestion="هل يمكن تحديث الحصر بعد تعديل الرسومات؟"
+				pAnswer="نعم، بشرط تحديد التعديلات والإصدار الجديد. إذا كان الجدول الأصلي منظمًا حسب البنود والعناصر، يكون تحديثه أسرع من إعادة العمل من البداية."
+			/>
+
+			<FaqItem
+				pQuestion="ما مدة إعداد حصر كميات البناء؟"
+				pAnswer="المدة تعتمد على مساحة المشروع وعدد الأدوار ومستوى التفصيل وحالة الرسومات. في المشاريع الصغيرة قد يكون الحصر أسرع، بينما المشاريع متعددة الأدوار أو ذات التفاصيل الإنشائية الكثيفة تحتاج وقت مراجعة أطول."
+			/>
+
+			<FaqItem
+				pQuestion="هل يتم احتساب الهالك؟"
+				pAnswer="الهالك ليس جزءًا واحدًا ثابتًا لكل البنود. يمكن إضافة هالك أو احتياطي عند تجهيز كميات شراء، أما جدول الحصر الصافي فيعرض الكمية المستخرجة من الرسومات غالبًا."
+			/>
+
+			<FaqItem
+				pQuestion="هل يمكن حصر مبنى قائم بدون رسومات؟"
+				pAnswer="يمكن عمل رفع ومعاينة ثم حصر تقريبي أو تفصيلي حسب إمكانية الوصول للعناصر. لكن حصر الهيكل المخفي في مبنى قائم بدون رسومات إنشائية يكون محدود الدقة ويحتاج تحفظات واضحة."
+			/>
+
+			<FaqItem
+				pQuestion="هل يتم اعتماد الحصر من جهة رسمية؟"
+				pAnswer="الحصر خدمة فنية لإعداد أو مراجعة الكميات. أي اعتماد رسمي أو ختم أو استخدام تعاقدي خاص يجب الاتفاق عليه صراحة حسب الجهة والغرض والمسؤولية المطلوبة."
+			/>
+
+		</EmoFaq>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ReadAlso
+		pTitle={Text.H2.Centered.WithColor("#111318").OfText("اقرأ أيضًا")}
+		pDesc={Text.Body.Centered.WithColor("#333333").OfText("صفحات مرتبطة تساعدك على فهم علاقة حصر الكميات بالتصميم والشوب دروينج والتنفيذ.")}
+		pHeadBg={new ElemBg("#E7D3A1")}
+		pBodyBg={new ElemBg("#F7F1E6")}
+		pCardBg={new ElemBg("#FFFFFF")}
+	>
+
+		<ReadAlsoItem
+			pTitle="حصر كميات"
+			pDesc="الصفحة الرئيسية لخدمات حصر الكميات داخل المكتب الفني."
+			pHref="/emodsign/tech/takeoff"
+			pImg="/Media/Emodsign/Tech/Takeoff/HeroL.webp"
+		/>
+
+		<ReadAlsoItem
+			pTitle="حصر كميات التشطيبات"
+			pDesc="خدمة حصر بنود التشطيب والخامات والمساحات وربطها بالمقايسة والتسعير."
+			pHref="/emodsign/tech/takeoff/finishing"
+			pImg="/Media/Emodsign/Tech/Takeoff/Finishing/HeroL.webp"
+		/>
+
+		<ReadAlsoItem
+			pTitle="شوب دروينج إنشائي"
+			pDesc="تفصيل الرسومات الإنشائية قبل التنفيذ بما يساعد في حصر أدق للحديد والعناصر."
+			pHref="/emodsign/tech/shopdwg/struc"
+			pImg="/Media/Emodsign/Tech/Shopdwg/Struc/HeroL.webp"
+		/>
+
+		<ReadAlsoItem
+			pTitle="تصميم إنشائي"
+			pDesc="خدمة إعداد الرسومات والنظام الإنشائي الذي تعتمد عليه كميات الخرسانة والحديد."
+			pHref="/emodsign/des/eng/struc"
+			pImg="/Media/Emodsign/Des/Eng/Struc/HeroL.webp"
+		/>
+
+		<ReadAlsoItem
+			pTitle="إدارة الجدول الزمني"
+			pDesc="تنظيم مراحل المشروع وربط الكميات والموارد بالتنفيذ والمتابعة."
+			pHref="/emodsign/tech/manage"
+			pImg="/Media/Emodsign/Tech/Manage/HeroL.webp"
+		/>
+
+		<ReadAlsoItem
+			pTitle="إشراف هندسي على البناء"
+			pDesc="متابعة تنفيذ الهيكل الخرساني ومراجعة الأعمال في الموقع طبقًا للرسومات والمواصفات."
+			pHref="/emocrete/supervision/construction"
+			pImg="/Media/Emocrete/Supervision/Construction/HeroL.webp"
+		/>
+
+	</ReadAlso>
+
+
+
+
+
+
+
+	<RelServices
+		pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("خدمات مرتبطة بحصر أعمال البناء")}
+		pDesc={Text.Body.Centered.WithColor("#F8F4EA").OfText("هذه خدمات تجارية مباشرة يمكن طلبها مع حصر الكميات أو بعده حسب مرحلة مشروعك.")}
+		pHeadBg={new ElemBg("#0E1118")}
+		pBodyBg={new ElemBg("#F7F1E6")}
+		pCardBg={new ElemBg("#FFFFFF")}
+	>
+
+		<RelServiceItem
+			pTitle="حصر كميات التشطيبات"
+			pDesc="حصر بنود التشطيب والمساحات والخامات بعد مرحلة الهيكل أو أثناء تجهيز ميزانية التشطيب."
+			pHref="/emodsign/tech/takeoff/finishing"
+			pImg="/Media/Emodsign/Tech/Takeoff/Finishing/HeroL.webp"
+			pBtnText="اطلب الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="شوب دروينج إنشائي"
+			pDesc="تطوير تفاصيل التنفيذ الإنشائية بما يساعد في ضبط كميات الحديد والخرسانة والشدات."
+			pHref="/emodsign/tech/shopdwg/struc"
+			pImg="/Media/Emodsign/Tech/Shopdwg/Struc/HeroL.webp"
+			pBtnText="اطلب الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="تصميم إنشائي"
+			pDesc="إعداد النظام الإنشائي واللوحات التي يتم بناء حصر الخرسانة والحديد عليها."
+			pHref="/emodsign/des/eng/struc"
+			pImg="/Media/Emodsign/Des/Eng/Struc/HeroL.webp"
+			pBtnText="اطلب الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="تصميم معماري"
+			pDesc="تجهيز المساقط والواجهات والقطاعات التي تساعد في حصر المباني والفتحات والعناصر المعمارية."
+			pHref="/emodsign/des/eng/arch"
+			pImg="/Media/Emodsign/Des/Eng/Arch/HeroL.webp"
+			pBtnText="اطلب الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="مقاولات عامة"
+			pDesc="تنفيذ أعمال البناء أو التشطيب بعد وضوح الرسومات والكميات والنطاق."
+			pHref="/emocrete/contracting"
+			pImg="/Media/Emocrete/Contracting/HeroL.webp"
+			pBtnText="اطلب الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="إشراف هندسي على البناء"
+			pDesc="متابعة تنفيذ أعمال الهيكل الخرساني طبقًا للرسومات والمواصفات والكميات المتفق عليها."
+			pHref="/emocrete/supervision/construction"
+			pImg="/Media/Emocrete/Supervision/Construction/HeroL.webp"
+			pBtnText="اطلب الخدمة"
+		/>
+
+	</RelServices>
+
+
+
+
+
+
+
+</BLayout>

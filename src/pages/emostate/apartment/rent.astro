@@ -1,0 +1,318 @@
+---
+import BLayout from "@/Layout.astro";
+import { Text, ElemBg, Size, Align, Colors, RespString, Topic, Pixel, EmoMediaData } from "@/TypesLib";
+import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, EmoFaq, ReadAlso, RelServices, EmoPipelineStrip, SecTitle, VrStack, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="شقق للإيجار"
+	pDescr="خدمة تسويق شقق للإيجار، تشمل تجهيز بيانات الشقة، فرز المستأجرين، تنظيم المعاينات، ومراجعة شروط الإيجار من مدة وقيمة وتأمين واستعمال قبل التعاقد."
+>
+
+	<Hero
+		pImgL="/Media/Emostate/Apartment/Rent/HeroD.webp"
+		pImgP="/Media/Emostate/Apartment/Rent/HeroM.webp"
+		pTitle="شقق للإيجار"
+		pDesc="تسويق شقتك للإيجار مع فرز المستأجر المناسب قبل المعاينة والتفاوض"
+		pTitleClr={Colors.WhiteOff}
+		pDescClr={Colors.WhiteOff}
+		pAlign="center"
+		pBlurL="on"
+		pBlurP="on"
+		pPosL="44% 8% 12% 8%"
+		pPosP="42% 5% 10% 5%"
+	>
+
+		<EmoCall BlackSky pText="اعرض شقتك للإيجار" />
+
+	</Hero>
+
+	<ESec
+		id="Intro"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+		<SecTitle
+			pTitle="تأجير الشقة يبدأ باختيار المستأجر"
+			pDesc="أهم قرار في الإيجار ليس الوصول إلى أي مستأجر، بل الوصول إلى مستأجر مناسب لطبيعة الشقة والعمارة وشروط المالك"
+			style={`--StripBg:${Colors.GreenLite};`}
+		/>
+
+		<EmoStrip
+			pBg={new ElemBg(Colors.WhiteOff)}
+
+			pAlign={Align.Center}
+>
+
+			<HzStack
+
+
+				pGap={new Pixel(30, 15)}
+				pPad={new Pixel(30, 15)}
+>
+
+				<RespImg pImg={new EmoMediaData("Img", "/Media/Emostate/Apartment/Rent/", "HeroD.webp", false, "شقق للإيجار", new Size(520, "auto", "100%", "auto"))} />
+
+				<VrStack
+
+					pWidth={new Pixel(700, 340)}
+					pGap={new Pixel(20, 15)}
+					pPad={new Pixel(0, 0)}
+>
+
+					<Emograph
+						pTitle={Text.H3.OfText("الاستقرار أهم من سرعة التأجير")}
+						pText={Text.Body.OfText("الشقة السكنية تحتاج مستأجرًا ملتزمًا بشروط السكن، مدة الإيجار، قيمة التأمين، طريقة السداد، والمحافظة على الوحدة. لذلك يتم فرز الطلبات قبل المعاينة بدل فتح الباب لاتصالات كثيرة بلا نتيجة.")}
+						pSize={new Size(700, "auto", "100%", "auto")}
+					/>
+
+					<CardsGr
+						pWidth={new RespString("700px", "100%")}
+						pCardBg={new ElemBg(Colors.Gray1)}
+						pCardTitleFnt={Text.H4.Centered}
+						pCardBodyFnt={Text.Body.Centered}
+						pTopic1={new Topic("مدة واضحة", "تحديد مدة الإيجار والزيادة السنوية وطريقة التجديد")}
+						pTopic2={new Topic("مستأجر مناسب", "فرز الغرض من السكن وعدد الأفراد وطبيعة الاستخدام")}
+						pTopic3={new Topic("تسليم منضبط", "تسجيل حالة الشقة والمرافق قبل التسليم")}
+					/>
+
+				</VrStack>
+
+			</HzStack>
+
+		</EmoStrip>
+
+	</ESec>
+
+	<ESec
+		id="Terms"
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+	>
+		<SecTitle
+			pTitle="شروط الإيجار التي يجب حسمها"
+			pDesc="توضيح الشروط من البداية يحمي المالك والمستأجر من سوء الفهم بعد المعاينة"
+			style={`--StripBg:${Colors.Gray5};`}
+		/>
+
+		<EmoStrip
+			pBg={new ElemBg(Colors.Gray1)}
+
+			pAlign={Align.Center}
+>
+
+			<HzStack
+
+
+				pGap={new Pixel(30, 15)}
+				pPad={new Pixel(30, 15)}
+>
+
+				<EmoList
+					pWidth={new RespString("560px", "100%")}
+					pTitle={Text.H3.Centered.OfText("شروط مالية")}
+					pDesc={Text.Body.Centered.OfText("تحدد جدوى التأجير قبل التفاوض")}
+					pHeadBg={new ElemBg(Colors.GreenLite)}
+					pItemsBg={new ElemBg(Colors.WhiteOff)}
+					pNumbered={true}
+					pItems={[
+						"قيمة الإيجار الشهري المطلوبة",
+						"قيمة التأمين وموعد رده وشروط الخصم منه",
+						"مدة التعاقد والزيادة السنوية إن وجدت",
+						"طريقة السداد: شهري أو مقدم أو شيكات",
+						"مسؤولية فواتير الكهرباء والمياه والغاز والصيانة"
+					]}
+				/>
+
+				<EmoList
+					pWidth={new RespString("560px", "100%")}
+					pTitle={Text.H3.Centered.OfText("شروط استعمال")}
+					pDesc={Text.Body.Centered.OfText("تمنع الخلافات بعد السكن")}
+					pHeadBg={new ElemBg(Colors.SkyLite)}
+					pItemsBg={new ElemBg(Colors.WhiteOff)}
+					pNumbered={true}
+					pItems={[
+						"عدد الأفراد وطبيعة السكن",
+						"السماح أو منع الحيوانات الأليفة",
+						"إمكانية استعمال الشقة كمكتب أو نشاط مهني من عدمه",
+						"مسؤولية الصيانة البسيطة أو الأعطال السابقة",
+						"حالة التشطيب والمنقولات إن وجدت عند الاستلام"
+					]}
+				/>
+
+			</HzStack>
+
+		</EmoStrip>
+
+	</ESec>
+
+	<ESec
+		id="Process"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+		<SecTitle
+			pTitle="خطوات تأجير الشقة"
+			pDesc="التسويق والمتابعة حتى الوصول إلى مستأجر مناسب"
+			style={`--StripBg:${Colors.SkyLite};`}
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1200px", "340px")}
+			pGrTitle={Text.H3.Centered.OfText("مراحل الخدمة")}
+			pCardBg={new ElemBg(Colors.WhiteOff)}
+			pCardTitleFnt={Text.H4.Centered}
+			pCardBodyFnt={Text.Body.Centered}
+			pStackDir="Row"
+			pTopic1={new Topic("تجهيز البيانات", "جمع بيانات الشقة والسعر والشروط وحالة التشطيب والمرافق.")}
+			pTopic2={new Topic("صياغة العرض", "كتابة وصف مناسب يوضح مزايا السكن والقيود المهمة للمستأجر.")}
+			pTopic3={new Topic("فرز المستأجر", "سؤال المستأجر عن عدد الأفراد والمدة والميزانية وطريقة السداد.")}
+			pTopic4={new Topic("المعاينة", "ترتيب زيارة واضحة ومعرفة رد فعل المستأجر على السعر والحالة.")}
+			pTopic5={new Topic("الاتفاق", "متابعة التفاوض على القيمة والتأمين والمدة وبنود الصيانة.")}
+		/>
+
+	</ESec>
+
+	<ESec
+		id="Handover"
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+	>
+		<SecTitle
+			pTitle="قبل تسليم الشقة"
+			pDesc="تسجيل الحالة يحمي الطرفين ويجعل نهاية الإيجار أسهل"
+			style={`--StripBg:${Colors.Gray5};`}
+		/>
+
+		<EmoStrip
+			pBg={new ElemBg(Colors.Gray1)}
+
+			pAlign={Align.Center}
+>
+
+			<EmoList
+				pWidth={new RespString("1000px", "100%")}
+				pTitle={Text.H3.Centered.OfText("قائمة فحص سريعة")}
+				pDesc={Text.Body.Centered.OfText("تستخدم قبل الاتفاق النهائي أو عند استلام المستأجر")}
+				pHeadBg={new ElemBg(Colors.GreenLite)}
+				pItemsBg={new ElemBg(Colors.WhiteOff)}
+				pNumbered={false}
+				pItems={[
+					"تصوير حالة الحوائط والأرضيات والأبواب والشبابيك",
+					"تسجيل قراءة العدادات إن أمكن",
+					"تحديد الأعطال السابقة والمسؤول عنها",
+					"تحديد عدد المفاتيح المسلمة",
+					"تحديد قواعد الصيانة الدورية أو الطوارئ"
+				]}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+	<EmoPipelineStrip
+		pTitle="طلبات إيجار الشقق المفتوحة"
+		pDesc="يتم ترتيب الأولوية حسب وضوح شروط المالك وجاهزية الشقة للمعاينة وإمكانية التسليم خلال مدة قريبة."
+		pServiceName="شقق للإيجار"
+	/>
+
+	<ReadAlso
+		pTitle={Text.H2.Centered.OfText("اقرأ أيضًا")}
+
+>
+
+	<ReadAlsoItem
+		pTitle="تسويق عقاري"
+		pDesc="الصفحة الرئيسية لمجموعة التسويق العقاري."
+		pHref="/emostate"
+		pImg="/Media/Emostate/HeroD.webp"
+	/>
+
+	<ReadAlsoItem
+		pTitle="شقق للبيع"
+		pDesc="تسويق شقق للبيع وفرز المشترين."
+		pHref="/emostate/apartment"
+		pImg="/Media/Emostate/Apartment/Sell/HeroD.webp"
+	/>
+
+	<ReadAlsoItem
+		pTitle="شقق مفروش"
+		pDesc="تسويق شقق مفروشة مع قائمة منقولات واضحة."
+		pHref="/emostate/apartment/furn"
+		pImg="/Media/Emostate/Apartment/Furn/HeroD.webp"
+	/>
+
+</ReadAlso>
+
+	<RelServices
+		pTitle={Text.H2.Centered.White.OfText("خدمات مساعدة")}
+	>
+
+		<RelServiceItem
+			pTitle="تشطيب شقق"
+			pDesc="تجهيز الشقة قبل الإيجار لرفع جودة المعروض."
+			pHref="/emocrete/finishing/apartment"
+			pImg="/Media/Emocrete/Finishing/Apartment/HeroL.webp"
+		/>
+
+		<RelServiceItem
+			pTitle="تكلفة تشطيب شقة"
+			pDesc="تقدير تكلفة الإصلاحات قبل قرار التأجير."
+			pHref="/emocrete/finishing/apartment/cost"
+			pImg="/Media/Emocrete/Finishing/Apartment/Cost/HeroL.webp"
+		/>
+
+		<RelServiceItem
+			pTitle="خدمات استشارية"
+			pDesc="استشارة هندسية عند وجود عيوب أو احتياج تقرير قبل التأجير."
+			pHref="/emonsult"
+			pImg="/Media/Emonsult/HeroL.webp"
+		/>
+
+	</RelServices>
+
+	<EmoFaq>
+
+		<FaqItem
+			pQuestion="هل يتم قبول إيجار عائلات فقط؟"
+			pAnswer="يتم الالتزام بما يحدده المالك من نوع المستأجر وطبيعة الاستخدام، ويتم ذكر ذلك قبل المعاينة حتى لا تضيع المواعيد."
+		/>
+
+		<FaqItem
+			pQuestion="هل التأمين ضروري؟"
+			pAnswer="التأمين من البنود المهمة لتغطية التلفيات أو الالتزامات المتأخرة، ويتم تحديد قيمته وشروط رده بوضوح قبل الاتفاق."
+		/>
+
+		<FaqItem
+			pQuestion="هل يمكن تأجير الشقة كإداري؟"
+			pAnswer="هذا يتوقف على طبيعة العمارة والمنطقة وشروط المالك والوضع القانوني للوحدة؛ لذلك يجب توضيح الغرض من البداية."
+		/>
+
+		<FaqItem
+			pQuestion="هل يتم تسويق الشقة بدون صور؟"
+			pAnswer="يمكن بدء التواصل ببيانات مختصرة، لكن الصور الواضحة ترفع جودة الطلبات وتقلل أسئلة العملاء المتكررة."
+		/>
+
+	</EmoFaq>
+
+</BLayout>

@@ -1,0 +1,46 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"div">, PlaceProps { pIcon?: "star" | "check" | "spark" | "pin"; pFill?: string; pBg?: string; pSpeed?: number; }
+
+const { pIcon = "spark", pFill = "#111111", pBg = "#fbff00", pSpeed = 3200, pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly, id: pGivenID = GetWidgetId("FloatingIcon"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
+const cPath = pIcon === "star" ? "M50 5 62 36 95 36 68 55 79 88 50 68 21 88 32 55 5 36 38 36Z" : pIcon === "check" ? "M38 70 15 47 25 37 39 51 76 16 86 26Z" : pIcon === "pin" ? "M50 6 C68 6 82 20 82 38 C82 64 50 94 50 94 C50 94 18 64 18 38 C18 20 32 6 50 6ZM50 24 C42 24 36 30 36 38 C36 46 42 52 50 52 C58 52 64 46 64 38 C64 30 58 24 50 24Z" : "M52 2 60 38 98 48 62 60 52 98 40 60 2 48 40 38Z";
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cPlace = new Place(Astro.props as PlaceProps, `--IconFill:${pFill}; --IconBg:${pBg}; --IconSpeed:${pSpeed}ms; --ShapePointer:${pClickable === true ? "auto" : "none"}; ${cGivenStyle}`);
+---
+
+<div class={`FloatingIcon ${cPlace.Class} ${pGivenClass}`.trim()} style={cPlace.Style} id={pGivenID} aria-hidden="true" {...RemAttr}>
+	<svg viewBox="0 0 100 100" focusable="false"><circle cx="50" cy="50" r="47" fill="var(--IconBg)" /><path d={cPath} fill="var(--IconFill)" /></svg>
+</div>
+
+<style>
+	.FloatingIcon { position: relative; display: block; width: 100%; height: 100%; pointer-events: var(--ShapePointer, none); box-sizing: border-box; animation: EmoFloatIcon var(--IconSpeed) ease-in-out infinite alternate; filter: drop-shadow(0 18px 24px rgba(0,0,0,.18)); }
+	.FloatingIcon svg { display: block; width: 100%; height: 100%; }
+	@keyframes EmoFloatIcon { from { translate: 0 -5%; } to { translate: 0 7%; } }
+.FloatingIcon.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+		z-index: var(--PlaceZ, 1);
+		opacity: var(--PlaceOpacityL, 100%);
+		transform: rotate(var(--PlaceRotateL, 0deg));
+		transform-origin: var(--PlaceOrigin, center center);
+		pointer-events: var(--ShapePointer, none);
+		min-width: 0;
+		box-sizing: border-box;
+	}
+
+	@media (orientation: portrait) {
+		.FloatingIcon.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+			opacity: var(--PlaceOpacityP, var(--PlaceOpacityL, 100%));
+			transform: rotate(var(--PlaceRotateP, var(--PlaceRotateL, 0deg)));
+		}
+	}
+</style>

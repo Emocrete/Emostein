@@ -1,0 +1,58 @@
+.hDrawer {
+	position: fixed;
+	inset: 0;
+	width: min(520px, 90vw);
+	background: rgb(0, 0, 0);
+	opacity: 30;
+	transform: translateX(0px);
+	transition:
+		transform 0.5s ease,
+		opacity 0.2s ease;
+	z-index: 1001;
+}
+.hDrawer.isOpen {
+	transform: translateX(-500);
+}
+.hDrawerInner {
+	position: relative;
+	top: 0;
+	left: 0;
+	width: min(420px, 90vw);
+	height: 100%;
+	background: #030711c9;
+	opacity: 50;
+	padding: 20px;
+}
+.hDrawerHead {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-bottom: 50px;
+}
+.hDrawerTitle {
+	font-size: 40px;
+	color: white;
+}
+.hClose {
+	border: 0;
+	background: rgb(255, 234, 46);
+	width:40px;
+	height: 40px;
+	border-radius: 50px;
+	font-weight: 700;
+	cursor: pointer;
+}
+.hDrawerLinks {
+	display: flex;
+	flex-direction: column;
+	width: 350px;
+	height: 100%;
+  align-items: center; 
+}
+.hOverlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.863);
+	z-index: 1000;
+	backdrop-filter: blur(10px);
+}
