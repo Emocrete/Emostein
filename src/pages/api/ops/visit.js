@@ -157,6 +157,8 @@ export async function POST({ request }) {
 			widget: Str(Body.widget),
 			label: Str(Body.label),
 			value: Body.value ?? "",
+			elapsedMs: Body.elapsedMs ?? Body.elapsed_ms ?? "",
+			elapsedSec: Body.elapsedSec ?? Body.elapsed_sec ?? "",
 			href: Str(Body.href),
 			important: Bool(Body.important),
 			notifyMobile: Bool(Body.notifyMobile ?? Body.notify_mobile ?? Body.notify),

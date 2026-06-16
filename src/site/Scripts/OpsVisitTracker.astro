@@ -40,6 +40,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	const cReadFocusMinRatio = 0.5;
 	const cReadTickMs = 250;
 	const cPageInstanceId = NewId("p");
+	const cPageStartedAt = Date.now();
 	const cFocusAwayMinMs = 1500;
 	const cObservedViewElems = new Set();
 	const cReadTargets = [];
@@ -81,6 +82,10 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 
 	function GetPageInstanceId() {
 	return cPageInstanceId;
+	}
+
+	function GetPageElapsedMs() {
+	return Math.max(0, Date.now() - cPageStartedAt);
 	}
 
 	function CleanText(pText) {
@@ -401,9 +406,24 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	function TrackReadEvent(pState, pEventType, pTime, pMode) {
+	const WidgetName = pState.Widget || GetWidgetName(pState.Elem);
+	const BodyText = Shorten(pState.Text || "", 420);
+
+	if (BodyText) {
+	TrackOpsEvent(pEventType, {
+	eventOn: "read_body",
+	widget: WidgetName,
+	label: BodyText,
+	labelMax: 420,
+	value: pState.WordCount,
+	durationMs: Math.round(pState.AccumMs),
+	awayReason: `${pMode || ""}:body`
+	});
+	}
+
 	TrackOpsEvent(pEventType, {
 	eventOn: "read",
-	widget: pState.Widget || GetWidgetName(pState.Elem),
+	widget: WidgetName,
 	label: pState.Label || BuildViewLabel(pState.Elem),
 	value: pState.WordCount,
 	durationMs: Math.round(pState.AccumMs),
@@ -542,8 +562,10 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	language: navigator.language || "",
 	timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
 	widget: String(pOptions.widget || "").trim(),
-	label: Shorten(pOptions.label || ""),
+	label: Shorten(pOptions.label || "", pOptions.labelMax || 190),
 	value: pOptions.value ?? "",
+	elapsedMs: Math.round(GetPageElapsedMs()),
+	elapsedSec: Math.round(GetPageElapsedMs() / 1000),
 	href: String(pOptions.href || "").trim(),
 	important: BoolValue(pOptions.important),
 	notifyMobile: BoolValue(pOptions.notifyMobile),
