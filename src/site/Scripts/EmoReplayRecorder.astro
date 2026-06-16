@@ -34,12 +34,19 @@ const cMaxEventsPerChunk = Number(import.meta.env.PUBLIC_EMO_REPLAY_MAX_EVENTS_P
 	const cApiChunk = "/api/replay/chunk";
 	const cStartedAt = new Date().toISOString();
 	const cStartTick = performance.now();
+	const cOpsIds = window.__EmoOpsIds || {};
 	const cReplayId = NewId("r");
-	const cVisitorId = GetStoredId(localStorage, cVisitorKey, "v");
-	const cVisitSessionId = GetStoredId(sessionStorage, cVisitSessionKey, "s");
-	const cPageId = NewId("rp");
+	const cVisitorId = Str(cOpsIds.visitorId) || GetStoredId(localStorage, cVisitorKey, "v");
+	const cVisitSessionId = Str(cOpsIds.sessionId) || GetStoredId(sessionStorage, cVisitSessionKey, "s");
+	const cPageId = Str(cOpsIds.pageInstanceId) || NewId("rp");
 
 	try { sessionStorage.setItem(cReplayPageKey, cPageId); } catch {}
+	window.__EmoReplayIds = {
+		replaySessionId: cReplayId,
+		visitorId: cVisitorId,
+		visitSessionId: cVisitSessionId,
+		pageId: cPageId
+	};
 
 	let fEvents = [];
 	let fSeq = 0;
@@ -49,6 +56,8 @@ const cMaxEventsPerChunk = Number(import.meta.env.PUBLIC_EMO_REPLAY_MAX_EVENTS_P
 	let fLastScrollAt = 0;
 	let fStartSent = false;
 	let fSnapshotSent = false;
+	let fSnapshotSending = false;
+	let fSnapshotAttempts = 0;
 	let fUnloading = false;
 	let fLastKnownScrollX = window.scrollX || 0;
 	let fLastKnownScrollY = window.scrollY || 0;
@@ -334,8 +343,11 @@ const cMaxEventsPerChunk = Number(import.meta.env.PUBLIC_EMO_REPLAY_MAX_EVENTS_P
 	}
 
 	async function SendSnapshot() {
-		if (fSnapshotSent) return;
-		fSnapshotSent = true;
+		if (fSnapshotSent || fSnapshotSending) return;
+		if (fSnapshotAttempts >= 3) return;
+
+		fSnapshotSending = true;
+		fSnapshotAttempts += 1;
 
 		let SnapshotHtml = "";
 		try {
@@ -344,12 +356,19 @@ const cMaxEventsPerChunk = Number(import.meta.env.PUBLIC_EMO_REPLAY_MAX_EVENTS_P
 			SnapshotHtml = `<!doctype html><html lang=\"ar\" dir=\"rtl\"><body><pre>Snapshot failed: ${String(Ex?.message || Ex)}</pre></body></html>`;
 		}
 
-		await SendJson(cApiSession, {
+		const Sent = await SendJson(cApiSession, {
 			...BasePayload(),
 			event: "snapshot",
-			snapshotHtml,
+			snapshotHtml: SnapshotHtml,
 			snapshotLength: SnapshotHtml.length
 		});
+
+		fSnapshotSending = false;
+		fSnapshotSent = Sent;
+
+		if (!Sent && !fUnloading) {
+			window.setTimeout(() => SendSnapshot(), 2500);
+		}
 	}
 
 	function PushEvent(pEvent) {
