@@ -1,0 +1,537 @@
+---
+const cEnabled = import.meta.env.PUBLIC_EMO_REPLAY_ENABLED !== "false";
+const cSampleRate = Number(import.meta.env.PUBLIC_EMO_REPLAY_SAMPLE_RATE ?? "1");
+const cSnapshotDelayMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_SNAPSHOT_DELAY_MS ?? "1400");
+const cPointerEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_POINTER_EVERY_MS ?? "80");
+const cScrollEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_SCROLL_EVERY_MS ?? "120");
+const cFlushEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_FLUSH_EVERY_MS ?? "5000");
+const cMaxEventsPerChunk = Number(import.meta.env.PUBLIC_EMO_REPLAY_MAX_EVENTS_PER_CHUNK ?? "120");
+---
+
+{ cEnabled && (
+<script
+	is:inline
+	define:vars={{
+		cSampleRate,
+		cSnapshotDelayMs,
+		cPointerEveryMs,
+		cScrollEveryMs,
+		cFlushEveryMs,
+		cMaxEventsPerChunk
+	}}
+>
+(() => {
+	if (window.__EmoReplayRecorderStarted) return;
+	window.__EmoReplayRecorderStarted = true;
+
+	if (Math.random() > Number(cSampleRate || 1)) return;
+	if (location.pathname.startsWith("/admin/replay")) return;
+
+	const cVisitorKey = "emo_ops_visitor_id";
+	const cVisitSessionKey = "emo_ops_session_id";
+	const cReplayPageKey = "emo_replay_page_id";
+	const cApiSession = "/api/replay/session";
+	const cApiChunk = "/api/replay/chunk";
+	const cStartedAt = new Date().toISOString();
+	const cStartTick = performance.now();
+	const cReplayId = NewId("r");
+	const cVisitorId = GetStoredId(localStorage, cVisitorKey, "v");
+	const cVisitSessionId = GetStoredId(sessionStorage, cVisitSessionKey, "s");
+	const cPageId = NewId("rp");
+
+	try { sessionStorage.setItem(cReplayPageKey, cPageId); } catch {}
+
+	let fEvents = [];
+	let fSeq = 0;
+	let fChunkIndex = 0;
+	let fFlushTimer = 0;
+	let fLastPointerAt = 0;
+	let fLastScrollAt = 0;
+	let fStartSent = false;
+	let fSnapshotSent = false;
+	let fUnloading = false;
+	let fLastKnownScrollX = window.scrollX || 0;
+	let fLastKnownScrollY = window.scrollY || 0;
+
+	function NewId(pPrefix) {
+		const Rand = Math.random().toString(36).slice(2, 10);
+		const Time = Date.now().toString(36);
+		return `${pPrefix}_${Time}_${Rand}`;
+	}
+
+	function Now() {
+		return Math.max(0, Math.round(performance.now() - cStartTick));
+	}
+
+	function GetStoredId(pStorage, pKey, pPrefix) {
+		let Id = "";
+		try { Id = pStorage.getItem(pKey) || ""; } catch {}
+		if (!Id) {
+			Id = NewId(pPrefix);
+			try { pStorage.setItem(pKey, Id); } catch {}
+		}
+		return Id;
+	}
+
+	function Str(pValue) {
+		return String(pValue ?? "").trim();
+	}
+
+	function Shorten(pText, pMax = 180) {
+		const Text = Str(pText).replace(/\s+/g, " ");
+		return Text.length > pMax ? `${Text.slice(0, pMax).trim()}…` : Text;
+	}
+
+	function CssEscape(pValue) {
+		if (window.CSS && typeof window.CSS.escape === "function") return CSS.escape(String(pValue));
+		return String(pValue).replace(/["\\]/g, "\\$&");
+	}
+
+	function GetReplayId(pElem) {
+		const Elem = pElem?.closest?.("[data-replay-id], [data-ops-widget], [data-ops-scope], [id]");
+		if (!Elem) return "";
+		return Str(Elem.getAttribute("data-replay-id") || Elem.getAttribute("data-ops-widget") || Elem.getAttribute("data-ops-scope") || Elem.id || "");
+	}
+
+	function GetReplaySelector(pElem) {
+		const Id = GetReplayId(pElem);
+		if (!Id) return "";
+		const Elem = pElem?.closest?.("[data-replay-id], [data-ops-widget], [data-ops-scope], [id]");
+		if (Elem?.hasAttribute?.("data-replay-id")) return `[data-replay-id=\"${CssEscape(Id)}\"]`;
+		if (Elem?.hasAttribute?.("data-ops-widget")) return `[data-ops-widget=\"${CssEscape(Id)}\"]`;
+		if (Elem?.hasAttribute?.("data-ops-scope")) return `[data-ops-scope=\"${CssEscape(Id)}\"]`;
+		if (Elem?.id) return `#${CssEscape(Elem.id)}`;
+		return "";
+	}
+
+	function GetLabel(pElem) {
+		const Elem = pElem?.closest?.("[data-replay-label], [data-ops-label], [aria-label], [title], button, a, summary, label, input, textarea, select, [data-replay-id], [id]") || pElem;
+		if (!Elem) return "";
+		const Explicit = Elem.getAttribute?.("data-replay-label") || Elem.getAttribute?.("data-ops-label") || Elem.getAttribute?.("aria-label") || Elem.getAttribute?.("title") || Elem.getAttribute?.("placeholder") || "";
+		if (Explicit) return Shorten(Explicit);
+		if (Elem.matches?.("input, textarea, select")) return Shorten(Elem.name || Elem.id || Elem.getAttribute("data-replay-id") || "");
+		return Shorten(Elem.innerText || Elem.textContent || "");
+	}
+
+	function GetTargetInfo(pElem) {
+		return {
+			target: GetReplayId(pElem),
+			selector: GetReplaySelector(pElem),
+			label: GetLabel(pElem)
+		};
+	}
+
+	function BasePayload() {
+		return {
+			id: cReplayId,
+			visitorId: cVisitorId,
+			visitSessionId: cVisitSessionId,
+			pageId: cPageId,
+			pageUrl: location.href,
+			pagePath: location.pathname,
+			pageTitle: document.title,
+			startedAt: cStartedAt,
+			viewport: GetViewportInfo(),
+			document: GetDocumentInfo(),
+			screen: `${screen.width}x${screen.height}`,
+			language: navigator.language || "",
+			timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
+			userAgentClient: navigator.userAgent || ""
+		};
+	}
+
+	function GetViewportInfo() {
+		return {
+			width: Math.round(window.innerWidth || document.documentElement.clientWidth || 0),
+			height: Math.round(window.innerHeight || document.documentElement.clientHeight || 0),
+			dpr: Number(window.devicePixelRatio || 1),
+			scrollX: Math.round(window.scrollX || 0),
+			scrollY: Math.round(window.scrollY || 0)
+		};
+	}
+
+	function GetDocumentInfo() {
+		const Doc = document.documentElement;
+		const Body = document.body;
+		return {
+			width: Math.max(Doc.scrollWidth, Body?.scrollWidth || 0, Doc.clientWidth),
+			height: Math.max(Doc.scrollHeight, Body?.scrollHeight || 0, Doc.clientHeight),
+			direction: getComputedStyle(Doc).direction || document.dir || "rtl"
+		};
+	}
+
+	async function SendJson(pUrl, pBody, pBeacon = false) {
+		const Text = JSON.stringify(pBody);
+		if (pBeacon && navigator.sendBeacon) {
+			const BlobBody = new Blob([Text], { type: "application/json" });
+			if (navigator.sendBeacon(pUrl, BlobBody)) return true;
+		}
+
+		try {
+			const Res = await fetch(pUrl, {
+				method: "POST",
+				headers: { "content-type": "application/json" },
+				body: Text,
+				keepalive: pBeacon
+			});
+			return Res.ok;
+		} catch {
+			return false;
+		}
+	}
+
+	function SendStart() {
+		if (fStartSent) return;
+		fStartSent = true;
+		SendJson(cApiSession, {
+			...BasePayload(),
+			event: "start"
+		});
+	}
+
+	function CollectCssSnapshot() {
+		const Parts = [];
+		const FailedLinks = [];
+
+		Array.from(document.styleSheets || []).forEach((Sheet) => {
+			try {
+				const Rules = Array.from(Sheet.cssRules || []).map((Rule) => Rule.cssText).join("\n");
+				if (Rules) Parts.push(`/* EmoReplay stylesheet: ${Sheet.href || "inline"} */\n${Rules}`);
+			} catch {
+				if (Sheet.href) FailedLinks.push(Sheet.href);
+			}
+		});
+
+		return { cssText: Parts.join("\n\n"), failedLinks: FailedLinks };
+	}
+
+	function BuildSnapshotHtml() {
+		const Clone = document.documentElement.cloneNode(true);
+		const Head = Clone.querySelector("head");
+		const Body = Clone.querySelector("body");
+
+		Clone.setAttribute("data-emo-replay-snapshot", "true");
+		Body?.setAttribute("data-emo-replay-snapshot-body", "true");
+
+		if (Head) {
+			const CssSnapshot = CollectCssSnapshot();
+
+			const Base = document.createElement("base");
+			Base.setAttribute("href", `${location.origin}/`);
+			Head.prepend(Base);
+
+			if (CssSnapshot.cssText) {
+				Head.querySelectorAll("link[rel='stylesheet'], style").forEach((El) => El.remove());
+
+				const FrozenCss = document.createElement("style");
+				FrozenCss.setAttribute("data-emo-replay-frozen-css", "true");
+				FrozenCss.textContent = CssSnapshot.cssText;
+				Head.appendChild(FrozenCss);
+			}
+
+			CssSnapshot.failedLinks.forEach((Href) => {
+				const Link = document.createElement("link");
+				Link.rel = "stylesheet";
+				Link.href = Href;
+				Link.setAttribute("data-emo-replay-fallback-css", "true");
+				Head.appendChild(Link);
+			});
+
+			const Style = document.createElement("style");
+			Style.textContent = `
+				html[data-emo-replay-snapshot="true"] { scroll-behavior: auto !important; }
+				html[data-emo-replay-snapshot="true"] *,
+				html[data-emo-replay-snapshot="true"] *::before,
+				html[data-emo-replay-snapshot="true"] *::after {
+					animation-play-state: paused !important;
+					transition: none !important;
+					caret-color: transparent !important;
+				}
+				html[data-emo-replay-snapshot="true"] a,
+				html[data-emo-replay-snapshot="true"] button,
+				html[data-emo-replay-snapshot="true"] input,
+				html[data-emo-replay-snapshot="true"] textarea,
+				html[data-emo-replay-snapshot="true"] select,
+				html[data-emo-replay-snapshot="true"] summary,
+				html[data-emo-replay-snapshot="true"] label {
+					pointer-events: none !important;
+				}
+			`;
+			Head.appendChild(Style);
+		}
+
+		Clone.querySelectorAll("script, noscript, astro-dev-toolbar, link[rel='modulepreload']").forEach((El) => El.remove());
+
+		Clone.querySelectorAll("*").forEach((El) => {
+			for (const Attr of Array.from(El.attributes || [])) {
+				const Name = Attr.name.toLowerCase();
+				if (Name.startsWith("on")) El.removeAttribute(Attr.name);
+			}
+		});
+
+		const OriginalFields = Array.from(document.querySelectorAll("input, textarea, select"));
+		const CloneFields = Array.from(Clone.querySelectorAll("input, textarea, select"));
+
+		CloneFields.forEach((CloneEl, Index) => {
+			const OrigEl = OriginalFields[Index];
+			if (!OrigEl) return;
+
+			CloneEl.setAttribute("data-replay-field", "true");
+
+			if (CloneEl.tagName === "TEXTAREA") {
+				CloneEl.textContent = OrigEl.value || "";
+				CloneEl.setAttribute("value", OrigEl.value || "");
+				return;
+			}
+
+			if (CloneEl.tagName === "SELECT") {
+				Array.from(CloneEl.options).forEach((Opt, OptIndex) => {
+					const OrigOpt = OrigEl.options?.[OptIndex];
+					if (OrigOpt?.selected) Opt.setAttribute("selected", "");
+					else Opt.removeAttribute("selected");
+				});
+				return;
+			}
+
+			const Type = String(CloneEl.getAttribute("type") || "text").toLowerCase();
+			if (Type === "checkbox" || Type === "radio") {
+				if (OrigEl.checked) CloneEl.setAttribute("checked", "");
+				else CloneEl.removeAttribute("checked");
+			} else {
+				CloneEl.setAttribute("value", OrigEl.value || "");
+			}
+		});
+
+		const OriginalDetails = Array.from(document.querySelectorAll("details"));
+		const CloneDetails = Array.from(Clone.querySelectorAll("details"));
+		CloneDetails.forEach((CloneEl, Index) => {
+			if (OriginalDetails[Index]?.open) CloneEl.setAttribute("open", "");
+			else CloneEl.removeAttribute("open");
+		});
+
+		const OriginalCanvas = Array.from(document.querySelectorAll("canvas"));
+		const CloneCanvas = Array.from(Clone.querySelectorAll("canvas"));
+		CloneCanvas.forEach((CloneEl, Index) => {
+			const OrigEl = OriginalCanvas[Index];
+			if (!OrigEl) return;
+			try {
+				const Img = document.createElement("img");
+				Img.src = OrigEl.toDataURL("image/png");
+				Img.width = OrigEl.width;
+				Img.height = OrigEl.height;
+				Img.setAttribute("data-replay-canvas-image", "true");
+				CloneEl.replaceWith(Img);
+			} catch {}
+		});
+
+		Clone.querySelectorAll("form").forEach((Form) => {
+			Form.setAttribute("data-replay-form", "true");
+			Form.removeAttribute("action");
+			Form.removeAttribute("method");
+		});
+
+		return `<!doctype html>\n${Clone.outerHTML}`;
+	}
+
+	async function SendSnapshot() {
+		if (fSnapshotSent) return;
+		fSnapshotSent = true;
+
+		let SnapshotHtml = "";
+		try {
+			SnapshotHtml = BuildSnapshotHtml();
+		} catch (Ex) {
+			SnapshotHtml = `<!doctype html><html lang=\"ar\" dir=\"rtl\"><body><pre>Snapshot failed: ${String(Ex?.message || Ex)}</pre></body></html>`;
+		}
+
+		await SendJson(cApiSession, {
+			...BasePayload(),
+			event: "snapshot",
+			snapshotHtml,
+			snapshotLength: SnapshotHtml.length
+		});
+	}
+
+	function PushEvent(pEvent) {
+		const Event = {
+			...pEvent,
+			t: Now(),
+			seq: ++fSeq,
+			sx: Math.round(window.scrollX || 0),
+			sy: Math.round(window.scrollY || 0)
+		};
+
+		fEvents.push(Event);
+
+		if (fEvents.length >= cMaxEventsPerChunk) {
+			FlushEvents("max", false);
+		}
+	}
+
+	function FlushEvents(pReason = "timer", pBeacon = false) {
+		if (!fEvents.length) return;
+		const Events = fEvents.splice(0, fEvents.length);
+		const FromMs = Events[0]?.t ?? 0;
+		const ToMs = Events[Events.length - 1]?.t ?? FromMs;
+
+		SendJson(cApiChunk, {
+			sessionId: cReplayId,
+			visitorId: cVisitorId,
+			visitSessionId: cVisitSessionId,
+			pageId: cPageId,
+			chunkIndex: fChunkIndex++,
+			fromMs: FromMs,
+			toMs: ToMs,
+			reason: pReason,
+			events: Events
+		}, pBeacon);
+	}
+
+	function StartFlushTimer() {
+		window.clearInterval(fFlushTimer);
+		fFlushTimer = window.setInterval(() => FlushEvents("timer", false), cFlushEveryMs);
+	}
+
+	function RecordScroll(pForced = false) {
+		const At = performance.now();
+		if (!pForced && At - fLastScrollAt < cScrollEveryMs) return;
+		fLastScrollAt = At;
+
+		const Doc = GetDocumentInfo();
+		const Y = Math.round(window.scrollY || 0);
+		const X = Math.round(window.scrollX || 0);
+		const MaxY = Math.max(1, Doc.height - (window.innerHeight || 0));
+		fLastKnownScrollX = X;
+		fLastKnownScrollY = Y;
+
+		PushEvent({
+			type: "scroll",
+			x: X,
+			y: Y,
+			p: Math.max(0, Math.min(1, Y / MaxY)),
+			documentHeight: Doc.height,
+			viewportHeight: window.innerHeight || 0
+		});
+	}
+
+	function RecordPointer(pType, pEvent, pForced = false) {
+		const At = performance.now();
+		if (!pForced && At - fLastPointerAt < cPointerEveryMs) return;
+		fLastPointerAt = At;
+
+		PushEvent({
+			type: pType,
+			x: Math.round(pEvent.clientX),
+			y: Math.round(pEvent.clientY),
+			nx: Number((pEvent.clientX / Math.max(1, window.innerWidth)).toFixed(5)),
+			ny: Number((pEvent.clientY / Math.max(1, window.innerHeight)).toFixed(5)),
+			pointerType: pEvent.pointerType || "mouse",
+			button: pEvent.button ?? 0,
+			...GetTargetInfo(pEvent.target)
+		});
+	}
+
+	function RecordInput(pType, pEvent) {
+		const El = pEvent.target;
+		if (!El?.matches?.("input, textarea, select")) return;
+
+		const TargetInfo = GetTargetInfo(El);
+		const CaptureValue = El.getAttribute("data-replay-capture") === "value" && El.getAttribute("data-replay-private") !== "true";
+		const FieldType = String(El.getAttribute("type") || El.tagName || "").toLowerCase();
+		const Payload = {
+			type: pType,
+			fieldType: FieldType,
+			length: typeof El.value === "string" ? El.value.length : 0,
+			checked: typeof El.checked === "boolean" ? El.checked : undefined,
+			...TargetInfo
+		};
+
+		if (CaptureValue) {
+			Payload.value = El.value;
+			Payload.selectionStart = El.selectionStart ?? null;
+			Payload.selectionEnd = El.selectionEnd ?? null;
+		} else {
+			Payload.masked = true;
+		}
+
+		PushEvent(Payload);
+	}
+
+	function WireEvents() {
+		window.addEventListener("scroll", () => RecordScroll(false), { passive: true });
+		window.addEventListener("resize", () => {
+			PushEvent({ type: "resize", viewport: GetViewportInfo(), document: GetDocumentInfo() });
+		}, { passive: true });
+
+		document.addEventListener("pointermove", (e) => RecordPointer("pointer", e, false), true);
+		document.addEventListener("pointerdown", (e) => RecordPointer("pointer-down", e, true), true);
+		document.addEventListener("pointerup", (e) => RecordPointer("pointer-up", e, true), true);
+		document.addEventListener("click", (e) => {
+			RecordPointer("click", e, true);
+		}, true);
+
+		document.addEventListener("focusin", (e) => {
+			PushEvent({ type: "focus", ...GetTargetInfo(e.target) });
+		}, true);
+
+		document.addEventListener("focusout", (e) => {
+			PushEvent({ type: "blur", ...GetTargetInfo(e.target) });
+		}, true);
+
+		document.addEventListener("input", (e) => RecordInput("input", e), true);
+		document.addEventListener("change", (e) => RecordInput("change", e), true);
+
+		document.addEventListener("submit", (e) => {
+			PushEvent({ type: "submit", ...GetTargetInfo(e.target) });
+		}, true);
+
+		document.addEventListener("toggle", (e) => {
+			if (!e.target?.matches?.("details")) return;
+			PushEvent({
+				type: "widget-state",
+				widget: "details",
+				state: e.target.open ? "open" : "closed",
+				...GetTargetInfo(e.target)
+			});
+		}, true);
+
+		window.addEventListener("emo:replay-state", (e) => {
+			PushEvent({
+				type: "widget-state",
+				...(e.detail || {})
+			});
+		}, true);
+
+		window.addEventListener("pagehide", () => {
+			fUnloading = true;
+			RecordScroll(true);
+			PushEvent({ type: "page-hide", viewport: GetViewportInfo(), document: GetDocumentInfo() });
+			FlushEvents("pagehide", true);
+		}, { capture: true });
+
+		visibilitychange = () => {
+			PushEvent({ type: "visibility", state: document.visibilityState });
+			if (document.visibilityState === "hidden") FlushEvents("hidden", true);
+		};
+		document.addEventListener("visibilitychange", visibilitychange, true);
+	}
+
+	let visibilitychange = null;
+
+	function Start() {
+		SendStart();
+		WireEvents();
+		StartFlushTimer();
+		PushEvent({ type: "page-open", viewport: GetViewportInfo(), document: GetDocumentInfo() });
+		RecordScroll(true);
+
+		window.setTimeout(() => {
+			if (!fUnloading) SendSnapshot();
+		}, Math.max(200, cSnapshotDelayMs));
+	}
+
+	if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", Start, { once: true });
+	else Start();
+})();
+</script>
+) }

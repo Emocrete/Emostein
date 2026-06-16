@@ -10,6 +10,7 @@ import { GetPageRating } from "@/PageRatings";
 import SpeedInsights from "@vercel/speed-insights/astro"
 import SiteIntro from "@/Widgets/Intro/SiteIntro.astro";
 import OpsVisitTracker from "@/Scripts/OpsVisitTracker.astro";
+import EmoReplayRecorder from "@/Scripts/EmoReplayRecorder.astro";
 
 
 export interface Props {
@@ -369,46 +370,9 @@ const cOgType = pSchemaType === "Article" ? "article" : "website";
 
 			<OpsVisitTracker />
 
+			<EmoReplayRecorder />
+
 			<SpeedInsights />
-
-<script is:inline>
-	(() => {
-	const cFloatContact = document.querySelector(".FloatContact");
-	if (!cFloatContact) return;
-
-	const cMobileQuery = window.matchMedia("(hover: none), (pointer: coarse), (max-width: 700px)");
-	let fIdleTimer = 0;
-
-	function IsMobileMode() {
-	return cMobileQuery.matches;
-	}
-
-	function HideMobileContact() {
-	if (!IsMobileMode()) {
-	cFloatContact.classList.remove("IsMobileIdleVisible");
-	return;
-	}
-
-	cFloatContact.classList.remove("IsMobileIdleVisible");
-	}
-
-	function ShowMobileContactAfterIdle() {
-	if (!IsMobileMode()) return;
-	cFloatContact.classList.add("IsMobileIdleVisible");
-	}
-
-	function QueueIdleShow() {
-	window.clearTimeout(fIdleTimer);
-	HideMobileContact();
-	fIdleTimer = window.setTimeout(ShowMobileContactAfterIdle, 2000);
-	}
-
-	window.addEventListener("scroll", QueueIdleShow, { passive: true });
-	window.addEventListener("resize", HideMobileContact, { passive: true });
-	cMobileQuery.addEventListener?.("change", HideMobileContact);
-	HideMobileContact();
-	})();
-</script>
 
 		</body>
 
@@ -702,6 +666,47 @@ const cOgType = pSchemaType === "Article" ? "article" : "website";
 
 
 
+
+
+
+<script is:inline>
+	(() => {
+	const cFloatContact = document.querySelector(".FloatContact");
+	if (!cFloatContact) return;
+
+	const cMobileQuery = window.matchMedia("(hover: none), (pointer: coarse), (max-width: 700px)");
+	let fIdleTimer = 0;
+
+	function IsMobileMode() {
+	return cMobileQuery.matches;
+	}
+
+	function HideMobileContact() {
+	if (!IsMobileMode()) {
+	cFloatContact.classList.remove("IsMobileIdleVisible");
+	return;
+	}
+
+	cFloatContact.classList.remove("IsMobileIdleVisible");
+	}
+
+	function ShowMobileContactAfterIdle() {
+	if (!IsMobileMode()) return;
+	cFloatContact.classList.add("IsMobileIdleVisible");
+	}
+
+	function QueueIdleShow() {
+	window.clearTimeout(fIdleTimer);
+	HideMobileContact();
+	fIdleTimer = window.setTimeout(ShowMobileContactAfterIdle, 2000);
+	}
+
+	window.addEventListener("scroll", QueueIdleShow, { passive: true });
+	window.addEventListener("resize", HideMobileContact, { passive: true });
+	cMobileQuery.addEventListener?.("change", HideMobileContact);
+	HideMobileContact();
+	})();
+</script>
 
 
 

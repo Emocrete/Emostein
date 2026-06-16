@@ -1,0 +1,71 @@
+---
+export const prerender = false;
+---
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>EmoReplay Sessions</title>
+	<style>
+		body { margin: 0; font-family: Cairo, Tahoma, system-ui, sans-serif; background: #080b12; color: #edf4ff; }
+		main { max-width: 1180px; margin: auto; padding: 24px; }
+		h1 { margin: 0 0 18px; }
+		.Top { display: flex; gap: 10px; margin-bottom: 18px; }
+		input, button { border: 1px solid rgba(255,255,255,.16); border-radius: 10px; background: rgba(255,255,255,.08); color: #fff; padding: 10px 12px; font-family: inherit; }
+		input { min-width: 280px; direction: ltr; }
+		.List { display: grid; gap: 10px; }
+		.Item { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding: 14px; border: 1px solid rgba(255,255,255,.12); border-radius: 14px; background: rgba(255,255,255,.06); }
+		.Title { font-weight: 800; margin-bottom: 5px; }
+		.Meta { direction: ltr; text-align: left; color: #aebbd1; font-size: 12px; }
+		a { color: #73e6ff; text-decoration: none; font-weight: 800; }
+	</style>
+</head>
+<body>
+	<main>
+		<h1>EmoReplay Sessions</h1>
+		<div class="Top">
+			<input id="OpsKey" placeholder="Ops key" />
+			<button id="LoadBtn">تحميل</button>
+		</div>
+		<div id="List" class="List">اكتب المفتاح واضغط تحميل</div>
+	</main>
+
+	<script is:inline>
+	(() => {
+		const KeyInput = document.getElementById("OpsKey");
+		const LoadBtn = document.getElementById("LoadBtn");
+		const List = document.getElementById("List");
+		KeyInput.value = localStorage.getItem("emo_ops_key") || "";
+
+		function Esc(pText) {
+			return String(pText ?? "").replace(/[&<>"]/g, (x) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[x]));
+		}
+
+		async function Load() {
+			const Key = KeyInput.value.trim();
+			if (Key) localStorage.setItem("emo_ops_key", Key);
+			List.textContent = "جاري التحميل...";
+			const Url = new URL("/api/replay/session", location.origin);
+			Url.searchParams.set("limit", "100");
+			Url.searchParams.set("key", Key);
+			const Res = await fetch(Url, { headers: { "x-ops-key": Key } });
+			const Data = await Res.json().catch(() => ({}));
+			if (!Res.ok || !Data.ok) throw new Error(Data.error || `HTTP ${Res.status}`);
+			const Rows = Data.sessions || [];
+			if (!Rows.length) {
+				List.textContent = "لا توجد جلسات Replay محفوظة";
+				return;
+			}
+			List.innerHTML = Rows.map((Row) => {
+				const Href = `/admin/replay/${encodeURIComponent(Row.id)}?key=${encodeURIComponent(Key)}`;
+				return `<div class="Item"><div><div class="Title">${Esc(Row.page_title || Row.page_url || Row.id)}</div><div class="Meta">${Esc(Row.created_at)} | ${Esc(Row.viewport_width)}x${Esc(Row.viewport_height)} | ${Esc(Row.id)}</div><div class="Meta">${Esc(Row.page_url)}</div></div><a href="${Href}" target="_blank">فتح</a></div>`;
+			}).join("");
+		}
+
+		LoadBtn.onclick = () => Load().catch((Ex) => List.textContent = `فشل التحميل: ${Ex.message || Ex}`);
+	})();
+	</script>
+</body>
+</html>
