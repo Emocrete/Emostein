@@ -73,6 +73,8 @@ const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
 const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
 const cFooterModeClass = pFooterMode ? "IsFooterMode" : "";
 const cStars = [1, 2, 3, 4, 5];
+const cStarLabels = ["ضعيف", "مقبول", "جيد", "قوي", "ممتاز"];
+const cStarTones = ["#ef4444", "#f97316", "#facc15", "#84cc16", "#22c55e"];
 const cBestRating = Number(pRatingData?.bestRating || 5);
 const cInitialHasRating = !!pRatingData?.hasRating && Number(pRatingData.ratingCount || 0) > 0;
 const cInitialRatingValue = cInitialHasRating ? Number(pRatingData?.ratingValue || 0) : 0;
@@ -102,6 +104,14 @@ function FormatInteger(pValue: number): string {
 	return new Intl.NumberFormat("ar-EG", {
 		maximumFractionDigits: 0
 	}).format(pValue || 0);
+}
+
+function GetStarLabel(pValue: number): string {
+	return cStarLabels[Math.max(0, Math.min(cStarLabels.length - 1, pValue - 1))] ?? "";
+}
+
+function GetStarTone(pValue: number): string {
+	return cStarTones[Math.max(0, Math.min(cStarTones.length - 1, pValue - 1))] ?? "#ffd15c";
 }
 ---
 
@@ -176,7 +186,7 @@ function FormatInteger(pValue: number): string {
 
 							<button
 								class = " StarBtn "
-								style = {`--star-fill:${GetStarFill(cValue, cInitialRatingValue)}%;`}
+								style = {`--star-fill:${GetStarFill(cValue, cInitialRatingValue)}%; --rating-tone:${GetStarTone(cValue)};`}
 								type="button"
 								data-star-value={String(cValue)}
 								aria-label={`${FormatInteger(cValue)} ${cValue === 1 ? "نجمة" : "نجوم"}`}
@@ -184,6 +194,10 @@ function FormatInteger(pValue: number): string {
 
 								<span class = " StarIcon " aria-hidden="true">
 									★
+								</span>
+
+								<span class = " StarMobileLabel " aria-hidden="true">
+									{GetStarLabel(cValue)}
 								</span>
 
 							</button>
@@ -503,6 +517,11 @@ function FormatInteger(pValue: number): string {
 	}
 
 
+	.StarMobileLabel {
+		display: none;
+	}
+
+
 	.RatingHint {
 		grid-area: Hint;
 		justify-self: center;
@@ -780,9 +799,26 @@ function FormatInteger(pValue: number): string {
 		}
 
 		.StarBtn {
+			flex-direction: column;
+			gap: 1px;
 			width: 46px;
-			height: 46px;
-			font-size: 29px;
+			height: 56px;
+			border-color: var(--rating-tone);
+			background: linear-gradient(145deg, color-mix(in srgb, var(--rating-tone) 26%, transparent), rgba(255, 255, 255, 0.045));
+			font-size: 26px;
+		}
+
+		.StarIcon {
+			color: color-mix(in srgb, var(--rating-tone) 50%, rgba(255, 255, 255, 0.24));
+		}
+
+		.StarMobileLabel {
+			display: block;
+			color: rgba(255, 255, 255, 0.86);
+			font-size: 9px;
+			font-weight: 900;
+			line-height: 1;
+			white-space: nowrap;
 		}
 	}
 
@@ -875,9 +911,13 @@ function FormatInteger(pValue: number): string {
 
 		.StarBtn {
 			width: 42px;
-			height: 42px;
+			height: 54px;
 			border-radius: 11px;
-			font-size: 27px;
+			font-size: 24px;
+		}
+
+		.StarMobileLabel {
+			font-size: 8px;
 		}
 
 		.SubmitBtn {

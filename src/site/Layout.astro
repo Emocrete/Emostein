@@ -371,6 +371,45 @@ const cOgType = pSchemaType === "Article" ? "article" : "website";
 
 			<SpeedInsights />
 
+<script is:inline>
+	(() => {
+	const cFloatContact = document.querySelector(".FloatContact");
+	if (!cFloatContact) return;
+
+	const cMobileQuery = window.matchMedia("(hover: none), (pointer: coarse), (max-width: 700px)");
+	let fIdleTimer = 0;
+
+	function IsMobileMode() {
+	return cMobileQuery.matches;
+	}
+
+	function HideMobileContact() {
+	if (!IsMobileMode()) {
+	cFloatContact.classList.remove("IsMobileIdleVisible");
+	return;
+	}
+
+	cFloatContact.classList.remove("IsMobileIdleVisible");
+	}
+
+	function ShowMobileContactAfterIdle() {
+	if (!IsMobileMode()) return;
+	cFloatContact.classList.add("IsMobileIdleVisible");
+	}
+
+	function QueueIdleShow() {
+	window.clearTimeout(fIdleTimer);
+	HideMobileContact();
+	fIdleTimer = window.setTimeout(ShowMobileContactAfterIdle, 2000);
+	}
+
+	window.addEventListener("scroll", QueueIdleShow, { passive: true });
+	window.addEventListener("resize", HideMobileContact, { passive: true });
+	cMobileQuery.addEventListener?.("change", HideMobileContact);
+	HideMobileContact();
+	})();
+</script>
+
 		</body>
 
 	</html>
@@ -571,29 +610,75 @@ const cOgType = pSchemaType === "Article" ? "article" : "website";
 
 	@media (hover: none), (pointer: coarse), (max-width: 700px) {
 		.FloatContact {
-			bottom: 95px;
-			width: 55px;
-			height: 118px;
+			left: 0;
+			right: 0;
+			bottom: max(14px, env(safe-area-inset-bottom));
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 12px;
+			width: 100%;
+			height: 58px;
+			padding-inline: 14px;
+			box-sizing: border-box;
+			opacity: 0;
+			transform: translateY(calc(100% + 28px));
+			transition: transform 0.24s ease, opacity 0.24s ease;
+			pointer-events: none;
+		}
+
+		.FloatContact.IsMobileIdleVisible {
+			opacity: 1;
+			transform: translateY(0);
+			pointer-events: auto;
 		}
 
 		.FloatContactLink {
-			width: 55px;
-			height: 55px;
+			position: relative;
+			left: auto;
+			top: auto;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 7px;
+			width: min(44vw, 166px);
+			height: 52px;
+			border-radius: 16px;
 			transition: none;
 		}
 
 		.FloatContactLink.IsWhatsapp {
-			top: 63px;
+			top: auto;
+			order: 1;
+		}
+
+		.FloatContactLink.IsCall {
+			order: 2;
 		}
 
 		.FloatContactIcon,
-		.FloatContactArrow
+		.FloatContactArrow,
+		.FloatContactText
 		{
-			height: 55px;
+			position: static;
+			width: auto;
+			height: auto;
+			opacity: 1;
+			transform: none;
+		}
+
+		.FloatContactIcon {
+			width: 25px;
+			height: 25px;
+		}
+
+		.FloatContactArrow {
+			display: none;
 		}
 
 		.FloatContactText {
-			display: none;
+			display: flex;
+			font-size: 14px;
 		}
 	}
 

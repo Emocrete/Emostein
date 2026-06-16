@@ -34,7 +34,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	const cViewThreshold = [0, 0.01, 0.05];
 	const cViewRootMargin = "0px";
 	const cStayDelayMs = 3500;
-	const cScrollMarks = [];
+	const cScrollMarks = [10, 20, 30, 40, 50, 60, 70, 80, 90];
 	const cPageInstanceId = NewId("p");
 	const cFocusAwayMinMs = 1500;
 	const cObservedViewElems = new Set();
@@ -43,6 +43,10 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	let fViewObserver = null;
 	let fAwayStartedAt = 0;
 	let fAwayReason = "";
+	let fLastScrollMark = null;
+	let fPageExitSent = false;
+	let fPagePingTimer = 0;
+	const cPagePingMs = 20000;
 
 	function NewId(pPrefix) {
 	const Rand = Math.random().toString(36).slice(2, 10);
@@ -391,7 +395,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	function TrackFromElementOnce(pElem, pEventType, pEventOn, pOnceKey, pExtra = {}) {
-	if (String(EventType || "").endsWith("_seen")) return;
+	if (String(pEventType || "").endsWith("_seen")) return;
 	if (!pElem || pElem.dataset?.opsAuto === "off") return;
 	const Widget = GetClosestWidget(pElem);
 	const Label = (pExtra.label ?? BuildActionLabel(pElem, Widget, GetExplicitLabel(pElem))) || BuildEventLabel(Widget, pElem);
@@ -633,28 +637,57 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	ObserveView(".RespImg", "image_seen", "RespImg");
 	}
 
-	function InitScrollMilestones() {
-	function CheckScroll() {
+	function GetScrollPercent() {
 	const Height = Math.max(
 	document.documentElement.scrollHeight,
 	document.body.scrollHeight
 	) - window.innerHeight;
 
-	const Percent = Height > 0 ? Math.round((window.scrollY / Height) * 100) : 100;
-	cScrollMarks.forEach((pMark) => {
-	if (Percent >= pMark) {
-	TrackOpsEventOnce(`scroll_${pMark}`, `scroll_${pMark}`, {
+	return Height > 0 ? Math.max(0, Math.min(100, Math.round((window.scrollY / Height) * 100))) : 100;
+	}
+
+	function GetCurrScrollMark(pPercent) {
+	let CurrMark = null;
+
+	for (const Mark of cScrollMarks) {
+	if (pPercent >= Mark) CurrMark = Mark;
+	else break;
+	}
+
+	return CurrMark;
+	}
+
+	function InitScrollMilestones() {
+	function CheckScroll() {
+	const Percent = GetScrollPercent();
+	const CurrMark = GetCurrScrollMark(Percent);
+
+	if (CurrMark === null) {
+	fLastScrollMark = null;
+	return;
+	}
+
+	if (CurrMark === fLastScrollMark) return;
+
+	const Direction = fLastScrollMark === null
+	? "start"
+	: CurrMark > fLastScrollMark
+	? "down"
+	: "up";
+
+	fLastScrollMark = CurrMark;
+
+	TrackOpsEvent(`scroll_${CurrMark}`, {
 	eventOn: "scroll",
 	widget: "Page",
-	label: `وصل إلى ${pMark}% من الصفحة`,
-	value: pMark
-	});
-	}
+	label: `دخل نطاق ${CurrMark}% من الصفحة`,
+	value: CurrMark,
+	durationMs: "",
+	awayReason: Direction
 	});
 	}
 
 	window.addEventListener("scroll", () => {
-	return;
 	CheckScroll();
 	CheckVisibleViews();
 	}, { passive: true });
@@ -713,6 +746,36 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	window.addEventListener("focus", () => TrackPageReturn("focus"));
 	}
 
+	function TrackPagePing() {
+	if (document.hidden) return;
+	TrackOpsEvent("page_ping", {
+	eventOn: "heartbeat",
+	widget: "Page",
+	label: "الصفحة ما زالت مفتوحة",
+	value: GetScrollPercent()
+	});
+	}
+
+	function TrackPageExit(pReason) {
+	if (fPageExitSent) return;
+	fPageExitSent = true;
+	TrackOpsEvent("page_exit", {
+	eventOn: String(pReason || "pagehide"),
+	widget: "Page",
+	label: "غادر الصفحة",
+	value: GetScrollPercent(),
+	awayReason: String(pReason || "pagehide")
+	});
+	}
+
+	function InitPageLiveEvents() {
+	if (fPagePingTimer) clearInterval(fPagePingTimer);
+	fPagePingTimer = window.setInterval(TrackPagePing, cPagePingMs);
+
+	window.addEventListener("pagehide", () => TrackPageExit("pagehide"));
+	window.addEventListener("beforeunload", () => TrackPageExit("beforeunload"));
+	}
+
 	function TrackPageOpen() {
 	TrackOpsEventOnce("page_open", "page_open", {
 	eventOn: "load",
@@ -741,6 +804,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	InitAutoViews();
 	InitScrollMilestones();
 	InitFocusAwayEvents();
+	InitPageLiveEvents();
 	TrackPageOpen();
 	}
 

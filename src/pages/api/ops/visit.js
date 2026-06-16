@@ -82,7 +82,7 @@ function ClassifyGeo(pCountryCode, pRegion, pCity) {
 			return { Band: "cairo", Label: City || Region || "Cairo", BorderColor: "#00C853" };
 		}
 
-		if (HasGeoWord(All, ["gz", "giza", "giza governorate", "al jizah", "al jizah governorate", "jizah", "الجيزة", "الجيزه", "محافظة الجيزة", "محافظه الجيزه"])) {
+		if (HasGeoWord(All, ["gz", "giza", "giza governorate", "al jizah", "al jizah governorate", "jizah", "6th of october", "sixth of october", "october", "october city", "sheikh zayed", "zayed", "الجيزة", "الجيزه", "محافظة الجيزة", "محافظه الجيزه", "اكتوبر", "السادس من اكتوبر", "مدينة 6 اكتوبر", "مدينة اكتوبر", "الشيخ زايد", "زايد"])) {
 			return { Band: "giza", Label: City || Region || "Giza", BorderColor: "#00D5FF" };
 		}
 
@@ -93,10 +93,14 @@ function ClassifyGeo(pCountryCode, pRegion, pCity) {
 	return { Band: "world", Label: City || CountryCode || "Outside Arab region", BorderColor: "#FF3B30" };
 }
 
-function BuildGeo(pRequest) {
-	const CountryCode = Header(pRequest, "x-vercel-ip-country", "cf-ipcountry", "x-country-code").toUpperCase();
+function BuildGeo(pRequest, pBody = {}) {
+	let CountryCode = Header(pRequest, "x-vercel-ip-country", "cf-ipcountry", "x-country-code").toUpperCase();
 	const Region = Header(pRequest, "x-vercel-ip-country-region", "x-vercel-ip-region", "x-region", "x-country-region");
 	const City = Header(pRequest, "x-vercel-ip-city", "x-city");
+	const Timezone = Str(pBody.timezone ?? pBody.timeZone);
+
+	if (!CountryCode && Timezone.toLowerCase() === "africa/cairo") CountryCode = "EG";
+
 	const Classified = ClassifyGeo(CountryCode, Region, City);
 
 	return {
@@ -143,7 +147,7 @@ export async function POST({ request }) {
 		const Body = await ReadBody(request);
 		if (!Body || typeof Body !== "object") return Json({ ok: false, error: "Invalid JSON body" }, 400);
 
-		const Geo = BuildGeo(request);
+		const Geo = BuildGeo(request, Body);
 
 		const Payload = {
 			...Body,
