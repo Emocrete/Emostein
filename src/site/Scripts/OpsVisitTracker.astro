@@ -33,12 +33,17 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	const cApiUrl = "/api/ops/visit";
 	const cViewThreshold = [0, 0.01, 0.05];
 	const cViewRootMargin = "0px";
-	const cStayDelayMs = 3500;
 	const cScrollMarks = [10, 20, 30, 40, 50, 60, 70, 80, 90];
+	const cReadWordsPerMinute = 200;
+	const cReadFocusTopRatio = 0.25;
+	const cReadFocusBottomRatio = 0.75;
+	const cReadFocusMinRatio = 0.5;
+	const cReadTickMs = 250;
 	const cPageInstanceId = NewId("p");
 	const cFocusAwayMinMs = 1500;
 	const cObservedViewElems = new Set();
-	const fStayTimers = new WeakMap();
+	const cReadTargets = [];
+	const fReadStates = new WeakMap();
 	let fSeq = 0;
 	let fViewObserver = null;
 	let fAwayStartedAt = 0;
@@ -46,6 +51,9 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	let fLastScrollMark = null;
 	let fPageExitSent = false;
 	let fPagePingTimer = 0;
+	let fReadTimer = 0;
+	let fLastReadTickAt = Date.now();
+	let fActiveReadState = null;
 	const cPagePingMs = 20000;
 
 	function NewId(pPrefix) {
@@ -209,14 +217,16 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	return Shorten(Question || Heading, 190);
 	}
 
-	function GetVisibleInfo(pElem) {
+	function GetVisibleInfo(pElem, pUseFocusZone = false) {
 	const Rect = pElem?.getBoundingClientRect?.();
 	if (!Rect || Rect.width <= 0 || Rect.height <= 0) return null;
 
 	const Vw = window.innerWidth || document.documentElement.clientWidth || 0;
 	const Vh = window.innerHeight || document.documentElement.clientHeight || 0;
+	const TopLimit = pUseFocusZone ? Vh * cReadFocusTopRatio : 0;
+	const BottomLimit = pUseFocusZone ? Vh * cReadFocusBottomRatio : Vh;
 	const VisibleW = Math.max(0, Math.min(Rect.right, Vw) - Math.max(Rect.left, 0));
-	const VisibleH = Math.max(0, Math.min(Rect.bottom, Vh) - Math.max(Rect.top, 0));
+	const VisibleH = Math.max(0, Math.min(Rect.bottom, BottomLimit) - Math.max(Rect.top, TopLimit));
 	const VisibleArea = VisibleW * VisibleH;
 	const ElemArea = Math.max(1, Rect.width * Rect.height);
 
@@ -224,75 +234,266 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	function IsReadableVisible(pElem) {
-	const Info = GetVisibleInfo(pElem);
+	const Info = GetVisibleInfo(pElem, true);
 	if (!Info) return false;
-
-	const NeededH = Math.min(
-	Math.max(70, Info.Vh * 0.14),
-	Math.max(32, Info.Rect.height * 0.18)
-	);
-	const NeededW = Math.min(120, Math.max(24, Info.Rect.width * 0.2));
-	return Info.VisibleH >= NeededH && Info.VisibleW >= NeededW;
+	return Info.Ratio >= cReadFocusMinRatio;
 	}
 
-	function GetStayEventType(pSeenEventType) {
-	const EventType = String(pSeenEventType || "");
-	if (EventType.endsWith("_seen")) return EventType.replace(/_seen$/, "_stay");
-	if (EventType.endsWith("_view")) return EventType.replace(/_view$/, "_stay");
-	return `${EventType}_stay`;
+	function CountWords(pText) {
+	const Text = CleanText(pText);
+	const Words = Text.match(/[\p{L}\p{N}]+/gu);
+	return Words ? Words.length : 0;
 	}
 
-	function CancelStayTimer(pElem) {
-	const Timer = fStayTimers.get(pElem);
-	if (!Timer) return;
-	clearTimeout(Timer);
-	fStayTimers.delete(pElem);
-	}
+	function GetReadableBlocksText(pElem) {
+	if (!pElem?.querySelectorAll) return CleanText(pElem?.textContent || "");
 
-	function ScheduleStayEvent(pElem, pSeenEventType, pOnceKey) {
-	if (pElem.dataset.opsStayDone === "true" || fStayTimers.has(pElem)) return;
+	const Blocks = Array.from(pElem.querySelectorAll("p, li"));
+	const Parts = [];
 
-	const Timer = setTimeout(() => {
-	fStayTimers.delete(pElem);
-	if (!IsReadableVisible(pElem)) return;
-
-	pElem.dataset.opsStayDone = "true";
-	TrackFromElementOnce(pElem, GetStayEventType(pSeenEventType), "stay", `${pOnceKey}:stay`, {
-	widget: GetWidgetName(pElem),
-	label: BuildViewLabel(pElem)
+	Blocks.forEach((pBlock) => {
+	if (FindReadTargetAncestor(pBlock) !== pElem) return;
+	if (pBlock.closest("script, style, nav, form, button, a, summary")) return;
+	const Text = CleanText(pBlock.textContent || "");
+	if (Text) Parts.push(Text);
 	});
-	}, cStayDelayMs);
 
-	fStayTimers.set(pElem, Timer);
+	if (Parts.length) return Parts.join(" ");
+
+	const Clone = pElem.cloneNode(true);
+	Clone.querySelectorAll?.("script, style, svg, img, nav, form, button, a, summary, h1, h2, h3, h4, h5, h6, .TitleBox, .SecTitle, .SectionTitle, .FaqTitle, .IndexSecTitle").forEach((pNode) => pNode.remove());
+	return CleanText(Clone.textContent || "");
 	}
 
-	function CheckViewElement(pElem) {
+	function FindReadTargetAncestor(pElem) {
+	let Node = pElem;
+	while (Node && Node !== document.body) {
+	if (fReadStates.has(Node)) return Node;
+	Node = Node.parentElement;
+	}
+	return null;
+	}
+
+	function GetReadFullMs(pElem, pWordCount) {
+	const Manual = Number.parseFloat(pElem?.dataset?.opsReadMs || pElem?.dataset?.readMs || "");
+	if (Number.isFinite(Manual) && Manual > 0) return Manual;
+	return (Math.max(0, pWordCount) / cReadWordsPerMinute) * 60000;
+	}
+
+	function EnsureReadState(pElem, pWidgetName = "") {
+	let State = fReadStates.get(pElem);
+	if (State) {
+	if (pWidgetName && !State.Widget) State.Widget = pWidgetName;
+	return State;
+	}
+
+	State = {
+	Elem: pElem,
+	Widget: pWidgetName || GetWidgetName(pElem),
+	Label: "",
+	Text: "",
+	WordCount: 0,
+	FullMs: 0,
+	QuickMs: 0,
+	Parent: null,
+	Children: [],
+	InFocus: false,
+	Active: false,
+	Done: false,
+	QuickCandidate: false,
+	QuickDone: false,
+	FullDone: false,
+	AccumMs: 0,
+	Cycle: 0,
+	FullAt: 0,
+	ResetAt: 0,
+	Order: cReadTargets.length
+	};
+
+	fReadStates.set(pElem, State);
+	cReadTargets.push(State);
+	return State;
+	}
+
+	function RegisterReadElement(pElem, pWidgetName = "") {
 	if (!pElem || pElem.dataset?.opsAuto === "off") return;
-
-	if (!IsReadableVisible(pElem)) {
-	CancelStayTimer(pElem);
-	return;
+	EnsureReadState(pElem, pWidgetName);
 	}
 
-	const EventType = pElem.dataset.opsEvent || pElem.dataset.opsViewEvent;
-	if (!EventType) return;
+	function PrepareReadStateText(pState) {
+	pState.Label = BuildViewLabel(pState.Elem);
+	pState.Text = GetReadableBlocksText(pState.Elem);
+	pState.WordCount = CountWords(pState.Text);
+	pState.FullMs = GetReadFullMs(pState.Elem, pState.WordCount);
+	pState.QuickMs = pState.FullMs / 2;
+	}
 
-	const OnceKey = pElem.dataset.opsOnceKey || pElem.id || EventType;
-	if (pElem.dataset.opsSeenDone !== "true") {
-	pElem.dataset.opsSeenDone = "true";
-	TrackFromElementOnce(pElem, EventType, "view", OnceKey, {
-	widget: GetWidgetName(pElem),
-	label: BuildViewLabel(pElem)
+	function BuildReadHierarchy() {
+	cReadTargets.forEach((pState) => {
+	pState.Parent = null;
+	pState.Children = [];
+	PrepareReadStateText(pState);
+	});
+
+	cReadTargets.forEach((pState) => {
+	let Node = pState.Elem.parentElement;
+	while (Node && Node !== document.body) {
+	const ParentState = fReadStates.get(Node);
+	if (ParentState) {
+	pState.Parent = ParentState;
+	ParentState.Children.push(pState);
+	break;
+	}
+	Node = Node.parentElement;
+	}
 	});
 	}
 
-	ScheduleStayEvent(pElem, EventType, OnceKey);
+	function ResetAncestorsForNewCycle(pState, pTime) {
+	let Parent = pState.Parent;
+	while (Parent) {
+	Parent.ResetAt = pTime;
+	Parent.FullDone = false;
+	Parent.Done = false;
+	Parent.FullAt = 0;
+	Parent = Parent.Parent;
+	}
+	}
+
+	function StartReadCycle(pState, pTime) {
+	pState.Cycle += 1;
+	pState.AccumMs = 0;
+	pState.Active = false;
+	pState.Done = false;
+	pState.QuickCandidate = false;
+	pState.QuickDone = false;
+	pState.FullDone = false;
+	pState.FullAt = 0;
+	ResetAncestorsForNewCycle(pState, pTime);
+	}
+
+	function FinishReadCycleOnExit(pState, pTime) {
+	if (fActiveReadState === pState) fActiveReadState = null;
+	pState.Active = false;
+
+	if (!pState.FullDone && pState.QuickCandidate && !pState.QuickDone) {
+	TrackReadEvent(pState, "read_quick", pTime, "quick");
+	pState.QuickDone = true;
+	pState.Done = true;
+	}
+
+	pState.AccumMs = 0;
+	pState.QuickCandidate = false;
+	}
+
+	function CompareDomOrder(pA, pB) {
+	if (pA.Elem === pB.Elem) return 0;
+	const Pos = pA.Elem.compareDocumentPosition(pB.Elem);
+	if (Pos & Node.DOCUMENT_POSITION_PRECEDING) return 1;
+	if (Pos & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
+	return pA.Order - pB.Order;
+	}
+
+	function GetReadableLeavesInFocus() {
+	return cReadTargets
+	.filter((pState) => pState.InFocus && !pState.Done && pState.Children.length === 0 && pState.FullMs > 0 && pState.WordCount > 0)
+	.sort(CompareDomOrder);
+	}
+
+	function TrackReadEvent(pState, pEventType, pTime, pMode) {
+	TrackOpsEvent(pEventType, {
+	eventOn: "read",
+	widget: pState.Widget || GetWidgetName(pState.Elem),
+	label: pState.Label || BuildViewLabel(pState.Elem),
+	value: pState.WordCount,
+	durationMs: Math.round(pState.AccumMs),
+	awayReason: pMode || ""
+	});
+
+	if (pEventType === "read_full") {
+	pState.FullDone = true;
+	pState.Done = true;
+	pState.FullAt = pTime;
+	pState.QuickCandidate = false;
+	CheckParentReadCompletion(pState.Parent, pTime);
+	}
+	}
+
+	function IsReadRelevantState(pState) {
+	if (!pState) return false;
+	if (pState.WordCount > 0) return true;
+	return pState.Children.some((pChild) => IsReadRelevantState(pChild));
+	}
+
+	function CheckParentReadCompletion(pParent, pTime) {
+	if (!pParent || pParent.FullDone || !pParent.Children.length) return;
+	const RequiredChildren = pParent.Children.filter((pChild) => IsReadRelevantState(pChild));
+	if (!RequiredChildren.length) return;
+	const AllChildrenFull = RequiredChildren.every((pChild) => pChild.FullAt > pParent.ResetAt);
+	if (!AllChildrenFull) return;
+
+	pParent.AccumMs = RequiredChildren.reduce((pSum, pChild) => pSum + (pChild.FullMs || pChild.AccumMs || 0), 0);
+	pParent.WordCount = RequiredChildren.reduce((pSum, pChild) => pSum + (pChild.WordCount || 0), 0) || pParent.WordCount;
+	TrackReadEvent(pParent, "read_full", pTime, "children_complete");
+	}
+
+	function UpdateReadFocusStates(pTime) {
+	cReadTargets.forEach((pState) => {
+	const WasInFocus = pState.InFocus;
+	const NowInFocus = IsReadableVisible(pState.Elem);
+
+	if (NowInFocus && !WasInFocus) StartReadCycle(pState, pTime);
+	if (!NowInFocus && WasInFocus) FinishReadCycleOnExit(pState, pTime);
+
+	pState.InFocus = NowInFocus;
+	});
+	}
+
+	function SelectActiveReadState() {
+	if (fActiveReadState && fActiveReadState.InFocus && !fActiveReadState.Done) return fActiveReadState;
+	const Leaves = GetReadableLeavesInFocus();
+	fActiveReadState = Leaves.length ? Leaves[0] : null;
+	if (fActiveReadState) fActiveReadState.Active = true;
+	return fActiveReadState;
+	}
+
+	function CheckReading() {
+	const Now = Date.now();
+	const DeltaMs = Math.min(1000, Math.max(0, Now - fLastReadTickAt));
+	fLastReadTickAt = Now;
+
+	UpdateReadFocusStates(Now);
+
+	const State = SelectActiveReadState();
+	if (!State) return;
+
+	State.AccumMs += DeltaMs;
+	if (State.AccumMs >= State.QuickMs) State.QuickCandidate = true;
+
+	if (State.AccumMs >= State.FullMs) {
+	State.Active = false;
+	TrackReadEvent(State, "read_full", Now, "full");
+	fActiveReadState = null;
+	SelectActiveReadState();
+	}
 	}
 
 	function CheckVisibleViews() {
-	cObservedViewElems.forEach((pElem) => CheckViewElement(pElem));
+	CheckReading();
 	}
 
+	function CheckViewElement(pElem) {
+	if (pElem) RegisterReadElement(pElem, GetWidgetName(pElem));
+	BuildReadHierarchy();
+	CheckReading();
+	}
+
+	function FlushPendingReadEvents() {
+	const Now = Date.now();
+	cReadTargets.forEach((pState) => {
+	if (pState.InFocus) FinishReadCycleOnExit(pState, Now);
+	});
+	}
 	function GetWidgetName(pElem) {
 	if (!pElem) return "";
 	if (pElem.dataset?.opsWidget) return pElem.dataset.opsWidget;
@@ -421,8 +622,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	pElem.dataset.opsWidget = pElem.dataset.opsWidget || pWidgetName;
 	pElem.dataset.opsOnceKey = pElem.dataset.opsOnceKey || OnceKey;
 	cObservedViewElems.add(pElem);
-	fViewObserver.observe(pElem);
-	setTimeout(() => CheckViewElement(pElem), 500);
+	RegisterReadElement(pElem, pWidgetName);
+	if (fViewObserver) fViewObserver.observe(pElem);
 	});
 	}
 
@@ -430,21 +631,21 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	if (!("IntersectionObserver" in window)) return;
 
 	fViewObserver = new IntersectionObserver((pEntries) => {
-	pEntries.forEach((pEntry) => {
-	const Elem = pEntry.target;
-	if (!pEntry.isIntersecting) {
-	CancelStayTimer(Elem);
-	return;
-	}
-
-	CheckViewElement(Elem);
-	});
+	pEntries.forEach(() => CheckReading());
 	}, {
 	threshold: cViewThreshold,
 	rootMargin: cViewRootMargin
 	});
 	}
 
+	function InitReadTracking() {
+	BuildReadHierarchy();
+	if (fReadTimer) clearInterval(fReadTimer);
+	fLastReadTickAt = Date.now();
+	fReadTimer = window.setInterval(CheckReading, cReadTickMs);
+	setTimeout(CheckReading, 300);
+	setTimeout(CheckReading, 900);
+	}
 	function InitDeclarativeEvents() {
 	document.querySelectorAll("[data-ops-event]").forEach((pElem, pIndex) => {
 	if (pElem.dataset.opsAuto === "off") return;
@@ -456,6 +657,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	pElem.dataset.opsViewEvent = pElem.dataset.opsEvent;
 	pElem.dataset.opsOnceKey = OnceKey;
 	cObservedViewElems.add(pElem);
+	RegisterReadElement(pElem, GetWidgetName(pElem));
 	fViewObserver.observe(pElem);
 	setTimeout(() => CheckViewElement(pElem), 500);
 	}
@@ -758,6 +960,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 
 	function TrackPageExit(pReason) {
 	if (fPageExitSent) return;
+	FlushPendingReadEvents();
 	fPageExitSent = true;
 	TrackOpsEvent("page_exit", {
 	eventOn: String(pReason || "pagehide"),
@@ -802,6 +1005,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	InitClickEvents();
 	InitFormEvents();
 	InitAutoViews();
+	InitReadTracking();
 	InitScrollMilestones();
 	InitFocusAwayEvents();
 	InitPageLiveEvents();
