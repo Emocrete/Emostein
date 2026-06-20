@@ -233,4 +233,15 @@ export { default as DuoCol } from "./Sections/DuoCol.astro";
 export { default as Grid } from "./Comp/Grid.astro";
 export { default as ReadAlsoItem } from "./Sections/ReadAlsoItem.astro";
 export { default as EmoCountdown } from "./Comp/EmoCountdown.astro";
+export { default as BlurBlob } from "./Shapes/Decor/BlurBlob.astro";
+export { default as CircleGlow } from "./Shapes/Decor/CircleGlow.astro";
+export { default as SvgDots } from "./Shapes/Decor/SvgDots.astro";
+export { default as LinePath } from "./Shapes/Decor/LinePath.astro";
+export { default as FloatingIcon } from "./Shapes/Decor/FloatingIcon.astro";
+export { default as Ribbon } from "./Shapes/Decor/Ribbon.astro";
+export { default as GlassCard } from "./Shapes/Frames/GlassCard.astro";
+export { default as FloatingPanel } from "./Shapes/Frames/FloatingPanel.astro";
+export { default as BadgeFrame } from "./Shapes/Frames/BadgeFrame.astro";
+export { default as TiltCard } from "./Shapes/Frames/TiltCard.astro";
+export { default as TornPaper } from "./Shapes/Edges/TornPaper.astro";
 
