@@ -1,7 +1,7 @@
 ---
 import BLayout from "@/Layout.astro";
 import { Text, ElemBg, EmoMediaData, Colors,DirectSize,Loc,NumPer,Percent, Pixel, Topic, Size, Align, RespString } from "@/TypesLib";
-import { Hero, IndexSec, ESec,EmoContactStrip,HzStack, EmoStrip,Badge, EmoBtn, IndexBtn, EmoCall, CardsGr, EmoList, Emograph, RespImg, EmoFaq, ReadAlso, RelServices, EmoPipelineStrip, SecTitle, VrStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { Hero, IndexSec, ESec,EmoContactStrip,HzStack,EmoCountdown , EmoStrip,Badge, EmoBtn, IndexBtn, EmoCall, CardsGr, EmoList, Emograph, RespImg, EmoFaq, ReadAlso, RelServices, EmoPipelineStrip, SecTitle, VrStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
 ---
 
 
@@ -83,6 +83,35 @@ import { Hero, IndexSec, ESec,EmoContactStrip,HzStack, EmoStrip,Badge, EmoBtn, I
 
 
 	<ESec
+		id="reconcile-update"
+		pBg={new ElemBg(Colors.BlackOff)}
+		pAlign={Align.Center}
+		data-ops-event="ReconcileUpdate"
+		data-ops-on="view"
+		data-ops-label="آخر تحديث تنظيمي"
+	>
+
+		<SecTitle
+			Yellow
+			pTitle="آخر موعد لتقديم طلبات التصالح في 5 نوفمبر 2026"
+			pDesc="طبقا لقرار مجلس الوزراء رقم 1098 لسنة 2026"
+		/>
+
+		<EmoCountdown pDeadline="2026-11-05T23:59:59+02:00" pSize={new DirectSize(new NumPer("1120px", "94%"))} />
+
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
 		id="secReport"
 		pBg={new ElemBg(Colors.BlackOff)}
 		pAlign={Align.Center}
@@ -95,6 +124,163 @@ import { Hero, IndexSec, ESec,EmoContactStrip,HzStack, EmoStrip,Badge, EmoBtn, I
 		/>
 
 	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="reconcile-scope"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+		data-ops-event="ReconcileScope"
+		data-ops-on="view"
+		data-ops-label="نطاق خدمة التصالح"
+	>
+
+		<SecTitle
+			Bistage
+			pTitle="ما الذي نجهزه في ملف التصالح؟"
+			pDesc="الصفحة موجهة لصاحب ملف التصالح الذي يحتاج مستندًا هندسيًا واضحًا: رسم معماري للوضع القائم، تقرير سلامة إنشائية، شهادة قيد مؤمنة، أو ملف رقمي قابل للتقديم والمتابعة."
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+			<CardsGr
+				pWidth={new RespString("1240px", "100%")}
+				pCardBg={new ElemBg(Colors.Gray1)}
+				pCardTitleFnt={Text.H3.Centered}
+				pCardBodyFnt={Text.Body.Centered}
+				pStackDir="Row"
+				pSpacing={20}
+				pTopic1={new Topic("رسومات الوضع القائم", "إعداد الرسومات المعمارية للأعمال المخالفة المنفذة على الطبيعة، بدل تقديم رسومات عامة لا تعبّر عن الحالة الفعلية للعقار.")}
+				pTopic2={new Topic("تقرير السلامة الإنشائية", "تجهيز التقرير الهندسي عن سلامة المبنى أو الجزء المخالف بالصيغة المناسبة للحالة والجهة المصدرة المطلوبة.")}
+				pTopic3={new Topic("الشهادة المؤمنة", "مراجعة احتياج الملف إلى شهادة القيد المؤمنة للمهندس مصدر التقرير وتجهيزها ضمن ترتيب الملف الفني.")}
+				pTopic4={new Topic("نسخة رقمية منظمة", "تجميع المستندات الفنية في صورة واضحة ومهيأة للتقديم من خلال المركز التكنولوجي أو المنظومة الإلكترونية.")}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="reconcile-documents"
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+		data-ops-event="ReconcileDocuments"
+		data-ops-on="view"
+		data-ops-label="المستندات الأساسية"
+	>
+
+		<SecTitle
+			Sky
+			pTitle="المستندات الفنية الأساسية في ملف التصالح"
+			pDesc="لا نعرض قائمة أوراق إدارية طويلة فقط، لكن نرتب المستندات الفنية التي تؤثر فعليًا على قبول وفحص الملف."
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+
+			<EmoList
+				pWidth={new RespString("1180px", "100%")}
+				pTitle={Text.H3.Centered.OfText("محتويات الملف الفني")}
+				pDesc={Text.Body.Centered.OfText("الصورة الأساسية للملف تدور حول الرسومات، التقرير الإنشائي، شهادة القيد المؤمنة، ومستندات الترخيص أو النسخة الرقمية متى كانت متاحة أو مطلوبة.")}
+				pHeadBg={new ElemBg(Colors.SkyLite)}
+				pItemsBg={new ElemBg(Colors.WhiteOff)}
+				pItems={[
+					{ Title: "الرسومات المعمارية", Items: ["نسختان من الرسومات المعمارية للأعمال المخالفة المنفذة على الطبيعة، موضح بهما الوضع القائم والمساحات والعناصر المؤثرة في الفحص."] },
+					{ Title: "تقرير السلامة الإنشائية", Items: ["تقرير هندسي يوضح حالة السلامة الإنشائية للمبنى أو للأعمال محل التصالح، وفق النموذج والجهة المصدرة المناسبة للحالة."] },
+					{ Title: "شهادة القيد المؤمنة", Items: ["شهادة تخص المهندس مصدر التقرير، وتُرفق عندما تكون مطلوبة ضمن مستندات الملف بحسب نطاق الحالة والجهة المختصة."] },
+					{ Title: "النسخة الرقمية", Items: ["تجهيز نسخة رقمية منظمة من المستندات الفنية والمساندة لتسهيل الرفع والمتابعة عبر الجهة المختصة أو المنصة الإلكترونية."] },
+					{ Title: "مستندات الصفة والسداد", Items: ["ما يثبت صفة مقدم الطلب، وإيصال سداد رسم الفحص، ومقابل جدية التصالح، بحسب ما يقدمه صاحب الشأن ضمن ملفه الإداري."] }
+				]}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="reconcile-deliverables"
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+		data-ops-event="ReconcileDeliverables"
+		data-ops-on="view"
+		data-ops-label="مخرجات التسليم"
+	>
+
+		<SecTitle SkyDark pTitle="مخرجات التسليم من خدمة التصالح" />
+
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+
+			<CardsGr
+				pWidth={new RespString("1240px", "100%")}
+				pCardBg={new ElemBg(Colors.WhiteOff)}
+				pCardTitleFnt={Text.H3}
+				pCardBodyFnt={Text.Body}
+				pStackDir="Row"
+				pSpacing={20}
+				pTopic1={new Topic("ملف رسومات", "رسومات هندسية معتمدة للوضع القائم والأعمال المخالفة محل التصالح، منظمة بحسب الغرض من التقديم.")}
+				pTopic2={new Topic("تقرير سلامة", "تقرير هندسي عن السلامة الإنشائية وفق النموذج الواجب التطبيق للحالة والجهة المصدرة المناسبة.")}
+				pTopic3={new Topic("شهادة مؤمنة", "شهادة القيد المؤمنة للمهندس مصدر التقرير إذا كانت مطلوبة ضمن حالة الملف.")}
+				pTopic4={new Topic("نسخة رقمية", "ملفات رقمية مرتبة للمستندات الفنية والمساندة لتسهيل التقديم والمتابعة والاستيفاء.")}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoFaq
+		data-ops-event="Faq"
+		data-ops-on="view"
+		data-ops-label="Faq"
+	>
+
+		<FaqItem
+			pQuestion="هل ملف التصالح يحتاج رسم هندسي دائمًا؟"
+			pAnswer="الرسومات المعمارية للأعمال المخالفة المنفذة على الطبيعة تظهر ضمن الركائز الفنية الأساسية في ملف التصالح، لكن شكلها وتفاصيلها وما يضاف إليها يتوقف على نوع المخالفة ومستندات الترخيص المتاحة ومتطلبات الجهة المختصة."
+		/>
+
+		<FaqItem
+			pQuestion="متى أحتاج شهادة القيد المؤمنة؟"
+			pAnswer="شهادة القيد المؤمنة تخص المهندس مصدر التقرير، وتُرفق عندما تكون مطلوبة ضمن ملف التصالح بحسب نوع التقرير والجهة المصدرة ومتطلبات الجهة الإدارية المختصة."
+		/>
+
+		<FaqItem
+			pQuestion="هل يمكن تجهيز الملف من مستندات وصور فقط؟"
+			pAnswer="يمكن إجراء مراجعة مبدئية من الصور والمستندات، لكن الرسومات الدقيقة وتقرير السلامة قد يحتاجان معاينة ورفع أبعاد أو مراجعة إنشائية بحسب حالة العقار ومدى وضوح المستندات المتاحة."
+		/>
+
+		<FaqItem
+			pQuestion="هل المستندات الإضافية مطلوبة في كل الحالات؟"
+			pAnswer="لا. المستندات الإضافية تظهر بحسب سبب المخالفة وموقع العقار وتاريخها والارتفاع وجهة الولاية وحقوق الارتفاق. لذلك يتم تحديد القائمة النهائية بعد فحص الحالة لا قبلها."
+		/>
+
+		<FaqItem
+			pQuestion="ما أهم خطأ يؤخر ملف التصالح؟"
+			pAnswer="أكثر ما يؤخر الملف هو تقديم رسومات أو تقرير لا يطابقان الواقع، أو تجاهل مستند خاص مطلوب للحالة، أو ترك الاستيفاءات دون متابعة حتى تنقضي المدد المقررة."
+		/>
+
+	</EmoFaq>
 
 
 

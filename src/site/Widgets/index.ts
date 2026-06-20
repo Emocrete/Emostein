@@ -232,4 +232,5 @@ export { default as DuoCol } from "./Sections/DuoCol.astro";
 
 export { default as Grid } from "./Comp/Grid.astro";
 export { default as ReadAlsoItem } from "./Sections/ReadAlsoItem.astro";
+export { default as EmoCountdown } from "./Comp/EmoCountdown.astro";
 
