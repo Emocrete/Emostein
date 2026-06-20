@@ -51,6 +51,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	let fAwayReason = "";
 	let fLastScrollMark = null;
 	let fPageExitSent = false;
+	let fPageOpenSent = false;
 	let fPagePingTimer = 0;
 	let fReadTimer = 0;
 	let fLastReadTickAt = Date.now();
@@ -546,6 +547,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	function TrackOpsEvent(pEventType, pOptions = {}) {
 	const EventType = String(pEventType || "").trim();
 	if (!EventType) return Promise.resolve({ ok: false, error: "Missing event type" });
+	if (EventType !== "page_open" && !fPageOpenSent) return Promise.resolve({ ok: true, skipped: true, reason: "page_not_visible_yet" });
 
 	const Body = {
 	eventType: EventType,
@@ -585,6 +587,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	function TrackOpsEventOnce(pEventType, pOnceKey, pOptions = {}) {
+	const EventType = String(pEventType || "").trim();
+	if (EventType !== "page_open" && !fPageOpenSent) return Promise.resolve({ ok: true, skipped: true, reason: "page_not_visible_yet" });
 	const Store = GetOnceStore();
 	const Key = `${pEventType}:${pOnceKey}`;
 	if (Store.Values.has(Key)) return Promise.resolve({ ok: true, skipped: true });
@@ -934,12 +938,17 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	function MarkPageAway(pReason) {
+	if (!fPageOpenSent) return;
 	if (fAwayStartedAt) return;
 	fAwayStartedAt = Date.now();
 	fAwayReason = String(pReason || "blur");
 	}
 
 	function TrackPageReturn(pReason) {
+	if (!fPageOpenSent) {
+	TrackPageOpen();
+	return;
+	}
 	if (!fAwayStartedAt) return;
 
 	const StartedAt = fAwayStartedAt;
@@ -963,6 +972,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	function InitFocusAwayEvents() {
 	document.addEventListener("visibilitychange", () => {
 	if (document.hidden) MarkPageAway("hidden");
+	else if (!fPageOpenSent) TrackPageOpen();
 	else TrackPageReturn("visible");
 	});
 
@@ -971,7 +981,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	function TrackPagePing() {
-	if (document.hidden) return;
+	if (!fPageOpenSent || document.hidden) return;
 	TrackOpsEvent("page_ping", {
 	eventOn: "heartbeat",
 	widget: "Page",
@@ -981,6 +991,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	function TrackPageExit(pReason) {
+	if (!fPageOpenSent) return;
 	if (fPageExitSent) return;
 	FlushPendingReadEvents();
 	fPageExitSent = true;
@@ -1002,6 +1013,9 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	function TrackPageOpen() {
+	if (fPageOpenSent) return;
+	if (document.hidden || document.visibilityState === "prerender") return;
+	fPageOpenSent = true;
 	TrackOpsEventOnce("page_open", "page_open", {
 	eventOn: "load",
 	widget: "Page",

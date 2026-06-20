@@ -1,0 +1,934 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Place, type PlaceProps } from "@/TypesLib";
+
+type StoneCardIcon = string;
+
+interface StoneCardFeature {
+	pIcon?: string;
+	pTitle: string;
+	pText?: string;
+}
+export interface Props extends HTMLAttributes<"article">, PlaceProps {
+	/** خامة الكرت: جرانيت مصري / رخام مصري / رخام مستورد ... */
+	pKind?: string;
+
+	/** اسم الخامة المعروضة. */
+	pName?: string;
+
+	/** وصف مختصر للخامة. */
+	pDesc?: string;
+
+	/** رابط صورة العينة. لا توجد صورة عينة مرفقة مع الودجت. */
+	pImg?: string;
+
+	/** نص بديل لصورة العينة. */
+	pImgAlt?: string;
+
+	/** شارة أعلى الصورة. اتركها فارغة لإخفائها. */
+	pBadge?: string;
+
+	/** أيقونة الشارة. اسم من الأصول المرفقة أو رابط مباشر. */
+	pBadgeIcon?: StoneCardIcon | string;
+
+	/** لون الخامة الظاهر في أسفل الصورة. */
+	pColor?: string;
+
+	/** شكل الحبيبات أو العروق الظاهر في أسفل الصورة. */
+	pTexture?: string;
+
+	/** المقاسات المتاحة. */
+	pSizes?: string[];
+
+	/** مميزات الخامة. */
+	pFeature1?: StoneCardFeature;
+	pFeature2?: StoneCardFeature;
+	pFeature3?: StoneCardFeature;
+	pFeature4?: StoneCardFeature;
+
+	/** زر الطلب الأساسي. */
+	pPrimaryText?: string;
+	pPrimaryHref?: string;
+
+	/** زر التفاصيل الثانوي. */
+	pSecondaryText?: string;
+	pSecondaryHref?: string;
+
+	/** مسار أصول الودجت داخل public. */
+	pAssetsBase?: string;
+
+	/** متغيرات شكلية مختصرة. */
+	pAccentColor?: string;
+	pAccentSoftColor?: string;
+	pBgColor?: string;
+	pPanelColor?: string;
+	pTextColor?: string;
+	pMutedTextColor?: string;
+	pMaxWidth?: string;
+	pMinHeight?: string;
+	pRadius?: string;
+
+	/** يحافظ على مقاسه داخل Stack بدل تمديده كعنصر صف. */
+	"data-own-size"?: boolean | string;
+}
+
+const {
+	pKind = "جرانيت مصري",
+	pName = "أسود أسوان",
+	pDesc = "جرانيت طبيعي مصري بلمعة عالية ولون أسود محبب يناسب الأماكن التي تجمع بين الفخامة والمتانة.",
+	pImg = "",
+	pImgAlt,
+	pBadge = "الأكثر طلبًا",
+	pBadgeIcon = "diamond",
+	pColor = "أسود",
+	pTexture = "حبيبات متوسطة",
+	pSizes = ["120 × 240", "100 × 300", "60 × 120"],
+	pFeature1 = { pIcon: "diamond", pTitle: "صلابة", pText: "عالية" },
+	pFeature2 = { pIcon: "drop", pTitle: "مقاومة امتصاص", pText: "الماء" },
+	pFeature3 = { pIcon: "sun", pTitle: "مقاوم للعوامل", pText: "الجوية" },
+	pFeature4 = { pIcon: "shield", pTitle: "يتحمل الاستخدام", pText: "اليومي" },
+	pPrimaryText = "اطلب عرض سعر",
+	pPrimaryHref = "#",
+	pSecondaryText = "عرض التفاصيل",
+	pSecondaryHref = "#",
+	pAssetsBase = "/Media/Widgets/StoneInfoCard/",
+	pAccentColor = "#C59A5A",
+	pAccentSoftColor = "#E8C878",
+	pBgColor = "#0D0D0C",
+	pPanelColor = "#151412",
+	pTextColor = "#F7F2E8",
+	pMutedTextColor = "#CFC6B8",
+	pMaxWidth = "1180px",
+	pMinHeight = "620px",
+	pRadius = "34px",
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("StoneInfoCard"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	"data-own-size": pOwnSizeValue = true,
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cFeatures = [pFeature1, pFeature2, pFeature3, pFeature4].filter(IsValidFeature);
+const cImageAlt = pImgAlt || `${pName} - ${pKind}`;
+const cOwnSize = GetBoolAttr(pOwnSizeValue);
+
+const cCssVars = [
+	`--StoneAccent:${pAccentColor};`,
+	`--StoneAccentSoft:${pAccentSoftColor};`,
+	`--StoneBg:${pBgColor};`,
+	`--StonePanel:${pPanelColor};`,
+	`--StoneText:${pTextColor};`,
+	`--StoneMuted:${pMutedTextColor};`,
+	`--StoneMaxWidth:${pMaxWidth};`,
+	`--StoneMinHeight:${pMinHeight};`,
+	`--StoneRadius:${pRadius};`,
+	cGivenStyle,
+].filter(Boolean).join("\n");
+
+const cPlace = new Place({
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+}, cCssVars);
+
+function IsValidFeature(pFeature: StoneCardFeature | undefined): pFeature is StoneCardFeature {
+	return !!pFeature && (pFeature.pTitle ?? "").trim() !== "";
+}
+
+function GetBoolAttr(pValue: unknown) {
+	return pValue === true || pValue === "" || pValue === "true";
+}
+
+function GetIconPath(pIcon?: StoneCardIcon | string) {
+	if (!pIcon) return "";
+	if (pIcon.includes("/") || pIcon.includes(".")) return pIcon;
+	return `${pAssetsBase}${pIcon}.svg`;
+}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<article
+	class = {`StoneInfoCard ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	dir="rtl"
+	data-own-size={cOwnSize ? "true" : undefined}
+	{...RemAttr}
+>
+
+
+
+
+
+
+
+	<div class = " StoneCardMedia ">
+
+		{ pImg ? (
+
+			<img
+				class = " StoneCardImg "
+				src={pImg}
+				alt={cImageAlt}
+				loading="lazy"
+				decoding="async"
+			/>
+		) : (
+
+			<div class = " StoneCardImgFallback " aria-label="ضع رابط صورة العينة في pImg">
+			
+			
+			
+			
+			
+			
+			
+				<span>
+					صورة العينة
+				</span>
+			
+			
+			
+			
+			
+			
+			
+			</div>
+		) }
+
+		<div class = " StoneCardMediaShade ">
+
+		</div>
+
+		{ pBadge && (
+
+			<div class = " StoneCardBadge ">
+			
+				{ GetIconPath(pBadgeIcon) &&
+			
+					<img
+						src={GetIconPath(pBadgeIcon)}
+						alt=""
+						loading="lazy"
+					/>
+			
+				}
+			
+				<span>
+					{pBadge}
+				</span>
+			
+			
+			
+			
+			
+			
+			
+			</div>
+		) }
+
+		<div class = " StoneCardSampleMeta ">
+
+			<div class = " StoneCardSampleItem ">
+
+				<img
+					src={GetIconPath("ruler")}
+					alt=""
+					loading="lazy"
+				/>
+
+				<span>
+					{pTexture}
+				</span>
+
+			</div>
+
+			<div class = " StoneCardSampleItem ">
+
+				<img
+					src={GetIconPath("diamond")}
+					alt=""
+					loading="lazy"
+				/>
+
+				<span>
+					{pColor}
+				</span>
+
+			</div>
+
+		</div>
+
+	</div>
+
+
+
+
+
+
+
+	<div class = " StoneCardInfo ">
+
+		<p class = " StoneCardKind ">
+			{pKind}
+		</p>
+
+		<h3 class = " StoneCardTitle ">
+			{pName}
+		</h3>
+
+		<p class = " StoneCardDesc ">
+			{pDesc}
+		</p>
+
+		<div class = " StoneCardDivider ">
+
+		</div>
+
+		{ cFeatures.length > 0 && (
+
+			<div class = " StoneCardFeatures ">
+			
+				{ cFeatures.map((pFeature) => (
+			
+					<div class = " StoneCardFeature ">
+			
+						{ GetIconPath(pFeature.pIcon) && (
+			
+							<img
+								src={GetIconPath(pFeature.pIcon)}
+								alt=""
+								loading="lazy"
+							/>
+						) }
+			
+						<span>
+							{pFeature.pTitle}
+						</span>
+			
+						{ pFeature.pText &&
+			
+							<small>
+			
+								{pFeature.pText}
+			
+							</small>
+			
+						}
+			
+					</div>
+			
+				)) }
+			
+			</div>
+		) }
+
+		<div class = " StoneCardDivider ">
+
+		</div>
+
+		<div class = " StoneCardSizesBlock ">
+
+			<div class = " StoneCardSizesTitle ">
+
+				<span>
+					المقاسات المتاحة
+				</span>
+
+				<img
+					src={GetIconPath("ruler")}
+					alt=""
+					loading="lazy"
+				/>
+
+			</div>
+
+			{ pSizes.length > 0 && (
+
+				<div class = " StoneCardSizes ">
+				
+					{ pSizes.map((pSizeItem) => (
+				
+						<span class = " StoneCardSizeChip " dir="ltr">
+							{pSizeItem}
+						</span>
+				
+					)) }
+				
+				</div>
+			) }
+
+		</div>
+
+		<div class = " StoneCardActions ">
+
+			{ pSecondaryText && (
+
+				<a class = " StoneCardBtn StoneCardBtnGhost " href={pSecondaryHref}>
+				
+				
+				
+				
+				
+				
+				
+					<span>
+						{pSecondaryText}
+					</span>
+				
+				
+				
+				
+				
+				
+				
+					<img
+						src={GetIconPath("eye")}
+						alt=""
+						loading="lazy"
+					/>
+				
+				
+				
+				
+				
+				
+				
+				</a>
+			) }
+
+			{ pPrimaryText && (
+
+				<a class = " StoneCardBtn StoneCardBtnSolid " href={pPrimaryHref}>
+				
+				
+				
+				
+				
+				
+				
+					<span>
+						{pPrimaryText}
+					</span>
+				
+				
+				
+				
+				
+				
+				
+					<img
+						src={GetIconPath("document")}
+						alt=""
+						loading="lazy"
+					/>
+				
+				
+				
+				
+				
+				
+				
+				</a>
+			) }
+
+		</div>
+
+	</div>
+
+
+
+
+
+
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.StoneInfoCard {
+		position: relative;
+		box-sizing: border-box;
+		width: min(100%, var(--StoneMaxWidth));
+		min-height: var(--StoneMinHeight);
+		margin-inline: auto;
+		display: grid;
+		grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+		direction: ltr;
+		background: radial-gradient(circle at 72% 22%, color-mix(in srgb, var(--StoneAccent) 14%, transparent), transparent 34%),
+			linear-gradient(135deg, color-mix(in srgb, var(--StonePanel) 92%, #000), var(--StoneBg));
+		border: 1px solid color-mix(in srgb, var(--StoneAccent) 28%, transparent);
+		border-radius: var(--StoneRadius);
+		overflow: hidden;
+		box-shadow: 0 28px 70px rgba(0, 0, 0, 0.38),
+			inset 0 1px 0 rgba(255, 255, 255, 0.06);
+		isolation: isolate;
+	}
+
+	.StoneInfoCard > :global(*) {
+		box-sizing: border-box;
+	}
+
+
+	.StoneCardMedia {
+		position: relative;
+		grid-column: 1;
+		min-height: var(--StoneMinHeight);
+		background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent 42%),
+			#111;
+		overflow: hidden;
+	}
+
+
+	.StoneCardImgFallback {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: color-mix(in srgb, var(--StoneMuted) 70%, transparent);
+		font-size: clamp(20px, 3vw, 42px);
+		background: linear-gradient(135deg, rgba(255,255,255,0.06), transparent 40%),
+			repeating-linear-gradient(45deg, #111 0 10px, #151515 10px 20px);
+	}
+
+
+	.StoneCardMediaShade {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(90deg, rgba(0,0,0,0.10), rgba(0,0,0,0.54)),
+			linear-gradient(0deg, rgba(0,0,0,0.74), transparent 42%);
+		pointer-events: none;
+	}
+
+
+	.StoneCardBadge {
+		position: absolute;
+		inset-inline-start: clamp(18px, 3vw, 34px);
+		top: 0;
+		width: clamp(84px, 9vw, 112px);
+		min-height: 136px;
+		padding: 22px 14px 28px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-start;
+		gap: 10px;
+		text-align: center;
+		color: #fff;
+		font-weight: 800;
+		font-size: clamp(14px, 1.35vw, 21px);
+		line-height: 1.35;
+		background: linear-gradient(180deg, var(--StoneAccentSoft), var(--StoneAccent));
+		clip-path: polygon(0 0, 100% 0, 100% 82%, 50% 100%, 0 82%);
+		box-shadow: 0 16px 24px rgba(0,0,0,0.28);
+		direction: rtl;
+		z-index: 2;
+	}
+
+	.StoneCardBadge img {
+		width: 36px;
+		height: 36px;
+		object-fit: contain;
+		filter: brightness(0) invert(1);
+	}
+
+
+	.StoneCardSampleMeta {
+		position: absolute;
+		inset-inline-start: clamp(18px, 3vw, 34px);
+		inset-inline-end: clamp(18px, 3vw, 34px);
+		bottom: clamp(22px, 3vw, 38px);
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		gap: 22px;
+		direction: rtl;
+		z-index: 2;
+	}
+
+
+	.StoneCardSampleItem {
+		display: inline-flex;
+		align-items: center;
+		gap: 9px;
+		color: var(--StoneText);
+		font-size: clamp(14px, 1.25vw, 18px);
+		line-height: 1.2;
+		text-shadow: 0 2px 6px rgba(0,0,0,0.45);
+	}
+
+	.StoneCardSampleItem img {
+		width: 28px;
+		height: 28px;
+		object-fit: contain;
+	}
+
+
+	.StoneCardInfo {
+		grid-column: 2;
+		direction: rtl;
+		padding: clamp(32px, 5vw, 72px) clamp(28px, 4vw, 62px);
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		background: linear-gradient(90deg, rgba(255,255,255,0.035), transparent 36%),
+			linear-gradient(180deg, rgba(255,255,255,0.025), transparent);
+	}
+
+
+	.StoneCardKind {
+		margin: 0 0 8px;
+		color: var(--StoneAccent);
+		font-size: clamp(18px, 1.7vw, 26px);
+		font-weight: 700;
+		line-height: 1.35;
+	}
+
+
+	.StoneCardTitle {
+		margin: 0;
+		color: var(--StoneText);
+		font-size: clamp(42px, 5.1vw, 74px);
+		font-weight: 800;
+		letter-spacing: -0.035em;
+		line-height: 1.15;
+	}
+
+
+	.StoneCardDesc {
+		margin: 22px 0 0;
+		max-width: 620px;
+		color: var(--StoneMuted);
+		font-size: clamp(17px, 1.55vw, 25px);
+		font-weight: 400;
+		line-height: 1.85;
+	}
+
+
+	.StoneCardDivider {
+		height: 1px;
+		margin: clamp(24px, 3vw, 38px) 0;
+		background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--StoneAccent) 44%, transparent), transparent);
+	}
+
+
+	.StoneCardFeatures {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 0;
+	}
+
+
+	.StoneCardFeature {
+		min-width: 0;
+		padding-inline: 14px;
+		display: grid;
+		justify-items: center;
+		align-content: start;
+		gap: 8px;
+		text-align: center;
+		color: var(--StoneText);
+		border-inline-start: 1px solid color-mix(in srgb, var(--StoneAccent) 28%, transparent);
+	}
+
+	.StoneCardFeature:first-child {
+		border-inline-start: 0;
+	}
+
+	.StoneCardFeature img {
+		width: clamp(32px, 3.2vw, 48px);
+		height: clamp(32px, 3.2vw, 48px);
+		object-fit: contain;
+	}
+
+	.StoneCardFeature span {
+		font-size: clamp(14px, 1.1vw, 18px);
+		font-weight: 700;
+		line-height: 1.35;
+	}
+
+	.StoneCardFeature small {
+		color: var(--StoneMuted);
+		font-size: clamp(12px, 0.95vw, 16px);
+		font-weight: 500;
+		line-height: 1.25;
+	}
+
+
+	.StoneCardSizesBlock {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		align-items: center;
+		gap: 18px;
+	}
+
+
+	.StoneCardSizesTitle {
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		color: var(--StoneMuted);
+		font-size: clamp(14px, 1.1vw, 18px);
+		font-weight: 700;
+		white-space: nowrap;
+	}
+
+	.StoneCardSizesTitle img {
+		width: 32px;
+		height: 32px;
+		object-fit: contain;
+	}
+
+
+	.StoneCardSizes {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		gap: 12px;
+	}
+
+
+	.StoneCardSizeChip {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 104px;
+		min-height: 46px;
+		padding: 8px 14px;
+		border: 1px solid color-mix(in srgb, var(--StoneAccent) 42%, transparent);
+		border-radius: 10px;
+		color: var(--StoneText);
+		font-size: clamp(14px, 1.1vw, 18px);
+		line-height: 1;
+		background: rgba(255,255,255,0.025);
+	}
+
+
+	.StoneCardActions {
+		margin-top: clamp(28px, 3.4vw, 46px);
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 16px;
+	}
+
+
+	.StoneCardBtn {
+		min-height: 58px;
+		padding: 14px 20px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 12px;
+		border-radius: 11px;
+		font-size: clamp(15px, 1.12vw, 18px);
+		font-weight: 800;
+		line-height: 1.2;
+		text-decoration: none;
+		transition: transform 0.14s ease, border-color 0.14s ease, background 0.14s ease, color 0.14s ease;
+	}
+
+	.StoneCardBtn:hover {
+		transform: translateY(-2px);
+	}
+
+	.StoneCardBtn:active {
+		transform: translateY(0) scale(0.99);
+	}
+
+	.StoneCardBtn img {
+		width: 25px;
+		height: 25px;
+		object-fit: contain;
+	}
+
+
+	.StoneCardBtnSolid {
+		color: #fff;
+		background: linear-gradient(180deg, var(--StoneAccentSoft), var(--StoneAccent));
+		border: 1px solid color-mix(in srgb, var(--StoneAccentSoft) 70%, #fff 8%);
+		box-shadow: 0 10px 22px color-mix(in srgb, var(--StoneAccent) 22%, transparent);
+	}
+
+	.StoneCardBtnSolid img {
+		filter: brightness(0) invert(1);
+	}
+
+
+	.StoneCardBtnGhost {
+		color: var(--StoneAccentSoft);
+		background: rgba(255,255,255,0.025);
+		border: 1px solid color-mix(in srgb, var(--StoneAccent) 54%, transparent);
+	}
+
+	.StoneCardBtnGhost:hover {
+		background: color-mix(in srgb, var(--StoneAccent) 10%, transparent);
+		border-color: var(--StoneAccentSoft);
+	}
+
+
+
+	.StoneCardMedia,
+	.StoneCardInfo
+	{
+		min-width: 0;
+	}
+
+
+	.StoneCardImg,
+	.StoneCardImgFallback
+	{
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		display: block;
+		object-fit: cover;
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait), (max-width: 760px) {
+		.StoneInfoCard {
+			grid-template-columns: 1fr;
+			width: min(100%, var(--StoneMaxWidth));
+			min-height: 0;
+			border-radius: min(var(--StoneRadius), 26px);
+		}
+
+		.StoneCardMedia,
+		.StoneCardInfo
+		{
+			grid-column: 1;
+		}
+
+		.StoneCardMedia {
+			min-height: clamp(330px, 56vh, 520px);
+		}
+
+		.StoneCardInfo {
+			padding: 30px 20px 24px;
+		}
+
+		.StoneCardBadge {
+			width: 82px;
+			min-height: 116px;
+			padding: 18px 10px 24px;
+		}
+
+		.StoneCardBadge img {
+			width: 30px;
+			height: 30px;
+		}
+
+		.StoneCardSampleMeta {
+			align-items: flex-start;
+			flex-direction: column;
+			gap: 10px;
+		}
+
+		.StoneCardFeatures {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 18px 0;
+		}
+
+		.StoneCardFeature:nth-child(odd) {
+			border-inline-start: 0;
+		}
+
+		.StoneCardSizesBlock {
+			grid-template-columns: 1fr;
+		}
+
+		.StoneCardSizes {
+			justify-content: flex-start;
+		}
+
+		.StoneCardActions {
+			grid-template-columns: 1fr;
+		}
+	}
+
+
+
+</style>
