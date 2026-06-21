@@ -2,6 +2,49 @@
 import BLayout from "@/Layout.astro";
 import { Text, ElemBg, EmoMediaData, Colors, Pixel, Topic, Size, Align, RespString } from "@/TypesLib";
 import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, ReadAlso, RelServices, EmoFaq, EmoContactStrip, SecTitle, VrStack, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+
+	import {
+		DirectSize,
+		NumPer,
+		Loc,
+		Angle,
+		Percent,
+		Location
+	} from "@/TypesLib";
+
+	import {
+		FreeHero,
+		FreeHeroItem,
+		DuoSec,
+		DuoCol,
+		Grid,
+		Badge,
+		PriceCard,
+		EmoPipelineStrip,
+		EmoStatsStrip
+	} from "@/Widgets";
+
+	import {
+		BlurBlob,
+		CircleGlow,
+		LinePath,
+		SvgDots,
+		DoubleWave,
+		FloatingPanel,
+		GlassCard,
+		BadgeFrame,
+		TiltCard,
+		Ribbon,
+		WaveBottom
+	} from "@/Widgets/Shapes";
+
+	const cMedia = "/Media/Emocrete/Supervision/Construction/";
+	const cDark = "#172331";
+	const cInk = "#111820";
+	const cSteel = "#20384C";
+	const cMint = "#D7F58C";
+	const cSky = "#DAEFFE";
+	const cAmber = "#FDCB9E";
 ---
 
 
@@ -828,70 +871,14 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 
 
-	<ReadAlso
-		pTitle={Text.H2.Centered.OfText("اقرأ أيضًا")}
-		pDesc={Text.Body.Centered.OfText("صفحات مرتبطة تساعدك على الانتقال بين الإشراف والخدمات الفنية والقانونية المرتبطة بتنفيذ المباني.")}
-		pHeadBg={new ElemBg(Colors.GreenLite)}
-		pBodyBg={new ElemBg(Colors.Creamy)}
-		pCardBg={new ElemBg(Colors.WhiteOff)}
-	>
-
-		<ReadAlsoItem
-			pTitle="خدمات الإشراف الهندسي"
-			pDesc="الصفحة العامة لخدمات الإشراف على البناء والتشطيبات."
-			pHref="/emocrete/supervision"
-			pImg="/Media/Emocrete/Supervision/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="إشراف هندسي على التشطيبات"
-			pDesc="متابعة جودة بنود التشطيب واستلام الأعمال قبل التسليم النهائي."
-			pHref="/emocrete/supervision/finishing"
-			pImg="/Media/Emocrete/Supervision/Finishing/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="شهادة إشراف على البناء"
-			pDesc="خدمة مرتبطة بالإشراف الرسمي والشهادات الهندسية المطلوبة لبعض إجراءات المباني."
-			pHref="/emonsult/certificate/con-supervision"
-			pImg="/Media/Emonsult/Certificate/ConSV/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="تصميم إنشائي"
-			pDesc="إعداد التصميم الإنشائي والرسومات التي يعتمد عليها التنفيذ والاستلام بالموقع."
-			pHref="/emodsign/des/eng/struc"
-			pImg="/Media/Emodsign/Des/Eng/Struc/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="شوب دروينج إنشائي"
-			pDesc="تفصيل الرسومات الإنشائية بصورة أوضح للموقع والمقاول قبل التنفيذ."
-			pHref="/emodsign/tech/shopdwg/struc"
-			pImg="/Media/Emodsign/Tech/Shopdwg/Struc/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="حصر كميات البناء"
-			pDesc="ربط الرسومات بالكميات لمراجعة التكلفة ومقارنة عروض المقاولين."
-			pHref="/emodsign/tech/takeoff/construction"
-			pImg="/Media/Emodsign/Tech/Takeoff/Construction/HeroL.webp"
-		/>
-
-	</ReadAlso>
-
-
-
-
-
-
-
 	<RelServices
+		pMax={5}
 		pTitle={Text.H2.Centered.White.OfText("خدمات ذات علاقة")}
 		pDesc={Text.Body.Centered.White.OfText("خدمات تجارية فعلية يمكن أن يحتاجها العميل قبل أو أثناء أو بعد مرحلة الإشراف على البناء.")}
 		pHeadBg={new ElemBg(Colors.Gray5)}
 		pBodyBg={new ElemBg(Colors.Gray1)}
 		pCardBg={new ElemBg(Colors.WhiteOff)}
+		pWidth={new Size("90%","auto","95%","auto")}
 	>
 
 		<RelServiceItem
@@ -899,14 +886,6 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="تنفيذ مشروعات البناء والتشييد بإدارة هندسية منضبطة من بداية الموقع حتى التسليم."
 			pHref="/emocrete/contracting"
 			pImg="/Media/Emocrete/Contracting/HeroL.webp"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="تصميم إنشائي"
-			pDesc="تصميم النظام الإنشائي والرسومات التي يتم الاستلام عليها في الموقع."
-			pHref="/emodsign/des/eng/struc"
-			pImg="/Media/Emodsign/Des/Eng/Struc/HeroL.webp"
 			pBtnText="اطلب الخدمة"
 		/>
 
@@ -927,14 +906,6 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 		/>
 
 		<RelServiceItem
-			pTitle="استخراج ترخيص بناء"
-			pDesc="خدمات تراخيص البناء للمدن والأحياء حسب حالة الأرض أو المبنى والإجراءات المطلوبة."
-			pHref="/emoperm/building"
-			pImg="/Media/Emoperm/Building/HeroD.webp"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
 			pTitle="إشراف هندسي على التشطيبات"
 			pDesc="متابعة مرحلة التشطيبات بعد انتهاء الهيكل الخرساني واستلام البنود النهائية."
 			pHref="/emocrete/supervision/finishing"
@@ -950,17 +921,1193 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 
 
-	<EmoContactStrip
-		pTitle="ابدأ إشراف البناء قبل الصب"
-		pDesc="أرسل موقع المشروع والمرحلة الحالية وصور الموقع والرسومات المتاحة، وسنحدد لك هل الأنسب زيارة استلام واحدة، جدول زيارات للمراحل، أو متابعة دورية خلال فترة التنفيذ."
-		pCallText="اتصال مباشر"
-		pWhatsappText="واتساب مباشر"
-		pLeadTitle="اترك رقمك وسنراجع معك مرحلة التنفيذ الحالية"
-		pPhonePlaceHolder="رقم الهاتف"
-		pLeadButtonText="طلب تواصل للإشراف"
-		pPrivacyText="سيتم استخدام رقمك فقط للرد على طلب الإشراف الهندسي"
-		pSourceName="صفحة إشراف هندسي على البناء"
-	/>
+	<FreeHero
+		pImgF={cMedia}
+		pImgL="HeroL.webp"
+		pImgP="HeroP.webp"
+	>
+
+		<SvgDots
+			pLoc={new Loc(new NumPer(0), new NumPer(0))}
+			pSize={new DirectSize(new NumPer("100%"), new NumPer("100%"))}
+			pZ={1}
+			pOpacity={new Percent(40, 25)}
+			pColor="rgba(255,255,255,.38)"
+			pGap={30}
+			pDot={2}
+		/>
+
+		<BlurBlob
+			pLoc={new Loc(new NumPer("8%", "-18%"), new NumPer("14%", "8%"))}
+			pSize={new DirectSize(new NumPer(420, 240), new NumPer(420, 300))}
+			pZ={2}
+			pOpacity={new Percent(78, 55)}
+			pColor="rgba(50,143,232,.55)"
+			pColor2="rgba(215,245,140,.42)"
+		/>
+
+		<LinePath
+			pLoc={new Loc(new NumPer("calc(100% - 360px)", "calc(100% - 200px)"), new NumPer(80, 120))}
+			pSize={new DirectSize(new NumPer(280, 160), new NumPer(150, 115))}
+			pRotate={new Angle(8, 4)}
+			pZ={3}
+			pOpacity={new Percent(90, 70)}
+			pStroke="rgba(215,245,140,.9)"
+			pDot="#FAFAFA"
+			pWidth={4}
+		/>
+
+		<FreeHeroItem
+			pLoc={new Location("7%", "6%", "24%", "17%")}
+			pSize={new Size("560px", "auto", "88%", "auto")}
+			pZ={10}
+			pFit
+		>
+
+			<FloatingPanel
+				pBg="rgba(17,24,32,.82)"
+				pBorder="rgba(255,255,255,.22)"
+				pAccent={cMint}
+			>
+
+				<Emograph
+					pTitle={Text.H1.White.OfText("إشراف هندسي على البناء")}
+					pText={Text.Body.White.OfSize(20, 14).OfText("خدمة متابعة واستلام للهيكل الخرساني قبل انتقال المقاول من مرحلة إلى المرحلة التالية: الحفر، المحاور، النجارة، الحدادة، وصب الخرسانة. الهدف ليس الوجود الشكلي في الموقع، بل منع دفن الخطأ داخل الخرسانة.")}
+				/>
+
+				<HzStack
+					pGap={new Pixel(18, 12)}
+					pPad={new Pixel(0)}
+					pForceHz
+				>
+
+					<EmoCall BlackSky pText="اطلب إشراف بناء" />
+
+					<Badge
+						pYears="3"
+						pYearsText="بوابات استلام رئيسية"
+						pWorks="2000"
+						pWorksText="جنيه / زيارة مبدئيًا"
+						pDuration="3%"
+						pDurationText="للمتابعة الدورية"
+						pUseBg={true}
+						pBgColor="rgba(255,255,255,.10)"
+						pColor={Colors.WhiteOff}
+						pMobMaxCols={1}
+					/>
+
+				</HzStack>
+
+			</FloatingPanel>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			pLoc={new Location("calc(100% - 430px)", "8%", "calc(100% - 240px)", "calc(100% - 245px)")}
+			pSize={new Size(360, "auto", "84%", "auto")}
+			pRot={new RespString("-2deg", "0deg")}
+			pZ={9}
+		>
+
+			<GlassCard
+				pBg="rgba(255,255,255,.76)"
+				pBorder="rgba(255,255,255,.9)"
+				pRadius={26}
+				pBlur={18}
+			>
+
+				<Emograph
+					pTitle={Text.H3.DarkSky.OfText("قاعدة الصفحة")}
+					pText={Text.Body.OfText("لا صب، لا إغلاق، لا انتقال للمرحلة التالية قبل استلام هندسي واضح للملاحظات المؤثرة.")}
+				/>
+
+			</GlassCard>
+
+		</FreeHeroItem>
+
+		<Ribbon
+			pText="STRUCTURE CHECKPOINTS"
+			pBg={cMint}
+			pColor={cInk}
+			pLoc={new Loc(new NumPer("calc(100% - 270px)", "calc(100% - 230px)"), new NumPer(34, 46))}
+			pSize={new DirectSize(new NumPer(220, 190), new NumPer("auto"))}
+			pRotate={new Angle(10, 6)}
+			pZ={8}
+		/>
+
+	</FreeHero>
+
+
+
+
+
+
+
+	<ESec
+		id="ControlIdea"
+		pBg={new ElemBg(cDark)}
+		pBox={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+		pAlign={Align.Center}
+	>
+
+		<CircleGlow
+			pLoc={new Loc(new NumPer("8%", "5%"), new NumPer(60, 40))}
+			pSize={new DirectSize(new NumPer(260, 180), new NumPer(170, 130))}
+			pZ={1}
+			pOpacity={new Percent(50, 40)}
+			pColor="rgba(215,245,140,.65)"
+			pColor2="rgba(50,143,232,.25)"
+		/>
+
+		<EmoStrip
+			pBg={new ElemBg("transparent")}
+			pSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+			pAlign={Align.Center}
+		>
+
+			<SecTitle
+				style = {`--StripBg:${cMint};`}
+				pTitle="الإشراف مش متابعة عمال.. الإشراف بوابات قرار"
+				pDesc="بدل ما الصفحة تتحول لكروت متشابهة، التكوين هنا بيقسم الخدمة حسب لحظات القرار: قبل التنفيذ، أثناء التنفيذ، وبعد ظهور الملاحظة. كل بوابة تمنع نوعًا مختلفًا من الخطر."
+			/>
+
+			<Grid
+				pMax={3}
+				pMaxP={1}
+				pGap={new Pixel(22, 18)}
+				pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+				Centered
+			>
+
+				<BadgeFrame
+					pBadge="قبل التنفيذ"
+					pBg="rgba(255,255,255,.92)"
+					pBadgeBg={cSky}
+					pColor={cInk}
+				>
+
+					<Emograph
+						pTitle={Text.H3.DarkSky.OfText("استلام قبل الصب")}
+						pText={Text.Body.OfText("مراجعة المحاور والمناسيب والأبعاد والتقويات والتسليح وأماكن الفتحات والقشاير قبل أن تتحول الملاحظة إلى عيب مخفي.")}
+					/>
+
+				</BadgeFrame>
+
+				<BadgeFrame
+					pBadge="أثناء التنفيذ"
+					pBg="rgba(255,255,255,.92)"
+					pBadgeBg={cMint}
+					pColor={cInk}
+				>
+
+					<Emograph
+						pTitle={Text.H3.OfText("ضبط طريقة العمل")}
+						pText={Text.Body.OfText("متابعة الصب وجودة الخرسانة والدمك والمعالجة ومنع القرارات العشوائية التي تظهر آثارها بعد فك الشدات أو أثناء التشطيبات.")}
+					/>
+
+				</BadgeFrame>
+
+				<BadgeFrame
+					pBadge="بعد الملاحظة"
+					pBg="rgba(255,255,255,.92)"
+					pBadgeBg={cAmber}
+					pColor={cInk}
+				>
+
+					<Emograph
+						pTitle={Text.H3.OrangeDark.OfText("قرار فني واضح")}
+						pText={Text.Body.OfText("الملاحظة لا تكفي وحدها؛ المهم تحديد الإجراء: قبول، تعديل، إعادة تنفيذ، أو الرجوع للمصمم قبل اتخاذ قرار مؤثر.")}
+					/>
+
+				</BadgeFrame>
+
+			</Grid>
+
+		</EmoStrip>
+
+		<DoubleWave
+			pLoc={new Loc(new NumPer(0), new NumPer("calc(100% - 120px)", "calc(100% - 85px)"))}
+			pSize={new DirectSize(new NumPer("100%"), new NumPer(120, 85))}
+			pZ={2}
+			pFill={Colors.Gray1}
+			pFill2="rgba(215,245,140,.28)"
+			pStroke="rgba(255,255,255,.45)"
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<DuoSec
+		id="OwnerEye"
+		pBg={new ElemBg(Colors.Gray1)}
+		pContentSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+		pGap={new Pixel(26, 16)}
+		pPad={new Pixel(70, 34)}
+	>
+
+		<DuoCol
+			pBgColor={new ElemBg(Colors.WhiteOff)}
+			pPad={new Pixel(44, 22)}
+			pAlign="Start"
+		>
+
+			<Emograph
+				pTitle={Text.H2.DarkSky.OfText("المهندس المشرف هو عين المالك الفنية")}
+				pText={Text.Body.OfText("المقاول مسؤول عن التنفيذ، لكن مصلحته التجارية قد تدفعه للسرعة أو تقليل الهدر أو تمرير تفاصيل ناقصة. دور الإشراف الهندسي هو مقارنة ما يحدث في الموقع بالرسومات والمواصفات، ورفض انتقال العمل للمرحلة التالية قبل علاج الملاحظات المؤثرة.")}
+			/>
+
+			<CardsGr
+				pWidth={new RespString("100%", "100%")}
+				pCardBg={new ElemBg(cSky)}
+				pCardTitleFnt={Text.H4.Centered}
+				pCardBodyFnt={Text.Body.Centered}
+				pTopic1={new Topic("رأي مستقل", "فصل واضح بين من ينفذ ومن يراجع ويحمي مصلحة المالك.")}
+				pTopic2={new Topic("توقيت مبكر", "كشف الملاحظة قبل الصب أو الإغلاق بدل علاجها بعد فوات الوقت.")}
+				pTopic3={new Topic("قرار قابل للتنفيذ", "تحديد ما يقبل موقعيًا وما يحتاج تعديلًا أو رجوعًا للمصمم.")}
+			/>
+
+		</DuoCol>
+
+		<DuoCol
+			Centered
+			pBgColor={new ElemBg(cSteel)}
+			pPad={new Pixel(36, 20)}
+		>
+
+			<RespImg
+				pImg={new EmoMediaData("Img", cMedia, "HeroL.webp", false, "إشراف هندسي على البناء", new Size("100%", "auto", "100%", "auto"))}
+			/>
+
+			<GlassCard
+				pBg="rgba(255,255,255,.12)"
+				pBorder="rgba(255,255,255,.28)"
+				pRadius={24}
+				pBlur={14}
+			>
+
+				<Emograph
+					pTitle={Text.H3.White.OfText("لحظة الحماية الحقيقية")}
+					pText={Text.Body.White.OfText("استلام التسليح والنجارة والتقويات قبل الصب هو الفارق بين تعديل بسيط الآن وتكلفة علاج كبيرة لاحقًا.")}
+				/>
+
+			</GlassCard>
+
+		</DuoCol>
+
+	</DuoSec>
+
+
+
+
+
+
+
+	<ESec
+		id="CoreTasks"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${cSky};`}
+			pTitle="المهام الأساسية في إشراف الهيكل الخرساني"
+			pDesc="الصفحة الأصلية كانت مبنية حول ثلاث مهام: النجارة المسلحة، الحدادة المسلحة، والصب. هنا نفس المحتوى معروض كمسار رقابي سريع يفهمه العميل قبل النزول للموقع."
+		/>
+
+		<EmoStrip
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pSize={new DirectSize(new NumPer("min(1240px, calc(100% - 24px))"), new NumPer("auto"))}
+			pAlign={Align.Center}
+		>
+
+			<Grid
+				pMax={3}
+				pMaxP={1}
+				pGap={new Pixel(24, 18)}
+				pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+				Centered
+			>
+
+				<TiltCard
+					pBg={cDark}
+					pColor={Colors.WhiteOff}
+					pTilt={-2}
+				>
+
+					<RespImg
+						pImg={new EmoMediaData("Img", cMedia, "SV_Tasks_Step1.webp", false, "أعمال النجارة المسلحة", new Size("100%", "auto", "100%", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H3.White.OfText("النجارة المسلحة")}
+						pText={Text.Body.White.OfText("الأبعاد، المناسيب، أماكن الفتحات، التقويات، وجاهزية العنصر للصب.")}
+					/>
+
+				</TiltCard>
+
+				<TiltCard
+					pBg="#1F3A4E"
+					pColor={Colors.WhiteOff}
+					pTilt={1}
+				>
+
+					<RespImg
+						pImg={new EmoMediaData("Img", cMedia, "SV_Tasks_Step2.webp", false, "أعمال الحدادة المسلحة", new Size("100%", "auto", "100%", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H3.White.OfText("الحدادة المسلحة")}
+						pText={Text.Body.White.OfText("عدد وأقطار وأطوال الأسياخ، أماكن التسليح، الكانات، القشاير، والتطابق مع الرسومات.")}
+					/>
+
+				</TiltCard>
+
+				<TiltCard
+					pBg="#354322"
+					pColor={Colors.WhiteOff}
+					pTilt={-1}
+				>
+
+					<RespImg
+						pImg={new EmoMediaData("Img", cMedia, "SV_Tasks_Step3.webp", false, "صب الخرسانة والفرمجة", new Size("100%", "auto", "100%", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H3.White.OfText("الصب والفرمجة")}
+						pText={Text.Body.White.OfText("جودة الخرسانة، الدمك، التشطيب، المعالجة، ومنع التعشيش أو فواصل الصب غير المناسبة.")}
+					/>
+
+				</TiltCard>
+
+			</Grid>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<DuoSec
+		id="Scope"
+		pBg={new ElemBg(Colors.Creamy)}
+		pContentSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+		pGap={new Pixel(28, 16)}
+		pPad={new Pixel(70, 34)}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${cMint};`}
+			pTitle="نطاق الخدمة من غير خلط"
+			pDesc="الإشراف على البناء هنا يركز على الهيكل الخرساني. أي تصميم جديد أو حصر تفصيلي أو إدارة يومية كاملة يحتاج اتفاقًا منفصلًا حتى لا تختلط المسؤوليات."
+		/>
+
+		<DuoCol
+			pBgColor={new ElemBg(Colors.WhiteOff)}
+			pPad={new Pixel(34, 20)}
+			pAlign="Start"
+		>
+
+			<EmoList
+				pWidth={new RespString("100%", "100%")}
+				pTitle={Text.H3.DarkSky.OfText("داخل نطاق الإشراف غالبًا")}
+				pDesc={Text.Body.OfText("النطاق النهائي يتثبت حسب حالة المشروع وعدد الأدوار وسرعة التنفيذ وعدد الزيارات المطلوبة.")}
+				pHeadBg={new ElemBg(cSky)}
+				pItemsBg={new ElemBg(Colors.WhiteOff)}
+				pItems={[
+						"مراجعة الرسومات المتاحة قبل النزول وتحديد نقاط الاستلام الحرجة.",
+						"استلام الحفر والمناسيب وحدود القواعد أو اللبشة حسب الرسومات.",
+						"مراجعة توقيع المحاور والخنزيرة ومطابقة الأبعاد الأساسية.",
+						"استلام النجارة والحدادة للعناصر الخرسانية قبل الصب.",
+						"متابعة صب الخرسانة وملاحظات الدمك والتشطيب والمعالجة.",
+						"توجيه المقاول لعلاج الملاحظات قبل الانتقال للمرحلة التالية."
+					]}
+			/>
+
+		</DuoCol>
+
+		<DuoCol
+			pBgColor={new ElemBg(Colors.WhiteOff)}
+			pPad={new Pixel(34, 20)}
+			pAlign="Start"
+		>
+
+			<EmoList
+				pWidth={new RespString("100%", "100%")}
+				pTitle={Text.H3.OrangeDark.OfText("يحتاج اتفاقًا مستقلًا")}
+				pDesc={Text.Body.OfText("هذه البنود ليست ضمن زيارة إشراف عادية إلا لو اتذكرت صراحة في الاتفاق.")}
+				pHeadBg={new ElemBg(cAmber)}
+				pItemsBg={new ElemBg(Colors.WhiteOff)}
+				pItems={[
+						"إعادة التصميم أو تعديل الرسومات الإنشائية أو المعمارية.",
+						"إدارة تنفيذ يومية كاملة أو وجود مهندس مقيم بالموقع.",
+						"حصر كميات تفصيلي أو مراجعة مستخلصات المقاول بندًا بندًا.",
+						"اختبارات معملية أو جسات أو تقارير تربة أو تقارير فنية منفصلة.",
+						"اعتماد رسومات رسمية أو شهادة إشراف للجهات الإدارية إن لم تكن ضمن الاتفاق.",
+						"الإشراف على التشطيبات أو الأعمال الكهروميكانيكية بعد الهيكل الخرساني."
+					]}
+			/>
+
+		</DuoCol>
+
+	</DuoSec>
+
+
+
+
+
+
+
+	<ESec
+		id="Foundations"
+		pBg={new ElemBg(cDark)}
+		pAlign={Align.Center}
+	>
+
+		<LinePath
+			pLoc={new Loc(new NumPer(40, 20), new NumPer(50, 40))}
+			pSize={new DirectSize(new NumPer(260, 160), new NumPer(150, 105))}
+			pZ={2}
+			pOpacity={new Percent(70, 55)}
+			pStroke="rgba(215,245,140,.86)"
+			pDot="#FAFAFA"
+		/>
+
+		<DuoSec
+			pBg={new ElemBg("transparent")}
+			pContentSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+			pGap={new Pixel(28, 16)}
+			pPad={new Pixel(72, 34)}
+		>
+
+			<DuoCol
+				pBgColor={new ElemBg("rgba(255,255,255,.08)")}
+				pPad={new Pixel(36, 20)}
+				pAlign="Start"
+				pBlur={new Pixel(10)}
+			>
+
+				<Emograph
+					pTitle={Text.H2.Bistage.OfText("1 — الأساسات: مرحلة لا تتحمل المجاملة")}
+					pText={Text.Body.White.OfText("الأساسات هي المرحلة التي يصعب علاج أخطائها لاحقًا دون تكلفة كبيرة؛ لذلك تبدأ المتابعة من الحفر والمحاور والخرسانة العادية ثم النجارة والحدادة والصب للأساسات المسلحة.")}
+				/>
+
+				<RespImg
+					pImg={new EmoMediaData("Img", cMedia, "FoundationLevel.webp", false, "استلام أعمال الأساسات", new Size("100%", "auto", "100%", "auto"))}
+				/>
+
+			</DuoCol>
+
+			<DuoCol
+				pBgColor={new ElemBg(Colors.WhiteOff)}
+				pPad={new Pixel(32, 18)}
+				pAlign="Start"
+			>
+
+				<EmoList
+					pWidth={new RespString("100%", "100%")}
+					pTitle={Text.H3.Centered.OfText("زيارات واستلامات الأساسات")}
+					pDesc={Text.Body.Centered.OfText("يمكن زيادة أو تقليل عدد الزيارات حسب مساحة المشروع وطبيعة التربة وسرعة التنفيذ.")}
+					pHeadBg={new ElemBg(cSky)}
+					pItemsBg={new ElemBg(Colors.WhiteOff)}
+					pNumbered={true}
+					pItems={[
+							{ Title: "استلام الحفر قبل النجارة العادية", Items: [
+								"استلام منسوب وحدود الحفر طبقًا لنقطة الصفر المعماري أو منسوب الأسفلت حسب النظام المتبع.",
+								"مراجعة كفاءة الدك عند توفر تقرير الدمك أو متابعة خطوات الغمر والدك الميكانيكي عند عدم توفره."
+							] },
+							{ Title: "توقيع المحاور قبل الخرسانة العادية", Items: [
+								"استلام الخنزيرة إن وجدت أو مراجعة حدود الأرض طبقًا للرسومات.",
+								"مراجعة توقيع محاور المبنى والمسافات بينها بوسيلة مساحية مناسبة."
+							] },
+							{ Title: "استلام الخرسانة العادية", Items: [
+								"استلام حدود ومنسوب الأساسات العادية سواء قواعد منفصلة أو لبشة.",
+								"مراجعة التقويات ومتابعة الصب وجودة الخرسانة وتشطيب السطح."
+							] },
+							{ Title: "متابعة بداية نجارة وحدادة الأساسات المسلحة", Items: [
+								"تنسيق أعمال النجارة والحدادة والتأكد من فهم العمالة لتفاصيل الرسومات."
+							] },
+							{ Title: "استلام ما قبل صب الأساسات المسلحة", Items: [
+								"استلام النجارة من حيث الأبعاد والميزان والزوايا والتقويات.",
+								"استلام الحدادة والقشاير وبادئ السلم طبقًا للأعداد والأقطار والمواقع."
+							] },
+							{ Title: "متابعة صب الأساسات المسلحة", Items: [
+								"التحقق من جودة الخرسانة وطريقة الصب بما يقلل العيوب والثغرات بعد فك الشدات."
+							] }
+						]}
+				/>
+
+			</DuoCol>
+
+		</DuoSec>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="Columns"
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+	>
+
+		<DuoSec
+			pBg={new ElemBg("transparent")}
+			pContentSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+			pGap={new Pixel(28, 16)}
+			pPad={new Pixel(72, 34)}
+		>
+
+			<DuoCol
+				Centered
+				pBgColor={new ElemBg(cSky)}
+				pPad={new Pixel(36, 20)}
+			>
+
+				<RespImg
+					pImg={new EmoMediaData("Img", cMedia, "ColumnsLevel.webp", false, "استلام أعمال الأعمدة", new Size("100%", "auto", "100%", "auto"))}
+				/>
+
+				<GlassCard pBg="rgba(255,255,255,.72)" pBorder="rgba(255,255,255,.88)">
+
+					<Emograph
+						pTitle={Text.H2.DarkSky.OfText("2 — الأعمدة: رأسية وتسليح وتقويات")}
+						pText={Text.Body.OfText("أي انحراف في الأبعاد أو الرأسية أو التسليح أو الكانات قد ينعكس على سلامة الدور التالي وشكل الفراغات وتشطيب الحوائط.")}
+					/>
+
+				</GlassCard>
+
+			</DuoCol>
+
+			<DuoCol
+				pBgColor={new ElemBg(Colors.WhiteOff)}
+				pPad={new Pixel(32, 18)}
+				pAlign="Start"
+			>
+
+				<EmoList
+					pWidth={new RespString("100%", "100%")}
+					pTitle={Text.H3.Centered.OfText("زيارات واستلامات الأعمدة")}
+					pDesc={Text.Body.Centered.OfText("التركيز هنا على مواقع الحطات، الرأسية، أبعاد القطاع، كثافة التسليح، الكانات، التقويات، وجودة الصب.")}
+					pHeadBg={new ElemBg(cMint)}
+					pItemsBg={new ElemBg(Colors.WhiteOff)}
+					pNumbered={true}
+					pItems={[
+							{ Title: "متابعة بداية النجارة والحدادة", Items: [
+								"استلام حطات الأعمدة السفلية والتأكد من صحة مواقع وأبعاد الأعمدة كنجارة.",
+								"استلام قطعيات الحديد للأعمدة وقطاعات الكانات قبل التركيب."
+							] },
+							{ Title: "متابعة الحطة العلوية وحدادة الأعمدة", Items: [
+								"استلام الحطة العلوية مع ثلاث أجناب نجارة وضبط الأبعاد والرأسية.",
+								"استلام حدادة الأعمدة بعد التركيب والتأكد من مطابقة التسليح للرسومات."
+							] },
+							{ Title: "استلام اليوم السابق للصب", Items: [
+								"استلام نجارة الأعمدة بعد تقفيل الجنب الرابع ومراجعة الرأسية.",
+								"مراجعة التقويات وجاهزية الأعمدة للصب."
+							] },
+							{ Title: "متابعة صب الأعمدة", Items: [
+								"التحقق من جودة الخرسانة وطريقة الصب لتقليل العيوب بعد فك الشدات."
+							] }
+						]}
+				/>
+
+			</DuoCol>
+
+		</DuoSec>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="Slabs"
+		pBg={new ElemBg(cDark)}
+		pAlign={Align.Center}
+	>
+
+		<BlurBlob
+			pLoc={new Loc(new NumPer("calc(100% - 340px)", "calc(100% - 220px)"), new NumPer(45, 40))}
+			pSize={new DirectSize(new NumPer(280, 180), new NumPer(180, 130))}
+			pZ={1}
+			pOpacity={new Percent(55, 40)}
+			pColor="rgba(50,143,232,.55)"
+			pColor2="rgba(215,245,140,.32)"
+		/>
+
+		<DuoSec
+			pBg={new ElemBg("transparent")}
+			pContentSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+			pGap={new Pixel(28, 16)}
+			pPad={new Pixel(72, 34)}
+		>
+
+			<DuoCol
+				pBgColor={new ElemBg("rgba(255,255,255,.08)")}
+				pPad={new Pixel(36, 20)}
+				pAlign="Start"
+				pBlur={new Pixel(10)}
+			>
+
+				<Emograph
+					pTitle={Text.H2.Bistage.OfText("3 — السقف: أكثر مرحلة تتداخل فيها التفاصيل")}
+					pText={Text.Body.White.OfText("السقف يجمع النجارة والحدادة والفتحات والمناسيب والتقويات، وغالبًا يكون أكثر مرحلة تظهر فيها نتائج ضعف التخطيط أو الاستعجال. لذلك تتم متابعته على خطوات قبل يوم الصب.")}
+				/>
+
+				<RespImg
+					pImg={new EmoMediaData("Img", cMedia, "SlabLevel.webp", false, "استلام أعمال السقف", new Size("100%", "auto", "100%", "auto"))}
+				/>
+
+			</DuoCol>
+
+			<DuoCol
+				pBgColor={new ElemBg(Colors.WhiteOff)}
+				pPad={new Pixel(32, 18)}
+				pAlign="Start"
+			>
+
+				<EmoList
+					pWidth={new RespString("100%", "100%")}
+					pTitle={Text.H3.Centered.OfText("زيارات واستلامات السقف")}
+					pDesc={Text.Body.Centered.OfText("تتابع زيارات السقف من بداية النجارة والحدادة حتى الصب حتى لا تظهر الملاحظات في آخر لحظة.")}
+					pHeadBg={new ElemBg(cSky)}
+					pItemsBg={new ElemBg(Colors.WhiteOff)}
+					pNumbered={true}
+					pItems={[
+							{ Title: "متابعة البداية", Items: [
+								"استلام منسوب النجارة لتدارك الأخطاء مبكرًا.",
+								"استلام قطعيات الحديد للكمرات وقطاعات الكانات قبل التركيب."
+							] },
+							{ Title: "متابعة النجارة والطبقة الأولى", Items: [
+								"استلام حدود وأبعاد النجارة للسقف والكمرات إن وجدت.",
+								"استلام الطبقة الأولى من الحدادة والتأكد من مطابقة التسليح للرسومات."
+							] },
+							{ Title: "استلام اليوم السابق للصب", Items: [
+								"استلام تقويات نجارة السقف استعدادًا للصب.",
+								"استلام الطبقة الثانية من الحدادة إن وجدت ومراجعة مطابقتها للرسومات."
+							] },
+							{ Title: "متابعة الصب", Items: [
+								"التحقق من جودة الخرسانة وتنفيذ الصب طبقًا لأصول الصناعة لتقليل العيوب والثغرات الظاهرة."
+							] }
+						]}
+				/>
+
+			</DuoCol>
+
+		</DuoSec>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="DecisionMatrix"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${cAmber};`}
+			pTitle="اختيار نظام الإشراف"
+			pDesc="نظام الزيارة يناسب الاستلامات المحددة، أما المتابعة الدورية أو النسبة فتناسب المواقع الأسرع أو الأكثر تداخلًا. المهم أن يكون النظام مناسبًا لسرعة الموقع لا مجرد رقم زيارات ثابت."
+		/>
+
+		<EmoStrip
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+			pAlign={Align.Center}
+		>
+
+			<Grid
+				pMax={4}
+				pMaxP={1}
+				pGap={new Pixel(20, 16)}
+				pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+				Centered
+			>
+
+				<BadgeFrame
+					pBadge="زيارة"
+					pBg={cSky}
+					pBadgeBg={Colors.WhiteOff}
+					pColor={cInk}
+				>
+
+					<Emograph
+						pTitle={Text.H3.DarkSky.OfText("نظام الزيارة")}
+						pText={Text.Body.OfText("مناسب لاستلامات واضحة مثل الحفر، المحاور، النجارة، الحدادة، والصب عندما يمكن تحديد موعد الاستلام بدقة.")}
+					/>
+
+				</BadgeFrame>
+
+				<BadgeFrame
+					pBadge="دوري"
+					pBg={Colors.Gray1}
+					pBadgeBg={cMint}
+					pColor={cInk}
+				>
+
+					<Emograph
+						pTitle={Text.H3.OfText("متابعة دورية")}
+						pText={Text.Body.OfText("مناسبة للمشروعات التي تتحرك بسرعة أو يتزامن فيها أكثر من بند، بعدد زيارات أسبوعية ثابت أو قابل للزيادة.")}
+					/>
+
+				</BadgeFrame>
+
+				<BadgeFrame
+					pBadge="نسبة"
+					pBg={Colors.Creamy}
+					pBadgeBg={cAmber}
+					pColor={cInk}
+				>
+
+					<Emograph
+						pTitle={Text.H3.OrangeDark.OfText("نظام النسبة")}
+						pText={Text.Body.OfText("مناسب عندما يتداخل الإشراف مع متابعة مستمرة وتنسيق أكبر، وتقدر الأتعاب كنسبة من تكلفة الأعمال خامات ومصنعيات.")}
+					/>
+
+				</BadgeFrame>
+
+				<BadgeFrame
+					pBadge="مقيم"
+					pBg={cDark}
+					pBadgeBg={cMint}
+					pColor={Colors.WhiteOff}
+				>
+
+					<Emograph
+						pTitle={Text.H3.White.OfText("مهندس مقيم")}
+						pText={Text.Body.White.OfText("مناسب للمشروعات الكبيرة أو الحساسة التي تتطلب وجودًا يوميًا، وهو نطاق مختلف عن إشراف الزيارات.")}
+					/>
+
+				</BadgeFrame>
+
+			</Grid>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="Pricing"
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${Colors.Gray5};`}
+			pTitle="أتعاب الإشراف الهندسي على البناء"
+			pDesc="الأرقام التالية نقطة بداية للتسعير، والسعر النهائي يتثبت بعد معرفة الموقع والمساحة وعدد مراحل الاستلام وسرعة التنفيذ وحالة الرسومات."
+		/>
+
+		<EmoStrip
+			pBg={new ElemBg(Colors.Gray1)}
+			pSize={new DirectSize(new NumPer("min(1120px, calc(100% - 24px))"), new NumPer("auto"))}
+			pAlign={Align.Center}
+		>
+
+			<HzStack pGap={new Pixel(24, 16)} pPad={new Pixel(0)}>
+
+				<PriceCard
+					pCaption={Text.H4.White.Bold.OfText("زيارة إشراف محددة")}
+					pStart={Text.H3.Bold.OfText("تبدأ من")}
+					pPrice={2000}
+					pCurrency={Text.H3.Bold.OfText("جنيه")}
+					pSize={new DirectSize(new NumPer(420, 320), new NumPer(130, 105))}
+					data-own-size
+				/>
+
+				<PriceCard
+					pCaption={Text.H4.White.Bold.OfText("متابعة دورية لأعمال البناء")}
+					pStart={Text.H3.Bold.OfText("نسبة")}
+					pPrice={3}
+					pCurrency={Text.H3.Bold.OfText("%")}
+					pSize={new DirectSize(new NumPer(420, 320), new NumPer(130, 105))}
+					data-own-size
+				/>
+
+			</HzStack>
+
+			<CardsGr
+				pWidth={new RespString("100%", "100%")}
+				pCardBg={new ElemBg(Colors.WhiteOff)}
+				pCardTitleFnt={Text.H4.Centered}
+				pCardBodyFnt={Text.Body.Centered}
+				pTopic1={new Topic("ما الذي يغير السعر؟", "موقع المشروع، المساحة، عدد الأدوار، سرعة التنفيذ، تداخل البنود، حالة الرسومات، خبرة المقاول، وعدد مرات إعادة الاستلام.")}
+				pTopic2={new Topic("الزيارة الواحدة ليست غطاءً كاملًا", "يمكن طلب زيارة واحدة قبل الصب، لكنها تغطي مرحلة محددة فقط ولا تعني استلام كل ما سبق أو ما سيأتي.")}
+				pTopic3={new Topic("النسبة تحتاج تعريف نطاق", "قبل الاتفاق يجب تحديد هل تشمل تقارير، مراجعة مستخلصات، حضور صب، أو مهام إضافية.")}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<DuoSec
+		id="BeforeStart"
+		pBg={new ElemBg(Colors.Creamy)}
+		pContentSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+		pGap={new Pixel(28, 16)}
+		pPad={new Pixel(70, 34)}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${cMint};`}
+			pTitle="قبل أول زيارة: جهّز أساس الاستلام"
+			pDesc="الزيارة المؤثرة لا تكون مشاهدة عامة للموقع، بل مراجعة على رسومات ومعلومات واضحة وفي توقيت يسمح بعلاج الملاحظة قبل الصب أو الإغلاق."
+		/>
+
+		<DuoCol
+			pBgColor={new ElemBg(Colors.WhiteOff)}
+			pPad={new Pixel(34, 20)}
+			pAlign="Start"
+		>
+
+			<EmoList
+				pWidth={new RespString("100%", "100%")}
+				pTitle={Text.H3.DarkSky.OfText("مستندات ورسومات")}
+				pDesc={Text.Body.OfText("وجود مستندات ناقصة يجعل الاستلام تقديريًا، بينما الرسومات الواضحة تجعل الملاحظة قابلة للإثبات.")}
+				pHeadBg={new ElemBg(cSky)}
+				pItemsBg={new ElemBg(Colors.WhiteOff)}
+				pItems={[
+						"رسومات معمارية وإنشائية واضحة وحديثة للمشروع.",
+						"تفاصيل الأساسات والأعمدة والأسقف والتسليح حسب المرحلة.",
+						"أي تعديلات تمت على الرسومات أو قرارات موقعة من المصمم.",
+						"تقرير تربة أو بيانات دك أو مناسيب إن كانت متاحة.",
+						"رخصة أو مستندات موقع عند ارتباط الإشراف بإجراءات رسمية.",
+						"بيانات المقاول أو مهندس الموقع المسؤول عن التنسيق."
+					]}
+			/>
+
+		</DuoCol>
+
+		<DuoCol
+			pBgColor={new ElemBg(Colors.WhiteOff)}
+			pPad={new Pixel(34, 20)}
+			pAlign="Start"
+		>
+
+			<EmoList
+				pWidth={new RespString("100%", "100%")}
+				pTitle={Text.H3.OrangeDark.OfText("تنظيم الزيارة")}
+				pDesc={Text.Body.OfText("الزيارة الناجحة تحتاج توقيتًا مناسبًا؛ لا تأتي بعد انتهاء المرحلة ولا قبل وجود عمل كافٍ للاستلام.")}
+				pHeadBg={new ElemBg(cAmber)}
+				pItemsBg={new ElemBg(Colors.WhiteOff)}
+				pItems={[
+						"إبلاغ المهندس قبل موعد الصب أو إغلاق البند بوقت كافٍ.",
+						"عدم صب أي عنصر قبل استلام النجارة والحدادة طبقًا للاتفاق.",
+						"تجهيز العمالة المسؤولة لشرح ما تم تنفيذه والإجابة عن الملاحظات.",
+						"توفير متر وميزان وخيط وأدوات قياس أساسية في الموقع.",
+						"تحديد المطلوب من الزيارة: استلام، مراجعة، حل مشكلة، أو متابعة صب.",
+						"إتاحة صور أو فيديوهات للمرحلة السابقة عند وجود متابعة عن بعد بين الزيارات."
+					]}
+			/>
+
+		</DuoCol>
+
+	</DuoSec>
+
+
+
+
+
+
+
+	<ESec
+		id="Mistakes"
+		pBg={new ElemBg(cDark)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${cAmber};`}
+			pTitle="أخطاء شائعة يكشفها الإشراف قبل أن تكبر"
+			pDesc="القائمة دي عملية وليست نظرية: أخطاء تتكرر في مواقع البناء عندما يغيب الاستلام الفني أو يتم الاعتماد على خبرة الصنايعي وحدها."
+		/>
+
+		<EmoStrip
+			pBg={new ElemBg("transparent")}
+			pSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+			pAlign={Align.Center}
+		>
+
+			<Grid
+				pMax={3}
+				pMaxP={1}
+				pGap={new Pixel(22, 16)}
+				pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+				Centered
+			>
+
+				<GlassCard pBg="rgba(255,255,255,.10)" pBorder="rgba(255,255,255,.22)">
+
+					<Emograph
+						pTitle={Text.H3.Bistage.OfText("محاور غير مضبوطة")}
+						pText={Text.Body.White.OfText("خطأ صغير في توقيع المحاور قد يغير علاقة الأعمدة بالحوائط والفتحات ويظهر لاحقًا في التشطيب والواجهات.")}
+					/>
+
+				</GlassCard>
+
+				<GlassCard pBg="rgba(255,255,255,.10)" pBorder="rgba(255,255,255,.22)">
+
+					<Emograph
+						pTitle={Text.H3.Bistage.OfText("تقويات نجارة ضعيفة")}
+						pText={Text.Body.White.OfText("النجارة غير المقواة قد تتحرك أثناء الصب فتظهر كرش أو ميل أو تغير في أبعاد العنصر بعد فك الشدة.")}
+					/>
+
+				</GlassCard>
+
+				<GlassCard pBg="rgba(255,255,255,.10)" pBorder="rgba(255,255,255,.22)">
+
+					<Emograph
+						pTitle={Text.H3.Bistage.OfText("تسليح غير مطابق")}
+						pText={Text.Body.White.OfText("نقص عدد الأسياخ أو اختلاف الأقطار أو تباعد الكانات أو سوء الرباط قد يضعف العنصر أو يفرض علاجًا مكلفًا.")}
+					/>
+
+				</GlassCard>
+
+				<GlassCard pBg="rgba(255,255,255,.10)" pBorder="rgba(255,255,255,.22)">
+
+					<Emograph
+						pTitle={Text.H3.Bistage.OfText("قشاير في غير مكانها")}
+						pText={Text.Body.White.OfText("قشاير الأعمدة وبادئ السلم إذا لم تُراجع قبل الصب قد تسبب تكسيرًا أو تعديلات غير آمنة في المرحلة التالية.")}
+					/>
+
+				</GlassCard>
+
+				<GlassCard pBg="rgba(255,255,255,.10)" pBorder="rgba(255,255,255,.22)">
+
+					<Emograph
+						pTitle={Text.H3.Bistage.OfText("خرسانة أو صب عشوائي")}
+						pText={Text.Body.White.OfText("غياب متابعة الصب قد يؤدي لتعشيش أو فراغات أو فواصل صب غير مناسبة أو سطح نهائي ضعيف يحتاج معالجة.")}
+					/>
+
+				</GlassCard>
+
+				<GlassCard pBg="rgba(255,255,255,.10)" pBorder="rgba(255,255,255,.22)">
+
+					<Emograph
+						pTitle={Text.H3.Bistage.OfText("تعديلات بدون مصمم")}
+						pText={Text.Body.White.OfText("بعض قرارات الموقع تبدو بسيطة لكنها قد تؤثر على المسار الإنشائي للأحمال، ويجب تمييزها قبل اعتمادها.")}
+					/>
+
+				</GlassCard>
+
+			</Grid>
+
+		</EmoStrip>
+
+		<WaveBottom
+			pLoc={new Loc(new NumPer(0), new NumPer("calc(100% - 95px)", "calc(100% - 70px)"))}
+			pSize={new DirectSize(new NumPer("100%"), new NumPer(95, 70))}
+			pZ={2}
+			pFill={Colors.Gray1}
+			pFill2="rgba(215,245,140,.24)"
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<DuoSec
+		id="ReportsAndLimits"
+		pBg={new ElemBg(Colors.Gray1)}
+		pContentSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+		pGap={new Pixel(28, 16)}
+		pPad={new Pixel(70, 34)}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${cSky};`}
+			pTitle="الملاحظة المفيدة وحدود المسؤولية"
+			pDesc="الإشراف بنظام الزيارة لا يعني وجود المهندس في كل دقيقة تنفيذ، لكنه يعني استلام أو مراجعة مرحلة محددة في توقيت محدد بناءً على ما ظهر في الموقع والرسومات المتاحة."
+		/>
+
+		<DuoCol
+			pBgColor={new ElemBg(Colors.WhiteOff)}
+			pPad={new Pixel(34, 20)}
+			pAlign="Start"
+		>
+
+			<CardsGr
+				pWidth={new RespString("100%", "100%")}
+				pCardBg={new ElemBg(cSky)}
+				pCardTitleFnt={Text.H4.Centered}
+				pCardBodyFnt={Text.Body.Centered}
+				pTopic1={new Topic("تحديد المرحلة", "هل الملاحظة في الحفر، المحاور، نجارة القواعد، حدادة الأعمدة، نجارة السقف، أو الصب؟")}
+				pTopic2={new Topic("ربطها بالرسومات", "كلما أمكن، يتم ربط الملاحظة باللوحة أو القطاع أو التفصيلة المخالفة أو محل المراجعة.")}
+				pTopic3={new Topic("تحديد الإجراء", "قبول، تعديل، إعادة تنفيذ، أو رجوع للمصمم قبل القرار.")}
+				pTopic4={new Topic("توقيت المتابعة", "بعد العلاج قد يحتاج البند إلى زيارة ثانية أو صورة متابعة أو تأجيل الصب.")}
+			/>
+
+		</DuoCol>
+
+		<DuoCol
+			pBgColor={new ElemBg(Colors.WhiteOff)}
+			pPad={new Pixel(34, 20)}
+			pAlign="Start"
+		>
+
+			<EmoList
+				pWidth={new RespString("100%", "100%")}
+				pTitle={Text.H3.DarkSky.OfText("حدود مسؤولية كل طرف")}
+				pDesc={Text.Body.OfText("توضيح الحدود يحمي العميل والمهندس والمقاول ويمنع تحويل زيارة واحدة إلى مسؤولية مطلقة على كل ما لم يظهر للمشرف.")}
+				pHeadBg={new ElemBg(cSky)}
+				pItemsBg={new ElemBg(Colors.WhiteOff)}
+				pItems={[
+						"المهندس يراجع الأعمال الظاهرة وقت الزيارة على أساس الرسومات المتاحة.",
+						"المهندس يوجه للملاحظات المؤثرة ويرفض أو يؤجل الصب عند وجود مخالفة جوهرية داخل نطاق الاستلام.",
+						"المالك والمقاول مسؤولان عن إخطار المهندس قبل الصب وتوفير الرسومات الحديثة.",
+						"الزيارة لا تكون بديلًا عن مهندس مقيم إذا كان المشروع يحتاج حضورًا يوميًا.",
+						"التغييرات الجوهرية لا تنفذ دون رسومات أو موافقة فنية واضحة."
+					]}
+			/>
+
+		</DuoCol>
+
+	</DuoSec>
+
+
+
+
+
+
+
+	<ESec
+		id="Compare"
+		pBg={new ElemBg(Colors.Creamy)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			style = {`--StripBg:${cMint};`}
+			pTitle="إشراف البناء غير إشراف التشطيبات"
+			pDesc="فصل الخدمتين مقصود؛ لأن طريقة الخطر وطريقة الاستلام مختلفة. الهيكل الخرساني أخطاؤه غالبًا مخفية ومكلفة، أما التشطيبات فأخطاؤها أكثر ظهورًا لكنها مؤثرة في الجودة والتشغيل والصيانة."
+		/>
+
+		<EmoStrip
+			pBg={new ElemBg(Colors.Creamy)}
+			pSize={new DirectSize(new NumPer("min(1120px, calc(100% - 24px))"), new NumPer("auto"))}
+			pAlign={Align.Center}
+		>
+
+			<CardsGr
+				pWidth={new RespString("100%", "100%")}
+				pCardBg={new ElemBg(Colors.WhiteOff)}
+				pCardTitleFnt={Text.H4.Centered}
+				pCardBodyFnt={Text.Body.Centered}
+				pTopic1={new Topic("إشراف البناء", "الحفر، المحاور، الأساسات، الأعمدة، الأسقف، الخرسانة، التسليح، والنجارة المسلحة.")}
+				pTopic2={new Topic("إشراف التشطيبات", "المحارة، العزل، السباكة، الكهرباء، الأرضيات، الدهانات، الألوميتال، والنجارة النهائية.")}
+				pTopic3={new Topic("نقطة الاختلاف", "في البناء قد تختفي المشكلة داخل الخرسانة. في التشطيبات تظهر المشكلة في الشكل أو التشغيل أو الصيانة.")}
+			/>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoFaq>
+
+		<FaqItem
+			pQuestion="هل يمكن طلب زيارة واحدة فقط قبل الصب؟"
+			pAnswer="نعم، لكن زيارة واحدة لا تكفي لتغطية كل مراحل التنفيذ. يمكن طلب زيارة استلام محددة مثل استلام حدادة سقف أو استلام أساسات، بشرط توفر الرسومات وإخطار المهندس قبل الصب بوقت يسمح بعلاج الملاحظات."
+		/>
+
+		<FaqItem
+			pQuestion="هل وجود المقاول يغني عن المهندس المشرف؟"
+			pAnswer="لا. المقاول جهة تنفيذ، أما المهندس المشرف فيراجع التنفيذ من زاوية مطابقة الرسومات والمواصفات وحماية مصلحة المالك. الجمع بين التنفيذ والرقابة دون فصل يضعف جودة الاستلام."
+		/>
+
+		<FaqItem
+			pQuestion="هل الإشراف يشمل تعديل التصميم؟"
+			pAnswer="الإشراف لا يعني إعادة التصميم. إذا ظهر تعارض أو خطأ تصميمي أو طلب تعديل جوهري، يتم الرجوع للمصمم أو الاتفاق على خدمة مراجعة أو تعديل تصميم منفصلة."
+		/>
+
+		<FaqItem
+			pQuestion="متى يجب حجز زيارة الاستلام؟"
+			pAnswer="يفضل حجز الزيارة قبل موعد الصب أو الإغلاق بوقت كافٍ، لأن اكتشاف الملاحظات وقت وصول الخرسانة يضع الموقع تحت ضغط وقد يؤدي إلى قرارات غير مناسبة."
+		/>
+
+		<FaqItem
+			pQuestion="هل يمكن الإشراف بالصور والفيديو فقط؟"
+			pAnswer="المتابعة عن بعد قد تساعد بين الزيارات، لكنها لا تعوض زيارة الاستلام في البنود الحساسة مثل المحاور والحدادة والتقويات والصب، لأن القياس والمعاينة الميدانية أدق."
+		/>
+
+		<FaqItem
+			pQuestion="هل السعر ثابت لكل المشاريع؟"
+			pAnswer="السعر المبدئي للزيارة 2000 جنيه، لكن التكلفة النهائية تتأثر بموقع المشروع ومساحته وعدد الزيارات وسرعة التنفيذ وتعقيد المرحلة وحالة الرسومات."
+		/>
+
+		<FaqItem
+			pQuestion="هل نسبة 3% تشمل كل شيء؟"
+			pAnswer="النسبة تخص نموذج متابعة دورية لأعمال البناء بمعدل زيارات متكرر. يجب تحديد ما إذا كانت تشمل تقارير، مراجعة مستخلصات، حضور صب، أو مهام إضافية قبل الاتفاق."
+		/>
+
+		<FaqItem
+			pQuestion="هل يتم إصدار تقرير بعد الزيارة؟"
+			pAnswer="يمكن الاتفاق على توثيق الملاحظات بعد الزيارة، خاصة في المراحل الحساسة أو عند وجود نزاع مع المقاول. شكل التقرير ومستوى تفصيله يحددان ضمن نطاق الخدمة."
+		/>
+
+		<FaqItem
+			pQuestion="هل الإشراف يمنع كل الأخطاء؟"
+			pAnswer="الإشراف يقلل المخاطر ويكشف الأخطاء في توقيتها، لكنه لا يلغي مسؤولية المقاول عن التنفيذ ولا يغني عن رسومات صحيحة ولا عن التزام المالك بعدم السماح بالصب قبل الاستلام."
+		/>
+
+		<FaqItem
+			pQuestion="ما الفرق بين إشراف الزيارة والمهندس المقيم؟"
+			pAnswer="إشراف الزيارة يغطي مراحل محددة في توقيتات محددة. المهندس المقيم يتواجد بالموقع بصورة مستمرة ويتابع التفاصيل اليومية، وهذا مناسب للمشاريع الأكبر أو الأسرع أو الأكثر تعقيدًا."
+		/>
+
+		<FaqItem
+			pQuestion="هل يمكن بدء الإشراف بعد تنفيذ الأساسات؟"
+			pAnswer="يمكن البدء من أي مرحلة، لكن ما تم تنفيذه سابقًا لا يمكن استلامه بنفس درجة اليقين إذا أصبح مخفيًا أو مصبوبًا. في هذه الحالة تكون البداية مراجعة حالة قائمة لا استلامًا كاملًا لما سبق."
+		/>
+
+		<FaqItem
+			pQuestion="هل الإشراف مطلوب للفيلا الصغيرة أو المنزل الخاص؟"
+			pAnswer="نعم، لأن تكلفة الخطأ في منزل صغير قد تكون مؤثرة جدًا على المالك. صغر المشروع لا يعني أن أعمال الحفر والتسليح والصب يمكن تركها بلا مراجعة فنية."
+		/>
+
+	</EmoFaq>
 
 
 

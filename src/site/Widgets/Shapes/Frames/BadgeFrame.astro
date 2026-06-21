@@ -7,14 +7,119 @@ const { pBadge = "NEW", pBg = "#FAFAFA", pBadgeBg = "#A7C45C", pColor = "#111111
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
 const cPlace = new Place(Astro.props as PlaceProps, `--BadgeFrameBg:${pBg}; --BadgeFrameColor:${pColor}; --BadgeBg:${pBadgeBg}; ${cGivenStyle}`);
 ---
-<article class={`BadgeFrame ${cPlace.Class} ${pGivenClass}`.trim()} style={cPlace.Style} id={pGivenID} {...RemAttr}>
-	<span class="BadgeText">{pBadge}</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<article
+	class = {`BadgeFrame ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+
+
+
+
+
+
+	<span class = " BadgeText ">
+		{pBadge}
+	</span>
+
+
+
+
+
+
+
 	<slot />
+
+
+
+
+
+
+
 </article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <style>
-	.BadgeFrame { position: relative; display: flex; flex-direction: column; justify-content: center; width: 100%; height: auto; padding: clamp(22px, 3vw, 40px); padding-top: clamp(34px, 4vw, 54px); border-radius: 26px; background: var(--BadgeFrameBg); color: var(--BadgeFrameColor); box-shadow: 0 22px 50px rgba(0,0,0,.16); box-sizing: border-box; }
-	.BadgeText { position: absolute; top: 0; inset-inline-start: clamp(20px, 3vw, 42px); translate: 0 -50%; display: inline-flex; align-items: center; justify-content: center; min-width: 86px; padding: 8px 18px; border-radius: 999px; background: var(--BadgeBg); color: #111111; font-weight: 900; box-shadow: 0 12px 24px rgba(0,0,0,.18); }
-.BadgeFrame.IsPlaced {
+
+
+
+	.BadgeFrame {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		width: 100%;
+		height: auto;
+		padding: clamp(22px, 3vw, 40px);
+		padding-top: clamp(34px, 4vw, 54px);
+		border-radius: 26px;
+		background: var(--BadgeFrameBg);
+		color: var(--BadgeFrameColor);
+		box-shadow: 0 22px 50px rgba(0,0,0,.16);
+		box-sizing: border-box;
+	}
+
+
+	.BadgeText {
+		position: absolute;
+		top: 0;
+		inset-inline-start: clamp(20px, 3vw, 42px);
+		translate: 0 -50%;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 86px;
+		padding: 8px 18px;
+		border-radius: 999px;
+		background: var(--BadgeBg);
+		color: #ebebeb;
+		font-weight: 900;
+		box-shadow: 0 12px 24px rgba(0,0,0,.18);
+	}
+
+
+
+	.BadgeFrame.IsPlaced {
 		position: absolute;
 		left: var(--PlaceXL);
 		top: var(--PlaceYL);
@@ -29,6 +134,33 @@ const cPlace = new Place(Astro.props as PlaceProps, `--BadgeFrameBg:${pBg}; --Ba
 		box-sizing: border-box;
 	}
 
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
 	@media (orientation: portrait) {
 		.BadgeFrame.IsPlaced {
 			left: var(--PlaceXP);
@@ -39,4 +171,7 @@ const cPlace = new Place(Astro.props as PlaceProps, `--BadgeFrameBg:${pBg}; --Ba
 			transform: rotate(var(--PlaceRotateP, var(--PlaceRotateL, 0deg)));
 		}
 	}
+
+
+
 </style>

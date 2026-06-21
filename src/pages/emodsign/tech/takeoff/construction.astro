@@ -2,6 +2,34 @@
 import BLayout from "@/Layout.astro";
 import { Text, Topic, ElemBg, EmoMediaData, RespString, Pixel, Size, Align } from "@/TypesLib";
 import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, EmoBtn, EmoFaq, ReadAlso, RelServices, SecTitle, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+
+import {NumPer,	Loc,Location,DirectSize,Percent} from "@/TypesLib";
+import {FreeHero,FreeHeroItem,VrStack,Grid,	DuoSec,	DuoCol} from "@/Widgets";
+import {GlassCard,FloatingPanel,TiltCard,BadgeFrame,LinePath,SvgDots,BlurBlob,Ribbon,SoftArc,DiagonalBottom} from "@/Widgets/Shapes";
+
+const cHeroFolder = "/Media/Emodsign/Tech/Takeoff/Construction/";
+const cTakeoffFolder = "/Media/Emodsign/Tech/Takeoff/";
+
+const cInk = "#111318";
+const cDark = "#0E1118";
+const cDark2 = "#151923";
+const cCream = "#F7F1E6";
+const cPaper = "#FFF9ED";
+const cGold = "#D9B86C";
+const cGold2 = "#E7D3A1";
+const cSteel = "#87A8B5";
+const cConcrete = "#C9C2B4";
+const cRust = "#B66A43";
+
+const MakeLoc = (pXL: number | string, pXP: number | string, pYL: number | string, pYP: number | string) =>
+	new Loc(new NumPer(pXL, pXP), new NumPer(pYL, pYP));
+
+const MakePlaceSize = (pWL: number | string, pWP: number | string, pHL: number | string = "auto", pHP: number | string = pHL) =>
+	new DirectSize(new NumPer(pWL, pWP), new NumPer(pHL, pHP));
+
+const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | string, pHP: number | string) =>
+	new Size(pWL, pHL, pWP, pHP);
+
 ---
 
 
@@ -33,6 +61,890 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 		"https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&fm=jpg&q=70&w=1600"
 	]}
 >
+
+
+
+
+
+
+
+	<FreeHero pImgF={cHeroFolder}>
+
+		<FreeHeroItem
+			style = " background : linear-gradient(90deg, rgba(8,10,14,.94) 0%, rgba(14,17,24,.82) 42%, rgba(14,17,24,.28) 100%) "
+			pLoc={new Location(0, 0, 0, 0)}
+			pSize={MakeHeroSize("100%", "100%", "100%", "100%")}
+			pFit={true}
+			pPointer={false}
+			pZ={1}
+		/>
+
+		<FreeHeroItem
+			pLoc={new Location("4%", "-18%", "8%", "9%")}
+			pSize={MakeHeroSize(520, 520, 520, 520)}
+			pZ={2}
+			pPointer={false}
+		>
+
+			<BlurBlob
+				pColor="rgba(217,184,108,.35)"
+				pColor2="rgba(135,168,181,.28)"
+				pBlur={34}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			pLoc={new Location("52%", "5%", "13%", "18%")}
+			pSize={MakeHeroSize(620, 220, 320, 150)}
+			pZ={2}
+			pFit={true}
+			pPointer={false}
+		>
+
+			<LinePath
+				pStroke="rgba(231,211,161,.55)"
+				pDot="rgba(255,249,237,.86)"
+				pWidth={3}
+			/>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			pLoc={new Location("7%", "6%", "15%", "10%")}
+			pSize={MakeHeroSize("46%", "auto", "88%", "auto")}
+			pZ={5}
+		>
+
+			<GlassCard
+				pBg="rgba(247,241,230,.86)"
+				pBorder="rgba(255,255,255,.48)"
+				pRadius={34}
+				pBlur={18}
+			>
+
+				<VrStack pGap={new Pixel(20, 14)} pPad={new Pixel(0)}>
+
+					<Emograph
+						pTitle={Text.H1.WithColor(cInk).OfText("خدمات الحصر الهندسي لأعمال البناء الخرسانية")}
+						pText={Text.Body.WithColor("#30343B").OfText("نحوّل رسومات المشروع ومواصفاته إلى جداول كميات واضحة للخرسانة والحديد والحفر والردم والشدات، بحيث يصبح قرار التسعير والتعاقد مبنيًا على أرقام قابلة للمراجعة لا على تقدير عام.")}
+						pSize={new Size("100%", "auto", "100%", "auto")}
+					/>
+
+					<HzStack
+						pGap={new Pixel(14, 10)}
+						pPad={new Pixel(0)}
+						pForceHz={true}
+					>
+
+						<EmoCall
+							BlackSky
+							pText="اطلب حصر الخرسانات"
+							pWidth="230px"
+							pHeight="54px"
+						/>
+
+						<EmoBtn
+							pText="شاهد نطاق الحصر"
+							pBgColor={cGold2}
+							pBgColorHover={cPaper}
+							pTextColor={cInk}
+							pWidth="210px"
+							pHeight="54px"
+							onclick="location.href='#scope-map'"
+						/>
+
+					</HzStack>
+
+				</VrStack>
+
+			</GlassCard>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			pLoc={new Location("59%", "10%", "40%", "58%")}
+			pSize={MakeHeroSize(430, 310, 290, 230)}
+			pZ={4}
+		>
+
+			<FloatingPanel
+				pBg="rgba(14,17,24,.88)"
+				pBorder="rgba(231,211,161,.26)"
+				pAccent={cGold}
+			>
+
+				<VrStack pGap={new Pixel(18, 12)} pPad={new Pixel(0)}>
+
+					<Emograph
+						pTitle={Text.H3.WithColor(cGold2).OfText("BOQ Control Board")}
+						pText={Text.Body.WithColor("#F8F4EA").OfText("كل بند يخرج بوحدة قياس، مصدر من اللوحة، ملاحظات قياس، وكمية قابلة للتسعير أو المراجعة.")}
+						pSize={new Size("100%", "auto", "100%", "auto")}
+					/>
+
+					<Grid
+						pMax={2}
+						pMaxP={2}
+						pGap={new Pixel(12, 10)}
+						pPad={new Pixel(0)}
+					>
+
+						<BadgeFrame
+							pBadge="m³"
+							pBg="rgba(255,249,237,.96)"
+							pBadgeBg={cConcrete}
+							pColor={cInk}
+						>
+
+							<Emograph pTitle={Text.H5.Centered.OfText("خرسانة")} pText={Text.Body.Centered.OfText("قواعد · أعمدة · كمرات")} />
+
+						</BadgeFrame>
+
+						<BadgeFrame
+							pBadge="kg"
+							pBg="rgba(255,249,237,.96)"
+							pBadgeBg={cRust}
+							pColor={cInk}
+						>
+
+							<Emograph pTitle={Text.H5.Centered.OfText("حديد")} pText={Text.Body.Centered.OfText("أقطار · أطوال · أوزان")} />
+
+						</BadgeFrame>
+
+					</Grid>
+
+				</VrStack>
+
+			</FloatingPanel>
+
+		</FreeHeroItem>
+
+		<FreeHeroItem
+			pLoc={new Location("67%", "62%", "18%", "82%")}
+			pSize={MakeHeroSize(260, 62, 190, 54)}
+			pZ={6}
+			pRot={new RespString("-4deg", "3deg")}
+		>
+
+			<Ribbon
+				pText="Concrete Takeoff"
+				pBg={cGold2}
+				pColor={cInk}
+			/>
+
+		</FreeHeroItem>
+
+	</FreeHero>
+
+
+
+
+
+
+
+	<IndexSec
+		pMedia={new EmoMediaData("Img", cHeroFolder, "HeroL.webp", false, "خلفية حصر أعمال البناء الخرسانية")}
+		pTitleClr="#ffffff"
+		pBlurL="on"
+		pBlurP="on"
+	>
+
+		<EmoBtn
+			pText="تعريف الحصر"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor="#ffffff"
+			pTextColorHover={cInk}
+			pWidth="250px"
+			pHeight="44px"
+			onclick="location.href='#takeoff-meaning'"
+		/>
+
+		<EmoBtn
+			pText="المستندات"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor="#ffffff"
+			pTextColorHover={cInk}
+			pWidth="250px"
+			pHeight="44px"
+			onclick="location.href='#documents'"
+		/>
+
+		<EmoBtn
+			pText="خريطة البنود"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor="#ffffff"
+			pTextColorHover={cInk}
+			pWidth="250px"
+			pHeight="44px"
+			onclick="location.href='#scope-map'"
+		/>
+
+		<EmoBtn
+			pText="خطوات العمل"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor="#ffffff"
+			pTextColorHover={cInk}
+			pWidth="250px"
+			pHeight="44px"
+			onclick="location.href='#workflow'"
+		/>
+
+		<EmoBtn
+			pText="مخرجات التقرير"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor="#ffffff"
+			pTextColorHover={cInk}
+			pWidth="250px"
+			pHeight="44px"
+			onclick="location.href='#deliverables'"
+		/>
+
+		<EmoBtn
+			pText="ضبط المخاطر"
+			pBgImg="/Media/IndexBtn.webp"
+			pTextColor="#ffffff"
+			pTextColorHover={cInk}
+			pWidth="250px"
+			pHeight="44px"
+			onclick="location.href='#risk-control'"
+		/>
+
+	</IndexSec>
+
+
+
+
+
+
+
+	<DuoSec
+		id="takeoff-meaning"
+		pBg={new ElemBg(cCream)}
+		pContentSize={new Size(1180, "auto", "calc(100% - 24px)", "auto")}
+		pPad={new Pixel(90, 36)}
+		pGap={new Pixel(34, 18)}
+	>
+
+		<DuoCol
+			pBg={new ElemBg("rgba(255,249,237,.88)")}
+			pBgOpacity={new Percent(100)}
+			pBlur={new Pixel(0)}
+			pPad={new Pixel(46, 24)}
+			pGap={new Pixel(22, 14)}
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor(cInk).OfText("الحصر الهندسي ليس عدّ كميات فقط")}
+				pText={Text.Body.WithColor("#333842").OfText("الحصر الهندسي هو قراءة منظمة للرسومات والمواصفات ثم تحويلها إلى بنود وكميات ووحدات وملاحظات قياس. النتيجة ليست رقم خرسانة أو حديد فقط، بل جدول كميات BOQ يساعد في تقدير التكلفة، ضبط ميزانية المشروع، مراجعة عروض المقاولين، وتقليل الهدر الناتج عن التقدير العشوائي.")}
+				pSize={new Size("100%", "auto", "100%", "auto")}
+			/>
+
+			<EmoList
+				pWidth={new RespString("100%", "100%")}
+				pTitle={Text.H3.WithColor(cRust).OfText("متى يكون الحصر مؤثرًا؟")}
+				pDesc={Text.Body.WithColor("#333842").OfText("كلما زادت قيمة الهيكل الخرساني أو تعددت اللوحات والتفاصيل، أصبح الحصر أداة حماية مالية وفنية قبل التعاقد والتنفيذ.")}
+				pHeadBg={new ElemBg("transparent")}
+				pItemsBg={new ElemBg("transparent")}
+				pItemFnt={Text.Body.WithColor("#333842")}
+				pNumbered={false}
+				pItems={[
+					"قبل طرح المشروع على المقاولين لتوحيد جدول الكميات المرسل لكل عرض.",
+					"قبل شراء الخامات لتحديد احتياجات الخرسانة والحديد والردم والشدات على مراحل.",
+					"عند مراجعة عرض مقاول لمعرفة الفرق بين كمية محسوبة وكمية معروضة.",
+					"أثناء التنفيذ لتوثيق الكميات المنفذة وربطها بالمستخلصات والمراجعات."
+				]}
+			/>
+
+		</DuoCol>
+
+		<DuoCol
+			pBg={new ElemBg(cDark)}
+			pBgOpacity={new Percent(100)}
+			pBlur={new Pixel(0)}
+			pPad={new Pixel(42, 22)}
+			pGap={new Pixel(20, 12)}
+		>
+
+			<BadgeFrame
+				pBadge="01"
+				pBg={cPaper}
+				pBadgeBg={cGold2}
+				pColor={cInk}
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor(cInk).OfText("حصر مبدئي تقديري")}
+					pText={Text.Body.WithColor("#333842").OfText("يتم قبل بدء التنفيذ أو قبل المناقصة، ويعتمد على مستوى الرسومات المتاح لتقدير الاحتياجات الأولية والميزانية ومقارنة المقاولين بصورة عادلة نسبيًا.")}
+				/>
+
+			</BadgeFrame>
+
+			<BadgeFrame
+				pBadge="02"
+				pBg={cPaper}
+				pBadgeBg={cSteel}
+				pColor={cInk}
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor(cInk).OfText("حصر تفصيلي فعلي")}
+					pText={Text.Body.WithColor("#333842").OfText("يُستخدم بعد بدء العمل أو عند توثيق التنفيذ، ويعتمد على تفاصيل اللوحات وما تم تنفيذه فعليًا لإعداد المستخلصات والمراجعات النهائية.")}
+				/>
+
+			</BadgeFrame>
+
+		</DuoCol>
+
+	</DuoSec>
+
+
+
+
+
+
+
+	<SoftArc
+		pFill={cDark}
+		pFill2="rgba(217,184,108,.35)"
+		pHeight={new NumPer(130, 80)}
+	/>
+
+
+
+
+
+
+
+	<ESec
+		id="documents"
+		pBg={new ElemBg(cDark)}
+		pMinH={new NumPer(700, 0)}
+		pAlign={Align.Center}
+	>
+
+		<SvgDots
+			pColor="rgba(255,255,255,.12)"
+			pGap={28}
+			pDot={2}
+			pLoc={MakeLoc("4%", "-12%", "8%", "5%")}
+			pSize={MakePlaceSize(520, 410, 420, 320)}
+			pZ={1}
+		/>
+
+		<SecTitle
+			style = " --StripBg : #E7D3A1 "
+			pTitle="مدخلات الحصر تحدد جودة النتيجة"
+			pDesc="لا توجد كمية دقيقة من فراغ. دقة الحصر تعتمد على وضوح الرسومات التنفيذية، اكتمال الجداول، وجود المواصفات الفنية، وتحديد حدود الخدمة: هل المطلوب خرسانة وحديد فقط أم بنود بناء كاملة تشمل الحفر والردم والشدات والمباني؟"
+		/>
+
+		<DuoSec
+			pContentSize={new Size(1180, "auto", "calc(100% - 24px)", "auto")}
+			pPad={new Pixel(36, 22)}
+			pGap={new Pixel(28, 16)}
+		>
+
+			<DuoCol
+				pBg={new ElemBg("rgba(255,249,237,.08)")}
+				pBgOpacity={new Percent(100)}
+				pBlur={new Pixel(12)}
+				pPad={new Pixel(38, 22)}
+				pGap={new Pixel(18, 12)}
+			>
+
+				<EmoList
+					pWidth={new RespString("100%", "100%")}
+					pTitle={Text.H3.WithColor(cGold2).OfText("المستندات المطلوبة")}
+					pDesc={Text.Body.WithColor("#F8F4EA").OfText("نراجع المستندات قبل بدء الحصر ونحدد ما يصلح للقياس وما يحتاج استكمالًا أو توضيحًا.")}
+					pHeadBg={new ElemBg("transparent")}
+					pItemsBg={new ElemBg("transparent")}
+					pItemFnt={Text.Body.WithColor("#F8F4EA")}
+					pNumbered={false}
+					pItems={[
+						"اللوحات المعمارية التنفيذية، خصوصًا المناسيب والقطاعات والفتحات.",
+						"اللوحات الإنشائية التفصيلية للأساسات والأعمدة والكمرات والبلاطات والسلالم.",
+						"لوحات وتفاصيل التسليح وجداول الحديد إن وجدت.",
+						"المواصفات الفنية وكراسة الشروط وحدود البنود المطلوبة.",
+						"أي تعديلات أو رسومات إضافية أو ملاحظات موقع تؤثر على الكميات."
+					]}
+				/>
+
+			</DuoCol>
+
+			<DuoCol
+				pBg={new ElemBg("rgba(255,249,237,.92)")}
+				pBgOpacity={new Percent(100)}
+				pPad={new Pixel(38, 22)}
+				pGap={new Pixel(18, 12)}
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor(cInk).OfText("فحص جاهزية اللوحات قبل الحساب")}
+					pText={Text.Body.WithColor("#333842").OfText("إذا كانت الرسومات ناقصة لا ندفن المشكلة داخل جدول الكميات. يتم تمييز البنود التي تحتاج تفصيلة أو مواصفة أو مراجعة، حتى يعرف العميل هل الرقم نهائي أم تقديري أم مشروط باستكمال مستندات.")}
+				/>
+
+				<CardsGr
+					pWidth={new RespString("100%", "100%")}
+					pGrTitle={Text.H4.Centered.WithColor(cRust).OfText("تصنيف دقة الكمية")}
+					pCardBg={new ElemBg(cPaper)}
+					pCardTitleFnt={Text.H5.WithColor(cInk)}
+					pCardBodyFnt={Text.Body.WithColor("#333842")}
+					pStackDir="Row"
+					pTopic1={new Topic("قابلة للتسعير", "كمية لها مصدر واضح في اللوحات ويمكن إدراجها مباشرة في BOQ.")}
+					pTopic2={new Topic("تقديرية", "كمية محسوبة على افتراض واضح بسبب نقص تفصيلة أو مواصفة.")}
+				/>
+
+			</DuoCol>
+
+		</DuoSec>
+
+	</ESec>
+
+
+
+
+
+
+
+	<DiagonalBottom
+		pFill={cCream}
+		pFill2="rgba(247,241,230,.55)"
+		pHeight={new NumPer(120, 82)}
+	/>
+
+
+
+
+
+
+
+	<ESec
+		id="scope-map"
+		pBg={new ElemBg(cCream)}
+		pAlign={Align.Center}
+		pMinH={new NumPer(780, 0)}
+	>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="خريطة بنود الحصر لأعمال البناء الخرسانية"
+			pDesc="تم تنظيم الخدمة حول البنود التي تؤثر فعليًا على تكلفة الهيكل الخرساني، وليس حول تعريف عام للحصر. كل بند له وحدة قياس ومنطق خصم وإضافة ومراجعة مختلف."
+		/>
+
+		<CardsGr
+			pWidth={new RespString("1180px", "calc(100% - 24px)")}
+			pGrTitle={Text.H3.Centered.WithColor(cRust).OfText("نطاق الحصر")}
+			pCardBg={new ElemBg(cPaper)}
+			pCardRadius={new Pixel(22, 18)}
+			pCardTitleFnt={Text.H4.WithColor(cInk)}
+			pCardBodyFnt={Text.Body.WithColor("#333842")}
+			pStackDir="Row"
+			pSpacing={20}
+			pTopic1={new Topic("الحفر والردم", "حساب كميات الحفر، الإحلال، الردم، التسوية، والفرق بين منسوب الأرض الطبيعية ومنسوب التأسيس حسب اللوحات المتاحة.")}
+			pTopic2={new Topic("الخرسانة العادية", "حصر فرشة النظافة والخرسانة العادية أسفل القواعد والسملات واللبشات وأي طبقات تأسيس مرتبطة.")}
+			pTopic3={new Topic("الخرسانة المسلحة", "حصر القواعد، اللبشة، الأعمدة، الكمرات، البلاطات، السلالم، الحوائط الخرسانية، والسدادات بوحدة المتر المكعب.")}
+			pTopic4={new Topic("حديد التسليح", "تفريغ عدد الأسياخ وأقطارها وأطوالها، وتحويل الطول إلى وزن إجمالي لكل عنصر أو بند حسب جداول الأوزان.")}
+			pTopic5={new Topic("الشدات والنجارة", "تقدير مسطحات الشدات للأعمدة والكمرات والبلاطات والحواف والعناصر الخاصة إذا كانت ضمن نطاق الخدمة.")}
+			pTopic6={new Topic("الفتحات والخصومات", "خصم الفتحات والفراغات المؤثرة في الحساب حسب قواعد القياس، مع توضيح ما تم خصمه وما لم يتم خصمه.")}
+			pTopic7={new Topic("المباني المرتبطة", "إدراج بند المباني أو الفواصل أو الأعمال التابعة عند طلب حصر بناء شامل وليس خرسانة وحديد فقط.")}
+			pTopic8={new Topic("ملاحظات القياس", "تسجيل مصدر كل كمية، الافتراضات، النواقص، وأي تعارض بين اللوحات قبل استخدام الجدول في التسعير.")}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<DuoSec
+		id="workflow"
+		pBg={new ElemBg(cDark)}
+		pContentSize={new Size(1180, "auto", "calc(100% - 24px)", "auto")}
+		pPad={new Pixel(90, 36)}
+		pGap={new Pixel(34, 18)}
+	>
+
+		<DuoCol
+			pBg={new ElemBg("rgba(255,249,237,.08)")}
+			pBgOpacity={new Percent(100)}
+			pBlur={new Pixel(10)}
+			pPad={new Pixel(42, 22)}
+			pGap={new Pixel(20, 12)}
+		>
+
+			<EmoList
+				pWidth={new RespString("100%", "100%")}
+				pTitle={Text.H2.WithColor(cGold2).OfText("خطواتنا في الحصر")}
+				pDesc={Text.Body.WithColor("#F8F4EA").OfText("المنهجية مبنية على خط سير واضح: من قراءة اللوحات إلى جدول كمية قابل للمراجعة والتسعير.")}
+				pHeadBg={new ElemBg("transparent")}
+				pItemsBg={new ElemBg("transparent")}
+				pItemFnt={Text.Body.WithColor("#F8F4EA")}
+				pNumbered={true}
+				pItems={[
+					"جمع الرسومات والمواصفات وتحديد حدود الحصر المطلوبة.",
+					"تقسيم المشروع إلى عناصر وبنود: حفر، خرسانة، حديد، شدات، مباني، وبنود تابعة.",
+					"حساب كميات الخرسانة لكل عنصر مع مراجعة المناسيب والفتحات والخصومات.",
+					"تفريغ حديد التسليح من اللوحات وحساب الوزن الإجمالي حسب القطر والطول والعدد.",
+					"تجميع النتائج في BOQ منظم مع الوصف والوحدة والكمية وملاحظات القياس.",
+					"مراجعة نهائية للأرقام وربط الكميات بالمستندات قبل تسليم التقرير."
+				]}
+			/>
+
+		</DuoCol>
+
+		<DuoCol
+			pBg={new ElemBg(cPaper)}
+			pBgOpacity={new Percent(100)}
+			pPad={new Pixel(32, 18)}
+			pGap={new Pixel(20, 12)}
+		>
+
+			<FloatingPanel
+				pBg="rgba(14,17,24,.92)"
+				pBorder="rgba(217,184,108,.28)"
+				pAccent={cGold}
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor(cGold2).OfText("من اللوحة إلى المستخلص")}
+					pText={Text.Body.WithColor("#F8F4EA").OfText("الكمية الجيدة يجب أن يعرف مراجعها: من أين جاءت، ما وحدتها، ما الذي تم خصمه، وهل تصلح للمقايسة أم للمستخلص أم تحتاج اعتمادًا إضافيًا.")}
+				/>
+
+			</FloatingPanel>
+
+			<Grid
+				pMax={2}
+				pMaxP={2}
+				pGap={new Pixel(14, 10)}
+				pPad={new Pixel(0)}
+			>
+
+				<TiltCard
+					pBg={cGold2}
+					pColor={cInk}
+					pTilt={-2}
+				>
+
+					<Emograph pTitle={Text.H4.Centered.OfText("01") } pText={Text.Body.Centered.OfText("قراءة اللوحات")} />
+
+				</TiltCard>
+
+				<TiltCard
+					pBg={cSteel}
+					pColor={cInk}
+					pTilt={2}
+				>
+
+					<Emograph pTitle={Text.H4.Centered.OfText("02") } pText={Text.Body.Centered.OfText("قياس العناصر")} />
+
+				</TiltCard>
+
+				<TiltCard
+					pBg={cConcrete}
+					pColor={cInk}
+					pTilt={1}
+				>
+
+					<Emograph pTitle={Text.H4.Centered.OfText("03") } pText={Text.Body.Centered.OfText("تجميع BOQ")} />
+
+				</TiltCard>
+
+				<TiltCard
+					pBg={cRust}
+					pColor="#FFF9ED"
+					pTilt={-1}
+				>
+
+					<Emograph pTitle={Text.H4.Centered.White.OfText("04") } pText={Text.Body.Centered.White.OfText("مراجعة وتسليم")} />
+
+				</TiltCard>
+
+			</Grid>
+
+		</DuoCol>
+
+	</DuoSec>
+
+
+
+
+
+
+
+	<ESec
+		id="deliverables"
+		pBg={new ElemBg(cPaper)}
+		pAlign={Align.Center}
+		pMinH={new NumPer(720, 0)}
+	>
+
+		<BlurBlob
+			pColor="rgba(217,184,108,.24)"
+			pColor2="rgba(135,168,181,.22)"
+			pBlur={28}
+			pLoc={MakeLoc("-80px", "-120px", "120px", "210px")}
+			pSize={MakePlaceSize(430, 300, 340, 260)}
+			pZ={1}
+		/>
+
+		<SecTitle
+			style = " --StripBg : #B66A43 "
+			pTitle="مخرجات الخدمة ليست ملف أرقام مبهم"
+			pDesc="التقرير النهائي يجب أن يصلح للمراجعة والتسعير واتخاذ القرار، لذلك يتم تنظيمه بطريقة يفهمها المالك والمقاول والمهندس المراجع."
+		/>
+
+		<Grid
+			pMax={4}
+			pMaxP={1}
+			pSize={new DirectSize(new NumPer("1180px", "calc(100% - 24px)"))}
+			pGap={new Pixel(22, 14)}
+			pPad={new Pixel(24, 8)}
+			Centered
+		>
+
+			<GlassCard
+				pBg="rgba(255,255,255,.78)"
+				pBorder="rgba(17,19,24,.12)"
+				pRadius={28}
+				pBlur={12}
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor(cInk).OfText("BOQ مفصل")}
+					pText={Text.Body.WithColor("#333842").OfText("أوصاف، وحدات قياس، كميات، وملاحظات لكل بند رئيسي وفرعي.")}
+				/>
+
+			</GlassCard>
+
+			<GlassCard
+				pBg="rgba(255,255,255,.78)"
+				pBorder="rgba(17,19,24,.12)"
+				pRadius={28}
+				pBlur={12}
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor(cInk).OfText("جداول خرسانة")}
+					pText={Text.Body.WithColor("#333842").OfText("كميات العناصر الخرسانية مفصولة حسب الأساسات والأعمدة والكمرات والبلاطات.")}
+				/>
+
+			</GlassCard>
+
+			<GlassCard
+				pBg="rgba(255,255,255,.78)"
+				pBorder="rgba(17,19,24,.12)"
+				pRadius={28}
+				pBlur={12}
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor(cInk).OfText("جداول حديد")}
+					pText={Text.Body.WithColor("#333842").OfText("تفريغ أقطار وأطوال وأعداد وتحويلها إلى وزن كلي حسب البند أو العنصر.")}
+				/>
+
+			</GlassCard>
+
+			<GlassCard
+				pBg="rgba(255,255,255,.78)"
+				pBorder="rgba(17,19,24,.12)"
+				pRadius={28}
+				pBlur={12}
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor(cInk).OfText("ملاحظات مراجعة")}
+					pText={Text.Body.WithColor("#333842").OfText("تحديد النواقص والتعارضات والافتراضات التي تؤثر على دقة التسعير.")}
+				/>
+
+			</GlassCard>
+
+		</Grid>
+
+	</ESec>
+
+
+
+
+
+
+
+	<EmoStrip
+		id="risk-control"
+		pBg={new ElemBg(cDark)}
+		pSize={new Size("100%", "auto", "100%", "auto")}
+		pAlign={Align.Center}
+	>
+
+		<SvgDots
+			pColor="rgba(231,211,161,.16)"
+			pGap={34}
+			pDot={2}
+			pLoc={MakeLoc("calc(100% - 560px)", "-80px", "40px", "80px")}
+			pSize={MakePlaceSize(520, 360, 300, 260)}
+			pZ={1}
+		/>
+
+		<Emograph
+			pTitle={Text.H2.Centered.WithColor(cGold2).OfText("لماذا تختار حصرًا هندسيًا منظمًا؟")}
+			pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("القيمة ليست في استخراج رقم سريع، بل في تقليل أخطاء التقدير، كشف النواقص، وضبط حدود التعاقد قبل أن تتحول الفروقات الصغيرة في اللوحات إلى تكلفة كبيرة في الموقع.")}
+			pSize={new Size(980, "auto", 320, "auto")}
+		/>
+
+		<Grid
+			pMax={3}
+			pMaxP={1}
+			pSize={new DirectSize(new NumPer("1180px", "calc(100% - 24px)"))}
+			pGap={new Pixel(22, 14)}
+			pPad={new Pixel(36, 16)}
+			Centered
+		>
+
+			<FloatingPanel
+				pBg="rgba(255,249,237,.08)"
+				pBorder="rgba(231,211,161,.22)"
+				pAccent={cGold}
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor(cGold2).OfText("خبرة قراءة اللوحات")}
+					pText={Text.Body.WithColor("#F8F4EA").OfText("المراجعة لا تعتمد على جدول فقط، بل على فهم العلاقة بين المعماري والإنشائي ومناسيب التنفيذ وتفاصيل التسليح.")}
+				/>
+
+			</FloatingPanel>
+
+			<FloatingPanel
+				pBg="rgba(255,249,237,.08)"
+				pBorder="rgba(231,211,161,.22)"
+				pAccent={cSteel}
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor(cGold2).OfText("تقارير قابلة للمراجعة")}
+					pText={Text.Body.WithColor("#F8F4EA").OfText("يتم تسليم الجداول بصياغة تسمح بمراجعة الكميات ومصدرها، لا مجرد رقم إجمالي يصعب تتبعه.")}
+				/>
+
+			</FloatingPanel>
+
+			<FloatingPanel
+				pBg="rgba(255,249,237,.08)"
+				pBorder="rgba(231,211,161,.22)"
+				pAccent={cRust}
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor(cGold2).OfText("دعم فني أثناء القرار")}
+					pText={Text.Body.WithColor("#F8F4EA").OfText("يمكن استخدام التقرير في المناقصة، مراجعة العروض، أو نقاش المقاول حول البنود الناقصة والتحفظات.")}
+				/>
+
+			</FloatingPanel>
+
+		</Grid>
+
+	</EmoStrip>
+
+
+
+
+
+
+
+	<ESec
+		pBg={new ElemBg(cCream)}
+		pAlign={Align.Center}
+		pMinH={new NumPer(560, 0)}
+	>
+
+		<SecTitle
+			style = " --StripBg : #0E1118 "
+			pTitle="أسئلة شائعة عن حصر أعمال البناء الخرسانية"
+			pDesc="إجابات مباشرة على الأسئلة التي تظهر عادة قبل طلب الحصر أو استخدامه في التسعير."
+		/>
+
+		<EmoFaq
+			pGap={new Pixel(14, 10)}
+			pPad={new Pixel(26, 12)}
+			pMinHeight={new Pixel(0)}
+		>
+
+			<FaqItem
+				pQuestion="هل الحصر يشمل الخرسانة والحديد فقط؟"
+				pAnswer="يمكن تنفيذ الحصر كخرسانة وحديد فقط، أو كحصر بناء أوسع يشمل الحفر والردم والشدات والمباني والبنود المرتبطة. يتم تحديد النطاق قبل البدء حتى لا تختلط البنود."
+			/>
+
+			<FaqItem
+				pQuestion="هل يمكن عمل حصر مبدئي قبل اكتمال كل الرسومات؟"
+				pAnswer="نعم، لكن يتم تمييزه كتقديري مع توضيح الافتراضات والنواقص. الحصر التفصيلي يحتاج رسومات تنفيذية ومواصفات أوضح حتى تكون الكمية صالحة للتسعير والمراجعة النهائية."
+			/>
+
+			<FaqItem
+				pQuestion="هل يتم خصم الفتحات والفراغات من كميات الخرسانة؟"
+				pAnswer="يتم التعامل مع الخصومات حسب قواعد القياس وحجم الفتحة وتأثيرها على البند. المهم أن يوضح التقرير ما تم خصمه وما لم يتم خصمه حتى لا يحدث خلاف أثناء المراجعة."
+			/>
+
+			<FaqItem
+				pQuestion="ما فائدة الحصر عند مقارنة عروض المقاولين؟"
+				pAnswer="عندما يرسل المالك جدول كميات موحدًا لأكثر من مقاول، تصبح المقارنة على نفس البنود والكميات. هذا يقلل فروق العروض الناتجة عن إهمال بند أو تغيير نطاق العمل أو إدخال تحفظات غير واضحة."
+			/>
+
+			<FaqItem
+				pQuestion="هل يمكن ربط الكميات بتحليل أسعار؟"
+				pAnswer="نعم، بعد تجهيز الكميات يمكن ربطها بتحليل أسعار البنود للوصول إلى تقدير تكلفة أقرب للواقع، أو استخدامها لمراجعة أسعار المقاولين ومعرفة البنود ذات التأثير الأكبر على الميزانية."
+			/>
+
+		</EmoFaq>
+
+	</ESec>
+
+
+
+
+
+
+
+	<RelServices
+		pTitle={Text.H2.Centered.WithColor("#F8F4EA").OfText("خدمات مرتبطة فعلًا بالحصر")}
+		pDesc={Text.Body.Centered.WithColor("#F8F4EA").OfText("روابط مكملة لنفس مسار القرار: حصر كميات، شوب دروينج، تصميم إنشائي، وجداول متابعة تنفيذ.")}
+		pHeadBg={new ElemBg(cDark)}
+		pBodyBg={new ElemBg(cCream)}
+		pCardBg={new ElemBg(cPaper)}
+		pMax={4}
+		pMaxP={1}
+	>
+
+		<RelServiceItem
+			pTitle="حصر كميات التشطيبات"
+			pDesc="عند الانتقال من الهيكل إلى الخامات النهائية: أرضيات، حوائط، أسقف، دهانات، أبواب، وكهرباء نهائية."
+			pHref="/emodsign/tech/takeoff/finishing"
+			pImg="/Media/Emodsign/Tech/Takeoff/Finishing/HeroL.webp"
+			pBtnText="افتح الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="الشوب دروينج الإنشائي"
+			pDesc="تفاصيل تنفيذية تساعد على وضوح التسليح والعناصر قبل الحصر أو التنفيذ."
+			pHref="/emodsign/tech/shopdwg/struc"
+			pImg="/Media/Emodsign/Tech/Shopdwg/Struc/HeroL.webp"
+			pBtnText="افتح الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="التصميم الإنشائي"
+			pDesc="إعداد أو مراجعة النظام الإنشائي الذي ينتج عنه حجم الخرسانة والحديد في المشروع."
+			pHref="/emodsign/des/eng/struc"
+			pImg="/Media/Emodsign/Des/Eng/Struc/HeroL.webp"
+			pBtnText="افتح الخدمة"
+		/>
+
+		<RelServiceItem
+			pTitle="جداول متابعة المشروع"
+			pDesc="تنظيم البنود والكميات والمراحل في جداول تساعد على إدارة التعاقد والمتابعة."
+			pHref="/emodsign/tech/manage/table"
+			pImg="/Media/Emodsign/Tech/Manage/Table/HeroL.webp"
+			pBtnText="افتح الخدمة"
+		/>
+
+	</RelServices>
 
 
 
