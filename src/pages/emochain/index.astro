@@ -1,7 +1,7 @@
 ---
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, Size, Align, Colors, RespString, Topic, Pixel } from "@/TypesLib";
-import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelServices, SecTitle, VrStack, HzStack, FaqItem, RelServiceItem } from "@/Widgets";
+import { Align, Angle, Colors, DirectSize, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, FloatingPanel, GlassCard, Grid, Hero, HzStack, PriceCard, RelServiceItem, RelServices, Ribbon, SecTitle, SvgDots, TiltCard, VrStack } from "@/Widgets";
 ---
 
 
@@ -35,26 +35,31 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelS
 
 
 
-	<Hero
-		pImgF="/Media/Emocrete/Contracting/"
-		pTitle="توريدات عمومية للشركات والمواقع والأنشطة التجارية"
-		pDesc="إدارة طلبات الشراء والتوريد من البحث عن الصنف وتحديد المواصفة حتى عرض السعر وتنسيق التسليم داخل القاهرة والجيزة."
-		pTitleClr={Colors.WhiteOff}
-		pDescClr={Colors.WhiteOff}
-		pAlign="right"
-		pBlurL="on"
-		pBlurP="on"
-		pPosL="18% 50% 12% 8%"
-		pPosP="12% 8% 45% 8%"
-	>
+	<Hero>
 
-		<HzStack pGap={new Pixel(15, 10)} pPad={new Pixel(0, 0)}>
+		<VrStack
+			pSize={new DirectSize(new NumPer("40%","95%"))}
+			pLoc={new Loc(new NumPer("10%","2.5%"),new NumPer("30%","12%"))}
+			pGap={new Pixel(50, 20)}
+			pAlign="Center"
+		>
 
-			<EmoCall BlackSky pText="أرسل طلب توريد" />
+			<Emograph
+				pTitle={Text.H1.Centered.Bold.OfText("توريدات عمومية")}
+				pText={Text.Body.Centered.OfSize(24,18).OfText("للمصالح الحكومية والشركات والمواقع الهندسية والأنشطة التجارية")}
+			/>
 
-			<EmoCall BlackSky pText="راجع عرض مورد" />
+			<Emograph
+				pText={Text.Body.Centered.OfText("إدارة طلبات الشراء والتوريد من البحث عن الصنف وتحديد المواصفة حتى عرض السعر وتنسيق التسليم داخل القاهرة والجيزة.")}
+			/>
 
-		</HzStack>
+			<EmoCall
+				data-own-size
+				BlackOrange
+				pText="التفاصيل"
+			/>
+
+		</VrStack>
 
 	</Hero>
 
@@ -64,7 +69,288 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelS
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<DuoSec
+		id="GeneralSuppliesCompactOffer"
+		pBg={new ElemBg("#101820")}
+		pGap={new Pixel(50, 20)}
+		pPad={new Pixel(50, 20)}
+		pAlign={new Align("Center", "Center")}
+	>
+
+		<CircleGlow
+			pLoc={new Loc(new NumPer("7%", "-18%"), new NumPer("8%", "2%"))}
+			pSize={new DirectSize(new NumPer(420, 260), new NumPer(300, 240))}
+			pOpacity={new Percent(34, 38)}
+			pColor="rgba(167,196,92,.72)"
+			pColor2="rgba(255,255,255,.20)"
+		/>
+
+		<BlurBlob
+			pLoc={new Loc(new NumPer("calc(100% - 440px)", "50%"), new NumPer("calc(100% - 320px)", "66%"))}
+			pSize={new DirectSize(new NumPer(360, 260), new NumPer(260, 220))}
+			pRotate={new Angle(-12, -8)}
+			pOpacity={new Percent(38, 32)}
+			pColor="rgba(50,143,232,.58)"
+			pColor2="rgba(167,196,92,.42)"
+			pBlur={18}
+		/>
+
+		<SvgDots
+			pLoc={new Loc(new NumPer("calc(100% - 380px)", "calc(100% - 220px)"), new NumPer(70, 90))}
+			pSize={new DirectSize(new NumPer(300, 210), new NumPer(170, 160))}
+			pOpacity={new Percent(34, 30)}
+			pColor="rgba(255,255,255,.30)"
+			pGap={24}
+			pDot={2}
+		/>
+
+		<DuoCol
+			pBg={new ElemBg("transparent")}
+			pPad={new Pixel(0)}
+			pGap={new Pixel(20, 16)}
+		>
+
+			<GlassCard
+				pBg="rgba(255,255,255,.10)"
+				pBorder="rgba(255,255,255,.20)"
+				pRadius={20}
+				pBlur={14}
+			>
+
+				<Emograph
+					pTitle={Text.H2.White.OfText("من الطلب حتى التسليم")}
+					pText={Text.Body.White.OfText("نخدم الشركات والمواقع والمحلات والأنشطة التجارية داخل القاهرة والجيزة في طلبات التوريد العامة: صنف واحد، قائمة مشتريات، طلب عاجل، أو مراجعة عرض مورد. دورنا أن نحول الطلب غير الواضح إلى مواصفة وسعر وشروط تسليم مفهومة قبل اعتماد الشراء.")}
+					pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+				/>
+
+				<Grid
+					pMax={3}
+					pMaxP={1}
+					pGap={new Pixel(16, 12)}
+					pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+				>
+
+					<BadgeFrame
+						pBadge="01"
+						pBg="#D7F58C"
+						pBadgeBg="#101820"
+					>
+
+						<Emograph
+							pTitle={Text.H4.Centered.WithColor("#101820").OfText("نستقبل الطلب")}
+							pText={Text.Body.Centered.WithColor("#101820").OfText("صورة، قائمة، رابط، وصف استخدام، أو عرض سعر سابق.")}
+						/>
+
+					</BadgeFrame>
+
+					<BadgeFrame
+						pBadge="02"
+						pBg="#D7F58C"
+						pBadgeBg="#101820"
+					>
+
+						<Emograph
+							pTitle={Text.H4.Centered.WithColor("#101820").OfText("نراجع المواصفة")}
+							pText={Text.Body.Centered.WithColor("#101820").OfText("نحدد الكمية، المقاس، الجودة، النقل، الفاتورة، والبدائل.")}
+						/>
+
+					</BadgeFrame>
+
+					<BadgeFrame
+						pBadge="03"
+						pBg="#D7F58C"
+						pBadgeBg="#101820"
+					>
+
+						<Emograph
+							pTitle={Text.H4.Centered.WithColor("#101820").OfText("ننسق التوريد")}
+							pText={Text.Body.Centered.WithColor("#101820").OfText("عرض واضح ثم اعتماد ثم متابعة شراء وتسليم حسب الاتفاق.")}
+						/>
+
+					</BadgeFrame>
+
+				</Grid>
+
+			</GlassCard>
+
+		</DuoCol>
+
+		<DuoCol
+			pBg={new ElemBg("transparent")}
+			pPad={new Pixel(20,10)}
+			pGap={new Pixel(50, 20)}
+			Centered
+		>
+
+			<PriceCard
+				pCaption={Text.H6.OfSize(17, 12).White.Bold.OfText("نظام العمولة")}
+				pStart={Text.H3.OfSize(27, 20).Bold.OfText("عمولة إدارة")}
+				pPrice="10%"
+				pPriceFnt={Text.H3.OfSize(36, 26).Bold.WithColor("#3797F5")}
+				pCurrency={Text.H3.OfSize(20, 16).Bold.OfText("من قيمة التوريد")}
+				pSize={new DirectSize(new NumPer(430, 320), new NumPer(125, 110))}
+			/>
+
+			<FloatingPanel
+				pBg="rgba(215,245,140,.95)"
+				pBorder="rgba(215,245,140,1)"
+				pAccent="#FFFFFF"
+			>
+
+				<Emograph
+					pTitle={Text.H2.WithColor("#101820").OfText("ما الذي تدفع مقابله؟")}
+					pText={Text.Body.WithColor("#101820").OfText("العمولة مقابل إدارة طلب الشراء: فهم المطلوب، ضبط البيانات الناقصة، البحث عن المورد أو البديل، مقارنة السعر بالمواصفة، وتجهيز شروط واضحة للنقل والتسليم قبل الدفع.")}
+				/>
+
+			</FloatingPanel>
+
+			<TiltCard
+				pBg="#FFFFFF"
+				pColor="#101820"
+				pTilt={-2}
+			>
+
+				<Emograph
+					pTitle={Text.H3.Centered.WithColor("#101820").OfText("لا نعد بأرخص سعر مطلق")}
+					pText={Text.Body.Centered.WithColor("#101820").OfText("نعد بعرض أوضح: صنف، كمية، سعر، نقل، مدة، وفاتورة أو مستندات عند الحاجة.")}
+				/>
+
+			</TiltCard>
+
+		</DuoCol>
+
+	</DuoSec>
+
+
+
+
+
+
+
+	<DuoSec
+		id="GeneralSuppliesOrderCta"
+		pBg={new ElemBg("#F3E8D2")}
+		pContentSize={new DirectSize(new NumPer("80%","95%"), new NumPer("auto"))}
+		pGap={new Pixel(26, 18)}
+		pPad={new Pixel(50, 5)}
+		pAlign={new Align("Center", "Center")}
+	>
+
+		<BlurBlob
+			pLoc={new Loc(new NumPer("4%", "-20%"), new NumPer("calc(100% - 260px)", "calc(100% - 220px)"))}
+			pSize={new DirectSize(new NumPer(340, 240), new NumPer(240, 200))}
+			pOpacity={new Percent(24, 26)}
+			pColor="rgba(16,24,32,.35)"
+			pColor2="rgba(50,143,232,.30)"
+			pBlur={18}
+		/>
+
+		<DuoCol
+			pBg={new ElemBg("#101820")}
+			pPad={new Pixel(44, 24)}
+			pGap={new Pixel(22, 16)}
+			Centered
+		>
+
+			<Emograph
+				pTitle={Text.H2.White.OfText("اطلب التوريد برسالة واحدة")}
+				pText={Text.Body.White.OfText("أرسل صورة الصنف أو قائمة المشتريات أو عرض المورد الذي تريد مراجعته. سنطلب البيانات الناقصة فقط، ثم نوضح إمكانية التنفيذ والسعر والمدة والنقل والعمولة قبل اعتماد الطلب.")}
+				pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+			/>
+
+			<Grid
+				pMax={2}
+				pMaxP={1}
+				pGap={new Pixel(14, 12)}
+				pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+			>
+
+				<BadgeFrame
+					pBadge="أرسل"
+					pBg="#FFFFFF"
+					pBadgeBg="#D7F58C"
+				>
+
+					<Emograph
+						pTitle={Text.H4.Centered.OfText("بيانات الطلب")}
+						pText={Text.Body.Centered.OfText("الصورة أو القائمة، الكمية، مكان التسليم، الموعد، وهل المطلوب فاتورة أو نقل.")}
+					/>
+
+				</BadgeFrame>
+
+				<BadgeFrame
+					pBadge="اعتمد"
+					pBg="#FFFFFF"
+					pBadgeBg="#D7F58C"
+				>
+
+					<Emograph
+						pTitle={Text.H4.Centered.WithColor("#101820").OfText("عرض واضح")}
+						pText={Text.Body.Centered.WithColor("#101820").OfText("لا يبدأ التنفيذ إلا بعد وضوح الصنف والسعر والعمولة وشروط التسليم.")}
+					/>
+
+				</BadgeFrame>
+
+			</Grid>
+
+		</DuoCol>
+
+		<DuoCol
+			pBg={new ElemBg("transparent")}
+			pPad={new Pixel(0)}
+			pGap={new Pixel(20, 16)}
+		>
+
+			<GlassCard
+				pBg="rgba(255,255,255,.88)"
+				pBorder="rgba(255,255,255,1)"
+				pRadius={34}
+				pBlur={10}
+			>
+
+				<Emograph
+					pText={Text.Body.WithColor("#101820").OfText("نقوم بتنفيذ وإدارة طلبات التوريد العمومية لصالح الشركات والمواقع والمحلات داخل القاهرة والجيزة، بداية من فهم المطلوب وضبط المواصفة وحتى عرض السعر وتنسيق التسليم، مقابل عمولة إدارة 10% من قيمة التوريد بعد اعتماد العرض.")}
+					pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+				/>
+
+				<FloatingPanel
+					pBg="rgba(16,24,32,.95)"
+					pBorder="rgba(16,24,32,1)"
+					pAccent="#D7F58C"
+				>
+
+					<Emograph
+						pTitle={Text.H3.WithColor("#D7F58C").OfText("للطلب والتفاصيل")}
+						pText={Text.Body.White.OfText("اتصل بنا أو أرسل طلبك على واتساب: صورة الصنف، الكمية، مكان التسليم، والموعد المطلوب. سنراجع الطلب ونرد بإمكانية التنفيذ والتكلفة قبل أي اعتماد.")}
+					/>
+
+					<EmoCall
+						BlackSky
+						pText="اتصل لطلب توريد"
+						pWidth="260px"
+						pHeight="54px"
+						pRadius="12px"
+					/>
+
+				</FloatingPanel>
+
+			</GlassCard>
+
+		</DuoCol>
+
+	</DuoSec>
+
+
+
+
+
+
+
+	<ESec
+		hidden
+		pBg={new ElemBg(Colors.Creamy)}
+		pAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -106,27 +392,33 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelS
 
 
 
-	<EmoStrip pBg={new ElemBg("#111820")} pAlign={Align.Center}>
+	<ESec hidden>
 
-		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+		<EmoStrip
+			hidden
+			pBg={new ElemBg("#111820")}
+			pAlign={Align.Center}
+		>
 
-			<Emograph
-				pSize={new Size(600, "auto", 320, "auto")}
-				pTitle={Text.H3.WithColor(Colors.GreenLite).OfText("المشكلة لا تبدأ عند التسليم")}
-				pText={Text.Body.White.OfText(`تبدو طلبات التوريد في ظاهرها بسيطة: صنف مطلوب، كمية محددة، وسعر يتم الاتفاق عليه. لكن الواقع العملي مختلف. كثير من الخلافات في الشراء لا تنتج عن سوء نية بقدر ما تنتج عن طلب غير محدد، أو مواصفة ناقصة، أو افتراضات لم تُكتب بوضوح. قد يطلب العميل مستلزمات مكتب، فيفهم المورد نوعًا معينًا من الجودة بينما يتوقع العميل درجة أخرى. وقد يطلب خامة تشطيب دون تحديد المقاس أو اللون أو طريقة الاستخدام، فتصل خامة صالحة في ذاتها لكنها غير مناسبة للمكان. وقد يحصل العميل على سعر جيد ظاهريًا، ثم يكتشف أن النقل أو الضريبة أو التحميل أو التركيب غير مشمول.
+			<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+				<Emograph
+					pSize={new Size(600, "auto", 320, "auto")}
+					pTitle={Text.H3.WithColor(Colors.GreenLite).OfText("المشكلة لا تبدأ عند التسليم")}
+					pText={Text.Body.White.OfText(`تبدو طلبات التوريد في ظاهرها بسيطة: صنف مطلوب، كمية محددة، وسعر يتم الاتفاق عليه. لكن الواقع العملي مختلف. كثير من الخلافات في الشراء لا تنتج عن سوء نية بقدر ما تنتج عن طلب غير محدد، أو مواصفة ناقصة، أو افتراضات لم تُكتب بوضوح. قد يطلب العميل مستلزمات مكتب، فيفهم المورد نوعًا معينًا من الجودة بينما يتوقع العميل درجة أخرى. وقد يطلب خامة تشطيب دون تحديد المقاس أو اللون أو طريقة الاستخدام، فتصل خامة صالحة في ذاتها لكنها غير مناسبة للمكان. وقد يحصل العميل على سعر جيد ظاهريًا، ثم يكتشف أن النقل أو الضريبة أو التحميل أو التركيب غير مشمول.
 
 في القاهرة والجيزة تحديدًا، تتضاعف أهمية تنظيم الطلب بسبب كثافة السوق وكثرة الموردين وتفاوت الأسعار بين منطقة وأخرى. وجود اختيارات كثيرة لا يعني أن القرار صار أسهل. كثرة الاختيارات قد تجعل العميل أكثر عرضة للمقارنة الخاطئة، خصوصًا عندما يقارن بين أسعار لأصناف تحمل الاسم نفسه لكنها تختلف في الجودة أو الكمية أو بلد المنشأ أو وحدة القياس أو شروط التسليم. لذلك فإن أول خطوة في التوريدات العمومية ليست الاتصال بالمورد، بل فهم ما الذي يجب توريده بالضبط.`)}
-			/>
+				/>
 
-			<EmoList
-				pWidth={new RespString("600px", "320px")}
-				pTitle={Text.H3.WithColor(Colors.GreenLite).OfText("أوجه التكلفة الخفية")}
-				pDesc={Text.Body.White.OfText("تتحول المشتريات العشوائية إلى عبء عندما يتم التعامل مع كل صنف كحالة منفصلة بلا مواصفة موحدة أو جهة متابعة أو مستندات واضحة.")}
-				pHeadBg={new ElemBg("transparent")}
-				pItemsBg={new ElemBg("transparent")}
-				pItemFnt={Text.Body.White}
-				pNumbered={false}
-				pItems={[
+				<EmoList
+					pWidth={new RespString("600px", "320px")}
+					pTitle={Text.H3.WithColor(Colors.GreenLite).OfText("أوجه التكلفة الخفية")}
+					pDesc={Text.Body.White.OfText("تتحول المشتريات العشوائية إلى عبء عندما يتم التعامل مع كل صنف كحالة منفصلة بلا مواصفة موحدة أو جهة متابعة أو مستندات واضحة.")}
+					pHeadBg={new ElemBg("transparent")}
+					pItemsBg={new ElemBg("transparent")}
+					pItemFnt={Text.Body.White}
+					pNumbered={false}
+					pItems={[
 					`ساعات عمل مهدرة في البحث والاتصال بالموردين بدل توجيه الفريق إلى مهامه الأساسية.`,
 					`مقارنات أسعار غير عادلة لأن كل مورد يسعر مواصفة مختلفة أو يستبعد بندًا من العرض.`,
 					`تعدد فواتير وسياسات دفع واستبدال ومواعيد تسليم، مما يرهق الإدارة المالية ويصعب تتبع المصروفات.`,
@@ -134,19 +426,25 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelS
 					`تكلفة نقل أو تحميل أو تنزيل تظهر بعد الاتفاق لأنها لم تكن جزءًا واضحًا من العرض الأول.`,
 					`تعطيل موقع أو افتتاح أو عملية تشغيل بسبب نقص صنف بسيط كان يمكن تحديده مبكرًا.`
 				]}
-			/>
+				/>
 
-		</HzStack>
+			</HzStack>
 
-	</EmoStrip>
+		</EmoStrip>
 
-
-
-
+	</ESec>
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+
+
+
+	<ESec
+		hidden
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -218,7 +516,11 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelS
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+	<ESec
+		hidden
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -271,50 +573,58 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelS
 
 
 
-	<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<ESec hidden>
 
-		<VrStack
-			pWidth={new Pixel(1300, 340)}
-			pGap={new Pixel(25, 20)}
-			pPad={new Pixel(35, 20)}
-		>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
 
-			<Emograph
-				pSize={new Size(1100, "auto", 320, "auto")}
-				pTitle={Text.H3.Centered.OfText("لكل شكل طلب طريقة تعامل مختلفة")}
-				pText={Text.Body.OfText(`ليست كل طلبات التوريد متشابهة. بعض الطلبات يبدأ بصنف واحد واضح، وبعضها يبدأ بقائمة طويلة، وبعضها يبدأ بصورة، وبعضها يبدأ بعرض سعر يحتاج إلى مراجعة، وبعضها عاجل لدرجة أن معيار الوقت يصبح أهم من البحث الطويل عن أقل سعر. فهم نوع الطلب يساعد على تحديد طريقة التعامل معه، ويمنع استخدام نفس المسار لكل الحالات.
+			<VrStack
+				pWidth={new Pixel(1300, 340)}
+				pGap={new Pixel(25, 20)}
+				pPad={new Pixel(35, 20)}
+			>
+
+				<Emograph
+					pSize={new Size(1100, "auto", 320, "auto")}
+					pTitle={Text.H3.Centered.OfText("لكل شكل طلب طريقة تعامل مختلفة")}
+					pText={Text.Body.OfText(`ليست كل طلبات التوريد متشابهة. بعض الطلبات يبدأ بصنف واحد واضح، وبعضها يبدأ بقائمة طويلة، وبعضها يبدأ بصورة، وبعضها يبدأ بعرض سعر يحتاج إلى مراجعة، وبعضها عاجل لدرجة أن معيار الوقت يصبح أهم من البحث الطويل عن أقل سعر. فهم نوع الطلب يساعد على تحديد طريقة التعامل معه، ويمنع استخدام نفس المسار لكل الحالات.
 
 في قوائم المشروعات المتكاملة، قد يتعامل العميل مع كشف مشتريات يتضمن أصنافًا من أكثر من قطاع، مثل مستلزمات كهرباء وسباكة ومهمات أمن صناعي وتجهيزات مكتبية وخامات تشطيب. هذه الحالة لا تصلح للتسعير العشوائي بندًا بندًا فقط، بل تحتاج إلى تصنيف القائمة، فصل البنود الواضحة عن البنود الناقصة، وتحديد ما يمكن تجميعه في توريد واحد وما يحتاج موردًا متخصصًا.`)}
-			/>
+				/>
 
-			<CardsGr
-				pWidth={new RespString("1300px", "340px")}
-				pCardBg={new ElemBg(Colors.WhiteOff)}
-				pCardTitleFnt={Text.H4}
-				pCardBodyFnt={Text.Body}
-				pStackDir="Row"
-				pSpacing={20}
-				pTopic1={new Topic("طلب صنف واحد", `مناسب عندما يعرف العميل الصنف أو يملك صورة أو رابطًا أو عينة. يتم التركيز على الكمية، المقاس، مكان التسليم، وهل المطلوب مطابق تمامًا أم يقبل بديلًا.`)}
-				pTopic2={new Topic("قائمة مشتريات كاملة", `تصلح للشركات والمواقع والمحلات قبل الافتتاح. يتم ترتيب القائمة وتصنيف البنود وتحديد الناقص قبل التسعير حتى لا تضيع الأصناف بين أكثر من مورد.`)}
-				pTopic3={new Topic("توريد دوري", `مناسب لمستهلكات التشغيل والصيانة والأصناف المتكررة. يمكن بناء قائمة ثابتة نسبيًا ومعدل احتياج شهري أو أسبوعي لتقليل الشراء الطارئ.`)}
-				pTopic4={new Topic("توريد عاجل", `يخدم نقصًا مؤثرًا في موقع أو تشغيل. يتم التركيز على المتاح الفعلي، أقرب موعد، تكلفة النقل، وهل يمكن قبول بديل قريب.`)}
-				pTopic5={new Topic("مقارنة أسعار", `تساعد العميل على مقارنة عروض الموردين على أساس مواصفة موحدة، لا على أساس أرقام تبدو متشابهة بينما تختلف في النقل أو الجودة أو الفاتورة.`)}
-				pTopic6={new Topic("بحث عن بدائل", `يستخدم عندما يكون الصنف غير متوفر أو مكلفًا أو غير واضح الاسم. البديل لا يقاس بالسعر فقط، بل بملاءمته للاستخدام المطلوب.`)}
-				pTopic7={new Topic("مراجعة عرض مورد", `مناسبة قبل اعتماد عرض قائم. يتم النظر في وضوح البنود، الكمية، مدة التوريد، النقل، الضريبة، الفاتورة، وشروط الاستبدال.`)}
-				pTopic8={new Topic("توريد مع نقل أو تركيب", `بعض الأصناف تحتاج تسليمًا خاصًا أو تركيبًا أو تنزيلًا. يجب إعلان ذلك من البداية لأن المسؤولية والسعر والمدة تختلف عن التوريد فقط.`)}
-			/>
+				<CardsGr
+					pWidth={new RespString("1300px", "340px")}
+					pCardBg={new ElemBg(Colors.WhiteOff)}
+					pCardTitleFnt={Text.H4}
+					pCardBodyFnt={Text.Body}
+					pStackDir="Row"
+					pSpacing={20}
+					pTopic1={new Topic("طلب صنف واحد", `مناسب عندما يعرف العميل الصنف أو يملك صورة أو رابطًا أو عينة. يتم التركيز على الكمية، المقاس، مكان التسليم، وهل المطلوب مطابق تمامًا أم يقبل بديلًا.`)}
+					pTopic2={new Topic("قائمة مشتريات كاملة", `تصلح للشركات والمواقع والمحلات قبل الافتتاح. يتم ترتيب القائمة وتصنيف البنود وتحديد الناقص قبل التسعير حتى لا تضيع الأصناف بين أكثر من مورد.`)}
+					pTopic3={new Topic("توريد دوري", `مناسب لمستهلكات التشغيل والصيانة والأصناف المتكررة. يمكن بناء قائمة ثابتة نسبيًا ومعدل احتياج شهري أو أسبوعي لتقليل الشراء الطارئ.`)}
+					pTopic4={new Topic("توريد عاجل", `يخدم نقصًا مؤثرًا في موقع أو تشغيل. يتم التركيز على المتاح الفعلي، أقرب موعد، تكلفة النقل، وهل يمكن قبول بديل قريب.`)}
+					pTopic5={new Topic("مقارنة أسعار", `تساعد العميل على مقارنة عروض الموردين على أساس مواصفة موحدة، لا على أساس أرقام تبدو متشابهة بينما تختلف في النقل أو الجودة أو الفاتورة.`)}
+					pTopic6={new Topic("بحث عن بدائل", `يستخدم عندما يكون الصنف غير متوفر أو مكلفًا أو غير واضح الاسم. البديل لا يقاس بالسعر فقط، بل بملاءمته للاستخدام المطلوب.`)}
+					pTopic7={new Topic("مراجعة عرض مورد", `مناسبة قبل اعتماد عرض قائم. يتم النظر في وضوح البنود، الكمية، مدة التوريد، النقل، الضريبة، الفاتورة، وشروط الاستبدال.`)}
+					pTopic8={new Topic("توريد مع نقل أو تركيب", `بعض الأصناف تحتاج تسليمًا خاصًا أو تركيبًا أو تنزيلًا. يجب إعلان ذلك من البداية لأن المسؤولية والسعر والمدة تختلف عن التوريد فقط.`)}
+				/>
 
-		</VrStack>
+			</VrStack>
 
-	</EmoStrip>
+		</EmoStrip>
 
-
-
-
+	</ESec>
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+
+
+
+	<ESec
+		hidden
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -364,7 +674,11 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelS
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+	<ESec
+		hidden
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #111820 "
@@ -414,50 +728,58 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelS
 
 
 
-	<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec hidden>
 
-		<VrStack
-			pWidth={new Pixel(1300, 340)}
-			pGap={new Pixel(25, 20)}
-			pPad={new Pixel(35, 20)}
-		>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
 
-			<Emograph
-				pSize={new Size(1100, "auto", 320, "auto")}
-				pTitle={Text.H3.Centered.OfText("المخاطرة ليست نظرية")}
-				pText={Text.Body.OfText(`التوريد العشوائي لا يعني بالضرورة التعامل مع مورد سيئ. أحيانًا يكون المورد جيدًا، لكن الطلب نفسه غير واضح. وأحيانًا يكون السعر مناسبًا، لكن شروط التسليم غير مكتوبة. وأحيانًا يكون المنتج صحيحًا، لكن الكمية أو المقاس أو التوقيت غير مناسب. لذلك فإن تقليل المخاطر لا يعتمد على الثقة وحدها، بل على توضيح التفاصيل التي يمكن أن تتحول إلى خلاف لاحقًا.
+			<VrStack
+				pWidth={new Pixel(1300, 340)}
+				pGap={new Pixel(25, 20)}
+				pPad={new Pixel(35, 20)}
+			>
+
+				<Emograph
+					pSize={new Size(1100, "auto", 320, "auto")}
+					pTitle={Text.H3.Centered.OfText("المخاطرة ليست نظرية")}
+					pText={Text.Body.OfText(`التوريد العشوائي لا يعني بالضرورة التعامل مع مورد سيئ. أحيانًا يكون المورد جيدًا، لكن الطلب نفسه غير واضح. وأحيانًا يكون السعر مناسبًا، لكن شروط التسليم غير مكتوبة. وأحيانًا يكون المنتج صحيحًا، لكن الكمية أو المقاس أو التوقيت غير مناسب. لذلك فإن تقليل المخاطر لا يعتمد على الثقة وحدها، بل على توضيح التفاصيل التي يمكن أن تتحول إلى خلاف لاحقًا.
 
 في السوق المفتوح، قد يدفع العميل ثمنًا أقل في البداية ثم يدفع الفرق لاحقًا في النقل، أو إعادة الشراء، أو تأخير الموقع، أو رفض الاستلام، أو استبدال صنف غير مطابق. لذلك يجب أن تظهر المخاطر داخل صفحة الخدمة بشكل واضح، لأن العميل الجاد لا يبحث عن كلام مطمئن فقط، بل يبحث عن آلية تقلل احتمالات الخسارة.`)}
-			/>
+				/>
 
-			<CardsGr
-				pWidth={new RespString("1300px", "340px")}
-				pCardBg={new ElemBg(Colors.Creamy)}
-				pCardTitleFnt={Text.H4}
-				pCardBodyFnt={Text.Body}
-				pStackDir="Row"
-				pSpacing={20}
-				pTopic1={new Topic("وصف غير واضح", `الأثر: تسعير غير دقيق أو توريد صنف مختلف. المعالجة: طلب صورة أو مقاس أو استخدام أو عينة أو بيانات إضافية قبل السعر النهائي.`)}
-				pTopic2={new Topic("اختلاف الجودة", `الأثر: مقارنة غير عادلة بين أسعار تبدو متقاربة. المعالجة: توضيح الدرجة أو البديل أو حدود الفحص قبل اعتماد الطلب.`)}
-				pTopic3={new Topic("نقل غير محسوب", `الأثر: ظهور تكلفة إضافية بعد الاتفاق. المعالجة: تحديد مكان التسليم وطريقة النقل قبل اعتماد السعر.`)}
-				pTopic4={new Topic("نفاد الصنف", `الأثر: تأخير الطلب أو قبول بديل غير مناسب. المعالجة: تأكيد التوفر أو اقتراح بدائل قبل الالتزام النهائي.`)}
-				pTopic5={new Topic("كمية خاطئة", `الأثر: تكلفة زائدة أو تعطيل لاحق. المعالجة: مراجعة الكمية حسب الاستخدام أو المساحة أو معدل الاستهلاك عند الإمكان.`)}
-				pTopic6={new Topic("فاتورة غير واضحة", `الأثر: صعوبة في المحاسبة أو إثبات الشراء. المعالجة: ذكر الحاجة إلى فاتورة أو مستند شراء من البداية.`)}
-				pTopic7={new Topic("استبدال غير متفق عليه", `الأثر: خلاف بعد الاستلام. المعالجة: توضيح شروط الاستبدال قبل الدفع والاستخدام.`)}
-				pTopic8={new Topic("طلب عاجل غير منضبط", `الأثر: قبول سعر أو بديل غير مناسب تحت ضغط الوقت. المعالجة: تحديد الموعد والكمية والمنطقة ودرجة قبول البدائل فورًا.`)}
-			/>
+				<CardsGr
+					pWidth={new RespString("1300px", "340px")}
+					pCardBg={new ElemBg(Colors.Creamy)}
+					pCardTitleFnt={Text.H4}
+					pCardBodyFnt={Text.Body}
+					pStackDir="Row"
+					pSpacing={20}
+					pTopic1={new Topic("وصف غير واضح", `الأثر: تسعير غير دقيق أو توريد صنف مختلف. المعالجة: طلب صورة أو مقاس أو استخدام أو عينة أو بيانات إضافية قبل السعر النهائي.`)}
+					pTopic2={new Topic("اختلاف الجودة", `الأثر: مقارنة غير عادلة بين أسعار تبدو متقاربة. المعالجة: توضيح الدرجة أو البديل أو حدود الفحص قبل اعتماد الطلب.`)}
+					pTopic3={new Topic("نقل غير محسوب", `الأثر: ظهور تكلفة إضافية بعد الاتفاق. المعالجة: تحديد مكان التسليم وطريقة النقل قبل اعتماد السعر.`)}
+					pTopic4={new Topic("نفاد الصنف", `الأثر: تأخير الطلب أو قبول بديل غير مناسب. المعالجة: تأكيد التوفر أو اقتراح بدائل قبل الالتزام النهائي.`)}
+					pTopic5={new Topic("كمية خاطئة", `الأثر: تكلفة زائدة أو تعطيل لاحق. المعالجة: مراجعة الكمية حسب الاستخدام أو المساحة أو معدل الاستهلاك عند الإمكان.`)}
+					pTopic6={new Topic("فاتورة غير واضحة", `الأثر: صعوبة في المحاسبة أو إثبات الشراء. المعالجة: ذكر الحاجة إلى فاتورة أو مستند شراء من البداية.`)}
+					pTopic7={new Topic("استبدال غير متفق عليه", `الأثر: خلاف بعد الاستلام. المعالجة: توضيح شروط الاستبدال قبل الدفع والاستخدام.`)}
+					pTopic8={new Topic("طلب عاجل غير منضبط", `الأثر: قبول سعر أو بديل غير مناسب تحت ضغط الوقت. المعالجة: تحديد الموعد والكمية والمنطقة ودرجة قبول البدائل فورًا.`)}
+				/>
 
-		</VrStack>
+			</VrStack>
 
-	</EmoStrip>
+		</EmoStrip>
 
-
-
-
+	</ESec>
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+
+
+
+
+	<ESec
+		hidden
+		pBg={new ElemBg(Colors.Creamy)}
+		pAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -504,7 +826,11 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelS
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec
+		hidden
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -554,44 +880,52 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelS
 
 
 
-	<EmoStrip pBg={new ElemBg("#111820")} pAlign={Align.Center}>
+	<ESec hidden>
 
-		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+		<EmoStrip pBg={new ElemBg("#111820")} pAlign={Align.Center}>
 
-			<Emograph
-				pSize={new Size(620, "auto", 320, "auto")}
-				pTitle={Text.H3.WithColor(Colors.GreenLite).OfText("الشفافية هي أساس التعامل")}
-				pText={Text.Body.White.OfText(`في عالم المعاملات التجارية بين الشركات والمواقع والأنشطة، لا يكفي الاعتماد على الثقة الشفهية. بناء علاقة مستدامة يتطلب عروضًا واضحة ومعايير عمل تحمي حقوق العميل ومقدم الخدمة معًا. أول هذه المعايير هو توضيح المواصفة قبل السعر النهائي. لا يتحول الطلب الغامض إلى سعر نهائي لمجرد استعجال العميل. يمكن إعطاء تقدير مبدئي عند الحاجة، لكن يجب توضيح أن السعر النهائي مرتبط باستكمال البيانات.
+			<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+				<Emograph
+					pSize={new Size(620, "auto", 320, "auto")}
+					pTitle={Text.H3.WithColor(Colors.GreenLite).OfText("الشفافية هي أساس التعامل")}
+					pText={Text.Body.White.OfText(`في عالم المعاملات التجارية بين الشركات والمواقع والأنشطة، لا يكفي الاعتماد على الثقة الشفهية. بناء علاقة مستدامة يتطلب عروضًا واضحة ومعايير عمل تحمي حقوق العميل ومقدم الخدمة معًا. أول هذه المعايير هو توضيح المواصفة قبل السعر النهائي. لا يتحول الطلب الغامض إلى سعر نهائي لمجرد استعجال العميل. يمكن إعطاء تقدير مبدئي عند الحاجة، لكن يجب توضيح أن السعر النهائي مرتبط باستكمال البيانات.
 
 العنصر الثاني هو توضيح الكمية ووحدة القياس. لا يكفي أن تكون الكمية رقمًا. يجب أن تكون الوحدة واضحة: قطعة، متر، متر مربع، عبوة، كرتونة، طقم، كيلو، أو أي وحدة مناسبة. هذا التفصيل البسيط يمنع أخطاء كبيرة. العنصر الثالث هو تحديد مكان التسليم قبل اعتماد السعر، لأن المسافة وحجم الصنف وطريقة التنزيل قد تؤثر في التكلفة ومدة التنفيذ.
 
 العنصر الرابع هو توضيح المستندات. بعض العملاء يحتاجون إلى فاتورة أو إيصال أو عرض مكتوب. في التعاملات بين الشركات، قد يكون هذا جزءًا أساسيًا من دورة الشراء والمحاسبة. لذلك يجب سؤال العميل مبكرًا عن نوع المستند المطلوب، وهل السعر المطروح يشمل ذلك أم يحتاج إلى ترتيب خاص.`)}
-			/>
+				/>
 
-			<CardsGr
-				pWidth={new RespString("620px", "320px")}
-				pCardBg={new ElemBg(Colors.Creamy)}
-				pCardTitleFnt={Text.H4}
-				pCardBodyFnt={Text.Body}
-				pStackDir="Col"
-				pSpacing={20}
-				pTopic1={new Topic("مواصفة مكتوبة", `كلما كان الوصف أوضح، أصبح السعر والمقارنة والاستلام أكثر أمانًا. المواصفة قد تشمل صورة، كود، مقاس، كمية، وحدة، أو استخدام.`)}
-				pTopic2={new Topic("عرض قابل للمراجعة", `العرض الجيد يوضح السعر وما يشمله وما لا يشمله، مثل النقل والضريبة ومدة التوريد وطريقة الدفع والمستندات.`)}
-				pTopic3={new Topic("استلام أوضح", `الاستلام يجب أن يراجع العدد والحالة الظاهرة وتطابق الوصف الأساسي وأي ملحقات أو مستندات تم الاتفاق عليها.`)}
-				pTopic4={new Topic("بدائل معلنة", `عند عدم توفر الصنف، يجب توضيح الفرق بين البديل والمطلوب، وهل الفرق في السعر أو الجودة أو المقاس أو مدة التوريد.`)}
-			/>
+				<CardsGr
+					pWidth={new RespString("620px", "320px")}
+					pCardBg={new ElemBg(Colors.Creamy)}
+					pCardTitleFnt={Text.H4}
+					pCardBodyFnt={Text.Body}
+					pStackDir="Col"
+					pSpacing={20}
+					pTopic1={new Topic("مواصفة مكتوبة", `كلما كان الوصف أوضح، أصبح السعر والمقارنة والاستلام أكثر أمانًا. المواصفة قد تشمل صورة، كود، مقاس، كمية، وحدة، أو استخدام.`)}
+					pTopic2={new Topic("عرض قابل للمراجعة", `العرض الجيد يوضح السعر وما يشمله وما لا يشمله، مثل النقل والضريبة ومدة التوريد وطريقة الدفع والمستندات.`)}
+					pTopic3={new Topic("استلام أوضح", `الاستلام يجب أن يراجع العدد والحالة الظاهرة وتطابق الوصف الأساسي وأي ملحقات أو مستندات تم الاتفاق عليها.`)}
+					pTopic4={new Topic("بدائل معلنة", `عند عدم توفر الصنف، يجب توضيح الفرق بين البديل والمطلوب، وهل الفرق في السعر أو الجودة أو المقاس أو مدة التوريد.`)}
+				/>
 
-		</HzStack>
+			</HzStack>
 
-	</EmoStrip>
+		</EmoStrip>
 
-
-
-
+	</ESec>
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+
+
+
+	<ESec
+		hidden
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -640,6 +974,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelS
 
 
 	<ESec
+		hidden
 		id="SupplyRequest"
 		pBg={new ElemBg("#111820")}
 		pAlign={Align.Center}
@@ -690,7 +1025,11 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelS
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<ESec
+		hidden
+		pBg={new ElemBg(Colors.Creamy)}
+		pAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -732,29 +1071,31 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelS
 
 
 
-	<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec hidden>
 
-		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
 
-			<Emograph
-				pSize={new Size(620, "auto", 320, "auto")}
-				pTitle={Text.H3.OfText("الاختيارات كثيرة ولكن القرار يحتاج ضبطًا")}
-				pText={Text.Body.OfText(`يظن بعض العملاء أن وجود عدد كبير من الموردين داخل القاهرة والجيزة يجعل عملية الشراء سهلة تلقائيًا. الواقع أن كثافة السوق تعطي فرصًا أفضل، لكنها تخلق أيضًا تحديات في المقارنة والمتابعة. قد يجد العميل عشرات الأسعار للصنف نفسه، لكنه لا يعرف هل هذه الأسعار تتحدث عن نفس الجودة ونفس الكمية ونفس طريقة التسليم. وقد يكون الصنف متوفرًا في منطقة بعيدة داخل نفس المحافظة، لكن تكلفة نقله أو زمن وصوله يجعلان العرض أقل ملاءمة من بديل أقرب وأكثر وضوحًا.
+			<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+				<Emograph
+					pSize={new Size(620, "auto", 320, "auto")}
+					pTitle={Text.H3.OfText("الاختيارات كثيرة ولكن القرار يحتاج ضبطًا")}
+					pText={Text.Body.OfText(`يظن بعض العملاء أن وجود عدد كبير من الموردين داخل القاهرة والجيزة يجعل عملية الشراء سهلة تلقائيًا. الواقع أن كثافة السوق تعطي فرصًا أفضل، لكنها تخلق أيضًا تحديات في المقارنة والمتابعة. قد يجد العميل عشرات الأسعار للصنف نفسه، لكنه لا يعرف هل هذه الأسعار تتحدث عن نفس الجودة ونفس الكمية ونفس طريقة التسليم. وقد يكون الصنف متوفرًا في منطقة بعيدة داخل نفس المحافظة، لكن تكلفة نقله أو زمن وصوله يجعلان العرض أقل ملاءمة من بديل أقرب وأكثر وضوحًا.
 
 النطاق المحلي مهم لأن كثيرًا من طلبات التوريد تكون مرتبطة بوقت تشغيل أو مرحلة تنفيذ أو موعد افتتاح. في هذه الحالات لا يكفي أن يكون الصنف متاحًا في أي مكان، بل يجب أن يكون قابلًا للوصول في الموعد المطلوب وبطريقة تسليم مناسبة. بعض الأصناف يمكن إرسالها بسهولة، وبعضها يحتاج سيارة أو تحميلًا أو تنزيلًا أو تنسيقًا مع مسؤول استلام. لذلك يتم التعامل مع منطقة التسليم كجزء من المواصفة التجارية للطلب، وليس تفصيلًا ثانويًا يترك لآخر لحظة.
 
 كما أن اختلاف طبيعة المناطق داخل القاهرة والجيزة يؤثر في التنفيذ. التسليم إلى مقر إداري يختلف عن موقع بناء، ومخزن يختلف عن محل تجاري في شارع مزدحم، ونقطة استلام سهلة تختلف عن مكان يحتاج إلى تصريح دخول أو موعد تحميل محدد. كل هذه التفاصيل قد لا تظهر في اسم الصنف، لكنها تظهر في نجاح عملية التوريد أو تعثرها.`)}
-			/>
+				/>
 
-			<EmoList
-				pWidth={new RespString("620px", "320px")}
-				pTitle={Text.H3.OfText("ما الذي نراجعه في التسليم المحلي؟")}
-				pDesc={Text.Body.OfText("هذه الأسئلة تساعد على تحويل العنوان العام إلى خطة توريد قابلة للتنفيذ.")}
-				pHeadBg={new ElemBg(Colors.GreenLite)}
-				pItemsBg={new ElemBg(Colors.Creamy)}
-				pItemFnt={Text.Body}
-				pNumbered={false}
-				pItems={[
+				<EmoList
+					pWidth={new RespString("620px", "320px")}
+					pTitle={Text.H3.OfText("ما الذي نراجعه في التسليم المحلي؟")}
+					pDesc={Text.Body.OfText("هذه الأسئلة تساعد على تحويل العنوان العام إلى خطة توريد قابلة للتنفيذ.")}
+					pHeadBg={new ElemBg(Colors.GreenLite)}
+					pItemsBg={new ElemBg(Colors.Creamy)}
+					pItemFnt={Text.Body}
+					pNumbered={false}
+					pItems={[
 					`هل التسليم في مقر شركة، موقع، محل، مخزن، أم نقطة استلام متفق عليها؟`,
 					`هل الصنف صغير يمكن تسليمه بسهولة أم يحتاج سيارة وتحميلًا وتنزيلًا؟`,
 					`هل الموعد مرن أم مرتبط بتشغيل أو افتتاح أو مرحلة تنفيذ لا تحتمل التأخير؟`,
@@ -762,19 +1103,25 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelS
 					`هل السعر المطلوب يجب أن يكون شامل النقل أم يفضل فصل النقل كبند مستقل؟`,
 					`هل يمكن استلام الطلب على دفعة واحدة أم الأفضل تقسيمه حسب توفر الأصناف؟`
 				]}
-			/>
+				/>
 
-		</HzStack>
+			</HzStack>
 
-	</EmoStrip>
+		</EmoStrip>
 
-
-
-
+	</ESec>
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+
+
+
+
+	<ESec
+		hidden
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -821,7 +1168,11 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelS
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec
+		hidden
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -869,29 +1220,31 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelS
 
 
 
-	<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<ESec hidden>
 
-		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
 
-			<Emograph
-				pSize={new Size(620, "auto", 320, "auto")}
-				pTitle={Text.H3.OfText("العرض الأرخص ليس دائمًا العرض الأوضح")}
-				pText={Text.Body.OfText(`كثير من العملاء يصلون إلى مرحلة متقدمة من الشراء قبل أن يكتشفوا أن عرض السعر الذي حصلوا عليه لا يكفي للاعتماد. قد يحتوي العرض على اسم الصنف والسعر فقط، دون توضيح الكمية الدقيقة أو وحدة القياس أو تكلفة النقل أو مدة التوريد أو الضريبة أو سياسة الاستبدال. وقد يكون السعر منخفضًا لأن جزءًا مهمًا من الخدمة غير مشمول، أو لأن المواصفة أقل مما يتوقعه العميل.
+			<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+
+				<Emograph
+					pSize={new Size(620, "auto", 320, "auto")}
+					pTitle={Text.H3.OfText("العرض الأرخص ليس دائمًا العرض الأوضح")}
+					pText={Text.Body.OfText(`كثير من العملاء يصلون إلى مرحلة متقدمة من الشراء قبل أن يكتشفوا أن عرض السعر الذي حصلوا عليه لا يكفي للاعتماد. قد يحتوي العرض على اسم الصنف والسعر فقط، دون توضيح الكمية الدقيقة أو وحدة القياس أو تكلفة النقل أو مدة التوريد أو الضريبة أو سياسة الاستبدال. وقد يكون السعر منخفضًا لأن جزءًا مهمًا من الخدمة غير مشمول، أو لأن المواصفة أقل مما يتوقعه العميل.
 
 مراجعة عرض المورد لا تعني التشكيك في المورد. هي خطوة تساعد العميل على فهم العرض قبل أن يدفع أو يصدر أمر شراء. أحيانًا تكون النتيجة أن العرض جيد ويحتاج فقط إلى استكمال بند أو اثنين. وأحيانًا تكشف المراجعة أن المقارنة بين العروض غير عادلة لأن كل مورد يسعر شيئًا مختلفًا. وفي بعض الحالات يظهر أن العميل يحتاج إلى بديل أو مواصفة أدق قبل اعتماد أي عرض.
 
 هذه الخدمة مفيدة خصوصًا للشركات الصغيرة، وأصحاب المحلات قبل الافتتاح، وملاك المشروعات، والمواقع التي تعمل تحت ضغط الوقت. فقرار الشراء لا ينبغي أن يعتمد على رقم السعر فقط، بل على وضوح ما سيصل ومتى سيصل وبأي مستندات وشروط.`)}
-			/>
+				/>
 
-			<EmoList
-				pWidth={new RespString("620px", "320px")}
-				pTitle={Text.H3.OfText("ما الذي نراجعه في العرض؟")}
-				pDesc={Text.Body.OfText("هذه العناصر تساعد العميل على طرح الأسئلة الصحيحة قبل الاعتماد.")}
-				pHeadBg={new ElemBg(Colors.GreenLite)}
-				pItemsBg={new ElemBg(Colors.WhiteOff)}
-				pItemFnt={Text.Body}
-				pNumbered={false}
-				pItems={[
+				<EmoList
+					pWidth={new RespString("620px", "320px")}
+					pTitle={Text.H3.OfText("ما الذي نراجعه في العرض؟")}
+					pDesc={Text.Body.OfText("هذه العناصر تساعد العميل على طرح الأسئلة الصحيحة قبل الاعتماد.")}
+					pHeadBg={new ElemBg(Colors.GreenLite)}
+					pItemsBg={new ElemBg(Colors.WhiteOff)}
+					pItemFnt={Text.Body}
+					pNumbered={false}
+					pItems={[
 					`هل اسم الصنف أو وصفه يكفي لتحديد المطلوب أم يحتاج كودًا أو صورة أو مواصفة تفصيلية؟`,
 					`هل الكمية ووحدة القياس واضحتان، أم يوجد رقم بلا وحدة يمكن فهمه بأكثر من طريقة؟`,
 					`هل السعر يشمل النقل والتحميل والتنزيل أم أن هذه البنود ستضاف لاحقًا؟`,
@@ -900,19 +1253,25 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelS
 					`هل شروط الاستبدال أو رفض الصنف غير المطابق مكتوبة بصورة يمكن الرجوع إليها؟`,
 					`هل يوجد بديل مقبول إذا لم يتوفر الصنف، وهل الفرق بين البديل والمطلوب واضح؟`
 				]}
-			/>
+				/>
 
-		</HzStack>
+			</HzStack>
 
-	</EmoStrip>
+		</EmoStrip>
 
-
-
-
+	</ESec>
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+
+
+
+	<ESec
+		hidden
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -959,7 +1318,11 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelS
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+	<ESec
+		hidden
+		pBg={new ElemBg(Colors.Gray1)}
+		pAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #111820 "
@@ -1088,54 +1451,6 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, RelS
 		/>
 
 	</EmoFaq>
-
-
-
-
-
-
-
-	<RelServices
-		pTitle={Text.H2.Centered.White.OfText("خدمات تجارية قد ترتبط بطلبات التوريد")}
-		pDesc={Text.Body.Centered.White.OfText("هذه خدمات فعلية يمكن أن تدخل ضمن طلبات توريد أو تجهيز أو تنفيذ، وليست صفحات معلومات عامة.")}
-		pHeadBg={new ElemBg(Colors.Gray5)}
-		pBodyBg={new ElemBg(Colors.Gray1)}
-		pCardBg={new ElemBg(Colors.WhiteOff)}
-	>
-
-		<RelServiceItem
-			pTitle="توريد وتركيب رخام"
-			pDesc="توريد خامات رخام للمداخل والسلالم والأرضيات والحوائط والديكورات حسب المقاس والاستخدام."
-			pHref="/emostone/marble"
-			pImg="/Media/Emostone/Marble/HeroD.webp"
-			pBtnText="افتح خدمة الرخام"
-		/>
-
-		<RelServiceItem
-			pTitle="توريد وتركيب جرانيت"
-			pDesc="حلول مناسبة للمساحات عالية الاستخدام والدرج والمداخل والواجهات والكاونترات."
-			pHref="/emostone/granit"
-			pImg="/Media/Emostone/Granit/HeroD.webp"
-			pBtnText="افتح خدمة الجرانيت"
-		/>
-
-		<RelServiceItem
-			pTitle="توريد وتركيب كوارتز"
-			pDesc="توريد خامات كوارتز للأسطح الداخلية والكاونترات مع دراسة المقاس والاستخدام قبل الطلب."
-			pHref="/emostone/quartz"
-			pImg="/Media/Emostone/Quartz/HeroD.webp"
-			pBtnText="افتح خدمة الكوارتز"
-		/>
-
-		<RelServiceItem
-			pTitle="تشطيب وحدات ومحلات"
-			pDesc="خدمة تنفيذ وتشطيب يمكن أن ترتبط بتوريد خامات ومستلزمات تشغيل وتجهيز داخل نطاق واحد."
-			pHref="/emocrete/finishing"
-			pImg="/Media/Emocrete/Finishing/HeroL.webp"
-			pBtnText="افتح خدمة التشطيب"
-		/>
-
-	</RelServices>
 
 
 

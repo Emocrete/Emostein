@@ -2,15 +2,136 @@
 import type { HTMLAttributes } from "astro/types";
 import { Place, type PlaceProps } from "@/TypesLib";
 
-interface Props extends HTMLAttributes<"article">, PlaceProps { pBg?: string; pBorder?: string; pRadius?: number; pBlur?: number; }
-const { pBg = "rgba(255,255,255,.72)", pBorder = "rgba(255,255,255,.72)", pRadius = 28, pBlur = 16, pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly, id: pGivenID = GetWidgetId("GlassCard"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
+interface Props extends HTMLAttributes<"article">, PlaceProps {
+	pBg?: string;
+	pBorder?: string;
+	pRadius?: number;
+	pBlur?: number;
+}
+
+const {
+	pBg = "rgba(255,255,255,.72)",
+	pBorder = "rgba(255,255,255,.72)",
+	pRadius = 28,
+	pBlur = 16,
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("GlassCard"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
-const cPlace = new Place(Astro.props as PlaceProps, `--FrameBg:${pBg}; --FrameBorder:${pBorder}; --FrameRadius:${pRadius}px; --FrameBlur:${pBlur}px; ${cGivenStyle}`);
+
+const cSizeStyle = [
+	`--FrameWidthL:${pSize?.WidthL ?? "100%"};`,
+	`--FrameWidthP:${pSize?.WidthP ?? pSize?.WidthL ?? "100%"};`,
+	`--FrameHeightL:${pSize?.HeightL ?? "auto"};`,
+	`--FrameHeightP:${pSize?.HeightP ?? pSize?.HeightL ?? "auto"};`,
+].join(" ");
+
+const cPlace = new Place(
+	Astro.props as PlaceProps,
+	`--FrameBg:${pBg}; --FrameBorder:${pBorder}; --FrameRadius:${pRadius}px; --FrameBlur:${pBlur}px; ${cSizeStyle} ${cGivenStyle}`
+);
 ---
-<article class={`GlassCard ${cPlace.Class} ${pGivenClass}`.trim()} style={cPlace.Style} id={pGivenID} {...RemAttr}><slot /></article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<article
+	class = {`GlassCard ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	data-own-size={pSize ? "true" : undefined}
+	{...RemAttr}
+>
+
+
+
+
+
+
+
+	<slot />
+
+
+
+
+
+
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <style>
-	.GlassCard { position: relative; display: flex; flex-direction: column; justify-content: center; width: 100%; height: auto; padding: clamp(20px, 3vw, 42px); border: 1px solid var(--FrameBorder); border-radius: var(--FrameRadius); background: var(--FrameBg); box-shadow: 0 24px 65px rgba(0,0,0,.16); backdrop-filter: blur(var(--FrameBlur)); box-sizing: border-box; }
-.GlassCard.IsPlaced {
+
+
+
+	.GlassCard {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		width: var(--FrameWidthL, 100%);
+		max-width: 100%;
+		height: var(--FrameHeightL, auto);
+		padding: clamp(20px, 3vw, 42px);
+		border: 1px solid var(--FrameBorder);
+		border-radius: var(--FrameRadius);
+		background: var(--FrameBg);
+		box-shadow: 0 24px 65px rgba(0,0,0,.16);
+		backdrop-filter: blur(var(--FrameBlur));
+		box-sizing: border-box;
+	}
+
+
+
+	.GlassCard.IsPlaced {
 		position: absolute;
 		left: var(--PlaceXL);
 		top: var(--PlaceYL);
@@ -25,7 +146,39 @@ const cPlace = new Place(Astro.props as PlaceProps, `--FrameBg:${pBg}; --FrameBo
 		box-sizing: border-box;
 	}
 
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
 	@media (orientation: portrait) {
+		.GlassCard {
+			width: var(--FrameWidthP, var(--FrameWidthL, 100%));
+			height: var(--FrameHeightP, var(--FrameHeightL, auto));
+		}
+
 		.GlassCard.IsPlaced {
 			left: var(--PlaceXP);
 			top: var(--PlaceYP);
@@ -35,4 +188,7 @@ const cPlace = new Place(Astro.props as PlaceProps, `--FrameBg:${pBg}; --FrameBo
 			transform: rotate(var(--PlaceRotateP, var(--PlaceRotateL, 0deg)));
 		}
 	}
+
+
+
 </style>

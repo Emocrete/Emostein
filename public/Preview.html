@@ -378,6 +378,8 @@ const cPortFrame = document.getElementById("portFrame");
 			let cShowLandscapeFrame = true;
 			let cShowPortraitFrame = true;
 			let cResizeFrame = 0;
+			let cCopyButtonLastOpenSignature = "";
+			let cCopyButtonLastOpenTime = 0;
 
 			InitializeTools();
 SetPreviewSources();
@@ -395,6 +397,8 @@ window.addEventListener("resize", RequestUpdateLayout);
 
 				cPreviewPortInput.value = cDefaultPreviewPort;
 				cPreviewPathInput.value = cDefaultRelativeSrc;
+
+				ApplyPreviewUrlParameters();
 
 				SyncDesktopInputs();
 				ApplyWrapperBaseSizes();
@@ -448,6 +452,7 @@ cPreviewPathInput.addEventListener("paste", HandlePathInputPaste);
 	cMobileFrameBtn.addEventListener("click", TogglePortraitFrame);
 	cDesktopFrameBtn.addEventListener("click", ToggleLandscapeFrame);
 
+	RegisterCopyButtonOpenGesture();
 	cCopyBtn.addEventListener("click", CopyPreviewSource);
 	cResetBtn.addEventListener("click", ResetPreviewSystem);
 }
@@ -715,22 +720,207 @@ function SetFrameSource(pFrame, pSource) {
 	return cPath;
 }
 
-			async function CopyPreviewSource() {
+			function RegisterCopyButtonOpenGesture() {
+				if (window.PointerEvent) {
+					cCopyBtn.addEventListener("pointerdown", HandleCopyButtonOpenGesture);
+				}
+				else {
+					cCopyBtn.addEventListener("mousedown", HandleCopyButtonOpenGesture);
+				}
+			}
+
+			function HandleCopyButtonOpenGesture(pEvent) {
+				const cOpenMode = GetCopyButtonOpenMode(pEvent);
+
+				if (!cOpenMode) {
+					return;
+				}
+
 				const cSource = cPreviewSrc || BuildPreviewSource(cPreviewPortInput.value, cPreviewPathInput.value);
+				const cTarget = GetCopyButtonTarget(cOpenMode, cSource);
+
+				if (!cTarget) {
+					return;
+				}
+
+				pEvent.preventDefault();
+
+				cCopyButtonLastOpenSignature = BuildCopyButtonOpenSignature(cOpenMode, cTarget);
+				cCopyButtonLastOpenTime = Date.now();
+
+				OpenUrlInNewWindow(cTarget);
+			}
+
+			async function CopyPreviewSource(pEvent) {
+				const cSource = cPreviewSrc || BuildPreviewSource(cPreviewPortInput.value, cPreviewPathInput.value);
+				const cOpenMode = GetCopyButtonOpenMode(pEvent);
 
 				if (!cSource) {
 					ShowCopyButtonFeedback(false);
 					return;
 				}
 
+				OpenCopyButtonTargetIfNeeded(cOpenMode, cSource);
+
+				let cCopied = false;
+
 				try {
 					await navigator.clipboard.writeText(cSource);
-					ShowCopyButtonFeedback(true);
+					cCopied = true;
 				}
 				catch {
-					const cCopied = CopyTextFallback(cSource);
-					ShowCopyButtonFeedback(cCopied);
+					cCopied = CopyTextFallback(cSource);
 				}
+
+				ShowCopyButtonFeedback(cCopied);
+			}
+
+			function GetCopyButtonOpenMode(pEvent) {
+				if (!pEvent || !(pEvent.ctrlKey || pEvent.metaKey)) {
+					return "";
+				}
+
+				if (pEvent.altKey) {
+					return "preview";
+				}
+
+				return "source";
+			}
+
+			function OpenCopyButtonTargetIfNeeded(pOpenMode, pSource) {
+				const cTarget = GetCopyButtonTarget(pOpenMode, pSource);
+
+				if (!cTarget || WasCopyButtonTargetJustOpened(pOpenMode, cTarget)) {
+					return;
+				}
+
+				cCopyButtonLastOpenSignature = BuildCopyButtonOpenSignature(pOpenMode, cTarget);
+				cCopyButtonLastOpenTime = Date.now();
+
+				OpenUrlInNewWindow(cTarget);
+			}
+
+			function WasCopyButtonTargetJustOpened(pOpenMode, pTarget) {
+				const cSignature = BuildCopyButtonOpenSignature(pOpenMode, pTarget);
+				const cElapsed = Date.now() - cCopyButtonLastOpenTime;
+
+				return cCopyButtonLastOpenSignature === cSignature && cElapsed >= 0 && cElapsed < 1500;
+			}
+
+			function BuildCopyButtonOpenSignature(pOpenMode, pTarget) {
+				return `${pOpenMode || ""}|${pTarget || ""}`;
+			}
+
+			function GetCopyButtonTarget(pOpenMode, pSource) {
+				if (!pOpenMode) {
+					return "";
+				}
+
+				if (pOpenMode === "preview") {
+					return BuildPreviewPageSplitSource();
+				}
+
+				return pSource || "";
+			}
+
+			function OpenUrlInNewWindow(pUrl) {
+				if (!pUrl) {
+					return;
+				}
+
+				try {
+					if (window.EmoPreviewOpenChrome) {
+						window.EmoPreviewOpenChrome(pUrl);
+						return;
+					}
+				}
+				catch {
+				}
+
+				try {
+					const cOpenedWindow = window.open(pUrl, "_blank");
+
+					if (cOpenedWindow) {
+						cOpenedWindow.focus();
+					}
+				}
+				catch {
+				}
+			}
+
+			function BuildPreviewPageSplitSource() {
+				try {
+					const cUrl = new URL(window.location.href);
+
+					cUrl.searchParams.set("emoPreview", "1");
+					cUrl.searchParams.set("mode", "split");
+					cUrl.searchParams.set("port", CleanPreviewPort(cPreviewPortInput.value));
+					cUrl.searchParams.set("path", cPreviewPathInput.value || "");
+					cUrl.searchParams.set("desktopKey", cDesktopSizeSelect.value || cDefaultDesktopKey);
+					cUrl.searchParams.set("mobileKey", cMobileModelSelect.value || cDefaultMobileKey);
+					cUrl.searchParams.set("desktopWidth", String(cLandscape.Width));
+					cUrl.searchParams.set("desktopHeight", String(cLandscape.Height));
+					cUrl.searchParams.set("mobileWidth", String(cPortrait.Width));
+					cUrl.searchParams.set("mobileHeight", String(cPortrait.Height));
+
+					return cUrl.href;
+				}
+				catch {
+					return window.location.href;
+				}
+			}
+
+			function ApplyPreviewUrlParameters() {
+				const cParams = new URLSearchParams(window.location.search);
+
+				if (cParams.get("emoPreview") !== "1") {
+					return;
+				}
+
+				const cMobileKey = cParams.get("mobileKey");
+
+				if (cMobileKey && cMobileModels[cMobileKey]) {
+					cMobileModelSelect.value = cMobileKey;
+					cPortrait.Width = cMobileModels[cMobileKey].Width;
+					cPortrait.Height = cMobileModels[cMobileKey].Height;
+				}
+
+				const cDesktopKey = cParams.get("desktopKey");
+
+				if (cDesktopKey && cDesktopSizes[cDesktopKey]) {
+					cDesktopSizeSelect.value = cDesktopKey;
+					cLandscape.Width = cDesktopSizes[cDesktopKey].Width;
+					cLandscape.Height = cDesktopSizes[cDesktopKey].Height;
+				}
+
+				const cDesktopWidth = GetPositiveNumber(cParams.get("desktopWidth"), cLandscape.Width);
+				const cDesktopHeight = GetPositiveNumber(cParams.get("desktopHeight"), cLandscape.Height);
+				const cMobileWidth = GetPositiveNumber(cParams.get("mobileWidth"), cPortrait.Width);
+				const cMobileHeight = GetPositiveNumber(cParams.get("mobileHeight"), cPortrait.Height);
+
+				cLandscape.Width = cDesktopWidth;
+				cLandscape.Height = cDesktopHeight;
+				cPortrait.Width = cMobileWidth;
+				cPortrait.Height = cMobileHeight;
+
+				if (cDesktopKey === cCustomDesktopKey || (!cDesktopKey && (cParams.has("desktopWidth") || cParams.has("desktopHeight")))) {
+					cDesktopSizeSelect.value = cCustomDesktopKey;
+				}
+
+				if (cParams.has("port")) {
+					cPreviewPortInput.value = CleanPreviewPort(cParams.get("port"));
+				}
+
+				if (cParams.has("path")) {
+					cPreviewPathInput.value = cParams.get("path") || "";
+				}
+
+				if (cParams.get("mode") === "split") {
+					cShowLandscapeFrame = true;
+					cShowPortraitFrame = true;
+				}
+
+				cPreviewSrc = BuildPreviewSource(cPreviewPortInput.value, cPreviewPathInput.value);
 			}
 
 			function CopyTextFallback(pText) {
@@ -1065,6 +1255,7 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 				const cScrollSyncStorageKey = "EmoPreviewScrollSync";
 				const cActivePageFileName = "__emo_active_page.json";
 				const cDefaultLocateBridgePort = 38921;
+				const cOpenChromePath = "/__emo_preview_open_chrome";
 
 				let cAutoFollow = localStorage.getItem(cAutoFollowStorageKey) !== "0";
 				let cScrollSync = localStorage.getItem(cScrollSyncStorageKey) !== "0";
@@ -1084,6 +1275,7 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 					EnsureScrollSyncButton();
 					EnsureLocateCodeButton();
 					EnsureLocateMenu();
+					ExposeChromeBridge();
 					RegisterManualPathHold();
 					InitializeScrollSync();
 					CheckActivePage();
@@ -1220,6 +1412,7 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 
 					if (Number.isInteger(pData.bridgePort) && pData.bridgePort > 0) {
 						cLocateBridgePort = pData.bridgePort;
+						ExposeChromeBridge();
 					}
 
 					const cPath = pData.route || pData.pagesRelativePath || pData.path || pData.workspaceRelativePath || "";
@@ -1290,6 +1483,41 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 					cPath = cPath.replace(/\/+$/, "");
 
 					return cPath;
+				}
+
+				function ExposeChromeBridge() {
+					window.__emoPreviewBridgePort = cLocateBridgePort;
+					window.EmoPreviewOpenChrome = OpenChromeThroughBridge;
+				}
+
+				async function OpenChromeThroughBridge(pUrl) {
+					if (!pUrl) {
+						return false;
+					}
+
+					try {
+						const cResponse = await fetch("http://127.0.0.1:" + cLocateBridgePort + cOpenChromePath, {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json"
+							},
+							body: JSON.stringify({
+								url: pUrl,
+								newWindow: false
+							})
+						});
+
+						if (!cResponse.ok) {
+							throw new Error("HTTP " + cResponse.status);
+						}
+
+						const cResult = await cResponse.json();
+						return !!(cResult && cResult.ok);
+					}
+					catch (cError) {
+						console.error("Emo Preview open Chrome request failed", cError);
+						return false;
+					}
 				}
 
 				function EnsureScrollSyncButton() {
