@@ -1,0 +1,474 @@
+---
+import BLayout from "@/Layout.astro";
+import { Align, Colors, DirectSize, ElemBg, EmoMediaData, HoverColors, Loc, Location, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { Badge, BottTriSep, CardsGr, DuoCol, DuoSec, EmoBtn, EmoCall, EmoContactStrip, EmoCoverageMapStrip, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoRatingStrip, EmoStatsStrip, EmoStrip, ESec, FaqItem, FreeHero, FreeHeroFadeIn, FreeHeroFloatY, FreeHeroItem, FreeHeroPulse, FreeHeroSlideInBottom, FreeHeroSlideInLeft, FreeHeroSlideInRight, Grid, HzStack, IncLineSep, IndexBtn, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack, YTPlayer } from "@/Widgets";
+import BlurBlob from "@/Widgets/Shapes/Decor/BlurBlob.astro";
+import CircleGlow from "@/Widgets/Shapes/Decor/CircleGlow.astro";
+import FloatingIcon from "@/Widgets/Shapes/Decor/FloatingIcon.astro";
+import LinePath from "@/Widgets/Shapes/Decor/LinePath.astro";
+import Ribbon from "@/Widgets/Shapes/Decor/Ribbon.astro";
+import Splash from "@/Widgets/Shapes/Decor/Splash.astro";
+import SvgDots from "@/Widgets/Shapes/Decor/SvgDots.astro";
+import DoubleWave from "@/Widgets/Shapes/Edges/DoubleWave.astro";
+import BadgeFrame from "@/Widgets/Shapes/Frames/BadgeFrame.astro";
+import FloatingPanel from "@/Widgets/Shapes/Frames/FloatingPanel.astro";
+import GlassCard from "@/Widgets/Shapes/Frames/GlassCard.astro";
+import TiltCard from "@/Widgets/Shapes/Frames/TiltCard.astro";
+import SvgBlobCard from "@/Widgets/Cards/SvgBlobCard.astro";
+import SvgRadarCard from "@/Widgets/Cards/SvgRadarCard.astro";
+import { Hero, PriceCard } from "../../../site/Widgets";
+
+
+
+
+const cWhatsapp = "201014490054";
+
+const cSellerMsg = encodeURIComponent(
+`عايز أسجل عرض للبيع في خدمة دَعْبِس:
+نوع العرض: صيدلية شغالة / محل فاضي صالح للترخيص
+الموقع:
+المساحة:
+الواجهة:
+هل يوجد ترخيص حالي؟
+السعر المطلوب:
+رقم التواصل:
+ملاحظات إضافية:`
+);
+
+const cBuyerMsg = encodeURIComponent(
+`عايز أسجل طلب شراء في خدمة دَعْبِس:
+أبحث عن: صيدلية جاهزة / محل صالح لترخيص صيدلية
+المناطق المطلوبة:
+الميزانية التقريبية:
+المساحة المناسبة:
+أفضلية الموقع:
+مدى الجدية وموعد الشراء:
+رقم التواصل:
+ملاحظات إضافية:`
+);
+
+const cCommissionMsg = encodeURIComponent(
+`عايز أعرف تفاصيل عمولة دَعْبِس لتسويق صيدلية أو محل صالح لترخيص صيدلية.`
+);
+
+const cSellerUrl = `https://wa.me/${cWhatsapp}?text=${cSellerMsg}`;
+const cBuyerUrl = `https://wa.me/${cWhatsapp}?text=${cBuyerMsg}`;
+const cCommissionUrl = `https://wa.me/${cWhatsapp}?text=${cCommissionMsg}`;
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="دعبس .. خدمات تنقيب عن الصيدليات"
+	pDescr="نبحث عن صيدليات للبيع أو محلات صالحة للترخيص كصيدلية"
+>
+
+
+
+
+
+
+
+	<Hero />
+
+
+
+
+
+
+
+	<DuoSec
+		id="pharmacy-seller"
+		pBg={new ElemBg("#07111F")}
+		pAlign={Align.Center}
+		pContentSize={new DirectSize(new NumPer("1180px", "100%"))}
+		pGap={new Pixel(34, 18)}
+		pPad={new Pixel(70, 24)}
+		pMinH={new NumPer(620, 680)}
+	>
+
+		<BlurBlob
+			pColor="rgba(55,151,245,.34)"
+			pColor2="rgba(212,175,55,.22)"
+			pBlur={34}
+			pLoc={new Loc(new NumPer("-10%", "-30%"), new NumPer("4%", "2%"))}
+			pSize={new DirectSize(new NumPer("42%", "86%"), new NumPer("58%", "30%"))}
+			pOpacity={new Percent(80)}
+			pZ={1}
+		/>
+
+		<CircleGlow
+			pColor="rgba(212,175,55,.24)"
+			pColor2="rgba(255,255,255,.14)"
+			pBlur={42}
+			pLoc={new Loc(new NumPer("65%", "48%"), new NumPer("12%", "64%"))}
+			pSize={new DirectSize(new NumPer("34%", "76%"), new NumPer("48%", "26%"))}
+			pOpacity={new Percent(78)}
+			pZ={1}
+		/>
+
+		<DuoCol
+			pAlign="Start"
+			pPad={new Pixel(0)}
+			pGap={new Pixel(20, 14)}
+		>
+
+			<GlassCard
+				pBg="rgba(255,255,255,.088)"
+				pBorder="rgba(255,255,255,.18)"
+				pRadius={34}
+				pBlur={18}
+			>
+
+				<VrStack
+					pGap={new Pixel(22, 14)}
+					pPad={new Pixel(0)}
+					pAlign="Start"
+				>
+
+					<Emograph
+						pTitle={Text.H2.White.WithAlign("right").OfText("عندك صيدلية أو محل يصلح صيدلية؟")}
+						pText={Text.Body.White.WithAlign("right").OfText("سجل بيانات المكان، ونحن نراجعه كفرصة قابلة للتسويق: صيدلية شغالة معروضة للبيع، أو محل فاضي يمكن فحصه من ناحية المسافة والموقع والمساحة قبل عرضه على صيادلة جادين.")}
+					/>
+
+					<EmoList
+						pWidth={new NumPer("100%", "100%") as any}
+						pItemFnt={Text.Body.White.WithAlign("right")}
+						pNumbered={false}
+						pItems={[
+						"صيدلية مرخصة شغالة ومطلوب بيعها أو التنازل عنها.",
+						"محل فاضي قريب من مناطق مناسبة ونحتاج التأكد من شرط المسافة.",
+						"تجهيز بيانات الموقع، المساحة، الواجهة، السعر، الصور، وحالة الترخيص.",
+						"تسويق العرض للصيادلة المهتمين بعد تنقية البيانات وتوضيح نقاط القوة."
+					]}
+					/>
+
+					<HzStack
+						pGap={new Pixel(14, 10)}
+						pPad={new Pixel(0)}
+						pForceHz={true}
+					>
+
+						<EmoBtn
+							pText="سجل عرض للبيع"
+							pWidth="220px"
+							pHeight="54px"
+							pRadius="18px"
+							pBgColor="#D4AF37"
+							pBgColorHover="#F4D66A"
+							pTextColor="#07111F"
+							pFontSize="17px"
+							onclick={`window.open('${cSellerUrl}', '_blank')`}
+						/>
+
+						<EmoBtn
+							pText="استفسار سريع"
+							pWidth="190px"
+							pHeight="54px"
+							pRadius="18px"
+							pBgColor="rgba(255,255,255,.10)"
+							pBgColorHover="rgba(255,255,255,.18)"
+							pTextColor="#FFFFFF"
+							pFontSize="17px"
+							onclick={`window.open('${cCommissionUrl}', '_blank')`}
+						/>
+
+					</HzStack>
+
+				</VrStack>
+
+			</GlassCard>
+
+		</DuoCol>
+
+		<DuoCol
+			pAlign="Start"
+			pPad={new Pixel(0)}
+			pGap={new Pixel(20, 14)}
+		>
+
+			<GlassCard
+				pBg="rgba(255,255,255,.94)"
+				pBorder="rgba(255,255,255,.60)"
+				pRadius={34}
+				pBlur={10}
+			>
+
+				<VrStack
+					pGap={new Pixel(18, 12)}
+					pPad={new Pixel(0)}
+					pAlign="Start"
+				>
+
+					<Emograph
+						pTitle={Text.H3.WithAlign("right").WithColor("#07111F").OfText("البيانات المطلوبة من صاحب العرض")}
+						pText={Text.Body.WithAlign("right").WithColor("#263449").OfText("كل ما كانت البيانات واضحة، كل ما كان تسويق المكان أسرع وأدق، وكل ما قلت المقابلات غير الجادة أو الأسئلة المتكررة.")}
+					/>
+
+					<EmoList
+						pWidth={new NumPer("100%", "100%") as any}
+						pItemFnt={Text.Body.WithAlign("right").WithColor("#263449")}
+						pNumbered={true}
+						pItems={[
+						"نوع المكان: صيدلية قائمة أو محل فقط.",
+						"العنوان التفصيلي والمنطقة وأقرب معالم واضحة.",
+						"المساحة، الواجهة، الدور، حالة التشطيب، وصور حديثة.",
+						"سعر البيع أو التنازل وحدود التفاوض.",
+						"أي مستندات أو بيانات ترخيص متاحة."
+					]}
+					/>
+
+				</VrStack>
+
+			</GlassCard>
+
+		</DuoCol>
+
+	</DuoSec>
+
+
+
+
+
+
+
+	<DuoSec
+		id="pharmacy-buyer"
+		pBg={new ElemBg("#F4F7FB")}
+		pAlign={Align.Center}
+		pContentSize={new DirectSize(new NumPer("1180px", "100%"))}
+		pGap={new Pixel(34, 18)}
+		pPad={new Pixel(70, 24)}
+		pMinH={new NumPer(600, 660)}
+	>
+
+		<CircleGlow
+			pColor="rgba(55,151,245,.22)"
+			pColor2="rgba(212,175,55,.16)"
+			pBlur={38}
+			pLoc={new Loc(new NumPer("8%", "-22%"), new NumPer("8%", "4%"))}
+			pSize={new DirectSize(new NumPer("32%", "82%"), new NumPer("42%", "28%"))}
+			pOpacity={new Percent(85)}
+			pZ={1}
+		/>
+
+		<DuoCol
+			pAlign="Start"
+			pPad={new Pixel(0)}
+			pGap={new Pixel(20, 14)}
+		>
+
+			<GlassCard
+				pBg="rgba(7,17,31,.96)"
+				pBorder="rgba(212,175,55,.35)"
+				pRadius={34}
+				pBlur={10}
+			>
+
+				<VrStack
+					pGap={new Pixel(22, 14)}
+					pPad={new Pixel(0)}
+					pAlign="Start"
+				>
+
+					<Emograph
+						pTitle={Text.H2.White.WithAlign("right").OfText("صيدلي وبتدور على فرصة مناسبة؟")}
+						pText={Text.Body.White.WithAlign("right").OfText("سجل طلبك بوضوح: هل تريد صيدلية جاهزة للتشغيل، أم محل فقط صالح للترخيص؟ نطابق طلبك مع العروض المتاحة ونرشح لك الأماكن الأقرب لشروطك قبل تضييع وقتك في معاينات عشوائية.")}
+					/>
+
+					<EmoList
+						pWidth={new NumPer("100%", "100%") as any}
+						pItemFnt={Text.Body.White.WithAlign("right")}
+						pNumbered={false}
+						pItems={[
+						"تحديد المناطق المناسبة لك بدل البحث العام المفتوح.",
+						"تحديد الميزانية من البداية لتصفية العروض غير المناسبة.",
+						"الاختيار بين صيدلية جاهزة أو محل قابل لفحص الترخيص.",
+						"استلام فرص مختصرة وواضحة قبل النزول للمعاينة."
+					]}
+					/>
+
+					<HzStack
+						pGap={new Pixel(14, 10)}
+						pPad={new Pixel(0)}
+						pForceHz={true}
+					>
+
+						<EmoBtn
+							pText="سجل طلب شراء"
+							pWidth="220px"
+							pHeight="54px"
+							pRadius="18px"
+							pBgColor="#D4AF37"
+							pBgColorHover="#F4D66A"
+							pTextColor="#07111F"
+							pFontSize="17px"
+							onclick={`window.open('${cBuyerUrl}', '_blank')`}
+						/>
+
+						<EmoBtn
+							pText="أرسل شروطك"
+							pWidth="190px"
+							pHeight="54px"
+							pRadius="18px"
+							pBgColor="rgba(255,255,255,.10)"
+							pBgColorHover="rgba(255,255,255,.18)"
+							pTextColor="#FFFFFF"
+							pFontSize="17px"
+							onclick={`window.open('${cBuyerUrl}', '_blank')`}
+						/>
+
+					</HzStack>
+
+				</VrStack>
+
+			</GlassCard>
+
+		</DuoCol>
+
+		<DuoCol
+			pAlign="Start"
+			pPad={new Pixel(0)}
+			pGap={new Pixel(20, 14)}
+		>
+
+			<GlassCard
+				pBg="rgba(255,255,255,.96)"
+				pBorder="rgba(7,17,31,.08)"
+				pRadius={34}
+				pBlur={10}
+			>
+
+				<VrStack
+					pGap={new Pixel(18, 12)}
+					pPad={new Pixel(0)}
+					pAlign="Start"
+				>
+
+					<Emograph
+						pTitle={Text.H3.WithAlign("right").WithColor("#07111F").OfText("البيانات المطلوبة من المشتري")}
+						pText={Text.Body.WithAlign("right").WithColor("#263449").OfText("المطابقة الجيدة تبدأ من طلب واضح، لأن فرق بسيط في المنطقة أو الميزانية أو نوع المكان يغير كل الترشيحات.")}
+					/>
+
+					<EmoList
+						pWidth={new NumPer("100%", "100%") as any}
+						pItemFnt={Text.Body.WithAlign("right").WithColor("#263449")}
+						pNumbered={true}
+						pItems={[
+						"المنطقة أو الأحياء المقبولة.",
+						"الميزانية التقريبية وحدود التفاوض.",
+						"صيدلية جاهزة أم محل صالح للترخيص فقط.",
+						"المساحة والواجهة وحالة التشطيب المفضلة.",
+						"مدى الجدية وموعد الشراء المتوقع."
+					]}
+					/>
+
+				</VrStack>
+
+			</GlassCard>
+
+		</DuoCol>
+
+	</DuoSec>
+
+
+
+
+
+
+
+	<ESec
+		id="pharmacy-commission"
+		pBg={new ElemBg("#07111F")}
+		pAlign={Align.Center}
+		pMinH={new NumPer(480, 560)}
+	>
+
+		<BlurBlob
+			pColor="rgba(212,175,55,.30)"
+			pColor2="rgba(55,151,245,.20)"
+			pBlur={36}
+			pLoc={new Loc(new NumPer("58%", "10%"), new NumPer("4%", "8%"))}
+			pSize={new DirectSize(new NumPer("36%", "86%"), new NumPer("50%", "28%"))}
+			pOpacity={new Percent(85)}
+			pZ={1}
+		/>
+
+		<GlassCard
+			pBg="rgba(255,255,255,.08)"
+			pBorder="rgba(212,175,55,.34)"
+			pRadius={38}
+			pBlur={18}
+		>
+
+			<VrStack
+				pGap={new Pixel(24, 16)}
+				pPad={new Pixel(10, 0)}
+				pAlign="Center"
+			>
+
+				<Emograph
+					pTitle={Text.H2.Centered.White.OfText("نسبة العمولة")}
+					pText={Text.Body.Centered.White.OfText("الخدمة قائمة على البحث، التنقية، المطابقة، التسويق، وترتيب التواصل بين صاحب العرض والصيدلي الجاد، لذلك تكون العمولة واضحة من البداية على الطرفين.")}
+				/>
+
+				<Emograph
+					pTitle={Text.H1.Centered.WithColor("#D4AF37").OfText("1.5%")}
+					pText={Text.H4.Centered.White.OfText("من كل طرف عند إتمام الاتفاق")}
+				/>
+
+				<EmoList
+					pWidth={new NumPer("720px", "100%") as any}
+					pItemFnt={Text.Body.White.WithAlign("right")}
+					pNumbered={false}
+					pItems={[
+					"1.5% من صاحب الصيدلية أو صاحب المحل عند إتمام البيع أو التنازل.",
+					"1.5% من الصيدلي المشتري عند إتمام الاتفاق.",
+					"لا يتم احتساب العمولة لمجرد السؤال أو إرسال طلب مبدئي.",
+					"أي فحص هندسي أو قياس مسافة أو معاينة تفصيلية يمكن الاتفاق عليه كبند مستقل عند الحاجة."
+				]}
+				/>
+
+				<EmoBtn
+					pText="اسأل عن تفاصيل العمولة"
+					pWidth="270px"
+					pHeight="56px"
+					pRadius="18px"
+					pBgColor="#D4AF37"
+					pBgColorHover="#F4D66A"
+					pTextColor="#07111F"
+					pFontSize="17px"
+					onclick={`window.open('${cCommissionUrl}', '_blank')`}
+				/>
+
+			</VrStack>
+
+		</GlassCard>
+
+	</ESec>
+
+
+
+
+
+
+
+</BLayout>
