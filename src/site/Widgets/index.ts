@@ -245,3 +245,6 @@ export { default as BadgeFrame } from "./Shapes/Frames/BadgeFrame.astro";
 export { default as TiltCard } from "./Shapes/Frames/TiltCard.astro";
 export { default as TornPaper } from "./Shapes/Edges/TornPaper.astro";
 
+export { default as ThemedPriceCardVr } from "./Prices/ThemedPriceCardVr.astro";
+export { default as ThemedPriceCardHz } from "./Prices/ThemedPriceCardHz.astro";
+

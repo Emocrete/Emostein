@@ -1,0 +1,814 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { DirectSize, NumPer, Pixel, Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends HTMLAttributes<"article">, PlaceProps {
+	pThemeColor?: string;
+
+	pImage?: string;
+	pImageAlt?: string;
+	pImageMoveAxis?: "x" | "y" | "xy" | "none";
+	pImageDuration?: string;
+	pImageScale?: number | string;
+	pImagePan?: string;
+	pImagePosition?: string;
+
+	pIcon?: string;
+	pIconAlt?: string;
+	pIconMask?: boolean | string;
+	pIconColor?: string;
+	pIconMotion?: "launch" | "fly" | "spin" | "pulse" | "float" | "none";
+
+	pActionTitle?: string;
+	pActionText?: string;
+	pActionLink?: string;
+	pActionHref?: string;
+	pActionColor?: string;
+	pActionTarget?: string;
+
+	pTopHeight?: Pixel;
+	pRadius?: Pixel;
+	pPad?: Pixel;
+	pGap?: Pixel;
+	pIconSize?: Pixel;
+	pRestOpacity?: number | string;
+	pIntroDelay?: string;
+	pIntro?: boolean | string;
+
+	"data-own-size"?: boolean | string;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+
+const {
+	pThemeColor = "#6B6ECC",
+
+	pImage = "",
+	pImageAlt = "",
+	pImageMoveAxis = "x",
+	pImageDuration = "22s",
+	pImageScale = 1.24,
+	pImagePan = "5.5%",
+	pImagePosition = "center center",
+
+	pIcon = "",
+	pIconAlt = "",
+	pIconMask = false,
+	pIconColor = "#f76583",
+	pIconMotion = "float",
+
+	pActionTitle = "",
+	pActionText = "",
+	pActionLink = "",
+	pActionHref = "",
+	pActionColor = "#f76583",
+	pActionTarget,
+
+	pTopHeight = new Pixel(120, 126),
+	pRadius = new Pixel(14, 14),
+	pPad = new Pixel(20, 18),
+	pGap = new Pixel(18, 14),
+	pIconSize = new Pixel(72, 64),
+	pRestOpacity = 1,
+	pIntroDelay = "0s",
+	pIntro = true,
+
+	pLoc,
+	pSize = new DirectSize(new NumPer(280, 320), new NumPer(470, 510)),
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	id: pGivenID = GetWidgetId("ThemedPriceCardVr"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	"data-own-size": pOwnSizeValue = true,
+	...RemAttr
+} = cProps;
+
+const cOwnSize = GetBoolAttr(pOwnSizeValue);
+const cIconMask = GetBoolAttr(pIconMask);
+const cIntro = GetBoolAttr(pIntro);
+const cActionTitle = pActionTitle || pActionText;
+const cActionHref = pActionLink || pActionHref;
+const cActionRel = pActionTarget === "_blank" ? "noopener noreferrer" : undefined;
+const cMoveClass = GetMoveClass(pImageMoveAxis);
+const cIconModeClass = cIconMask ? "UseMaskIcon" : "UseImageIcon";
+const cIconMotionClass = GetIconMotionClass(pIconMotion);
+const cImageScale = typeof pImageScale === "number" ? `${pImageScale}` : pImageScale;
+const cRestOpacity = typeof pRestOpacity === "number" ? `${pRestOpacity}` : pRestOpacity;
+
+const cCssVars = [
+	`--TPCVrTheme:${pThemeColor};`,
+	`--TPCVrAction:${pActionColor};`,
+	`--TPCVrWidthL:${pSize.WidthL};`,
+	`--TPCVrWidthP:${pSize.WidthP};`,
+	`--TPCVrHeightL:${pSize.HeightL};`,
+	`--TPCVrHeightP:${pSize.HeightP};`,
+	`--TPCVrTopHeightL:${pTopHeight.Landscape};`,
+	`--TPCVrTopHeightP:${pTopHeight.Portrait};`,
+	`--TPCVrRadiusL:${pRadius.Landscape};`,
+	`--TPCVrRadiusP:${pRadius.Portrait};`,
+	`--TPCVrPadL:${pPad.Landscape};`,
+	`--TPCVrPadP:${pPad.Portrait};`,
+	`--TPCVrGapL:${pGap.Landscape};`,
+	`--TPCVrGapP:${pGap.Portrait};`,
+	`--TPCVrIconSizeL:${pIconSize.Landscape};`,
+	`--TPCVrIconSizeP:${pIconSize.Portrait};`,
+	`--TPCVrIconUrl:${BuildCssUrl(pIcon)};`,
+	`--TPCVrIconColor:${pIconColor};`,
+	`--TPCVrImageDuration:${pImageDuration};`,
+	`--TPCVrImageScale:${cImageScale};`,
+	`--TPCVrImagePan:${pImagePan};`,
+	`--TPCVrImagePosition:${pImagePosition};`,
+	`--TPCVrRestOpacity:${cRestOpacity};`,
+	`--TPCVrIntroDelay:${pIntroDelay};`,
+	GetStyleText(pGivenStyle),
+].filter(Boolean).join(" ");
+
+const cPlace = new Place({
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+}, cCssVars);
+
+const cRootClass = [
+	"ThemedPriceCardVr",
+	cMoveClass,
+	cIconModeClass,
+	cIconMotionClass,
+	cActionTitle && cActionHref ? "HasAction" : "NoAction",
+	pImage ? "HasImage" : "NoImage",
+	pIcon ? "HasIcon" : "NoIcon",
+	cIntro ? "UseIntro" : "NoIntro",
+	cPlace.Class,
+	pGivenClass,
+].filter(Boolean).join(" ");
+
+function GetBoolAttr(pValue: unknown) {
+	return pValue === true || pValue === "" || pValue === "true";
+}
+
+function GetMoveClass(pValue: unknown) {
+	if (pValue === "y") return "MoveY";
+	if (pValue === "xy") return "MoveXY";
+	if (pValue === "none") return "MoveNone";
+	return "MoveX";
+}
+
+function GetIconMotionClass(pValue: unknown) {
+	if (pValue === "launch") return "IconLaunch";
+	if (pValue === "fly") return "IconFly";
+	if (pValue === "spin") return "IconSpin";
+	if (pValue === "pulse") return "IconPulse";
+	if (pValue === "none") return "IconNone";
+	return "IconFloat";
+}
+
+function BuildCssUrl(pValue?: string) {
+	return pValue ? `url("${pValue}")` : "none";
+}
+
+function GetStyleText(pStyle: unknown) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+	if (typeof pStyle !== "object") return "";
+
+	return Object.entries(pStyle as Record<string, string | number | null | undefined>)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<article
+	class = {cRootClass}
+	style = {cPlace.Style}
+	id={pGivenID}
+	data-own-size={cOwnSize ? "true" : undefined}
+	{...RemAttr}
+>
+
+
+
+
+
+
+
+	<div class = " TPCVrFrame ">
+
+		<div class = " TPCVrHeader " aria-hidden={pImage ? undefined : "true"}>
+
+			{ pImage && (
+
+				<img
+					class = " TPCVrHeaderImg "
+					src={pImage}
+					alt={pImageAlt}
+					loading="lazy"
+					decoding="async"
+				/>
+			) }
+
+		</div>
+
+		<div class = " TPCVrBody ">
+
+			<div class = " TPCVrContent ">
+
+				<slot />
+
+			</div>
+
+			{ cActionTitle && cActionHref && (
+
+				<a
+					class = " TPCVrAction "
+					href={cActionHref}
+					target={pActionTarget || undefined}
+					rel={cActionRel}
+				>
+
+					<span>
+						{cActionTitle}
+					</span>
+
+				</a>
+
+			) }
+
+		</div>
+
+		<div class = " TPCVrIconCircle " aria-hidden={pIcon && !cIconMask ? undefined : "true"}>
+
+			{ pIcon ? (
+				cIconMask ? (
+
+					<span class = " TPCVrMaskIcon " />
+
+					) : (
+
+						<img
+							class = " TPCVrIconImg "
+							src={pIcon}
+							alt={pIconAlt}
+							loading="lazy"
+							decoding="async"
+						/>
+
+					)
+					) : (
+
+						<span class = " TPCVrFallbackIcon " />
+
+					) }
+
+			</div>
+
+		</div>
+
+	</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.ThemedPriceCardVr {
+		position: relative;
+		box-sizing: border-box;
+		width: var(--TPCVrWidthL);
+		height: var(--TPCVrHeightL);
+		max-width: 100%;
+		color: #ffffff;
+		text-align: center;
+		direction: rtl;
+	}
+
+
+	.TPCVrFrame {
+		position: relative;
+		isolation: isolate;
+		display: grid;
+		grid-template-rows: var(--TPCVrTopHeightL) minmax(0, 1fr);
+		width: 100%;
+		height: 100%;
+		border-radius: var(--TPCVrRadiusL);
+		background: radial-gradient(circle at 18% 14%, rgba(255,255,255,.34), transparent 32%),
+			linear-gradient(45deg,
+				color-mix(in srgb, var(--TPCVrTheme) 70%, #7058d8) 0%,
+				color-mix(in srgb, var(--TPCVrTheme) 42%, #ffffff) 100%);
+		box-shadow: 0 17px 46px -10px rgba(0, 0, 0, .34),
+			0 26px 60px -32px color-mix(in srgb, var(--TPCVrTheme) 60%, transparent);
+		overflow: hidden;
+		opacity: var(--TPCVrRestOpacity);
+		transition: opacity .2s ease, transform .2s ease, box-shadow .2s ease;
+	}
+
+	.TPCVrFrame::before {
+		background: linear-gradient(120deg, rgba(255,255,255,.16), transparent 42%),
+			radial-gradient(circle at 88% 92%, color-mix(in srgb, var(--TPCVrTheme) 20%, #ffffff) 0 8%, transparent 34%);
+		opacity: .40;
+	}
+
+
+	.TPCVrHeader {
+		position: relative;
+		z-index: 1;
+		grid-row: 1;
+		width: 100%;
+		height: var(--TPCVrTopHeightL);
+		overflow: hidden;
+		background: linear-gradient(135deg, color-mix(in srgb, var(--TPCVrTheme) 25%, #ffffff), color-mix(in srgb, var(--TPCVrTheme) 55%, #243b86));
+	}
+
+	.TPCVrHeader::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		background: linear-gradient(180deg, rgba(255,255,255,.08), color-mix(in srgb, var(--TPCVrTheme) 18%, transparent)),
+			linear-gradient(90deg, color-mix(in srgb, var(--TPCVrTheme) 14%, transparent), transparent 55%);
+		pointer-events: none;
+	}
+
+
+	.TPCVrHeaderImg {
+		position: absolute;
+		inset: 0;
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: var(--TPCVrImagePosition);
+		filter: saturate(1.04) contrast(1.02) brightness(1.02);
+		transform: scale(var(--TPCVrImageScale));
+		transform-origin: center;
+		will-change: transform;
+	}
+
+
+	.TPCVrBody {
+		position: relative;
+		z-index: 2;
+		grid-row: 2;
+		min-width: 0;
+		min-height: 0;
+		padding: calc(var(--TPCVrIconSizeL) / 2 + 16px) var(--TPCVrPadL) var(--TPCVrPadL);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: var(--TPCVrGapL);
+		color: #ffffff;
+	}
+
+
+	.TPCVrContent {
+		width: min(100%, 240px);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: var(--TPCVrGapL);
+		color: #ffffff;
+	}
+
+	.TPCVrContent :global(*) {
+		box-sizing: border-box;
+		max-width: 100%;
+	}
+
+
+	.TPCVrIconCircle {
+		position: absolute;
+		z-index: 4;
+		left: 50%;
+		top: var(--TPCVrTopHeightL);
+		width: var(--TPCVrIconSizeL);
+		height: var(--TPCVrIconSizeL);
+		min-width: 46px;
+		min-height: 46px;
+		max-width: 84px;
+		max-height: 84px;
+		aspect-ratio: 1 / 1;
+		border-radius: 999px;
+		transform: translate(-50%, -50%);
+		display: grid;
+		place-items: center;
+		background: radial-gradient(circle at 34% 26%, #ffffff 0%, #f8f8f6 58%, #ecebea 100%);
+		border: 4px solid rgba(255, 255, 255, .94);
+		box-shadow: 0 8px 20px rgba(0, 0, 0, .22),
+			0 0 0 7px color-mix(in srgb, var(--TPCVrTheme) 14%, transparent),
+			0 12px 22px color-mix(in srgb, var(--TPCVrTheme) 20%, transparent);
+		overflow: hidden;
+	}
+
+
+	.TPCVrIconImg {
+		object-fit: contain;
+		filter: drop-shadow(0 2px 2px rgba(0,0,0,.12));
+	}
+
+
+	.TPCVrMaskIcon {
+		background-color: var(--TPCVrIconColor);
+		-webkit-mask: var(--TPCVrIconUrl) center / contain no-repeat;
+		mask: var(--TPCVrIconUrl) center / contain no-repeat;
+		filter: drop-shadow(0 2px 2px rgba(0,0,0,.12));
+	}
+
+
+	.TPCVrFallbackIcon {
+		width: 18%;
+		height: 18%;
+		border-radius: 50%;
+		background: var(--TPCVrIconColor);
+		box-shadow: 0 0 0 10px color-mix(in srgb, var(--TPCVrIconColor) 16%, transparent);
+	}
+
+
+	.TPCVrAction {
+		align-self: center;
+		min-height: 44px;
+		padding: 10px 22px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 8px;
+		text-decoration: none;
+		font-weight: 900;
+		line-height: 1.1;
+		color: #ffffff;
+		background: linear-gradient(180deg, color-mix(in srgb, var(--TPCVrAction) 28%, #ffffff), var(--TPCVrAction) 58%, color-mix(in srgb, var(--TPCVrAction) 86%, #111111));
+		border: 1px solid rgba(255, 255, 255, .34);
+		box-shadow: 0 16px 28px color-mix(in srgb, var(--TPCVrAction) 26%, transparent), 0 7px 16px rgba(0, 0, 0, .18), inset 0 1px 0 rgba(255, 255, 255, .34);
+		transition: transform .18s ease, filter .18s ease, box-shadow .18s ease;
+	}
+
+	.TPCVrAction:hover {
+		transform: translateY(-2px);
+		filter: saturate(1.08) brightness(1.03);
+	}
+
+
+
+	.ThemedPriceCardVr.UseIntro .TPCVrFrame {
+		animation: TPCVrIntro .82s var(--TPCVrIntroDelay) both cubic-bezier(.18,.82,.28,1.2);
+	}
+
+
+	.ThemedPriceCardVr.MoveX .TPCVrHeaderImg {
+		animation: TPCVrPanX var(--TPCVrImageDuration) ease-in-out infinite alternate;
+	}
+
+
+	.ThemedPriceCardVr.MoveY .TPCVrHeaderImg {
+		animation: TPCVrPanY var(--TPCVrImageDuration) ease-in-out infinite alternate;
+	}
+
+
+	.ThemedPriceCardVr.MoveXY .TPCVrHeaderImg {
+		animation: TPCVrPanXY var(--TPCVrImageDuration) ease-in-out infinite alternate;
+	}
+
+
+	.ThemedPriceCardVr.MoveNone .TPCVrHeaderImg {
+		animation: none;
+	}
+
+
+	.ThemedPriceCardVr.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+		z-index: var(--PlaceZ, 1);
+		opacity: var(--PlaceOpacityL, 100%);
+		transform: rotate(var(--PlaceRotateL, 0deg));
+		transform-origin: var(--PlaceOrigin, center center);
+		pointer-events: var(--PlaceClickable, auto);
+	}
+
+
+
+	.ThemedPriceCardVr,
+	.ThemedPriceCardVr *
+	{
+		box-sizing: border-box;
+	}
+
+
+	.TPCVrFrame::before,
+	.TPCVrFrame::after
+	{
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		border-radius: inherit;
+		pointer-events: none;
+	}
+
+
+	.TPCVrContent :global(h1),
+	.TPCVrContent :global(h2),
+	.TPCVrContent :global(h3),
+	.TPCVrContent :global(h4),
+	.TPCVrContent :global(h5),
+	.TPCVrContent :global(h6),
+	.TPCVrContent :global(p)
+	{
+		margin: 0;
+		color: #ffffff;
+		text-shadow: 0 3px 4px rgba(0, 0, 0, .16);
+	}
+
+
+	.TPCVrContent :global(h1),
+	.TPCVrContent :global(h2),
+	.TPCVrContent :global(h3),
+	.TPCVrContent :global(.title),
+	.TPCVrContent :global([data-title])
+	{
+		font-size: clamp(20px, 7vw, 26px);
+		font-weight: 900;
+		line-height: 1.14;
+	}
+
+
+	.TPCVrContent :global(.price),
+	.TPCVrContent :global([data-price])
+	{
+		font-size: clamp(44px, 13vw, 68px);
+		font-weight: 900;
+		line-height: .92;
+		letter-spacing: -.05em;
+		text-shadow: 0 0 10px rgba(0, 0, 0, .38);
+		direction: ltr;
+		unicode-bidi: isolate;
+	}
+
+
+	.TPCVrContent :global(p),
+	.TPCVrContent :global(li)
+	{
+		font-size: clamp(13px, 3.6vw, 15px);
+		line-height: 1.6;
+		font-weight: 400;
+		color: #ffffff;
+	}
+
+
+	.TPCVrIconImg,
+	.TPCVrMaskIcon,
+	.TPCVrFallbackIcon
+	{
+		display: block;
+		width: 43%;
+		height: 43%;
+		position: relative;
+		transition: transform .2s ease, opacity .2s ease;
+	}
+
+
+	.ThemedPriceCardVr.IconFloat .TPCVrIconImg,
+	.ThemedPriceCardVr.IconFloat .TPCVrMaskIcon,
+	.ThemedPriceCardVr.IconFloat .TPCVrFallbackIcon
+	{
+		animation: TPCVrIconFloat 2.4s ease-in-out infinite alternate;
+	}
+
+
+	.ThemedPriceCardVr.IconLaunch:hover .TPCVrIconImg,
+	.ThemedPriceCardVr.IconLaunch:hover .TPCVrMaskIcon,
+	.ThemedPriceCardVr.IconLaunch:hover .TPCVrFallbackIcon
+	{
+		animation: TPCVrLaunch .95s ease-in-out both;
+	}
+
+
+	.ThemedPriceCardVr.IconFly:hover .TPCVrIconImg,
+	.ThemedPriceCardVr.IconFly:hover .TPCVrMaskIcon,
+	.ThemedPriceCardVr.IconFly:hover .TPCVrFallbackIcon
+	{
+		animation: TPCVrFly .95s ease-in-out both;
+	}
+
+
+	.ThemedPriceCardVr.IconSpin:hover .TPCVrIconImg,
+	.ThemedPriceCardVr.IconSpin:hover .TPCVrMaskIcon,
+	.ThemedPriceCardVr.IconSpin:hover .TPCVrFallbackIcon
+	{
+		animation: TPCVrSpin .85s ease-in-out both;
+	}
+
+
+	.ThemedPriceCardVr.IconPulse:hover .TPCVrIconImg,
+	.ThemedPriceCardVr.IconPulse:hover .TPCVrMaskIcon,
+	.ThemedPriceCardVr.IconPulse:hover .TPCVrFallbackIcon
+	{
+		animation: TPCVrPulse .75s ease-in-out both;
+	}
+
+
+	@keyframes TPCVrIntro {
+	0% { transform: scale(0); } 25% { transform: scale(1.06); } 50% { transform: scale(.965); } 75% { transform: scale(1.02); } 100% { transform: scale(1); }
+	}
+
+
+	@keyframes TPCVrPanX {
+	from { transform: translate3d(calc(0px - var(--TPCVrImagePan)), 0, 0) scale(var(--TPCVrImageScale)); } to { transform: translate3d(var(--TPCVrImagePan), 0, 0) scale(var(--TPCVrImageScale)); }
+	}
+
+
+	@keyframes TPCVrPanY {
+	from { transform: translate3d(0, calc(0px - var(--TPCVrImagePan)), 0) scale(var(--TPCVrImageScale)); } to { transform: translate3d(0, var(--TPCVrImagePan), 0) scale(var(--TPCVrImageScale)); }
+	}
+
+
+	@keyframes TPCVrPanXY {
+	from { transform: translate3d(calc(0px - var(--TPCVrImagePan)), var(--TPCVrImagePan), 0) scale(var(--TPCVrImageScale)); } to { transform: translate3d(var(--TPCVrImagePan), calc(0px - var(--TPCVrImagePan)), 0) scale(var(--TPCVrImageScale)); }
+	}
+
+
+	@keyframes TPCVrIconFloat {
+	from { transform: translateY(1px); } to { transform: translateY(-4px); }
+	}
+
+
+	@keyframes TPCVrLaunch {
+	0% { transform: translate(0, 0) rotate(0deg); } 25% { transform: translate(0, -72px) rotate(0deg); } 50% { transform: translate(-95px, -20px) rotate(-20deg); } 75% { transform: translate(42px, 64px) rotate(40deg); } 100% { transform: translate(0, 0) rotate(0deg); }
+	}
+
+
+	@keyframes TPCVrFly {
+	0% { transform: translate(0, 0) rotate(0deg); } 25% { transform: translate(48px, -58px) rotate(12deg); } 50% { transform: translate(-112px, -12px) rotate(-12deg); } 75% { transform: translate(32px, 58px) rotate(8deg); } 100% { transform: translate(0, 0) rotate(0deg); }
+	}
+
+
+	@keyframes TPCVrSpin {
+	0% { transform: rotate(0deg); } 100% { transform: rotate(720deg); }
+	}
+
+
+	@keyframes TPCVrPulse {
+	0% { transform: scale(1); } 45% { transform: scale(1.22); } 100% { transform: scale(1); }
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: landscape) {
+		.ThemedPriceCardVr.PlaceHideLand {
+			display: none;
+		}
+	}
+
+
+	@media (orientation: portrait) {
+		.ThemedPriceCardVr.PlaceHidePort {
+			display: none;
+		}
+	}
+
+
+
+	@media (orientation: portrait), (max-width: 700px) {
+		.ThemedPriceCardVr {
+			width: var(--TPCVrWidthP);
+			height: var(--TPCVrHeightP);
+		}
+
+		.TPCVrFrame {
+			grid-template-rows: var(--TPCVrTopHeightP) minmax(0, 1fr);
+			border-radius: var(--TPCVrRadiusP);
+		}
+
+		.TPCVrHeader {
+			height: var(--TPCVrTopHeightP);
+		}
+
+		.TPCVrIconCircle {
+			top: var(--TPCVrTopHeightP);
+			width: var(--TPCVrIconSizeP);
+			height: var(--TPCVrIconSizeP);
+			max-width: 78px;
+			max-height: 78px;
+		}
+
+		.TPCVrBody {
+			padding: calc(var(--TPCVrIconSizeP) / 2 + 14px) var(--TPCVrPadP) var(--TPCVrPadP);
+			gap: var(--TPCVrGapP);
+		}
+
+		.TPCVrContent {
+			width: min(100%, 280px);
+			gap: var(--TPCVrGapP);
+		}
+
+		.ThemedPriceCardVr.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+			opacity: var(--PlaceOpacityP, var(--PlaceOpacityL, 100%));
+			transform: rotate(var(--PlaceRotateP, var(--PlaceRotateL, 0deg)));
+		}
+	}
+
+
+	@media (prefers-reduced-motion: reduce) {
+		.ThemedPriceCardVr.UseIntro .TPCVrFrame,
+		.TPCVrHeaderImg,
+		.TPCVrIconImg,
+		.TPCVrMaskIcon,
+		.TPCVrFallbackIcon
+		{
+			animation: none;
+		}
+	}
+
+
+
+</style>

@@ -1,316 +1,61 @@
 ---
 import BLayout from "@/Layout.astro";
-import { DirectSize, NumPer, Loc, HoverColors, Text, ElemBg, EmoMediaData, Colors, Pixel, Topic, Size, Align, RespString, Percent } from "@/TypesLib";
-import { Hero, IndexSec, IndexBtn, BottTriSep, YTPlayer, DataCard, IncLineSep, DuoSec, DuoCol, ESec, PhDwgMonthlyOffer, SecTitle, EmoStrip, Badge, EmoCall, HzStack, VrStack, CardsGr, PriceCard, EmoList, EmoBtn, EmoContactStrip, Emograph, RespImg, ReadAlso, RelServices, EmoFaq, RetailDwgMonthlyOffer, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
-
-const cMediaFolder = "/Media/EmoMedical/Pharmacy/";
-
-
-
-
-type TStep = {
-	fTitle: string;
-	fText: string;
-	fImg: string;
-	fBg: string;
-	fTitleClr: string;
-	fTextClr: string;
-	fCtaLabel?: string;
-	fCtaHref?: string;
-	fMeta?: string[];
-};
-
-
-
-const cValidityRules = [
-	"في حال لم يتم تعيين مدير والعمل به خلال 6 أشهر من تاريخ استلام الترخيص.",
-	"في حال تم إغلاق الصيدلية بشكل متصل لمدة تزيد عن سنة ميلادية.",
-	"إذا تم نقل الصيدلية لمكان آخر لسبب غير قهري، ويستثنى من ذلك حالات النقل للأسباب القهرية كتهدم المبنى أو حدوث حريق، وفي هذه الحالة يسمح بنقل الصيدلية لمكان آخر بنفس الرخصة بشرط استيفاء المكان الجديد للشروط الصحية المعمول بها.",
-];
-
-
-
-
-
-const cTopicItems = [
-	{ fTitle: "كيفية قياس المسافة بين صيدليتين", fHref: "#faq-distance" },
-	{ fTitle: "أقل مساحة لترخيص صيدلية وكيفية حسابها", fHref: "#faq-area" },
-	{ fTitle: "كيفية حساب ارتفاع الصيدلية", fHref: "#faq-height" },
-	{ fTitle: "متى يحق للصيدلي فتح صيدلية", fHref: "#faq-when" },
-	{ fTitle: "كم صيدلية يحق للصيدلي فتحها", fHref: "#faq-count" },
-	{ fTitle: "ترخيص صيدلية لغير صيدلي", fHref: "#faq-non-pharmacist" },
-	{ fTitle: "عقوبة فتح صيدلية بدون ترخيص", fHref: "#faq-penalty" },
-	{ fTitle: "كيفية حساب المهلة بين المعاينتين", fHref: "#faq-deadline" },
-];
-
-
-
-
-const cReviewStages = [
-	{
-		fTitle: "أولا : عند فحص الملف",
-		fText: "يتم مراجعة المستندات المرفقة بالطلب والتأكد من توفر المستندات الأساسية مرفقة بطلب الترخيص.",
-	},
-	{
-		fTitle: "ثانيا : أثناء المعاينة الأولى",
-		fText: "يتم التحقق من الصلاحية المبدئية لمقر الصيدلية من خلال الشروط الأساسية وهي المسافة والمساحة والارتفاع.",
-	},
-	{
-		fTitle: "ثالثا : أثناء المعاينة الثانية",
-		fText: "يتم التحقق من توفر الاشتراطات الصحية واستكمال أعمال التشطيب والتجهيز والفرش الأساسي ومدى صلاحية الصيدلية للتشغيل.",
-	},
-	{
-		fTitle: "رابعا : بعد المعاينة الثانية",
-		fText: "يتم التحقق من استيفاء باقي المستندات المطلوبة قبل إصدار ترخيص الصيدلية.",
-	},
-];
-
-
-const cPharmacistRules = [
-	"ألا يكون الصيدلي مالكا أو شريكا في أكثر من صيدليتين.",
-	"أن يكون الصيدلي له خبرة فعلية سنة على الأقل في مؤسسة حكومية أو أهلية.",
-	"أن يكون الصيدلي طالب ترخيص الصيدلية حاصل على ترخيص بمزاولة المهنة.",
-];
-
-
-const cFirstInspectionRules = [
-	"يجب ألا تقل المسافة بين الصيدلية المطلوب الترخيص لها وبين أقرب صيدلية مرخصة عن 100 متر.",
-	"الحد الأدنى لمساحة الصيدلية الصافية هو 25 متر مربع، وتُحسب المساحة على أنها المساحة الفعلية وليست التعاقدية.",
-	"أقل ارتفاع صافي داخل الصيدلية 2.6 متر، والمقصود به الارتفاع تحت السقف الأصلي أو المستعار أيهما أقل.",
-	"يجب أن تكون حدود الصيدلية عند المعاينة الأولى واضحة ومحددة بجوانب من المباني مكتملة البناء وسقف.",
-];
-
-const cSecondInspectionRules = [
-	"يجب توفير حوض معمل إلزامي مع رخامة جانبية لا يقل عرضها عن 60 سم مع تغطية الحائط فوق الحوض بالسيراميك بارتفاع 60 سم.",
-	"يجب استخدام أرضيات غير قابلة للاشتعال في تشطيب الصيدلية مثل البلاط أو السيراميك أو البورسلين.",
-	"يجب توافر مصدر مياه دائم بعداد مستقل، ومصدر تيار كهربائي دائم من خلال شبكة الكهرباء أو مولد كهرباء خاص بالصيدلية.",
-	"ينبغي ألا تقل مساحة منافذ التهوية بالصيدلية عن سدس مساحتها، أو يمكن استخدام أجهزة تكييف كبديل.",
-	"يجب أن يكون مستوى أرضية الصيدلية أعلى من الطريق العام، وإلا يتم الاستعانة بوسيلة صرف وقائية على المدخل.",
-	"في حال وجود حمام يلزم عمل طرقة إضافية أمام باب الحمام مفصولة عن فراغ الصيدلية بباب آخر مستقل، ويمكن أن تحتوي هذه المنطقة الحمام والمعمل بداخلها.",
-	"يجب ألا يكون للصيدلية أي منافذ على وحدات سكنية متصلة بها أو على محل آخر مختلف النشاط أو على مدخل العقار.",
-];
-
-const cPrimaryDocs = [
-	"طلب ترخيص صيدلية مستوفي البيانات الخاصة بالصيدلي والصيدلية.",
-	"صورة بطاقة الرقم القومي أو صورة جواز سفر، وكلاهما ساري.",
-	"صورة ترخيص مزاولة المهنة.",
-	"صورة كارنيه النقابة العامة للصيادلة.",
-	"صحيفة حالة جنائية حديثة ونظيفة وموجهة إلى فرع هيئة الدواء المصرية التابع له الصيدلية.",
-	"مستخرج شهادة ميلاد كمبيوتر.",
-	"رسم هندسي للصيدلية من 3 نسخ أصلية معتمدة بختم مهندس نقابي.",
-	"إيصال حوالة بريدية لحساب هيئة الدواء المصرية بقيمة 5 جنيهات مصرية، ويتم كتابة رقم إيصال البريد في طلب الترخيص.",
-];
-
-const cFinalDocs = [
-	"رسم هندسي نهائي للصيدلية مطابق للحالة التي سيتم التشغيل عليها، مكون من نسخة واحدة أصلية معتمدة بختم نقابة المهندسين بالإضافة إلى عدد 2 صورة ضوئية منها بختم حي من المهندس النقابي.",
-	"شهادة قيد من النقابة العامة للصيادلة.",
-	"شهادة بالموافقة على الإسم التجاري من النقابة الفرعية التابع لها الصيدلية.",
-	"شهادة بالموقف من التكليف من النقابة العامة للصيادلة.",
-	"شهادة بعدد الصيدليات المملوكة للصيدلي من النقابة العامة للصيادلة.",
-	"عقد الملكية للعين محل الصيدلية، أو عقد إيجار بمدة لا تقل عن خمس سنوات.",
-	{
-		Title: "صورة من مستندات التقنين بالحي أو الجهاز وتكون حسب أحد الحالات التالية للعقار:",
-		Items: [
-			"عقار تم بناؤه بترخيص بناء سليم ومطابق بدون مخالفات: يطلب صورة رخصة البناء فقط.",
-			"عقار تم بناؤه بدون ترخيص بناء: يطلب صورة من نموذج التصالح النهائي فقط عن الجزء الخاص بالصيدلية فقط.",
-			"عقار تم بناؤه بترخيص بناء لكن غير مطابق من حيث نوع الاستخدام: يطلب رخصة البناء مع نموذج التصالح النهائي بتحويل الاستخدام إلى تجاري للجزء الخاص بالصيدلية.",
-		],
-	},
-];
-
-
-
-
-
-function BuildTopicProps(pItems: Array<string | { fTitle?: string; fText?: string; fDesc?: string }>) {
-	return Object.fromEntries(
-		pItems.slice(0, 8).map((pItem, pIndex) => {
-			const cTitle = typeof pItem === "string" ? "" : pItem.fTitle ?? "";
-			const cBody = typeof pItem === "string" ? pItem : pItem.fText ?? pItem.fDesc ?? "";
-			return [`pTopic${pIndex + 1}`, new Topic(cTitle, cBody)];
-		}),
-	);
-}
-
-
-
-type TFaqItem = {
-	fId: string;
-	fTitle: string;
-	fParas?: string[];
-	fList?: string[];
-	fLinkLabel?: string;
-	fLinkHref?: string;
-};
-
-const cFaqItems: TFaqItem[] = [
-	{
-		fId: "faq-distance",
-		fTitle: "كيفية قياس المسافة بين صيدليتين",
-		fParas: [
-			"يتم قياس المسافة بين الصيدليات باعتبارها طول أقصر مسار للمشاة يمكن للشخص المترجل سلوكه مشيا على الأقدام بين الصيدليتين، على أن يكون هذا المسار من خطوط مستقيمة عمودية تبدأ من منتصف الباب للصيدلية الأولى وتنتهي عند منتصف الباب للصيدلية الثانية.",
-			"يتم اختيار الصيدلية الثانية التي يتم القياس إليها باعتبارها الأقرب من أي اتجاه، سواء كانت في نفس الجانب من نفس الشارع أو في الجانب المقابل أو في شارع عمودي أو في الشارع الموازي السابق أو التالي للشارع الموجود به الصيدلية الأولى.",
-			"مسار المشاة الذي يتم حسابه غير مقيد بفتحات الدوران المرورية المخصصة للسيارات ولا بمناطق عبور المشاة المخططة، ويتم حساب نقطة عبور الطريق للجانب المقابل من أقرب نقطة يمكن للشخص السليم العبور منها فعليا ما دام ارتفاع الرصيف مناسب ويمكن تخطيه.",
-			"يتوفر لدينا خدمات قياس المسافة بين الصيدليات طبقا للأسلوب المتبع من هيئة الدواء المصرية، والخدمات متاحة في محافظتي القاهرة والجيزة فقط.",
-		],
-		fLinkLabel: "معرفة المزيد",
-		fLinkHref: "/emomed/pharmacy/distance",
-	},
-	{
-		fId: "faq-area",
-		fTitle: "المساحة المطلوبة لترخيص صيدلية",
-		fParas: [
-			"أقل مساحة لترخيص صيدلية هي 25 م2، ويتم حسابها باعتبارها المساحة الصافية الداخلية المتاحة للفرش بعد استبعاد المساحات المستغلة في بناء الحوائط الخارجية والداخلية ومساحات الأعمدة وبروزاتها.",
-			"ويدخل ضمن مساحة الصيدلية المساحة المخصصة لعمل حمام أو معمل بالصيدلية.",
-		],
-	},
-	{
-		fId: "faq-height",
-		fTitle: "كيفية حساب ارتفاع الصيدلية",
-		fParas: ["أقل ارتفاع صالح لترخيص صيدلية هو 2.6 م، ويكون هو ارتفاع الفراغ الصافي من منسوب تشطيب الصيدلية إلى باطن منسوب السقف الخرساني الأصلي أو إلى باطن منسوب السقف المستعار لو كان مستخدما."],
-	},
-	{
-		fId: "faq-when",
-		fTitle: "متى يحق للصيدلي فتح صيدلية",
-		fParas: ["يحق للصيدلي فتح صيدلية بعد مرور سنة على مزاولته الفعلية للمهنة في أي مؤسسة حكومية أو خاصة، وليس سنة من تاريخ التخرج."],
-	},
-	{
-		fId: "faq-count",
-		fTitle: "كم صيدلية يحق للصيدلي فتحها",
-		fParas: ["يحق للصيدلي أن يكون مالكا أو شريكا في صيدليتين فقط."],
-	},
-	{
-		fId: "faq-non-pharmacist",
-		fTitle: "ترخيص صيدلية لغير صيدلي",
-		fParas: [
-			"لا يحق لغير الصيدلي الحصول على ترخيص صيدلية، ولكن يمكن لغير الصيدلي عمل تعاقد مشاركة مادية لتمويل مشروع الصيدلية مع أحد الصيادلة المصرح لهم بالحصول على ترخيص صيدلية، على أن يكون الترخيص والإدارة الفعلية من خلال الصيدلي المشارك وليس مجرد إعطاء اسمه للشريك بدون تواجده الفعلي.",
-			"ولا يحق للشريك غير الصيدلي العمل بالصيدلية أو إدارتها من الباطن تحت أي ظرف، وإلا تعرض الطرفان للعقوبة المقررة قانونا في هذا الشأن.",
-		],
-	},
-	{
-		fId: "faq-penalty",
-		fTitle: "عقوبة فتح صيدلية بدون ترخيص",
-		fList: ["الحبس مدة لا تقل عن سنة.", "غرامة مالية من 5 إلى 10 آلاف جنيه مصري.", "الغلق الإداري للصيدلية المخالفة."],
-	},
-	{
-		fId: "faq-deadline",
-		fTitle: "كيفية حساب المهلة بين المعاينتين",
-		fList: [
-			"المهلة الأولى بين المعاينة الأولى والثانية وتكون مدة 8 شهور، ويمكن قطعها من خلال طلب تقديم موعد المعاينة الثانية.",
-			"المهلة الثانية في حالة فشل المعاينة الثانية وعدم تحقق الاشتراطات، وفي هذه الحالة تكون مدتها 4 شهور في حال استفاد الصيدلي من مدة المهلة الأولى كاملة، أو تكون مساوية لنصف الفترة الزمنية بين المعاينة الأولى وتاريخ تقديم طلب إجراء المعاينة الثانية.",
-		],
-	},
-];
-
-
-
-const cOtherServices = [
-	{
-		fTitle: "رسم هندسي لصيدلية للمعاينة الأولى أو الثانية",
-		fDesc: "إعداد الرسم الهندسي المطلوب لترخيص صيدلية للمعاينة الأولى، ويتم عمل معاينة للمحل لرفع الأبعاد وجمع المعلومات المطلوبة لإعداد الرسم الهندسي.",
-		fHref: "/emomed/pharmacy/dwg",
-	},
-	{
-		fTitle: "تعديل الرسم الهندسي لصيدلية",
-		fDesc: "تنفيذ التعديلات المطلوبة على الرسم الهندسي المتوفر للصيدلية، سواء في صورة نسخة ورقية أو نسخة إلكترونية أوتوكاد أو PDF.",
-		fHref: "/emomed/pharmacy/dwg",
-	},
-	{
-		fTitle: "اعتماد رسم هندسي للمعاينة الثانية من نقابة المهندسين",
-		fDesc: "ختم الرسومات الهندسية للصيدلية بختم نقابة المهندسين على نسخة واحدة أصل وصورتين منها.",
-		fHref: "/emomed/pharmacy/dwg",
-	},
-	{
-		fTitle: "قياس المسافة بين صيدليتين",
-		fDesc: "عمل معاينة لقياس المسافة بدقة لأقرب الصيدليات المحيطة للتأكد من استيفاء شرط المسافة قبل اتخاذ خطوة بالشراء أو تقديم ملف الترخيص.",
-		fHref: "/emomed/pharmacy/distance",
-	},
-	{
-		fTitle: "تقرير هندسي استشاري عن حالة مبنى صيدلية",
-		fDesc: "عمل تقرير هندسي استشاري عن حالة المبنى الذي توجد به الصيدلية، وقد يطلب لبعض الحالات التي يكون فيها المبنى قديما أو بدون رخصة بناء، ويكون التقرير مختوما بختم مهندس استشاري فقط أو مع ختم نقابة المهندسين حسب الطلب.",
-		fHref: "/emonsult/report/safety",
-	},
-	{
-		fTitle: "تشطيب وتجهيز الصيدليات",
-		fDesc: "تصميم وتنفيذ جميع أنواع تشطيبات وفرش الصيدليات، مع مرونة في تجهيز تصميمات تناسب نطاقا واسعا من الميزانيات.",
-		fHref: "/emocrete/finishing/pharmacy",
-	},
-];
-
-
-const cSchema = "";
-
-
-const cMedia = {
-	hero: "https://static.wixstatic.com/media/11062b_cf4444776baf4b40a69972b4abe23417f000.jpg/v1/fill/w_980%2Ch_551%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/11062b_cf4444776baf4b40a69972b4abe23417f000.jpg",
-	cloud: "https://static.wixstatic.com/media/d602f65fd922483090016d17d4714305.png/v1/fill/w_600%2Ch_600%2Cal_c%2Cq_85%2Cenc_avif%2Cquality_auto/Watercolor%20Rainy%20Cloud.png",
-	pharmacy:
-		"https://static.wixstatic.com/media/308dfd_cb10f850d54c4753bd885a5cdd3e8107~mv2.png/v1/fill/w_230%2Ch_194%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/Pharma%20Vect.png",
-	doctor: "https://static.wixstatic.com/media/308dfd_d2aac5bc043646f4a8763bdfeb17005e~mv2.png/v1/fill/w_155%2Ch_550%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/Pharma%20Doctor.png",
-	books: "https://static.wixstatic.com/media/308dfd_7be132707ae74b99bd43427a8c3ebc69~mv2.webp/v1/fill/w_136%2Ch_141%2Cal_c%2Cq_80%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/308dfd_7be132707ae74b99bd43427a8c3ebc69~mv2.webp",
-	prepare:
-		"https://static.wixstatic.com/media/308dfd_bf414578b19549b7950b4152f9f3d8ca~mv2.png/v1/fill/w_248%2Ch_136%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/%D8%AA%D9%82%D8%AF%D9%8A%D9%85%20%D8%B7%D9%84%D8%A8%20%D8%AA%D8%B1%D8%AE%D9%8A%D8%B5%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9.png",
-	send: "https://static.wixstatic.com/media/308dfd_fec5743986ee48b9b3725a00d6cb5f48~mv2.png/v1/fill/w_226%2Ch_136%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/%25D8%25A5%25D8%25B1%25D8%25B3%25D8%25A7%25D9%2584%2520%25D9%2586%25.png",
-	inspect:
-		"https://static.wixstatic.com/media/308dfd_73681e883b1d4fc9a7807ce3826a61c1~mv2.png/v1/fill/w_141%2Ch_136%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/%D8%A7%D9%84%D9%85%D8%B9%D8%A7%D9%8A%D9%86%D8%A9%20%D8%A7%D9%84%D8%A3%D9%88%D9%84%D9%89%20%D9%84%D9%84%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9.png",
-};
-
-
-
-
-const cSteps: TStep[] = [
-	{
-		fTitle: "تجهيز الملف",
-		fText: "تحميل وكتابة طلب ترخيص صيدلية من موقع هيئة الدواء المصرية أو من الرابط بالأسفل، وتجميع المستندات في ظرف.",
-		fImg: "PreparePharmacyFile.webp",
-		fBg: Colors.BistageLite,
-		fTitleClr: Colors.BlackOff,
-		fTextClr: Colors.BlackOff,
-		fCtaLabel: "تحميل نموذج طلب ترخيص صيدلية",
-	},
-	{
-		fTitle: "إرسال الطلب",
-		fText: "إرسال ملف ترخيص الصيدلية إلى فرع هيئة الدواء المصرية الرئيسي الخاص بالمحافظة بخطاب مسجل بعلم الوصول مرفقا به المستندات المطلوبة لاستخراج ترخيص صيدلية.",
-		fImg: "SendReq.webp",
-		fBg: Colors.WhiteOff,
-		fTitleClr: Colors.Sky,
-		fTextClr: Colors.BlackOff,
-		fMeta: ["عنوان فرع القاهرة الرئيسي: 22 ش الإخشيد - المنيل", "عنوان فرع الجيزة الرئيسي: 5 ش ابن بطوطة - مدكور - الطالبية - الهرم"],
-	},
-	{
-		fTitle: "المعاينة الأولى",
-		fText: "حضور المعاينة الأولى للصيدلية للتحقق من استيفاء الاشتراطات القانونية: المسافة لأقرب صيدلية، المساحة، الارتفاع.",
-		fImg: "Inspection.webp",
-		fBg: Colors.Gray5,
-		fTitleClr: Colors.BistageLite,
-		fTextClr: "white",
-	},
-	{
-		fTitle: "المعاينة الثانية ثم استخراج الرخصة",
-		fText: "حضور المعاينة الثانية للتحقق من استيفاء الاشتراطات الصحية بالصيدلية مثل خامات التشطيب ونظام الصرف للمعمل والحمام إن وجد والتهوية، ثم تستخرج الرخصة خلال ثلاثين يوما من تاريخ استيفاء باقي المستندات بعد تحقق شروط المعاينة الثانية.",
-		fImg: "Inspection.webp",
-		fBg: Colors.WhiteOff,
-		fTitleClr: Colors.SkyDark,
-		fTextClr: Colors.BlackOff,
-	},
-];
-
-
-const cReadMoreItems = [
-	{ fTitle: "أقل مساحة لترخيص صيدلية وكيفية حسابها", fHref: "#faq-area" },
-	{ fTitle: "كيفية حساب ارتفاع الصيدلية", fHref: "#faq-height" },
-	{ fTitle: "متى يحق للصيدلي فتح صيدلية", fHref: "#faq-when" },
-	{ fTitle: "كم صيدلية يحق للصيدلي فتحها", fHref: "#faq-count" },
-	{ fTitle: "شروط ترخيص صيدلية", fHref: "#conditions" },
-	{ fTitle: "الأوراق المطلوبة لترخيص صيدلية", fHref: "#documents" },
-	{ fTitle: "إجراءات ترخيص صيدلية", fHref: "#steps" },
-	{ fTitle: "الرسم الهندسي لصيدلية", fHref: "/emomed/pharmacy/pharmacy-drawing" },
-	{ fTitle: "ترخيص صيدلية لغير صيدلي", fHref: "#faq-non-pharmacist" },
-	{ fTitle: "عقوبة فتح صيدلية بدون ترخيص", fHref: "#faq-penalty" },
-	{ fTitle: "كيفية حساب المهلة بين المعاينتين", fHref: "#faq-deadline" },
-];
-
-
+import { Align, Colors, DirectSize, ElemBg, EmoMediaData, HoverColors, Loc, Location, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import {
+	Badge,
+	BottTriSep,
+	CardsGr,
+	DuoCol,
+	DuoSec,
+	EmoBtn,
+	EmoCall,
+	EmoContactStrip,
+	EmoCoverageMapStrip,
+	EmoFaq,
+	EmoList,
+	Emograph,
+	EmoPipelineStrip,
+	EmoRatingStrip,
+	EmoStatsStrip,
+	EmoStrip,
+	ESec,
+	FaqItem,
+	FreeHero,
+	FreeHeroFadeIn,
+	FreeHeroFloatY,
+	FreeHeroItem,
+	FreeHeroPulse,
+	FreeHeroSlideInBottom,
+	FreeHeroSlideInLeft,
+	FreeHeroSlideInRight,
+	Grid,
+	HzStack,
+	IncLineSep,
+	IndexBtn,
+	IndexSec,
+	ReadAlso,
+	ReadAlsoItem,
+	RelServices,
+	RelServiceItem,
+	RespImg,
+	SecTitle,
+	VrStack,
+	YTPlayer,
+} from "@/Widgets";
+import BlurBlob from "@/Widgets/Shapes/Decor/BlurBlob.astro";
+import CircleGlow from "@/Widgets/Shapes/Decor/CircleGlow.astro";
+import FloatingIcon from "@/Widgets/Shapes/Decor/FloatingIcon.astro";
+import LinePath from "@/Widgets/Shapes/Decor/LinePath.astro";
+import Ribbon from "@/Widgets/Shapes/Decor/Ribbon.astro";
+import Splash from "@/Widgets/Shapes/Decor/Splash.astro";
+import SvgDots from "@/Widgets/Shapes/Decor/SvgDots.astro";
+import DoubleWave from "@/Widgets/Shapes/Edges/DoubleWave.astro";
+import BadgeFrame from "@/Widgets/Shapes/Frames/BadgeFrame.astro";
+import FloatingPanel from "@/Widgets/Shapes/Frames/FloatingPanel.astro";
+import GlassCard from "@/Widgets/Shapes/Frames/GlassCard.astro";
+import TiltCard from "@/Widgets/Shapes/Frames/TiltCard.astro";
+import SvgBlobCard from "@/Widgets/Cards/SvgBlobCard.astro";
+import SvgRadarCard from "@/Widgets/Cards/SvgRadarCard.astro";
 ---
 
 
@@ -344,166 +89,146 @@ const cReadMoreItems = [
 
 
 
-	<ESec data-hero pImgAlt="واجهة صيدلية مرخصة مفروشة بالأدوية">
+	<FreeHero pImgF="/Media/Emomed/Pharmacy/">
 
-		<VrStack
-			pSize={new DirectSize(new NumPer("35%","95%"))}
-			pLoc={new Loc(new NumPer("52%","2.5%"),new NumPer("20%","60%"))}
-			pBgColor={new ElemBg(Colors.Gray5)}
-			pBgOpacity={new Percent(50)}
-		>
-
-			<Emograph
-				pTitle={Text.H1.Centered.White.OfText("ترخيص صيدلية")}
-				pText={Text.Body.Centered.White.OfText("الشروط والأوراق والإجراءات الخاصة بترخيص الصيدليات، مع خدمات الرسم الهندسي وقياس المسافة بين الصيدليات واستخراج الترخيص في القاهرة والجيزة.")}
-			/>
-
-			<EmoCall BlackSky pText="للطلب والاستفسار" />
-
-		</VrStack>
-
-		<VrStack
-			pLandOnly
-			pSize={new DirectSize(new NumPer("60%","95%"))}
-			pLoc={new Loc(new NumPer("40%","2.5%"),new NumPer("75%","60%"))}
-		>
-
-			<Badge
-				pYears={6}
-				pWorks={120}
-				pDuration={24}
-				pDurationText="خلال يوم واحد"
-				pUseBg={true}
-				pBgColor="white"
-			/>
-
-		</VrStack>
-
-	</ESec>
-
-
-
-
-
-
-
-	<section class = " Hero ">
-
-		<div class = " HeroBg " aria-hidden="true" />
-
-		<img
-			class = " HeroCloud HeroCloudTop "
-			src={cMedia.cloud}
-			alt=""
-			loading="eager"
+		<BlurBlob
+			pColor="rgba(50,143,232,.46)"
+			pColor2="rgba(215,245,140,.42)"
+			pBlur={26}
+			pLoc={new Loc(new NumPer("-7%", "-22%"), new NumPer("-10%", "-8%"))}
+			pSize={new DirectSize(new NumPer("42%", "70%"), new NumPer("45%", "34%"))}
+			pZ={1}
 		/>
 
-		<img
-			class = " HeroCloud HeroCloudBottom "
-			src={cMedia.cloud}
-			alt=""
-			loading="lazy"
+		<CircleGlow
+			pColor="rgba(215,245,140,.72)"
+			pColor2="rgba(255,255,255,.32)"
+			pBlur={34}
+			pLoc={new Loc(new NumPer("62%", "42%"), new NumPer("14%", "58%"))}
+			pSize={new DirectSize(new NumPer("33%", "70%"), new NumPer("42%", "30%"))}
+			pZ={1}
 		/>
 
-		<div class = " Wrap HeroGrid ">
+		<SvgDots
+			pColor="rgba(255,255,255,.34)"
+			pGap={24}
+			pDot={2}
+			pLoc={new Loc(new NumPer("4%", "6%"), new NumPer("4%", "5%"))}
+			pSize={new DirectSize(new NumPer("36%", "88%"), new NumPer("70%", "36%"))}
+			pZ={1}
+		/>
 
-			<div class = " HeroContent ">
+		<FreeHeroSlideInRight
+			pLoc={new Location("6%", "5%", "12%", "9%")}
+			pBox={new Size("48%", "auto", "90%", "auto")}
+			pZ={4}
+		>
 
-				<span class = " Eyebrow ">
-					خدمات ترخيص الصيدليات
-				</span>
+			<GlassCard
+				pBg="rgba(17,24,32,.74)"
+				pBorder="rgba(255,255,255,.22)"
+				pRadius={32}
+				pBlur={14}
+			>
 
-				<h1>
-					ترخيص صيدلية
-				</h1>
+				<VrStack
+					pGap={new Pixel(18, 12)}
+					pPad={new Pixel(0)}
+					pAlign="Center"
+				>
 
-				<p class = " Lead ">
-					الشروط والأوراق والإجراءات الخاصة بترخيص الصيدليات، مع خدمات الرسم الهندسي وقياس المسافة بين الصيدليات واستخراج الترخيص في القاهرة والجيزة.
-				</p>
-
-				<div class = " HeroActions ">
-
-					<a class = " Btn BtnPrimary " href="#conditions">
-						شروط الترخيص
-					</a>
-
-					<a class = " Btn BtnGhost " href="#documents">
-						الأوراق المطلوبة
-					</a>
-
-					<a class = " Btn BtnGhost " href="#steps">
-						الإجراءات
-					</a>
-
-				</div>
-
-				<div class = " HeroStats ">
-
-					<div class = " StatCard ">
-
-						<strong>
-							100 م
-						</strong>
-
-						<span>
-							الحد الأدنى للمسافة
-						</span>
-
-					</div>
-
-					<div class = " StatCard ">
-
-						<strong>
-							25 م²
-						</strong>
-
-						<span>
-							أقل مساحة صافية
-						</span>
-
-					</div>
-
-					<div class = " StatCard ">
-
-						<strong>
-							2.6 م
-						</strong>
-
-						<span>
-							أقل ارتفاع صافي
-						</span>
-
-					</div>
-
-				</div>
-
-			</div>
-
-			<div class = " HeroVisual ">
-
-				<div class = " HeroFrame ">
-
-					<img
-						class = " HeroMainImg "
-						src={cMedia.hero}
-						alt="ترخيص صيدلية"
-						loading="eager"
+					<Emograph
+						pTitle={Text.H1.Centered.White.OfText("ترخيص صيدلية")}
+						pText={Text.Body.Centered.White.OfText("دليل عملي وخدمة هندسية لترخيص الصيدليات: فحص صلاحية المكان، قياس المسافة، حساب المساحة والارتفاع، تجهيز الرسم الهندسي، ترتيب المستندات، ومتابعة إجراءات الترخيص في القاهرة والجيزة.")}
 					/>
 
-					<img
-						class = " HeroSideImg "
-						src={cMedia.pharmacy}
-						alt=""
-						loading="lazy"
-					/>
+					<HzStack pGap={new Pixel(14, 10)} pPad={new Pixel(0)}>
 
-				</div>
+						<EmoCall
+							BlackSky
+							pText="للطلب والاستفسار"
+							pWidth="220px"
+							pHeight="54px"
+							pRadius="18px"
+						/>
 
-			</div>
+						<EmoCall
+							pText="واتساب سريع"
+							pWidth="220px"
+							pHeight="54px"
+							pRadius="18px"
+							pBgColors={new HoverColors(Colors.BistageLite, Colors.Bistage)}
+							pTitleColors={new HoverColors(Colors.BlackOff)}
+						/>
 
-		</div>
+					</HzStack>
 
-	</section>
+				</VrStack>
+
+			</GlassCard>
+
+		</FreeHeroSlideInRight>
+
+		<FreeHeroFadeIn
+			pLoc={new Location("63%", "10%", "12%", "56%")}
+			pBox={new Size("29%", "auto", "80%", "auto")}
+			pDelay={500}
+			pZ={4}
+		>
+
+			<FloatingPanel
+				pBg="rgba(255,255,255,.86)"
+				pBorder="rgba(255,255,255,.55)"
+				pAccent={Colors.BistageLite}
+			>
+
+				<CardsGr
+					pWidth={new RespString("100%", "100%")}
+					pCardBg={new ElemBg("rgba(255,255,255,.92)")}
+					pGrTitle={Text.H4.Centered.Sky.OfText("أرقام لا يبدأ الترخيص بدونها")}
+					pCardTitleFnt={Text.H3.Centered.Bistage}
+					pCardBodyFnt={Text.Body.Centered}
+					pStackDir="Col"
+					pTopic1={new Topic("100 م", "أقل مسافة عن أقرب صيدلية مرخصة.")}
+					pTopic2={new Topic("25 م²", "الحد الأدنى للمساحة الصافية الداخلية.")}
+					pTopic3={new Topic("2.6 م", "أقل ارتفاع صافي داخل الصيدلية.")}
+				/>
+
+			</FloatingPanel>
+
+		</FreeHeroFadeIn>
+
+		<FreeHeroFloatY
+			pLoc={new Location("77%", "73%", "78%", "78%")}
+			pBox={new Size(150, 150, 96, 96)}
+			pDelay={800}
+			pZ={5}
+		>
+
+			<FloatingIcon
+				pIcon="check"
+				pBg={Colors.BistageLite}
+				pFill={Colors.BlackOff}
+			/>
+
+		</FreeHeroFloatY>
+
+		<FreeHeroPulse
+			pLoc={new Location("7%", "7%", "76%", "84%")}
+			pBox={new Size(360, 64, 270, 54)}
+			pDelay={900}
+			pZ={5}
+		>
+
+			<Ribbon
+				pText="خدمة هندسية في القاهرة والجيزة"
+				pBg={Colors.BistageLite}
+				pColor={Colors.BlackOff}
+			/>
+
+		</FreeHeroPulse>
+
+	</FreeHero>
 
 
 
@@ -520,25 +245,25 @@ const cReadMoreItems = [
 
 		<VrStack>
 
-			<IndexBtn pText="كيفية قياس المسافة بين صيدليتين" onclick="location.href='#DistanceFaq'" />
+			<IndexBtn pText="صلاحية المكان قبل التقديم" onclick="location.href='#overview'" />
 
-			<IndexBtn pText="أقل مساحة لترخيص صيدلية وكيفية حسابها" onclick="location.href='#AreaFaq'" />
+			<IndexBtn pText="شروط ترخيص صيدلية" onclick="location.href='#conditions'" />
 
-			<IndexBtn pText="كيفية حساب ارتفاع الصيدلية" onclick="location.href='#HeightFaq'" />
+			<IndexBtn pText="الأوراق المطلوبة" onclick="location.href='#documents'" />
 
-			<IndexBtn pText="متى يحق للصيدلي فتح صيدلية" onclick="location.href='#WhenFaq'" />
+			<IndexBtn pText="إجراءات الترخيص" onclick="location.href='#procedures'" />
 
 		</VrStack>
 
 		<VrStack>
 
-			<IndexBtn pText="كم صيدلية يحق للصيدلي فتحها" onclick="location.href='#CountFaq'" />
+			<IndexBtn pText="المعاينة الأولى والثانية" onclick="location.href='#inspection'" />
 
-			<IndexBtn pText="ترخيص صيدلية لغير صيدلي" onclick="location.href='#NonPharmacistFaq'" />
+			<IndexBtn pText="صلاحية الترخيص" onclick="location.href='#validity'" />
 
-			<IndexBtn pText="عقوبة فتح صيدلية بدون ترخيص" onclick="location.href='#PenaltyFaq'" />
+			<IndexBtn pText="الأسئلة الشائعة" onclick="location.href='#faq'" />
 
-			<IndexBtn pText="كيفية حساب المهلة بين المعاينتين" onclick="location.href='#DeadlineFaq'" />
+			<IndexBtn pText="الخدمات المرتبطة" onclick="location.href='#related-services'" />
 
 		</VrStack>
 
@@ -550,86 +275,97 @@ const cReadMoreItems = [
 
 
 
-	<section class = " Wrap TopicsSection ">
+	<ESec
+		id="overview"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={new Align("Center", "Center", "Center", "Center")}
+	>
 
-		<div class = " SectionHead InlineStart ">
-
-			<img
-				src={cMedia.books}
-				alt=""
-				loading="lazy"
-			/>
-
-			<div>
-
-				<span class = " SectionKicker ">
-					محتوى الصفحة
-				</span>
-
-				<h2>
-					أهم الموضوعات
-				</h2>
-
-			</div>
-
-		</div>
-
-		<nav class = " TopicsGrid " aria-label="محتوى الصفحة">
-
-			{ cTopicItems.map((fItem) => (
-
-				<a class = " TopicChip " href={fItem.fHref}>
-					{fItem.fTitle}
-				</a>
-
-			)) }
-
-		</nav>
-
-	</section>
-
-
-
-
-
-
-
-	<ESec>
+		<Splash
+			pFill="rgba(215,245,140,.34)"
+			pFill2="rgba(50,143,232,.18)"
+			pLoc={new Loc(new NumPer("-5%", "-12%"), new NumPer("5%", "3%"))}
+			pSize={new DirectSize(new NumPer("36%", "70%"), new NumPer("260px", "170px"))}
+			pZ={1}
+		/>
 
 		<SecTitle
 			SkyLite
 			pTitle="ترخيص الصيدلية يبدأ من صلاحية المكان"
-			pDesc="أغلب مشكلات ترخيص الصيدليات تظهر بعد اختيار المحل أو دفع مقدم الإيجار. لذلك يتم التعامل مع الترخيص كقرار فني وإجرائي يبدأ بفحص الموقع، وليس مجرد تجميع أوراق وتقديم طلب."
+			pDesc="أكبر مخاطرة في ترخيص الصيدليات أن يتم اختيار محل غير مطابق ثم تظهر المشكلة عند المعاينة الأولى. لذلك يتم التعامل مع الترخيص كقرار فني وإجرائي يبدأ بفحص الموقع، وليس مجرد تجميع مستندات وإرسال طلب."
 		/>
 
 		<DuoSec
-			id="secDwgTypes"
-			pBg={new ElemBg(Colors.Gray1)}
-			pContentSize={new DirectSize(new NumPer("90%", "95%"))}
-			pGap={new Pixel(40, 20)}
+			pContentSize={new DirectSize(new NumPer("92%", "96%"))}
+			pGap={new Pixel(28, 16)}
+			pPad={new Pixel(28, 18)}
 		>
 
-			<DuoCol pPad={new Pixel(40, 20)}>
+			<DuoCol
+				pBgColor={new ElemBg(Colors.Gray5)}
+				pBgOpacity={new Percent(100)}
+				pBlur={new Pixel(0)}
+			>
 
-				<Emograph
-					pSize={new Size(560, "auto", 320, "auto")}
-					pTitle={Text.H3.OfText("ما الذي نقدمه في ترخيص الصيدليات؟")}
-					pText={Text.Body.OfText("نساعد طالب الترخيص على فهم موقف مقر الصيدلية من الشروط الأساسية، وتجهيز الرسم الهندسي، وقراءة ملاحظات المعاينات، وترتيب المستندات المطلوبة. الهدف أن يدخل الملف إلى الجهة المختصة بصورة منظمة، وأن تكون المخاطر المعروفة واضحة قبل الالتزام بالمقر أو البدء في أعمال التشطيب.")}
-				/>
+				<FloatingPanel
+					pBg="rgba(17,24,32,.96)"
+					pBorder="rgba(255,255,255,.14)"
+					pAccent={Colors.SkyDark}
+				>
+
+					<Emograph
+						pTitle={Text.H3.Bistage.OfText("ما الذي نقدمه في ترخيص الصيدليات؟")}
+						pText={Text.Body.White.OfText("نراجع موقف مقر الصيدلية من الشروط الأساسية، ونجهز الرسم الهندسي المطلوب، ونساعد في قراءة ملاحظات المعاينات وترتيب المستندات. الهدف أن يكون الملف منظما وأن تكون المخاطر الفنية واضحة قبل الالتزام بالمكان أو البدء في التشطيب.")}
+					/>
+
+					<EmoList
+						pWidth={new RespString("100%", "100%")}
+						pTitle={Text.H4.Bistage.OfText("مراجعة فنية قبل الالتزام بالمقر")}
+						pDesc={Text.Body.White.OfText("الاختيار السليم للمقر أهم من علاج المشكلة بعد ظهورها في المعاينة.")}
+						pItemFnt={Text.Body.White}
+						pItemsBg={new ElemBg("transparent")}
+						pNumbered={false}
+						pItems={[
+							"قياس المسافة إلى أقرب صيدلية مرخصة من مسار المشاة الصحيح.",
+							"رفع أبعاد العين وحساب المساحة الصافية القابلة للفرش.",
+							"قياس الارتفاع الصافي ومراجعة تأثير السقف المستعار إن وجد.",
+							"مراجعة إمكانية تنفيذ المعمل أو الحمام أو الصرف والتهوية قبل التشطيب.",
+							"قراءة موقف العقار من الترخيص أو التصالح أو تحويل الاستخدام قبل وضعه في ملف الترخيص."
+						]}
+					/>
+
+				</FloatingPanel>
 
 			</DuoCol>
 
-			<DuoCol pPad={new Pixel(40, 20)}>
+			<DuoCol Centered pBgColor={new ElemBg(Colors.SkyLite)}>
 
 				<RespImg
 					pImg={new EmoMediaData(
-					"Img",
-					"/Media/Emomed/Pharmacy/",
-					"PhRet.webp",
-					false,
-					"ترخيص صيدلية وتجهيز مقر الصيدلية",
-					new Size(460, "auto", 300, "auto")
-				)}
+						"Img",
+						"/Media/Emomed/Pharmacy/",
+						"PhRet.webp",
+						false,
+						"فحص وتجهيز مقر صيدلية للترخيص",
+						new Size(520, "auto", 310, "auto")
+					)}
+				/>
+
+				<Badge
+					pYears={6}
+					pWorks={120}
+					pDuration={24}
+					pDurationText="خلال يوم واحد للرسم"
+					pUseBg={true}
+					pBgColor="white"
+				/>
+
+				<EmoCall
+					BlackSky
+					pText="اطلب فحص مقر الصيدلية"
+					pWidth="270px"
+					pHeight="54px"
+					pRadius="18px"
 				/>
 
 			</DuoCol>
@@ -644,214 +380,147 @@ const cReadMoreItems = [
 
 
 
-	<ESec id="conditions">
+	<EmoPipelineStrip
+		pTitle="قرار الترخيص ليس ورقة.. هو مسار فني"
+		pDesc="لو المحل لم يتم اختياره بعد، نبدأ بفحص المسافة والمساحة والارتفاع وموقف العقار. ولو الملف بدأ بالفعل، نراجع النواقص وملاحظات المعاينة ونحدد الخطوة التالية."
+		pServiceName="ترخيص صيدلية"
+	/>
+
+
+
+
+
+
+
+	<ESec id="conditions" pBg={new ElemBg(Colors.Gray5)}>
+
+		<CircleGlow
+			pColor="rgba(215,245,140,.52)"
+			pColor2="rgba(255,255,255,.22)"
+			pBlur={42}
+			pLoc={new Loc(new NumPer("70%", "45%"), new NumPer("-12%", "-5%"))}
+			pSize={new DirectSize(new NumPer("32%", "60%"), new NumPer("250px", "180px"))}
+			pZ={1}
+		/>
 
 		<SecTitle
-			SkyLite
+			BistageLite
 			pTitle="شروط ترخيص صيدلية"
-			pDesc="شروط الترخيص ليست في مستوى واحد. بعضها يخص الصيدلي طالب الترخيص، وبعضها يخص العين نفسها، وبعضها يتم فحصه عند المعاينة الأولى، ثم يتم استكمال الشروط الصحية والتجهيزية عند المعاينة الثانية."
+			pDesc="شروط الترخيص ليست في مستوى واحد. بعضها يخص الصيدلي طالب الترخيص، وبعضها يخص مقر الصيدلية، وبعضها يتم فحصه عند المعاينة الأولى، ثم تستكمل الاشتراطات الصحية والتجهيزية عند المعاينة الثانية."
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1600px", "340px")}
-			pGrTitle={Text.H3.Centered.Bistage.OfText("مراحل فحص شروط الصيدلية")}
-			pCardTitleFnt={Text.H4}
-			pCardBodyFnt={Text.Body}
+			pWidth={new RespString("1500px", "94%")}
+			pCardBg={new ElemBg(Colors.WhiteOff)}
+			pGrTitle={Text.H3.Centered.Bistage.OfText("مراحل فحص شروط ترخيص الصيدليات")}
+			pCardTitleFnt={Text.H4.Centered.Sky}
+			pCardBodyFnt={Text.Body.Centered}
 			pStackDir="Row"
-			pSpacing={20}
-			pTopic1={new Topic("فحص الملف", "مراجعة وجود المستندات الأساسية مع طلب الترخيص، والتأكد من أن بيانات الصيدلي والعين محل الترخيص واضحة ومطابقة لما سيتم تقديمه.")}
-			pTopic2={new Topic("المعاينة الأولى", "التحقق من صلاحية المقر من حيث المسافة لأقرب صيدلية مرخصة، والمساحة الصافية، والارتفاع الصافي، ووضوح حدود العين.")}
-			pTopic3={new Topic("المعاينة الثانية", "مراجعة التشطيبات والتجهيزات الصحية، ومصدر المياه والكهرباء، والتهوية، والمعمل أو الحمام إن وجدا، وفصل الصيدلية عن أي نشاط أو وحدة أخرى.")}
-			pTopic4={new Topic("استكمال الترخيص", "استكمال باقي المستندات النهائية المطلوبة بعد اجتياز المعاينة الثانية، ومنها الرسم النهائي والمستندات النقابية والتعاقدية الخاصة بالمقر.")}
+			pSpacing={24}
+			pTopic1={new Topic("أولا: عند فحص الملف", "يتم مراجعة المستندات المرفقة بالطلب والتأكد من توفر المستندات الأساسية مرفقة بطلب الترخيص.")}
+			pTopic2={new Topic("ثانيا: أثناء المعاينة الأولى", "يتم التحقق من الصلاحية المبدئية لمقر الصيدلية من خلال الشروط الأساسية وهي المسافة والمساحة والارتفاع.")}
+			pTopic3={new Topic("ثالثا: أثناء المعاينة الثانية", "يتم التحقق من توفر الاشتراطات الصحية واستكمال أعمال التشطيب والتجهيز والفرش الأساسي ومدى صلاحية الصيدلية للتشغيل.")}
+			pTopic4={new Topic("رابعا: بعد المعاينة الثانية", "يتم التحقق من استيفاء باقي المستندات المطلوبة قبل إصدار ترخيص الصيدلية.")}
 		/>
 
-		<CardsGr
-			pWidth={new RespString(1600..AsPixel,"100%")}
-			pCardBg={new ElemBg("white")}
-			pGrTitle={Text.H3.Centered.OrangeDark.OfText("مراحل فحص شروط ترخيص الصيدليات")}
-			pCardTitleFnt={Text.H4}
-			pCardBodyFnt={Text.Body}
-			pTopic1={new Topic(
-			"أولا : عند فحص الملف",
-			"يتم مراجعة المستندات المرفقة بالطلب والتأكد من توفر المستندات الأساسية مرفقة بطلب الترخيص .")}
-			pTopic2={new Topic(
-			"ثانيًا : أثناء المعاينة الأولى",
-			"يتم التحقق من الصلاحية المبدئية لمقر الصيدلية من خلال الشروط الأساسية وهي المسافة والمساحة والارتفاع.")}
-			pTopic3={new Topic(
-			"ثالثًا : أثناء المعاينة الثانية",
-			"يتم التحقق من توفر الاشتراطات الصحية واستكمال أعمال التشطيب والتجهيز والفرش الأساسي ومدى صلاحية الصيدلية للتشغيل.")}
-			pTopic4={new Topic(
-			"رابعًا : بعد المعاينة الثانية",
-			"يتم التحقق من استيفاء باقي المستندات المطلوبة قبل إصدار ترخيص الصيدلية.")}
-		/>
-
-		<IncLineSep
-			pTopColor="rgb(218, 239, 254)"
-			pBottomColor="white"
-			pHeight={600}
-			pBottomLeft={100}
-			pBottomRight={400}
-			pContentWidth={1000}
-			pPadInline={50}
+		<DuoSec
+			id="inspection"
+			pContentSize={new DirectSize(new NumPer("92%", "96%"))}
+			pGap={new Pixel(28, 18)}
+			pPad={new Pixel(36, 18)}
 		>
 
-			<YTPlayer pVideoId="ipAz7hc2k6Y" pTitle="شروط ترخيص صيدلية | خدمات هندسية | أيمن عاشور" />
+			<DuoCol pBgColor={new ElemBg(Colors.BlackOff)}>
 
-		</IncLineSep>
+				<BadgeFrame
+					pBadge="طالب الترخيص"
+					pBg="rgba(17,17,17,.92)"
+					pBadgeBg={Colors.BistageLite}
+					pColor={Colors.WhiteOff}
+				>
 
-		<BottTriSep
-			pTopColor="white"
-			pBottomColor="rgb(51, 51, 51)"
-			pHeight={600}
-			pTipX={500}
-			pTipY={300}
-			pContentWidth={1200}
-			pPadInline={50}
-		>
+					<EmoList
+						pWidth={new RespString("100%", "100%")}
+						pTitle={Text.H3.Bistage.OfText("شروط خاصة بالصيدلي")}
+						pDesc={Text.Body.White.OfText("هذه البنود تخص طالب الترخيص نفسه، وتؤثر في قبول الطلب قبل الدخول في تفاصيل تجهيز المكان.")}
+						pItemFnt={Text.Body.White}
+						pItemsBg={new ElemBg("transparent")}
+						pNumbered={false}
+						pItems={[
+							"أن يكون الصيدلي طالب ترخيص الصيدلية حاصلًا على ترخيص بمزاولة المهنة.",
+							"أن يكون الصيدلي له خبرة فعلية سنة على الأقل في مؤسسة حكومية أو أهلية.",
+							"ألا يكون الصيدلي مالكًا أو شريكًا في أكثر من صيدليتين."
+						]}
+					/>
 
-			<CardsGr
-				pWidth={new RespString(800..AsPixel,"90%")}
-				pGrTitle={Text.H3.WithColor("rgb(0, 119, 255)").OfText("شروط خاصة بالصيدلي")}
-				pCardTitleFnt={Text.H4}
-				pCardBodyFnt={Text.Body}
-				pTopic1={new Topic("","أن يكون الصيدلي طالب ترخيص الصيدلية حاصل على ترخيص بمزاولة المهنة")}
-				pTopic2={new Topic("","أن يكون الصيدلي له خبرة فعلية سنة على الأقل في مؤسسة حكومية أو أهلية")}
-				pTopic3={new Topic("","ألا يكون الصيدلي مالكا أو شريكا في أكثر من صيدليتين")}
-			/>
-
-		</BottTriSep>
-
-		<SecTitle
-			Gray5
-			pTitle="شروط خاصة بالصيدلية"
-			pDesc="تعتبر شروط المعاينة الأولى واجبة التحقق ولا بدائل لها ، وفي حال عدم تحقق أحد هذه الشروط الثلاثة مع عدم وجود أي إمكانية لتحقيقه فإنه يتم رفض الطلب مباشرة بعد المعاينة الأولى"
-		/>
-
-		<div style = { `width : 100% ; display : flex ; background-color : ${Colors.Gray5}` }>
-
-			<CardsGr
-				pWidth={new RespString(400..AsPixel,"90%")}
-				pCardBg={new ElemBg(Colors.SkyLite)}
-				pGrTitle={Text.H3.WithColor("#FFF3CC").OfText("شروط المعاينة الأولى")}
-				pCardTitleFnt={Text.H4}
-				pCardBodyFnt={Text.Body}
-				pStackDir="Col"
-				pTopic1={new Topic(
-				"0",
-				"يجب ألا تقل المسافة بين الصيدلية المطلوب الترخيص لها وبين أقرب صيدلية مرخصة عن 100 متر")}
-				pTopic2={new Topic(
-				"0",
-				"الحد الأدنى لمساحة الصيدلية الصافية هو 25 متر مربع ، تحسب المساحة على أنها المساحة الفعلية وليس التعاقدية")}
-				pTopic3={new Topic(
-				"0",
-				"​أقل ارتفاع صافي داخل الصيدلية 2.6 متر والمقصود به الارتفاع تحت السقف الأصلي أو المستعار أيهما أقل")}
-				pTopic4={new Topic(
-				"0",
-				"يجب أن تكون حدود الصيدلية عند المعاينة الأولى واضحة ومحددة بجوانب من المباني مكتملة البناء وسقف")}
-			/>
-
-			<CardsGr
-				pWidth={new RespString(400..AsPixel,"90%")}
-				pCardBg={new ElemBg(Colors.SkyLite)}
-				pGrTitle={Text.H3.WithColor("#FFF3CC").OfText("شروط المعاينة الثانية")}
-				pCardTitleFnt={Text.H4}
-				pCardBodyFnt={Text.Body}
-				pStackDir="Col"
-				pTopic1={
-						new Topic(
-								"0",
-								"يجب توفير حوض معمل إلزامي مع رخامة جانبية لا يقل عرضها عن 60 سم مع تغطية الحائط فوق الحوض بالسيراميك بارتفاع 60 سم"
-								)}
-				pTopic2={
-						new Topic(
-								"0",
-								"يجب استخدام أرضيات غير قابلة للاشتعال في تشطيب الصيدلية ( بلاط ، سيراميك ، بورسلين )"
-								)}
-				pTopic3={
-						new Topic(
-								"0",
-								"​يجب  توافر مصدر مياه دائم بعداد مستقل ، ومصدر تيار كهربائي دائم من خلال شبكة الكهرباء أو مولد كهرباء خاص بالصيدلية"
-								)}
-				pTopic4={new Topic(
-							"0",
-							"ينبغي ألا تقل مساحة منافذ التهوية بالصيدلية عن سدس مساحتها​ ، أو يمكن استخدام أجهزة تكييف كبديل"
-						)}
-				pTopic5={ new Topic(
-								"0",
-								"​يجب أن يكون مستوي أرضية الصيدلية أعلى من الطريق العام وإلا يتم الاستعانة بوسيلة صرف وقائية على مدخل الصيدلية"
-							)}
-				pTopic6={new Topic(
-			"0",
-			"في حال وجود حمام يلزم عمل طرقة إضافية أمام باب الحمام مفصولة عن فراغ الصيدلية بباب آخر مستقل للطرقة ، ويمكن أن تكون الطرقة صغيرة على قدر الحمام فقط أو منطقة واسعة لها باب مستقل يفصلها عن فراغ الصيدلية وتحتوي الحمام والمعمل بداخلها")}
-				pTopic7={new Topic(
-			"0",
-			"يجب أن لا يكون للصيدلية أي منافذ على وحدات سكنية متصلة بها أو على محل آخر مختلف النشاط أو على مدخل العقار")}
-			/>
-
-		</div>
-
-		<DuoSec pBg={new ElemBg(Colors.BlackOff)}>
-
-			<DuoCol Centered>
-
-				<EmoList
-					pTitle={Text.H3.Bistage.OfText("شروط خاصة بالصيدلي")}
-					pDesc={Text.Body.White.OfText("هذه البنود تخص طالب الترخيص نفسه، وتؤثر في قبول الطلب قبل الدخول في تفاصيل تجهيز المقر.")}
-					pItemFnt={Text.Body.White}
-					pNumbered={false}
-					pItems={[
-				"أن يكون الصيدلي حاصلًا على ترخيص مزاولة المهنة.",
-				"أن تكون له خبرة فعلية لا تقل عن سنة في مؤسسة حكومية أو أهلية.",
-				"ألا يكون مالكًا أو شريكًا في أكثر من صيدليتين.",
-				"أن تكون بياناته النقابية والمهنية والمستندات الشخصية قابلة للتقديم والاستكمال أمام الجهة المختصة."
-			]}
-				/>
+				</BadgeFrame>
 
 			</DuoCol>
 
-			<DuoCol>
+			<DuoCol Centered pBgColor={new ElemBg(Colors.SkyLite)}>
 
 				<RespImg
-					pImg={new EmoMediaData("Img","/Media/Emomed/Pharmacy/",	"Inspection.webp",false,"معاينة ترخيص صيدلية",new Size(430, "auto", 300, "auto"))}
+					pImg={new EmoMediaData(
+						"Img",
+						"/Media/Emomed/Pharmacy/",
+						"Inspection.webp",
+						false,
+						"معاينة مقر صيدلية قبل الترخيص",
+						new Size(430, "auto", 290, "auto")
+					)}
+				/>
+
+				<Emograph
+					pTitle={Text.H3.Centered.Sky.OfText("شروط خاصة بالصيدلية")}
+					pText={Text.Body.Centered.OfText("شروط المعاينة الأولى واجبة التحقق ولا بدائل لها غالبًا؛ فإذا لم تتحقق المسافة أو المساحة أو الارتفاع مع عدم وجود إمكانية علاج، قد يتم رفض الطلب مباشرة بعد المعاينة الأولى.")}
 				/>
 
 			</DuoCol>
 
 		</DuoSec>
 
-		<DuoSec>
+		<DuoSec
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pContentSize={new DirectSize(new NumPer("92%", "96%"))}
+			pGap={new Pixel(28, 18)}
+			pPad={new Pixel(36, 18)}
+		>
 
-			<DuoCol>
+			<DuoCol pBgColor={new ElemBg(Colors.SkyLite)}>
 
 				<EmoList
-					pTitle={Text.H3.OfText("شروط المعاينة الأولى")}
-					pDesc={Text.Body.OfText("بنود يجب التأكد منها قبل التقديم، لأنها غالبًا لا تعالج بسهولة بعد اختيار المكان.")}
+					pWidth={new RespString("100%", "100%")}
+					pTitle={Text.H3.Sky.OfText("شروط المعاينة الأولى")}
+					pDesc={Text.Body.OfText("بنود يجب التأكد منها قبل التقديم لأنها غالبًا لا تعالج بسهولة بعد اختيار المكان.")}
 					pItemFnt={Text.Body}
+					pNumbered={false}
 					pItems={[
-					"ألا تقل المسافة بين الصيدلية المطلوب ترخيصها وأقرب صيدلية مرخصة عن 100 متر حسب طريقة القياس المتبعة.",
-					"ألا تقل المساحة الصافية الداخلية للصيدلية عن 25 مترًا مربعًا بعد استبعاد الحوائط والأعمدة والبروزات غير المستغلة.",
-					"ألا يقل الارتفاع الصافي داخل الصيدلية عن 2.6 متر حتى باطن السقف الأصلي أو السقف المستعار أيهما أقل.",
-					"أن تكون حدود العين واضحة ومحددة بجوانب وسقف، وأن تكون قابلة للمعاينة كمكان مستقل."
-				]}
+						"يجب ألا تقل المسافة بين الصيدلية المطلوب الترخيص لها وبين أقرب صيدلية مرخصة عن 100 متر.",
+						"الحد الأدنى لمساحة الصيدلية الصافية هو 25 متر مربع، وتحسب المساحة على أنها المساحة الفعلية وليست التعاقدية.",
+						"أقل ارتفاع صافي داخل الصيدلية 2.6 متر، والمقصود به الارتفاع تحت السقف الأصلي أو المستعار أيهما أقل.",
+						"يجب أن تكون حدود الصيدلية عند المعاينة الأولى واضحة ومحددة بجوانب من المباني مكتملة البناء وسقف."
+					]}
 				/>
 
 			</DuoCol>
 
-			<DuoCol>
+			<DuoCol pBgColor={new ElemBg(Colors.Gray1)}>
 
 				<EmoList
-					pTitle={Text.H3.OfText("شروط المعاينة الثانية")}
+					pWidth={new RespString("100%", "100%")}
+					pTitle={Text.H3.Bistage.OfText("شروط المعاينة الثانية")}
 					pDesc={Text.Body.OfText("بنود تتعلق بالتجهيز النهائي والتشطيب والصرف والتهوية والفصل عن الأنشطة أو الوحدات الأخرى.")}
 					pItemFnt={Text.Body}
+					pNumbered={false}
 					pItems={[
-					"توفير حوض معمل مع رخامة جانبية مناسبة، وتغطية الحائط فوق الحوض بالسيراميك بالارتفاع المطلوب.",
-					"استخدام أرضيات غير قابلة للاشتعال مثل السيراميك أو البورسلين أو ما يماثلهما.",
-					"توفير مصدر مياه دائم ومصدر تيار كهربائي دائم حسب المتاح والمعتمد للمقر.",
-					"تحقيق التهوية المطلوبة أو استخدام التكييف كبديل مناسب وفق حالة المكان.",
-					"رفع منسوب أرضية الصيدلية عن الطريق العام أو توفير وسيلة صرف وقائية عند المدخل عند الحاجة.",
-					"فصل الحمام أو المعمل عن فراغ الصيدلية بطرقة أو باب مستقل عند وجودهما.",
-					"عدم وجود منافذ للصيدلية على وحدة سكنية أو محل آخر أو مدخل عقار بصورة تخالف استقلال النشاط."
-				]}
+						"يجب توفير حوض معمل إلزامي مع رخامة جانبية لا يقل عرضها عن 60 سم مع تغطية الحائط فوق الحوض بالسيراميك بارتفاع 60 سم.",
+						"يجب استخدام أرضيات غير قابلة للاشتعال في تشطيب الصيدلية مثل البلاط أو السيراميك أو البورسلين.",
+						"يجب توافر مصدر مياه دائم بعداد مستقل، ومصدر تيار كهربائي دائم من خلال شبكة الكهرباء أو مولد كهرباء خاص بالصيدلية.",
+						"ينبغي ألا تقل مساحة منافذ التهوية بالصيدلية عن سدس مساحتها، أو يمكن استخدام أجهزة تكييف كبديل.",
+						"يجب أن يكون مستوى أرضية الصيدلية أعلى من الطريق العام، وإلا يتم الاستعانة بوسيلة صرف وقائية على مدخل الصيدلية.",
+						"في حال وجود حمام يلزم عمل طرقة إضافية أمام باب الحمام مفصولة عن فراغ الصيدلية بباب آخر مستقل، ويمكن أن تكون الطرقة صغيرة على قدر الحمام فقط أو منطقة واسعة لها باب مستقل يفصلها عن فراغ الصيدلية وتحتوي الحمام والمعمل بداخلها.",
+						"يجب ألا يكون للصيدلية أي منافذ على وحدات سكنية متصلة بها أو على محل آخر مختلف النشاط أو على مدخل العقار."
+					]}
 				/>
 
 			</DuoCol>
@@ -866,52 +535,103 @@ const cReadMoreItems = [
 
 
 
-	<ESec id="secDoc" pBg={new ElemBg(Colors.SkyLite)}>
+	<IncLineSep
+		pTopColor={Colors.Gray5}
+		pBottomColor={Colors.WhiteOff}
+		pHeight={620}
+		pBottomLeft={120}
+		pBottomRight={430}
+		pContentWidth={1120}
+		pPadInline={40}
+	>
+
+		<YTPlayer pVideoId="ipAz7hc2k6Y" pTitle="شروط ترخيص صيدلية | خدمات هندسية | أيمن عاشور" />
+
+	</IncLineSep>
+
+
+
+
+
+
+
+	<ESec id="documents" pBg={new ElemBg(Colors.SkyLite)}>
 
 		<SecTitle
 			Gray2
 			pTitle="الأوراق المطلوبة لترخيص صيدلية"
-			pDesc="ملف ترخيص الصيدلية ينقسم إلى مستندات تقديم أولية، ثم مستندات استكمال بعد المعاينات وقبل إصدار الترخيص النهائي. ترتيب المستندات مبكرًا يقلل التعطيل عند المراجعة."
+			pDesc="ينقسم ملف الترخيص إلى مستندات أساسية يتم تقديمها مع طلب الترخيص، ومستندات استكمال بعد المعاينة الثانية وقبل إصدار الترخيص النهائي."
 		/>
 
-		<DuoSec>
+		<DuoSec
+			pContentSize={new DirectSize(new NumPer("92%", "96%"))}
+			pGap={new Pixel(28, 18)}
+			pPad={new Pixel(36, 18)}
+		>
 
-			<DuoCol>
+			<DuoCol pBgColor={new ElemBg(Colors.WhiteOff)}>
 
-				<EmoList
-					pTitle={Text.H3.OfText("مستندات التقديم الأساسية")}
-					pDesc={Text.Body.OfText("المستندات التي يبدأ بها ملف طلب الترخيص، مع ضرورة مراجعة النسخ والأختام والبيانات قبل الإرسال.")}
-					pItemFnt={Text.Body}
-					pItems={[
-					"طلب ترخيص صيدلية مستوفى البيانات الخاصة بالصيدلي والصيدلية.",
-					"صورة بطاقة الرقم القومي أو جواز السفر، ويجب أن يكون المستند ساريًا.",
-					"صورة ترخيص مزاولة المهنة.",
-					"صورة كارنيه النقابة العامة للصيادلة.",
-					"صحيفة حالة جنائية حديثة وموجهة إلى الجهة المختصة.",
-					"مستخرج شهادة ميلاد كمبيوتر.",
-					"رسم هندسي للصيدلية من النسخ المطلوبة ومعتمد بختم مهندس نقابي.",
-					"إيصال أو مستند سداد الرسوم المطلوبة حسب نموذج الجهة المختصة وقت التقديم."
-				]}
-				/>
+				<TiltCard
+					pBg={Colors.WhiteOff}
+					pColor={Colors.BlackOff}
+					pTilt={-1}
+				>
+
+					<EmoList
+						pWidth={new RespString("100%", "100%")}
+						pTitle={Text.H3.Sky.OfText("مستندات التقديم الأساسية")}
+						pDesc={Text.Body.OfText("المستندات التي يبدأ بها ملف طلب الترخيص، مع مراجعة النسخ والأختام والبيانات قبل الإرسال.")}
+						pItemFnt={Text.Body}
+						pNumbered={true}
+						pItems={[
+							"طلب ترخيص صيدلية مستوفي البيانات الخاصة بالصيدلي والصيدلية.",
+							"صورة بطاقة الرقم القومي أو صورة جواز سفر، وكلاهما ساري.",
+							"صورة ترخيص مزاولة المهنة.",
+							"صورة كارنيه النقابة العامة للصيادلة.",
+							"صحيفة حالة جنائية حديثة ونظيفة وموجهة إلى فرع هيئة الدواء المصرية التابع له الصيدلية.",
+							"مستخرج شهادة ميلاد كمبيوتر.",
+							"رسم هندسي للصيدلية من 3 نسخ أصلية معتمدة بختم مهندس نقابي.",
+							"إيصال حوالة بريدية لحساب هيئة الدواء المصرية بقيمة 5 جنيهات مصرية، ويتم كتابة رقم إيصال البريد في طلب الترخيص."
+						]}
+					/>
+
+				</TiltCard>
 
 			</DuoCol>
 
-			<DuoCol>
+			<DuoCol pBgColor={new ElemBg(Colors.WhiteOff)}>
 
-				<EmoList
-					pTitle={Text.H3.OfText("مستندات الاستكمال قبل إصدار الترخيص")}
-					pDesc={Text.Body.OfText("تطلب بعد تقدم الملف ومرور المعاينات، وتختلف تفاصيلها حسب موقف العقار وحالة المقر والمستندات النقابية.")}
-					pItemFnt={Text.Body}
-					pItems={[
-					"رسم هندسي نهائي مطابق للحالة التي سيتم التشغيل عليها بعد انتهاء التجهيزات.",
-					"شهادة قيد من النقابة العامة للصيادلة.",
-					"موافقة على الاسم التجاري من النقابة الفرعية المختصة.",
-					"شهادة بالموقف من التكليف من النقابة العامة للصيادلة.",
-					"شهادة بعدد الصيدليات المملوكة للصيدلي.",
-					"عقد ملكية أو عقد إيجار للعين محل الصيدلية بالمدة والشروط المطلوبة.",
-					{ Title: "مستندات موقف العقار", Items: ["رخصة بناء سليمة عند وجود مبنى مرخص ومطابق.", "نموذج تصالح نهائي عند وجود مخالفة أو بناء غير مرخص حسب حالة العقار.", "مستند تحويل الاستخدام أو ما يثبت صلاحية النشاط عند وجود اختلاف بين الترخيص القائم والاستخدام المطلوب."] }
-				]}
-				/>
+				<TiltCard
+					pBg={Colors.WhiteOff}
+					pColor={Colors.BlackOff}
+					pTilt={1}
+				>
+
+					<EmoList
+						pWidth={new RespString("100%", "100%")}
+						pTitle={Text.H3.Bistage.OfText("مستندات الاستكمال قبل إصدار الترخيص")}
+						pDesc={Text.Body.OfText("تطلب بعد تقدم الملف ومرور المعاينات، وتختلف تفاصيلها حسب موقف العقار وحالة المقر والمستندات النقابية.")}
+						pItemFnt={Text.Body}
+						pNumbered={true}
+						pItems={[
+							"رسم هندسي نهائي للصيدلية مطابق للحالة التي سيتم التشغيل عليها، مكون من نسخة واحدة أصلية معتمدة بختم نقابة المهندسين بالإضافة إلى عدد 2 صورة ضوئية منها بختم حي من المهندس النقابي.",
+							"شهادة قيد من النقابة العامة للصيادلة.",
+							"شهادة بالموافقة على الاسم التجاري من النقابة الفرعية التابع لها الصيدلية.",
+							"شهادة بالموقف من التكليف من النقابة العامة للصيادلة.",
+							"شهادة بعدد الصيدليات المملوكة للصيدلي من النقابة العامة للصيادلة.",
+							"عقد الملكية للعين محل الصيدلية، أو عقد إيجار بمدة لا تقل عن خمس سنوات.",
+							{
+								Title: "صورة من مستندات التقنين بالحي أو الجهاز وتكون حسب إحدى الحالات التالية للعقار:",
+								Items: [
+									"عقار تم بناؤه بترخيص بناء سليم ومطابق بدون مخالفات: يطلب صورة رخصة البناء فقط.",
+									"عقار تم بناؤه بدون ترخيص بناء: يطلب صورة من نموذج التصالح النهائي عن الجزء الخاص بالصيدلية فقط.",
+									"عقار تم بناؤه بترخيص بناء لكن غير مطابق من حيث نوع الاستخدام: يطلب رخصة البناء مع نموذج التصالح النهائي بتحويل الاستخدام إلى تجاري للجزء الخاص بالصيدلية."
+								]
+							}
+						]}
+					/>
+
+				</TiltCard>
 
 			</DuoCol>
 
@@ -925,41 +645,16 @@ const cReadMoreItems = [
 
 
 
-	<ESec id="documents">
+	<ESec id="procedures" pBg={new ElemBg(Colors.WhiteOff)}>
 
-		<SecTitle
-			Sky
-			pTitle="الأوراق المطلوبة لترخيص صيدلية"
-			pDesc="ينقسم ملف الترخيص إلى مستندات أساسية يتم تقديمها مع الطلب، ومستندات استكمال بعد المعاينة الثانية وقبل إصدار الترخيص النهائي."
+		<SvgDots
+			pColor="rgba(50,143,232,.12)"
+			pGap={22}
+			pDot={2}
+			pLoc={new Loc(new NumPer("0%", "0%"), new NumPer("0%", "0%"))}
+			pSize={new DirectSize(new NumPer("100%"), new NumPer("100%"))}
+			pZ={1}
 		/>
-
-		<div class = " ListsWrap ">
-
-			<EmoList
-				pTitle={Text.H3.OfText("المستندات الأساسية لتقديم الملف")}
-				pWidth={new RespString("620px", "100%")}
-				pNumbered={true}
-				pItems={cPrimaryDocs}
-			/>
-
-			<EmoList
-				pTitle={Text.H3.OfText("المستندات المطلوبة لاستكمال الملف بعد المعاينة الثانية")}
-				pWidth={new RespString("620px", "100%")}
-				pNumbered={true}
-				pItems={cFinalDocs}
-			/>
-
-		</div>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec id="secProc">
 
 		<SecTitle
 			BistageLite
@@ -967,107 +662,112 @@ const cReadMoreItems = [
 			pDesc="المسار العملي للترخيص يبدأ بتجهيز الملف وإرساله، ثم انتظار المعاينة الأولى، واستكمال تجهيز الصيدلية للمعاينة الثانية، ثم تقديم المستندات النهائية حتى إصدار الترخيص."
 		/>
 
-		<CardsGr
-			pWidth={new RespString("1600px", "340px")}
-			pGrTitle={Text.H3.Centered.OfText("خطوات ملف ترخيص الصيدلية")}
-			pCardTitleFnt={Text.H4}
-			pCardBodyFnt={Text.Body}
-			pStackDir="Row"
-			pSpacing={20}
-			pTopic1={new Topic("تجهيز الملف", "كتابة طلب الترخيص وتجميع مستندات الصيدلي والمقر والرسم الهندسي الأول، مع مراجعة البيانات قبل الإرسال.")}
-			pTopic2={new Topic("إرسال الطلب", "إرسال ملف الترخيص إلى الفرع المختص أو تقديمه بالطريقة المعتمدة لدى الجهة المختصة، مع الاحتفاظ بما يثبت التقديم أو الإرسال.")}
-			pTopic3={new Topic("المعاينة الأولى", "تتم المعاينة للتحقق من شروط الموقع الأساسية: المسافة، المساحة، الارتفاع، ووضوح حدود العين.")}
-			pTopic4={new Topic("المعاينة الثانية", "بعد تنفيذ التشطيبات والتجهيزات المطلوبة، يتم فحص الاشتراطات الصحية والتشغيلية، ثم استكمال المستندات النهائية.")}
+		<LinePath
+			pStroke="rgba(50,143,232,.42)"
+			pDot={Colors.Bistage}
+			pWidth={4}
+			pLoc={new Loc(new NumPer("5%", "5%"), new NumPer("270px", "330px"))}
+			pSize={new DirectSize(new NumPer("90%", "90%"), new NumPer("130px", "90px"))}
+			pZ={1}
 		/>
 
-		<HzStack
-			pGap={new Pixel(30, 20)}
-			pPad={new Pixel(35, 20)}
-			pAlign="Center"
+		<Grid
+			pMax={5}
+			pMaxP={1}
+			pSize={new DirectSize(new NumPer("92%", "96%"))}
+			pGap={new Pixel(18, 16)}
+			pPad={new Pixel(34, 18)}
+			Centered
 		>
 
+			<BadgeFrame
+				pBadge="01"
+				pBg="#FFFFFF"
+				pBadgeBg={Colors.BistageLite}
+				pColor={Colors.BlackOff}
+			>
+
+				<Emograph
+					pTitle={Text.H4.Centered.Sky.OfText("تجهيز الملف")}
+					pText={Text.Body.Centered.OfText("تحميل وكتابة طلب ترخيص صيدلية وتجميع المستندات في ملف واحد قبل الإرسال.")}
+				/>
+
+			</BadgeFrame>
+
+			<BadgeFrame
+				pBadge="02"
+				pBg="#FFFFFF"
+				pBadgeBg={Colors.Sky}
+				pColor={Colors.BlackOff}
+			>
+
+				<Emograph
+					pTitle={Text.H4.Centered.Sky.OfText("إرسال الطلب")}
+					pText={Text.Body.Centered.OfText("إرسال ملف الترخيص إلى فرع هيئة الدواء المصرية الرئيسي الخاص بالمحافظة بخطاب مسجل بعلم الوصول.")}
+				/>
+
+			</BadgeFrame>
+
+			<BadgeFrame
+				pBadge="03"
+				pBg="#FFFFFF"
+				pBadgeBg={Colors.BistageLite}
+				pColor={Colors.BlackOff}
+			>
+
+				<Emograph
+					pTitle={Text.H4.Centered.Sky.OfText("المعاينة الأولى")}
+					pText={Text.Body.Centered.OfText("التحقق من المسافة لأقرب صيدلية، والمساحة، والارتفاع، ووضوح حدود العين.")}
+				/>
+
+			</BadgeFrame>
+
+			<BadgeFrame
+				pBadge="04"
+				pBg="#FFFFFF"
+				pBadgeBg={Colors.Sky}
+				pColor={Colors.BlackOff}
+			>
+
+				<Emograph
+					pTitle={Text.H4.Centered.Sky.OfText("المعاينة الثانية")}
+					pText={Text.Body.Centered.OfText("فحص خامات التشطيب والصرف والتهوية والمعمل أو الحمام إن وجد ومدى صلاحية التشغيل.")}
+				/>
+
+			</BadgeFrame>
+
+			<BadgeFrame
+				pBadge="05"
+				pBg="#FFFFFF"
+				pBadgeBg={Colors.BistageLite}
+				pColor={Colors.BlackOff}
+			>
+
+				<Emograph
+					pTitle={Text.H4.Centered.Sky.OfText("استخراج الرخصة")}
+					pText={Text.Body.Centered.OfText("تستخرج الرخصة خلال ثلاثين يومًا من تاريخ استيفاء باقي المستندات بعد تحقق شروط المعاينة الثانية.")}
+				/>
+
+			</BadgeFrame>
+
+		</Grid>
+
+		<HzStack pGap={new Pixel(28, 14)} pPad={new Pixel(30, 18)}>
+
 			<RespImg
-				pImg={new EmoMediaData(
-					"Img",
-					"/Media/Emomed/Pharmacy/",
-					"PreparePharmacyFile.webp",
-					false,
-					"تجهيز ملف ترخيص صيدلية",
-					new Size(360, "auto", 280, "auto")
-				)}
+				pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "PreparePharmacyFile.webp", false, "تجهيز ملف ترخيص صيدلية", new Size(360, "auto", 280, "auto"))}
 			/>
 
 			<RespImg
-				pImg={new EmoMediaData(
-					"Img",
-					"/Media/Emomed/Pharmacy/",
-					"SendReq.webp",
-					false,
-					"إرسال طلب ترخيص صيدلية",
-					new Size(360, "auto", 280, "auto")
-				)}
+				pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "SendReq.webp", false, "إرسال طلب ترخيص صيدلية", new Size(360, "auto", 280, "auto"))}
 			/>
 
 			<RespImg
-				pImg={new EmoMediaData(
-					"Img",
-					"/Media/Emomed/Pharmacy/",
-					"Inspection.webp",
-					false,
-					"معاينة صيدلية للترخيص",
-					new Size(360, "auto", 280, "auto")
-				)}
+				pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "Inspection.webp", false, "معاينة صيدلية للترخيص", new Size(360, "auto", 280, "auto"))}
 			/>
 
 		</HzStack>
 
-		<EmoStrip>
-
-			<SecTitle
-				Gray5
-				pTitle="قبل استئجار محل الصيدلية"
-				pDesc="الفحص المبكر يوفر تكلفة كبيرة. المسافة غير المطابقة أو المساحة غير المحسوبة بدقة أو الارتفاع غير الكافي قد تجعل المحل غير صالح للترخيص حتى لو كان موقعه تجاريًا جيدًا."
-			/>
-
-			<HzStack
-				pGap={new Pixel(30, 20)}
-				pPad={new Pixel(35, 20)}
-				pAlign="Center"
-			>
-
-				<EmoList
-					pWidth={new RespString("560px", "320px")}
-					pTitle={Text.H3.WithColor(Colors.BistageLite).OfText("مراجعة فنية قبل الالتزام بالمقر")}
-					pDesc={Text.Body.WithColor("#FFFFFF").OfText("الاختيار السليم للمقر أهم من علاج المشكلة بعد ظهورها في المعاينة.")}
-					pItemsBg={new ElemBg("transparent")}
-					pItemFnt={Text.Body.WithColor("#FFFFFF")}
-					pNumbered={false}
-					pItems={[
-					"قياس المسافة إلى أقرب صيدلية مرخصة من مسار المشاة الصحيح.",
-					"رفع أبعاد العين وحساب المساحة الصافية القابلة للفرش.",
-					"قياس الارتفاع الصافي ومراجعة تأثير السقف المستعار إن وجد.",
-					"مراجعة إمكانية تنفيذ المعمل أو الحمام أو الصرف والتهوية قبل التشطيب.",
-					"قراءة موقف العقار من الترخيص أو التصالح أو تحويل الاستخدام قبل وضعه في ملف الترخيص."
-				]}
-				/>
-
-				<CardsGr
-					pWidth={new RespString("560px", "320px")}
-					pGrTitle={Text.H3.Centered.WithColor(Colors.BistageLite).OfText("ثلاثة أرقام لا تبدأ بدونها")}
-					pCardBg={new ElemBg("#FFFFFF")}
-					pCardRadius={18 as any}
-					pCardTitleFnt={Text.H3.Centered}
-					pCardBodyFnt={Text.Body.Centered}
-					pStackDir="Col"
-					pTopic1={new Topic("100 م", "المسافة المطلوبة عن أقرب صيدلية مرخصة.")}
-					pTopic2={new Topic("25 م²", "الحد الأدنى للمساحة الصافية الداخلية.")}
-					pTopic3={new Topic("2.6 م", "أقل ارتفاع صافي صالح للترخيص.")}
-				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
 	</ESec>
 
 
@@ -1076,108 +776,96 @@ const cReadMoreItems = [
 
 
 
-	<ESec id="secProc">
+	<BottTriSep
+		pTopColor={Colors.WhiteOff}
+		pBottomColor={Colors.Gray5}
+		pHeight={620}
+		pTipX={500}
+		pTipY={300}
+		pContentWidth={1200}
+		pPadInline={50}
+	>
 
-		<SecTitle
-			Black
-			pTitle="إجراءات ترخيص صيدلية"
-			pDesc="خطوات السير في ملف الترخيص من تجهيز الطلب وحتى المعاينات واستكمال المستندات واستخراج الرخصة."
-		/>
+		<DuoSec
+			pContentSize={new DirectSize(new NumPer("92%", "96%"))}
+			pGap={new Pixel(26, 16)}
+			pPad={new Pixel(30, 18)}
+		>
 
-		<EmoStrip>
+			<DuoCol pBgColor={new ElemBg(Colors.BlackOff)}>
 
-			<SecTitle
-				BistageLite
-				pTitle="تجهيز الملف"
-				pDesc="تحميل وكتابة طلب ترخيص صيدلية من موقع هيئة الدواء المصرية أو من الرابط بالأسفل، وتجميع المستندات في ظرف."
-			/>
-
-			<a
-				class = " TextCta "
-				href="https://www.emocrete.com/_files/ugd/308dfd_6fa1b62c8c3f42a99e9468d151b34c4d.pdf"
-				target="_blank"
-				rel="noreferrer"
-			>
-				تحميل نموذج طلب ترخيص صيدلية
-			</a>
-
-		</EmoStrip>
-
-		<EmoStrip>
-
-			<SecTitle
-				BistageLite
-				pTitle="إرسال الطلب"
-				pDesc="إرسال ملف ترخيص الصيدلية إلى فرع هيئة الدواء المصرية الرئيسي الخاص بالمحافظة بخطاب مسجل بعلم الوصول مرفقا به المستندات المطلوبة لاستخراج ترخيص صيدلية."
-			/>
-
-			<EmoList
-				pTitle={Text.Body.OfText("عناوين الإرسال")}
-				pWidth={new RespString("900px", "100%")}
-				pNumbered={false}
-				pItems={[
+				<EmoList
+					pWidth={new RespString("100%", "100%")}
+					pTitle={Text.H3.Bistage.OfText("عناوين إرسال الطلب")}
+					pDesc={Text.Body.White.OfText("يتم الإرسال إلى الفرع الرئيسي الخاص بالمحافظة، مع الاحتفاظ بما يثبت الإرسال أو التقديم.")}
+					pItemFnt={Text.Body.White}
+					pItemsBg={new ElemBg("transparent")}
+					pNumbered={false}
+					pItems={[
 						"عنوان فرع القاهرة الرئيسي: 22 ش الإخشيد - المنيل.",
-						"عنوان فرع الجيزة الرئيسي: 5 ش ابن بطوطة - مدكور - الطالبية - الهرم.",
+						"عنوان فرع الجيزة الرئيسي: 5 ش ابن بطوطة - مدكور - الطالبية - الهرم."
 					]}
-			/>
+				/>
 
-		</EmoStrip>
+			</DuoCol>
 
-		<SecTitle
-			Gray5
-			pTitle="المعاينة الأولى"
-			pDesc="حضور المعاينة الأولى للصيدلية للتحقق من استيفاء الاشتراطات القانونية: المسافة لأقرب صيدلية، المساحة، الارتفاع."
-		/>
+			<DuoCol pBgColor={new ElemBg(Colors.BistageLite)}>
+
+				<Emograph
+					pTitle={Text.H3.Centered.OfText("قبل استئجار محل الصيدلية")}
+					pText={Text.Body.Centered.OfText("الفحص المبكر يوفر تكلفة كبيرة. المسافة غير المطابقة أو المساحة غير المحسوبة بدقة أو الارتفاع غير الكافي قد تجعل المحل غير صالح للترخيص حتى لو كان موقعه التجاري جيدًا.")}
+				/>
+
+				<EmoCall
+					BlackSky
+					pText="فحص قبل التعاقد"
+					pWidth="260px"
+					pHeight="54px"
+					pRadius="18px"
+				/>
+
+			</DuoCol>
+
+		</DuoSec>
+
+	</BottTriSep>
+
+
+
+
+
+
+
+	<ESec id="validity" pBg={new ElemBg(Colors.SkyLite)}>
 
 		<SecTitle
 			WhiteOff
-			pTitle="المعاينة الثانية"
-			pDesc="حضور المعاينة الثانية للصيدلية للتحقق من استيفاء الاشتراطات الصحية بالصيدلية مثل خامات التشطيب ونظام الصرف للمعمل والحمام إن وجد والتهوية."
+			pTitle="صلاحية ترخيص الصيدلية بعد إصداره"
+			pDesc="الحصول على الترخيص لا يعني تركه بلا تشغيل أو نقل النشاط بحرية. توجد حالات عملية قد تؤدي إلى اعتبار الترخيص ملغى أو تستلزم إجراءات جديدة."
 		/>
 
-		<SecTitle
-			BistageLite
-			pTitle="استخراج الرخصة"
-			pDesc="تستخرج الرخصة خلال ثلاثين يوما من تاريخ استيفاء باقي المستندات بعد تحقق شروط المعاينة الثانية."
-		/>
+		<GlassCard
+			pBg="rgba(255,255,255,.82)"
+			pBorder="rgba(255,255,255,.74)"
+			pRadius={30}
+			pBlur={12}
+			pSize={new DirectSize(new NumPer("1000px", "94%"))}
+		>
 
-		<section class = " ValiditySec ">
+			<EmoList
+				pWidth={new RespString("100%", "100%")}
+				pTitle={Text.H3.Centered.Sky.OfText("متى يعتبر الترخيص ملغيًا؟")}
+				pDesc={Text.Body.Centered.OfText("بعد الحصول على ترخيص صيدلية يعتبر الترخيص ملغى في الحالات التالية:")}
+				pItemFnt={Text.Body}
+				pNumbered={false}
+				pItems={[
+					"في حال لم يتم تعيين مدير والعمل به خلال 6 أشهر من تاريخ استلام الترخيص.",
+					"في حال تم إغلاق الصيدلية بشكل متصل لمدة تزيد عن سنة ميلادية.",
+					"إذا تم نقل الصيدلية لمكان آخر لسبب غير قهري، ويستثنى من ذلك حالات النقل للأسباب القهرية كتهدم المبنى أو حدوث حريق، وفي هذه الحالة يسمح بنقل الصيدلية لمكان آخر بنفس الرخصة بشرط استيفاء المكان الجديد للشروط الصحية المعمول بها."
+				]}
+			/>
 
-			<div class = " OneBlock DarkBlock ">
-
-				<h2>
-					صلاحية ترخيص الصيدلية
-				</h2>
-
-				<p>
-					بعد الحصول على ترخيص صيدلية يعتبر الترخيص ملغي في الحالات التالية:
-				</p>
-
-				<ul>
-
-					<li>
-
-						في حال لم يتم تعيين مدير والعمل به خلال 6 أشهر من تاريخ استلام الترخيص.
-
-					</li>
-
-					<li>
-
-						في حال تم إغلاق الصيدلية بشكل متصل لمدة تزيد عن سنة ميلادية.
-
-					</li>
-
-					<li>
-
-						إذا تم نقل الصيدلية لمكان آخر لسبب غير قهري ، ويستثنى من ذلك حالات النقل للأسباب القهرية كتهدم المبنى أو حدوث حريق ، وفي هذه الحالة يسمح بنقل الصيدلية لمكان آخر بنفس الرخصة بشرط استيفاء المكان الجديد للشروط الصحية المعمول بها.
-
-					</li>
-
-				</ul>
-
-			</div>
-
-		</section>
+		</GlassCard>
 
 	</ESec>
 
@@ -1187,89 +875,13 @@ const cReadMoreItems = [
 
 
 
-	<section class = " Wrap SectionSpace ">
-
-		<div class = " SectionHead ">
-
-			<span class = " SectionKicker ">
-				إجراءات ترخيص صيدلية
-			</span>
-
-			<h2>
-				خطوات السير في الملف من البداية إلى الرخصة
-			</h2>
-
-		</div>
-
-		<div class = " StepGrid ">
-
-			{ cSteps.map((fStep, fIndex) => (
-
-				<article class = " StepCard ">
-
-					<div class = " StepTop ">
-
-						<span class = " StepNo ">
-
-							0
-
-							{fIndex + 1}
-
-						</span>
-
-						<img
-							src={fStep.fImg}
-							alt=""
-							loading="lazy"
-						/>
-
-					</div>
-
-					<h3>
-						{fStep.fTitle}
-					</h3>
-
-					<p>
-						{fStep.fText}
-					</p>
-
-					{ fStep.fMeta && (
-
-						<ul class = " MetaList ">
-						
-							{ fStep.fMeta.map((fLine) => (
-						
-								<li>
-						
-									{fLine}
-						
-								</li>
-						
-							)) }
-						
-						</ul>
-					) }
-
-					{ fStep.fCtaHref && fStep.fCtaLabel && (
-
-						<a
-							class = " TextLink "
-							href={fStep.fCtaHref}
-							target="_blank"
-							rel="noreferrer"
-						>
-							{fStep.fCtaLabel}
-						</a>
-
-					) }
-
-				</article>
-
-			)) }
-
-		</div>
-
-	</section>
+	<EmoCoverageMapStrip
+		pTitle="نطاق خدمة ترخيص الصيدليات"
+		pDesc="الخدمة الميدانية المباشرة لقياس المسافة ورفع أبعاد المكان وتجهيز الرسم الهندسي متاحة في القاهرة والجيزة. يمكن مراجعة حالات المحافظات الأخرى حسب طبيعة المطلوب وإمكانية التنفيذ."
+		pDetectedGovernorate="القاهرة"
+		pDetectedArea="القاهرة والجيزة"
+		pCurrentServiceName="ترخيص صيدلية"
+	/>
 
 
 
@@ -1277,25 +889,46 @@ const cReadMoreItems = [
 
 
 
-	<ESec id="secValidity">
+	<ESec pBg={new ElemBg(Colors.WhiteOff)}>
 
 		<SecTitle
 			SkyLite
-			pTitle="صلاحية ترخيص الصيدلية بعد إصداره"
-			pDesc="الحصول على الترخيص لا يعني تركه بلا تشغيل أو نقل النشاط بحرية. توجد حالات عملية قد تؤدي إلى اعتبار الترخيص ملغى أو الحاجة إلى إجراءات جديدة."
+			pTitle="الخدمات العملية داخل ملف الترخيص"
+			pDesc="الخدمة لا تقف عند شرح الشروط؛ الأهم هو تحويل حالة المكان والملف إلى خطوات قابلة للتنفيذ والمتابعة."
 		/>
 
-		<EmoList
-			pWidth={new RespString("1000px", "320px")}
-			pTitle={Text.H3.Centered.OfText("حالات يجب الانتباه لها")}
-			pDesc={Text.Body.Centered.OfText("بعد إصدار الترخيص يجب متابعة التشغيل والإدارة الفعلية وموقف المكان، لأن بعض الوقائع تؤثر على استمرار صلاحية الترخيص.")}
-			pItemFnt={Text.Body}
-			pItems={[
-				"عدم تعيين مدير والعمل به خلال المدة المحددة من تاريخ استلام الترخيص.",
-				"إغلاق الصيدلية مدة طويلة متصلة بما يخالف الضوابط المنظمة لاستمرار النشاط.",
-				"نقل الصيدلية إلى مكان آخر دون سبب قهري أو دون اتباع الإجراءات المطلوبة، مع مراعاة أن حالات مثل تهدم المبنى أو الحريق قد يكون لها تعامل مختلف بشرط استيفاء المكان البديل للاشتراطات."
-			]}
-		/>
+		<Grid
+			pMax={3}
+			pMaxP={1}
+			pSize={new DirectSize(new NumPer("92%", "96%"))}
+			pGap={new Pixel(24, 16)}
+			pPad={new Pixel(28, 18)}
+			Centered
+		>
+
+			<SvgBlobCard
+				fTitle="رسم هندسي لصيدلية"
+				fText="إعداد الرسم المطلوب للمعاينة الأولى أو الرسم النهائي بعد التشطيب، مع مطابقة الأبعاد والحالة التي سيتم التشغيل عليها."
+				fCtaText="اطلب الرسم"
+				fCtaHref="/emomed/pharmacy/dwg"
+				fHue={198}
+			/>
+
+			<SvgRadarCard
+				fTitle="قياس المسافة بين صيدليتين"
+				fText="فحص شرط المسافة من أقصر مسار مشاة فعلي قبل التعاقد على المحل أو قبل تقديم ملف الترخيص."
+				fColor={Colors.BistageLite}
+			/>
+
+			<SvgBlobCard
+				fTitle="مراجعة ملاحظات المعاينة"
+				fText="قراءة ملاحظات الجهة المختصة وترتيب المطلوب قبل المعاينة التالية أو قبل استكمال المستندات النهائية."
+				fCtaText="تواصل للمراجعة"
+				fCtaHref="#EmoContactStrip"
+				fHue={92}
+			/>
+
+		</Grid>
 
 	</ESec>
 
@@ -1305,232 +938,65 @@ const cReadMoreItems = [
 
 
 
-	<EmoFaq>
-
-		<FaqItem
-			pQuestion="كيفية قياس المسافة بين صيدليتين؟"
-			pAnswer="تقاس المسافة باعتبارها أقصر مسار مشاة فعلي بين باب الصيدلية المطلوب ترخيصها وباب أقرب صيدلية مرخصة، مع مراعاة اتجاهات الشوارع والعبور المتاح للمشاة وليس مسار السيارات فقط."
-		/>
-
-		<FaqItem
-			pQuestion="ما أقل مساحة لترخيص صيدلية؟"
-			pAnswer="الحد الأدنى الشائع هو 25 مترًا مربعًا كمساحة صافية داخلية، ويتم حسابها من الأبعاد الفعلية القابلة للاستخدام بعد استبعاد الحوائط والأعمدة والبروزات المؤثرة."
-		/>
-
-		<FaqItem
-			pQuestion="كيف يحسب ارتفاع الصيدلية؟"
-			pAnswer="يحسب الارتفاع من منسوب تشطيب الأرضية إلى باطن السقف الأصلي أو باطن السقف المستعار أيهما أقل، لذلك قد يؤدي السقف المستعار إلى تقليل الارتفاع المقبول عند المعاينة."
-		/>
-
-		<FaqItem
-			pQuestion="متى يحق للصيدلي فتح صيدلية؟"
-			pAnswer="يحتاج الصيدلي عادة إلى ترخيص مزاولة المهنة وخبرة فعلية في مؤسسة حكومية أو أهلية، مع استيفاء باقي الشروط النقابية والمهنية المنظمة لطلب الترخيص."
-		/>
-
-		<FaqItem
-			pQuestion="كم صيدلية يحق للصيدلي امتلاكها؟"
-			pAnswer="ينبغي مراجعة الحد الأقصى للملكية أو الشراكة قبل التقديم، لأن وجود ملكية أو شراكة سابقة قد يؤثر على قبول طلب ترخيص صيدلية جديدة."
-		/>
-
-		<FaqItem
-			pQuestion="هل يمكن ترخيص صيدلية لغير صيدلي؟"
-			pAnswer="ترخيص الصيدلية يكون للصيدلي المستوفي للشروط. أما التمويل أو المشاركة المادية مع غير صيدلي فتحتاج صياغة قانونية واضحة ولا تعني إدارة غير الصيدلي للصيدلية أو تشغيلها باسمه."
-		/>
-
-		<FaqItem
-			pQuestion="ما خطورة فتح صيدلية بدون ترخيص؟"
-			pAnswer="تشغيل صيدلية بدون ترخيص يعرض صاحب النشاط لإجراءات قانونية وإدارية قد تشمل الغلق والعقوبات المقررة، لذلك لا ينصح ببدء التشغيل قبل استكمال الترخيص والتأكد من سلامة الوضع القانوني."
-		/>
-
-		<FaqItem
-			pQuestion="ما الفرق بين الرسم الهندسي الأول والرسم النهائي؟"
-			pAnswer="الرسم الأول يوضح صلاحية المقر وشروط المسافة والمساحة والارتفاع عند بداية الملف، أما الرسم النهائي فيطابق حالة الصيدلية بعد التشطيب والتجهيز ويستخدم في استكمال الترخيص."
-		/>
-
-	</EmoFaq>
-
-
-
-
-
-
-
-	<ESec id="secFaq">
+	<ESec id="faq" pBg={new ElemBg(Colors.Gray5)}>
 
 		<SecTitle
-			SkyDark
+			BistageLite
 			pTitle="الأسئلة الشائعة عن ترخيص الصيدليات"
 			pDesc="إجابات مباشرة على أهم الأسئلة العملية التي تظهر قبل شراء مقر الصيدلية أو قبل تقديم ملف الترخيص."
 		/>
 
-		<VrStack>
+		<EmoFaq>
 
-			<div class = " FaqBox " id="faq-distance">
+			<FaqItem
+				id="faq-distance"
+				pQuestion="كيفية قياس المسافة بين صيدليتين؟"
+				pAnswer="يتم قياس المسافة بين الصيدليات باعتبارها طول أقصر مسار للمشاة يمكن للشخص المترجل سلوكه مشيًا على الأقدام بين الصيدليتين، على أن يكون هذا المسار من خطوط مستقيمة عمودية تبدأ من منتصف باب الصيدلية الأولى وتنتهي عند منتصف باب الصيدلية الثانية. ويتم اختيار أقرب صيدلية من أي اتجاه، سواء كانت في نفس جانب الشارع أو الجانب المقابل أو شارع عمودي أو شارع موازي. مسار المشاة غير مقيد بفتحات الدوران المرورية للسيارات ولا بمناطق عبور المشاة المخططة، وإنما يحسب من أقرب نقطة يمكن للمترجل العبور منها فعليًا. تتوفر لدينا خدمة قياس المسافة بين الصيدليات طبقا للأسلوب المتبع من هيئة الدواء المصرية في القاهرة والجيزة فقط."
+			/>
 
-				<Emograph
-					pTitle={Text.H3.WithAlign("right").WithColor(Colors.BistageLite).OfText("كيفية قياس المسافة بين صيدليتين")}
-					pText={Text.Body.WithColor("white").OfText("")}
-					pSize={new Size(1200, "auto", "100%", "auto")}
-				>
+			<FaqItem
+				id="faq-area"
+				pQuestion="ما أقل مساحة لترخيص صيدلية وكيف يتم حسابها؟"
+				pAnswer="أقل مساحة لترخيص صيدلية هي 25 م2، ويتم حسابها باعتبارها المساحة الصافية الداخلية المتاحة للفرش بعد استبعاد المساحات المستغلة في بناء الحوائط الخارجية والداخلية ومساحات الأعمدة وبروزاتها. ويدخل ضمن مساحة الصيدلية المساحة المخصصة لعمل حمام أو معمل بالصيدلية."
+			/>
 
-					<p>
-						يتم قياس المسافة بين الصيدليات باعتبارها طول أقصر مسار للمشاة يمكن للشخص المترجل سلوكه مشيا على الأقدام بين الصيدليتين، على أن يكون هذا المسار من خطوط مستقيمة عمودية تبدأ من منتصف الباب للصيدلية الأولى وتنتهي عند منتصف الباب للصيدلية الثانية.
-					</p>
+			<FaqItem
+				id="faq-height"
+				pQuestion="كيفية حساب ارتفاع الصيدلية؟"
+				pAnswer="أقل ارتفاع صالح لترخيص صيدلية هو 2.6 م، ويكون هو ارتفاع الفراغ الصافي من منسوب تشطيب الصيدلية إلى باطن منسوب السقف الخرساني الأصلي أو إلى باطن منسوب السقف المستعار لو كان مستخدما."
+			/>
 
-					<p>
-						ويتم اختيار الصيدلية الثانية التي يتم القياس إليها باعتبارها الأقرب من أي اتجاه، سواء كانت في نفس الجانب من نفس الشارع الموجود به الصيدلية المطلوب ترخيصها، أو كانت في الجانب المقابل من نفس الشارع، أو كانت في شارع عمودي على الشارع الموجود به الصيدلية المراد ترخيصها، أو كانت في الشارع الموازي السابق أو التالي للشارع الموجود به الصيدلية الأولى.
-					</p>
+			<FaqItem
+				id="faq-when"
+				pQuestion="متى يحق للصيدلي فتح صيدلية؟"
+				pAnswer="يحق للصيدلي فتح صيدلية بعد مرور سنة على مزاولته الفعلية للمهنة في أي مؤسسة حكومية أو خاصة، وليس سنة من تاريخ التخرج."
+			/>
 
-					<p>
-						مسار المشاة الذي يتم حسابه غير مقيد بفتحات الدوران المرورية المخصصة للسيارات، ولا بمناطق عبور المشاة المخططة في الطريق العام المخصص للسيارات أو فتحات عبور المشاة المفتوحة بالرصيف، ويتم حساب نقطة عبور الطريق للجانب المقابل من أقرب نقطة يمكن للشخص السليم السوي العبور منها فعليا ما دام ارتفاع الرصيف مناسب ويمكن تخطيه.
-					</p>
+			<FaqItem
+				id="faq-count"
+				pQuestion="كم صيدلية يحق للصيدلي فتحها؟"
+				pAnswer="يحق للصيدلي أن يكون مالكا أو شريكا في صيدليتين فقط."
+			/>
 
-					<p>
-						يتوفر لدينا خدمات قياس المسافة بين الصيدليات طبقا للأسلوب المتبع من هيئة الدواء المصرية، والخدمات متاحة في محافظتي القاهرة والجيزة فقط.
-					</p>
+			<FaqItem
+				id="faq-non-pharmacist"
+				pQuestion="هل يمكن ترخيص صيدلية لغير صيدلي؟"
+				pAnswer="لا يحق لغير الصيدلي الحصول على ترخيص صيدلية، ولكن يمكن لغير الصيدلي عمل تعاقد مشاركة مادية لتمويل مشروع الصيدلية مع أحد الصيادلة المصرح لهم بالحصول على ترخيص صيدلية، على أن يكون الترخيص والإدارة الفعلية من خلال الصيدلي المشارك وليس مجرد إعطاء اسمه للشريك بدون تواجده الفعلي. ولا يحق للشريك غير الصيدلي العمل بالصيدلية أو إدارتها من الباطن تحت أي ظرف، وإلا تعرض الطرفان للعقوبة المقررة قانونا في هذا الشأن."
+			/>
 
-					<a class = " TextCta " href="/emomed/pharmacy/distance">
-						معرفة المزيد
-					</a>
+			<FaqItem
+				id="faq-penalty"
+				pQuestion="ما عقوبة فتح صيدلية بدون ترخيص؟"
+				pAnswer="عقوبة فتح صيدلية بدون ترخيص تشمل الحبس مدة لا تقل عن سنة، وغرامة مالية من 5 إلى 10 آلاف جنيه مصري، والغلق الإداري للصيدلية المخالفة."
+			/>
 
-				</Emograph>
+			<FaqItem
+				id="faq-deadline"
+				pQuestion="كيفية حساب المهلة بين المعاينتين؟"
+				pAnswer="المهلة الأولى بين المعاينة الأولى والثانية تكون 8 شهور، ويمكن قطعها من خلال طلب تقديم موعد المعاينة الثانية. وفي حالة فشل المعاينة الثانية وعدم تحقق الاشتراطات تكون المهلة الثانية 4 شهور إذا استفاد الصيدلي من مدة المهلة الأولى كاملة، أو تكون مساوية لنصف الفترة الزمنية بين المعاينة الأولى وتاريخ تقديم طلب إجراء المعاينة الثانية."
+			/>
 
-			</div>
-
-			<div class = " FaqBox " id="faq-area">
-
-				<Emograph
-					pTitle={Text.H3.WithAlign("right").WithColor(Colors.BistageLite).OfText("المساحة المطلوبة لترخيص صيدلية")}
-					pText={Text.Body.WithColor("white").OfText("")}
-					pSize={new Size(1200, "auto", "100%", "auto")}
-				>
-
-					<p>
-						أقل مساحة لترخيص صيدلية هي 25 م2، ويتم حسابها باعتبارها المساحة الصافية الداخلية المتاحة للفرش بعد استبعاد المساحات المستغلة في بناء الحوائط الخارجية والداخلية ومساحات الأعمدة وبروزاتها.
-					</p>
-
-					<p>
-						ويدخل ضمن مساحة الصيدلية المساحة المخصصة لعمل حمام أو معمل بالصيدلية.
-					</p>
-
-				</Emograph>
-
-			</div>
-
-			<div class = " FaqBox " id="faq-height">
-
-				<Emograph
-					pTitle={Text.H3.WithAlign("right").WithColor(Colors.BistageLite).OfText("كيفية حساب ارتفاع الصيدلية")}
-					pText={Text.Body.WithColor("white").OfText("")}
-					pSize={new Size(1200, "auto", "100%", "auto")}
-				>
-
-					<p>
-						أقل ارتفاع صالح لترخيص صيدلية هو 2.6 م، ويكون هو ارتفاع الفراغ الصافي من منسوب تشطيب الصيدلية إلى باطن منسوب السقف الخرساني الأصلي أو إلى باطن منسوب السقف المستعار لو كان مستخدما.
-					</p>
-
-				</Emograph>
-
-			</div>
-
-			<div class = " FaqBox " id="faq-when">
-
-				<Emograph
-					pTitle={Text.H3.WithAlign("right").WithColor(Colors.BistageLite).OfText("متى يحق للصيدلي فتح صيدلية")}
-					pText={Text.Body.WithColor("white").OfText("")}
-					pSize={new Size(1200, "auto", "100%", "auto")}
-				>
-
-					<p>
-						يحق للصيدلي فتح صيدلية بعد مرور سنة على مزاولته الفعلية للمهنة في أي مؤسسة حكومية أو خاصة، وليس سنة من تاريخ التخرج.
-					</p>
-
-				</Emograph>
-
-			</div>
-
-			<div class = " FaqBox " id="faq-count">
-
-				<Emograph
-					pTitle={Text.H3.WithAlign("right").WithColor(Colors.BistageLite).OfText("كم صيدلية يحق للصيدلي فتحها")}
-					pText={Text.Body.WithColor("white").OfText("")}
-					pSize={new Size(1200, "auto", "100%", "auto")}
-				>
-
-					<p>
-						يحق للصيدلي أن يكون مالكا أو شريكا في صيدليتين فقط.
-					</p>
-
-				</Emograph>
-
-			</div>
-
-			<div class = " FaqBox " id="faq-non-pharmacist">
-
-				<Emograph
-					pTitle={Text.H3.WithAlign("right").WithColor(Colors.BistageLite).OfText("ترخيص صيدلية لغير صيدلي")}
-					pText={Text.Body.WithColor("white").OfText("")}
-					pSize={new Size(1200, "auto", "100%", "auto")}
-				>
-
-					<p>
-						لا يحق لغير الصيدلي الحصول على ترخيص صيدلية، ولكن يمكن لغير الصيدلي عمل تعاقد مشاركة مادية لتمويل مشروع الصيدلية مع أحد الصيادلة المصرح لهم بالحصول على ترخيص صيدلية، على أن يكون ترخيص الصيدلية وإدارتها الفعلية من خلال الصيدلي المشارك، وليس مجرد إعطاء اسمه للشريك بدون تواجده الفعلي.
-					</p>
-
-					<p>
-						ولا يحق للشريك غير الصيدلي العمل بالصيدلية أو إدارتها من الباطن تحت أي ظرف، وإلا تعرض الطرفان للعقوبة المقررة قانونا في هذا الشأن.
-					</p>
-
-				</Emograph>
-
-			</div>
-
-			<div class = " FaqBox " id="faq-penalty">
-
-				<Emograph
-					pTitle={Text.H3.WithAlign("right").WithColor(Colors.BistageLite).OfText("عقوبة فتح صيدلية بدون ترخيص")}
-					pText={Text.Body.WithColor("white").OfText("")}
-					pSize={new Size(1200, "auto", "100%", "auto")}
-				>
-
-					<EmoList
-						pWidth={new RespString("100%", "100%")}
-						pNumbered={true}
-						pItemFnt={Text.Body.WithColor("white")}
-						pItems={[
-								"الحبس مدة لا تقل عن سنة.",
-								"غرامة مالية من 5 إلى 10 آلاف جنيه مصري.",
-								"الغلق الإداري للصيدلية المخالفة.",
-							]}
-					/>
-
-				</Emograph>
-
-			</div>
-
-			<div class = " FaqBox " id="faq-deadline">
-
-				<Emograph
-					pTitle={Text.H3.WithAlign("right").WithColor(Colors.BistageLite).OfText("كيفية حساب المهلة بين المعاينات")}
-					pText={Text.Body.WithColor("white").OfText("")}
-					pSize={new Size(1200, "auto", "100%", "auto")}
-				>
-
-					<EmoList
-						pWidth={new RespString("100%", "100%")}
-						pNumbered={false}
-						pItemFnt={Text.Body.WithColor("white")}
-						pItems={[
-								"المهلة الأولى بين المعاينة الأولى والثانية وتكون مدة 8 شهور، ويمكن قطعها من خلال طلب تقديم موعد المعاينة الثانية.",
-								"المهلة الثانية في حالة فشل المعاينة الثانية وعدم تحقق الاشتراطات، وفي هذه الحالة تكون مدتها 4 شهور في حال استفاد الصيدلي من مدة المهلة الأولى كاملة، أو تكون مساوية لنصف الفترة الزمنية بين المعاينة الأولى وتاريخ تقديم طلب إجراء المعاينة الثانية، بمعنى لو تم استعجال المعاينة الثانية لتكون بعد 4 شهور فقط من المعاينة الأولى تكون المهلة الثانية شهرين فقط، ولو تمت المعاينة الثانية بعد شهر من المعاينة الأولى تكون مدة المهلة الثانية 15 يوم فقط.",
-							]}
-					/>
-
-				</Emograph>
-
-			</div>
-
-		</VrStack>
+		</EmoFaq>
 
 	</ESec>
 
@@ -1546,30 +1012,36 @@ const cReadMoreItems = [
 		pHeadBg={new ElemBg(Colors.BistageLite)}
 		pBodyBg={new ElemBg(Colors.WhiteOff)}
 		pCardBg={new ElemBg("#FFFFFF")}
+		pMax={4}
+		pMaxP={1}
 	>
 
 		<ReadAlsoItem
 			pTitle="شروط ترخيص صيدلية"
 			pDesc="تفصيل شروط الصيدلي وشروط العين والمعاينات."
 			pHref="/emomed/pharmacy/cond"
+			pImg="/Media/Emomed/Pharmacy/Cond/HeroL.webp"
 		/>
 
 		<ReadAlsoItem
 			pTitle="إجراءات ترخيص صيدلية"
 			pDesc="خطوات تقديم الملف والمعاينة والاستكمال."
 			pHref="/emomed/pharmacy/proc"
+			pImg="/Media/Emomed/Pharmacy/Proc/HeroL.webp"
 		/>
 
 		<ReadAlsoItem
 			pTitle="رسم هندسي لصيدلية"
 			pDesc="ما يجب أن يتضمنه الرسم الهندسي للمعاينة الأولى والثانية."
 			pHref="/emomed/pharmacy/dwg"
+			pImg="/Media/Emomed/Pharmacy/Dwg/HeroL.webp"
 		/>
 
 		<ReadAlsoItem
 			pTitle="قياس المسافة بين الصيدليات"
 			pDesc="طريقة فحص شرط المسافة قبل التعاقد على محل الصيدلية."
 			pHref="/emomed/pharmacy/distance"
+			pImg="/Media/Emomed/Pharmacy/Distance/HeroL.webp"
 		/>
 
 	</ReadAlso>
@@ -1581,17 +1053,21 @@ const cReadMoreItems = [
 
 
 	<RelServices
+		id="related-services"
 		pTitle={Text.H2.Centered.WithColor(Colors.BistageLite).OfText("خدمات ذات علاقة")}
-		pDesc={Text.Body.Centered.WithColor("#FFFFFF").OfText("خدمات تجارية تساعد في تجهيز ملف الصيدلية أو دعم قرار اختيار المقر أو تشغيل المشروع بعد الترخيص.")}
+		pDesc={Text.Body.Centered.WithColor(Colors.WhiteOff).OfText("خدمات هندسية وتنفيذية مرتبطة بالصيدليات قبل الترخيص أو أثناء الترخيص أو بعده.")}
 		pHeadBg={new ElemBg(Colors.Gray5)}
 		pBodyBg={new ElemBg(Colors.SkyLite)}
 		pCardBg={new ElemBg("#FFFFFF")}
+		pMax={3}
+		pMaxP={1}
 	>
 
 		<RelServiceItem
 			pTitle="رسم هندسي لصيدلية"
-			pDesc="إعداد الرسم المطلوب للمعاينة الأولى أو الرسم النهائي بعد التشطيب."
+			pDesc="إعداد الرسم الهندسي المطلوب للمعاينة الأولى أو الرسم النهائي بعد التشطيب."
 			pHref="/emomed/pharmacy/dwg"
+			pImg="/Media/Emomed/Pharmacy/Dwg/HeroL.webp"
 			pBtnText="اطلب الخدمة"
 		/>
 
@@ -1599,13 +1075,15 @@ const cReadMoreItems = [
 			pTitle="قياس المسافة بين صيدليتين"
 			pDesc="فحص شرط المسافة قبل استئجار المحل أو تقديم ملف الترخيص."
 			pHref="/emomed/pharmacy/distance"
+			pImg="/Media/Emomed/Pharmacy/Distance/HeroL.webp"
 			pBtnText="اطلب الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="تقرير هندسي عن حالة المبنى"
 			pDesc="تقرير فني عن العقار عند الحاجة إلى توضيح الحالة الإنشائية أو موقف المقر."
-			pHref="/emonsult/report"
+			pHref="/emonsult/report/safety"
+			pImg="/Media/Emonsult/Report/Safety/HeroL.webp"
 			pBtnText="اطلب الخدمة"
 		/>
 
@@ -1613,6 +1091,7 @@ const cReadMoreItems = [
 			pTitle="تشطيب وتجهيز الصيدليات"
 			pDesc="تصميم وتنفيذ تشطيبات وتجهيزات الصيدلية بما يناسب التشغيل والميزانية."
 			pHref="/emocrete/finishing/pharmacy"
+			pImg="/Media/Emocrete/Finishing/Pharmacy/HeroL.webp"
 			pBtnText="اطلب الخدمة"
 		/>
 
@@ -1624,435 +1103,54 @@ const cReadMoreItems = [
 
 
 
-	<section class = " MainService " id="MainService">
-
-		<div class = " OneBlock MainServiceBlock ">
-
-			<h2>
-				استخراج ترخيص صيدلية
-			</h2>
-
-			<p>
-				خدمة السير في إجراءات استخراج ترخيص صيدلية كوكيل عن الصيدلي صاحب الصيدلية
-			</p>
-
-			<a
-				href="https://wa.me/201014490054"
-				target="_blank"
-				rel="noreferrer"
-			>
-				اطلب الخدمة
-			</a>
-
-		</div>
-
-	</section>
-
-
-
-
-
-
-
-	<ESec id="secReadMore">
-
-		<SecTitle
-			SkyLite
-			pTitle="اقرأ أيضا"
-			pDesc="روابط سريعة داخل نفس الخدمة وما حولها."
-		/>
-
-		<div class = " ButtonGrid ">
-
-			<EmoBtn
-				pText="أقل مساحة لترخيص صيدلية وكيفية حسابها"
-				pBgColor={Colors.WhiteOff}
-				pBgColorHover={Colors.SkyLite}
-				pTextColor={Colors.BlackOff}
-				pWidth="100%"
-				pHeight="58px"
-				onclick="location.href='#faq-area'"
-			/>
-
-			<EmoBtn
-				pText="كيفية حساب ارتفاع الصيدلية"
-				pBgColor={Colors.WhiteOff}
-				pBgColorHover={Colors.SkyLite}
-				pTextColor={Colors.BlackOff}
-				pWidth="100%"
-				pHeight="58px"
-				onclick="location.href='#faq-height'"
-			/>
-
-			<EmoBtn
-				pText="متى يحق للصيدلي فتح صيدلية"
-				pBgColor={Colors.WhiteOff}
-				pBgColorHover={Colors.SkyLite}
-				pTextColor={Colors.BlackOff}
-				pWidth="100%"
-				pHeight="58px"
-				onclick="location.href='#faq-when'"
-			/>
-
-			<EmoBtn
-				pText="كم صيدلية يحق للصيدلي فتحها"
-				pBgColor={Colors.WhiteOff}
-				pBgColorHover={Colors.SkyLite}
-				pTextColor={Colors.BlackOff}
-				pWidth="100%"
-				pHeight="58px"
-				onclick="location.href='#faq-count'"
-			/>
-
-			<EmoBtn
-				pText="شروط ترخيص صيدلية"
-				pBgColor={Colors.WhiteOff}
-				pBgColorHover={Colors.SkyLite}
-				pTextColor={Colors.BlackOff}
-				pWidth="100%"
-				pHeight="58px"
-				onclick="location.href='#secCond'"
-			/>
-
-			<EmoBtn
-				pText="الأوراق المطلوبة لترخيص صيدلية"
-				pBgColor={Colors.WhiteOff}
-				pBgColorHover={Colors.SkyLite}
-				pTextColor={Colors.BlackOff}
-				pWidth="100%"
-				pHeight="58px"
-				onclick="location.href='#secDoc'"
-			/>
-
-			<EmoBtn
-				pText="إجراءات ترخيص صيدلية"
-				pBgColor={Colors.WhiteOff}
-				pBgColorHover={Colors.SkyLite}
-				pTextColor={Colors.BlackOff}
-				pWidth="100%"
-				pHeight="58px"
-				onclick="location.href='#secProc'"
-			/>
-
-			<EmoBtn
-				pText="الرسم الهندسي لصيدلية"
-				pBgColor={Colors.WhiteOff}
-				pBgColorHover={Colors.SkyLite}
-				pTextColor={Colors.BlackOff}
-				pWidth="100%"
-				pHeight="58px"
-				onclick="location.href='/emomed/pharmacy/dwg'"
-			/>
+	<EmoStatsStrip
+		pTitle="مؤشرات قراءة صفحة ترخيص الصيدليات"
+		pDesc="استخدم هذه الصفحة كمرجع سريع قبل اختيار مقر الصيدلية أو قبل تجهيز ملف الترخيص، ثم اطلب مراجعة الحالة الفعلية للمكان أو المستندات عند الحاجة."
+		pOfferTitle="فحص مبكر قبل الالتزام بالمحل"
+		pOfferDesc="الفحص قبل دفع مقدم الإيجار أو بدء التشطيب قد يمنع رفض الملف بسبب المسافة أو المساحة أو الارتفاع."
+		pOfferButtonText="سجّل طلب فحص"
+	/>
 
-			<EmoBtn
-				pText="ترخيص صيدلية لغير صيدلي"
-				pBgColor={Colors.WhiteOff}
-				pBgColorHover={Colors.SkyLite}
-				pTextColor={Colors.BlackOff}
-				pWidth="100%"
-				pHeight="58px"
-				onclick="location.href='#faq-non-pharmacist'"
-			/>
 
-			<EmoBtn
-				pText="عقوبة فتح صيدلية بدون ترخيص"
-				pBgColor={Colors.WhiteOff}
-				pBgColorHover={Colors.SkyLite}
-				pTextColor={Colors.BlackOff}
-				pWidth="100%"
-				pHeight="58px"
-				onclick="location.href='#faq-penalty'"
-			/>
 
-			<EmoBtn
-				pText="كيفية حساب المهلة بين المعاينات"
-				pBgColor={Colors.WhiteOff}
-				pBgColorHover={Colors.SkyLite}
-				pTextColor={Colors.BlackOff}
-				pWidth="100%"
-				pHeight="58px"
-				onclick="location.href='#faq-deadline'"
-			/>
 
-		</div>
 
-	</ESec>
 
 
+	<EmoRatingStrip
+		pTitle="قيّم وضوح معلومات ترخيص الصيدلية"
+		pSubmitText="إرسال التقييم"
+		pCommentPlaceholder="اكتب ملاحظة عن الجزء غير الواضح أو السؤال الذي لم تجد إجابته..."
+		pSourceName="صفحة ترخيص صيدلية"
+	/>
 
 
 
 
 
-	<ESec id="secOtherServ">
 
-		<SecTitle
-			BistageLite
-			pTitle="خدمات أخرى"
-			pDesc="خدمات هندسية وتنفيذية مرتبطة بالصيدليات قبل الترخيص أو أثناء الترخيص أو بعده."
-		/>
 
-		<div class = " ServiceCards ">
+	<EmoContactStrip
+		pTitle="تحتاج مراجعة مقر صيدلية أو ملف ترخيص؟"
+		pDesc="اتصل أو أرسل واتساب لتحديد المطلوب: قياس مسافة، رسم هندسي، مراجعة مستندات، أو متابعة إجراءات الترخيص في القاهرة والجيزة."
+		pCallText="اتصال مباشر"
+		pWhatsappText="واتساب مباشر"
+		pLeadTitle="اترك رقمك وسبب التواصل"
+		pLeadButtonText="تسجيل طلب التواصل"
+		pSourceName="صفحة ترخيص صيدلية"
+	/>
 
-			<DataCard
-				pTitle="رسم هندسي لصيدلية للمعاينة الأولى أو الثانية"
-				pBody="إعداد الرسم الهندسي المطلوب لترخيص صيدلية للمعاينة الأولى، ويتم عمل معاينة للمحل لرفع الأبعاد وجمع المعلومات المطلوبة لإعداد الرسم الهندسي."
-				pLink="/emomed/pharmacy/dwg"
-			/>
 
-			<DataCard
-				pTitle="تعديل الرسم الهندسي لصيدلية"
-				pBody="تنفيذ التعديلات المطلوبة على الرسم الهندسي المتوفر للصيدلية، سواء في صورة نسخة ورقية أو نسخة إلكترونية أوتوكاد أو PDF."
-				pLink="/emomed/pharmacy/dwg"
-			/>
 
-			<DataCard
-				pTitle="اعتماد رسم هندسي للمعاينة الثانية من نقابة المهندسين"
-				pBody="ختم الرسومات الهندسية للصيدلية بختم نقابة المهندسين على نسخة واحدة أصل وصورتين منها."
-				pLink="/emomed/pharmacy/dwg"
-			/>
 
-			<DataCard
-				pTitle="قياس المسافة بين صيدليتين"
-				pBody="عمل معاينة لقياس المسافة بدقة لأقرب الصيدليات المحيطة للتأكد من استيفاء شرط المسافة قبل اتخاذ خطوة بالشراء أو تقديم ملف ترخيص صيدلية."
-				pLink="/emomed/pharmacy/distance"
-			/>
 
-			<DataCard
-				pTitle="تقرير هندسي استشاري عن حالة مبنى صيدلية"
-				pBody="عمل تقرير هندسي استشاري عن حالة المبنى الذي توجد به الصيدلية، وقد يطلب لبعض الحالات التي يكون فيها المبنى قديما أو بدون رخصة بناء، ويكون التقرير مختوما بختم مهندس استشاري فقط أو مع ختم نقابة المهندسين أيضا حسب الطلب."
-				pLink="/emonsult/report/safety"
-			/>
 
-			<DataCard
-				pTitle="تشطيب وتجهيز الصيدليات"
-				pBody="تصميم وتنفيذ جميع أنواع تشطيبات وفرش الصيدليات، مع مرونة في تجهيز تصميمات تناسب نطاقا واسعا من الميزانيات."
-				pLink="/emocrete/finishing/pharmacy"
-			/>
 
-		</div>
-
-	</ESec>
-
-
-
-
-
-
-
-	<section class = " Wrap SectionSpace ">
-
-		<div class = " SectionHead ">
-
-			<span class = " SectionKicker ">
-				شروط ترخيص صيدلية
-			</span>
-
-			<h2>
-				ما الذي يتم فحصه قبل إصدار الترخيص؟
-			</h2>
-
-			<p>
-				تختلف شروط ترخيص الصيدلية في أهميتها ودرجة تأثيرها في قبول الطلب أو رفضه. بعض هذه الشروط يتعلق بالصيدلي صاحب الترخيص، وبعضها خاص بالعين المطلوب ترخيص الصيدلية بها.
-			</p>
-
-		</div>
-
-		<div class = " StageGrid ">
-
-			{ cReviewStages.map((fStage) => (
-
-				<article class = " StageCard ">
-
-					<h3>
-						{fStage.fTitle}
-					</h3>
-
-					<p>
-						{fStage.fText}
-					</p>
-
-				</article>
-
-			)) }
-
-		</div>
-
-		<div class = " ConditionColumns ">
-
-			<article class = " Panel PanelAccent ">
-
-				<div class = " PanelHeader ">
-
-					<img
-						src={cMedia.doctor}
-						alt=""
-						loading="lazy"
-					/>
-
-					<div>
-
-						<span class = " SectionKicker ">
-							شروط خاصة بالصيدلي
-						</span>
-
-						<h3>
-							متطلبات طالب الترخيص
-						</h3>
-
-					</div>
-
-				</div>
-
-				<ul class = " CheckList ">
-
-					{ cPharmacistRules.map((fItem) =>
-
-						<li>
-
-							{fItem}
-
-						</li>
-
-					) }
-
-				</ul>
-
-			</article>
-
-			<article class = " Panel ">
-
-				<div class = " PanelHeader ">
-
-					<img
-						src={cMedia.pharmacy}
-						alt=""
-						loading="lazy"
-					/>
-
-					<div>
-
-						<span class = " SectionKicker ">
-							شروط خاصة بالصيدلية
-						</span>
-
-						<h3>
-							متطلبات مقر الصيدلية
-						</h3>
-
-					</div>
-
-				</div>
-
-				<p class = " Muted ">
-					تعتبر شروط المعاينة الأولى واجبة التحقق ولا بدائل لها، وفي حال عدم تحقق أحد هذه الشروط الثلاثة مع عدم وجود أي إمكانية لتحقيقه فإنه يتم رفض الطلب مباشرة بعد المعاينة الأولى.
-				</p>
-
-				<div class = " RulesBlock ">
-
-					<h4>
-						شروط المعاينة الأولى
-					</h4>
-
-					<ul class = " CheckList ">
-
-						{ cFirstInspectionRules.map((fItem) =>
-
-							<li>
-
-								{fItem}
-
-							</li>
-
-						) }
-
-					</ul>
-
-				</div>
-
-				<div class = " RulesBlock ">
-
-					<h4>
-						شروط المعاينة الثانية
-					</h4>
-
-					<ul class = " CheckList ">
-
-						{ cSecondInspectionRules.map((fItem) =>
-
-							<li>
-
-								{fItem}
-
-							</li>
-
-						) }
-
-					</ul>
-
-				</div>
-
-			</article>
-
-		</div>
-
-	</section>
-
-
-
-
-
-
-
-	<section class = " Wrap SectionSpace ">
-
-		<article class = " Panel WidePanel ">
-
-			<div
-				class = "
-						SectionHead
-						InlineStart
-						NoMargin
-					"
-			>
-
-				<img
-					src={cMedia.pharmacy}
-					alt=""
-					loading="lazy"
-				/>
-
-				<div>
-
-					<span class = " SectionKicker ">
-						صلاحية ترخيص الصيدلية
-					</span>
-
-					<h2>
-						متى يعتبر الترخيص ملغيا؟
-					</h2>
-
-				</div>
-
-			</div>
-
-			<ul class = " CheckList LargeList ">
-
-				{ cValidityRules.map((fItem) =>
-
-					<li>
-
-						{fItem}
-
-					</li>
-
-				) }
-
-			</ul>
-
-		</article>
-
-	</section>
+	<DoubleWave
+		pHeight={new NumPer(150, 90)}
+		pFill={Colors.Gray5}
+		pFill2="rgba(50,143,232,.28)"
+	/>
 
 
 
@@ -2061,992 +1159,3 @@ const cReadMoreItems = [
 
 
 </BLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<style is:global>
-
-
-
-	.HeroActions {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		justify-content: center;
-		gap: 12px;
-		margin-top: 18px;
-	}
-
-	.HeroActions {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 12px;
-		margin-top: 24px;
-	}
-
-
-	.ListsWrap > :global(*) {
-		flex: 1 1 500px;
-	}
-
-	.ListsWrap > :global(*) {
-		flex: 1 1 540px;
-	}
-
-
-	.FaqBox {
-		width: min(1200px, 100%);
-		padding: 26px;
-		border-radius: 26px;
-		background: #353535;
-		box-sizing: border-box;
-		box-shadow: 0 14px 40px rgb(0 0 0 / 18%);
-	}
-
-	.FaqBox p {
-		margin: 0 0 14px;
-		line-height: 2;
-	}
-
-
-	.ButtonGrid {
-		display: grid;
-		grid-template-columns: repeat(4, minmax(0, 1fr));
-		gap: 14px;
-	}
-
-
-	.ServiceCards {
-		align-items: stretch;
-	}
-
-	.ServiceCards > :global(*) {
-		flex: 1 1 360px;
-		max-width: 430px;
-	}
-
-
-	.TextCta {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		min-height: 44px;
-		margin-top: 16px;
-		padding: 0 20px;
-		border-radius: 10px;
-		background: black;
-		color: white;
-		font-weight: 700;
-		text-decoration: none;
-	}
-
-	.TextCta {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		min-height: 44px;
-		padding: 0 20px;
-		border-radius: 10px;
-		background: black;
-		color: white;
-		font-weight: 700;
-		text-decoration: none;
-	}
-
-
-	.ValiditySec {
-		padding: 60px 20px 30px;
-	}
-
-
-	.OneBlock {
-		width: min(1050px, 100%);
-		margin-inline: auto;
-		padding: 42px 50px;
-		box-sizing: border-box;
-		border-radius: 26px;
-		line-height: 2;
-	}
-
-
-	.DarkBlock {
-		background: #1f1f1f;
-		color: white;
-	}
-
-	.DarkBlock h2 {
-		color: #d7f58c;
-	}
-
-
-	.MainService {
-		padding: 30px 20px;
-	}
-
-
-	.MainServiceBlock {
-		background: #d7f58c;
-		color: #222;
-		text-align: center;
-	}
-
-	.MainServiceBlock a {
-		background: white;
-		color: #111;
-		border: 1px solid #e1e1e1;
-	}
-
-
-	.Wrap {
-		width: min(1180px, calc(100% - 32px));
-		margin-inline: auto;
-	}
-
-
-	.SectionSpace {
-		padding-block: 28px 12px;
-	}
-
-
-	.Hero {
-		position: relative;
-		overflow: clip;
-		padding: 56px 0 36px;
-	}
-
-
-	.HeroBg {
-		position: absolute;
-		inset: 0;
-		background: linear-gradient(120deg, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.65)),
-			linear-gradient(135deg, #d7eefb 0%, #f4fbff 45%, #eef7e7 100%);
-	}
-
-
-	.HeroCloud {
-		position: absolute;
-		opacity: 0.2;
-		pointer-events: none;
-		filter: blur(0.4px);
-	}
-
-
-	.HeroCloudTop {
-		top: -40px;
-		right: -80px;
-		width: min(34vw, 260px);
-	}
-
-
-	.HeroCloudBottom {
-		left: -70px;
-		bottom: 10px;
-		width: min(24vw, 200px);
-		transform: rotate(12deg);
-	}
-
-
-	.HeroGrid {
-		position: relative;
-		display: grid;
-		grid-template-columns: 1.15fr 0.85fr;
-		align-items: center;
-		gap: 28px;
-	}
-
-
-	.HeroContent h1 {
-		margin-top: 10px;
-		font-size: clamp(2rem, 4vw, 3.7rem);
-		font-weight: 900;
-		color: #052f5f;
-	}
-
-
-	.Lead {
-		margin-top: 16px;
-		max-width: 62ch;
-		font-size: 1.06rem;
-	}
-
-
-	.Btn {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		min-height: 48px;
-		padding: 0 18px;
-		border-radius: 999px;
-		border: 1px solid transparent;
-		font-weight: 800;
-		text-decoration: none;
-		transition: transform 0.22s ease,
-			border-color 0.22s ease,
-			background-color 0.22s ease,
-			color 0.22s ease,
-			box-shadow 0.22s ease;
-	}
-
-
-	.BtnPrimary {
-		color: #fff;
-		background: linear-gradient(135deg, #0f766e, #0ea5a4);
-		box-shadow: 0 16px 36px rgba(15, 118, 110, 0.18);
-	}
-
-
-	.BtnGhost {
-		color: #0f4c81;
-		background: rgba(255, 255, 255, 0.82);
-		border-color: rgba(15, 76, 129, 0.18);
-	}
-
-
-	.HeroStats {
-		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 14px;
-		margin-top: 28px;
-	}
-
-
-	.StatCard {
-		display: grid;
-		gap: 6px;
-		padding: 16px 18px;
-		border-radius: 24px;
-	}
-
-	.StatCard strong {
-		color: #052f5f;
-		font-size: 1.35rem;
-	}
-
-	.StatCard span {
-		color: #475569;
-		line-height: 1.7;
-	}
-
-
-	.HeroVisual {
-		position: relative;
-	}
-
-
-	.HeroFrame {
-		position: relative;
-		isolation: isolate;
-		min-height: 430px;
-		border-radius: 34px;
-		padding: 24px;
-		background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(240, 249, 255, 0.9));
-		border: 1px solid rgba(14, 165, 164, 0.16);
-		box-shadow: 0 24px 60px rgba(14, 116, 144, 0.16);
-	}
-
-	.HeroFrame::before {
-		content: "";
-		position: absolute;
-		inset: 18px;
-		border-radius: 28px;
-		background: linear-gradient(145deg, rgba(15, 118, 110, 0.08), rgba(59, 130, 246, 0.1));
-		z-index: -1;
-	}
-
-
-	.HeroMainImg {
-		display: block;
-		width: 100%;
-		height: 100%;
-		min-height: 382px;
-		object-fit: cover;
-		border-radius: 26px;
-	}
-
-
-	.HeroSideImg {
-		position: absolute;
-		left: -10px;
-		bottom: 18px;
-		width: min(28vw, 180px);
-		max-width: 38%;
-		filter: drop-shadow(0 18px 30px rgba(15, 23, 42, 0.14));
-	}
-
-
-	.TopicsSection {
-		padding-block: 18px 10px;
-	}
-
-
-	.SectionHead {
-		display: grid;
-		gap: 10px;
-		margin-bottom: 20px;
-	}
-
-	.SectionHead h2 {
-		font-size: clamp(1.55rem, 2.6vw, 2.35rem);
-		color: #052f5f;
-	}
-
-
-	.InlineStart {
-		display: flex;
-		align-items: center;
-		gap: 16px;
-	}
-
-	.InlineStart img {
-		width: 64px;
-		height: 64px;
-		object-fit: contain;
-		flex: 0 0 auto;
-	}
-
-
-	.NoMargin {
-		margin-bottom: 0;
-	}
-
-
-	.StageGrid {
-		display: grid;
-		grid-template-columns: repeat(4, minmax(0, 1fr));
-		gap: 14px;
-		margin-bottom: 18px;
-	}
-
-
-	.StageCard {
-		padding: 20px;
-		border-radius: 24px;
-	}
-
-	.StageCard h3 {
-		margin: 0 0 10px;
-		font-size: 1.05rem;
-		color: #0f4c81;
-	}
-
-	.StageCard p {
-		margin: 0;
-		color: #475569;
-		line-height: 1.9;
-	}
-
-
-	.Panel {
-		border-radius: 28px;
-		padding: 22px;
-	}
-
-
-	.PanelAccent {
-		background: linear-gradient(180deg, rgba(240, 253, 250, 0.92), rgba(255, 255, 255, 0.88));
-	}
-
-
-	.PanelHeader {
-		display: flex;
-		align-items: center;
-		gap: 16px;
-		margin-bottom: 14px;
-	}
-
-	.PanelHeader img {
-		width: 84px;
-		height: 84px;
-		object-fit: contain;
-		flex: 0 0 auto;
-	}
-
-
-	.Muted {
-		color: #475569;
-		line-height: 1.95;
-		margin-bottom: 18px;
-	}
-
-
-	.RulesBlock + .RulesBlock {
-		margin-top: 22px;
-		padding-top: 18px;
-		border-top: 1px dashed rgba(15, 76, 129, 0.16);
-	}
-
-
-	.CheckList li {
-		padding-right: 26px;
-	}
-
-	.CheckList li::before {
-		content: "✓";
-		position: absolute;
-		top: 0;
-		right: 0;
-		color: #0f766e;
-		font-weight: 900;
-	}
-
-
-	.StepTop {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 14px;
-		margin-bottom: 14px;
-	}
-
-	.StepTop img {
-		width: 74px;
-		height: 74px;
-		object-fit: contain;
-	}
-
-
-	.StepNo {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 54px;
-		height: 54px;
-		border-radius: 999px;
-		background: linear-gradient(135deg, #cffafe, #dbeafe);
-		color: #0f4c81;
-		font-weight: 900;
-		font-size: 1.12rem;
-	}
-
-
-	.MetaList li {
-		padding-right: 18px;
-	}
-
-	.MetaList li::before {
-		content: "—";
-		position: absolute;
-		right: 0;
-		color: #0f766e;
-		font-weight: 900;
-	}
-
-
-	.WidePanel {
-		padding: 24px;
-	}
-
-
-	.LargeList {
-		margin-top: 18px;
-	}
-
-
-	.TextLink {
-		display: inline-flex;
-		width: fit-content;
-		margin-top: 12px;
-		color: #0f766e;
-		font-weight: 800;
-		text-decoration: none;
-	}
-
-
-
-	.ListsWrap,
-	.ServiceCards,
-	.ButtonGrid
-	{
-		width: min(1400px, 100%);
-		margin-inline: auto;
-		padding: 34px 20px;
-		box-sizing: border-box;
-	}
-
-
-	.ListsWrap,
-	.ServiceCards
-	{
-		display: flex;
-		flex-wrap: wrap;
-		align-items: stretch;
-		justify-content: center;
-		gap: 28px;
-	}
-
-
-	.MainServiceBlock a, {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		min-height: 42px;
-		padding: 0 24px;
-		border-radius: 999px;
-		font-weight: 700;
-		text-decoration: none;
-	}
-
-
-	.DarkBlock li, {
-		margin-bottom: 10px;
-		line-height: 2;
-	}
-
-
-	.ValiditySec,
-	.MainService
-	{
-		direction: rtl;
-		background: #fff5f0;
-	}
-
-
-	:root,
-	:host
-	{
-		-webkit-font-smoothing: antialiased;
-	}
-
-
-	.Eyebrow,
-	.SectionKicker
-	{
-		display: inline-flex;
-		align-items: center;
-		gap: 8px;
-		font-size: 0.92rem;
-		font-weight: 800;
-		color: #0f766e;
-		letter-spacing: 0.02em;
-	}
-
-
-	.HeroContent h1,
-	.SectionHead h2,
-	.Panel h3,
-	.StepCard h3
-	{
-		margin: 0;
-		line-height: 1.2;
-	}
-
-
-	.Lead,
-	.SectionHead p,
-	.Panel p,
-	.StepCard p
-	{
-		margin: 0;
-		line-height: 1.95;
-		color: #334155;
-	}
-
-
-	.Btn:hover,
-	.TopicChip:hover,
-	.TextLink:hover
-	{
-		transform: translateY(-2px);
-	}
-
-
-	.StatCard,
-	.Panel,
-	.StageCard,
-	.StepCard,
-	.TopicChip
-	{
-		border: 1px solid rgba(15, 76, 129, 0.09);
-		background: rgba(255, 255, 255, 0.84);
-		box-shadow: 0 18px 44px rgba(15, 23, 42, 0.06);
-		backdrop-filter: blur(10px);
-	}
-
-
-	.TopicsGrid, {
-		display: grid;
-		grid-template-columns: repeat(4, minmax(0, 1fr));
-		gap: 12px;
-	}
-
-
-	.TopicChip, {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		min-height: 62px;
-		padding: 14px 16px;
-		border-radius: 22px;
-		text-align: center;
-		font-weight: 800;
-		line-height: 1.7;
-		text-decoration: none;
-		color: #0f4c81;
-	}
-
-
-	.ConditionColumns, {
-		display: grid;
-		grid-template-columns: 0.72fr 1.28fr;
-		gap: 18px;
-	}
-
-
-	.RulesBlock h4,
-	.Panel h3
-	{
-		margin: 0 0 12px;
-		font-size: 1.16rem;
-		color: #0f4c81;
-	}
-
-
-	.CheckList,
-	.MetaList
-	{
-		display: grid;
-		gap: 10px;
-		margin: 0;
-		padding: 0;
-	}
-
-
-	.CheckList,
-	.MetaList
-	{
-		list-style: none;
-	}
-
-
-	.CheckList li,
-	.MetaList li
-	{
-		position: relative;
-		line-height: 1.95;
-		color: #334155;
-	}
-
-
-	.StepGrid, {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 16px;
-	}
-
-
-	.StepCard, {
-		padding: 22px;
-		border-radius: 26px;
-	}
-
-
-
-	:global(html) {
-		scroll-behavior: smooth;
-	}
-
-
-	:global(body) {
-		background: #fff5f0;
-	}
-
-
-	:root:active-view-transition {
-		view-transition-name: none;
-	}
-
-
-	:root:active-view-transition::view-transition-group(*) {
-		animation: auto ease 0s 1 normal none running none;
-	}
-
-
-	:root:active-view-transition::view-transition-old(*) {
-		animation: auto ease 0s 1 normal none running none;
-	}
-
-
-	:root:active-view-transition::view-transition-new(*) {
-		animation: auto ease 0s 1 normal none running none;
-	}
-
-
-	:root:active-view-transition::view-transition-group(page-group) {
-		pointer-events: all;
-		cursor: wait;
-		animation-timing-function: revert;
-		animation-delay: revert;
-		animation-iteration-count: revert;
-		animation-direction: revert;
-		animation-fill-mode: revert;
-		animation-play-state: revert;
-		animation-name: revert;
-		animation-timeline: revert;
-		animation-range: revert;
-		animation-duration: 0.6s;
-	}
-
-
-	:root:active-view-transition::view-transition-old(page-group) {
-		pointer-events: all;
-		cursor: wait;
-		animation-timing-function: revert;
-		animation-delay: revert;
-		animation-iteration-count: revert;
-		animation-direction: revert;
-		animation-fill-mode: revert;
-		animation-play-state: revert;
-		animation-name: revert;
-		animation-timeline: revert;
-		animation-range: revert;
-		animation-duration: 0.6s;
-	}
-
-
-	:root:active-view-transition::view-transition-new(page-group) {
-		pointer-events: all;
-		cursor: wait;
-		animation-timing-function: revert;
-		animation-delay: revert;
-		animation-iteration-count: revert;
-		animation-direction: revert;
-		animation-fill-mode: revert;
-		animation-play-state: revert;
-		animation-name: revert;
-		animation-timeline: revert;
-		animation-range: revert;
-		animation-duration: 0.6s;
-	}
-
-
-	:root:active-view-transition-type(SlideHorizontal)::view-transition-old(page-group) {
-		mix-blend-mode: normal;
-		animation: 0.6s cubic-bezier(0.83, 0, 0.17, 1) 0s 1 normal forwards running slide-horizontal-old;
-	}
-
-
-	:root:active-view-transition-type(SlideHorizontal)::view-transition-new(page-group) {
-		mix-blend-mode: normal;
-		animation: 0.6s cubic-bezier(0.83, 0, 0.17, 1) 0s 1 normal backwards running slide-horizontal-new;
-	}
-
-
-	:root:active-view-transition-type(SlideVertical)::view-transition-old(page-group) {
-		mix-blend-mode: normal;
-		animation: 0.6s cubic-bezier(0.83, 0, 0.17, 1) 0s 1 normal forwards running slide-vertical-old;
-	}
-
-
-	:root:active-view-transition-type(SlideVertical)::view-transition-new(page-group) {
-		mix-blend-mode: normal;
-		animation: 0.6s cubic-bezier(0.83, 0, 0.17, 1) 0s 1 normal backwards running slide-vertical-new;
-	}
-
-
-	:root:active-view-transition-type(OutIn)::view-transition-old(page-group) {
-		animation: 0.35s cubic-bezier(0.22, 1, 0.36, 1) 0s 1 normal forwards running out-in-old;
-	}
-
-
-	:root:active-view-transition-type(OutIn)::view-transition-new(page-group) {
-		animation: 0.35s cubic-bezier(0.64, 0, 0.78, 0) 0.35s 1 normal backwards running out-in-new;
-	}
-
-
-	:root {
-		--one-unit: 1vw;
-		--section-max-width: 9999px;
-		--spx-stopper-max: 9999px;
-		--spx-stopper-min: 0px;
-		--browser-zoom: 1;
-	}
-
-
-
-</style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<style is:global>
-
-
-
-	@media (max-width: 900px) {
-		.ButtonGrid {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
-	}
-
-
-
-	@media (max-width: 520px) {
-		.ButtonGrid {
-			grid-template-columns: 1fr;
-		}
-
-		.FaqBox {
-			padding: 20px;
-		}
-	}
-
-
-	@media (max-width: 900px) {
-		.DocsWrap,
-		.TwoRules,
-		.ReadMoreBtns
-		{
-			grid-template-columns: 1fr;
-			display: grid;
-		}
-
-		.StepStrip,
-		.StripHead,
-		.OtherHead
-		{
-			flex-direction: column;
-			gap: 20px;
-			text-align: center;
-		}
-
-		.StepStrip img,
-		.StripHead img
-		{
-			max-width: 70%;
-		}
-
-		.OtherHead {
-			min-height: 230px;
-		}
-
-		.OtherBlock {
-			padding: 30px 24px;
-		}
-	}
-
-
-	@media (max-width: 980px) {
-		.HeroGrid,
-		.ConditionColumns,
-		.DocGrid,
-		.MainServiceCard
-		{
-			grid-template-columns: 1fr;
-		}
-
-		.TopicsGrid,
-		.ReadMoreGrid,
-		.StageGrid,
-		.StepGrid,
-		.ServiceGrid
-		{
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
-
-		.HeroVisual {
-			order: -1;
-		}
-
-		.HeroFrame {
-			min-height: unset;
-		}
-	}
-
-
-	@media (max-width: 640px) {
-		.Wrap {
-			width: min(100% - 24px, 1180px);
-		}
-
-		.Hero {
-			padding-top: 34px;
-		}
-
-		.HeroActions,
-		.CTAButtons
-		{
-			flex-direction: column;
-		}
-
-		.HeroStats,
-		.TopicsGrid,
-		.ReadMoreGrid,
-		.StageGrid,
-		.StepGrid,
-		.ServiceGrid
-		{
-			grid-template-columns: 1fr;
-		}
-
-		.HeroFrame,
-		.Panel,
-		.StepCard,
-		.ServiceCard,
-		.MainServiceCard,
-		.StageCard,
-		.FaqItem,
-		.TopicChip,
-		.ReadMoreLink,
-		.StatCard
-		{
-			border-radius: 20px;
-		}
-
-		.PanelHeader,
-		.InlineStart
-		{
-			align-items: flex-start;
-		}
-
-		.PanelHeader img {
-			width: 68px;
-			height: 68px;
-		}
-
-		.HeroSideImg {
-			width: 120px;
-			left: -4px;
-			bottom: 10px;
-		}
-
-		.HeroMainImg {
-			min-height: 250px;
-		}
-	}
-
-
-
-</style>

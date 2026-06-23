@@ -1,7 +1,8 @@
 ---
 import BLayout from "@/Layout.astro";
 import { DirectSize, NumPer, Loc, HoverColors, Text, ElemBg, EmoMediaData, Colors, Pixel, Topic, Size, Align, RespString, Percent } from "@/TypesLib";
-import { Hero, DuoSec, DuoCol, ESec, PhDwgMonthlyOffer, SecTitle, EmoStrip, ReadAlsoItem, Badge, EmoCall, HzStack, VrStack, CardsGr, PriceCard, EmoList, EmoBtn, EmoContactStrip, Emograph, RespImg, ReadAlso, RelServices, EmoFaq, RetailDwgMonthlyOffer, FaqItem, RelServiceItem } from "@/Widgets";
+import { Hero, DuoSec, DuoCol, ESec,ThemedPriceCardHz,ThemedPriceCardVr, PhDwgMonthlyOffer, SecTitle, EmoStrip, ReadAlsoItem, Badge, EmoCall, HzStack, VrStack, CardsGr, PriceCard, EmoList, EmoBtn, EmoContactStrip, Emograph, RespImg, ReadAlso, RelServices, EmoFaq, RetailDwgMonthlyOffer, FaqItem, RelServiceItem } from "@/Widgets";
+import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 ---
 
 
@@ -25,8 +26,8 @@ import { Hero, DuoSec, DuoCol, ESec, PhDwgMonthlyOffer, SecTitle, EmoStrip, Read
 
 <BLayout
 	pSchemaType="Service"
-	pTitle="رسم هندسي لصيدلية"
-	pDescr="يعتبر الرسم الهندسي من المستندات الأساسية المطلوبة لترخيص الصيدليات ، يتم تقديم الرسم الهندسي للصيدلية مرتين ، أحدهما يرسل كمرفق بطلب ترخيص الصيدلية عند التقديم ، والثاني يقدم كنسخة أخيرة مطابقة للواقع النهائي الذي سيتم تشغيل الصيدلية عليه ."
+	pTitle="خدمات الرسم الهندسي للصيدليات - معاينة أولى - معاينة ثانية - تعديل رسم هندسي"
+	pDescr="خدمة إعداد الرسم الهندسي المطلوب لترخيص صيدلية جديدة اللازم للتقديم للمعاينة الأولى معتمد بختم مهندس نقابي ، والرسم الهندسي للمعاينة الثانية أو تعديل الرسم الهندسي للصيدلية معتمد بختم نقابة المهندسين"
 >
 
 
@@ -35,21 +36,26 @@ import { Hero, DuoSec, DuoCol, ESec, PhDwgMonthlyOffer, SecTitle, EmoStrip, Read
 
 
 
-	<ESec data-hero pImgAlt="واجهة صيدلية مرخصة مفروشة بالأدوية">
+	<Hero pImgAlt="واجهة صيدلية مرخصة مفروشة بالأدوية">
 
 		<VrStack
 			pSize={new DirectSize(new NumPer("35%","95%"))}
 			pLoc={new Loc(new NumPer("52%","2.5%"),new NumPer("20%","60%"))}
 			pBgColor={new ElemBg(Colors.Gray5)}
 			pBgOpacity={new Percent(50)}
+			pAlign="Center"
 		>
 
 			<Emograph
-				pTitle={Text.H1.Centered.White.OfText("رسم هندسي لترخيص صيدلية")}
-				pText={Text.Body.Centered.White.OfText("يعتبر الرسم الهندسي من المستندات الأساسية المطلوبة لترخيص الصيدليات ، يتم تقديم الرسم الهندسي للصيدلية مرتين ، أحدهما يرسل كمرفق بطلب ترخيص الصيدلية عند التقديم ، والثاني يقدم كنسخة أخيرة مطابقة للواقع النهائي الذي سيتم تشغيل الصيدلية عليه .")}
+				pTitle={Text.H1.Centered.White.OfText("رسم هندسي لصيدلية")}
+				pText={Text.Body.Centered.White.OfText("خدمة إعداد الرسم الهندسي المطلوب لترخيص صيدلية جديدة اللازم للتقديم للمعاينة الأولى معتمد بختم مهندس نقابي ، والرسم الهندسي للمعاينة الثانية أو تعديل الرسم الهندسي للصيدلية معتمد بختم نقابة المهندسين")}
 			/>
 
-			<EmoCall BlackSky pText="للطلب والاستفسار" />
+			<EmoCall
+				data-own-size
+				BlackSky
+				pText="للطلب والاستفسار"
+			/>
 
 		</VrStack>
 
@@ -70,7 +76,7 @@ import { Hero, DuoSec, DuoCol, ESec, PhDwgMonthlyOffer, SecTitle, EmoStrip, Read
 
 		</VrStack>
 
-	</ESec>
+	</Hero>
 
 
 
@@ -103,44 +109,47 @@ import { Hero, DuoSec, DuoCol, ESec, PhDwgMonthlyOffer, SecTitle, EmoStrip, Read
 
 
 
-	<DuoSec
-		id="secDwgTypes"
-		pBg={new ElemBg(Colors.Gray1)}
-		pContentSize={new DirectSize(new NumPer("90%", "95%"))}
-		pGap={new Pixel(40, 20)}
-	>
+	<ESec id="secDwgStages">
 
 		<SecTitle
 			SkyLite
-			pTitle="مراحل الرسم الهندسي المطلوب لترخيص الصيدليات"
-			pDesc="يعتبر الرسم الهندسي من المستندات الأساسية المطلوبة لترخيص الصيدليات ، يتم تقديم الرسم الهندسي للصيدلية مرتين ، أحدهما يرسل كمرفق بطلب ترخيص الصيدلية عند التقديم ، والثاني يقدم كنسخة أخيرة مطابقة للواقع النهائي الذي سيتم تشغيل الصيدلية عليه"
+			pTitle="مراحل الرسم الهندسي المطلوب لترخيص صيدلية جديدة"
+			pDesc="يتم تقديم الرسم الهندسي للصيدلية مرتين ، أحدهما يرسل كمرفق بطلب ترخيص الصيدلية عند التقديم ، والثاني يقدم كنسخة أخيرة مطابقة للواقع النهائي الذي سيتم تشغيل الصيدلية عليه"
 		/>
 
-		<DuoCol pBgColor={new ElemBg(Colors.Gray2)} pPad={new Pixel(40, 20)}>
+		<DuoSec
+			pContentSize={new DirectSize(new NumPer("90%", "95%"))}
+			pGap={new Pixel(40, 20)}
+			pPad={new Pixel(40,20)}
+		>
 
-			<EmoList
-				pTitle={Text.H3.Centered.OfText("الرسم الهندسي للمعاينة الأولى")}
-				pDesc={Text.Body.OfText("يوفر الرسم الهندسي للمعاينة الأولى للصيدلية المعلومات المبدئية التي توضح صلاحية مقر الصيدلية للترخيص ، واستيفاءه للشروط الثلاثة الأساسية التي يجب توفرها في مقر الصيدلية وهي :")}
-				pItems={[
-							"بيان تحقق شرط المسافة لأقرب صيدلية وتوضيح موقعها وشكل المسار بين الصيدلية الأخرى والصيدلية المطلوب ترخيصها وأن طول المسافة بين الصيدليتين أكبر من 100 م .",
-							"بيان تحقق شرط مساحة الصيدلية من خلال توضيح أبعاد الصيدلية من الداخل والتي يجب أن تكون مساحتها أكبر من 25 م2 .",
-							"بيان تحقق شرط ارتفاع الصيدلية وأنه يزيد عن 2.6 م ."
-								]}
-				pWidth={new RespString("600px","auto")}
-			/>
+			<DuoCol pBgColor={new ElemBg(Colors.Gray1)} pPad={new Pixel(30, 10)}>
 
-		</DuoCol>
+				<EmoList
+					pTitle={Text.H3.Centered.OfText("الرسم الهندسي للمعاينة الأولى")}
+					pDesc={Text.Body.OfText("يوفر الرسم الهندسي للمعاينة الأولى للصيدلية المعلومات المبدئية التي توضح صلاحية مقر الصيدلية للترخيص ، واستيفاءه للشروط الثلاثة الأساسية التي يجب توفرها في مقر الصيدلية وهي :")}
+					pItems={[
+					"بيان تحقق شرط المسافة لأقرب صيدلية وتوضيح موقعها وشكل المسار بين الصيدلية الأخرى والصيدلية المطلوب ترخيصها وأن طول المسافة بين الصيدليتين أكبر من 100 م .",
+					"بيان تحقق شرط مساحة الصيدلية من خلال توضيح أبعاد الصيدلية من الداخل والتي يجب أن تكون مساحتها أكبر من 25 م2 .",
+					"بيان تحقق شرط ارتفاع الصيدلية وأنه يزيد عن 2.6 م ."
+						]}
+					pWidth={new RespString("600px","auto")}
+				/>
 
-		<DuoCol pBgColor={new ElemBg(Colors.Gray2)} pPad={new Pixel(40, 20)}>
+			</DuoCol>
 
-			<Emograph
-				pTitle={Text.H3.Centered.OfText("الرسم الهندسي للمعاينة الثانية")}
-				pText={Text.Body.OfText("يحتوي الرسم الهندسي للمعاينة الثانية للصيدلية على نفس عناصر الرسم الهندسي للمعاينة الأولى ، ولكن بما يطابق الوضع والأبعاد النهائية للصيدلية بعد اكتمال أعمال التشطيبات والتعديلات التي قد ينفذها الصيدلي صاحب الترخيص مثل إضافة حمام أو معمل أو كليهما .")}
-			/>
+			<DuoCol pBgColor={new ElemBg(Colors.Gray1)} pPad={new Pixel(30, 10)}>
 
-		</DuoCol>
+				<Emograph
+					pTitle={Text.H3.Centered.OfText("الرسم الهندسي للمعاينة الثانية")}
+					pText={Text.Body.OfText("يحتوي الرسم الهندسي للمعاينة الثانية للصيدلية على نفس عناصر الرسم الهندسي للمعاينة الأولى ، ولكن بما يطابق الوضع والأبعاد النهائية للصيدلية بعد اكتمال أعمال التشطيبات والتعديلات التي قد ينفذها الصيدلي صاحب الترخيص مثل إضافة حمام أو معمل أو كليهما .")}
+				/>
 
-	</DuoSec>
+			</DuoCol>
+
+		</DuoSec>
+
+	</ESec>
 
 
 
@@ -148,12 +157,12 @@ import { Hero, DuoSec, DuoCol, ESec, PhDwgMonthlyOffer, SecTitle, EmoStrip, Read
 
 
 
-	<ESec id="DwgCond">
+	<ESec id="secDwgSpecs">
 
 		<SecTitle
 			Sky
 			pTitle="شروط الرسم الهندسي المطلوب لترخيص صيدلية"
-			pDesc="يجب أن يتضمن الرسم الهندسي لترخيص الصيدلية عدة عناصر رئيسية لتوصيف مقر الصيدلية وتوضيح مدى استيفاء الرسم للمواصفات المطلوبة لترخيص الصيدليات ، وبناءا على محتوى الرسم الهندسي يتم عمل المعاينة الأولى للصيدلية لعمل مطابقة للرسم الهندسي على الواقع وتحديد مدى صلاحية الموقع لفتح صيدلية ومدى توفر الشروط القانونية والشروط الصحية في مقر الصيدلية"
+			pDesc="يجب أن يتضمن الرسم الهندسي لترخيص الصيدلية عدة عناصر رئيسية لتوصيف مقر الصيدلية ، حيث يوضح الرسم الهندسي للمعاينة الأولى مدى استيفاء مقر الصيدلية للشروط القانونية المطلوبة لترخيص الصيدليات وهي ( المسافة - المساحة - الارتفاع ) ، وبناءا على محتوى الرسم الهندسي يتم عمل المعاينة الأولى للصيدلية وتحديد مدى صلاحية الموقع المبدئية لفتح صيدلية . ويوضح الرسم الهندسي للمعاينة الثانية مدى استيفاء المقر للشروط الصحية الخاصة بحوض المعمل والحمام إن وجد"
 		/>
 
 		<DuoSec
@@ -167,11 +176,11 @@ import { Hero, DuoSec, DuoCol, ESec, PhDwgMonthlyOffer, SecTitle, EmoStrip, Read
 				<RespImg
 					pImg={new EmoMediaData(
 					"Img",
-					"https://static.wixstatic.com/media/",
-					"308dfd_fa7d8e9b98f54d95887a69f74be18f3f~mv2.jpg/v1/fill/w_339%2Ch_487%2Cal_c%2Cq_80%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/%D9%85%D8%B3%D9%82%D8%B7%20%D8%A3%D9%81%D9%82%D9%8A%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9.jpg",
+					"/Media/Emomed/Pharmacy/Dwg/Specs",
+					"Plan.webp",
 					false,
 					"مسقط أفقي لصيدلية",
-					new Size(300, "auto", 280, "auto")
+					new Size(600, "auto", 310, "auto")
 				)}
 				/>
 
@@ -226,11 +235,11 @@ import { Hero, DuoSec, DuoCol, ESec, PhDwgMonthlyOffer, SecTitle, EmoStrip, Read
 				<RespImg
 					pImg={new EmoMediaData(
 				"Img",
-				"https://static.wixstatic.com/media/",
-				"308dfd_79163f45df3849b1b02fe290d77c0b9f~mv2.jpg/v1/fill/w_339%2Ch_421%2Cal_c%2Cq_80%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/%D9%82%D8%B7%D8%A7%D8%B9%20%D8%B1%D8%A3%D8%B3%D9%8A%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9.jpg",
+				"/Media/Emomed/Pharmacy/Dwg/Specs",
+				"Sec.webp",
 				false,
 				"قطاع رأسي لصيدلية",
-				new Size(300, "auto", 280, "auto")
+				new Size(600, "auto", 310, "auto")
 			)}
 				/>
 
@@ -249,11 +258,11 @@ import { Hero, DuoSec, DuoCol, ESec, PhDwgMonthlyOffer, SecTitle, EmoStrip, Read
 				<RespImg
 					pImg={new EmoMediaData(
 					"Img",
-					"https://static.wixstatic.com/media/",
-					"308dfd_489a61b971684fbeacad353b24a08c9c~mv2.jpg/v1/fill/w_680%2Ch_377%2Cal_c%2Cq_80%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/%D9%88%D8%A7%D8%AC%D9%87%D8%A9%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9.jpg",
+					"/Media/Emomed/Pharmacy/Dwg/Specs",
+					"Elev.webp",
 					false,
 					"واجهة الصيدلية",
-					new Size(460, "auto", 300, "auto")
+					new Size(600, "auto", 310, "auto")
 				)}
 				/>
 
@@ -308,11 +317,11 @@ import { Hero, DuoSec, DuoCol, ESec, PhDwgMonthlyOffer, SecTitle, EmoStrip, Read
 				<RespImg
 					pImg={new EmoMediaData(
 					"Img",
-					"https://static.wixstatic.com/media/",
-					"308dfd_7706b724c1994401b148a3e252385fdf~mv2.jpg/v1/fill/w_308%2Ch_577%2Cal_c%2Cq_80%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/%D9%83%D8%B1%D9%88%D9%83%D9%8A%20%D8%A7%D9%84%D9%85%D9%88%D9%82%D8%B9%20%D8%A7%D9%84%D8%B9%D8%A7%D9%85%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9.jpg",
+					"/Media/Emomed/Pharmacy/Dwg/Specs",
+					"Map.webp",
 					false,
 					"كروكي الموقع العام لصيدلية",
-					new Size(280, "auto", 260, "auto")
+					new Size(600, "auto", 310, "auto")
 				)}
 				/>
 
@@ -328,50 +337,11 @@ import { Hero, DuoSec, DuoCol, ESec, PhDwgMonthlyOffer, SecTitle, EmoStrip, Read
 
 
 
-	<ESec id="DwgSamples">
+	<ESec id="secSamples">
 
-		<SecTitle
-			BistageLite
-			pTitle="نماذج رسم هندسي لصيدلية"
-			pDesc="نماذج توضح شكل اللوحات الفنية التي يمكن استخدامها في ملف الترخيص، مع ضرورة إعداد الرسم النهائي حسب أبعاد المقر الفعلية وليس نسخ نموذج جاهز."
-		/>
+		<SecTitle BistageLite pTitle="نماذج رسم هندسي لصيدلية" />
 
-		<HzStack pGap={new Pixel(25, 15)} pPad={new Pixel(35, 20)}>
-
-			<RespImg
-				pImg={new EmoMediaData(
-					"Img",
-					"https://static.wixstatic.com/media/",
-					"308dfd_6c6d5166033e45e384ae71f76ef228af~mv2.jpg/v1/fit/w_876%2Ch_636%2Cq_90%2Cenc_avif%2Cquality_auto/308dfd_6c6d5166033e45e384ae71f76ef228af~mv2.jpg",
-					false,
-					"نموذج رسم هندسي لصيدلية",
-					new Size(360, "auto", 320, "auto")
-				)}
-			/>
-
-			<RespImg
-				pImg={new EmoMediaData(
-					"Img",
-					"https://static.wixstatic.com/media/",
-					"308dfd_c03d543506f04c1d9727adb3a1b7668d~mv2.jpg/v1/fit/w_876%2Ch_636%2Cq_90%2Cenc_avif%2Cquality_auto/308dfd_c03d543506f04c1d9727adb3a1b7668d~mv2.jpg",
-					false,
-					"نموذج لوحة رسم هندسي لصيدلية",
-					new Size(360, "auto", 320, "auto")
-				)}
-			/>
-
-			<RespImg
-				pImg={new EmoMediaData(
-					"Img",
-					"https://static.wixstatic.com/media/",
-					"308dfd_a4ef967c230a4775b0d2a6a4c37bfd6b~mv2.jpg/v1/fit/w_876%2Ch_636%2Cq_90%2Cenc_avif%2Cquality_auto/308dfd_a4ef967c230a4775b0d2a6a4c37bfd6b~mv2.jpg",
-					false,
-					"نموذج رسم صيدلية للترخيص",
-					new Size(360, "auto", 320, "auto")
-				)}
-			/>
-
-		</HzStack>
+		<EmoGallery pFolder="/Media/Emomed/Pharmacy/Dwg/Samples" />
 
 	</ESec>
 
@@ -381,54 +351,86 @@ import { Hero, DuoSec, DuoCol, ESec, PhDwgMonthlyOffer, SecTitle, EmoStrip, Read
 
 
 
-	<ESec id="secService">
+	<ESec>
 
-		<SecTitle
-			BistageLite
-			pTitle="خدمة الرسم الهندسي للمعاينة الأولى"
-			pDesc="الخدمة موجهة لصاحب الصيدلية الذي يحتاج لوحة هندسية واضحة ومختومة ضمن ملف الترخيص، مع فحص مبكر للنقاط التي قد تعطل قبول المقر."
-		/>
+		<SecTitle BistageLite pTitle="خدمات الرسم الهندسي للصيدليات" />
 
-		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+		<EmoStrip pAlign={Align.Center}>
 
-			<EmoList
-				pWidth={new RespString("680px", "320px")}
-				pTitle={Text.H3.OfText("تشمل الخدمة")}
-				pDesc={Text.Body.OfText("بنود العمل التي يتم تنفيذها قبل تسليم الرسم المختوم.")}
-				pHeadBg={new ElemBg(Colors.BistageLite)}
-				pItemsBg={new ElemBg(Colors.WhiteOff)}
-				pItemFnt={Text.Body}
-				pNumbered={true}
-				pItems={[
-					"عمل المعاينة ورفع المقاسات على الطبيعة.",
-					"مراجعة تحقق الحد الأدنى المطلوب لمساحة الصيدلية وهو 25 مترًا مربعًا.",
-					"مراجعة تحقق الحد الأدنى المطلوب لارتفاع الصيدلية وهو 2.60 متر.",
-					"قياس المسافة لأقرب صيدلية ومراجعة تحقق الحد الأدنى للمسافة وهو 100 متر.",
-					"إعداد الرسم الهندسي من ثلاث نسخ مختومة بختم مهندس نقابي.",
-				]}
-			/>
+			<VrStack
+				pPad={new Pixel(50,20)}
+				pGap={new Pixel(0,20)}
+				pAlign="Center"
+			>
 
-			<CardsGr
-				pWidth={new RespString("420px", "320px")}
-				pGrTitle={Text.H3.Centered.OfText("قيمة الخدمة")}
-				pCardBg={new ElemBg(Colors.WhiteOff)}
-				pCardTitleFnt={Text.H3.Centered}
-				pCardBodyFnt={Text.Body.Centered}
-				pStackDir="Col"
-				pSpacing={15}
-				pTopic1={new Topic("2500 جنيه", "تبدأ قيمة إعداد الرسم الهندسي للمعاينة الأولى حسب نطاق المعاينة وحالة المقر.")}
-				pTopic2={new Topic("3 نسخ", "تسليم نسخ مختومة بختم مهندس نقابي للاستخدام في ملف الترخيص.")}
-			/>
+				<ThemedPriceCardHz
+					pThemeColor="#097a2f"
+					pImage="/Media/Emomed/Pharmacy/Dwg/Offers/First-Visit.webp"
+					pIcon="/Media/Emomed/Pharmacy/Dwg/Offers/First-Visit.webp"
+					pActionTitle="اطلب الخدمة"
+					pActionLink="/emocrete/"
+					pSize={new DirectSize(new NumPer(1200,"95%"),new NumPer(400,"auto"))}
+					pActionColor="black"
+				>
 
-		</HzStack>
+					<Emograph
+						pTitle={Text.H3.Centered.OfText("رسم هندسي للمعاينة الأولى")}
+						pText={Text.Body.Centered.OfText("3 نسخ بختم مهندس نقابي للتقديم مرفقة بطلب ترخيص صيدلية")}
+					/>
 
-		<HzStack pGap={new Pixel(20, 15)} pPad={new Pixel(0, 0)}>
+					<Emograph pTitle={Text.Body.Bold.Centered.OfSize(100,70).OfText("2500")} pText={Text.Body.Centered.OfText("جنيه")} />
 
-			<EmoCall BlackSky pText="اطلب الخدمة" />
+				</ThemedPriceCardHz>
 
-			<EmoCall BlackSky pText="اسأل عن الصيدلية" />
+				<ThemedPriceCardHz
+					pThemeColor="#28c25b"
+					pImage="/Media/Emomed/Pharmacy/Dwg/Offers/First-Visit.webp"
+					pIcon="/Media/Emomed/Pharmacy/Dwg/Offers/First-Visit.webp"
+					pActionTitle="اطلب الخدمة"
+					pActionLink="/emocrete/"
+					pSize={new DirectSize(new NumPer(1200,"95%"),new NumPer(400,"auto"))}
+					pActionColor="black"
+				>
 
-		</HzStack>
+					<VrStack>
+
+						<Emograph
+							pTitle={Text.H3.Centered.OfText("رسم هندسي للمعاينة الثانية")}
+							pText={Text.Body.Centered.OfText("نسخة أصل مختومة بختم نقابة المهندسين + عدد 2 صورة طبق الأصل بختم حي من مهندس نقابي")}
+						/>
+
+						<Emograph pTitle={Text.Body.Bold.Centered.OfSize(70,40).OfText("3500")} pText={Text.Body.Centered.OfText("جنيه")} />
+
+					</VrStack>
+
+				</ThemedPriceCardHz>
+
+				<ThemedPriceCardHz
+					pThemeColor="#28c25b"
+					pImage="/Media/Emomed/Pharmacy/Dwg/Offers/First-Visit.webp"
+					pIcon="/Media/Emomed/Pharmacy/Dwg/Offers/First-Visit.webp"
+					pActionTitle="اطلب الخدمة"
+					pActionLink="/emocrete/"
+					pSize={new DirectSize(new NumPer(1200,"95%"),new NumPer(400,"auto"))}
+					pActionColor="black"
+				>
+
+					<VrStack>
+
+						<Emograph
+							pTitle={Text.H3.Centered.OfText("تعديل الرسم الهندسي لصيدلية")}
+							pText={Text.Body.Centered.OfText("نسخة أصل مختومة بختم نقابة المهندسين + عدد 2 صورة طبق الأصل بختم حي من مهندس نقابي")}
+						/>
+
+						<Emograph pTitle={Text.Body.Bold.Centered.OfSize(70,40).OfText("4000")} pText={Text.Body.Centered.OfText("جنيه")} />
+
+					</VrStack>
+
+				</ThemedPriceCardHz>
+
+			</VrStack>
+
+		</EmoStrip>
 
 	</ESec>
 
