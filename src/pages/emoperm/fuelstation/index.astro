@@ -1,7 +1,8 @@
 ---
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, EmoMediaData, Colors, Pixel, Topic, Size, Align, RespString } from "@/TypesLib";
-import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, EmoCall, CardsGr, EmoList, Emograph, RespImg, EmoFaq, ReadAlso, RelServices, EmoPipelineStrip, SecTitle, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { Align, Colors, DirectSize, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip, ESec, FaqItem, Hero, HzStack, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle } from "@/Widgets";
+import { VrStack } from "../../../site/Widgets";
 ---
 
 
@@ -27,10 +28,6 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, EmoCall, CardsGr, EmoList, Emog
 	pSchemaType="Service"
 	pTitle="ترخيص محطة وقود"
 	pDescr="خدمة مراجعة ومتابعة ملف ترخيص محطة وقود، تشمل فحص الموقع والواجهة والمساحة والمسافات البينية ومخططات المحطة وموافقات الجهات المختصة والحماية المدنية قبل السير في الترخيص."
-	pSchemaImages={[
-		"/Media/Emoperm/FuelStation/HeroD.webp",
-		"/Media/Emoperm/FuelStation/HeroM.webp"
-	]}
 >
 
 
@@ -39,89 +36,29 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, EmoCall, CardsGr, EmoList, Emog
 
 
 
-	<Hero
-		pImgF="/Media/Emoperm/FuelStation/"
-		pImgL="HeroD.webp"
-		pImgP="HeroM.webp"
-		pTitle="ترخيص محطة وقود"
-		pDesc="مراجعة موقع محطة الوقود ومخططها وموافقاتها قبل التقديم، لتقليل مخاطر رفض الموقع أو توقف الملف عند الحماية المدنية أو الجهات المختصة"
-		pTitleClr={Colors.WhiteOff}
-		pDescClr={Colors.WhiteOff}
-		pAlign="center"
-		pBlurL="on"
-		pBlurP="on"
-		pPosL="42% 8% 12% 8%"
-		pPosP="28% 5% 24% 5%"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="اطلب ترخيص محطة وقود" />
+		<VrStack
+			pSize={new DirectSize(new NumPer("30%","100%"))}
+			pLoc={new Loc(new NumPer("5%","0%"),new NumPer("5%","12%"))}
+			pGap={new Pixel(20, 10)}
+			pAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.Bold.OfText("ترخيص محطة وقود")}
+				pText={Text.Body.Centered.OfSize(24,18).OfText("إعداد ملف الترخيص والمتابعة مع الجهات المختلفة حتى صدور الرخصة")}
+			/>
+
+			<EmoCall
+				data-own-size
+				BlackOrange
+				pText="التفاصيل"
+			/>
+
+		</VrStack>
 
 	</Hero>
-
-
-
-
-
-
-
-	<IndexSec
-		pMedia={new EmoMediaData("Img", "/Media/Emoperm/FuelStation/", "HeroD.webp")}
-		pTitleClr={Colors.WhiteOff}
-		pBlurL="on"
-		pBlurP="on"
-	>
-
-		<EmoBtn
-			pText="طبيعة الملف"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor={Colors.WhiteOff}
-			pTextColorHover={Colors.BlackOff}
-			pWidth="230px"
-			pHeight="44px"
-			onclick="location.href='#station-nature'"
-		/>
-
-		<EmoBtn
-			pText="اشتراطات الموقع"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor={Colors.WhiteOff}
-			pTextColorHover={Colors.BlackOff}
-			pWidth="230px"
-			pHeight="44px"
-			onclick="location.href='#station-site'"
-		/>
-
-		<EmoBtn
-			pText="الموافقات"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor={Colors.WhiteOff}
-			pTextColorHover={Colors.BlackOff}
-			pWidth="230px"
-			pHeight="44px"
-			onclick="location.href='#station-approvals'"
-		/>
-
-		<EmoBtn
-			pText="الحريق والسلامة"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor={Colors.WhiteOff}
-			pTextColorHover={Colors.BlackOff}
-			pWidth="230px"
-			pHeight="44px"
-			onclick="location.href='#station-fire'"
-		/>
-
-		<EmoBtn
-			pText="اطلب الخدمة"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor={Colors.WhiteOff}
-			pTextColorHover={Colors.BlackOff}
-			pWidth="230px"
-			pHeight="44px"
-			onclick="location.href='#station-service'"
-		/>
-
-	</IndexSec>
 
 
 
@@ -136,7 +73,7 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, EmoCall, CardsGr, EmoList, Emog
 	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
+			Sky
 			pTitle="ترخيص محطة الوقود يبدأ من صلاحية الموقع"
 			pDesc="المحطة ليست مبنى تجاريًا فقط؛ هي موقع حركة سيارات وتخزين وقود وبيع وتشغيل ومخاطر حريق ومسافات أمان ومداخل ومخارج، لذلك يتم تقييم الأرض قبل الدخول في تكلفة التصميم والتعاقدات."
 		/>
@@ -333,18 +270,6 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, EmoCall, CardsGr, EmoList, Emog
 		</EmoStrip>
 
 	</ESec>
-
-
-
-
-
-
-
-	<EmoPipelineStrip
-		pTitle="جاهزية موقع محطة الوقود"
-		pDesc="قبل تقديم الملف نحدد هل الأرض مرشحة للقبول مبدئيًا، وما هي الملاحظات التي يجب حلها في المخطط أو المستندات أو موافقات الجهات."
-		pServiceName="ترخيص محطة وقود"
-	/>
 
 
 
