@@ -1,7 +1,9 @@
 ---
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, EmoMediaData, Colors, Pixel, Topic, Size, Align, RespString } from "@/TypesLib";
-import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, EmoCall, CardsGr, EmoList, Emograph, RespImg, EmoFaq, ReadAlso, RelServices, EmoPipelineStrip, SecTitle, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { Align, Angle, Colors, DirectSize, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { Badge, CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip, ESec, FaqItem, Hero, HzStack, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle } from "@/Widgets";
+import { PriceCard, VrStack } from "../../../site/Widgets";
+import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, Ribbon, SvgDots, TiltCard } from "../../../site/Widgets/Shapes";
 ---
 
 
@@ -27,10 +29,6 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, EmoCall, CardsGr, EmoList, Emog
 	pSchemaType="Service"
 	pTitle="ترخيص مصنع"
 	pDescr="خدمة تجهيز ومتابعة ملف ترخيص مصنع ورخصة تشغيل منشأة صناعية، شامل مراجعة النشاط والموقع وسند الحيازة والملف الفني والبيئي وتقرير الحريق وشهادة صلاحية المبنى للإشغال."
-	pSchemaImages={[
-		"/Media/Emoperm/Factory/HeroD.webp",
-		"/Media/Emoperm/Factory/HeroM.webp"
-	]}
 >
 
 
@@ -39,22 +37,27 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, EmoCall, CardsGr, EmoList, Emog
 
 
 
-	<Hero
-		pImgF="/Media/Emoperm/Factory/"
-		pImgL="HeroD.webp"
-		pImgP="HeroM.webp"
-		pTitle="ترخيص مصنع"
-		pDesc="متابعة ملف رخصة تشغيل المصنع هندسيًا وإداريًا من مراجعة الموقع والنشاط حتى تجهيز المستندات الفنية المطلوبة للتقديم"
-		pTitleClr={Colors.WhiteOff}
-		pDescClr={Colors.WhiteOff}
-		pAlign="center"
-		pBlurL="on"
-		pBlurP="on"
-		pPosL="40% 8% 12% 8%"
-		pPosP="32% 5% 22% 5%"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="اطلب ترخيص مصنع" />
+		<VrStack
+			pSize={new DirectSize(new NumPer("35%","100%"))}
+			pLoc={new Loc(new NumPer("7%","0%"),new NumPer("35%","72%"))}
+			pGap={new Pixel(50, 5)}
+			pAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.Bold.OfText("ترخيص مصنع")}
+				pText={Text.Body.Centered.OfSize(24,18).OfText("متابعة ملف رخصة تشغيل المصنع هندسيًا وإداريًا وتجهيز المستندات الفنية للتقديم")}
+			/>
+
+			<EmoCall
+				data-own-size
+				BlackOrange
+				pText="التفاصيل"
+			/>
+
+		</VrStack>
 
 	</Hero>
 
@@ -64,64 +67,392 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, EmoCall, CardsGr, EmoList, Emog
 
 
 
-	<IndexSec
-		pMedia={new EmoMediaData("Img", "/Media/Emoperm/Factory/", "HeroD.webp")}
-		pTitleClr={Colors.WhiteOff}
-		pBlurL="on"
-		pBlurP="on"
+	<ESec
+		id="factory-permit-service"
+		pBg={new ElemBg("#071419")}
+		pBox={new DirectSize(new NumPer("100%"), new NumPer(760, 980))}
+		pAlign={new Align("Center", "Center")}
 	>
 
-		<EmoBtn
-			pText="طبيعة الترخيص"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor={Colors.WhiteOff}
-			pTextColorHover={Colors.BlackOff}
-			pWidth="230px"
-			pHeight="44px"
-			onclick="location.href='#factory-nature'"
+		<BlurBlob
+			pLoc={new Loc(new NumPer("-8%", "-35%"), new NumPer("-18%", "-7%"))}
+			pSize={new DirectSize(new NumPer(520, 360), new NumPer(520, 420))}
+			pOpacity={new Percent(72, 64)}
+			pColor="rgba(50,143,232,.45)"
+			pColor2="rgba(167,196,92,.34)"
+			pBlur={30}
 		/>
 
-		<EmoBtn
-			pText="المستندات"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor={Colors.WhiteOff}
-			pTextColorHover={Colors.BlackOff}
-			pWidth="230px"
-			pHeight="44px"
-			onclick="location.href='#factory-documents'"
+		<CircleGlow
+			pLoc={new Loc(new NumPer("68%", "54%"), new NumPer("13%", "6%"))}
+			pSize={new DirectSize(new NumPer(360, 260), new NumPer(300, 240))}
+			pOpacity={new Percent(70, 62)}
+			pColor="rgba(251,255,0,.35)"
+			pColor2="rgba(167,196,92,.25)"
+			pBlur={34}
 		/>
 
-		<EmoBtn
-			pText="الخطوات"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor={Colors.WhiteOff}
-			pTextColorHover={Colors.BlackOff}
-			pWidth="230px"
-			pHeight="44px"
-			onclick="location.href='#factory-procedures'"
+		<SvgDots
+			pLoc={new Loc(new NumPer("7%", "6%"), new NumPer("69%", "76%"))}
+			pSize={new DirectSize(new NumPer("78%", "88%"), new NumPer(110, 90))}
+			pOpacity={new Percent(54, 46)}
+			pColor="rgba(255,255,255,.28)"
+			pGap={24}
+			pDot={2}
 		/>
 
-		<EmoBtn
-			pText="الفحص الهندسي"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor={Colors.WhiteOff}
-			pTextColorHover={Colors.BlackOff}
-			pWidth="230px"
-			pHeight="44px"
-			onclick="location.href='#factory-engineering'"
+		<LinePath
+			pLoc={new Loc(new NumPer("12%", "5%"), new NumPer("18%", "30%"))}
+			pSize={new DirectSize(new NumPer("76%", "88%"), new NumPer(210, 160))}
+			pOpacity={new Percent(58, 42)}
+			pStroke="rgba(215,245,140,.58)"
+			pDot="#fbff00"
+			pWidth={3}
 		/>
 
-		<EmoBtn
-			pText="اطلب الخدمة"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor={Colors.WhiteOff}
-			pTextColorHover={Colors.BlackOff}
-			pWidth="230px"
-			pHeight="44px"
-			onclick="location.href='#factory-service'"
+		<Ribbon
+			pText="ملف تشغيل صناعي"
+			pLoc={new Loc(new NumPer("calc(100% - 390px)", "calc(100% - 250px)"), new NumPer(44, 34))}
+			pSize={new DirectSize(new NumPer(300, 220), new NumPer(54, 46))}
+			pRotate={new Angle(-4, -2)}
+			pBg={Colors.Bistage}
+			pColor={Colors.BlackOff}
 		/>
 
-	</IndexSec>
+		<FloatingPanel
+			pLoc={new Loc(new NumPer("8%", "5%"), new NumPer(120, 110))}
+			pSize={new DirectSize(new NumPer(520, 320), new NumPer(360, 300))}
+			pZ={8}
+			pBg="rgba(17,24,32,.90)"
+			pBorder="rgba(255,255,255,.18)"
+			pAccent={Colors.Bistage}
+		>
+
+			<Emograph
+				pTitle={Text.H2.White.OfText("ترخيص المصنع مش ورق… ده ملف تشغيل")}
+				pText={Text.Body.White.OfText("الخدمة تبدأ من فحص النشاط والموقع وسند الحيازة، ثم تجهيز الملف الفني والبيئي والحريق وشهادة صلاحية المبنى عند الحاجة، ثم متابعة الطلب والاستيفاءات حتى وضوح موقف رخصة التشغيل.")}
+			/>
+
+		</FloatingPanel>
+
+		<GlassCard
+			pLoc={new Loc(new NumPer("calc(100% - 600px)", "5%"), new NumPer(180, 440))}
+			pSize={new DirectSize(new NumPer(510, 430), new NumPer(360, 370))}
+			pZ={9}
+			pBg="rgba(250,250,250,.88)"
+			pBorder="rgba(255,255,255,.62)"
+			pRadius={34}
+			pBlur={18}
+		>
+
+			<EmoList
+				pWidth={new RespString("100%", "100%")}
+				pTitle={Text.H3.Centered.OfText("نراجع إيه قبل التقديم؟")}
+				pDesc={Text.Body.Centered.OfText("الهدف تقليل الاستيفاءات قبل ما الملف يدخل عند الجهة المختصة.")}
+				pHeadBg={new ElemBg("transparent")}
+				pItemsBg={new ElemBg("transparent")}
+				pNumbered={false}
+				pItems={[
+				"هل النشاط الصناعي مناسب للموقع والمنطقة؟",
+				"هل السجل وسند الحيازة والمساحة متطابقين؟",
+				"هل المبنى يصلح للتشغيل والإشغال الصناعي؟",
+				"هل الملف يحتاج حريق أو بيئة أو مكتب اعتماد؟"
+			]}
+			/>
+
+		</GlassCard>
+
+		<BadgeFrame
+			pBadge="النتيجة"
+			pLoc={new Loc(new NumPer("18%", "6%"), new NumPer(500, 775))}
+			pSize={new DirectSize(new NumPer(420, 250), new NumPer(360, 160))}
+			pZ={10}
+			pBg="#F7F0D7"
+			pBadgeBg={Colors.SkyDark}
+			pColor={Colors.BlackOff}
+		>
+
+			<Emograph
+				pTitle={Text.H3.OfText("ملف واضح بدل استيفاءات مفتوحة")}
+				pText={Text.Body.OfText("تحديد المسار الصحيح من البداية: إخطار، ترخيص مسبق، مكتب اعتماد، أو استكمال فني قبل التقديم.")}
+			/>
+
+		</BadgeFrame>
+
+		<TiltCard
+			pLoc={new Loc(new NumPer("calc(100% - 455px)", "9%"), new NumPer(565, 610))}
+			pSize={new DirectSize(new NumPer(360, 150), new NumPer(330, 130))}
+			pZ={11}
+			pTilt={2}
+			pBg={Colors.Bistage}
+			pColor={Colors.BlackOff}
+		>
+
+			<Emograph pTitle={Text.H4.Centered.OfText("ابدأ بفحص الحالة")} pText={Text.Body.Centered.OfText("قبل دفع رسوم أو تقديم ملف ناقص.")} />
+
+		</TiltCard>
+
+		<EmoCall
+			BlackSky
+			pText="راجع ملف المصنع"
+			pLoc={new Loc(new NumPer("calc(50% - 135px)", "calc(50% - 130px)"), new NumPer(680, 910))}
+			pSize={new DirectSize(new NumPer(270, 260), new NumPer(56, 52))}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="factory-permit-prices"
+		pBg={new ElemBg("#F7F0D7")}
+		pBox={new DirectSize(new NumPer("100%"), new NumPer(720, 980))}
+		pAlign={new Align("Center", "Center")}
+	>
+
+		<BlurBlob
+			pLoc={new Loc(new NumPer("63%", "42%"), new NumPer("-18%", "-8%"))}
+			pSize={new DirectSize(new NumPer(520, 360), new NumPer(420, 320))}
+			pOpacity={new Percent(58, 48)}
+			pColor="rgba(50,143,232,.28)"
+			pColor2="rgba(253,203,158,.42)"
+			pBlur={34}
+		/>
+
+		<SvgDots
+			pLoc={new Loc(new NumPer("5%", "6%"), new NumPer(60, 54))}
+			pSize={new DirectSize(new NumPer(280, 190), new NumPer(180, 130))}
+			pOpacity={new Percent(66, 50)}
+			pColor="rgba(53,53,53,.22)"
+			pGap={22}
+			pDot={2}
+		/>
+
+		<Ribbon
+			pText="أسعار ترخيص مصنع"
+			pLoc={new Loc(new NumPer(70, 30), new NumPer(70, 58))}
+			pSize={new DirectSize(new NumPer(310, 240), new NumPer(54, 46))}
+			pRotate={new Angle(3, 1)}
+			pBg={Colors.BlackOff}
+			pColor={Colors.WhiteOff}
+		/>
+
+		<BadgeFrame
+			pBadge="التسعير"
+			pLoc={new Loc(new NumPer("calc(50% - 500px)", "5%"), new NumPer(155, 130))}
+			pSize={new DirectSize(new NumPer(470, 270), new NumPer(360, 250))}
+			pZ={8}
+			pBg="#111820"
+			pBadgeBg={Colors.Bistage}
+			pColor={Colors.WhiteOff}
+		>
+
+			<Emograph
+				pTitle={Text.H2.White.OfText("السعر بيتحدد بعد تشخيص الملف")}
+				pText={Text.Body.White.OfText("لأن مصنع جاهز بمستندات سليمة غير مصنع محتاج رسومات أو حريق أو بيئة أو شهادة صلاحية مبنى. لذلك نبدأ بفحص سريع، ثم نحدد نطاق المتابعة بدقة.")}
+			/>
+
+		</BadgeFrame>
+
+		<PriceCard
+			pLoc={new Loc(new NumPer("calc(50% + 20px)", "calc(50% - 160px)"), new NumPer(150, 405))}
+			pSize={new DirectSize(new NumPer(420, 320), new NumPer(125, 112))}
+			pCaption={Text.H5.White.Bold.OfText("فحص مبدئي للنشاط والمستندات")}
+			pStart={Text.H4.Bold.OfText("يبدأ من")}
+			pPrice={3000}
+			pCurrency={Text.H4.Bold.OfText("جنيه")}
+		/>
+
+		<PriceCard
+			pLoc={new Loc(new NumPer("calc(50% + 20px)", "calc(50% - 160px)"), new NumPer(295, 535))}
+			pSize={new DirectSize(new NumPer(420, 320), new NumPer(125, 112))}
+			pCaption={Text.H5.White.Bold.OfText("تجهيز ومتابعة ملف الترخيص")}
+			pStart={Text.H4.Bold.OfText("حسب")}
+			pPrice="الحالة"
+			pCurrency={Text.H4.Bold.OfText("")}
+		/>
+
+		<PriceCard
+			pLoc={new Loc(new NumPer("calc(50% + 20px)", "calc(50% - 160px)"), new NumPer(440, 665))}
+			pSize={new DirectSize(new NumPer(420, 320), new NumPer(125, 112))}
+			pCaption={Text.H5.White.Bold.OfText("تقارير فنية أو موافقات إضافية")}
+			pStart={Text.H4.Bold.OfText("تسعر")}
+			pPrice="منفصلة"
+			pCurrency={Text.H4.Bold.OfText("")}
+		/>
+
+		<GlassCard
+			pLoc={new Loc(new NumPer("calc(50% - 490px)", "5%"), new NumPer(455, 690))}
+			pSize={new DirectSize(new NumPer(460, 220), new NumPer(360, 210))}
+			pZ={9}
+			pBg="rgba(255,255,255,.82)"
+			pBorder="rgba(255,255,255,.72)"
+			pRadius={30}
+			pBlur={14}
+		>
+
+			<EmoList
+				pWidth={new RespString("100%", "100%")}
+				pTitle={Text.H3.Centered.OfText("السعر لا يشمل")}
+				pDesc={Text.Body.Centered.OfText("الرسوم الحكومية، أتعاب مكاتب الاعتماد، المعامل، القياسات الخارجية، أو أي تعديلات تنفيذية داخل المصنع.")}
+				pHeadBg={new ElemBg("transparent")}
+				pItemsBg={new ElemBg("transparent")}
+				pNumbered={false}
+				pItems={[
+				"رسوم الجهات الرسمية.",
+				"مصاريف الدفاع المدني أو البيئة أو المعامل.",
+				"تعديلات الموقع أو تنفيذ اشتراطات الحريق.",
+				"أي موافقات خاصة خارج نطاق الاتفاق."
+			]}
+			/>
+
+		</GlassCard>
+
+		<FloatingPanel
+			pLoc={new Loc(new NumPer("calc(100% - 430px)", "5%"), new NumPer(580, 875))}
+			pSize={new DirectSize(new NumPer(340, 120), new NumPer(360, 86))}
+			pZ={11}
+			pBg="rgba(17,24,32,.92)"
+			pBorder="rgba(255,255,255,.18)"
+			pAccent={Colors.OrangeLite}
+		>
+
+			<Emograph pTitle={Text.H4.White.Centered.OfText("أرسل النشاط + الموقع + المتاح من المستندات")} />
+
+		</FloatingPanel>
+
+		<EmoCall
+			BlackSky
+			pText="اعرف تكلفة ملف مصنعك"
+			pLoc={new Loc(new NumPer("calc(50% - 135px)", "calc(50% - 130px)"), new NumPer(635, 910))}
+			pSize={new DirectSize(new NumPer(270, 260), new NumPer(56, 52))}
+		/>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		id="factory-service"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			pTitle="خدمات ترخيص المصانع"
+			pDesc="تجهيز ومتابعة ملف ترخيص المصنع هندسيًا وإداريًا، من مراجعة النشاط والموقع والمستندات حتى تجهيز الملف الفني ومتابعة الاستيفاءات المطلوبة لرخصة التشغيل."
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+
+			<CardsGr
+				pWidth={new RespString("1200px", "100%")}
+				pCardBg={new ElemBg(Colors.Gray1)}
+				pGrTitle={Text.H3.Centered.OfText("ما الذي نقدمه في ملف ترخيص المصنع؟")}
+				pCardTitleFnt={Text.H4.Centered}
+				pCardBodyFnt={Text.Body.Centered}
+				pStackDir="Row"
+				pSpacing={20}
+				pTopic1={new Topic("فحص النشاط والموقع", "مراجعة هل النشاط الصناعي مناسب للموقع والمنطقة، وهل بيانات السجل وسند الحيازة والمساحة متوافقة مع الواقع.")}
+				pTopic2={new Topic("تجهيز الملف الفني", "تنظيم بيانات المبنى وخطوط الإنتاج والمعدات والتخزين والمرافق والأحمال المطلوبة للتقديم.")}
+				pTopic3={new Topic("الحريق والبيئة", "تحديد احتياجات تقرير الحريق والملف البيئي وشهادة صلاحية المبنى للإشغال حسب طبيعة النشاط وحالة المصنع.")}
+				pTopic4={new Topic("المتابعة والاستيفاءات", "متابعة الطلب والرد على ملاحظات الجهة المختصة حتى الوصول إلى موقف واضح للترخيص أو المطلوب لاستكماله.")}
+			/>
+
+			<EmoList
+				pWidth={new RespString("1050px", "100%")}
+				pTitle={Text.H3.Centered.OfText("الخدمة مناسبة لـ")}
+				pDesc={Text.Body.Centered.OfText("مصنع جديد، مصنع قائم بدون رخصة واضحة، تعديل نشاط أو بيانات، أو منشأة تريد مراجعة ملفها قبل التقديم الرسمي.")}
+				pHeadBg={new ElemBg(Colors.GreenLite)}
+				pItemsBg={new ElemBg(Colors.WhiteOff)}
+				pNumbered={false}
+				pItems={[
+				"مراجعة المستندات الأساسية: السجل، البطاقة الضريبية، سند الحيازة، وبيانات المنشأة.",
+				"تحديد مسار الترخيص المناسب: إخطار، ترخيص مسبق، أو مكتب اعتماد حسب الحالة.",
+				"تجهيز قائمة الاستيفاءات الفنية قبل التقديم لتقليل التعطيل والرفض.",
+				"تنسيق الملفات الهندسية أو البيئية أو تقارير الحريق عند الحاجة."
+			]}
+			/>
+
+			<EmoCall BlackSky pText="ابدأ مراجعة ملف المصنع" />
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		hidden
+		id="factory-prices"
+		pBg={new ElemBg(Colors.BlackOff)}
+		pAlign={Align.Center}
+	>
+
+		<SecTitle
+			pTitle="أسعار خدمات ترخيص المصانع"
+			pDesc="السعر النهائي يتحدد بعد معرفة النشاط، مساحة المصنع، حالة المستندات، وجود رسومات، واحتياج الملف لتقارير حريق أو بيئة أو صلاحية مبنى."
+		/>
+
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+
+			<HzStack pGap={new Pixel(24, 16)} pPad={new Pixel(30, 15)}>
+
+				<PriceCard
+					pCaption={Text.H4.White.Bold.OfText("فحص مبدئي للنشاط والمستندات")}
+					pStart={Text.H3.Bold.OfText("يبدأ من")}
+					pPrice={0}
+					pCurrency={Text.H3.Bold.OfText("جنيه")}
+					data-own-size
+				/>
+
+				<PriceCard
+					pCaption={Text.H4.White.Bold.OfText("تجهيز ومتابعة ملف ترخيص المصنع")}
+					pStart={Text.H3.Bold.OfText("يحدد")}
+					pPrice="حسب الحالة"
+					pCurrency={Text.H3.Bold.OfText("")}
+					data-own-size
+				/>
+
+				<PriceCard
+					pCaption={Text.H4.White.Bold.OfText("تقارير أو موافقات فنية إضافية")}
+					pStart={Text.H3.Bold.OfText("تسعر")}
+					pPrice="منفردة"
+					pCurrency={Text.H3.Bold.OfText("")}
+					data-own-size
+				/>
+
+			</HzStack>
+
+			<CardsGr
+				pWidth={new RespString("1100px", "100%")}
+				pCardBg={new ElemBg(Colors.WhiteOff)}
+				pCardTitleFnt={Text.H4.Centered}
+				pCardBodyFnt={Text.Body.Centered}
+				pStackDir="Row"
+				pSpacing={20}
+				pTopic1={new Topic("السعر يشمل", "فحص الحالة، تحديد مسار الترخيص، مراجعة المستندات، تجهيز المتطلبات الفنية المتفق عليها، ومتابعة الاستيفاءات.")}
+				pTopic2={new Topic("السعر لا يشمل", "الرسوم الحكومية، أتعاب مكاتب الاعتماد، المعامل، القياسات الخارجية، أو أي تعديلات تنفيذية مطلوبة داخل الموقع.")}
+				pTopic3={new Topic("متى يثبت السعر؟", "بعد استلام بيانات النشاط والموقع والمستندات المتاحة وتحديد هل الملف يحتاج حريق أو بيئة أو شهادة صلاحية مبنى.")}
+			/>
+
+			<EmoCall BlackSky pText="اعرف تكلفة ملف مصنعك" />
+
+		</EmoStrip>
+
+	</ESec>
 
 
 
@@ -315,18 +646,6 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, EmoCall, CardsGr, EmoList, Emog
 		</EmoStrip>
 
 	</ESec>
-
-
-
-
-
-
-
-	<EmoPipelineStrip
-		pTitle="جاهزية ملف المصنع"
-		pDesc="نراجع حالة المستندات والرسومات والموافقات قبل التقديم، ونحدد هل الملف جاهز للتقديم أم يحتاج استكمالًا هندسيًا أو بيئيًا أو إداريًا."
-		pServiceName="ترخيص مصنع"
-	/>
 
 
 

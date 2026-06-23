@@ -280,7 +280,8 @@
 		<script>
 			const cDefaultPreviewPort = "4321";
 			const cDefaultRelativeSrc = "";
-
+			const cDefaultPublishedBaseSource = "https://www.emocrete.com/";
+			
 			const cDefaultMobileKey = "CurrentMobile";
 			const cDefaultDesktopKey = "CurrentDesktop";
 			const cCustomDesktopKey = "CustomDesktop";
@@ -378,8 +379,6 @@ const cPortFrame = document.getElementById("portFrame");
 			let cShowLandscapeFrame = true;
 			let cShowPortraitFrame = true;
 			let cResizeFrame = 0;
-			let cCopyButtonLastOpenSignature = "";
-			let cCopyButtonLastOpenTime = 0;
 
 			InitializeTools();
 SetPreviewSources();
@@ -452,7 +451,6 @@ cPreviewPathInput.addEventListener("paste", HandlePathInputPaste);
 	cMobileFrameBtn.addEventListener("click", TogglePortraitFrame);
 	cDesktopFrameBtn.addEventListener("click", ToggleLandscapeFrame);
 
-	RegisterCopyButtonOpenGesture();
 	cCopyBtn.addEventListener("click", CopyPreviewSource);
 	cResetBtn.addEventListener("click", ResetPreviewSystem);
 }
@@ -720,116 +718,99 @@ function SetFrameSource(pFrame, pSource) {
 	return cPath;
 }
 
-			function RegisterCopyButtonOpenGesture() {
-				if (window.PointerEvent) {
-					cCopyBtn.addEventListener("pointerdown", HandleCopyButtonOpenGesture);
-				}
-				else {
-					cCopyBtn.addEventListener("mousedown", HandleCopyButtonOpenGesture);
-				}
-			}
-
-			function HandleCopyButtonOpenGesture(pEvent) {
-				const cOpenMode = GetCopyButtonOpenMode(pEvent);
-
-				if (!cOpenMode) {
-					return;
-				}
-
-				const cSource = cPreviewSrc || BuildPreviewSource(cPreviewPortInput.value, cPreviewPathInput.value);
-				const cTarget = GetCopyButtonTarget(cOpenMode, cSource);
-
-				if (!cTarget) {
-					return;
-				}
-
-				pEvent.preventDefault();
-
-				cCopyButtonLastOpenSignature = BuildCopyButtonOpenSignature(cOpenMode, cTarget);
-				cCopyButtonLastOpenTime = Date.now();
-
-				OpenUrlInNewWindow(cTarget);
-			}
-
 			async function CopyPreviewSource(pEvent) {
 				const cSource = cPreviewSrc || BuildPreviewSource(cPreviewPortInput.value, cPreviewPathInput.value);
 				const cOpenMode = GetCopyButtonOpenMode(pEvent);
+				const cCopyValue = GetCopyButtonCopyValue(cOpenMode, cSource);
 
-				if (!cSource) {
+				if (!cCopyValue) {
 					ShowCopyButtonFeedback(false);
 					return;
 				}
 
-				OpenCopyButtonTargetIfNeeded(cOpenMode, cSource);
-
 				let cCopied = false;
 
 				try {
-					await navigator.clipboard.writeText(cSource);
+					await navigator.clipboard.writeText(cCopyValue);
 					cCopied = true;
 				}
 				catch {
-					cCopied = CopyTextFallback(cSource);
+					cCopied = CopyTextFallback(cCopyValue);
 				}
 
 				ShowCopyButtonFeedback(cCopied);
-			}
 
-			function GetCopyButtonOpenMode(pEvent) {
-				if (!pEvent || !(pEvent.ctrlKey || pEvent.metaKey)) {
-					return "";
-				}
-
-				if (pEvent.altKey) {
-					return "preview";
-				}
-
-				return "source";
-			}
-
-			function OpenCopyButtonTargetIfNeeded(pOpenMode, pSource) {
-				const cTarget = GetCopyButtonTarget(pOpenMode, pSource);
-
-				if (!cTarget || WasCopyButtonTargetJustOpened(pOpenMode, cTarget)) {
+				if (!cCopied) {
 					return;
 				}
 
-				cCopyButtonLastOpenSignature = BuildCopyButtonOpenSignature(pOpenMode, cTarget);
-				cCopyButtonLastOpenTime = Date.now();
-
-				OpenUrlInNewWindow(cTarget);
+				OpenCopyButtonTarget(cOpenMode, cSource);
 			}
 
-			function WasCopyButtonTargetJustOpened(pOpenMode, pTarget) {
-				const cSignature = BuildCopyButtonOpenSignature(pOpenMode, pTarget);
-				const cElapsed = Date.now() - cCopyButtonLastOpenTime;
-
-				return cCopyButtonLastOpenSignature === cSignature && cElapsed >= 0 && cElapsed < 1500;
-			}
-
-			function BuildCopyButtonOpenSignature(pOpenMode, pTarget) {
-				return `${pOpenMode || ""}|${pTarget || ""}`;
-			}
-
-			function GetCopyButtonTarget(pOpenMode, pSource) {
-				if (!pOpenMode) {
+			function GetCopyButtonOpenMode(pEvent) {
+				if (!pEvent) {
 					return "";
 				}
 
-				if (pOpenMode === "preview") {
-					return BuildPreviewPageSplitSource();
+				const cHasControl = !!(pEvent.ctrlKey || pEvent.metaKey);
+				const cHasAlt = !!pEvent.altKey;
+
+				if (cHasControl && cHasAlt) {
+					return "preview";
+				}
+
+				if (cHasControl) {
+					return "source";
+				}
+
+				if (cHasAlt) {
+					return "published";
+				}
+
+				return "";
+			}
+
+			function GetCopyButtonCopyValue(pOpenMode, pSource) {
+				if (pOpenMode === "published") {
+					return BuildPublishedPreviewSource();
 				}
 
 				return pSource || "";
 			}
 
-			function OpenUrlInNewWindow(pUrl) {
+			function OpenCopyButtonTarget(pOpenMode, pSource) {
+				const cTarget = GetCopyButtonTarget(pOpenMode, pSource);
+
+				if (!cTarget) {
+					return;
+				}
+
+				OpenUrlInChrome(cTarget);
+			}
+
+			function GetCopyButtonTarget(pOpenMode, pSource) {
+				if (pOpenMode === "preview") {
+					return BuildPreviewPageSplitSource();
+				}
+
+				if (pOpenMode === "published") {
+					return BuildPublishedPreviewSource();
+				}
+
+				if (pOpenMode === "source") {
+					return pSource || "";
+				}
+
+				return "";
+			}
+
+			function OpenUrlInChrome(pUrl) {
 				if (!pUrl) {
 					return;
 				}
 
 				try {
-					if (window.EmoPreviewOpenChrome) {
+					if (typeof window.EmoPreviewOpenChrome === "function") {
 						window.EmoPreviewOpenChrome(pUrl);
 						return;
 					}
@@ -838,14 +819,43 @@ function SetFrameSource(pFrame, pSource) {
 				}
 
 				try {
-					const cOpenedWindow = window.open(pUrl, "_blank");
-
-					if (cOpenedWindow) {
-						cOpenedWindow.focus();
-					}
+					window.open(pUrl, "_blank");
 				}
 				catch {
 				}
+			}
+
+			function BuildPublishedPreviewSource() {
+				const cBase = GetPublishedBaseSource();
+				const cRelative = CleanRelativePreviewPath(cPreviewPathInput.value || cDefaultRelativeSrc);
+
+				try {
+					return new URL(cRelative ? cRelative + "/" : "", cBase).href;
+				}
+				catch {
+					return cBase;
+				}
+			}
+
+			function GetPublishedBaseSource() {
+				const cBridgeValue = typeof window.__emoPreviewPublishedBaseUrl === "string" ? window.__emoPreviewPublishedBaseUrl : "";
+				const cBase = CleanPublishedBaseSource(cBridgeValue || cDefaultPublishedBaseSource);
+
+				return cBase || cDefaultPublishedBaseSource;
+			}
+
+			function CleanPublishedBaseSource(pBase) {
+				let cBase = String(pBase || "").trim();
+
+				if (!cBase) {
+					return "";
+				}
+
+				if (!/^https?:\/\//i.test(cBase)) {
+					cBase = "https://" + cBase.replace(/^\/+/, "");
+				}
+
+				return cBase.replace(/\/+$/, "") + "/";
 			}
 
 			function BuildPreviewPageSplitSource() {
@@ -1256,6 +1266,7 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 				const cActivePageFileName = "__emo_active_page.json";
 				const cDefaultLocateBridgePort = 38921;
 				const cOpenChromePath = "/__emo_preview_open_chrome";
+const cDefaultPublishedBaseUrl = "https://www.emocrete.com/";
 
 				let cAutoFollow = localStorage.getItem(cAutoFollowStorageKey) !== "0";
 				let cScrollSync = localStorage.getItem(cScrollSyncStorageKey) !== "0";
@@ -1266,6 +1277,7 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 				let cIgnoredScrollName = "";
 				let cIgnoredScrollUntil = 0;
 				let cLocateBridgePort = cDefaultLocateBridgePort;
+				let cPublishedBaseUrl = cDefaultPublishedBaseUrl;
 				let cLastCursorStamp = 0;
 				let cPendingCursorTarget = undefined;
 				let cLastContextTarget = undefined;
@@ -1412,8 +1424,13 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 
 					if (Number.isInteger(pData.bridgePort) && pData.bridgePort > 0) {
 						cLocateBridgePort = pData.bridgePort;
-						ExposeChromeBridge();
 					}
+
+					if (pData.publishedBaseUrl) {
+						cPublishedBaseUrl = CleanPublishedBaseUrlForBridge(pData.publishedBaseUrl) || cPublishedBaseUrl;
+					}
+
+					ExposeChromeBridge();
 
 					const cPath = pData.route || pData.pagesRelativePath || pData.path || pData.workspaceRelativePath || "";
 
@@ -1487,7 +1504,22 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 
 				function ExposeChromeBridge() {
 					window.__emoPreviewBridgePort = cLocateBridgePort;
+					window.__emoPreviewPublishedBaseUrl = cPublishedBaseUrl;
 					window.EmoPreviewOpenChrome = OpenChromeThroughBridge;
+				}
+
+				function CleanPublishedBaseUrlForBridge(pBase) {
+					let cBase = String(pBase || "").trim();
+
+					if (!cBase) {
+						return "";
+					}
+
+					if (!/^https?:\/\//i.test(cBase)) {
+						cBase = "https://" + cBase.replace(/^\/+/, "");
+					}
+
+					return cBase.replace(/\/+$/, "") + "/";
 				}
 
 				async function OpenChromeThroughBridge(pUrl) {
