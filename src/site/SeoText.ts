@@ -72,15 +72,10 @@ export class SeoText {
 			if (!pUrl) { return ""; }
 
 			const cUrl = new URL(pUrl);
-			const cPath = cUrl.pathname.replace(/\/+$/g, "");
-
-			cUrl.pathname = cPath || "/";
-			cUrl.search = cUrl.search;
+			cUrl.pathname = cUrl.pathname.replace(/\/+$/g, "") || "/";
 			cUrl.hash = "";
 
-			const cText = cUrl.href.replace(/#$/, "");
-
-			return cUrl.pathname === "/" ? cText.replace(/\/$/, "") : cText.replace(/\/$/, "");
+			return cUrl.href.replace(/\/$/, "");
 
 		}
 
