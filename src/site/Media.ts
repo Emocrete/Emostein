@@ -62,6 +62,32 @@ export class Media {
 
 
 
+		public static GetExistingHeroLandscape( pPageUrlOrPath: string , pOptions: MediaPathOptions = {} ) : string
+			{
+
+				const cFileName = Media.FindHeroFileName(Media.GetPageFolder(pPageUrlOrPath, pOptions), "HeroL");
+
+				if (!cFileName) { return ""; }
+
+				return Media.GetPageFile(pPageUrlOrPath, cFileName, pOptions);
+
+			}
+
+
+
+		public static GetExistingHeroPortrait( pPageUrlOrPath: string , pOptions: MediaPathOptions = {} ) : string
+			{
+
+				const cFileName = Media.FindHeroFileName(Media.GetPageFolder(pPageUrlOrPath, pOptions), "HeroP");
+
+				if (!cFileName) { return ""; }
+
+				return Media.GetPageFile(pPageUrlOrPath, cFileName, pOptions);
+
+			}
+
+
+
 		public static GetHeroLandscape( pPageUrlOrPath: string , pOptions: MediaPathOptions = {} ) : string
 			{
 

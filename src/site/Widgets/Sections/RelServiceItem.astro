@@ -1,5 +1,6 @@
 ---
 import type { HTMLAttributes } from "astro/types";
+import { Media } from "@/Media";
 
 interface Props extends HTMLAttributes<"article"> {
 	pTitle: string;
@@ -27,6 +28,36 @@ const {
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
 const cTarget = pExternal ? "_blank" : undefined;
 const cRel = pExternal ? "noopener noreferrer" : undefined;
+const cImg = GetCardImage(pHref, pImg, pExternal);
+
+function GetCardImage(pHref: string, pImg?: string, pExternal = false) {
+	const cGivenImg = pImg?.trim() ?? "";
+	if (cGivenImg) return cGivenImg;
+
+	const cHref = pHref?.trim() ?? "";
+	if (!ShouldReadHeroFromHref(cHref, pExternal)) return "";
+
+	return Media.GetExistingHeroLandscape(cHref);
+}
+
+function ShouldReadHeroFromHref(pHref: string, pExternal: boolean) {
+	if (!pHref) return false;
+	if (pHref.startsWith("#")) return false;
+	if (/^(mailto|tel|sms|whatsapp):/i.test(pHref)) return false;
+	if (pHref.startsWith("/")) return true;
+	if (!/^https?:\/\//i.test(pHref)) return false;
+
+	return !pExternal && IsSiteUrl(pHref);
+}
+
+function IsSiteUrl(pHref: string) {
+	try {
+		const cHost = new URL(pHref).hostname.toLowerCase().replace(/^www\./, "");
+		return cHost === "emocrete.com";
+	} catch {
+		return false;
+	}
+}
 ---
 
 
@@ -45,7 +76,7 @@ const cRel = pExternal ? "noopener noreferrer" : undefined;
 	{...RemAttr}
 >
 
-	{ pImg && (
+	{ cImg && (
 
 		<a
 			class = " RelServiceImgLink "
@@ -56,7 +87,7 @@ const cRel = pExternal ? "noopener noreferrer" : undefined;
 		
 			<img
 				class = " RelServiceImg "
-				src={pImg}
+				src={cImg}
 				alt={pTitle}
 				loading="lazy"
 				decoding="async"
