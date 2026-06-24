@@ -1,6 +1,7 @@
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { Media } from "@/Media";
+import { SeoText } from "@/SeoText";
 
 type SchemaObject = Record<string, unknown>;
 
@@ -19,6 +20,13 @@ interface SchemaImageSpec {
 	FileName: string;
 	Width?: number;
 	Height?: number;
+}
+
+export interface SchemaImageMeta {
+	Url: string;
+	Width?: number;
+	Height?: number;
+	Alt: string;
 }
 
 export interface ServiceSchemaOptions {
@@ -76,22 +84,22 @@ export interface FreelancerSchemaOptions {
 }
 
 export class Schema {
-	private static readonly cOrgId = "https://www.emocrete.com/#org";
-	private static readonly cWebsiteId = "https://www.emocrete.com/#website";
-	private static readonly cFounderId = "https://www.emocrete.com/#founder";
+	private static readonly cOrgId = "https://www.emocrete.com#org";
+	private static readonly cWebsiteId = "https://www.emocrete.com#website";
+	private static readonly cFounderId = "https://www.emocrete.com#founder";
 	private static readonly cTelephone = "01014490054";
 	private static readonly cPriceRange = "$$";
 	private static readonly cDefaultOrgName = "Emostein";
 	private static readonly cLogoPath = "/Media/EmoLogo.svg";
 
 	private static readonly cDefaultSchemaImageSpecs: SchemaImageSpec[] = [
-		{ FileName: "Share.jpg", Width: 1200, Height: 630 },
-		{ FileName: "Share.webp", Width: 1200, Height: 630 },
 		{ FileName: "Schema-1x1-1200.webp", Width: 1200, Height: 1200 },
-		{ FileName: "Schema-16x9-1200.webp", Width: 1200, Height: 675 },
 		{ FileName: "Schema-4x3-1200.webp", Width: 1200, Height: 900 },
-		{ FileName: "HeroL.webp", Width: 1920, Height: 911 },
-		{ FileName: "HeroP.webp", Width: 360, Height: 680 }
+		{ FileName: "Schema-16x9-1200.webp", Width: 1200, Height: 675 },
+		{ FileName: "HeroL.webp", Width: 1920, Height: 800 },
+		{ FileName: "HeroP.webp", Width: 360, Height: 680 },
+		{ FileName: "Share.webp", Width: 1200, Height: 630 },
+		{ FileName: "Share.jpg", Width: 1200, Height: 630 }
 	];
 
 	private static readonly cSameAs = [
@@ -159,15 +167,16 @@ export class Schema {
 	public static GetOrganization( pTitle: string , pDescr: string , pUrl: string , pOptions: OrganizationSchemaOptions = {} ) : string
 		{
 
-			const cPageId = `${pUrl}#webpage`;
-			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
-			const cGraph = Schema.GetBaseGraph(pTitle, pDescr, pUrl, pOptions);
+			const cUrl = Schema.NormalizePageUrl(pUrl);
+			const cPageId = `${cUrl}#webpage`;
+			const cImages = Schema.GetSchemaImages(cUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
+			const cGraph = Schema.GetBaseGraph(pTitle, pDescr, cUrl, pOptions);
 
 			cGraph.push(Schema.GetPageNode(
 				"WebPage",
 				pTitle,
 				pDescr,
-				pUrl,
+				cUrl,
 				cPageId,
 				Schema.cOrgId,
 				cImages
@@ -182,9 +191,10 @@ export class Schema {
 	public static GetFreelancer( pTitle: string , pDescr: string , pUrl: string , pOptions: FreelancerSchemaOptions = {} ) : string
 		{
 
-			const cPageId = `${pUrl}#webpage`;
-			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
-			const cGraph = Schema.GetBaseGraph(pTitle, pDescr, pUrl, {
+			const cUrl = Schema.NormalizePageUrl(pUrl);
+			const cPageId = `${cUrl}#webpage`;
+			const cImages = Schema.GetSchemaImages(cUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
+			const cGraph = Schema.GetBaseGraph(pTitle, pDescr, cUrl, {
 				pSameAs: pOptions.pSameAs,
 				pTelephone: pOptions.pTelephone,
 				pImages: pOptions.pImages,
@@ -196,7 +206,7 @@ export class Schema {
 				"WebPage",
 				pTitle,
 				pDescr,
-				pUrl,
+				cUrl,
 				cPageId,
 				Schema.cFounderId,
 				cImages
@@ -211,16 +221,17 @@ export class Schema {
 	public static GetSection( pTitle: string , pDescr: string , pUrl: string , pOptions: SectionSchemaOptions = {} ) : string
 		{
 
-			const cSectionId = `${pUrl}#business`;
-			const cPageId = `${pUrl}#webpage`;
-			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
-			const cGraph = Schema.GetBaseGraph(pTitle, pDescr, pUrl);
+			const cUrl = Schema.NormalizePageUrl(pUrl);
+			const cSectionId = `${cUrl}#business`;
+			const cPageId = `${cUrl}#webpage`;
+			const cImages = Schema.GetSchemaImages(cUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
+			const cGraph = Schema.GetBaseGraph(pTitle, pDescr, cUrl);
 
 			cGraph.push(Schema.GetPageNode(
 				"CollectionPage",
 				pTitle,
 				pDescr,
-				pUrl,
+				cUrl,
 				cPageId,
 				cSectionId,
 				cImages
@@ -231,7 +242,7 @@ export class Schema {
 				"@id": cSectionId,
 				"name": pTitle,
 				"description": pDescr,
-				"url": pUrl,
+				"url": cUrl,
 				...Schema.GetImageProperty(cImages),
 				"telephone": pOptions.pTelephone ?? Schema.cTelephone,
 				"priceRange": pOptions.pPriceRange ?? Schema.cPriceRange,
@@ -253,16 +264,17 @@ export class Schema {
 	public static GetCollection( pTitle: string , pDescr: string , pUrl: string , pOptions: CollectionSchemaOptions = {} ) : string
 		{
 
-			const cPageId = `${pUrl}#webpage`;
-			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
-			const cGraph = Schema.GetBaseGraph(pTitle, pDescr, pUrl);
+			const cUrl = Schema.NormalizePageUrl(pUrl);
+			const cPageId = `${cUrl}#webpage`;
+			const cImages = Schema.GetSchemaImages(cUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
+			const cGraph = Schema.GetBaseGraph(pTitle, pDescr, cUrl);
 
 			cGraph.push({
 				...Schema.GetPageNode(
 					"CollectionPage",
 					pTitle,
 					pDescr,
-					pUrl,
+					cUrl,
 					cPageId,
 					undefined,
 					cImages
@@ -279,16 +291,17 @@ export class Schema {
 	public static GetService( pTitle: string , pDescr: string , pUrl: string , pOptions: ServiceSchemaOptions = {} ) : string
 		{
 
-			const cServiceId = `${pUrl}#service`;
-			const cPageId = `${pUrl}#webpage`;
-			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
-			const cGraph = Schema.GetBaseGraph(pTitle, pDescr, pUrl);
+			const cUrl = Schema.NormalizePageUrl(pUrl);
+			const cServiceId = `${cUrl}#service`;
+			const cPageId = `${cUrl}#webpage`;
+			const cImages = Schema.GetSchemaImages(cUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
+			const cGraph = Schema.GetBaseGraph(pTitle, pDescr, cUrl);
 
 			cGraph.push(Schema.GetPageNode(
 				"WebPage",
 				pTitle,
 				pDescr,
-				pUrl,
+				cUrl,
 				cPageId,
 				cServiceId,
 				cImages
@@ -299,7 +312,7 @@ export class Schema {
 				"@id": cServiceId,
 				"name": pTitle,
 				"description": pDescr,
-				"url": pUrl,
+				"url": cUrl,
 				...Schema.GetImageProperty(cImages),
 				"serviceType": pOptions.pServiceType ?? pTitle,
 				"areaServed": pOptions.pAreaServed ?? "EG",
@@ -320,16 +333,17 @@ export class Schema {
 	public static GetArticle( pTitle: string , pDescr: string , pUrl: string , pOptions: ArticleSchemaOptions = {} ) : string
 		{
 
-			const cArticleId = `${pUrl}#article`;
-			const cPageId = `${pUrl}#webpage`;
-			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
-			const cGraph = Schema.GetBaseGraph(pTitle, pDescr, pUrl);
+			const cUrl = Schema.NormalizePageUrl(pUrl);
+			const cArticleId = `${cUrl}#article`;
+			const cPageId = `${cUrl}#webpage`;
+			const cImages = Schema.GetSchemaImages(cUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
+			const cGraph = Schema.GetBaseGraph(pTitle, pDescr, cUrl);
 
 			cGraph.push(Schema.GetPageNode(
 				"WebPage",
 				pTitle,
 				pDescr,
-				pUrl,
+				cUrl,
 				cPageId,
 				cArticleId,
 				cImages
@@ -341,7 +355,7 @@ export class Schema {
 				"headline": pTitle,
 				"name": pTitle,
 				"description": pDescr,
-				"url": pUrl,
+				"url": cUrl,
 				...Schema.GetImageProperty(cImages),
 				"inLanguage": "ar-EG",
 				"author": {
@@ -364,9 +378,25 @@ export class Schema {
 	public static GetPrimaryImageUrl( pTitle: string , pUrl: string , pOptions: ServiceSchemaOptions | SectionSchemaOptions | CollectionSchemaOptions | ArticleSchemaOptions | OrganizationSchemaOptions = {} ) : string
 		{
 
-			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
+			return Schema.GetPrimaryImageMeta(pTitle, "", pUrl, pOptions).Url;
 
-			return Schema.GetImageUrl(cImages[0]);
+		}
+
+
+
+	public static GetPrimaryImageMeta( pTitle: string , pDescr: string , pUrl: string , pOptions: ServiceSchemaOptions | SectionSchemaOptions | CollectionSchemaOptions | ArticleSchemaOptions | OrganizationSchemaOptions = {} ) : SchemaImageMeta
+		{
+
+			const cUrl = Schema.NormalizePageUrl(pUrl);
+			const cImages = Schema.GetSchemaImages(cUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
+			const cImage = cImages[0];
+
+			return {
+				Url: Schema.GetImageUrl(cImage),
+				Width: Schema.GetNumber(cImage?.["width"]),
+				Height: Schema.GetNumber(cImage?.["height"]),
+				Alt: SeoText.GetImageAlt(pTitle, pDescr)
+			};
 
 		}
 
@@ -375,7 +405,9 @@ export class Schema {
 	public static GetImageUrls( pTitle: string , pUrl: string , pOptions: ServiceSchemaOptions | SectionSchemaOptions | CollectionSchemaOptions | ArticleSchemaOptions | OrganizationSchemaOptions = {} ) : string[]
 		{
 
-			return Schema.GetSchemaImages(pUrl, pTitle, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames)
+			const cUrl = Schema.NormalizePageUrl(pUrl);
+
+			return Schema.GetSchemaImages(cUrl, pTitle, "", pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames)
 				.map((pImage) => Schema.GetImageUrl(pImage))
 				.filter((pUrl) => pUrl.length > 0);
 
@@ -386,7 +418,7 @@ export class Schema {
 	private static GetBaseGraph( pTitle: string , pDescr: string , pUrl: string , pOptions: OrganizationSchemaOptions = {} ) : SchemaObject[]
 		{
 
-			const cSiteUrl = pOptions.pUrl ?? `${Schema.GetSiteOrigin(pUrl)}/`;
+			const cSiteUrl = SeoText.NormalizePageUrl(pOptions.pUrl ?? Schema.GetSiteOrigin(pUrl));
 			const cLogo = Schema.GetAbsoluteUrl(pUrl, pOptions.pLogo ?? Schema.cLogoPath);
 			const cOrgName = pOptions.pName ?? Schema.cDefaultOrgName;
 			const cSameAs = pOptions.pSameAs ?? Schema.cSameAs;
@@ -445,18 +477,19 @@ export class Schema {
 	private static GetPageNode( pPageType: "WebPage" | "CollectionPage" , pTitle: string , pDescr: string , pUrl: string , pPageId: string , pMainEntityId?: string , pImages: SchemaObject[] = [] ) : SchemaObject
 		{
 
+			const cUrl = Schema.NormalizePageUrl(pUrl);
 			const cPageNode: SchemaObject = {
 				"@type": pPageType,
 				"@id": pPageId,
 				"name": pTitle,
 				"description": pDescr,
-				"url": pUrl,
+				"url": cUrl,
 				"inLanguage": "ar-EG",
 				"isPartOf": {
 					"@id": Schema.cWebsiteId
 				},
 				"breadcrumb": {
-					"@id": `${pUrl}#breadcrumb`
+					"@id": `${cUrl}#breadcrumb`
 				}
 			};
 
@@ -487,7 +520,7 @@ export class Schema {
 
 
 
-	private static GetSchemaImages( pUrl: string , pTitle: string , pImages?: string[] , pHeroFolder?: string , pHeroImageNames?: string[] ) : SchemaObject[]
+	private static GetSchemaImages( pUrl: string , pTitle: string , pDescr: string , pImages?: string[] , pHeroFolder?: string , pHeroImageNames?: string[] ) : SchemaObject[]
 		{
 
 			const cHeroFolder = Schema.GetSchemaHeroFolder(pUrl, pHeroFolder);
@@ -499,6 +532,7 @@ export class Schema {
 				cUsedUrls,
 				pUrl,
 				pTitle,
+				pDescr,
 				(pImages ?? []).map((pImage) => {
 					return { FileName: pImage };
 				}),
@@ -510,21 +544,24 @@ export class Schema {
 				cUsedUrls,
 				pUrl,
 				pTitle,
+				pDescr,
 				(pHeroImageNames ?? []).map((pImage) => {
 					return Schema.GetImageSpecByName(pImage);
 				}),
 				cHeroFolder
 			);
 
-			Schema.AddImageObjects(cImages, cUsedUrls, pUrl, pTitle, Schema.cDefaultSchemaImageSpecs, cHeroFolder, true);
+			Schema.AddImageObjects(cImages, cUsedUrls, pUrl, pTitle, pDescr, Schema.cDefaultSchemaImageSpecs, cHeroFolder, true);
 
 			if (cImages.length === 0) {
 				for (const cFallbackFolder of Schema.GetFallbackHeroFolders(cHeroFolder)) {
-					Schema.AddImageObjects(cImages, cUsedUrls, pUrl, pTitle, Schema.cDefaultSchemaImageSpecs, cFallbackFolder, true);
+					Schema.AddImageObjects(cImages, cUsedUrls, pUrl, pTitle, pDescr, Schema.cDefaultSchemaImageSpecs, cFallbackFolder, true);
 
 					if (cImages.length > 0) { break; }
 				}
 			}
+
+			if (cImages.length > 0) { cImages[0]["representativeOfPage"] = true; }
 
 			return cImages;
 
@@ -555,7 +592,7 @@ export class Schema {
 
 
 
-	private static AddImageObjects( pImages: SchemaObject[] , pUsedUrls: Set<string> , pPageUrl: string , pTitle: string , pSpecs: SchemaImageSpec[] , pFolder: string , pRequireLocalFile = false ) : void
+	private static AddImageObjects( pImages: SchemaObject[] , pUsedUrls: Set<string> , pPageUrl: string , pTitle: string , pDescr: string , pSpecs: SchemaImageSpec[] , pFolder: string , pRequireLocalFile = false ) : void
 		{
 
 			pSpecs.forEach((pSpec) => {
@@ -569,7 +606,7 @@ export class Schema {
 				if (pUsedUrls.has(cUrl)) { return; }
 
 				pUsedUrls.add(cUrl);
-				pImages.push(Schema.GetImageObject(cUrl, pTitle, pSpec.Width, pSpec.Height));
+				pImages.push(Schema.GetImageObject(cUrl, pTitle, pDescr, pSpec.Width, pSpec.Height));
 			});
 
 		}
@@ -723,16 +760,19 @@ export class Schema {
 
 
 
-	private static GetImageObject( pUrl: string , pTitle: string , pWidth?: number , pHeight?: number ) : SchemaObject
+	private static GetImageObject( pUrl: string , pTitle: string , pDescr: string , pWidth?: number , pHeight?: number ) : SchemaObject
 		{
 
+			const cCleanTitle = SeoText.GetCleanTitle(pTitle);
+			const cImageAlt = SeoText.GetImageAlt(pTitle, pDescr);
 			const cImage: SchemaObject = {
 				"@type": "ImageObject",
 				"@id": `${pUrl}#image`,
 				"url": pUrl,
 				"contentUrl": pUrl,
-				"name": pTitle,
-				"caption": pTitle,
+				"name": cCleanTitle || cImageAlt,
+				"caption": cImageAlt,
+				"description": cImageAlt,
 				"inLanguage": "ar-EG"
 			};
 
@@ -854,10 +894,29 @@ export class Schema {
 
 
 
+	private static NormalizePageUrl( pUrl: string ) : string
+		{
+
+			return SeoText.NormalizePageUrl(pUrl);
+
+		}
+
+
+
+	private static GetNumber( pValue: unknown ) : number | undefined
+		{
+
+			return typeof pValue === "number" ? pValue : undefined;
+
+		}
+
+
+
 	private static GetSiteOrigin( pUrl: string ) : string
 		{
 
-			const cUrl = new URL(pUrl);
+			const cPageUrl = Schema.NormalizePageUrl(pUrl);
+			const cUrl = new URL(cPageUrl);
 
 			return `${cUrl.protocol}//${cUrl.host}`;
 
@@ -868,14 +927,15 @@ export class Schema {
 	private static GetBreadcrumbNode( pTitle: string , pUrl: string ) : SchemaObject
 		{
 
-			const cUrl = new URL(pUrl);
+			const cPageUrl = Schema.NormalizePageUrl(pUrl);
+			const cUrl = new URL(cPageUrl);
 			const cParts = cUrl.pathname
 				.split("/")
 				.map((pPart) => pPart.trim())
 				.filter((pPart) => pPart.length > 0);
-			const cOrigin = Schema.GetSiteOrigin(pUrl);
+			const cOrigin = Schema.GetSiteOrigin(cPageUrl);
 			const cItems: SchemaObject[] = [
-				Schema.GetBreadcrumbItem(1, "الرئيسية", `${cOrigin}/`)
+				Schema.GetBreadcrumbItem(1, "الرئيسية", cOrigin)
 			];
 			let cPath = "";
 
@@ -893,7 +953,7 @@ export class Schema {
 
 			return {
 				"@type": "BreadcrumbList",
-				"@id": `${pUrl}#breadcrumb`,
+				"@id": `${cPageUrl}#breadcrumb`,
 				"name": `مسار ${pTitle}`,
 				"itemListElement": cItems
 			};

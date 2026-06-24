@@ -1,6 +1,7 @@
 ---
 import { Align, DirectSize, ElemBg, NumPer, Place, type PlaceProps } from "@/TypesLib";
 import { Media } from "@/Media";
+import { SeoText } from "@/SeoText";
 import type { HTMLAttributes } from "astro/types";
 
 interface Props extends HTMLAttributes<"section">, PlaceProps {
@@ -66,7 +67,7 @@ const cBgImgP = pImgP
 const cFinalBgImgL = cBgImgL || cBgImgP;
 const cFinalBgImgP = cBgImgP || cBgImgL;
 const cHasBgImg = cFinalBgImgL !== "" || cFinalBgImgP !== "";
-const cBgAlt = pImgAlt || pBg?.Img?.Alt || "";
+const cBgAlt = pImgAlt || pBg?.Img?.Alt || SeoText.GetLocalsImageAlt(Astro.locals);
 
 const cSectionStyle = [
 	`--SecBg:${pBg?.Color || "transparent"};`,
