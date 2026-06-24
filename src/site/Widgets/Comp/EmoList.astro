@@ -49,14 +49,16 @@ let {
 
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
 
-if (!pTitle && !pDesc) {
-	pTitle = Text.Body.OfText("العنوان");
-	pDesc = Text.Body.OfText("الوصف")
+function HasText(pText?: Text) {
+	return typeof pText?.text === "string" && pText.text.trim() !== "";
 }
 
+const cHasTitle = HasText(pTitle);
+const cHasDesc = HasText(pDesc);
+const cHasHead = cHasTitle || cHasDesc;
 const cHasBulletIcon = pBulletIcon.trim() !== "";
 
-const TitleTag = pTitle?.GetTag() as keyof astroHTML.JSX.DefinedIntrinsicElements;
+const TitleTag = (cHasTitle && pTitle ? pTitle.GetTag() : "p") as keyof astroHTML.JSX.DefinedIntrinsicElements;
 
 const cHeadStyle = [
 	`--HeadBg:${pHeadBg.Color};`,
@@ -103,27 +105,31 @@ function IsSubListItem(pItem: TItem): pItem is TSubListItem {
 	{...RemAttr}
 >
 
-	<div class = " EmoListHead " style = {cHeadStyle}>
+	{ cHasHead &&
 
-		{ pTitle  &&
+		<div class = " EmoListHead " style = {cHeadStyle}>
 
-			<TitleTag style = {pTitle.GetStyle()}>
+			{ cHasTitle && pTitle &&
 
-				{pTitle.text}
+				<TitleTag style = {pTitle.GetStyle()}>
 
-			</TitleTag>
+					{pTitle.text}
 
-		}
+				</TitleTag>
 
-		{ pDesc  &&
+			}
 
-			<p style = {pDesc.GetStyle()}>
-				{pDesc.text}
-			</p>
+			{ cHasDesc && pDesc &&
 
-		}
+				<p style = {pDesc.GetStyle()}>
+					{pDesc.text}
+				</p>
 
-	</div>
+			}
+
+		</div>
+
+	}
 
 	<div class = " EmoListBodyBox " style = {cBodyStyle}>
 

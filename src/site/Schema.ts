@@ -98,16 +98,6 @@ export class Schema {
 		"https://www.youtube.com/@aymanashoor7410"
 	];
 
-	private static readonly cAltNames = [
-		"Emocrete",
-		"Emodsign",
-		"Emoperm",
-		"Emomed",
-		"Emonsult",
-		"Emostone",
-		"Emostate",
-		"Emochain"
-	];
 
 	private static readonly cBreadcrumbNames: Record<string, string> = {
 		emochain: "إدارة المشروعات",
@@ -189,7 +179,6 @@ export class Schema {
 
 
 
-
 	public static GetFreelancer( pTitle: string , pDescr: string , pUrl: string , pOptions: FreelancerSchemaOptions = {} ) : string
 		{
 
@@ -216,7 +205,6 @@ export class Schema {
 			return Schema.StringifyGraph(cGraph);
 
 		}
-
 
 
 
@@ -409,7 +397,6 @@ export class Schema {
 					"@type": "Organization",
 					"@id": Schema.cOrgId,
 					"name": cOrgName,
-					"alternateName": Schema.cAltNames,
 					"url": cSiteUrl,
 					"logo": cLogo,
 					"telephone": cTelephone,
@@ -491,15 +478,12 @@ export class Schema {
 					};
 				}
 
-				if (cPrimaryImageUrl) {
-					cPageNode["thumbnailUrl"] = cPrimaryImageUrl;
-				}
+				if (cPrimaryImageUrl) { cPageNode["thumbnailUrl"] = cPrimaryImageUrl; }
 			}
 
 			return cPageNode;
 
 		}
-
 
 
 
@@ -739,7 +723,6 @@ export class Schema {
 
 
 
-
 	private static GetImageObject( pUrl: string , pTitle: string , pWidth?: number , pHeight?: number ) : SchemaObject
 		{
 
@@ -832,7 +815,6 @@ export class Schema {
 			return cParts[cParts.length - 1] ?? pPath;
 
 		}
-
 
 
 

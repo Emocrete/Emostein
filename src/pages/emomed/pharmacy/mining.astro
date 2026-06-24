@@ -99,9 +99,9 @@ const cCommissionUrl = `https://wa.me/${cWhatsapp}?text=${cCommissionMsg}`;
 		id="pharmacy-seller"
 		pBg={new ElemBg("#07111F")}
 		pAlign={Align.Center}
-		pContentSize={new DirectSize(new NumPer("1180px", "100%"))}
-		pGap={new Pixel(34, 18)}
-		pPad={new Pixel(70, 24)}
+		pContentSize={new DirectSize(new NumPer("80%", "100%"))}
+		pGap={new Pixel(35, 20)}
+		pPad={new Pixel(50, 10)}
 		pMinH={new NumPer(620, 680)}
 	>
 
@@ -140,7 +140,7 @@ const cCommissionUrl = `https://wa.me/${cWhatsapp}?text=${cCommissionMsg}`;
 
 				<VrStack
 					pGap={new Pixel(22, 14)}
-					pPad={new Pixel(0)}
+					pPad={new Pixel(10)}
 					pAlign="Start"
 				>
 
@@ -175,7 +175,7 @@ const cCommissionUrl = `https://wa.me/${cWhatsapp}?text=${cCommissionMsg}`;
 							pBgColor="#D4AF37"
 							pBgColorHover="#F4D66A"
 							pTextColor="#07111F"
-							pFontSize="17px"
+							pFontSize="15px"
 							onclick={`window.open('${cSellerUrl}', '_blank')`}
 						/>
 
@@ -187,7 +187,7 @@ const cCommissionUrl = `https://wa.me/${cWhatsapp}?text=${cCommissionMsg}`;
 							pBgColor="rgba(255,255,255,.10)"
 							pBgColorHover="rgba(255,255,255,.18)"
 							pTextColor="#FFFFFF"
-							pFontSize="17px"
+							pFontSize="15px"
 							onclick={`window.open('${cCommissionUrl}', '_blank')`}
 						/>
 
@@ -230,7 +230,7 @@ const cCommissionUrl = `https://wa.me/${cWhatsapp}?text=${cCommissionMsg}`;
 						pItems={[
 						"نوع المكان: صيدلية قائمة أو محل فقط.",
 						"العنوان التفصيلي والمنطقة وأقرب معالم واضحة.",
-						"المساحة، الواجهة، الدور، حالة التشطيب، وصور حديثة.",
+						"المساحة، الواجهة، حالة التشطيب، وصور حديثة.",
 						"سعر البيع أو التنازل وحدود التفاوض.",
 						"أي مستندات أو بيانات ترخيص متاحة."
 					]}
@@ -320,7 +320,7 @@ const cCommissionUrl = `https://wa.me/${cWhatsapp}?text=${cCommissionMsg}`;
 							pBgColor="#D4AF37"
 							pBgColorHover="#F4D66A"
 							pTextColor="#07111F"
-							pFontSize="17px"
+							pFontSize="15px"
 							onclick={`window.open('${cBuyerUrl}', '_blank')`}
 						/>
 
@@ -332,7 +332,7 @@ const cCommissionUrl = `https://wa.me/${cWhatsapp}?text=${cCommissionMsg}`;
 							pBgColor="rgba(255,255,255,.10)"
 							pBgColorHover="rgba(255,255,255,.18)"
 							pTextColor="#FFFFFF"
-							pFontSize="17px"
+							pFontSize="15px"
 							onclick={`window.open('${cBuyerUrl}', '_blank')`}
 						/>
 
@@ -399,7 +399,9 @@ const cCommissionUrl = `https://wa.me/${cWhatsapp}?text=${cCommissionMsg}`;
 		id="pharmacy-commission"
 		pBg={new ElemBg("#07111F")}
 		pAlign={Align.Center}
-		pMinH={new NumPer(480, 560)}
+		pMinH={new NumPer(400, 800)}
+		pImgL="/Media/Emomed/Pharmacy/Mining/PriceL.webp"
+		pImgP="/Media/Emomed/Pharmacy/Mining/PriceP.webp"
 	>
 
 		<BlurBlob
@@ -415,51 +417,45 @@ const cCommissionUrl = `https://wa.me/${cWhatsapp}?text=${cCommissionMsg}`;
 		<GlassCard
 			pBg="rgba(255,255,255,.08)"
 			pBorder="rgba(212,175,55,.34)"
-			pRadius={38}
-			pBlur={18}
+			pRadius={20}
+			pBlur={10}
+			pSize={new DirectSize(new NumPer("75%","95%"),new NumPer("90%","80%"))}
+			pLoc={new Loc(new NumPer("4%","2.5%"),new NumPer("5%","25%"))}
 		>
 
-			<VrStack
-				pGap={new Pixel(24, 16)}
-				pPad={new Pixel(10, 0)}
-				pAlign="Center"
-			>
+			<HzStack pPad={new Pixel(0)} pGap={new Pixel(25,40)}>
 
-				<Emograph
-					pTitle={Text.H2.Centered.White.OfText("نسبة العمولة")}
-					pText={Text.Body.Centered.White.OfText("الخدمة قائمة على البحث، التنقية، المطابقة، التسويق، وترتيب التواصل بين صاحب العرض والصيدلي الجاد، لذلك تكون العمولة واضحة من البداية على الطرفين.")}
-				/>
+				<VrStack
+					pGap={new Pixel(10, 10)}
+					pPad={new Pixel(10, 10)}
+					pAlign="Center"
+					pSize={new DirectSize(new NumPer("50%","95%"))}
+					pLoc={new Loc(new NumPer("0%","2.5%"),new NumPer("0%","2.5%"))}
+				>
 
-				<Emograph
-					pTitle={Text.H1.Centered.WithColor("#D4AF37").OfText("1.5%")}
-					pText={Text.H4.Centered.White.OfText("من كل طرف عند إتمام الاتفاق")}
-				/>
+					<Emograph
+						pTitle={Text.H2.Centered.White.OfText("أتعاب الخدمة")}
+						pText={Text.Body.Centered.White.OfText("الخدمة قائمة على البحث ، التنقية ، المطابقة ، التسويق ، وترتيب التواصل بين صاحب العرض والصيادلة الجادين")}
+					/>
+
+					<Emograph
+						pTitle={Text.Body.Bold.Centered.OfSize(50,40).WithColor("#D4AF37").OfText("1.5%")}
+						pText={Text.Body.Centered.White.OfText("عند إتمام الاتفاق")}
+					/>
+
+				</VrStack>
 
 				<EmoList
 					pWidth={new NumPer("720px", "100%") as any}
 					pItemFnt={Text.Body.White.WithAlign("right")}
 					pNumbered={false}
 					pItems={[
-					"1.5% من صاحب الصيدلية أو صاحب المحل عند إتمام البيع أو التنازل.",
-					"1.5% من الصيدلي المشتري عند إتمام الاتفاق.",
-					"لا يتم احتساب العمولة لمجرد السؤال أو إرسال طلب مبدئي.",
-					"أي فحص هندسي أو قياس مسافة أو معاينة تفصيلية يمكن الاتفاق عليه كبند مستقل عند الحاجة."
-				]}
+		"لا يتم احتساب العمولة لمجرد السؤال أو إرسال طلب مبدئي.",
+		"أي فحص هندسي أو قياس مسافة أو معاينة تفصيلية يمكن الاتفاق عليه كبند مستقل عند الحاجة."
+	]}
 				/>
 
-				<EmoBtn
-					pText="اسأل عن تفاصيل العمولة"
-					pWidth="270px"
-					pHeight="56px"
-					pRadius="18px"
-					pBgColor="#D4AF37"
-					pBgColorHover="#F4D66A"
-					pTextColor="#07111F"
-					pFontSize="17px"
-					onclick={`window.open('${cCommissionUrl}', '_blank')`}
-				/>
-
-			</VrStack>
+			</HzStack>
 
 		</GlassCard>
 
