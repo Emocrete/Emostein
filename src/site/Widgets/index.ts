@@ -248,3 +248,6 @@ export { default as TornPaper } from "./Shapes/Edges/TornPaper.astro";
 export { default as ThemedPriceCardVr } from "./Prices/ThemedPriceCardVr.astro";
 export { default as ThemedPriceCardHz } from "./Prices/ThemedPriceCardHz.astro";
 
+export { default as EmoWhats } from "./Comp/EmoWhats.astro";
+export { default as EmoDet } from "./Comp/EmoDet.astro";
+

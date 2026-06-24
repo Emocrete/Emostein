@@ -1,7 +1,8 @@
 ---
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, Colors, Pixel } from "@/TypesLib";
-import { Hero, ESec, EmoBtn, Emograph, Price, EmoList, SecTitle, VrStack } from "@/Widgets";
+import { Colors, DirectSize, ElemBg, Loc, NumPer, Pixel, Text } from "@/TypesLib";
+import { EmoBtn, Emograph, EmoList, ESec, Hero, HzStack, Price, SecTitle, VrStack } from "@/Widgets";
+import { EmoCall, EmoDet, EmoStrip, EmoWhats } from "../../../site/Widgets";
 ---
 
 
@@ -29,60 +30,43 @@ import { Hero, ESec, EmoBtn, Emograph, Price, EmoList, SecTitle, VrStack } from 
 	pDescr="خدمات الختم الهندسي للرسومات والتقارير الهندسية من مهندسين استشاريين لجميع التخصصات"
 >
 
-	<Hero
-		pTitle="ختم مهندس استشاري"
-		pDesc="خدمات الختم الهندسي للرسومات والتقارير الهندسية من مهندسين استشاريين لجميع التخصصات"
-		pPosL="30% 5% 30% 45%"
-		pPosP="15% 3% 55% 3%"
-		pBlurL="off"
-		pBlurP="off"
-	>
 
-		<Emograph pText={Text.Body.OfSize(22).OfText("( إنشائي - ميكانيكا - كهرباء )")} />
 
-		<EmoBtn
-			pText="التفاصيل"
-			pWidth="200px"
-			pHeight="50px"
-			pRadius="50px"
-			pBgColor={Colors.BlackOff}
-			pBgColorHover={Colors.Gray4}
-			pTextColor={Colors.WhiteOff}
-			pFontSize="20px"
-			onclick="location.href='#PageTopics'"
-		/>
 
-	</Hero>
 
-	<ESec
-		id="PageTopics"
-		pBg={new ElemBg(Colors.BlackOff)}
-	>
-		<SecTitle
-			pTitle="موضوعات الصفحة"
-			style={`--StripBg:${Colors.BlackOff};`}
-		/>
 
-		<VrStack>
 
-			<Emograph pText={Text.Body.OfSize(18, 15).AtRight.DarkSky.OfText("تعريف معنى المهندس الاستشاري")} />
+	<Hero pImgAlt="ختم مهندس استشاري">
 
-			<Emograph pText={Text.Body.OfSize(18, 15).AtRight.DarkSky.OfText("تكلفة ختم مهندسي استشاري إنشائي للرسومات الهندسية")} />
+		<VrStack
+			pSize={new DirectSize(new NumPer("40%","100%"))}
+			pLoc={new Loc(new NumPer("50%","0%"),new NumPer("20%","9%"))}
+			pAlign="Center"
+			pGap={new Pixel(30,5)}
+		>
 
-			<Emograph pText={Text.Body.OfSize(18, 15).AtRight.DarkSky.OfText("تكلفة ختم مهندسي استشاري إنشائي لتقارير هندسية")} />
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("ختم مهندس استشاري")}
+				pText={Text.Body.Centered.OfSize(22,18).OfText("خدمات الختم الهندسي للرسومات والتقارير الهندسية من مهندسين استشاريين لجميع التخصصات")}
+			/>
+
+			<Emograph pText={Text.Body.Centered.OfSize(22).OfText("( إنشائي - ميكانيكا - كهرباء )")} />
+
+			<EmoCall data-own-size BlackOrange />
 
 		</VrStack>
 
-	</ESec>
+	</Hero>
 
-	<ESec
-		id="secConsDef"
-		pBg={new ElemBg(Colors.WhiteOff)}
-	>
-		<SecTitle
-			pTitle="ما المقصود بـ مهندس استشاري ؟"
-			style={`--StripBg:${Colors.WhiteOff};`}
-		/>
+
+
+
+
+
+
+	<ESec id="secConsDef" pBg={new ElemBg(Colors.WhiteOff)}>
+
+		<SecTitle WhiteOff pTitle="ما المقصود بـ مهندس استشاري ؟" />
 
 		<VrStack>
 
@@ -103,119 +87,227 @@ import { Hero, ESec, EmoBtn, Emograph, Price, EmoList, SecTitle, VrStack } from 
 
 	</ESec>
 
-	<ESec
-		id="secDwgCost"
-		pBg={new ElemBg(Colors.BlackOff)}
-	>
-		<SecTitle
-			pTitle="تكلفة ختم مهندسي استشاري إنشائي للرسومات الهندسية"
-			style={`--StripBg:${Colors.Black};`}
-		/>
 
-		<VrStack>
 
-			<Price pTitle={Text.H3.Centered.White.OfText("ختم مهندس استشاري لرسومات ترخيص محل تجاري")} pPrice={"1500"} pTitlePlace="top">
 
-				<VrStack>
 
-					<Emograph
-						pText={Text.Body.Red.OfText("لا يطلب ختم مهندس استشاري لرسومات ترخيص المحلات التجارية إلا لبعض الحالات حسب طلب الجهة التي سيسلم إليها الرسومات صراحة ، عادة يكفي فقط ختم مهندس نقابي غير استشاري لاعتماد رسومات تراخيص المحلات التجارية")}
-					/>
 
-					<EmoBtn
-						pText="نعم أريد ختم مهندس نقابي فقط"
-						pWidth="350px"
-						pHeight="50px"
-						pRadius="5px"
-						pBgColor={Colors.BlackOff}
-						pBgColorHover={Colors.BistageDark}
-						pTextColor={Colors.WhiteOff}
-						pFontSize="18px"
-						onclick="location.href='/emonsult/stamp/eng/'"
-					/>
 
-				</VrStack>
+	<ESec id="secStrucCost">
 
-			</Price>
+		<SecTitle OrangeDark pTitle="تكلفة ختم مهندسي استشاري معماري أو إنشائي" />
 
-			<Price
-				pTitle={Text.H3.Centered.White.OfText("ختم مهندس استشاري لرسومات لأغراض عامة")}
-				pPrice={"1500"}
-				pPriceLabel="تبدأ من"
-				pTitlePlace="top"
-			>
+		<EmoStrip id="strDwg">
 
-				<Emograph pText={Text.Body.OfText("يتم تقديرها لكل حالة تبعًا لمحتوى الرسومات وعدد اللوحات")} />
+			<SecTitle OrangeLite pTitle="أولا : الرسومات الهندسية ( بدون ختم نقابة المهندسين )" />
 
-			</Price>
+			<VrStack pSize={new DirectSize(new NumPer("70%","95%"))}>
 
-		</VrStack>
+				<Price
+					pTitle={Text.H3.Centered.OfText("ختم مهندس استشاري لرسومات ترخيص محل تجاري")}
+					pPrice={"1500"}
+					pTitlePlace="top"
+				>
+
+					<VrStack>
+
+						<Emograph
+							pText={Text.Body.Red.OfText("لا يطلب ختم مهندس استشاري لرسومات ترخيص المحلات التجارية إلا لبعض الحالات حسب طلب الجهة التي سيسلم إليها الرسومات صراحة ، عادة يكفي فقط ختم مهندس نقابي غير استشاري لاعتماد رسومات تراخيص المحلات التجارية")}
+						/>
+
+						<HzStack pGap={new Pixel(50,30)}>
+
+							<EmoDet
+								BlackOrange
+								pHref="/emonsult/stamp/eng"
+								pText="نعم أقصد ختم مهندس نقابي فقط"
+							/>
+
+							<EmoWhats GreenDark pText="غير متأكد وأريد المساعدة" />
+
+						</HzStack>
+
+					</VrStack>
+
+				</Price>
+
+				<Price
+					pTitle={Text.H3.Centered.OfText("ختم مهندس استشاري لرسومات لأغراض عامة")}
+					pPrice={"1500"}
+					pPriceLabel="تبدأ من"
+					pTitlePlace="top"
+				>
+
+					<Emograph pText={Text.Body.OfText("يتم تقديرها لكل حالة تبعًا لمحتوى الرسومات وعدد اللوحات")} />
+
+				</Price>
+
+			</VrStack>
+
+		</EmoStrip>
+
+		<EmoStrip id="strReport">
+
+			<SecTitle OrangeLite pTitle="ثانيا : التقارير الهندسية ( بدون ختم نقابة المهندسين )" />
+
+			<VrStack pSize={new DirectSize(new NumPer("70%","95%"))}>
+
+				<Price
+					pTitle={Text.H3.Centered.OfText("ختم مهندس استشاري لتقرير سلامة مبنى لترخيص محل تجاري أو ترخيص صيدلية")}
+					pPrice={"2000"}
+					pTitlePlace="top"
+					pPriceLabel="يبدأ من"
+				>
+
+					<EmoDet BlackOrange pHref="/emonsult/report/safety" />
+
+				</Price>
+
+				<Price
+					pTitle={Text.H3.Centered.OfText("ختم مهندس استشاري لتقرير سلامة مبنى لترخيص تركيب مصعد")}
+					pPrice={"3000"}
+					pPriceLabel="يبدأ من"
+					pTitlePlace="top"
+				>
+
+					<EmoDet BlackOrange pHref="/emonsult/report/elevator" />
+
+				</Price>
+
+			</VrStack>
+
+		</EmoStrip>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec id="secMechCost">
+
+		<SecTitle OrangeDark pTitle="تكلفة ختم مهندسي استشاري ميكانيكا" />
+
+		<EmoStrip id="strDwg">
+
+			<SecTitle OrangeLite pTitle="أولا : الرسومات الهندسية ( بدون ختم نقابة المهندسين )" />
+
+			<VrStack pSize={new DirectSize(new NumPer("70%","95%"))}>
+
+				<Price
+					pTitle={Text.H3.Centered.OfText("ختم مهندس استشاري ميكانيكا لرسومات ترخيص تشغيل مصعد")}
+					pPrice={"1500"}
+					pTitlePlace="top"
+				>
+
+				</Price>
+
+				<Price
+					pTitle={Text.H3.Centered.OfText("ختم مهندس استشاري ميكانيكا لرسومات لأغراض عامة")}
+					pPrice={"1500"}
+					pPriceLabel="تبدأ من"
+					pTitlePlace="top"
+				>
+
+					<Emograph pText={Text.Body.OfText("يتم تقديرها لكل حالة تبعًا لمحتوى الرسومات وعدد اللوحات")} />
+
+				</Price>
+
+			</VrStack>
+
+		</EmoStrip>
+
+		<EmoStrip id="strReport">
+
+			<SecTitle OrangeLite pTitle="ثانيا : التقارير الهندسية ( بدون ختم نقابة المهندسين )" />
+
+			<VrStack pSize={new DirectSize(new NumPer("70%","95%"))}>
+
+				<Price
+					pTitle={Text.H3.Centered.OfText("ختم مهندس استشاري ميكانيكا لترخيص تركيب وتشغيل مصعد")}
+					pPrice={"3000"}
+					pPriceLabel="يبدأ من"
+					pTitlePlace="top"
+				>
+
+					<EmoDet BlackOrange pHref="/emonsult/report/elevator" />
+
+				</Price>
+
+			</VrStack>
+
+		</EmoStrip>
 
 	</ESec>
 
-	<ESec
-		id="secReportCost"
-		pBg={new ElemBg(Colors.BlackOff)}
-	>
-		<SecTitle
-			pTitle="تكلفة ختم مهندسي استشاري إنشائي لتقارير هندسية"
-			style={`--StripBg:${Colors.Black};`}
-		/>
 
-		<VrStack>
 
-			<Price
-				pTitle={Text.H3.Centered.White.OfText("ختم مهندس استشاري لتقرير سلامة مبنى لترخيص محل تجاري أو ترخيص صيدلية")}
-				pPrice={"2000"}
-				pTitlePlace="top"
-				pPriceLabel="يبدأ من"
-			>
 
-				<VrStack>
 
-					<EmoBtn
-						pText="التفاصيل"
-						pWidth="120px"
-						pHeight="50px"
-						pRadius="0px"
-						pBgColor={Colors.BlackOff}
-						pBgColorHover={Colors.Gray4}
-						pTextColor={Colors.WhiteOff}
-						pFontSize="20px"
-						onclick="location.href='/emonsult/report/safety/'"
-					/>
 
-				</VrStack>
 
-			</Price>
+	<ESec id="secElecCost">
 
-			<Price
-				pTitle={Text.H3.Centered.White.OfText("ختم مهندس استشاري لتقرير سلامة مبنى لترخيص تركيب مصعد")}
-				pPrice={"3000"}
-				pTitlePlace="top"
-				pPriceLabel="يبدأ من"
-			>
+		<SecTitle OrangeDark pTitle="تكلفة ختم مهندسي استشاري كهرباء" />
 
-				<VrStack>
+		<EmoStrip id="strDwg">
 
-					<EmoBtn
-						pText="التفاصيل"
-						pWidth="120px"
-						pHeight="50px"
-						pRadius="0px"
-						pBgColor={Colors.BlackOff}
-						pBgColorHover={Colors.Gray4}
-						pTextColor={Colors.WhiteOff}
-						pFontSize="20px"
-						onclick="location.href='/emonsult/report/elevator/'"
-					/>
+			<SecTitle OrangeLite pTitle="أولا : الرسومات الهندسية ( بدون ختم نقابة المهندسين )" />
 
-				</VrStack>
+			<VrStack pSize={new DirectSize(new NumPer("70%","95%"))}>
 
-			</Price>
+				<Price
+					pTitle={Text.H3.Centered.OfText("ختم مهندس استشاري كهرباء لرسومات إنذار حريق")}
+					pPrice={"1500"}
+					pTitlePlace="top"
+				>
 
-		</VrStack>
+				</Price>
+
+				<Price
+					pTitle={Text.H3.Centered.OfText("ختم مهندس استشاري كهرباء لرسومات لأغراض عامة")}
+					pPrice={"1500"}
+					pPriceLabel="تبدأ من"
+					pTitlePlace="top"
+				>
+
+					<Emograph pText={Text.Body.OfText("يتم تقديرها لكل حالة تبعًا لمحتوى الرسومات وعدد اللوحات")} />
+
+				</Price>
+
+			</VrStack>
+
+		</EmoStrip>
+
+		<EmoStrip id="strReport">
+
+			<SecTitle OrangeLite pTitle="ثانيا : التقارير الهندسية ( بدون ختم نقابة المهندسين )" />
+
+			<VrStack pSize={new DirectSize(new NumPer("70%","95%"))}>
+
+				<Price
+					pTitle={Text.H3.Centered.OfText("ختم مهندس استشاري كهرباء لترخيص حضانة أطفال")}
+					pPrice={"3000"}
+					pPriceLabel="يبدأ من"
+					pTitlePlace="top"
+				>
+
+					<EmoDet BlackOrange pHref="/emonsult/report/nursery" />
+
+				</Price>
+
+			</VrStack>
+
+		</EmoStrip>
 
 	</ESec>
+
+
+
+
+
+
 
 </BLayout>

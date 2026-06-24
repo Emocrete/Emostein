@@ -1,0 +1,382 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Colors, HoverColors, HoverImg, Place, type PlaceProps } from "@/TypesLib";
+
+export interface Props extends HTMLAttributes<"a">, PlaceProps {
+	/** نص زر التفاصيل. */
+	pText?: string;
+
+	/** رابط التفاصيل. يمكن استخدام href مباشرة كذلك. */
+	pHref?: string;
+
+	/** فتح الرابط في تبويب جديد مع rel آمن. */
+	pBlank?: boolean;
+
+	/** Presets سريعة للألوان. */
+	Black?: boolean;
+	BlackOrange?: boolean;
+	BlackSky?: boolean;
+	Sky?: boolean;
+	Bistage?: boolean;
+	Gold?: boolean;
+	Green?: boolean;
+	Ghost?: boolean;
+	Light?: boolean;
+
+	/** صور الأيقونة في الحالات الثلاث: Normal / Hover / Click. */
+	pIconImgs?: HoverImg;
+
+	/** مكان الأيقونة داخل الزر. */
+	pIconPos?: "right" | "left" | "top" | "bottom";
+
+	pWidth?: string;
+	pHeight?: string;
+	pRadius?: string;
+
+	/** ألوان خلفية الزر في الحالات الثلاث: Normal / Hover / Click. */
+	pBgColors?: HoverColors;
+
+	/** صور خلفية الزر في الحالات الثلاث: Normal / Hover / Click. */
+	pBgImgs?: HoverImg;
+
+	/** ألوان عنوان الزر في الحالات الثلاث: Normal / Hover / Click. */
+	pTitleColors?: HoverColors;
+
+	pFontSize?: string;
+}
+
+const {
+	pText,
+	pHref,
+	pBlank = false,
+	Black = false,
+	BlackOrange = false,
+	BlackSky = false,
+	Sky = false,
+	Bistage = false,
+	Gold = false,
+	Green = false,
+	Ghost = false,
+	Light = false,
+	pIconImgs,
+	pIconPos = "right",
+
+	pWidth = "170px",
+	pHeight = "48px",
+	pRadius = "999px",
+
+	pBgColors,
+	pBgImgs,
+
+	pTitleColors,
+	pFontSize = "18px",
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+
+	href: pHrefAttr,
+	target: pTargetAttr,
+	rel: pRelAttr,
+	id: pId = GetWidgetId("EmoDet"),
+	class: pClass = "",
+	style: pStyle = "",
+	...cAttrs
+} = Astro.props as Props;
+
+const cDetPresets = {
+	BlackOrange: {
+		BgColors: new HoverColors(Colors.Black, Colors.OrangeDark),
+		TitleColors: new HoverColors("#ffffff"),
+	},
+	BlackSky: {
+		BgColors: new HoverColors(Colors.Black, Colors.Sky),
+		TitleColors: new HoverColors("#ffffff", Colors.BlackOff),
+	},
+	Sky: {
+		BgColors: HoverColors.Sky,
+		TitleColors: new HoverColors(Colors.BlackOff),
+	},
+	Bistage: {
+		BgColors: HoverColors.Bistage,
+		TitleColors: new HoverColors(Colors.BlackOff),
+	},
+	Gold: {
+		BgColors: new HoverColors("#D4AF37", "#F4D66A"),
+		TitleColors: new HoverColors("#07111F"),
+	},
+	Green: {
+		BgColors: new HoverColors("#1f3d34", "#284f44"),
+		TitleColors: new HoverColors("#ffffff"),
+	},
+	Ghost: {
+		BgColors: new HoverColors("rgba(255,255,255,.10)", "rgba(255,255,255,.18)"),
+		TitleColors: new HoverColors("#ffffff"),
+	},
+	Light: {
+		BgColors: new HoverColors(Colors.WhiteOff, Colors.Gray1),
+		TitleColors: new HoverColors(Colors.BlackOff),
+	},
+};
+
+const cPreset = GetPreset();
+const cText = pText ?? "التفاصيل";
+const cHref = pHref ?? pHrefAttr ?? "#";
+const cTarget = pBlank ? "_blank" : pTargetAttr;
+const cRel = pRelAttr ?? (cTarget === "_blank" ? "noopener noreferrer" : undefined);
+const cLayoutClass = GetLayoutClass(pIconPos);
+const cIconSize = `calc(${pHeight} - 5px)`;
+
+const cBgColors = pBgColors ?? cPreset?.BgColors ?? cDetPresets.BlackSky.BgColors;
+const cTitleColors = pTitleColors ?? cPreset?.TitleColors ?? cDetPresets.BlackSky.TitleColors;
+const cIconImgs = pIconImgs ?? new HoverImg("");
+const cBgImgs = pBgImgs ?? new HoverImg("");
+
+const cBgImgNormal = BuildCssUrl(cBgImgs.Normal);
+const cBgImgHover = BuildCssUrl(cBgImgs.Hover);
+const cBgImgActive = BuildCssUrl(cBgImgs.Click);
+
+const cIconNormal = BuildCssUrl(cIconImgs.Normal);
+const cIconHover = BuildCssUrl(cIconImgs.Hover);
+const cIconActive = BuildCssUrl(cIconImgs.Click);
+
+const cHasIcon = Boolean(cIconImgs.Normal);
+
+const cStyle = [
+	`--Width:${pWidth};`,
+	`--Height:${pHeight};`,
+	`--Radius:${pRadius};`,
+
+	`--BgClr:${cBgColors.Normal};`,
+	`--BgClr-hover:${cBgColors.Hover};`,
+	`--BgClr-active:${cBgColors.Click};`,
+
+	`--BgImg:${cBgImgNormal};`,
+	`--BgImg-hover:${cBgImgHover};`,
+	`--BgImg-active:${cBgImgActive};`,
+
+	`--TitleCrl:${cTitleColors.Normal};`,
+	`--TitleCrl-hover:${cTitleColors.Hover};`,
+	`--TitleCrl-active:${cTitleColors.Click};`,
+	`--TitleSize:${pFontSize};`,
+
+	`--btn-icon-size:${cIconSize};`,
+	`--IconNormal:${cIconNormal};`,
+	`--btn-icon-hover:${cIconHover};`,
+	`--btn-icon-active:${cIconActive};`,
+
+	GetStyleText(pStyle),
+].filter(Boolean).join("\n");
+
+const cPlace = new Place({
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+}, cStyle);
+
+function GetPreset() {
+	if (Black || BlackOrange) return cDetPresets.BlackOrange;
+	if (BlackSky) return cDetPresets.BlackSky;
+	if (Sky) return cDetPresets.Sky;
+	if (Bistage) return cDetPresets.Bistage;
+	if (Gold) return cDetPresets.Gold;
+	if (Green) return cDetPresets.Green;
+	if (Ghost) return cDetPresets.Ghost;
+	if (Light) return cDetPresets.Light;
+	return undefined;
+}
+
+function BuildCssUrl(pValue?: string) {
+	return pValue ? `url("${pValue}")` : "none";
+}
+
+function GetLayoutClass(pValue: "right" | "left" | "top" | "bottom") {
+	if (pValue === "left") return "isIconLeft";
+	if (pValue === "top") return "isIconTop";
+	if (pValue === "bottom") return "isIconBottom";
+	return "isIconRight";
+}
+
+function GetStyleText(pStyle: Props["style"]) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+
+	return Object.entries(pStyle)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+<a
+	class = {`DetBtn ${cLayoutClass} ${cHasIcon ? "hasIcon" : "noIcon"} ${cPlace.Class} ${pClass}`.trim()}
+	style = {cPlace.Style}
+	id={pId}
+	href={cHref}
+	target={cTarget}
+	rel={cRel}
+	{...cAttrs}
+>
+
+	{ cHasIcon && (
+
+		<span class = " BtnIcon " />
+	) }
+
+	{ cText && (
+
+		<span class = " BtnText ">
+			{cText}
+		</span>
+	) }
+
+</a>
+
+<style>
+	.DetBtn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: var(--Width);
+		height: var(--Height);
+		min-height: var(--Height);
+		border-radius: var(--Radius);
+		background-color: var(--BgClr);
+		background-image: var(--BgImg);
+		background-repeat: no-repeat;
+		font-family: inherit;
+		cursor: pointer;
+		position: relative;
+		appearance: none;
+		border: 0;
+		text-decoration: none;
+		box-sizing: border-box;
+		transition: background-color 0.1s ease,
+			border-color 0.1s ease,
+			box-shadow 0.1s ease,
+			color 0.1s ease,
+			transform 0.1s ease;
+	}
+
+	.DetBtn:hover {
+		background-color: var(--BgClr-hover);
+		background-image: var(--BgImg-hover);
+		color: var(--TitleCrl-hover);
+	}
+
+	.DetBtn:active {
+		background-color: var(--BgClr-active);
+		background-image: var(--BgImg-active);
+		color: var(--TitleCrl-active);
+		transform: scale(0.985);
+	}
+
+	.DetBtn:hover .BtnIcon {
+		background-image: var(--btn-icon-hover);
+	}
+
+	.DetBtn:active .BtnIcon {
+		background-image: var(--btn-icon-active);
+	}
+
+	.BtnIcon {
+		flex: 0 0 auto;
+		width: var(--btn-icon-size);
+		height: var(--btn-icon-size);
+		background-image: var(--IconNormal);
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
+
+	.BtnText {
+		display: block;
+		line-height: 1.2;
+		white-space: nowrap;
+		color: var(--TitleCrl);
+		font-size: var(--TitleSize);
+		font-weight: 800;
+		text-decoration: none;
+	}
+
+	.DetBtn.IsPlaced {
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+		min-height: var(--PlaceHeightL);
+	}
+
+	.DetBtn.isIconLeft {
+		flex-direction: row-reverse;
+	}
+
+	.DetBtn.isIconTop {
+		flex-direction: column;
+	}
+
+	.DetBtn.isIconBottom {
+		flex-direction: column-reverse;
+	}
+
+	.DetBtn.hasIcon.isIconRight .BtnIcon {
+		right: 20px;
+	}
+
+	.DetBtn.hasIcon.isIconRight .BtnText {
+		margin-right: calc(15px + var(--btn-icon-size) + 8px);
+		padding-left: 15px;
+	}
+
+	.DetBtn.hasIcon.isIconLeft .BtnIcon {
+		left: 20px;
+	}
+
+	.DetBtn.hasIcon.isIconLeft .BtnText {
+		padding-left: calc(15px + var(--btn-icon-size) + 8px);
+		padding-right: 15px;
+	}
+
+	.DetBtn.hasIcon.isIconRight .BtnIcon,
+	.DetBtn.hasIcon.isIconLeft .BtnIcon {
+		position: absolute;
+	}
+
+	.DetBtn.hasIcon.isIconTop,
+	.DetBtn.hasIcon.isIconBottom {
+		gap: 5px;
+	}
+
+	.DetBtn.hasIcon.isIconTop .BtnText,
+	.DetBtn.hasIcon.isIconBottom .BtnText {
+		padding: 0;
+	}
+</style>
+
+<style>
+	@media (orientation: portrait) {
+		.DetBtn.IsPlaced {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+			min-height: var(--PlaceHeightP);
+		}
+	}
+</style>

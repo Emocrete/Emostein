@@ -1000,7 +1000,7 @@ export class Schema {
 	private static Stringify( pSchema: SchemaObject ) : string
 		{
 
-			return JSON.stringify(pSchema, null, 0);
+			return `\n${JSON.stringify(pSchema, null, "\t")}\n`;
 
 		}
 }
