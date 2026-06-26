@@ -77,7 +77,12 @@ function MapEvent(pRow) {
 	const DurationMs = Pick(Payload, "durationMs", "duration_ms");
 	const AwayReason = Str(Pick(Payload, "awayReason", "away_reason"));
 	const ReplayUrl = Str(Pick(Payload, "replayUrl", "replay_url", "sessionReplayUrl", "session_replay_url"));
-	const ClarityUrl = Str(Pick(Payload, "clarityRecordingUrl", "clarity_recording_url", "clarityUrl", "clarity_url"));
+	const ClarityUrl = Str(Pick(Payload, "clarityRecordingUrl", "clarity_recording_url", "clarityPlaybackUrl", "clarity_playback_url", "clarityUrl", "clarity_url"));
+	const ClarityProjectId = Str(Pick(Payload, "clarityProjectId", "clarity_project_id"));
+	const ClarityUserId = Str(Pick(Payload, "clarityUserId", "clarity_user_id"));
+	const ClaritySessionId = Str(Pick(Payload, "claritySessionId", "clarity_session_id"));
+	const ClarityAvailableAfter = Str(Pick(Payload, "clarityAvailableAfter", "clarity_available_after"));
+	const ClarityStatus = Str(Pick(Payload, "clarityStatus", "clarity_status"));
 	const VideoUrl = ReplayUrl || ClarityUrl || Str(Pick(Payload, "videoUrl", "video_url", "sessionVideoUrl", "session_video_url", "sessionRecordingUrl", "session_recording_url", "recordingUrl", "recording_url", "recordUrl", "record_url"));
 	const ControlCommand = Str(Pick(Payload, "controlCommand", "control_command", "opsCommand", "ops_command"));
 	const TargetVisitorId = Str(Pick(Payload, "targetVisitorId", "target_visitor_id", "deletedVisitorId", "deleted_visitor_id"));
@@ -125,6 +130,20 @@ function MapEvent(pRow) {
 		replayUrl: ReplayUrl,
 		clarity_url: ClarityUrl,
 		clarityUrl: ClarityUrl,
+		clarity_recording_url: ClarityUrl,
+		clarityRecordingUrl: ClarityUrl,
+		clarity_playback_url: ClarityUrl,
+		clarityPlaybackUrl: ClarityUrl,
+		clarity_project_id: ClarityProjectId,
+		clarityProjectId: ClarityProjectId,
+		clarity_user_id: ClarityUserId,
+		clarityUserId: ClarityUserId,
+		clarity_session_id: ClaritySessionId,
+		claritySessionId: ClaritySessionId,
+		clarity_available_after: ClarityAvailableAfter,
+		clarityAvailableAfter: ClarityAvailableAfter,
+		clarity_status: ClarityStatus,
+		clarityStatus: ClarityStatus,
 		video_url: VideoUrl,
 		videoUrl: VideoUrl,
 		control_command: ControlCommand,

@@ -58,6 +58,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	let fActiveReadState = null;
 	const cPagePingMs = 20000;
 	const cClarityProjectId = "426t10sg85";
+	const cClarityReadyDelayMs = 90 * 60 * 1000;
+	let fLastClarityLinkKey = "";
 	const cBotUserAgentPattern = /(bot|crawl|spider|slurp|googlebot|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb)/i;
 
 	function NewId(pPrefix) {
@@ -113,8 +115,69 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	return `/api/ops/replay?visitor_id=${VisitorId}&session_id=${SessionId}&page_instance_id=${PageInstanceId}`;
 	}
 
-	function GetClarityRecordingUrl() {
+	function GetCookieValue(pName) {
+	const Name = `${pName}=`;
+	const Parts = String(document.cookie || "").split(";");
+	for (const Part of Parts) {
+	const Text = Part.trim();
+	if (Text.startsWith(Name)) {
+	try {
+	return decodeURIComponent(Text.slice(Name.length));
+	} catch {
+	return Text.slice(Name.length);
+	}
+	}
+	}
 	return "";
+	}
+
+	function GetClarityCookieId(pCookieName) {
+	const Value = GetCookieValue(pCookieName);
+	if (!Value) return "";
+	return String(Value).split("|")[0].trim();
+	}
+
+	function GetClarityState() {
+	const ProjectId = cClarityProjectId.trim();
+	const UserId = GetClarityCookieId("_clck");
+	const SessionId = GetClarityCookieId("_clsk");
+	const HasIds = !!(ProjectId && UserId && SessionId);
+	const Url = HasIds ? `https://clarity.microsoft.com/player/${encodeURIComponent(ProjectId)}/${encodeURIComponent(UserId)}/${encodeURIComponent(SessionId)}` : "";
+	const AvailableAfter = HasIds ? new Date(cPageStartedAt + cClarityReadyDelayMs).toISOString() : "";
+	return { ProjectId, UserId, SessionId, Url, AvailableAfter, Status: HasIds ? "pending" : "missing_ids" };
+	}
+
+	function GetClarityRecordingUrl() {
+	return GetClarityState().Url;
+	}
+
+	function TrackClarityLink() {
+	if (!fPageOpenSent) return;
+	const State = GetClarityState();
+	if (!State.Url) return;
+	const Key = `${State.ProjectId}|${State.UserId}|${State.SessionId}`;
+	if (Key === fLastClarityLinkKey) return;
+	fLastClarityLinkKey = Key;
+	TrackOpsEvent("clarity_link", {
+	eventOn: "clarity",
+	widget: "Clarity",
+	label: "تم التقاط رابط تشغيل كلاريتي المباشر",
+	clarityUrl: State.Url,
+	clarityRecordingUrl: State.Url,
+	clarityProjectId: State.ProjectId,
+	clarityUserId: State.UserId,
+	claritySessionId: State.SessionId,
+	clarityAvailableAfter: State.AvailableAfter,
+	clarityStatus: State.Status,
+	notifyMobile: false,
+	sound: false
+	});
+	}
+
+	function ScheduleClarityLinkCapture() {
+	[1500, 5000, 15000, 30000, 60000].forEach((pDelay) => {
+	window.setTimeout(TrackClarityLink, pDelay);
+	});
 	}
 
 	function InitClarityIdentifiers() {
@@ -618,7 +681,13 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	durationMs: pOptions.durationMs ?? "",
 	awayReason: String(pOptions.awayReason || "").trim(),
 	replayUrl: String(pOptions.replayUrl || BuildReplayPath()).trim(),
-	clarityUrl: String(pOptions.clarityUrl || GetClarityRecordingUrl()).trim(),
+	clarityUrl: String(pOptions.clarityUrl || pOptions.clarityRecordingUrl || GetClarityRecordingUrl()).trim(),
+	clarityRecordingUrl: String(pOptions.clarityRecordingUrl || pOptions.clarityUrl || GetClarityRecordingUrl()).trim(),
+	clarityProjectId: String(pOptions.clarityProjectId || GetClarityState().ProjectId).trim(),
+	clarityUserId: String(pOptions.clarityUserId || GetClarityState().UserId).trim(),
+	claritySessionId: String(pOptions.claritySessionId || GetClarityState().SessionId).trim(),
+	clarityAvailableAfter: String(pOptions.clarityAvailableAfter || GetClarityState().AvailableAfter).trim(),
+	clarityStatus: String(pOptions.clarityStatus || GetClarityState().Status).trim(),
 	videoUrl: String(pOptions.videoUrl || pOptions.replayUrl || BuildReplayPath()).trim(),
 	recordingProvider: "emo_replay",
 	trafficKind: "human",
@@ -1099,6 +1168,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	InitFocusAwayEvents();
 	InitPageLiveEvents();
 	TrackPageOpen();
+	ScheduleClarityLinkCapture();
 	}
 
 	if (document.readyState === "loading") {
