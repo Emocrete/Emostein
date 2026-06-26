@@ -27,11 +27,6 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 
 <script is:inline>
 	(() => {
-	try {
-	const ReplayParams = new URLSearchParams(location.search);
-	if (ReplayParams.get("emoReplay") === "1" || ReplayParams.get("emo_replay") === "1") return;
-	} catch {}
-
 	const cVisitorKey = "emo_ops_visitor_id";
 	const cSessionKey = "emo_ops_session_id";
 	const cOncePrefix = "emo_ops_once_";
@@ -61,10 +56,6 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	let fReadTimer = 0;
 	let fLastReadTickAt = Date.now();
 	let fActiveReadState = null;
-	let fLastPointerClientX = "";
-	let fLastPointerClientY = "";
-	let fLastPointerPageX = "";
-	let fLastPointerPageY = "";
 	const cPagePingMs = 20000;
 	const cClarityProjectId = "426t10sg85";
 	const cClarityReadyDelayMs = 90 * 60 * 1000;
@@ -100,27 +91,6 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 
 	function GetPageElapsedMs() {
 	return Math.max(0, Date.now() - cPageStartedAt);
-	}
-
-	function GetScrollPercentNow() {
-	const Height = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight) - window.innerHeight;
-	return Height > 0 ? Math.max(0, Math.min(100, Math.round((window.scrollY / Height) * 100))) : 100;
-	}
-
-	function CapturePointer(pEvent) {
-	if (!pEvent) return;
-	const Point = pEvent.touches && pEvent.touches.length ? pEvent.touches[0] : pEvent.changedTouches && pEvent.changedTouches.length ? pEvent.changedTouches[0] : pEvent;
-	if (!Point) return;
-	fLastPointerClientX = Number.isFinite(Point.clientX) ? Math.round(Point.clientX) : "";
-	fLastPointerClientY = Number.isFinite(Point.clientY) ? Math.round(Point.clientY) : "";
-	fLastPointerPageX = Number.isFinite(Point.pageX) ? Math.round(Point.pageX) : "";
-	fLastPointerPageY = Number.isFinite(Point.pageY) ? Math.round(Point.pageY) : "";
-	}
-
-	function InitReplayPointerCapture() {
-	document.addEventListener("pointerdown", CapturePointer, true);
-	document.addEventListener("pointermove", CapturePointer, { capture: true, passive: true });
-	document.addEventListener("touchstart", CapturePointer, { capture: true, passive: true });
 	}
 
 	function BotSignal() {
@@ -679,6 +649,16 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	} catch {}
 	}
 
+	function GetPointerExtra(pEvent) {
+	if (!pEvent) return {};
+	return {
+	pointerClientX: Number.isFinite(pEvent.clientX) ? Math.round(pEvent.clientX) : "",
+	pointerClientY: Number.isFinite(pEvent.clientY) ? Math.round(pEvent.clientY) : "",
+	pointerPageX: Number.isFinite(pEvent.pageX) ? Math.round(pEvent.pageX) : "",
+	pointerPageY: Number.isFinite(pEvent.pageY) ? Math.round(pEvent.pageY) : ""
+	};
+	}
+
 	function TrackOpsEvent(pEventType, pOptions = {}) {
 	const EventType = String(pEventType || "").trim();
 	if (!EventType) return Promise.resolve({ ok: false, error: "Missing event type" });
@@ -697,15 +677,15 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	referrer: document.referrer || "",
 	screen: `${window.screen.width}x${window.screen.height}`,
 	viewport: `${window.innerWidth}x${window.innerHeight}`,
-	viewportWidth: window.innerWidth,
-	viewportHeight: window.innerHeight,
-	scrollX: Math.round(window.scrollX || 0),
-	scrollY: Math.round(window.scrollY || 0),
-	scrollPercent: GetScrollPercentNow(),
-	pointerClientX: fLastPointerClientX,
-	pointerClientY: fLastPointerClientY,
-	pointerPageX: fLastPointerPageX,
-	pointerPageY: fLastPointerPageY,
+	viewportWidth: window.innerWidth || document.documentElement.clientWidth || "",
+	viewportHeight: window.innerHeight || document.documentElement.clientHeight || "",
+	scrollX: Math.round(window.scrollX || window.pageXOffset || 0),
+	scrollY: Math.round(window.scrollY || window.pageYOffset || 0),
+	scrollPercent: GetScrollPercent(),
+	pointerClientX: pOptions.pointerClientX ?? "",
+	pointerClientY: pOptions.pointerClientY ?? "",
+	pointerPageX: pOptions.pointerPageX ?? "",
+	pointerPageY: pOptions.pointerPageY ?? "",
 	language: navigator.language || "",
 	timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
 	widget: String(pOptions.widget || "").trim(),
@@ -773,6 +753,10 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	label: Label,
 	value: Value,
 	href: Href,
+	pointerClientX: pExtra.pointerClientX ?? "",
+	pointerClientY: pExtra.pointerClientY ?? "",
+	pointerPageX: pExtra.pointerPageX ?? "",
+	pointerPageY: pExtra.pointerPageY ?? "",
 	important: Important,
 	notifyMobile: Notify,
 	sound: Sound
@@ -791,6 +775,10 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	label: Label,
 	value: pExtra.value ?? pElem.dataset?.opsValue ?? "",
 	href: pExtra.href ?? pElem.getAttribute?.("href") ?? "",
+	pointerClientX: pExtra.pointerClientX ?? "",
+	pointerClientY: pExtra.pointerClientY ?? "",
+	pointerPageX: pExtra.pointerPageX ?? "",
+	pointerPageY: pExtra.pointerPageY ?? "",
 	important: pExtra.important ?? pElem.dataset?.opsImportant,
 	notifyMobile: pExtra.notifyMobile ?? pElem.dataset?.opsNotify ?? pElem.dataset?.opsNotifyMobile,
 	sound: pExtra.sound ?? pElem.dataset?.opsSound
@@ -883,6 +871,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	document.addEventListener("click", (pEvent) => {
 	const Target = pEvent.target;
 	if (!(Target instanceof Element)) return;
+	const PointerExtra = GetPointerExtra(pEvent);
 
 	const Manual = Target.closest("[data-ops-event]");
 	if (Manual && (!Manual.dataset.opsOn || Manual.dataset.opsOn === "click")) return;
@@ -892,7 +881,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	TrackFromElement(RatingStar, "rating_click", "click", {
 	widget: "EmoRatingStrip",
 	label: BuildEventLabel(RatingStar, GetClosestWidget(RatingStar)),
-	value: RatingStar.dataset.starValue
+	value: RatingStar.dataset.starValue,
+	...PointerExtra
 	});
 	return;
 	}
@@ -901,20 +891,21 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	if (RatingSubmit) {
 	TrackFromElement(RatingSubmit, "rating_submit", "click", {
 	widget: "EmoRatingStrip",
-	label: BuildEventLabel(RatingSubmit, GetClosestWidget(RatingSubmit))
+	label: BuildEventLabel(RatingSubmit, GetClosestWidget(RatingSubmit)),
+	...PointerExtra
 	});
 	return;
 	}
 
 	const LeadSubmit = Target.closest("[data-lead-submit], [data-submit-btn]");
 	if (LeadSubmit) {
-	TrackFromElement(LeadSubmit, "lead_submit_click", "click");
+	TrackFromElement(LeadSubmit, "lead_submit_click", "click", PointerExtra);
 	return;
 	}
 
 	const ActionButton = Target.closest("button.Btn, [data-service-btn], [data-lead-btn], [data-action-btn]");
 	if (ActionButton) {
-	TrackFromElement(ActionButton, ActionButton.dataset.opsEvent || "button_click", "click");
+	TrackFromElement(ActionButton, ActionButton.dataset.opsEvent || "button_click", "click", PointerExtra);
 	return;
 	}
 
@@ -922,7 +913,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	if (GalleryItem) {
 	TrackFromElement(GalleryItem, "gallery_click", "click", {
 	widget: "EmoGallery",
-	value: GalleryItem.dataset.index || GalleryItem.dataset.galleryIndex || ""
+	value: GalleryItem.dataset.index || GalleryItem.dataset.galleryIndex || "",
+	...PointerExtra
 	});
 	return;
 	}
@@ -936,7 +928,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	const IsOpen = !FaqItem || FaqItem.open !== false;
 	TrackFromElementOnce(FaqItem || FaqSummary, IsOpen ? "faq_open" : "faq_click", IsOpen ? "toggle-open" : "click", Key, {
 	widget: "FaqItem",
-	label: BuildFaqLabel(FaqItem, FaqSummary)
+	label: BuildFaqLabel(FaqItem, FaqSummary),
+	...PointerExtra
 	});
 	}, 0);
 	return;
@@ -946,17 +939,17 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	if (Link) {
 	const EventType = GetLinkEvent(Link);
 	if (EventType) {
-	TrackFromElement(Link, EventType, "click", { href: Link.href });
+	TrackFromElement(Link, EventType, "click", { href: Link.href, ...PointerExtra });
 	return;
 	}
 
 	if (Link.closest(".ReadAlso, .ReadAlsoItem")) {
-	TrackFromElement(Link, "readalso_click", "click", { href: Link.href, widget: "ReadAlso" });
+	TrackFromElement(Link, "readalso_click", "click", { href: Link.href, widget: "ReadAlso", ...PointerExtra });
 	return;
 	}
 
 	if (Link.closest(".RelatedServices, .RelServiceItem")) {
-	TrackFromElement(Link, "related_service_click", "click", { href: Link.href, widget: "RelatedServices" });
+	TrackFromElement(Link, "related_service_click", "click", { href: Link.href, widget: "RelatedServices", ...PointerExtra });
 	return;
 	}
 	}
@@ -1068,8 +1061,9 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	widget: "Page",
 	label: `دخل نطاق ${CurrMark}% من الصفحة`,
 	value: CurrMark,
-	scrollPercent: CurrMark,
-	scrollY: Math.round(window.scrollY || 0),
+	scrollX: Math.round(window.scrollX || window.pageXOffset || 0),
+	scrollY: Math.round(window.scrollY || window.pageYOffset || 0),
+	scrollPercent: Percent,
 	durationMs: "",
 	awayReason: Direction
 	});
@@ -1201,7 +1195,6 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	InitViewObserver();
 	InitDeclarativeEvents();
 	InitToggleEvents();
-	InitReplayPointerCapture();
 	InitClickEvents();
 	InitFormEvents();
 	InitAutoViews();
