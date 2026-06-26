@@ -25,6 +25,27 @@ function Bool(pValue) {
 	return Value === "true" || Value === "1" || Value === "yes" || Value === "on" || Value === "important";
 }
 
+const cSyntheticUserAgentPattern = /(bot|crawl|spider|slurp|googlebot|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb)/i;
+
+function SyntheticTrafficReason(pRequest, pBody = {}) {
+	const UserAgent = Str(pRequest.headers.get("user-agent"));
+	const Purpose = Str(pRequest.headers.get("purpose") || pRequest.headers.get("sec-purpose") || pRequest.headers.get("x-purpose")).toLowerCase();
+	const Mode = Str(pRequest.headers.get("sec-fetch-mode")).toLowerCase();
+	const Dest = Str(pRequest.headers.get("sec-fetch-dest")).toLowerCase();
+	const BodySignal = Str(pBody.botSignal ?? pBody.bot_signal);
+	const TrafficKind = Str(pBody.trafficKind ?? pBody.traffic_kind).toLowerCase();
+	const Reasons = [];
+
+	if (!UserAgent) Reasons.push("empty_ua");
+	if (cSyntheticUserAgentPattern.test(UserAgent)) Reasons.push("ua_bot");
+	if (Purpose.includes("prefetch") || Purpose.includes("preview")) Reasons.push("prefetch");
+	if (Mode === "navigate" && Dest === "document" && Bool(pBody.synthetic)) Reasons.push("client_synthetic");
+	if (BodySignal) Reasons.push(`client_${BodySignal}`);
+	if (TrafficKind === "bot" || TrafficKind === "crawler" || TrafficKind === "synthetic") Reasons.push(`kind_${TrafficKind}`);
+
+	return Reasons.join(",");
+}
+
 
 const cArabCountryCodes = new Set([
 	"EG", "SA", "AE", "KW", "QA", "BH", "OM", "YE", "JO", "LB", "SY", "IQ", "PS", "MA", "DZ", "TN", "LY", "SD", "SO", "DJ", "KM", "MR"
@@ -146,6 +167,11 @@ export async function POST({ request }) {
 
 		const Body = await ReadBody(request);
 		if (!Body || typeof Body !== "object") return Json({ ok: false, error: "Invalid JSON body" }, 400);
+
+		const SyntheticReason = SyntheticTrafficReason(request, Body);
+		if (SyntheticReason) {
+			return Json({ ok: true, skipped: true, reason: "synthetic_traffic", syntheticReason: SyntheticReason });
+		}
 
 		const Geo = BuildGeo(request, Body);
 

@@ -27,6 +27,24 @@ function Bool(pValue) {
 	return Value === "true" || Value === "1" || Value === "yes" || Value === "on" || Value === "important";
 }
 
+const cSyntheticUserAgentPattern = /(bot|crawl|spider|slurp|googlebot|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb)/i;
+
+function SyntheticReasonFromRow(pRow, pPayload) {
+	const UserAgent = Str(Pick(pRow, "user_agent") || Pick(pPayload, "userAgent", "user_agent", "userAgentClient", "user_agent_client"));
+	const BodySignal = Str(Pick(pPayload, "botSignal", "bot_signal"));
+	const TrafficKind = Str(Pick(pPayload, "trafficKind", "traffic_kind")).toLowerCase();
+	const StoredSynthetic = Bool(Pick(pPayload, "isSynthetic", "is_synthetic", "synthetic"));
+	const Reasons = [];
+
+	if (!UserAgent) Reasons.push("empty_ua");
+	if (cSyntheticUserAgentPattern.test(UserAgent)) Reasons.push("ua_bot");
+	if (BodySignal) Reasons.push(`client_${BodySignal}`);
+	if (TrafficKind === "bot" || TrafficKind === "crawler" || TrafficKind === "synthetic") Reasons.push(`kind_${TrafficKind}`);
+	if (StoredSynthetic) Reasons.push("stored_synthetic");
+
+	return Reasons.join(",");
+}
+
 function PayloadOf(pRow) {
 	if (!pRow || pRow.payload === null || pRow.payload === undefined) return {};
 	if (typeof pRow.payload === "object") return pRow.payload;
@@ -65,6 +83,10 @@ function MapEvent(pRow) {
 	const LocationBand = Str(Pick(Payload, "locationBand", "location_band"));
 	const LocationLabel = Str(Pick(Payload, "locationLabel", "location_label"));
 	const LocationBorderColor = Str(Pick(Payload, "locationBorderColor", "location_border_color"));
+	const UserAgent = Str(Pick(pRow, "user_agent") || Pick(Payload, "userAgent", "user_agent", "userAgentClient", "user_agent_client"));
+	const SyntheticReason = SyntheticReasonFromRow(pRow, Payload);
+	const IsSynthetic = SyntheticReason !== "";
+	const TrafficKind = IsSynthetic ? "synthetic" : Str(Pick(Payload, "trafficKind", "traffic_kind") || "human");
 
 	return {
 		...pRow,
@@ -109,6 +131,14 @@ function MapEvent(pRow) {
 		locationLabel: LocationLabel,
 		location_border_color: LocationBorderColor,
 		locationBorderColor: LocationBorderColor,
+		user_agent: UserAgent,
+		userAgent: UserAgent,
+		is_synthetic: IsSynthetic,
+		isSynthetic: IsSynthetic,
+		traffic_kind: TrafficKind,
+		trafficKind: TrafficKind,
+		synthetic_reason: SyntheticReason,
+		syntheticReason: SyntheticReason,
 		important: Bool(Pick(Payload, "important")),
 		notify_mobile: Bool(Pick(Payload, "notifyMobile", "notify_mobile", "notify")),
 		notifyMobile: Bool(Pick(Payload, "notifyMobile", "notify_mobile", "notify")),

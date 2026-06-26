@@ -57,6 +57,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	let fLastReadTickAt = Date.now();
 	let fActiveReadState = null;
 	const cPagePingMs = 20000;
+	const cClarityProjectId = "426t10sg85";
+	const cBotUserAgentPattern = /(bot|crawl|spider|slurp|googlebot|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb)/i;
 
 	function NewId(pPrefix) {
 	const Rand = Math.random().toString(36).slice(2, 10);
@@ -87,6 +89,39 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 
 	function GetPageElapsedMs() {
 	return Math.max(0, Date.now() - cPageStartedAt);
+	}
+
+	function BotSignal() {
+	const UserAgent = String(navigator.userAgent || "");
+	const Reasons = [];
+	if (!UserAgent) Reasons.push("empty_ua");
+	if (cBotUserAgentPattern.test(UserAgent)) Reasons.push("ua_bot");
+	if (navigator.webdriver) Reasons.push("webdriver");
+	if (window.callPhantom || window._phantom || window.__nightmare) Reasons.push("headless_marker");
+	if (document.visibilityState === "prerender") Reasons.push("prerender");
+	return Reasons.join(",");
+	}
+
+	function IsSyntheticTraffic() {
+	return BotSignal() !== "";
+	}
+
+	function BuildClarityUrl() {
+	return `https://clarity.microsoft.com/projects/view/${cClarityProjectId}/dashboard?date=Last%203%20days`;
+	}
+
+	function InitClarityIdentifiers() {
+	try {
+	if (typeof window.clarity !== "function") return;
+	const VisitorId = GetVisitorId();
+	const SessionId = GetSessionId();
+	const PageInstanceId = GetPageInstanceId();
+	window.clarity("identify", VisitorId, SessionId, PageInstanceId, `EmoLive ${VisitorId}`);
+	window.clarity("set", "emo_visitor_id", VisitorId);
+	window.clarity("set", "emo_session_id", SessionId);
+	window.clarity("set", "emo_page_instance_id", PageInstanceId);
+	window.clarity("set", "emo_page_path", location.pathname);
+	} catch {}
 	}
 
 	function CleanText(pText) {
@@ -547,6 +582,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	function TrackOpsEvent(pEventType, pOptions = {}) {
 	const EventType = String(pEventType || "").trim();
 	if (!EventType) return Promise.resolve({ ok: false, error: "Missing event type" });
+	if (IsSyntheticTraffic()) return Promise.resolve({ ok: true, skipped: true, reason: "synthetic_traffic", signal: BotSignal() });
 	if (EventType !== "page_open" && !fPageOpenSent) return Promise.resolve({ ok: true, skipped: true, reason: "page_not_visible_yet" });
 
 	const Body = {
@@ -574,6 +610,11 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	sound: BoolValue(pOptions.sound),
 	durationMs: pOptions.durationMs ?? "",
 	awayReason: String(pOptions.awayReason || "").trim(),
+	videoUrl: String(pOptions.videoUrl || BuildClarityUrl()).trim(),
+	recordingProvider: "clarity",
+	trafficKind: "human",
+	botSignal: "",
+	userAgentClient: navigator.userAgent || "",
 	clientEventSeq: ++fSeq,
 	createdAtClient: new Date().toISOString()
 	};
@@ -1014,6 +1055,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 
 	function TrackPageOpen() {
 	if (fPageOpenSent) return;
+	if (IsSyntheticTraffic()) return;
 	if (document.hidden || document.visibilityState === "prerender") return;
 	fPageOpenSent = true;
 	TrackOpsEventOnce("page_open", "page_open", {
@@ -1027,9 +1069,11 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	function InitOps() {
+	if (IsSyntheticTraffic()) return;
 	GetVisitorId();
 	GetSessionId();
 	GetPageInstanceId();
+	InitClarityIdentifiers();
 
 	window.TrackOpsEvent = TrackOpsEvent;
 	window.TrackOpsEventOnce = TrackOpsEventOnce;
