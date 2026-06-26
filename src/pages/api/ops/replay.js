@@ -95,18 +95,30 @@ function CreatedAtMsOf(pRow, pPayload = null) {
 	return 0;
 }
 
+function ExplicitElapsedMsOf(pPayload) {
+	const ExplicitMs = Pick(pPayload, "elapsedMs", "elapsed_ms");
+	const ExplicitSec = Pick(pPayload, "elapsedSec", "elapsed_sec");
+	if (ExplicitMs !== "") return Math.max(0, Num(ExplicitMs));
+	if (ExplicitSec !== "") return Math.max(0, Num(ExplicitSec) * 1000);
+	return -1;
+}
+
 function EventElapsedMs(pRow, pPayload, pFirstCreatedAtMs) {
+	const PayloadElapsed = ExplicitElapsedMsOf(pPayload);
+	if (PayloadElapsed >= 0) return PayloadElapsed;
+
 	const CreatedAt = CreatedAtMsOf(pRow, pPayload);
 	if (CreatedAt > 0 && Number.isFinite(pFirstCreatedAtMs) && pFirstCreatedAtMs > 0) {
 		return Math.max(0, CreatedAt - pFirstCreatedAtMs);
 	}
 
-	const ExplicitMs = Pick(pPayload, "elapsedMs", "elapsed_ms");
-	const ExplicitSec = Pick(pPayload, "elapsedSec", "elapsed_sec");
-	let PayloadElapsed = 0;
-	if (ExplicitMs !== "") PayloadElapsed = Math.max(PayloadElapsed, Num(ExplicitMs));
-	if (ExplicitSec !== "") PayloadElapsed = Math.max(PayloadElapsed, Num(ExplicitSec) * 1000);
-	return Math.max(0, PayloadElapsed);
+	return 0;
+}
+
+function ExplicitDurationMsOf(pEvent) {
+	const DurationValue = Pick(pEvent, "durationMs", "duration_ms");
+	if (DurationValue === "") return 0;
+	return Math.max(0, Num(DurationValue));
 }
 
 function ScrollPercentOf(pEventType, pPayload) {
@@ -130,6 +142,9 @@ function EventTime(pRow) {
 function NormalizeReplayEvents(pReplayEvents) {
 	if (!pReplayEvents.length) return [];
 
+	let MaxDuration = 0;
+	for (const EventItem of pReplayEvents) MaxDuration = Math.max(MaxDuration, ExplicitDurationMsOf(EventItem));
+
 	let MaxElapsed = 0;
 	for (const EventItem of pReplayEvents) MaxElapsed = Math.max(MaxElapsed, Num(EventItem.elapsedMs));
 
@@ -147,10 +162,27 @@ function NormalizeReplayEvents(pReplayEvents) {
 	for (const EventItem of pReplayEvents) MaxElapsed = Math.max(MaxElapsed, Num(EventItem.elapsedMs));
 
 	if (MaxElapsed <= 0 && pReplayEvents.length > 1) {
-		for (let Index = 0; Index < pReplayEvents.length; Index++) pReplayEvents[Index].elapsedMs = Index * 2000;
+		for (let Index = 0; Index < pReplayEvents.length; Index++) pReplayEvents[Index].elapsedMs = Index * 1500;
+	}
+
+	if (MaxDuration > 0) {
+		for (const EventItem of pReplayEvents) {
+			if (Num(EventItem.elapsedMs) > MaxDuration) EventItem.elapsedMs = MaxDuration;
+		}
 	}
 
 	return pReplayEvents;
+}
+
+function ReplayDurationMsOf(pReplayEvents) {
+	let MaxElapsed = 0;
+	let MaxDuration = 0;
+	for (const EventItem of pReplayEvents) {
+		MaxElapsed = Math.max(MaxElapsed, Num(EventItem.elapsedMs));
+		MaxDuration = Math.max(MaxDuration, ExplicitDurationMsOf(EventItem));
+	}
+	if (MaxDuration > 0 && (MaxElapsed <= 0 || MaxElapsed > MaxDuration * 1.15)) return MaxDuration;
+	return Math.max(MaxElapsed, MaxDuration, pReplayEvents.length > 1 ? (pReplayEvents.length - 1) * 1500 : 1000);
 }
 
 function SafeReplayData(pEvents, pRequestUrl) {
@@ -253,8 +285,7 @@ function RenderReplay(pEvents, pSessionId, pPageInstanceId, pRequestUrl) {
 	const ReplayViewport = ReplayViewportOf(ReplayEvents);
 	const Meta = RequestMeta(pRequestUrl, pSessionId, pPageInstanceId, ReplayEvents);
 	const FirstPage = ReplayEvents.find((EventItem) => EventItem.pageUrl)?.pageUrl || new URL("/", pRequestUrl).origin;
-	const MaxEventMs = Math.max(0, ...ReplayEvents.map((EventItem) => Num(EventItem.elapsedMs)));
-	const DurationMs = Math.max(MaxEventMs, ReplayEvents.length > 1 && MaxEventMs <= 0 ? (ReplayEvents.length - 1) * 1500 : 1000);
+	const DurationMs = ReplayDurationMsOf(ReplayEvents);
 	const TimelineRows = ReplayEvents.map((EventItem, Index) => `<button class="timelineItem" type="button" data-index="${Index}"><span class="timelineNo">${Index + 1}</span><span class="timelineBody"><b>${EscapeHtml(EventItem.type)}</b><small>${EscapeHtml(EventItem.label)}</small><em>${EscapeHtml(EventItem.pagePath)}</em></span><strong>${Math.round(EventItem.elapsedMs / 1000)} ث</strong></button>`).join("\n");
 
 	return `<!doctype html>
@@ -413,7 +444,14 @@ function LoadPageIfNeeded(pEvent) {
 }
 
 function Escape(pText) {
-	return String(pText || "").replace(/[&<>"']/g, (pChar) => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[pChar] || pChar));
+	return String(pText || "").replace(/[&<>"']/g, (pChar) => {
+		if (pChar === "&") return "&amp;";
+		if (pChar === "<") return "&lt;";
+		if (pChar === ">") return "&gt;";
+		if (pChar === String.fromCharCode(34)) return "&quot;";
+		if (pChar === "'") return "&#39;";
+		return pChar;
+	});
 }
 
 function LastEventIndexAt(pMs) {
