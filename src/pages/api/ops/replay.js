@@ -205,6 +205,8 @@ function SafeReplayData(pEvents, pRequestUrl) {
 		PageUrl.searchParams.set("emoReplay", "1");
 		PageUrl.searchParams.set("emo_replay", "1");
 
+		const PageReplayUrl = ReplayProxyUrlOf(PageUrl.toString(), pRequestUrl);
+
 		return {
 			index: Index,
 			id: Num(Pick(EventRow, "id"), Index + 1),
@@ -213,7 +215,8 @@ function SafeReplayData(pEvents, pRequestUrl) {
 			eventOn: Str(Pick(Payload, "eventOn", "event_on")),
 			pagePath: PagePath,
 			pageTitle: PageTitleOf(EventRow, Payload),
-			pageUrl: PageUrl.toString(),
+			pageUrl: PageReplayUrl,
+			livePageUrl: PageUrl.toString(),
 			createdAtMs: CreatedAtMsOf(EventRow, Payload),
 			createdAtText: EventTime(EventRow),
 			elapsedMs: EventElapsedMs(EventRow, Payload, FirstCreatedAtMs),
@@ -235,6 +238,78 @@ function SafeReplayData(pEvents, pRequestUrl) {
 
 function JsonForHtml(pValue) {
 	return JSON.stringify(pValue).replace(/</g, "\\u003c").replace(/>/g, "\\u003e").replace(/&/g, "\\u0026");
+}
+
+function UrlPathOf(pValue) {
+	const Text = Str(pValue) || "/";
+	try {
+		const Parsed = new URL(Text, "https://emocrete.com");
+		return Parsed.pathname + Parsed.search + Parsed.hash;
+	} catch {
+		return Text.startsWith("/") ? Text : "/" + Text;
+	}
+}
+
+function ReplayProxyUrlOf(pPageUrl, pRequestUrl) {
+	const ReqUrl = new URL(pRequestUrl);
+	const ProxyUrl = new URL(ReqUrl.origin + ReqUrl.pathname);
+	ProxyUrl.searchParams.set("raw", "1");
+	ProxyUrl.searchParams.set("path", UrlPathOf(pPageUrl));
+	const Key = Str(ReqUrl.searchParams.get("key") || ReqUrl.searchParams.get("k"));
+	if (Key) ProxyUrl.searchParams.set("key", Key);
+	return ProxyUrl.toString();
+}
+
+function SanitizeReplayHtml(pHtml, pSourceUrl) {
+	let HtmlText = String(pHtml || "");
+	const SourceUrl = new URL(pSourceUrl);
+	const BaseHref = SourceUrl.href;
+
+	HtmlText = HtmlText.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, "");
+	HtmlText = HtmlText.replace(/<noscript\b[^>]*>[\s\S]*?<\/noscript\s*>/gi, "");
+	HtmlText = HtmlText.replace(/\s+on[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, "");
+	HtmlText = HtmlText.replace(/<base\b[^>]*>/gi, "");
+
+	const InjectHead = `
+<base href="${EscapeHtml(BaseHref)}">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<style>
+html,body{overscroll-behavior:none!important;}
+a,button,input,select,textarea,label,summary,[role="button"]{pointer-events:none!important;}
+*{scroll-behavior:auto!important;animation-play-state:paused!important;}
+</style>`;
+
+	if (/<head\b[^>]*>/i.test(HtmlText)) {
+		HtmlText = HtmlText.replace(/<head\b([^>]*)>/i, `<head$1>${InjectHead}`);
+	} else if (/<html\b[^>]*>/i.test(HtmlText)) {
+		HtmlText = HtmlText.replace(/<html\b([^>]*)>/i, `<html$1><head>${InjectHead}</head>`);
+	} else {
+		HtmlText = `<!doctype html><html><head>${InjectHead}</head><body>${HtmlText}</body></html>`;
+	}
+
+	return HtmlText;
+}
+
+async function RenderRawReplayPage(pRequest) {
+	if (!CheckOpsKey(pRequest)) return Html("Unauthorized", 401);
+	const ReqUrl = new URL(pRequest.url);
+	const Path = UrlPathOf(ReqUrl.searchParams.get("path") || "/");
+	const SourceUrl = new URL(Path, ReqUrl.origin);
+	SourceUrl.searchParams.set("emoReplay", "1");
+	SourceUrl.searchParams.set("emo_replay", "1");
+	SourceUrl.searchParams.set("emoNoAnalytics", "1");
+
+	const Res = await fetch(SourceUrl.toString(), {
+		headers: {
+			"user-agent": "EmoLiveReplay/1.0",
+			"accept": "text/html,application/xhtml+xml"
+		},
+		redirect: "follow"
+	});
+
+	const Text = await Res.text();
+	if (!Res.ok) return Html(EscapeHtml(Text), Res.status || 500);
+	return Html(SanitizeReplayHtml(Text, SourceUrl.toString()), 200);
 }
 
 function ReplayViewportOf(pReplayEvents) {
@@ -625,6 +700,9 @@ if (cEvents.length) Seek(0, false); else fEventText.textContent = "";
 
 export async function GET({ request }) {
 	try {
+		const ReqUrlForMode = new URL(request.url);
+		if (ReqUrlForMode.searchParams.get("raw") === "1") return await RenderRawReplayPage(request);
+
 		if (!CheckOpsKey(request)) return Html("Unauthorized", 401);
 
 		const SupabaseUrl = Env("SUPABASE_URL");
