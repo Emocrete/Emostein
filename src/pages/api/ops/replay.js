@@ -78,21 +78,24 @@ function EventLabel(pRow, pPayload) {
 	return Str(Pick(pPayload, "label", "event_label", "eventText") || PageTitleOf(pRow, pPayload));
 }
 
+function ParseDateMs(pValue) {
+	const Text = Str(pValue);
+	if (!Text) return 0;
+	const Parsed = Date.parse(Text);
+	return Number.isFinite(Parsed) ? Parsed : 0;
+}
+
+function ClientCreatedAtMsOf(pPayload) {
+	return ParseDateMs(Pick(pPayload, "createdAtClient", "created_at_client", "clientCreatedAt", "client_created_at"));
+}
+
+function ServerCreatedAtMsOf(pRow) {
+	return ParseDateMs(Pick(pRow, "created_at", "createdAt", "createdAtServer", "created_at_server"));
+}
+
 function CreatedAtMsOf(pRow, pPayload = null) {
 	const Payload = pPayload || PayloadOf(pRow);
-	const Candidates = [
-		Pick(pRow, "created_at", "createdAt", "createdAtServer", "created_at_server"),
-		Pick(Payload, "createdAtClient", "created_at_client", "createdAt", "created_at")
-	];
-
-	for (const Candidate of Candidates) {
-		const Text = Str(Candidate);
-		if (!Text) continue;
-		const Parsed = Date.parse(Text);
-		if (Number.isFinite(Parsed)) return Parsed;
-	}
-
-	return 0;
+	return ClientCreatedAtMsOf(Payload) || ServerCreatedAtMsOf(pRow);
 }
 
 function ExplicitElapsedMsOf(pPayload) {
@@ -104,13 +107,13 @@ function ExplicitElapsedMsOf(pPayload) {
 }
 
 function EventElapsedMs(pRow, pPayload, pFirstCreatedAtMs) {
-	const PayloadElapsed = ExplicitElapsedMsOf(pPayload);
-	if (PayloadElapsed >= 0) return PayloadElapsed;
-
 	const CreatedAt = CreatedAtMsOf(pRow, pPayload);
 	if (CreatedAt > 0 && Number.isFinite(pFirstCreatedAtMs) && pFirstCreatedAtMs > 0) {
 		return Math.max(0, CreatedAt - pFirstCreatedAtMs);
 	}
+
+	const PayloadElapsed = ExplicitElapsedMsOf(pPayload);
+	if (PayloadElapsed >= 0) return PayloadElapsed;
 
 	return 0;
 }
@@ -142,33 +145,33 @@ function EventTime(pRow) {
 function NormalizeReplayEvents(pReplayEvents) {
 	if (!pReplayEvents.length) return [];
 
-	let MaxDuration = 0;
-	for (const EventItem of pReplayEvents) MaxDuration = Math.max(MaxDuration, ExplicitDurationMsOf(EventItem));
+	pReplayEvents.sort((A, B) => {
+		const TimeA = Num(A.createdAtMs);
+		const TimeB = Num(B.createdAtMs);
+		return TimeA - TimeB || Num(A.id) - Num(B.id) || Num(A.index) - Num(B.index);
+	});
 
-	let MaxElapsed = 0;
-	for (const EventItem of pReplayEvents) MaxElapsed = Math.max(MaxElapsed, Num(EventItem.elapsedMs));
-
-	if (MaxElapsed <= 0 && pReplayEvents.length > 1) {
-		const CreatedValues = pReplayEvents.map((EventItem) => Num(EventItem.createdAtMs)).filter((Value) => Value > 0);
-		if (CreatedValues.length > 1) {
-			const FirstCreatedAt = Math.min(...CreatedValues);
-			for (const EventItem of pReplayEvents) {
-				if (Num(EventItem.createdAtMs) > 0) EventItem.elapsedMs = Math.max(0, Num(EventItem.createdAtMs) - FirstCreatedAt);
-			}
-		}
-	}
-
-	MaxElapsed = 0;
-	for (const EventItem of pReplayEvents) MaxElapsed = Math.max(MaxElapsed, Num(EventItem.elapsedMs));
-
-	if (MaxElapsed <= 0 && pReplayEvents.length > 1) {
-		for (let Index = 0; Index < pReplayEvents.length; Index++) pReplayEvents[Index].elapsedMs = Index * 1500;
-	}
-
-	if (MaxDuration > 0) {
+	const DateValues = pReplayEvents.map((EventItem) => Num(EventItem.createdAtMs)).filter((Value) => Value > 0);
+	if (DateValues.length >= 2) {
+		const FirstCreatedAt = Math.min(...DateValues);
 		for (const EventItem of pReplayEvents) {
-			if (Num(EventItem.elapsedMs) > MaxDuration) EventItem.elapsedMs = MaxDuration;
+			const CreatedAt = Num(EventItem.createdAtMs);
+			EventItem.elapsedMs = CreatedAt > 0 ? Math.max(0, CreatedAt - FirstCreatedAt) : 0;
 		}
+	} else {
+		let MaxElapsed = 0;
+		for (const EventItem of pReplayEvents) MaxElapsed = Math.max(MaxElapsed, Num(EventItem.elapsedMs));
+		if (MaxElapsed <= 0 && pReplayEvents.length > 1) {
+			for (let Index = 0; Index < pReplayEvents.length; Index++) pReplayEvents[Index].elapsedMs = Index * 1500;
+		}
+	}
+
+	let LastElapsed = -1;
+	for (const EventItem of pReplayEvents) {
+		let Elapsed = Math.max(0, Num(EventItem.elapsedMs));
+		if (Elapsed < LastElapsed) Elapsed = LastElapsed;
+		EventItem.elapsedMs = Elapsed;
+		LastElapsed = Elapsed;
 	}
 
 	return pReplayEvents;
@@ -176,13 +179,9 @@ function NormalizeReplayEvents(pReplayEvents) {
 
 function ReplayDurationMsOf(pReplayEvents) {
 	let MaxElapsed = 0;
-	let MaxDuration = 0;
-	for (const EventItem of pReplayEvents) {
-		MaxElapsed = Math.max(MaxElapsed, Num(EventItem.elapsedMs));
-		MaxDuration = Math.max(MaxDuration, ExplicitDurationMsOf(EventItem));
-	}
-	if (MaxDuration > 0 && (MaxElapsed <= 0 || MaxElapsed > MaxDuration * 1.15)) return MaxDuration;
-	return Math.max(MaxElapsed, MaxDuration, pReplayEvents.length > 1 ? (pReplayEvents.length - 1) * 1500 : 1000);
+	for (const EventItem of pReplayEvents) MaxElapsed = Math.max(MaxElapsed, Num(EventItem.elapsedMs));
+	if (MaxElapsed <= 0) return pReplayEvents.length > 1 ? (pReplayEvents.length - 1) * 1500 : 1000;
+	return Math.max(1000, Math.round(MaxElapsed));
 }
 
 function SafeReplayData(pEvents, pRequestUrl) {
@@ -260,23 +259,45 @@ function ReplayProxyUrlOf(pPageUrl, pRequestUrl) {
 	return ProxyUrl.toString();
 }
 
+function ShouldStripScript(pScriptTag) {
+	const Text = String(pScriptTag || "").toLowerCase();
+	return Text.includes("googletagmanager.com")
+		|| Text.includes("google-analytics.com")
+		|| Text.includes("/gtag/js")
+		|| Text.includes("gtag(")
+		|| Text.includes("dataLayer")
+		|| Text.includes("clarity.ms")
+		|| Text.includes("clarity(")
+		|| Text.includes("/api/ops/visit")
+		|| Text.includes("opsvisittracker")
+		|| Text.includes("emo_ops_");
+}
+
 function SanitizeReplayHtml(pHtml, pSourceUrl) {
 	let HtmlText = String(pHtml || "");
 	const SourceUrl = new URL(pSourceUrl);
 	const BaseHref = SourceUrl.href;
 
-	HtmlText = HtmlText.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, "");
-	HtmlText = HtmlText.replace(/<noscript\b[^>]*>[\s\S]*?<\/noscript\s*>/gi, "");
-	HtmlText = HtmlText.replace(/\s+on[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, "");
+	HtmlText = HtmlText.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, (Match) => ShouldStripScript(Match) ? "" : Match);
+	HtmlText = HtmlText.replace(/<noscript\b[^>]*>[\s\S]*?<\/noscript\s*>/gi, (Match) => /googletagmanager|google-analytics|clarity|ops\/visit/i.test(Match) ? "" : Match);
 	HtmlText = HtmlText.replace(/<base\b[^>]*>/gi, "");
+	HtmlText = HtmlText.replace(/\s+ping\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, "");
 
 	const InjectHead = `
 <base href="${EscapeHtml(BaseHref)}">
 <meta name="robots" content="noindex,nofollow,noarchive">
+<script>
+window.__EMO_REPLAY__=true;
+window.__EMO_NO_ANALYTICS__=true;
+window.dataLayer=[];
+window.gtag=function(){};
+window.clarity=function(){};
+window.fbq=function(){};
+</script>
 <style>
 html,body{overscroll-behavior:none!important;}
 a,button,input,select,textarea,label,summary,[role="button"]{pointer-events:none!important;}
-*{scroll-behavior:auto!important;animation-play-state:paused!important;}
+*{scroll-behavior:auto!important;}
 </style>`;
 
 	if (/<head\b[^>]*>/i.test(HtmlText)) {
@@ -431,15 +452,24 @@ function ResizeDeviceFrame() {
 	const TopHeight = TopBar ? Math.ceil(TopBar.getBoundingClientRect().height) : 0;
 	const AvailableWidth = Math.max(1, window.innerWidth || document.documentElement.clientWidth || fViewport.clientWidth || 1);
 	const AvailableHeight = Math.max(1, AppHeight - TopHeight);
-	const WidthScale = AvailableWidth / Math.max(1, cReplayViewportWidth);
-	const HeightScale = AvailableHeight / Math.max(1, cReplayViewportHeight);
+	const SourceIsDesktopLandscape = cReplayViewportWidth >= 900 && cReplayViewportWidth > cReplayViewportHeight;
+	const ViewerIsPortraitMobile = AvailableWidth <= 700 && AvailableHeight > AvailableWidth;
+	const RotateForMobilePreview = SourceIsDesktopLandscape && ViewerIsPortraitMobile;
+	const FitWidth = RotateForMobilePreview ? cReplayViewportHeight : cReplayViewportWidth;
+	const FitHeight = RotateForMobilePreview ? cReplayViewportWidth : cReplayViewportHeight;
+	const WidthScale = AvailableWidth / Math.max(1, FitWidth);
+	const HeightScale = AvailableHeight / Math.max(1, FitHeight);
 	fScale = Math.min(WidthScale, HeightScale);
 	if (!Number.isFinite(fScale) || fScale <= 0) fScale = 1;
 	fDeviceFrame.style.width = cReplayViewportWidth + "px";
 	fDeviceFrame.style.height = cReplayViewportHeight + "px";
-	fDeviceFrame.style.left = Math.max(0, (AvailableWidth - cReplayViewportWidth * fScale) / 2) + "px";
-	fDeviceFrame.style.top = Math.max(0, (AvailableHeight - cReplayViewportHeight * fScale) / 2) + "px";
-	fDeviceFrame.style.transform = "scale(" + fScale + ")";
+	fDeviceFrame.style.left = Math.max(0, (AvailableWidth - FitWidth * fScale) / 2) + "px";
+	fDeviceFrame.style.top = Math.max(0, (AvailableHeight - FitHeight * fScale) / 2) + "px";
+	if (RotateForMobilePreview) {
+		fDeviceFrame.style.transform = "translateX(" + (cReplayViewportHeight * fScale) + "px) rotate(90deg) scale(" + fScale + ")";
+	} else {
+		fDeviceFrame.style.transform = "scale(" + fScale + ")";
+	}
 }
 
 function BlockInteraction(pEvent) {
