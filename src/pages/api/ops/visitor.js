@@ -23,7 +23,8 @@ function Str(pValue) {
 
 function CheckOpsKey(pRequest) {
 	const OpsKey = Env("OPS_API_KEY") || cDefaultOpsKey;
-	const GivenKey = Str(pRequest.headers.get("x-ops-key"));
+	const ReqUrl = new URL(pRequest.url);
+	const GivenKey = Str(pRequest.headers.get("x-ops-key") || ReqUrl.searchParams.get("key") || ReqUrl.searchParams.get("k"));
 	return GivenKey && GivenKey === OpsKey;
 }
 
@@ -32,6 +33,54 @@ async function ReadBody(pRequest) {
 		return await pRequest.json();
 	} catch {
 		return {};
+	}
+}
+
+async function InsertControlEvent(pSupabaseUrl, pServiceKey, pCommand, pPayload = {}) {
+	const Now = new Date().toISOString();
+	const Row = {
+		event_type: pCommand,
+		visitor_id: "__ops_system__",
+		session_id: "__ops_control__",
+		page_path: "",
+		page_title: pCommand,
+		referrer: "",
+		screen: "",
+		language: "",
+		timezone: "",
+		user_agent: "EmoLiveControl",
+		payload: {
+			...pPayload,
+			controlCommand: pCommand,
+			opsCommand: pCommand,
+			createdAtClient: Now,
+			notifyMobile: false,
+			sound: false,
+			trafficKind: "ops_control",
+			botSignal: "",
+			userAgentClient: "EmoLiveControl"
+		}
+	};
+
+	const Res = await fetch(`${pSupabaseUrl}/rest/v1/ops_events`, {
+		method: "POST",
+		headers: {
+			"apikey": pServiceKey,
+			"authorization": `Bearer ${pServiceKey}`,
+			"content-type": "application/json",
+			"prefer": "return=representation"
+		},
+		body: JSON.stringify(Row)
+	});
+
+	const Text = await Res.text();
+	if (!Res.ok) throw new Error(Text || "Failed to insert control event");
+
+	try {
+		const Data = JSON.parse(Text);
+		return Array.isArray(Data) && Data.length ? Data[0] : null;
+	} catch {
+		return null;
 	}
 }
 
@@ -71,7 +120,12 @@ async function DeleteVisitor(pRequest) {
 	const Text = await Res.text();
 	if (!Res.ok) return Json({ ok: false, error: Text }, 500);
 
-	return Json({ ok: true, deleted: true, visitorId: VisitorId });
+	const ControlRow = await InsertControlEvent(SupabaseUrl, ServiceKey, "ops_delete_visitor", {
+		targetVisitorId: VisitorId,
+		deletedAt: new Date().toISOString()
+	});
+
+	return Json({ ok: true, deleted: true, visitorId: VisitorId, controlId: ControlRow?.id ?? 0 });
 }
 
 export async function OPTIONS() {

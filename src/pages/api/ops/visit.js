@@ -175,6 +175,9 @@ export async function POST({ request }) {
 
 		const Geo = BuildGeo(request, Body);
 
+		const ReplayUrl = Str(Body.replayUrl ?? Body.replay_url);
+		const ClarityUrl = Str(Body.clarityRecordingUrl ?? Body.clarity_recording_url ?? Body.clarityUrl ?? Body.clarity_url);
+
 		const Payload = {
 			...Body,
 			eventType: NormalizeEventType(Body),
@@ -194,7 +197,13 @@ export async function POST({ request }) {
 			locationCity: Geo.city,
 			locationBand: Geo.locationBand,
 			locationLabel: Geo.locationLabel,
-			locationBorderColor: Geo.locationBorderColor
+			locationBorderColor: Geo.locationBorderColor,
+			replayUrl: ReplayUrl,
+			replay_url: ReplayUrl,
+			clarityUrl: ClarityUrl,
+			clarity_url: ClarityUrl,
+			videoUrl: ReplayUrl || ClarityUrl || Str(Body.videoUrl ?? Body.video_url),
+			recordingProvider: Str(Body.recordingProvider ?? Body.recording_provider)
 		};
 
 		const Row = {

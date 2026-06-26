@@ -76,7 +76,11 @@ function MapEvent(pRow) {
 
 	const DurationMs = Pick(Payload, "durationMs", "duration_ms");
 	const AwayReason = Str(Pick(Payload, "awayReason", "away_reason"));
-	const VideoUrl = Str(Pick(Payload, "videoUrl", "video_url", "sessionVideoUrl", "session_video_url", "sessionRecordingUrl", "session_recording_url", "recordingUrl", "recording_url", "recordUrl", "record_url", "replayUrl", "replay_url", "clarityUrl", "clarity_url"));
+	const ReplayUrl = Str(Pick(Payload, "replayUrl", "replay_url", "sessionReplayUrl", "session_replay_url"));
+	const ClarityUrl = Str(Pick(Payload, "clarityRecordingUrl", "clarity_recording_url", "clarityUrl", "clarity_url"));
+	const VideoUrl = ReplayUrl || ClarityUrl || Str(Pick(Payload, "videoUrl", "video_url", "sessionVideoUrl", "session_video_url", "sessionRecordingUrl", "session_recording_url", "recordingUrl", "recording_url", "recordUrl", "record_url"));
+	const ControlCommand = Str(Pick(Payload, "controlCommand", "control_command", "opsCommand", "ops_command"));
+	const TargetVisitorId = Str(Pick(Payload, "targetVisitorId", "target_visitor_id", "deletedVisitorId", "deleted_visitor_id"));
 	const LocationCountryCode = Str(Pick(Payload, "locationCountryCode", "location_country_code"));
 	const LocationRegion = Str(Pick(Payload, "locationRegion", "location_region"));
 	const LocationCity = Str(Pick(Payload, "locationCity", "location_city"));
@@ -117,8 +121,16 @@ function MapEvent(pRow) {
 		durationMs: DurationMs,
 		away_reason: AwayReason,
 		awayReason: AwayReason,
+		replay_url: ReplayUrl,
+		replayUrl: ReplayUrl,
+		clarity_url: ClarityUrl,
+		clarityUrl: ClarityUrl,
 		video_url: VideoUrl,
 		videoUrl: VideoUrl,
+		control_command: ControlCommand,
+		controlCommand: ControlCommand,
+		target_visitor_id: TargetVisitorId,
+		targetVisitorId: TargetVisitorId,
 		location_country_code: LocationCountryCode,
 		locationCountryCode: LocationCountryCode,
 		location_region: LocationRegion,

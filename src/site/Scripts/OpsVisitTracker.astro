@@ -106,8 +106,15 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	return BotSignal() !== "";
 	}
 
-	function BuildClarityUrl() {
-	return `https://clarity.microsoft.com/projects/view/${cClarityProjectId}/dashboard?date=Last%203%20days`;
+	function BuildReplayPath() {
+	const VisitorId = encodeURIComponent(GetVisitorId());
+	const SessionId = encodeURIComponent(GetSessionId());
+	const PageInstanceId = encodeURIComponent(GetPageInstanceId());
+	return `/api/ops/replay?visitor_id=${VisitorId}&session_id=${SessionId}&page_instance_id=${PageInstanceId}`;
+	}
+
+	function GetClarityRecordingUrl() {
+	return "";
 	}
 
 	function InitClarityIdentifiers() {
@@ -610,8 +617,10 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	sound: BoolValue(pOptions.sound),
 	durationMs: pOptions.durationMs ?? "",
 	awayReason: String(pOptions.awayReason || "").trim(),
-	videoUrl: String(pOptions.videoUrl || BuildClarityUrl()).trim(),
-	recordingProvider: "clarity",
+	replayUrl: String(pOptions.replayUrl || BuildReplayPath()).trim(),
+	clarityUrl: String(pOptions.clarityUrl || GetClarityRecordingUrl()).trim(),
+	videoUrl: String(pOptions.videoUrl || pOptions.replayUrl || BuildReplayPath()).trim(),
+	recordingProvider: "emo_replay",
 	trafficKind: "human",
 	botSignal: "",
 	userAgentClient: navigator.userAgent || "",
