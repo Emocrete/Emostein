@@ -228,7 +228,9 @@ function SafeReplayData(pEvents, pRequestUrl) {
 			pointerClientX: Pick(Payload, "pointerClientX", "pointer_client_x"),
 			pointerClientY: Pick(Payload, "pointerClientY", "pointer_client_y"),
 			href: Str(Pick(Payload, "href")),
-			value: Pick(Payload, "value")
+			value: Pick(Payload, "value"),
+			targetSelector: Str(Pick(Payload, "targetSelector", "target_selector")),
+			targetText: Str(Pick(Payload, "targetText", "target_text"))
 		};
 	});
 
@@ -296,7 +298,6 @@ window.fbq=function(){};
 </script>
 <style>
 html,body{overscroll-behavior:none!important;}
-a,button,input,select,textarea,label,summary,[role="button"]{pointer-events:none!important;}
 *{scroll-behavior:auto!important;}
 </style>`;
 
@@ -393,7 +394,7 @@ function RenderReplay(pEvents, pSessionId, pPageInstanceId, pRequestUrl) {
 <title>EmoLive Replay</title>
 
 <style>
-:root{color-scheme:dark;--bg:#05080d;--panel:#0c131d;--line:#26384d;--text:#eef5ff;--muted:#a8b7c9;--blue:#2da5ff;--gold:#ffca4b;--red:#ff4b4b;--appH:100vh}*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;position:fixed;inset:0}body{background:#05080d;color:var(--text);font-family:system-ui,Tahoma,Arial,sans-serif;overscroll-behavior:none;touch-action:none;user-select:none}.shell{width:100vw;height:var(--appH);display:grid;grid-template-rows:auto 1fr;background:#05080d;overflow:hidden}.top{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:28px 5px;gap:3px 6px;align-items:center;padding:3px 6px;background:#0c131d;border-bottom:1px solid #233348;direction:ltr}.controls{display:flex;gap:4px;align-items:center}.iconBtn{width:28px;height:26px;border:1px solid #3b5670;background:#152235;color:var(--text);border-radius:8px;font-size:14px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;line-height:1}.iconBtn:hover{border-color:var(--blue)}.speed{height:26px;background:#101925;color:var(--text);border:1px solid #3b5670;border-radius:8px;padding:0 4px;font-weight:800;max-width:56px}.meta{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-align:center;font-size:11px;color:var(--muted);direction:ltr}.meta b{color:var(--text);font-size:11px}.meta a{color:#8fd0ff;text-decoration:none}.timeBox{color:var(--gold);font-weight:1000;min-width:46px;text-align:center;font-size:12px;direction:ltr}.progressRow{grid-column:1/4;height:5px}.progress{appearance:none;width:100%;height:4px;border-radius:999px;background:#233348;display:block;margin:0}.progress::-webkit-slider-thumb{appearance:none;width:13px;height:13px;border-radius:50%;background:var(--blue);cursor:pointer}.progress::-moz-range-thumb{width:13px;height:13px;border:0;border-radius:50%;background:var(--blue);cursor:pointer}.main{min-height:0;position:relative;overflow:hidden;background:#05080d}.timeline{display:none}.stageWrap{position:absolute;inset:0;overflow:hidden;background:#05080d;direction:ltr}.viewport{position:absolute;inset:0;overflow:hidden;background:#05080d}.deviceFrame{position:absolute;left:0;top:0;flex:none;width:${ReplayViewport.Width}px;height:${ReplayViewport.Height}px;transform-origin:top left;background:white;box-shadow:0 12px 60px #000d;border:1px solid #ffffff26;will-change:transform}.pageFrame{position:absolute;inset:0;width:100%;height:100%;border:0;background:white;pointer-events:none;overflow:hidden}.interactionBlock{position:absolute;inset:0;z-index:4;background:transparent;touch-action:none}.cursor{position:absolute;z-index:8;width:22px;height:22px;border:3px solid var(--red);border-radius:50%;pointer-events:none;display:none;transform:translate(-50%,-50%);box-shadow:0 0 0 8px #ff4b4b25}.cursor.pulse{animation:pulse .45s ease-out}.replayToast{position:absolute;z-index:12;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);min-width:96px;max-width:min(80vw,360px);padding:10px 18px;border-radius:999px;border:1px solid #ffffff3a;background:#05080ddf;color:#fff;font-weight:1000;font-size:20px;text-align:center;box-shadow:0 16px 50px #000b;opacity:0;pointer-events:none;transition:opacity .16s ease,transform .16s ease}.replayToast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}@keyframes pulse{from{box-shadow:0 0 0 4px #ff4b4b66}to{box-shadow:0 0 0 24px #ff4b4b00}}.srOnly{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}@media(max-width:650px){.top{grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:27px 5px;padding:3px 5px}.iconBtn{width:27px;height:25px}.speed{height:25px}.meta{font-size:10px}.meta b{font-size:10px}.timeBox{font-size:11px;min-width:40px}}
+:root{color-scheme:dark;--bg:#05080d;--panel:#0c131d;--line:#26384d;--text:#eef5ff;--muted:#a8b7c9;--blue:#2da5ff;--gold:#ffca4b;--red:#ff4b4b;--appH:100vh}*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;position:fixed;inset:0}body{background:#05080d;color:var(--text);font-family:system-ui,Tahoma,Arial,sans-serif;overscroll-behavior:none;touch-action:none;user-select:none}.shell{width:100vw;height:var(--appH);display:grid;grid-template-rows:auto 1fr;background:#05080d;overflow:hidden}.top{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:28px 5px;gap:3px 6px;align-items:center;padding:3px 6px;background:#0c131d;border-bottom:1px solid #233348;direction:ltr}.controls{display:flex;gap:4px;align-items:center}.iconBtn{width:28px;height:26px;border:1px solid #3b5670;background:#152235;color:var(--text);border-radius:8px;font-size:14px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;line-height:1}.iconBtn:hover{border-color:var(--blue)}.speed{height:26px;background:#101925;color:var(--text);border:1px solid #3b5670;border-radius:8px;padding:0 4px;font-weight:800;max-width:56px}.meta{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-align:center;font-size:11px;color:var(--muted);direction:ltr}.meta b{color:var(--text);font-size:11px}.meta a{color:#8fd0ff;text-decoration:none}.timeBox{color:var(--gold);font-weight:1000;min-width:46px;text-align:center;font-size:12px;direction:ltr}.progressRow{grid-column:1/4;height:7px;position:relative}.trackLayer{position:absolute;left:0;right:0;top:1px;height:5px;border-radius:999px;overflow:hidden;background:#233348;pointer-events:none}.trackSegment{position:absolute;top:0;height:100%;opacity:.9}.trackSegment.full{background:#16c784}.trackSegment.quick{background:#ff9f1a}.trackMarker{position:absolute;top:-12px;transform:translateX(-50%);font-size:13px;line-height:1;text-shadow:0 1px 4px #000}.progress{appearance:none;position:relative;z-index:2;background:transparent;width:100%;height:4px;border-radius:999px;background:#233348;display:block;margin:0}.progress::-webkit-slider-thumb{appearance:none;width:13px;height:13px;border-radius:50%;background:var(--blue);cursor:pointer}.progress::-moz-range-thumb{width:13px;height:13px;border:0;border-radius:50%;background:var(--blue);cursor:pointer}.main{min-height:0;position:relative;overflow:hidden;background:#05080d}.timeline{display:none}.stageWrap{position:absolute;inset:0;overflow:hidden;background:#05080d;direction:ltr}.viewport{position:absolute;inset:0;overflow:hidden;background:#05080d}.deviceFrame{position:absolute;left:0;top:0;flex:none;width:${ReplayViewport.Width}px;height:${ReplayViewport.Height}px;transform-origin:top left;background:white;box-shadow:0 12px 60px #000d;border:1px solid #ffffff26;will-change:transform}.pageFrame{position:absolute;inset:0;width:100%;height:100%;border:0;background:white;pointer-events:none;overflow:hidden}.interactionBlock{position:absolute;inset:0;z-index:4;background:transparent;touch-action:none}.cursor{position:absolute;z-index:8;width:22px;height:22px;border:3px solid var(--red);border-radius:50%;pointer-events:none;display:none;transform:translate(-50%,-50%);box-shadow:0 0 0 8px #ff4b4b25}.cursor.pulse{animation:pulse .45s ease-out}.replayToast{position:absolute;z-index:12;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);min-width:96px;max-width:min(80vw,360px);padding:10px 18px;border-radius:999px;border:1px solid #ffffff3a;background:#05080ddf;color:#fff;font-weight:1000;font-size:20px;text-align:center;box-shadow:0 16px 50px #000b;opacity:0;pointer-events:none;transition:opacity .16s ease,transform .16s ease}.replayToast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}@keyframes pulse{from{box-shadow:0 0 0 4px #ff4b4b66}to{box-shadow:0 0 0 24px #ff4b4b00}}.srOnly{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}@media(max-width:650px){.top{grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:27px 5px;padding:3px 5px}.iconBtn{width:27px;height:25px}.speed{height:25px}.meta{font-size:10px}.meta b{font-size:10px}.timeBox{font-size:11px;min-width:40px}}
 </style>
 </head>
 <body>
@@ -402,7 +403,7 @@ function RenderReplay(pEvents, pSessionId, pPageInstanceId, pRequestUrl) {
 		<div class="controls"><button id="restartBtn" class="iconBtn" type="button" title="من الأول">↺</button><button id="playBtn" class="iconBtn" type="button" title="تشغيل">▶</button><select id="speedSelect" class="speed"><option value="0.5">0.5x</option><option value="1" selected>1x</option><option value="2">2x</option><option value="4">4x</option><option value="8">8x</option></select></div>
 		<div class="meta"><b>${EscapeHtml(Meta.label)}</b> · ${EscapeHtml(Meta.firstPath)} · ${ReplayViewport.Width}×${ReplayViewport.Height} · <a href="${EscapeHtml(Meta.deepLink)}">فتح في التطبيق</a></div>
 		<div id="timeBox" class="timeBox">0 / ${Math.round(DurationMs / 1000)}ث</div>
-		<div class="progressRow"><input id="progress" class="progress" type="range" min="0" max="${Math.max(1000, Math.round(DurationMs))}" step="1" value="0" /></div>
+		<div class="progressRow"><div id="trackLayer" class="trackLayer"></div><input id="progress" class="progress" type="range" min="0" max="${Math.max(1000, Math.round(DurationMs))}" step="1" value="0" /></div>
 	</div>
 	<div class="main">
 		<section class="stageWrap"><div id="viewport" class="viewport"><div id="deviceFrame" class="deviceFrame"><iframe id="pageFrame" class="pageFrame" src="${EscapeHtml(FirstPage)}" width="${ReplayViewport.Width}" height="${ReplayViewport.Height}"></iframe><div id="interactionBlock" class="interactionBlock"></div></div></div><div id="cursor" class="cursor"></div><div id="replayToast" class="replayToast"></div><span id="eventBadge" class="srOnly"></span><span id="eventText" class="srOnly"></span></section>
@@ -427,6 +428,7 @@ const fEventBadge = document.getElementById("eventBadge");
 const fEventText = document.getElementById("eventText");
 const fCursor = document.getElementById("cursor");
 const fReplayToast = document.getElementById("replayToast");
+const fTrackLayer = document.getElementById("trackLayer");
 const fMaxMs = Math.max(1000, Number(cReplayDurationMs) || 1000);
 let fPlaying = false;
 let fStartedAt = 0;
@@ -438,6 +440,8 @@ let fCurrentPageUrl = fFrame.getAttribute("src") || "";
 let fPendingScroll = null;
 let fAnimationId = 0;
 let fScale = 1;
+let fScrollAnimationId = 0;
+let fLastFramePagePath = "";
 
 function ViewportHeight() {
 	const Visual = window.visualViewport;
@@ -507,13 +511,15 @@ function FrameDocument() {
 	try { return fFrame.contentDocument || (fFrame.contentWindow ? fFrame.contentWindow.document : null) || null; } catch { return null; }
 }
 
-function ScrollFrameToPosition(pEvent, pSmooth = true) {
+function CancelScrollAnimation() {
+	if (fScrollAnimationId) cancelAnimationFrame(fScrollAnimationId);
+	fScrollAnimationId = 0;
+}
+
+function TargetScrollFromEvent(pEvent) {
 	const Win = FrameWindow();
 	const Doc = FrameDocument();
-	if (!Win || !Doc || !Doc.documentElement) {
-		fPendingScroll = pEvent;
-		return;
-	}
+	if (!Win || !Doc || !Doc.documentElement) return null;
 	const Body = Doc.body;
 	const Root = Doc.documentElement;
 	const MaxTop = Math.max(0, Math.max(Root.scrollHeight || 0, Body ? Body.scrollHeight || 0 : 0) - Win.innerHeight);
@@ -528,28 +534,95 @@ function ScrollFrameToPosition(pEvent, pSmooth = true) {
 	if (!Number.isFinite(Left) || Left < 0) Left = 0;
 	Top = Math.max(0, Math.min(MaxTop, Top));
 	Left = Math.max(0, Math.min(MaxLeft, Left));
-	try { Win.scrollTo({ top: Top, left: Left, behavior: pSmooth ? "smooth" : "auto" }); } catch { Win.scrollTo(Left, Top); }
+	return { Win, Top, Left };
 }
 
-function ShowCursor(pEvent) {
+function ScrollFrameToPosition(pEvent, pSmooth = true) {
+	const Target = TargetScrollFromEvent(pEvent);
+	if (!Target) {
+		fPendingScroll = pEvent;
+		return;
+	}
+	CancelScrollAnimation();
+	const StartTop = Number(Target.Win.scrollY || Target.Win.pageYOffset || 0);
+	const StartLeft = Number(Target.Win.scrollX || Target.Win.pageXOffset || 0);
+	const DeltaTop = Target.Top - StartTop;
+	const DeltaLeft = Target.Left - StartLeft;
+	if (!pSmooth || (Math.abs(DeltaTop) < 2 && Math.abs(DeltaLeft) < 2)) {
+		Target.Win.scrollTo(Target.Left, Target.Top);
+		return;
+	}
+	const Duration = Math.max(260, Math.min(1350, Math.abs(DeltaTop) * 0.55));
+	const StartedAt = performance.now();
+	function Step(Now) {
+		const T = Math.max(0, Math.min(1, (Now - StartedAt) / Duration));
+		const Ease = T < .5 ? 2 * T * T : 1 - Math.pow(-2 * T + 2, 2) / 2;
+		Target.Win.scrollTo(StartLeft + DeltaLeft * Ease, StartTop + DeltaTop * Ease);
+		if (T < 1) fScrollAnimationId = requestAnimationFrame(Step);
+		else fScrollAnimationId = 0;
+	}
+	fScrollAnimationId = requestAnimationFrame(Step);
+}
+
+function MoveCursorTo(pEvent, pPulse = false) {
 	const X = Number(pEvent.pointerClientX);
 	const Y = Number(pEvent.pointerClientY);
 	if (!Number.isFinite(X) || !Number.isFinite(Y) || X <= 0 || Y <= 0) return;
 	const Rect = fDeviceFrame.getBoundingClientRect();
-	const ScaleX = Rect.width / Math.max(1, Number(pEvent.viewportWidth) || cReplayViewportWidth);
-	const ScaleY = Rect.height / Math.max(1, Number(pEvent.viewportHeight) || cReplayViewportHeight);
+	const BaseW = Number(pEvent.viewportWidth) || cReplayViewportWidth;
+	const BaseH = Number(pEvent.viewportHeight) || cReplayViewportHeight;
+	const ScaleX = Rect.width / Math.max(1, BaseW);
+	const ScaleY = Rect.height / Math.max(1, BaseH);
 	fCursor.style.left = (Rect.left + X * ScaleX) + "px";
 	fCursor.style.top = (Rect.top + Y * ScaleY) + "px";
 	fCursor.style.display = "block";
-	fCursor.classList.remove("pulse");
-	void fCursor.offsetWidth;
-	fCursor.classList.add("pulse");
+	if (pPulse) {
+		fCursor.classList.remove("pulse");
+		void fCursor.offsetWidth;
+		fCursor.classList.add("pulse");
+	}
+}
+
+function ShowCursor(pEvent) {
+	MoveCursorTo(pEvent, true);
+}
+
+function EventHasPointer(pEvent) {
+	return Number.isFinite(Number(pEvent && pEvent.pointerClientX)) && Number.isFinite(Number(pEvent && pEvent.pointerClientY));
+}
+
+function UpdateCursorForTime(pMs) {
+	let Prev = null;
+	let Next = null;
+	for (let Index = 0; Index < cEvents.length; Index++) {
+		const EventItem = cEvents[Index];
+		if (!EventHasPointer(EventItem)) continue;
+		const EventTime = Number(EventItem.elapsedMs) || 0;
+		if (EventTime <= pMs) Prev = EventItem;
+		else { Next = EventItem; break; }
+	}
+	if (!Prev && Next) return MoveCursorTo(Next, false);
+	if (Prev && !Next) return MoveCursorTo(Prev, false);
+	if (!Prev || !Next) return;
+	const PrevTime = Number(Prev.elapsedMs) || 0;
+	const NextTime = Number(Next.elapsedMs) || PrevTime + 1;
+	const Ratio = Math.max(0, Math.min(1, (pMs - PrevTime) / Math.max(1, NextTime - PrevTime)));
+	const Mixed = {
+		pointerClientX: Number(Prev.pointerClientX) + (Number(Next.pointerClientX) - Number(Prev.pointerClientX)) * Ratio,
+		pointerClientY: Number(Prev.pointerClientY) + (Number(Next.pointerClientY) - Number(Prev.pointerClientY)) * Ratio,
+		viewportWidth: Next.viewportWidth || Prev.viewportWidth,
+		viewportHeight: Next.viewportHeight || Prev.viewportHeight
+	};
+	MoveCursorTo(Mixed, false);
 }
 
 function LoadPageIfNeeded(pEvent) {
 	if (!pEvent || !pEvent.pageUrl || pEvent.pageUrl === fCurrentPageUrl) return false;
 	fCurrentPageUrl = pEvent.pageUrl;
 	fFrame.src = pEvent.pageUrl;
+	const PathText = String(pEvent.pageTitle || pEvent.pagePath || "صفحة جديدة");
+	ShowReplayToast("انتقال إلى " + PathText);
+	fLastFramePagePath = String(pEvent.pagePath || "");
 	return true;
 }
 
@@ -602,7 +675,7 @@ function ShowReplayToast(pText) {
 	if (fToastTimer) clearTimeout(fToastTimer);
 	fReplayToast.textContent = Text;
 	fReplayToast.classList.add("show");
-	fToastTimer = setTimeout(() => { fReplayToast.classList.remove("show"); }, 1000);
+	fToastTimer = setTimeout(() => { fReplayToast.classList.remove("show"); }, 2000);
 }
 
 function EventHasScroll(pEvent) {
@@ -613,6 +686,69 @@ function EventHasScroll(pEvent) {
 	return false;
 }
 
+function IsClickEvent(pEvent) {
+	const Type = String(pEvent && pEvent.type || "").toLowerCase();
+	const EventOn = String(pEvent && pEvent.eventOn || "").toLowerCase();
+	return EventOn === "click" || Type.includes("click") || Type.includes("faq_open");
+}
+
+function DispatchReplayClick(pEvent) {
+	if (!IsClickEvent(pEvent)) return;
+	const Win = FrameWindow();
+	const Doc = FrameDocument();
+	if (!Win || !Doc) return;
+	let Target = null;
+	const Selector = String(pEvent.targetSelector || "").trim();
+	if (Selector) {
+		try { Target = Doc.querySelector(Selector); } catch {}
+	}
+	if (!Target) {
+		const X = Number(pEvent.pointerClientX);
+		const Y = Number(pEvent.pointerClientY);
+		if (Number.isFinite(X) && Number.isFinite(Y)) Target = Doc.elementFromPoint(X, Y);
+	}
+	if (!Target) return;
+	try {
+		["pointerdown", "mousedown", "mouseup", "click"].forEach((Name) => {
+			Target.dispatchEvent(new Win.MouseEvent(Name, { bubbles: true, cancelable: true, view: Win, clientX: Number(pEvent.pointerClientX) || 0, clientY: Number(pEvent.pointerClientY) || 0 }));
+		});
+	} catch {}
+}
+
+function BuildTimelineLayer() {
+	if (!fTrackLayer) return;
+	fTrackLayer.innerHTML = "";
+	function AddSegment(StartMs, EndMs, ClassName) {
+		const Left = Math.max(0, Math.min(100, StartMs / fMaxMs * 100));
+		const Width = Math.max(.7, Math.min(100 - Left, (EndMs - StartMs) / fMaxMs * 100));
+		const Elem = document.createElement("span");
+		Elem.className = "trackSegment " + ClassName;
+		Elem.style.left = Left + "%";
+		Elem.style.width = Width + "%";
+		fTrackLayer.appendChild(Elem);
+	}
+	function AddMarker(TimeMs, Text, Title) {
+		const Elem = document.createElement("span");
+		Elem.className = "trackMarker";
+		Elem.textContent = Text;
+		Elem.title = Title || "";
+		Elem.style.left = Math.max(0, Math.min(100, TimeMs / fMaxMs * 100)) + "%";
+		fTrackLayer.appendChild(Elem);
+	}
+	let LastPage = "";
+	for (const EventItem of cEvents) {
+		const TimeMs = Number(EventItem.elapsedMs) || 0;
+		const Duration = Math.max(800, Number(EventItem.durationMs) || 1800);
+		const Type = String(EventItem.type || "").toLowerCase();
+		if (Type === "read_full") AddSegment(TimeMs, Math.min(fMaxMs, TimeMs + Duration), "full");
+		if (Type === "read_quick") AddSegment(TimeMs, Math.min(fMaxMs, TimeMs + Duration), "quick");
+		if (Type.includes("call") || String(EventItem.href || "").startsWith("tel:")) AddMarker(TimeMs, "☎", "كليك اتصال");
+		if (Type.includes("whatsapp") || String(EventItem.href || "").toLowerCase().includes("whatsapp") || String(EventItem.href || "").toLowerCase().includes("wa.me")) AddMarker(TimeMs, "🟢", "واتساب");
+		if (LastPage && EventItem.pagePath && EventItem.pagePath !== LastPage) AddMarker(TimeMs, "🚪", "انتقال صفحة");
+		if (EventItem.pagePath) LastPage = EventItem.pagePath;
+	}
+}
+
 function ApplyEvent(pEvent, pIndex, pSmooth = true) {
 	if (!pEvent) return;
 	const PageChanged = LoadPageIfNeeded(pEvent);
@@ -620,9 +756,10 @@ function ApplyEvent(pEvent, pIndex, pSmooth = true) {
 	fEventText.innerHTML = "<b>" + Escape(String(pEvent.type || "event")) + "</b><small>" + Escape(String(pEvent.label || "")) + "</small>";
 	if (EventHasScroll(pEvent)) {
 		if (PageChanged) fPendingScroll = pEvent;
-		else ScrollFrameToPosition(pEvent, false);
+		else ScrollFrameToPosition(pEvent, pSmooth);
 	}
 	ShowCursor(pEvent);
+	DispatchReplayClick(pEvent);
 	ShowReplayToast(ClickToastText(pEvent));
 }
 
@@ -664,7 +801,7 @@ function ApplyDueEvents(pTimeMs) {
 		const EventTime = Number(EventItem.elapsedMs) || 0;
 		if (EventTime > pTimeMs) break;
 		fAppliedIndex = fNextEventIndex;
-		ApplyEvent(EventItem, fNextEventIndex, false);
+		ApplyEvent(EventItem, fNextEventIndex, true);
 		fNextEventIndex++;
 	}
 }
@@ -675,6 +812,7 @@ function Tick(pNow) {
 	const TimeMs = Math.min(fMaxMs, fBaseMs + (pNow - fStartedAt) * Speed);
 	fProgress.value = String(Math.round(TimeMs));
 	UpdateTime(TimeMs);
+	UpdateCursorForTime(TimeMs);
 	ApplyDueEvents(TimeMs);
 	if (TimeMs >= fMaxMs) {
 		fPlaying = false;
@@ -720,8 +858,9 @@ fPlayBtn.addEventListener("click", Play);
 fRestartBtn.addEventListener("click", () => { fPlaying = false; fPlayBtn.textContent = "▶"; StopAnimation(); Seek(0, false); });
 fProgress.addEventListener("input", () => { fPlaying = false; fPlayBtn.textContent = "▶"; StopAnimation(); Seek(Number(fProgress.value) || 0, false); });
 document.addEventListener("visibilitychange", () => { if (!document.hidden) ResizeDeviceFrame(); });
+BuildTimelineLayer();
 UpdateTime(0);
-if (cEvents.length) Seek(0, false); else fEventText.textContent = "";
+if (cEvents.length) { Seek(0, false); setTimeout(Play, 550); } else fEventText.textContent = "";
 })();
 </script>
 </body>

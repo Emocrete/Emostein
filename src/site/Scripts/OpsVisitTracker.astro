@@ -52,6 +52,9 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	let fAwayStartedAt = 0;
 	let fAwayReason = "";
 	let fLastScrollMark = null;
+	let fLastScrollSampleAt = 0;
+	let fLastPointerSampleAt = 0;
+	let fScrollIdleTimer = 0;
 	let fPageExitSent = false;
 	let fPageOpenSent = false;
 	let fPagePingTimer = 0;
@@ -651,13 +654,38 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	} catch {}
 	}
 
+	function GetReplaySelector(pElem) {
+	if (!pElem || !(pElem instanceof Element)) return "";
+	if (pElem.id) return "#" + CSS.escape(pElem.id);
+	const Parts = [];
+	let Elem = pElem;
+	let Depth = 0;
+	while (Elem && Elem.nodeType === 1 && Elem !== document.body && Depth < 5) {
+	let Name = Elem.tagName.toLowerCase();
+	if (Elem.classList && Elem.classList.length) {
+	Name += "." + Array.from(Elem.classList).slice(0, 2).map((Item) => CSS.escape(Item)).join(".");
+	}
+	const Parent = Elem.parentElement;
+	if (Parent) {
+	const Siblings = Array.from(Parent.children).filter((Item) => Item.tagName === Elem.tagName);
+	if (Siblings.length > 1) Name += ":nth-of-type(" + (Siblings.indexOf(Elem) + 1) + ")";
+	}
+	Parts.unshift(Name);
+	Elem = Parent;
+	Depth += 1;
+	}
+	return Parts.join(" > ");
+	}
+
 	function GetPointerExtra(pEvent) {
 	if (!pEvent) return {};
 	return {
 	pointerClientX: Number.isFinite(pEvent.clientX) ? Math.round(pEvent.clientX) : "",
 	pointerClientY: Number.isFinite(pEvent.clientY) ? Math.round(pEvent.clientY) : "",
 	pointerPageX: Number.isFinite(pEvent.pageX) ? Math.round(pEvent.pageX) : "",
-	pointerPageY: Number.isFinite(pEvent.pageY) ? Math.round(pEvent.pageY) : ""
+	pointerPageY: Number.isFinite(pEvent.pageY) ? Math.round(pEvent.pageY) : "",
+	targetSelector: GetReplaySelector(pEvent.target),
+	targetText: Shorten(pEvent.target && pEvent.target.textContent ? pEvent.target.textContent : "", 80)
 	};
 	}
 
@@ -688,6 +716,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	pointerClientY: pOptions.pointerClientY ?? "",
 	pointerPageX: pOptions.pointerPageX ?? "",
 	pointerPageY: pOptions.pointerPageY ?? "",
+	targetSelector: String(pOptions.targetSelector || "").trim(),
+	targetText: Shorten(pOptions.targetText || "", 80),
 	language: navigator.language || "",
 	timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
 	widget: String(pOptions.widget || "").trim(),
@@ -1038,6 +1068,54 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	return CurrMark;
 	}
 
+	function TrackSmoothScrollPoint(pReason) {
+	if (!fPageOpenSent || document.hidden) return;
+	const Now = Date.now();
+	if (Now - fLastScrollSampleAt < 320) return;
+	fLastScrollSampleAt = Now;
+	TrackOpsEvent("scroll_move", {
+	eventOn: "scroll",
+	widget: "Page",
+	label: "حركة سكرول",
+	value: GetScrollPercent(),
+	scrollX: Math.round(window.scrollX || window.pageXOffset || 0),
+	scrollY: Math.round(window.scrollY || window.pageYOffset || 0),
+	scrollPercent: GetScrollPercent(),
+	awayReason: pReason || "move",
+	notifyMobile: false,
+	sound: false
+	});
+	}
+
+	function ScheduleScrollStopPoint() {
+	if (fScrollIdleTimer) clearTimeout(fScrollIdleTimer);
+	fScrollIdleTimer = window.setTimeout(() => TrackSmoothScrollPoint("idle"), 650);
+	}
+
+	function TrackPointerPoint(pEvent, pReason) {
+	if (!fPageOpenSent || document.hidden) return;
+	const Now = Date.now();
+	if (Now - fLastPointerSampleAt < 280) return;
+	fLastPointerSampleAt = Now;
+	TrackOpsEvent("pointer_move", {
+	eventOn: "pointer",
+	widget: "Page",
+	label: "حركة مؤشر",
+	...GetPointerExtra(pEvent),
+	awayReason: pReason || "move",
+	notifyMobile: false,
+	sound: false
+	});
+	}
+
+	function InitContinuousReplayEvents() {
+	window.addEventListener("scroll", () => {
+	TrackSmoothScrollPoint("move");
+	ScheduleScrollStopPoint();
+	}, { passive: true });
+	document.addEventListener("pointermove", (pEvent) => TrackPointerPoint(pEvent, "move"), { passive: true });
+	}
+
 	function InitScrollMilestones() {
 	function CheckScroll() {
 	const Percent = GetScrollPercent();
@@ -1202,6 +1280,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	InitAutoViews();
 	InitReadTracking();
 	InitScrollMilestones();
+	InitContinuousReplayEvents();
 	InitFocusAwayEvents();
 	InitPageLiveEvents();
 	TrackPageOpen();
