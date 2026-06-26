@@ -79,11 +79,17 @@ function EventLabel(pRow, pPayload) {
 }
 
 function EventElapsedMs(pRow, pPayload, pFirstCreatedAtMs) {
-	const Explicit = Pick(pPayload, "elapsedMs", "elapsed_ms");
-	if (Explicit !== "") return Math.max(0, Num(Explicit));
+	const ExplicitMs = Pick(pPayload, "elapsedMs", "elapsed_ms");
+	const ExplicitSec = Pick(pPayload, "elapsedSec", "elapsed_sec");
+	let PayloadElapsed = 0;
+	if (ExplicitMs !== "") PayloadElapsed = Math.max(PayloadElapsed, Num(ExplicitMs));
+	if (ExplicitSec !== "") PayloadElapsed = Math.max(PayloadElapsed, Num(ExplicitSec) * 1000);
+
 	const CreatedAt = Date.parse(Str(Pick(pRow, "created_at")));
-	if (Number.isFinite(CreatedAt) && Number.isFinite(pFirstCreatedAtMs)) return Math.max(0, CreatedAt - pFirstCreatedAtMs);
-	return 0;
+	let CreatedElapsed = 0;
+	if (Number.isFinite(CreatedAt) && Number.isFinite(pFirstCreatedAtMs)) CreatedElapsed = Math.max(0, CreatedAt - pFirstCreatedAtMs);
+
+	return Math.max(0, PayloadElapsed, CreatedElapsed);
 }
 
 function ScrollPercentOf(pEventType, pPayload) {
@@ -106,9 +112,17 @@ function EventTime(pRow) {
 
 function SafeReplayData(pEvents, pRequestUrl) {
 	const Origin = new URL(pRequestUrl).origin;
-	const FirstCreatedAtMs = pEvents.length ? Date.parse(Str(pEvents[0].created_at)) : 0;
+	const OrderedEvents = [...pEvents].sort((A, B) => {
+		const TimeA = Date.parse(Str(Pick(A, "created_at")));
+		const TimeB = Date.parse(Str(Pick(B, "created_at")));
+		const SafeA = Number.isFinite(TimeA) ? TimeA : 0;
+		const SafeB = Number.isFinite(TimeB) ? TimeB : 0;
+		return SafeA - SafeB || Num(Pick(A, "id")) - Num(Pick(B, "id"));
+	});
+	const FirstEventWithDate = OrderedEvents.find((EventRow) => Number.isFinite(Date.parse(Str(Pick(EventRow, "created_at")))));
+	const FirstCreatedAtMs = FirstEventWithDate ? Date.parse(Str(Pick(FirstEventWithDate, "created_at"))) : 0;
 
-	return pEvents.map((EventRow, Index) => {
+	return OrderedEvents.map((EventRow, Index) => {
 		const Payload = PayloadOf(EventRow);
 		const EventType = EventTypeOf(EventRow, Payload);
 		const PagePath = PagePathOf(EventRow, Payload);
@@ -143,8 +157,20 @@ function JsonForHtml(pValue) {
 	return JSON.stringify(pValue).replace(/</g, "\\u003c").replace(/>/g, "\\u003e").replace(/&/g, "\\u0026");
 }
 
+function ReplayViewportOf(pReplayEvents) {
+	const WithViewport = pReplayEvents.find((EventItem) => Num(EventItem.viewportWidth) >= 240 && Num(EventItem.viewportHeight) >= 320);
+	let Width = WithViewport ? Num(WithViewport.viewportWidth) : 1366;
+	let Height = WithViewport ? Num(WithViewport.viewportHeight) : 768;
+
+	Width = Math.max(240, Math.min(3840, Math.round(Width)));
+	Height = Math.max(320, Math.min(2160, Math.round(Height)));
+
+	return { Width, Height, IsMobile: Width <= 600 };
+}
+
 function RenderReplay(pEvents, pSessionId, pPageInstanceId, pRequestUrl) {
 	const ReplayEvents = SafeReplayData(pEvents, pRequestUrl).sort((A, B) => A.elapsedMs - B.elapsedMs || A.id - B.id);
+	const ReplayViewport = ReplayViewportOf(ReplayEvents);
 	const FirstPage = ReplayEvents.find((EventItem) => EventItem.pageUrl)?.pageUrl || new URL("/", pRequestUrl).origin;
 	const TimelineRows = ReplayEvents.map((EventItem, Index) => `<button class="timelineItem" type="button" data-index="${Index}">
 		<span class="timelineNo">${Index + 1}</span>
@@ -159,7 +185,7 @@ function RenderReplay(pEvents, pSessionId, pPageInstanceId, pRequestUrl) {
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>EmoLive Replay</title>
 <style>
-:root{color-scheme:dark;--bg:#0b111a;--panel:#131d29;--panel2:#172333;--line:#334a62;--text:#eef5ff;--muted:#a8b7c9;--blue:#2da5ff;--gold:#ffca4b;--red:#ff4b4b}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0,#172233 0,#0b111a 46%,#080d14 100%);color:var(--text);font-family:system-ui,Tahoma,Arial,sans-serif;overflow:hidden}.shell{height:100vh;display:grid;grid-template-rows:auto 1fr}.top{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#0f1722;border-bottom:1px solid #293a4f}.title{display:flex;flex-direction:column;gap:2px;min-width:220px}.title h1{font-size:20px;margin:0}.title small{color:var(--muted);direction:ltr;text-align:right}.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.btn{border:1px solid #3b5670;background:#172333;color:var(--text);border-radius:10px;padding:8px 12px;font-weight:800;cursor:pointer}.btn:hover{border-color:var(--blue)}.timeBox{color:var(--gold);font-weight:900;min-width:72px;text-align:center}.speed{background:#0c141f;color:var(--text);border:1px solid #3b5670;border-radius:9px;padding:7px}.progress{appearance:none;flex:1;min-width:160px;height:8px;border-radius:999px;background:#26364a}.progress::-webkit-slider-thumb{appearance:none;width:18px;height:18px;border-radius:50%;background:var(--blue);cursor:pointer}.main{min-height:0;display:grid;grid-template-columns:minmax(270px,340px) 1fr;gap:10px;padding:10px;direction:ltr}.timeline{direction:rtl;min-height:0;background:#0f1722;border:1px solid #26384d;border-radius:16px;display:flex;flex-direction:column;overflow:hidden}.timelineHead{padding:12px;border-bottom:1px solid #26384d;font-weight:900}.timelineList{overflow:auto;padding:8px;display:flex;flex-direction:column;gap:7px}.timelineItem{display:grid;grid-template-columns:34px 1fr 54px;gap:8px;align-items:center;text-align:right;background:#131d29;border:1px solid #334a62;color:var(--text);border-radius:12px;padding:8px;cursor:pointer}.timelineItem.active{border-color:var(--gold);box-shadow:0 0 0 1px #ffca4b66 inset;background:#1b2a3b}.timelineNo{color:var(--blue);font-weight:1000;font-size:18px}.timelineBody{min-width:0}.timelineBody b{display:block;font-size:14px}.timelineBody small{display:block;color:#dce8f5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.timelineBody em{display:block;color:var(--muted);direction:ltr;text-align:left;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.timelineItem strong{color:var(--gold);text-align:left}.stageWrap{min-height:0;position:relative;background:#060a10;border:1px solid #26384d;border-radius:18px;overflow:hidden;direction:ltr}.stageBar{position:absolute;z-index:5;left:12px;right:12px;top:12px;display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid #ffffff1f;border-radius:14px;background:#07101bcc;backdrop-filter:blur(10px);direction:rtl}.eventBadge{font-weight:900;color:var(--gold)}.eventText{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.eventText b{color:var(--text)}.eventText small{color:var(--muted);margin-inline-start:8px}.viewport{position:absolute;inset:0;padding-top:54px}.pageFrame{width:100%;height:100%;border:0;background:white}.cursor{position:absolute;z-index:8;width:22px;height:22px;border:3px solid var(--red);border-radius:50%;pointer-events:none;display:none;transform:translate(-50%,-50%);box-shadow:0 0 0 8px #ff4b4b25}.cursor.pulse{animation:pulse .45s ease-out}@keyframes pulse{from{box-shadow:0 0 0 4px #ff4b4b66}to{box-shadow:0 0 0 24px #ff4b4b00}}.empty{padding:30px;text-align:center;color:var(--muted)}@media(max-width:850px){body{overflow:auto}.shell{height:auto;min-height:100vh}.main{grid-template-columns:1fr;height:calc(100vh - 104px)}.timeline{display:none}.title small{font-size:11px}.top{align-items:flex-start}.stageWrap{min-height:0}.controls{gap:6px}.btn{padding:7px 9px}}
+:root{color-scheme:dark;--bg:#0b111a;--panel:#131d29;--panel2:#172333;--line:#334a62;--text:#eef5ff;--muted:#a8b7c9;--blue:#2da5ff;--gold:#ffca4b;--red:#ff4b4b}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0,#172233 0,#0b111a 46%,#080d14 100%);color:var(--text);font-family:system-ui,Tahoma,Arial,sans-serif;overflow:hidden}.shell{height:100vh;display:grid;grid-template-rows:auto 1fr}.top{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#0f1722;border-bottom:1px solid #293a4f}.title{display:flex;flex-direction:column;gap:2px;min-width:220px}.title h1{font-size:20px;margin:0}.title small{color:var(--muted);direction:ltr;text-align:right}.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.btn{border:1px solid #3b5670;background:#172333;color:var(--text);border-radius:10px;padding:8px 12px;font-weight:800;cursor:pointer}.btn:hover{border-color:var(--blue)}.timeBox{color:var(--gold);font-weight:900;min-width:72px;text-align:center}.speed{background:#0c141f;color:var(--text);border:1px solid #3b5670;border-radius:9px;padding:7px}.progress{appearance:none;flex:1;min-width:160px;height:8px;border-radius:999px;background:#26364a}.progress::-webkit-slider-thumb{appearance:none;width:18px;height:18px;border-radius:50%;background:var(--blue);cursor:pointer}.main{min-height:0;display:grid;grid-template-columns:minmax(270px,340px) 1fr;gap:10px;padding:10px;direction:ltr}.timeline{direction:rtl;min-height:0;background:#0f1722;border:1px solid #26384d;border-radius:16px;display:flex;flex-direction:column;overflow:hidden}.timelineHead{padding:12px;border-bottom:1px solid #26384d;font-weight:900}.timelineList{overflow:auto;padding:8px;display:flex;flex-direction:column;gap:7px}.timelineItem{display:grid;grid-template-columns:34px 1fr 54px;gap:8px;align-items:center;text-align:right;background:#131d29;border:1px solid #334a62;color:var(--text);border-radius:12px;padding:8px;cursor:pointer}.timelineItem.active{border-color:var(--gold);box-shadow:0 0 0 1px #ffca4b66 inset;background:#1b2a3b}.timelineNo{color:var(--blue);font-weight:1000;font-size:18px}.timelineBody{min-width:0}.timelineBody b{display:block;font-size:14px}.timelineBody small{display:block;color:#dce8f5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.timelineBody em{display:block;color:var(--muted);direction:ltr;text-align:left;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.timelineItem strong{color:var(--gold);text-align:left}.stageWrap{min-height:0;position:relative;background:#060a10;border:1px solid #26384d;border-radius:18px;overflow:hidden;direction:ltr}.stageBar{position:absolute;z-index:5;left:12px;right:12px;top:12px;display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid #ffffff1f;border-radius:14px;background:#07101bcc;backdrop-filter:blur(10px);direction:rtl}.eventBadge{font-weight:900;color:var(--gold)}.eventText{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.eventText b{color:var(--text)}.eventText small{color:var(--muted);margin-inline-start:8px}.viewport{position:absolute;inset:0;padding-top:54px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#05080d}.deviceFrame{position:relative;flex:none;width:${ReplayViewport.Width}px;height:${ReplayViewport.Height}px;transform-origin:center center;background:white;box-shadow:0 18px 70px #000c;border:1px solid #ffffff26}.pageFrame{position:absolute;inset:0;width:100%;height:100%;border:0;background:white;pointer-events:none}.interactionBlock{position:absolute;inset:0;z-index:4;background:transparent;touch-action:none}.cursor{position:absolute;z-index:8;width:22px;height:22px;border:3px solid var(--red);border-radius:50%;pointer-events:none;display:none;transform:translate(-50%,-50%);box-shadow:0 0 0 8px #ff4b4b25}.cursor.pulse{animation:pulse .45s ease-out}@keyframes pulse{from{box-shadow:0 0 0 4px #ff4b4b66}to{box-shadow:0 0 0 24px #ff4b4b00}}.empty{padding:30px;text-align:center;color:var(--muted)}@media(max-width:850px){body{overflow:hidden}.shell{height:100vh}.top{align-items:flex-start;gap:8px;padding:8px}.title{min-width:150px}.title h1{font-size:16px}.title small{font-size:10px}.controls{gap:5px}.btn{padding:6px 8px}.speed{padding:6px}.progress{min-width:110px}.main{grid-template-columns:1fr;height:auto;min-height:0;padding:6px}.timeline{display:none}.stageWrap{min-height:0;border-radius:12px}.stageBar{left:8px;right:8px;top:8px;padding:7px 8px}.viewport{padding-top:48px}}
 </style>
 </head>
 <body>
@@ -169,6 +195,7 @@ function RenderReplay(pEvents, pSessionId, pPageInstanceId, pRequestUrl) {
 			<h1>EmoLive Replay</h1>
 			<small>Session: ${EscapeHtml(pSessionId)}</small>
 			<small>Page: ${EscapeHtml(pPageInstanceId || "كل الصفحات")}</small>
+			<small>Viewport: ${ReplayViewport.Width}×${ReplayViewport.Height}</small>
 		</div>
 		<div class="controls">
 			<button id="playBtn" class="btn" type="button">تشغيل</button>
@@ -185,7 +212,7 @@ function RenderReplay(pEvents, pSessionId, pPageInstanceId, pRequestUrl) {
 		</aside>
 		<section class="stageWrap">
 			<div class="stageBar"><span id="eventBadge" class="eventBadge">جاهز</span><span id="eventText" class="eventText">اضغط تشغيل لبدء محاكاة الزيارة فوق الصفحة الفعلية.</span></div>
-			<div class="viewport"><iframe id="pageFrame" class="pageFrame" src="${EscapeHtml(FirstPage)}"></iframe></div>
+			<div id="viewport" class="viewport"><div id="deviceFrame" class="deviceFrame"><iframe id="pageFrame" class="pageFrame" src="${EscapeHtml(FirstPage)}" width="${ReplayViewport.Width}" height="${ReplayViewport.Height}"></iframe><div id="interactionBlock" class="interactionBlock"></div></div></div>
 			<div id="cursor" class="cursor"></div>
 		</section>
 	</div>
@@ -193,7 +220,12 @@ function RenderReplay(pEvents, pSessionId, pPageInstanceId, pRequestUrl) {
 <script>
 (() => {
 const cEvents = ${JsonForHtml(ReplayEvents)};
+const cReplayViewportWidth = ${ReplayViewport.Width};
+const cReplayViewportHeight = ${ReplayViewport.Height};
 const fFrame = document.getElementById("pageFrame");
+const fViewport = document.getElementById("viewport");
+const fDeviceFrame = document.getElementById("deviceFrame");
+const fInteractionBlock = document.getElementById("interactionBlock");
 const fPlayBtn = document.getElementById("playBtn");
 const fRestartBtn = document.getElementById("restartBtn");
 const fProgress = document.getElementById("progress");
@@ -203,13 +235,35 @@ const fEventBadge = document.getElementById("eventBadge");
 const fEventText = document.getElementById("eventText");
 const fCursor = document.getElementById("cursor");
 const fTimeline = Array.from(document.querySelectorAll(".timelineItem"));
-const fMaxMs = Math.max(1, ...cEvents.map((pEvent) => Number(pEvent.elapsedMs) || 0));
+const fMaxMs = Math.max(1000, ...cEvents.map((pEvent) => Number(pEvent.elapsedMs) || 0));
 let fPlaying = false;
 let fStartedAt = 0;
 let fBaseMs = 0;
 let fAppliedIndex = -1;
 let fCurrentPageUrl = fFrame.getAttribute("src") || "";
 let fPendingScroll = null;
+
+function ResizeDeviceFrame() {
+	const Rect = fViewport.getBoundingClientRect();
+	const AvailableWidth = Math.max(1, Rect.width - 24);
+	const AvailableHeight = Math.max(1, Rect.height - 24);
+	const Scale = Math.min(AvailableWidth / cReplayViewportWidth, AvailableHeight / cReplayViewportHeight, 1);
+	fDeviceFrame.style.width = cReplayViewportWidth + "px";
+	fDeviceFrame.style.height = cReplayViewportHeight + "px";
+	fDeviceFrame.style.transform = "scale(" + Scale + ")";
+}
+
+function BlockInteraction(pEvent) {
+	pEvent.preventDefault();
+	pEvent.stopPropagation();
+}
+
+["pointerdown", "pointermove", "pointerup", "wheel", "touchstart", "touchmove", "touchend", "contextmenu"].forEach((EventName) => {
+	fInteractionBlock.addEventListener(EventName, BlockInteraction, { passive: false });
+});
+window.addEventListener("resize", ResizeDeviceFrame);
+ResizeDeviceFrame();
+
 fProgress.max = String(fMaxMs);
 
 function FormatTime(pMs) {
@@ -226,23 +280,31 @@ function FrameDocument() {
 	try { return fFrame.contentDocument || fFrame.contentWindow?.document || null; } catch { return null; }
 }
 
-function ScrollFrameToPercent(pPercent, pSmooth = true) {
-	const Percent = Number(pPercent);
-	if (!Number.isFinite(Percent)) return;
+function ScrollFrameToPosition(pEvent, pSmooth = true) {
 	const Win = FrameWindow();
 	const Doc = FrameDocument();
 	if (!Win || !Doc) {
-		fPendingScroll = Percent;
+		fPendingScroll = pEvent;
 		return;
 	}
 	const Body = Doc.body;
 	const Root = Doc.documentElement;
-	const Height = Math.max(Root.scrollHeight || 0, Body?.scrollHeight || 0) - Win.innerHeight;
-	const Top = Math.max(0, Height * Math.max(0, Math.min(100, Percent)) / 100);
+	const MaxTop = Math.max(0, Math.max(Root.scrollHeight || 0, Body ? Body.scrollHeight || 0 : 0) - Win.innerHeight);
+	const MaxLeft = Math.max(0, Math.max(Root.scrollWidth || 0, Body ? Body.scrollWidth || 0 : 0) - Win.innerWidth);
+	let Top = Number(pEvent.scrollY);
+	let Left = Number(pEvent.scrollX);
+	const Percent = Number(pEvent.scrollPercent);
+	if (!Number.isFinite(Top) || Top < 0) {
+		if (!Number.isFinite(Percent)) return;
+		Top = MaxTop * Math.max(0, Math.min(100, Percent)) / 100;
+	}
+	if (!Number.isFinite(Left) || Left < 0) Left = 0;
+	Top = Math.max(0, Math.min(MaxTop, Top));
+	Left = Math.max(0, Math.min(MaxLeft, Left));
 	try {
-		Win.scrollTo({ top: Top, left: 0, behavior: pSmooth ? "smooth" : "auto" });
+		Win.scrollTo({ top: Top, left: Left, behavior: pSmooth ? "smooth" : "auto" });
 	} catch {
-		Win.scrollTo(0, Top);
+		Win.scrollTo(Left, Top);
 	}
 }
 
@@ -250,10 +312,9 @@ function ShowCursor(pEvent) {
 	const X = Number(pEvent.pointerClientX);
 	const Y = Number(pEvent.pointerClientY);
 	if (!Number.isFinite(X) || !Number.isFinite(Y) || X <= 0 || Y <= 0) return;
-	const Viewport = document.querySelector(".viewport");
-	const Rect = Viewport.getBoundingClientRect();
-	const ScaleX = Rect.width / Math.max(1, Number(pEvent.viewportWidth) || Rect.width);
-	const ScaleY = Rect.height / Math.max(1, Number(pEvent.viewportHeight) || Rect.height);
+	const Rect = fDeviceFrame.getBoundingClientRect();
+	const ScaleX = Rect.width / Math.max(1, Number(pEvent.viewportWidth) || cReplayViewportWidth);
+	const ScaleY = Rect.height / Math.max(1, Number(pEvent.viewportHeight) || cReplayViewportHeight);
 	fCursor.style.left = (Rect.left + X * ScaleX) + "px";
 	fCursor.style.top = (Rect.top + Y * ScaleY) + "px";
 	fCursor.style.display = "block";
@@ -279,7 +340,7 @@ function ApplyEvent(pEvent, pIndex, pSmooth = true) {
 	fEventBadge.textContent = String(pIndex + 1) + " / " + String(cEvents.length);
 	fEventText.innerHTML = "<b>" + Escape(String(pEvent.type || "event")) + "</b><small>" + Escape(String(pEvent.label || "")) + "</small>";
 	SetActive(pIndex);
-	if (pEvent.scrollPercent !== "" && pEvent.scrollPercent !== null && pEvent.scrollPercent !== undefined) ScrollFrameToPercent(pEvent.scrollPercent, pSmooth);
+	if ((pEvent.scrollY !== "" && pEvent.scrollY !== null && pEvent.scrollY !== undefined) || (pEvent.scrollPercent !== "" && pEvent.scrollPercent !== null && pEvent.scrollPercent !== undefined)) ScrollFrameToPosition(pEvent, pSmooth);
 	ShowCursor(pEvent);
 }
 
@@ -341,9 +402,9 @@ function Play() {
 
 fFrame.addEventListener("load", () => {
 	if (fPendingScroll !== null) {
-		const Percent = fPendingScroll;
+		const PendingEvent = fPendingScroll;
 		fPendingScroll = null;
-		setTimeout(() => ScrollFrameToPercent(Percent, false), 250);
+		setTimeout(() => ScrollFrameToPosition(PendingEvent, false), 250);
 	}
 });
 
