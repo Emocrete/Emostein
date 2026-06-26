@@ -134,6 +134,45 @@ function ScrollPercentOf(pEventType, pPayload) {
 	return "";
 }
 
+function LowerType(pEventType) {
+	return Str(pEventType).toLowerCase();
+}
+
+function IsReplayOnlyMotionType(pEventType) {
+	const Type = LowerType(pEventType);
+	return Type === "pointer_move" || Type === "mouse_move" || Type === "touch_move" || Type === "scroll_move";
+}
+
+function IsReplayVisualEventType(pEventType) {
+	const Type = LowerType(pEventType);
+	if (!Type) return false;
+	if (Type === "page_ping" || Type === "heartbeat" || Type === "clarity_link" || Type.includes("clarity")) return false;
+	if (Type.startsWith("ops_")) return false;
+	return true;
+}
+
+function IsCallEvent(pEvent) {
+	const Type = LowerType(pEvent && pEvent.type);
+	const Href = Str(pEvent && pEvent.href).toLowerCase();
+	return Type.includes("call") || Href.startsWith("tel:");
+}
+
+function IsWhatsappEvent(pEvent) {
+	const Type = LowerType(pEvent && pEvent.type);
+	const Href = Str(pEvent && pEvent.href).toLowerCase();
+	return Type.includes("whatsapp") || Href.includes("wa.me") || Href.includes("whatsapp");
+}
+
+function IsFullReadEvent(pEvent) {
+	const Type = LowerType(pEvent && pEvent.type);
+	return Type === "read_full" || Type === "read" || Type === "read_stay" || Type.endsWith("_stay");
+}
+
+function IsQuickReadEvent(pEvent) {
+	const Type = LowerType(pEvent && pEvent.type);
+	return Type === "read_quick" || Type === "read_skim" || Type === "skim" || Type === "skimming";
+}
+
 function EventTime(pRow) {
 	try {
 		return new Date(CreatedAtMsOf(pRow)).toLocaleString("ar-EG", { timeZone: "Africa/Cairo" });
@@ -148,7 +187,9 @@ function NormalizeReplayEvents(pReplayEvents) {
 	pReplayEvents.sort((A, B) => {
 		const TimeA = Num(A.createdAtMs);
 		const TimeB = Num(B.createdAtMs);
-		return TimeA - TimeB || Num(A.id) - Num(B.id) || Num(A.index) - Num(B.index);
+		const SeqA = Num(A.clientEventSeq);
+		const SeqB = Num(B.clientEventSeq);
+		return TimeA - TimeB || SeqA - SeqB || Num(A.id) - Num(B.id) || Num(A.index) - Num(B.index);
 	});
 
 	const DateValues = pReplayEvents.map((EventItem) => Num(EventItem.createdAtMs)).filter((Value) => Value > 0);
@@ -179,7 +220,10 @@ function NormalizeReplayEvents(pReplayEvents) {
 
 function ReplayDurationMsOf(pReplayEvents) {
 	let MaxElapsed = 0;
-	for (const EventItem of pReplayEvents) MaxElapsed = Math.max(MaxElapsed, Num(EventItem.elapsedMs));
+	for (const EventItem of pReplayEvents) {
+		if (!IsReplayVisualEventType(EventItem.type)) continue;
+		MaxElapsed = Math.max(MaxElapsed, Num(EventItem.elapsedMs));
+	}
 	if (MaxElapsed <= 0) return pReplayEvents.length > 1 ? (pReplayEvents.length - 1) * 1500 : 1000;
 	return Math.max(1000, Math.round(MaxElapsed));
 }
@@ -196,7 +240,9 @@ function SafeReplayData(pEvents, pRequestUrl) {
 	const FirstEventWithDate = OrderedEvents.find((EventRow) => CreatedAtMsOf(EventRow, PayloadOf(EventRow)) > 0);
 	const FirstCreatedAtMs = FirstEventWithDate ? CreatedAtMsOf(FirstEventWithDate, PayloadOf(FirstEventWithDate)) : 0;
 
-	const Result = OrderedEvents.map((EventRow, Index) => {
+	const VisualEvents = OrderedEvents.filter((EventRow) => IsReplayVisualEventType(EventTypeOf(EventRow, PayloadOf(EventRow))));
+
+	const Result = VisualEvents.map((EventRow, Index) => {
 		const Payload = PayloadOf(EventRow);
 		const EventType = EventTypeOf(EventRow, Payload);
 		const PagePath = PagePathOf(EventRow, Payload);
@@ -218,6 +264,7 @@ function SafeReplayData(pEvents, pRequestUrl) {
 			livePageUrl: PageUrl.toString(),
 			createdAtMs: CreatedAtMsOf(EventRow, Payload),
 			createdAtText: EventTime(EventRow),
+			clientEventSeq: Num(Pick(Payload, "clientEventSeq", "client_event_seq")),
 			elapsedMs: EventElapsedMs(EventRow, Payload, FirstCreatedAtMs),
 			durationMs: Pick(Payload, "durationMs", "duration_ms"),
 			scrollPercent: ScrollPercentOf(EventType, Payload),
@@ -394,7 +441,7 @@ function RenderReplay(pEvents, pSessionId, pPageInstanceId, pRequestUrl) {
 <title>EmoLive Replay</title>
 
 <style>
-:root{color-scheme:dark;--bg:#05080d;--panel:#0c131d;--line:#26384d;--text:#eef5ff;--muted:#a8b7c9;--blue:#2da5ff;--gold:#ffca4b;--red:#ff4b4b;--appH:100vh}*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;position:fixed;inset:0}body{background:#05080d;color:var(--text);font-family:system-ui,Tahoma,Arial,sans-serif;overscroll-behavior:none;touch-action:none;user-select:none}.shell{width:100vw;height:var(--appH);display:grid;grid-template-rows:auto 1fr;background:#05080d;overflow:hidden}.top{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:28px 5px;gap:3px 6px;align-items:center;padding:3px 6px;background:#0c131d;border-bottom:1px solid #233348;direction:ltr}.controls{display:flex;gap:4px;align-items:center}.iconBtn{width:28px;height:26px;border:1px solid #3b5670;background:#152235;color:var(--text);border-radius:8px;font-size:14px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;line-height:1}.iconBtn:hover{border-color:var(--blue)}.speed{height:26px;background:#101925;color:var(--text);border:1px solid #3b5670;border-radius:8px;padding:0 4px;font-weight:800;max-width:56px}.meta{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-align:center;font-size:11px;color:var(--muted);direction:ltr}.meta b{color:var(--text);font-size:11px}.meta a{color:#8fd0ff;text-decoration:none}.timeBox{color:var(--gold);font-weight:1000;min-width:46px;text-align:center;font-size:12px;direction:ltr}.progressRow{grid-column:1/4;height:7px;position:relative}.trackLayer{position:absolute;left:0;right:0;top:1px;height:5px;border-radius:999px;overflow:hidden;background:#233348;pointer-events:none}.trackSegment{position:absolute;top:0;height:100%;opacity:.9}.trackSegment.full{background:#16c784}.trackSegment.quick{background:#ff9f1a}.trackMarker{position:absolute;top:-12px;transform:translateX(-50%);font-size:13px;line-height:1;text-shadow:0 1px 4px #000}.progress{appearance:none;position:relative;z-index:2;background:transparent;width:100%;height:4px;border-radius:999px;background:#233348;display:block;margin:0}.progress::-webkit-slider-thumb{appearance:none;width:13px;height:13px;border-radius:50%;background:var(--blue);cursor:pointer}.progress::-moz-range-thumb{width:13px;height:13px;border:0;border-radius:50%;background:var(--blue);cursor:pointer}.main{min-height:0;position:relative;overflow:hidden;background:#05080d}.timeline{display:none}.stageWrap{position:absolute;inset:0;overflow:hidden;background:#05080d;direction:ltr}.viewport{position:absolute;inset:0;overflow:hidden;background:#05080d}.deviceFrame{position:absolute;left:0;top:0;flex:none;width:${ReplayViewport.Width}px;height:${ReplayViewport.Height}px;transform-origin:top left;background:white;box-shadow:0 12px 60px #000d;border:1px solid #ffffff26;will-change:transform}.pageFrame{position:absolute;inset:0;width:100%;height:100%;border:0;background:white;pointer-events:none;overflow:hidden}.interactionBlock{position:absolute;inset:0;z-index:4;background:transparent;touch-action:none}.cursor{position:absolute;z-index:8;width:22px;height:22px;border:3px solid var(--red);border-radius:50%;pointer-events:none;display:none;transform:translate(-50%,-50%);box-shadow:0 0 0 8px #ff4b4b25}.cursor.pulse{animation:pulse .45s ease-out}.replayToast{position:absolute;z-index:12;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);min-width:96px;max-width:min(80vw,360px);padding:10px 18px;border-radius:999px;border:1px solid #ffffff3a;background:#05080ddf;color:#fff;font-weight:1000;font-size:20px;text-align:center;box-shadow:0 16px 50px #000b;opacity:0;pointer-events:none;transition:opacity .16s ease,transform .16s ease}.replayToast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}@keyframes pulse{from{box-shadow:0 0 0 4px #ff4b4b66}to{box-shadow:0 0 0 24px #ff4b4b00}}.srOnly{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}@media(max-width:650px){.top{grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:27px 5px;padding:3px 5px}.iconBtn{width:27px;height:25px}.speed{height:25px}.meta{font-size:10px}.meta b{font-size:10px}.timeBox{font-size:11px;min-width:40px}}
+:root{color-scheme:dark;--bg:#05080d;--panel:#0c131d;--line:#26384d;--text:#eef5ff;--muted:#a8b7c9;--blue:#2da5ff;--gold:#ffca4b;--red:#ff4b4b;--appH:100vh}*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;position:fixed;inset:0}body{background:#05080d;color:var(--text);font-family:system-ui,Tahoma,Arial,sans-serif;overscroll-behavior:none;touch-action:none;user-select:none}.shell{width:100vw;height:var(--appH);display:grid;grid-template-rows:auto 1fr;background:#05080d;overflow:hidden}.top{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:28px 5px;gap:3px 6px;align-items:center;padding:3px 6px;background:#0c131d;border-bottom:1px solid #233348;direction:ltr}.controls{display:flex;gap:4px;align-items:center}.iconBtn{width:28px;height:26px;border:1px solid #3b5670;background:#152235;color:var(--text);border-radius:8px;font-size:14px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;line-height:1}.iconBtn:hover{border-color:var(--blue)}.speed{height:26px;background:#101925;color:var(--text);border:1px solid #3b5670;border-radius:8px;padding:0 4px;font-weight:800;max-width:56px}.meta{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-align:center;font-size:11px;color:var(--muted);direction:ltr}.meta b{color:var(--text);font-size:11px}.meta a{color:#8fd0ff;text-decoration:none}.timeBox{color:var(--gold);font-weight:1000;min-width:46px;text-align:center;font-size:12px;direction:ltr}.progressRow{grid-column:1/4;height:7px;position:relative}.trackLayer{position:absolute;left:0;right:0;top:1px;height:5px;border-radius:999px;overflow:visible;background:#233348;pointer-events:none}.trackSegment{position:absolute;top:0;height:100%;opacity:.9}.trackSegment.full{background:#16c784}.trackSegment.quick{background:#ff9f1a}.trackMarker{position:absolute;top:-12px;transform:translateX(-50%);font-size:13px;line-height:1;text-shadow:0 1px 4px #000}.progress{appearance:none;position:relative;z-index:2;background:transparent;width:100%;height:4px;border-radius:999px;background:#233348;display:block;margin:0}.progress::-webkit-slider-thumb{appearance:none;width:13px;height:13px;border-radius:50%;background:var(--blue);cursor:pointer}.progress::-moz-range-thumb{width:13px;height:13px;border:0;border-radius:50%;background:var(--blue);cursor:pointer}.main{min-height:0;position:relative;overflow:hidden;background:#05080d}.timeline{display:none}.stageWrap{position:absolute;inset:0;overflow:hidden;background:#05080d;direction:ltr}.viewport{position:absolute;inset:0;overflow:hidden;background:#05080d}.deviceFrame{position:absolute;left:0;top:0;flex:none;width:${ReplayViewport.Width}px;height:${ReplayViewport.Height}px;transform-origin:top left;background:white;box-shadow:0 12px 60px #000d;border:1px solid #ffffff26;will-change:transform;overflow:hidden}.pageFrame{position:absolute;inset:0;width:100%;height:100%;border:0;background:white;pointer-events:none;overflow:hidden}.interactionBlock{position:absolute;inset:0;z-index:4;background:transparent;touch-action:none}.trailLayer{position:absolute;inset:0;z-index:7;pointer-events:none}.trailPoint{position:absolute;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none}.trailPoint.mouse{background:#ff4b4b;box-shadow:0 0 12px #ff4b4baa}.trailPoint.touch{background:#ffd233;box-shadow:0 0 12px #ffd233aa}.cursor{position:absolute;z-index:8;width:22px;height:22px;border:3px solid var(--red);border-radius:50%;pointer-events:none;display:none;transform:translate(-50%,-50%);box-shadow:0 0 0 8px #ff4b4b25}.cursor.pulse{animation:pulse .45s ease-out}.cursor.clicking{background:var(--red);border-color:var(--red)}.rotatedReplay .progressRow{position:fixed;z-index:30;right:2px;top:50%;width:calc(var(--appH) - 10px);transform-origin:center;transform:translate(50%,-50%) rotate(90deg)}.replayToast{position:absolute;z-index:12;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);min-width:96px;max-width:min(80vw,360px);padding:10px 18px;border-radius:999px;border:1px solid #ffffff3a;background:#05080ddf;color:#fff;font-weight:1000;font-size:20px;text-align:center;box-shadow:0 16px 50px #000b;opacity:0;pointer-events:none;transition:opacity .16s ease,transform .16s ease}.replayToast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}@keyframes pulse{from{box-shadow:0 0 0 4px #ff4b4b66}to{box-shadow:0 0 0 24px #ff4b4b00}}.srOnly{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}@media(max-width:650px){.top{grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:27px 5px;padding:3px 5px}.iconBtn{width:27px;height:25px}.speed{height:25px}.meta{font-size:10px}.meta b{font-size:10px}.timeBox{font-size:11px;min-width:40px}}
 </style>
 </head>
 <body>
@@ -406,7 +453,7 @@ function RenderReplay(pEvents, pSessionId, pPageInstanceId, pRequestUrl) {
 		<div class="progressRow"><div id="trackLayer" class="trackLayer"></div><input id="progress" class="progress" type="range" min="0" max="${Math.max(1000, Math.round(DurationMs))}" step="1" value="0" /></div>
 	</div>
 	<div class="main">
-		<section class="stageWrap"><div id="viewport" class="viewport"><div id="deviceFrame" class="deviceFrame"><iframe id="pageFrame" class="pageFrame" src="${EscapeHtml(FirstPage)}" width="${ReplayViewport.Width}" height="${ReplayViewport.Height}"></iframe><div id="interactionBlock" class="interactionBlock"></div></div></div><div id="cursor" class="cursor"></div><div id="replayToast" class="replayToast"></div><span id="eventBadge" class="srOnly"></span><span id="eventText" class="srOnly"></span></section>
+		<section class="stageWrap"><div id="viewport" class="viewport"><div id="deviceFrame" class="deviceFrame"><iframe id="pageFrame" class="pageFrame" src="${EscapeHtml(FirstPage)}" width="${ReplayViewport.Width}" height="${ReplayViewport.Height}"></iframe><div id="interactionBlock" class="interactionBlock"></div><div id="trailLayer" class="trailLayer"></div><div id="cursor" class="cursor"></div></div></div><div id="replayToast" class="replayToast"></div><span id="eventBadge" class="srOnly"></span><span id="eventText" class="srOnly"></span></section>
 	</div>
 </div>
 <script>
@@ -427,6 +474,8 @@ const fTimeBox = document.getElementById("timeBox");
 const fEventBadge = document.getElementById("eventBadge");
 const fEventText = document.getElementById("eventText");
 const fCursor = document.getElementById("cursor");
+const fTrailLayer = document.getElementById("trailLayer");
+const cReplayIsMobile = cReplayViewportWidth <= 600 || cReplayViewportHeight > cReplayViewportWidth;
 const fReplayToast = document.getElementById("replayToast");
 const fTrackLayer = document.getElementById("trackLayer");
 const fMaxMs = Math.max(1000, Number(cReplayDurationMs) || 1000);
@@ -469,6 +518,7 @@ function ResizeDeviceFrame() {
 	fDeviceFrame.style.height = cReplayViewportHeight + "px";
 	fDeviceFrame.style.left = Math.max(0, (AvailableWidth - FitWidth * fScale) / 2) + "px";
 	fDeviceFrame.style.top = Math.max(0, (AvailableHeight - FitHeight * fScale) / 2) + "px";
+	document.body.classList.toggle("rotatedReplay", RotateForMobilePreview);
 	if (RotateForMobilePreview) {
 		fDeviceFrame.style.transform = "translateX(" + (cReplayViewportHeight * fScale) + "px) rotate(90deg) scale(" + fScale + ")";
 	} else {
@@ -495,7 +545,6 @@ fProgress.max = String(fMaxMs);
 
 function FormatTime(pMs) {
 	const Seconds = Math.round(Math.max(0, pMs) / 1000);
-	if (Seconds < 60) return Seconds + "ث";
 	return Math.floor(Seconds / 60) + ":" + String(Seconds % 60).padStart(2, "0");
 }
 
@@ -564,22 +613,29 @@ function ScrollFrameToPosition(pEvent, pSmooth = true) {
 	fScrollAnimationId = requestAnimationFrame(Step);
 }
 
-function MoveCursorTo(pEvent, pPulse = false) {
-	const X = Number(pEvent.pointerClientX);
-	const Y = Number(pEvent.pointerClientY);
-	if (!Number.isFinite(X) || !Number.isFinite(Y) || X <= 0 || Y <= 0) return;
-	const Rect = fDeviceFrame.getBoundingClientRect();
+function PointerPointOf(pEvent) {
+	const X = Number(pEvent && pEvent.pointerClientX);
+	const Y = Number(pEvent && pEvent.pointerClientY);
+	if (!Number.isFinite(X) || !Number.isFinite(Y) || X <= 0 || Y <= 0) return null;
 	const BaseW = Number(pEvent.viewportWidth) || cReplayViewportWidth;
 	const BaseH = Number(pEvent.viewportHeight) || cReplayViewportHeight;
-	const ScaleX = Rect.width / Math.max(1, BaseW);
-	const ScaleY = Rect.height / Math.max(1, BaseH);
-	fCursor.style.left = (Rect.left + X * ScaleX) + "px";
-	fCursor.style.top = (Rect.top + Y * ScaleY) + "px";
+	return {
+		x: Math.max(0, Math.min(cReplayViewportWidth, X * cReplayViewportWidth / Math.max(1, BaseW))),
+		y: Math.max(0, Math.min(cReplayViewportHeight, Y * cReplayViewportHeight / Math.max(1, BaseH)))
+	};
+}
+
+function MoveCursorTo(pEvent, pPulse = false) {
+	const Point = PointerPointOf(pEvent);
+	if (!Point) return;
+	fCursor.style.left = Point.x + "px";
+	fCursor.style.top = Point.y + "px";
 	fCursor.style.display = "block";
 	if (pPulse) {
-		fCursor.classList.remove("pulse");
+		fCursor.classList.remove("pulse", "clicking");
 		void fCursor.offsetWidth;
-		fCursor.classList.add("pulse");
+		fCursor.classList.add("pulse", "clicking");
+		setTimeout(() => fCursor.classList.remove("clicking"), 420);
 	}
 }
 
@@ -591,7 +647,34 @@ function EventHasPointer(pEvent) {
 	return Number.isFinite(Number(pEvent && pEvent.pointerClientX)) && Number.isFinite(Number(pEvent && pEvent.pointerClientY));
 }
 
+function RenderPointerTrail(pMs) {
+	if (!fTrailLayer) return;
+	fTrailLayer.innerHTML = "";
+	const TrailEvents = [];
+	for (const EventItem of cEvents) {
+		const EventTime = Number(EventItem.elapsedMs) || 0;
+		if (EventTime < pMs - 2000 || EventTime > pMs) continue;
+		if (EventHasPointer(EventItem)) TrailEvents.push(EventItem);
+	}
+	for (const EventItem of TrailEvents) {
+		const Point = PointerPointOf(EventItem);
+		if (!Point) continue;
+		const Age = Math.max(0, pMs - (Number(EventItem.elapsedMs) || 0));
+		const Opacity = Math.max(0, 1 - Age / 2000);
+		const Dot = document.createElement("span");
+		Dot.className = "trailPoint " + (cReplayIsMobile ? "touch" : "mouse");
+		const Size = cReplayIsMobile ? 22 : Math.max(4, 16 * Opacity);
+		Dot.style.width = Size + "px";
+		Dot.style.height = Size + "px";
+		Dot.style.left = Point.x + "px";
+		Dot.style.top = Point.y + "px";
+		Dot.style.opacity = String(cReplayIsMobile ? Opacity * 0.75 : Opacity * 0.55);
+		fTrailLayer.appendChild(Dot);
+	}
+}
+
 function UpdateCursorForTime(pMs) {
+	RenderPointerTrail(pMs);
 	let Prev = null;
 	let Next = null;
 	for (let Index = 0; Index < cEvents.length; Index++) {
@@ -675,7 +758,7 @@ function ShowReplayToast(pText) {
 	if (fToastTimer) clearTimeout(fToastTimer);
 	fReplayToast.textContent = Text;
 	fReplayToast.classList.add("show");
-	fToastTimer = setTimeout(() => { fReplayToast.classList.remove("show"); }, 2000);
+	fToastTimer = setTimeout(() => { fReplayToast.classList.remove("show"); }, 3000);
 }
 
 function EventHasScroll(pEvent) {
@@ -708,10 +791,15 @@ function DispatchReplayClick(pEvent) {
 		if (Number.isFinite(X) && Number.isFinite(Y)) Target = Doc.elementFromPoint(X, Y);
 	}
 	if (!Target) return;
+	const X = Number(pEvent.pointerClientX) || 0;
+	const Y = Number(pEvent.pointerClientY) || 0;
 	try {
-		["pointerdown", "mousedown", "mouseup", "click"].forEach((Name) => {
-			Target.dispatchEvent(new Win.MouseEvent(Name, { bubbles: true, cancelable: true, view: Win, clientX: Number(pEvent.pointerClientX) || 0, clientY: Number(pEvent.pointerClientY) || 0 }));
+		["pointerdown", "mousedown", "pointerup", "mouseup", "click"].forEach((Name) => {
+			const Ctor = Name.startsWith("pointer") && Win.PointerEvent ? Win.PointerEvent : Win.MouseEvent;
+			Target.dispatchEvent(new Ctor(Name, { bubbles: true, cancelable: true, view: Win, clientX: X, clientY: Y, pointerId: 1, pointerType: cReplayIsMobile ? "touch" : "mouse", isPrimary: true }));
 		});
+		const Clickable = Target.closest ? Target.closest("button,summary,[role='button'],[aria-expanded],.FaqQuestion,.FaqQuestionText,.EmoBtn,.EmoCall,.EmoWhats,[data-ops-click]") : null;
+		if (Clickable && typeof Clickable.click === "function") Clickable.click();
 	} catch {}
 }
 
@@ -719,6 +807,7 @@ function BuildTimelineLayer() {
 	if (!fTrackLayer) return;
 	fTrackLayer.innerHTML = "";
 	function AddSegment(StartMs, EndMs, ClassName) {
+		if (EndMs <= StartMs) return;
 		const Left = Math.max(0, Math.min(100, StartMs / fMaxMs * 100));
 		const Width = Math.max(.7, Math.min(100 - Left, (EndMs - StartMs) / fMaxMs * 100));
 		const Elem = document.createElement("span");
@@ -736,16 +825,28 @@ function BuildTimelineLayer() {
 		fTrackLayer.appendChild(Elem);
 	}
 	let LastPage = "";
-	for (const EventItem of cEvents) {
+	for (let Index = 0; Index < cEvents.length; Index++) {
+		const EventItem = cEvents[Index];
 		const TimeMs = Number(EventItem.elapsedMs) || 0;
 		const Duration = Math.max(800, Number(EventItem.durationMs) || 1800);
-		const Type = String(EventItem.type || "").toLowerCase();
-		if (Type === "read_full") AddSegment(TimeMs, Math.min(fMaxMs, TimeMs + Duration), "full");
-		if (Type === "read_quick") AddSegment(TimeMs, Math.min(fMaxMs, TimeMs + Duration), "quick");
-		if (Type.includes("call") || String(EventItem.href || "").startsWith("tel:")) AddMarker(TimeMs, "☎", "كليك اتصال");
-		if (Type.includes("whatsapp") || String(EventItem.href || "").toLowerCase().includes("whatsapp") || String(EventItem.href || "").toLowerCase().includes("wa.me")) AddMarker(TimeMs, "🟢", "واتساب");
+		if (IsFullReadEvent(EventItem)) AddSegment(TimeMs, Math.min(fMaxMs, TimeMs + Duration), "full");
+		if (IsQuickReadEvent(EventItem)) AddSegment(TimeMs, Math.min(fMaxMs, TimeMs + Duration), "quick");
+		if (IsCallEvent(EventItem)) AddMarker(TimeMs, "☎", "كليك اتصال");
+		if (IsWhatsappEvent(EventItem)) AddMarker(TimeMs, "☘", "واتساب");
 		if (LastPage && EventItem.pagePath && EventItem.pagePath !== LastPage) AddMarker(TimeMs, "🚪", "انتقال صفحة");
 		if (EventItem.pagePath) LastPage = EventItem.pagePath;
+	}
+	for (let Index = 0; Index < cEvents.length - 1; Index++) {
+		const A = cEvents[Index];
+		const B = cEvents[Index + 1];
+		const StartMs = Number(A.elapsedMs) || 0;
+		const EndMs = Number(B.elapsedMs) || 0;
+		const Gap = EndMs - StartMs;
+		if (Gap < 4000 || A.pagePath !== B.pagePath) continue;
+		const AScroll = Number(A.scrollY);
+		const BScroll = Number(B.scrollY);
+		if (Number.isFinite(AScroll) && Number.isFinite(BScroll) && Math.abs(AScroll - BScroll) > 20) continue;
+		AddSegment(StartMs, EndMs, Gap >= 12000 ? "full" : "quick");
 	}
 }
 
@@ -759,7 +860,7 @@ function ApplyEvent(pEvent, pIndex, pSmooth = true) {
 		else ScrollFrameToPosition(pEvent, pSmooth);
 	}
 	ShowCursor(pEvent);
-	DispatchReplayClick(pEvent);
+	try { DispatchReplayClick(pEvent); } catch {}
 	ShowReplayToast(ClickToastText(pEvent));
 }
 
@@ -801,7 +902,7 @@ function ApplyDueEvents(pTimeMs) {
 		const EventTime = Number(EventItem.elapsedMs) || 0;
 		if (EventTime > pTimeMs) break;
 		fAppliedIndex = fNextEventIndex;
-		ApplyEvent(EventItem, fNextEventIndex, true);
+		try { ApplyEvent(EventItem, fNextEventIndex, true); } catch {}
 		fNextEventIndex++;
 	}
 }

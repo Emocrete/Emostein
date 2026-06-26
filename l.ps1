@@ -7,7 +7,9 @@ if ([string]::IsNullOrWhiteSpace($repoRoot)) {
 }
 
 Set-Location $repoRoot
-$commitMessage = "Live " + (Get-Date -Format "yyMMdd HHmm")
+$now = Get-Date
+$timeSuffix = if ($now.Hour -lt 12) { "AM" } else { "PM" }
+$commitMessage = "Live " + $now.ToString("yyMMdd hhmm") + " " + $timeSuffix
 
 Write-Host "git add ." -ForegroundColor Cyan
 git add .
