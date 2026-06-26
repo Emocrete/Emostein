@@ -276,8 +276,8 @@ function LoadPageIfNeeded(pEvent) {
 
 function ApplyEvent(pEvent, pIndex, pSmooth = true) {
 	LoadPageIfNeeded(pEvent);
-	fEventBadge.textContent = `${pIndex + 1} / ${cEvents.length}`;
-	fEventText.innerHTML = `<b>${Escape(String(pEvent.type || "event"))}</b><small>${Escape(String(pEvent.label || ""))}</small>`;
+	fEventBadge.textContent = String(pIndex + 1) + " / " + String(cEvents.length);
+	fEventText.innerHTML = "<b>" + Escape(String(pEvent.type || "event")) + "</b><small>" + Escape(String(pEvent.label || "")) + "</small>";
 	SetActive(pIndex);
 	if (pEvent.scrollPercent !== "" && pEvent.scrollPercent !== null && pEvent.scrollPercent !== undefined) ScrollFrameToPercent(pEvent.scrollPercent, pSmooth);
 	ShowCursor(pEvent);
