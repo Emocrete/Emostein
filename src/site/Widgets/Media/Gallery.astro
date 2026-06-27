@@ -1,9 +1,16 @@
 ---
-const { fId = "gallery1", fItems = [], ...RemAttr } = Astro.props;
+const {
+	fId = "gallery1",
+	fItems = [],
+	id: fIdAttr,
+	class: fClass = "",
+	style: fStyle = "",
+	...cAttrs
+} = Astro.props as DebugOutlineProps & Record<string, any>;
 // fItems: [{ fSrc, fAlt, fThumb? }]
 ---
 
-<div class="galleryGrid" {...RemAttr}>
+<div id={fIdAttr} class={`galleryGrid ${fClass}`.trim()} style={fStyle} {...cAttrs}>
     {
         fItems.map((fIt, fI) => (
             <button

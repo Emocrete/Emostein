@@ -52,28 +52,7 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 
 	<Hero>
 
-		<BlurBlob
-			Debug
-			pColor="rgba(50,143,232,.46)"
-			pColor2="rgba(215,245,140,.42)"
-			pBlur={26}
-			pLoc={new Loc(new NumPer("-7%", "-22%"), new NumPer("-10%", "-8%"))}
-			pSize={new DirectSize(new NumPer("42%", "70%"), new NumPer("45%", "34%"))}
-			pZ={1}
-		/>
-
-		<CircleGlow
-			DebugG
-			pColor="rgba(215,245,140,.72)"
-			pColor2="rgba(255,255,255,.32)"
-			pBlur={34}
-			pLoc={new Loc(new NumPer("62%", "42%"), new NumPer("14%", "58%"))}
-			pSize={new DirectSize(new NumPer("33%", "70%"), new NumPer("42%", "30%"))}
-			pZ={1}
-		/>
-
 		<SvgDots
-			DebugF
 			pColor="rgba(255,255,255,.34)"
 			pGap={24}
 			pDot={2}
@@ -82,56 +61,54 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 			pZ={1}
 		/>
 
-		<FreeHeroSlideInRight
-			pLoc={new Location("6%", "5%", "12%", "9%")}
-			pBox={new Size("48%", "auto", "90%", "auto")}
+		<GlassCard
+			pMove="SlideInRight"
+			pMoveLoc={new Location("6%", "5%", "12%", "9%")}
+			pMoveBox={new Size("48%", "auto", "90%", "auto")}
+			pMoveDuration={900}
+			pMoveViewTarget="self"
 			pZ={4}
+			pBg="rgba(17,24,32,.74)"
+			pBorder="rgba(255,255,255,.22)"
+			pRadius={32}
+			pBlur={14}
 		>
 
-			<GlassCard
-				pBg="rgba(17,24,32,.74)"
-				pBorder="rgba(255,255,255,.22)"
-				pRadius={32}
-				pBlur={14}
+			<VrStack
+				pGap={new Pixel(18, 12)}
+				pPad={new Pixel(0)}
+				pAlign="Center"
 			>
 
-				<VrStack
-					pGap={new Pixel(18, 12)}
-					pPad={new Pixel(0)}
-					pAlign="Center"
-				>
+				<Emograph
+					pTitle={Text.H1.Centered.White.OfText("ترخيص صيدلية")}
+					pText={Text.Body.Centered.White.OfText("دليل عملي وخدمة هندسية لترخيص الصيدليات: فحص صلاحية المكان، قياس المسافة، حساب المساحة والارتفاع، تجهيز الرسم الهندسي، ترتيب المستندات، ومتابعة إجراءات الترخيص في القاهرة والجيزة.")}
+				/>
 
-					<Emograph
-						pTitle={Text.H1.Centered.White.OfText("ترخيص صيدلية")}
-						pText={Text.Body.Centered.White.OfText("دليل عملي وخدمة هندسية لترخيص الصيدليات: فحص صلاحية المكان، قياس المسافة، حساب المساحة والارتفاع، تجهيز الرسم الهندسي، ترتيب المستندات، ومتابعة إجراءات الترخيص في القاهرة والجيزة.")}
+				<HzStack pGap={new Pixel(14, 10)} pPad={new Pixel(0)}>
+
+					<EmoCall
+						BlackSky
+						pText="للطلب والاستفسار"
+						pWidth="220px"
+						pHeight="54px"
+						pRadius="18px"
 					/>
 
-					<HzStack pGap={new Pixel(14, 10)} pPad={new Pixel(0)}>
+					<EmoCall
+						pText="واتساب سريع"
+						pWidth="220px"
+						pHeight="54px"
+						pRadius="18px"
+						pBgColors={new HoverColors(Colors.BistageLite, Colors.Bistage)}
+						pTitleColors={new HoverColors(Colors.BlackOff)}
+					/>
 
-						<EmoCall
-							BlackSky
-							pText="للطلب والاستفسار"
-							pWidth="220px"
-							pHeight="54px"
-							pRadius="18px"
-						/>
+				</HzStack>
 
-						<EmoCall
-							pText="واتساب سريع"
-							pWidth="220px"
-							pHeight="54px"
-							pRadius="18px"
-							pBgColors={new HoverColors(Colors.BistageLite, Colors.Bistage)}
-							pTitleColors={new HoverColors(Colors.BlackOff)}
-						/>
+			</VrStack>
 
-					</HzStack>
-
-				</VrStack>
-
-			</GlassCard>
-
-		</FreeHeroSlideInRight>
+		</GlassCard>
 
 		<FreeHeroFadeIn
 			pLoc={new Location("63%", "10%", "12%", "56%")}

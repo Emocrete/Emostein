@@ -2,7 +2,7 @@
 import type { HTMLAttributes } from "astro/types";
 import { Place, type PlaceProps } from "@/TypesLib";
 
-interface Props extends HTMLAttributes<"div">, PlaceProps , DebugOutlineProps { pColor?: string; pColor2?: string; pBlur?: number; }
+interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps { pColor?: string; pColor2?: string; pBlur?: number; }
 
 const { pColor = "rgba(50,143,232,.45)", pColor2 = "rgba(167,196,92,.4)", pBlur = 18, pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly,
 	pMove,
@@ -32,7 +32,8 @@ const cPlace = new Place(Astro.props as PlaceProps, `--BlobColor:${pColor}; --Bl
 <div class={`BlurBlob ${cPlace.Class} ${pGivenClass}`.trim()} style={cPlace.Style} id={pGivenID} aria-hidden="true" {...RemAttr}></div>
 
 <style>
-	.BlurBlob { position: relative; display: block; width: 100%; height: 100%; border-radius: 48% 52% 63% 37% / 42% 38% 62% 58%; background: linear-gradient(135deg, var(--BlobColor), var(--BlobColor2)); filter: blur(var(--BlobBlur)); pointer-events: var(--ShapePointer, none); box-sizing: border-box; }
+	.BlurBlob { position: relative; display: block; width: 100%; height: 100%; border-radius: 48% 52% 63% 37% / 42% 38% 62% 58%; background: none; filter: none; pointer-events: var(--ShapePointer, none); box-sizing: border-box; overflow: visible; }
+	.BlurBlob::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(135deg, var(--BlobColor), var(--BlobColor2)); filter: blur(var(--BlobBlur)); pointer-events: none; }
 .BlurBlob.IsPlaced {
 		position: absolute;
 		left: var(--PlaceXL);

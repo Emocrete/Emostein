@@ -1,15 +1,18 @@
 ---
 const {
     fTitle = "رادار المتابعة",
-    fText = "حركة لطيفة تشبه السونار…",
+    fText = "وصف قصير…",
     fColor = "#7CFFB2",
-    ...RemAttr
+    id: fIdAttr,
+    class: fClass = "",
+    style: fStyle = "",
+    ...cAttrs
 } = Astro.props;
 
 const fId = "rad_" + Math.random().toString(36).slice(2);
 ---
 
-<article class="radCard reveal" data-reveal="up" {...RemAttr}>
+<article id={fIdAttr} class={`radCard reveal ${fClass}`.trim()} style={fStyle} data-reveal="up" {...cAttrs}>
     <div class="radSvg" aria-hidden="true">
         <svg viewBox="0 0 360 220" preserveAspectRatio="xMidYMid meet">
             <defs>

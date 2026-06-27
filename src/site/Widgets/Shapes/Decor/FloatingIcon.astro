@@ -2,7 +2,7 @@
 import type { HTMLAttributes } from "astro/types";
 import { Place, type PlaceProps } from "@/TypesLib";
 
-interface Props extends HTMLAttributes<"div">, PlaceProps , DebugOutlineProps { pIcon?: "star" | "check" | "spark" | "pin"; pFill?: string; pBg?: string; pSpeed?: number; }
+interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps { pIcon?: "star" | "check" | "spark" | "pin"; pFill?: string; pBg?: string; pSpeed?: number; }
 
 const { pIcon = "spark", pFill = "#111111", pBg = "#fbff00", pSpeed = 3200, pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly,
 	pMove,
@@ -35,8 +35,8 @@ const cPlace = new Place(Astro.props as PlaceProps, `--IconFill:${pFill}; --Icon
 </div>
 
 <style>
-	.FloatingIcon { position: relative; display: block; width: 100%; height: 100%; pointer-events: var(--ShapePointer, none); box-sizing: border-box; animation: EmoFloatIcon var(--IconSpeed) ease-in-out infinite alternate; filter: drop-shadow(0 18px 24px rgba(0,0,0,.18)); }
-	.FloatingIcon svg { display: block; width: 100%; height: 100%; }
+	.FloatingIcon { position: relative; display: block; width: 100%; height: 100%; pointer-events: var(--ShapePointer, none); box-sizing: border-box; animation: EmoFloatIcon var(--IconSpeed) ease-in-out infinite alternate; filter: none; }
+	.FloatingIcon svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 18px 24px rgba(0,0,0,.18)); }
 	@keyframes EmoFloatIcon { from { translate: 0 -5%; } to { translate: 0 7%; } }
 .FloatingIcon.IsPlaced {
 		position: absolute;

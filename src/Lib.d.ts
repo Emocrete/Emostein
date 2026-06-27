@@ -29,6 +29,15 @@ interface TImageSpec {
 	alt: string;
 	pos?: TLocationSpec;
 }
+
+
+
+
+/** Debug-only outline attributes for Astro widgets.
+ * Debug  = outline the widget root itself.
+ * DebugF = parent-level/debug family outline.
+ * DebugG = grand-parent-level/debug group outline.
+ */
 interface DebugOutlineProps {
 	Debug?: boolean | string;
 	DebugF?: boolean | string;
@@ -37,4 +46,3 @@ interface DebugOutlineProps {
 	"data-debugF"?: boolean | string;
 	"data-debugG"?: boolean | string;
 }
-

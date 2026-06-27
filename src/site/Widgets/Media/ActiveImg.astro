@@ -1,8 +1,5 @@
 ---
-interface Props {
-	Debug?: boolean | string;
-	DebugF?: boolean | string;
-	DebugG?: boolean | string;
+interface Props extends DebugOutlineProps {
 	pImg?: string;
 	pImgHover?: string;
 	pImgActive?: string;
@@ -30,16 +27,19 @@ const {
 	pScale = "",
 	pClass = "",
 	pFollowParentHover = false,
-	...RemAttr
-} = Astro.props as Props;
+	id: pGivenId,
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...cAttrs
+} = Astro.props as Props & Record<string, any>;
 
-const cId = `StateImg-${Math.random().toString(36).slice(2, 11)}`;
+const cId = pGivenId || `StateImg-${Math.random().toString(36).slice(2, 11)}`;
 const cImgNormal = pImg;
 const cImgHover = pImgHover || cImgNormal;
 const cImgActive = pImgActive || cImgHover || cImgNormal;
 const cHasLink = Boolean(pLink);
 const cRel = pRel || (pTarget === "_blank" ? "noopener noreferrer" : undefined);
-const cClass = `StateImg ${pClass}`.trim();
+const cClass = `StateImg ${pClass} ${pGivenClass}`.trim();
 const cMode = HasValue(pHeight) ? "height" : HasValue(pWidth) ? "width" : HasValue(pScale) ? "scale" : "auto";
 const cSizeValue = HasValue(pHeight)
 	? NormalizeUnit(pHeight)
@@ -70,7 +70,8 @@ function NormalizeUnit(pValue: string | number | undefined) {
 		<a
 			id={cId}
 			class={cClass}
-			{...RemAttr}
+			style={pGivenStyle}
+			{...cAttrs}
 			href={pLink}
 			target={pTarget}
 			rel={cRel}
@@ -87,7 +88,8 @@ function NormalizeUnit(pValue: string | number | undefined) {
 		<div
 			id={cId}
 			class={cClass}
-			{...RemAttr}
+			style={pGivenStyle}
+			{...cAttrs}
 			data-mode={cMode}
 			data-size={cSizeValue}
 			data-normal={cImgNormal}

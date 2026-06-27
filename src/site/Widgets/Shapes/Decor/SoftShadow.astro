@@ -2,7 +2,7 @@
 import type { HTMLAttributes } from "astro/types";
 import { Place, type PlaceProps } from "@/TypesLib";
 
-interface Props extends HTMLAttributes<"div">, PlaceProps , DebugOutlineProps { pColor?: string; }
+interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps { pColor?: string; }
 
 const { pColor = "rgba(0,0,0,.26)", pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly,
 	pMove,
@@ -32,7 +32,8 @@ const cPlace = new Place(Astro.props as PlaceProps, `--ShadowColor:${pColor}; --
 <div class={`SoftShadow ${cPlace.Class} ${pGivenClass}`.trim()} style={cPlace.Style} id={pGivenID} aria-hidden="true" {...RemAttr}></div>
 
 <style>
-	.SoftShadow { position: relative; display: block; width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(ellipse at center, var(--ShadowColor), transparent 72%); filter: blur(18px); pointer-events: var(--ShapePointer, none); box-sizing: border-box; }
+	.SoftShadow { position: relative; display: block; width: 100%; height: 100%; border-radius: 50%; background: none; filter: none; pointer-events: var(--ShapePointer, none); box-sizing: border-box; overflow: visible; }
+	.SoftShadow::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(ellipse at center, var(--ShadowColor), transparent 72%); filter: blur(18px); pointer-events: none; }
 .SoftShadow.IsPlaced {
 		position: absolute;
 		left: var(--PlaceXL);

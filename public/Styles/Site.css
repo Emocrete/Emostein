@@ -263,26 +263,34 @@ body {
     transform: translateY(0);
 }
 
-/* Debug outline helpers
-   Debug  = العنصر نفسه
-   DebugF = عنصر الأب
-   DebugG = عنصر الجد
-   data-debug* متروكة للتوافق مع الاستخدامات القديمة. */
-:where([Debug], [debug], [data-debug]) {
+/* Debug outline helpers:
+   Debug  => widget/root itself
+   DebugF => parent-level mark
+   DebugG => grand-parent-level mark
+   data-* variants kept only for old pages/tests. */
+:where([debug], [Debug], [data-debug], [data-debug="true"], [data-debug=""]) {
 	outline: 3px solid red !important;
 	outline-offset: -3px !important;
+	box-shadow: 0 0 0 3px rgba(255, 0, 0, .55) inset !important;
 }
 
-:where([DebugF], [debugf], [data-debugF], [data-debugf]) {
+:where([debugf], [DebugF], [data-debugF], [data-debugf], [data-debugF="true"], [data-debugf="true"], [data-debugF=""], [data-debugf=""]) {
 	outline: 3px solid rgb(32, 158, 216) !important;
 	outline-offset: -3px !important;
+	box-shadow: 0 0 0 3px rgba(32, 158, 216, .55) inset !important;
 }
 
-:where([DebugG], [debugg], [data-debugG], [data-debugg]) {
+:where([debugg], [DebugG], [data-debugG], [data-debugg], [data-debugG="true"], [data-debugg="true"], [data-debugG=""], [data-debugg=""]) {
 	outline: 3px solid rgb(255, 166, 0) !important;
 	outline-offset: -3px !important;
+	box-shadow: 0 0 0 3px rgba(255, 166, 0, .6) inset !important;
 }
 
+/* Some decorative widgets use filter/mask; while debugging, keep the boundary readable. */
+:where([debug], [Debug], [debugf], [DebugF], [debugg], [DebugG], [data-debug], [data-debugF], [data-debugf], [data-debugG], [data-debugg]) {
+	-webkit-mask-image: none !important;
+	mask-image: none !important;
+}
 
 /* =========================
    Carousel (scroll-snap)
