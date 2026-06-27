@@ -111,6 +111,13 @@ const cSessionId = Astro.params.sessionId ?? "";
 			z-index: 10;
 			overflow: hidden;
 		}
+		.EmoReplayTrailCanvas {
+			position: absolute;
+			inset: 0;
+			z-index: 10;
+			width: 100%;
+			height: 100%;
+		}
 		.EmoReplayCursor {
 			position: absolute;
 			z-index: 12;
@@ -129,13 +136,18 @@ const cSessionId = Astro.params.sessionId ?? "";
 			border-top: 18px solid #ffffff;
 			border-left: 11px solid transparent;
 		}
+		#ReplayOverlay.IsTouchMode .EmoReplayCursor:before,
 		.EmoReplayCursor.IsTouch:before {
-			width: 22px;
-			height: 22px;
-			border: 3px solid rgba(0,213,255,.95);
-			background: rgba(0,213,255,.18);
+			width: 24px;
+			height: 24px;
+			border: 3px solid rgba(255, 48, 48, .95);
+			background: rgba(255, 48, 48, 0);
 			border-radius: 50%;
 			box-sizing: border-box;
+		}
+		#ReplayOverlay.IsTouchMode .EmoReplayCursor.IsTouchDown:before,
+		.EmoReplayCursor.IsTouch.IsTouchDown:before {
+			background: rgba(255, 48, 48, .88);
 		}
 		.EmoReplayPulse {
 			position: absolute;
@@ -143,10 +155,10 @@ const cSessionId = Astro.params.sessionId ?? "";
 			width: 12px;
 			height: 12px;
 			margin: -6px 0 0 -6px;
-			border: 3px solid #00d5ff;
+			border: 3px solid #ff8a00;
 			border-radius: 50%;
 			animation: Pulse .65s ease-out forwards;
-			box-shadow: 0 0 25px rgba(0,213,255,.55);
+			box-shadow: 0 0 25px rgba(255,138,0,.55);
 		}
 		.EmoReplayFocus {
 			position: absolute;
@@ -193,6 +205,35 @@ const cSessionId = Astro.params.sessionId ?? "";
 			text-align: left;
 			font-size: 11px;
 		}
+		.EmoReplayTrack {
+			position: relative;
+			width: 260px;
+			height: 16px;
+			border-radius: 999px;
+			overflow: hidden;
+			background: rgba(255,255,255,.08);
+			border: 1px solid rgba(255,255,255,.14);
+		}
+		.EmoReplayTrackFill {
+			position: absolute;
+			inset-block: 0;
+			left: 0;
+			background: linear-gradient(90deg, #2ea8ff, #00c6a7, #ffc74a, #ff8a00);
+		}
+		.EmoReplayTrackIdle {
+			position: absolute;
+			inset-block: 0;
+			background: #e7eaf0;
+			opacity: .95;
+		}
+		.EmoReplayTrackMarker {
+			position: absolute;
+			top: 50%;
+			transform: translate(-50%, -50%);
+			font-size: 12px;
+			line-height: 1;
+			text-shadow: 0 1px 5px rgba(0,0,0,.9);
+		}
 		.EmoReplayStatus {
 			padding: 30px;
 			text-align: center;
@@ -225,6 +266,7 @@ const cSessionId = Astro.params.sessionId ?? "";
 				</select>
 				<input id="Timeline" type="range" min="0" max="1000" value="0" />
 				<span id="Clock">0.0s</span>
+				<div class="EmoReplayTrack" id="ReplayTrack" aria-label="Replay timeline"></div>
 			</div>
 		</div>
 
@@ -234,6 +276,7 @@ const cSessionId = Astro.params.sessionId ?? "";
 				<div class="EmoReplayStage" id="Stage">
 					<iframe id="ReplayFrame" sandbox="allow-same-origin"></iframe>
 					<div id="ReplayOverlay">
+						<canvas class="EmoReplayTrailCanvas" id="ReplayTrail"></canvas>
 						<div class="EmoReplayFocus" id="FocusBox" hidden></div>
 						<div class="EmoReplayCursor" id="Cursor" hidden></div>
 					</div>
@@ -263,12 +306,15 @@ const cSessionId = Astro.params.sessionId ?? "";
 		const cStageScaler = document.getElementById("StageScaler");
 		const cOverlay = document.getElementById("ReplayOverlay");
 		const cCursor = document.getElementById("Cursor");
+		const cTrail = document.getElementById("ReplayTrail");
+		const cTrailCtx = cTrail.getContext("2d");
 		const cFocusBox = document.getElementById("FocusBox");
 		const cStatus = document.getElementById("ReplayStatus");
 		const cTitle = document.getElementById("ReplayTitle");
 		const cMeta = document.getElementById("ReplayMeta");
 		const cEventsList = document.getElementById("EventsList");
 		const cTimeline = document.getElementById("Timeline");
+		const cReplayTrack = document.getElementById("ReplayTrack");
 		const cClock = document.getElementById("Clock");
 		const cSpeedSel = document.getElementById("SpeedSel");
 		const cPlayBtn = document.getElementById("PlayBtn");
@@ -286,9 +332,72 @@ const cSessionId = Astro.params.sessionId ?? "";
 		let fSpeed = 1;
 		let fLastScrollEvent = null;
 		let fNextScrollEvent = null;
+		let fTrailPoints = [];
+		let fLastCursorPoint = null;
+		let fTouchDown = false;
+		let fTouchStartPoint = null;
+		let fDragTrail = null;
+		let fTrailRaf = 0;
+		let fLastScrollX = 0;
+		let fLastScrollY = 0;
 
 		function FormatMs(pMs) {
 			return `${(pMs / 1000).toFixed(1)}s`;
+		}
+
+		function SetTrailCanvasSize() {
+			const Ratio = window.devicePixelRatio || 1;
+			const W = Math.max(1, cOverlay.clientWidth);
+			const H = Math.max(1, cOverlay.clientHeight);
+			if (cTrail.width !== Math.round(W * Ratio) || cTrail.height !== Math.round(H * Ratio)) {
+				cTrail.width = Math.round(W * Ratio);
+				cTrail.height = Math.round(H * Ratio);
+				cTrail.style.width = `${W}px`;
+				cTrail.style.height = `${H}px`;
+			}
+			cTrailCtx.setTransform(Ratio, 0, 0, Ratio, 0, 0);
+		}
+
+		function AddTrailPoint(pX, pY, pTime = performance.now()) {
+			fTrailPoints.push({ x: pX, y: pY, time: pTime });
+			if (fTrailPoints.length > 90) fTrailPoints.splice(0, fTrailPoints.length - 90);
+		}
+
+		function DrawTrails() {
+			SetTrailCanvasSize();
+			const Now = performance.now();
+			const W = cOverlay.clientWidth;
+			const H = cOverlay.clientHeight;
+			cTrailCtx.clearRect(0, 0, W, H);
+			fTrailPoints = fTrailPoints.filter((Point) => Now - Point.time <= 950);
+			for (let I = 1; I < fTrailPoints.length; I++) {
+				const A = fTrailPoints[I - 1];
+				const B = fTrailPoints[I];
+				const Age = Now - B.time;
+				const Alpha = Math.max(0, 1 - Age / 950);
+				cTrailCtx.strokeStyle = `rgba(255,138,0,${Alpha * .78})`;
+				cTrailCtx.lineWidth = 2 + Alpha * 9;
+				cTrailCtx.lineCap = "round";
+				cTrailCtx.beginPath();
+				cTrailCtx.moveTo(A.x, A.y);
+				cTrailCtx.lineTo(B.x, B.y);
+				cTrailCtx.stroke();
+			}
+			if (fDragTrail) {
+				const Alpha = Math.max(0, 1 - (Now - fDragTrail.time) / 2000);
+				if (Alpha > 0) {
+					cTrailCtx.strokeStyle = `rgba(255,48,48,${Alpha * .82})`;
+					cTrailCtx.lineWidth = 5;
+					cTrailCtx.lineCap = "round";
+					cTrailCtx.beginPath();
+					cTrailCtx.moveTo(fDragTrail.start.x, fDragTrail.start.y);
+					cTrailCtx.lineTo(fDragTrail.end.x, fDragTrail.end.y);
+					cTrailCtx.stroke();
+				} else {
+					fDragTrail = null;
+				}
+			}
+			fTrailRaf = requestAnimationFrame(DrawTrails);
 		}
 
 		function CssEscape(pValue) {
@@ -375,6 +484,14 @@ const cSessionId = Astro.params.sessionId ?? "";
 			cCursor.hidden = true;
 			cFocusBox.hidden = true;
 			cOverlay.querySelectorAll(".EmoReplayPulse").forEach((x) => x.remove());
+			fTrailPoints = [];
+			fLastCursorPoint = null;
+			fTouchDown = false;
+			fTouchStartPoint = null;
+			fDragTrail = null;
+			fLastScrollX = 0;
+			fLastScrollY = 0;
+			cCursor.classList.remove("IsTouchDown");
 			fLastScrollEvent = null;
 			fNextScrollEvent = null;
 		}
@@ -382,10 +499,19 @@ const cSessionId = Astro.params.sessionId ?? "";
 		function MoveCursor(pEvent) {
 			const X = Number.isFinite(pEvent.x) ? pEvent.x : (Number(pEvent.nx || 0) * cStage.clientWidth);
 			const Y = Number.isFinite(pEvent.y) ? pEvent.y : (Number(pEvent.ny || 0) * cStage.clientHeight);
+			const IsTouch = pEvent.pointerType === "touch" || pEvent.type === "touch" || cOverlay.classList.contains("IsTouchMode");
+			fLastCursorPoint = { x: X, y: Y, isTouch: IsTouch };
 			cCursor.hidden = false;
 			cCursor.style.left = `${X}px`;
 			cCursor.style.top = `${Y}px`;
-			cCursor.classList.toggle("IsTouch", pEvent.pointerType === "touch" || pEvent.type === "touch");
+			cCursor.classList.toggle("IsTouch", IsTouch);
+			if (pEvent.type === "pointer-down") {
+				fTouchDown = true;
+				fTouchStartPoint = { x: X, y: Y };
+			}
+			if (pEvent.type === "pointer-up") fTouchDown = false;
+			cCursor.classList.toggle("IsTouchDown", fTouchDown && IsTouch);
+			AddTrailPoint(X, Y);
 		}
 
 		function ShowPulse(pEvent) {
@@ -446,7 +572,21 @@ const cSessionId = Astro.params.sessionId ?? "";
 		}
 
 		function ApplyScroll(pEvent) {
-			GetFrameWin()?.scrollTo?.(Number(pEvent.x || 0), Number(pEvent.y || 0));
+			const NewX = Number(pEvent.x || 0);
+			const NewY = Number(pEvent.y || 0);
+			const DeltaX = NewX - fLastScrollX;
+			const DeltaY = NewY - fLastScrollY;
+			GetFrameWin()?.scrollTo?.(NewX, NewY);
+			fLastScrollX = NewX;
+			fLastScrollY = NewY;
+			if (fTouchDown && fLastCursorPoint?.isTouch) {
+				fLastCursorPoint.x -= DeltaX;
+				fLastCursorPoint.y -= DeltaY;
+				cCursor.style.left = `${fLastCursorPoint.x}px`;
+				cCursor.style.top = `${fLastCursorPoint.y}px`;
+				AddTrailPoint(fLastCursorPoint.x, fLastCursorPoint.y);
+				if (fTouchStartPoint) fDragTrail = { start: fTouchStartPoint, end: { x: fLastCursorPoint.x, y: fLastCursorPoint.y }, time: performance.now() };
+			}
 		}
 
 		function ApplyEvent(pEvent, pSilent = false) {
@@ -520,6 +660,51 @@ const cSessionId = Astro.params.sessionId ?? "";
 			SetTime(0, true);
 		}
 
+		function EventIcon(pEvent) {
+			const Type = String(pEvent?.type || "").toLowerCase();
+			if (Type.includes("read_full") || Type === "read" || Type.endsWith("_stay")) return "📖";
+			if (Type.includes("read_quick") || Type.includes("skim")) return "👁";
+			if (Type.includes("video") || Type.includes("clarity")) return "▶";
+			if (Type.includes("call")) return "☎";
+			if (Type.includes("whatsapp")) return "☘";
+			if (Type.includes("input") || Type.includes("form")) return "✎";
+			if (Type.includes("rating")) return "★";
+			if (Type.includes("click")) return "⌁";
+			if (Type.includes("visibility") || Type === "blur") return "◌";
+			return "";
+		}
+
+		function RenderReplayTrack() {
+			cReplayTrack.innerHTML = `<div class="EmoReplayTrackFill" style="width:100%"></div>`;
+			let IdleStart = null;
+			for (const Event of fEvents) {
+				const Type = String(Event.type || "").toLowerCase();
+				const State = String(Event.state || Event.visibilityState || "").toLowerCase();
+				if ((Type === "visibility" && State === "hidden") || Type === "window-blur") IdleStart = Number(Event.t || 0);
+				if (((Type === "visibility" && State === "visible") || Type === "window-focus") && IdleStart !== null) {
+					const End = Number(Event.t || 0);
+					const Left = Math.max(0, Math.min(100, (IdleStart / fDurationMs) * 100));
+					const Width = Math.max(.4, Math.min(100 - Left, ((End - IdleStart) / fDurationMs) * 100));
+					const Idle = document.createElement("div");
+					Idle.className = "EmoReplayTrackIdle";
+					Idle.style.left = `${Left}%`;
+					Idle.style.width = `${Width}%`;
+					cReplayTrack.appendChild(Idle);
+					IdleStart = null;
+				}
+			}
+			fEvents.forEach((Event, Index) => {
+				const Icon = EventIcon(Event);
+				if (!Icon) return;
+				if (Index > 0 && Math.abs(Number(Event.t || 0) - Number(fEvents[Index - 1].t || 0)) < 150) return;
+				const Marker = document.createElement("span");
+				Marker.className = "EmoReplayTrackMarker";
+				Marker.textContent = Icon;
+				Marker.style.left = `${Math.max(0, Math.min(100, (Number(Event.t || 0) / fDurationMs) * 100))}%`;
+				cReplayTrack.appendChild(Marker);
+			});
+		}
+
 		function RenderEventsList() {
 			const Important = fEvents.filter((Event) => ["click", "focus", "input", "change", "submit", "widget-state"].includes(Event.type));
 			cEventsList.innerHTML = "";
@@ -545,6 +730,10 @@ const cSessionId = Astro.params.sessionId ?? "";
 			const Chunks = ChunksData.chunks || [];
 			fEvents = Chunks.flatMap((Chunk) => Array.isArray(Chunk.events_json) ? Chunk.events_json : []).sort((A, B) => (A.t || 0) - (B.t || 0));
 			fDurationMs = Math.max(1000, ...fEvents.map((Event) => Number(Event.t || 0)));
+			const ViewportWidth = Number(fSession.viewport_width || fSession.meta?.viewport?.width || 0);
+			cOverlay.classList.toggle("IsTouchMode", ViewportWidth > 0 && ViewportWidth <= 740);
+			cOverlay.classList.toggle("IsDesktop", !(ViewportWidth > 0 && ViewportWidth <= 740));
+			RenderReplayTrack();
 
 			cTitle.textContent = fSession.page_title || "EmoReplay";
 			cMeta.textContent = `${fSession.page_url || ""} | ${fSession.viewport_width}x${fSession.viewport_height} | ${fEvents.length} events`;
@@ -556,6 +745,8 @@ const cSessionId = Astro.params.sessionId ?? "";
 				cStageScaler.hidden = false;
 				SetTime(0, true);
 				RenderEventsList();
+				cancelAnimationFrame(fTrailRaf);
+				fTrailRaf = requestAnimationFrame(DrawTrails);
 			}, { once: true });
 		}
 
@@ -572,7 +763,7 @@ const cSessionId = Astro.params.sessionId ?? "";
 			Pause();
 			SetTime((Number(cTimeline.value) / 1000) * fDurationMs, true);
 		};
-		window.addEventListener("resize", FitStage, { passive: true });
+		window.addEventListener("resize", () => { FitStage(); SetTrailCanvasSize(); }, { passive: true });
 
 		Load().catch((Ex) => {
 			cStatus.textContent = `Replay failed: ${Ex.message || Ex}`;
