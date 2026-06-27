@@ -138,6 +138,17 @@ function LowerType(pEventType) {
 	return Str(pEventType).toLowerCase();
 }
 
+function EventSearchText(pEvent) {
+	return Str([
+		pEvent && pEvent.type,
+		pEvent && pEvent.eventOn,
+		pEvent && pEvent.label,
+		pEvent && pEvent.targetText,
+		pEvent && pEvent.widget,
+		pEvent && pEvent.href
+	].join(" ")).toLowerCase();
+}
+
 function IsReplayOnlyMotionType(pEventType) {
 	const Type = LowerType(pEventType);
 	return Type === "pointer_move" || Type === "mouse_move" || Type === "touch_move" || Type === "scroll_move";
@@ -152,15 +163,13 @@ function IsReplayVisualEventType(pEventType) {
 }
 
 function IsCallEvent(pEvent) {
-	const Type = LowerType(pEvent && pEvent.type);
-	const Href = Str(pEvent && pEvent.href).toLowerCase();
-	return Type.includes("call") || Href.startsWith("tel:");
+	const Text = EventSearchText(pEvent);
+	return Text.includes("call") || Text.includes("phone") || Text.includes("tel:") || Text.includes("اتصال") || Text.includes("تليفون") || Text.includes("هاتف");
 }
 
 function IsWhatsappEvent(pEvent) {
-	const Type = LowerType(pEvent && pEvent.type);
-	const Href = Str(pEvent && pEvent.href).toLowerCase();
-	return Type.includes("whatsapp") || Href.includes("wa.me") || Href.includes("whatsapp");
+	const Text = EventSearchText(pEvent);
+	return Text.includes("whatsapp") || Text.includes("wa.me") || Text.includes("واتساب") || Text.includes("واتس");
 }
 
 function IsFullReadEvent(pEvent) {
@@ -185,26 +194,17 @@ function NormalizeReplayEvents(pReplayEvents) {
 	if (!pReplayEvents.length) return [];
 
 	pReplayEvents.sort((A, B) => {
-		const TimeA = Num(A.createdAtMs);
-		const TimeB = Num(B.createdAtMs);
+		const ElapsedA = Num(A.elapsedMs);
+		const ElapsedB = Num(B.elapsedMs);
 		const SeqA = Num(A.clientEventSeq);
 		const SeqB = Num(B.clientEventSeq);
-		return TimeA - TimeB || SeqA - SeqB || Num(A.id) - Num(B.id) || Num(A.index) - Num(B.index);
+		return ElapsedA - ElapsedB || SeqA - SeqB || Num(A.id) - Num(B.id) || Num(A.index) - Num(B.index);
 	});
 
-	const DateValues = pReplayEvents.map((EventItem) => Num(EventItem.createdAtMs)).filter((Value) => Value > 0);
-	if (DateValues.length >= 2) {
-		const FirstCreatedAt = Math.min(...DateValues);
-		for (const EventItem of pReplayEvents) {
-			const CreatedAt = Num(EventItem.createdAtMs);
-			EventItem.elapsedMs = CreatedAt > 0 ? Math.max(0, CreatedAt - FirstCreatedAt) : 0;
-		}
-	} else {
-		let MaxElapsed = 0;
-		for (const EventItem of pReplayEvents) MaxElapsed = Math.max(MaxElapsed, Num(EventItem.elapsedMs));
-		if (MaxElapsed <= 0 && pReplayEvents.length > 1) {
-			for (let Index = 0; Index < pReplayEvents.length; Index++) pReplayEvents[Index].elapsedMs = Index * 1500;
-		}
+	let MaxElapsed = 0;
+	for (const EventItem of pReplayEvents) MaxElapsed = Math.max(MaxElapsed, Num(EventItem.elapsedMs));
+	if (MaxElapsed <= 0 && pReplayEvents.length > 1) {
+		for (let Index = 0; Index < pReplayEvents.length; Index++) pReplayEvents[Index].elapsedMs = Index * 1500;
 	}
 
 	let LastElapsed = -1;
@@ -218,15 +218,26 @@ function NormalizeReplayEvents(pReplayEvents) {
 	return pReplayEvents;
 }
 
+function IsReplayDurationEvent(pEvent) {
+	const Type = LowerType(pEvent && pEvent.type);
+	if (!IsReplayVisualEventType(Type)) return false;
+	if (IsReplayOnlyMotionType(Type)) return false;
+	if (Type === "page_ping" || Type === "heartbeat" || Type === "clarity_link") return false;
+	if (Type === "page_exit" || Type === "page_close" || Type === "visibility_hidden" || Type === "page_hidden") return false;
+	return true;
+}
+
 function ReplayDurationMsOf(pReplayEvents) {
 	let MaxElapsed = 0;
 	for (const EventItem of pReplayEvents) {
-		if (!IsReplayVisualEventType(EventItem.type)) continue;
-		if (IsReplayOnlyMotionType(EventItem.type)) continue;
+		if (!IsReplayDurationEvent(EventItem)) continue;
 		MaxElapsed = Math.max(MaxElapsed, Num(EventItem.elapsedMs));
 	}
 	if (MaxElapsed <= 0) {
-		for (const EventItem of pReplayEvents) MaxElapsed = Math.max(MaxElapsed, Num(EventItem.elapsedMs));
+		for (const EventItem of pReplayEvents) {
+			if (IsReplayOnlyMotionType(EventItem.type)) continue;
+			MaxElapsed = Math.max(MaxElapsed, Num(EventItem.elapsedMs));
+		}
 	}
 	if (MaxElapsed <= 0) return pReplayEvents.length > 1 ? (pReplayEvents.length - 1) * 1500 : 1000;
 	return Math.max(1000, Math.round(MaxElapsed));
@@ -241,8 +252,29 @@ function SafeReplayData(pEvents, pRequestUrl) {
 		const TimeB = CreatedAtMsOf(B, PayloadB);
 		return TimeA - TimeB || Num(Pick(A, "id")) - Num(Pick(B, "id"));
 	});
-	const FirstEventWithDate = OrderedEvents.find((EventRow) => CreatedAtMsOf(EventRow, PayloadOf(EventRow)) > 0);
-	const FirstCreatedAtMs = FirstEventWithDate ? CreatedAtMsOf(FirstEventWithDate, PayloadOf(FirstEventWithDate)) : 0;
+	const PageStarts = new Map();
+	const FallbackDates = [];
+	for (const EventRow of OrderedEvents) {
+		const Payload = PayloadOf(EventRow);
+		const CreatedAt = CreatedAtMsOf(EventRow, Payload);
+		if (CreatedAt > 0) FallbackDates.push(CreatedAt);
+		const ExplicitElapsed = ExplicitElapsedMsOf(Payload);
+		if (CreatedAt > 0 && ExplicitElapsed >= 0) {
+			const Key = PageInstanceKeyOf(EventRow, Payload);
+			const StartAt = CreatedAt - ExplicitElapsed;
+			if (!PageStarts.has(Key) || StartAt < PageStarts.get(Key)) PageStarts.set(Key, StartAt);
+		}
+	}
+	const StartCandidates = [...PageStarts.values()].filter((Value) => Number.isFinite(Value) && Value > 0);
+	const SessionStartMs = StartCandidates.length ? Math.min(...StartCandidates) : (FallbackDates.length ? Math.min(...FallbackDates) : 0);
+	function AbsoluteElapsedMs(EventRow, Payload) {
+		const ExplicitElapsed = ExplicitElapsedMsOf(Payload);
+		const Key = PageInstanceKeyOf(EventRow, Payload);
+		if (ExplicitElapsed >= 0 && PageStarts.has(Key) && SessionStartMs > 0) return Math.max(0, PageStarts.get(Key) + ExplicitElapsed - SessionStartMs);
+		const CreatedAt = CreatedAtMsOf(EventRow, Payload);
+		if (CreatedAt > 0 && SessionStartMs > 0) return Math.max(0, CreatedAt - SessionStartMs);
+		return Math.max(0, ExplicitElapsed);
+	}
 
 	const VisualEvents = OrderedEvents.filter((EventRow) => IsReplayVisualEventType(EventTypeOf(EventRow, PayloadOf(EventRow))));
 
@@ -269,7 +301,7 @@ function SafeReplayData(pEvents, pRequestUrl) {
 			createdAtMs: CreatedAtMsOf(EventRow, Payload),
 			createdAtText: EventTime(EventRow),
 			clientEventSeq: Num(Pick(Payload, "clientEventSeq", "client_event_seq")),
-			elapsedMs: EventElapsedMs(EventRow, Payload, FirstCreatedAtMs),
+			elapsedMs: AbsoluteElapsedMs(EventRow, Payload),
 			durationMs: Pick(Payload, "durationMs", "duration_ms"),
 			scrollPercent: ScrollPercentOf(EventType, Payload),
 			scrollX: Pick(Payload, "scrollX", "scroll_x"),
@@ -300,6 +332,10 @@ function UrlPathOf(pValue) {
 	} catch {
 		return Text.startsWith("/") ? Text : "/" + Text;
 	}
+}
+
+function PageInstanceKeyOf(pRow, pPayload) {
+	return Str(Pick(pRow, "page_instance_id", "pageInstanceId") || Pick(pPayload, "pageInstanceId", "page_instance_id") || PagePathOf(pRow, pPayload));
 }
 
 function ReplayProxyUrlOf(pPageUrl, pRequestUrl) {
@@ -445,7 +481,7 @@ function RenderReplay(pEvents, pSessionId, pPageInstanceId, pRequestUrl) {
 <title>EmoLive Replay</title>
 
 <style>
-:root{color-scheme:dark;--bg:#05080d;--panel:#0c131d;--line:#26384d;--text:#eef5ff;--muted:#a8b7c9;--blue:#2da5ff;--gold:#ffca4b;--red:#ff4b4b;--appH:100vh}*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;position:fixed;inset:0}body{background:#05080d;color:var(--text);font-family:system-ui,Tahoma,Arial,sans-serif;overscroll-behavior:none;touch-action:none;user-select:none}.shell{width:100vw;height:var(--appH);display:grid;grid-template-rows:auto 1fr;background:#05080d;overflow:hidden}.top{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:28px 5px;gap:3px 6px;align-items:center;padding:3px 6px;background:#0c131d;border-bottom:1px solid #233348;direction:ltr}.controls{display:flex;gap:4px;align-items:center}.iconBtn{width:28px;height:26px;border:1px solid #3b5670;background:#152235;color:var(--text);border-radius:8px;font-size:14px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;line-height:1}.iconBtn:hover{border-color:var(--blue)}.speed{height:26px;background:#101925;color:var(--text);border:1px solid #3b5670;border-radius:8px;padding:0 4px;font-weight:800;max-width:56px}.meta{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-align:center;font-size:11px;color:var(--muted);direction:ltr}.meta b{color:var(--text);font-size:11px}.meta a{color:#8fd0ff;text-decoration:none}.timeBox{color:var(--gold);font-weight:1000;min-width:46px;text-align:center;font-size:12px;direction:ltr}.progressRow{grid-column:1/4;height:7px;position:relative}.trackLayer{position:absolute;left:0;right:0;top:1px;height:5px;border-radius:999px;overflow:visible;background:#233348;pointer-events:none;z-index:7}.trackSegment{position:absolute;top:0;height:100%;opacity:.9}.trackSegment.full{background:#16c784}.trackSegment.quick{background:#ff9f1a}.trackMarker{position:absolute;top:-14px;transform:translateX(-50%);font-size:14px;line-height:1;text-shadow:0 1px 4px #000;z-index:12}.progress{appearance:none;position:relative;z-index:8;background:transparent!important;width:100%;height:5px;border-radius:999px;display:block;margin:0}.progress::-webkit-slider-runnable-track{height:5px;background:transparent!important}.progress::-moz-range-track{height:5px;background:transparent!important}.progress::-webkit-slider-thumb{appearance:none;width:13px;height:13px;border-radius:50%;background:var(--blue);cursor:pointer}.progress::-moz-range-thumb{width:13px;height:13px;border:0;border-radius:50%;background:var(--blue);cursor:pointer}.main{min-height:0;position:relative;overflow:hidden;background:#05080d}.timeline{display:none}.stageWrap{position:absolute;inset:0;overflow:hidden;background:#05080d;direction:ltr}.viewport{position:absolute;inset:0;overflow:hidden;background:#05080d}.deviceFrame{position:absolute;left:0;top:0;flex:none;width:${ReplayViewport.Width}px;height:${ReplayViewport.Height}px;transform-origin:top left;background:white;box-shadow:0 12px 60px #000d;border:1px solid #ffffff26;will-change:transform;overflow:hidden}.pageFrame{position:absolute;inset:0;width:100%;height:100%;border:0;background:white;pointer-events:none;overflow:hidden}.interactionBlock{position:absolute;inset:0;z-index:4;background:transparent;touch-action:none}.trailLayer{position:absolute;inset:0;z-index:7;pointer-events:none}.trailPoint{position:absolute;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none}.trailPoint.mouse{background:#ff4b4b;box-shadow:0 0 12px #ff4b4baa}.trailPoint.touch{background:#ffd233;box-shadow:0 0 12px #ffd233aa}.cursor{position:absolute;z-index:8;width:22px;height:22px;border:3px solid var(--red);border-radius:50%;pointer-events:none;display:none;transform:translate(-50%,-50%);box-shadow:0 0 0 8px #ff4b4b25}.cursor.pulse{animation:pulse .45s ease-out}.cursor.clicking{background:var(--red);border-color:var(--red)}.rotatedReplay .shell{grid-template-rows:1fr}.rotatedReplay .top{position:fixed;z-index:40;right:3px;top:50%;width:calc(var(--appH) - 8px);transform-origin:center;transform:translate(50%,-50%) rotate(90deg);border:1px solid #233348;border-radius:10px;box-shadow:0 8px 30px #0008}.rotatedReplay .main{grid-row:1/2}.replayToast{position:absolute;z-index:12;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);min-width:96px;max-width:min(80vw,360px);padding:10px 18px;border-radius:999px;border:1px solid #ffffff3a;background:#05080ddf;color:#fff;font-weight:1000;font-size:20px;text-align:center;box-shadow:0 16px 50px #000b;opacity:0;pointer-events:none;transition:opacity .16s ease,transform .16s ease}.replayToast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}@keyframes pulse{from{box-shadow:0 0 0 4px #ff4b4b66}to{box-shadow:0 0 0 24px #ff4b4b00}}.srOnly{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}@media(max-width:650px){.top{grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:27px 5px;padding:3px 5px}.iconBtn{width:27px;height:25px}.speed{height:25px}.meta{font-size:10px}.meta b{font-size:10px}.timeBox{font-size:11px;min-width:40px}}
+:root{color-scheme:dark;--bg:#05080d;--panel:#0c131d;--line:#26384d;--text:#eef5ff;--muted:#a8b7c9;--blue:#2da5ff;--gold:#ffca4b;--red:#ff4b4b;--appH:100vh}*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;position:fixed;inset:0}body{background:#05080d;color:var(--text);font-family:system-ui,Tahoma,Arial,sans-serif;overscroll-behavior:none;touch-action:none;user-select:none}.shell{width:100vw;height:var(--appH);display:grid;grid-template-rows:auto 1fr;background:#05080d;overflow:hidden}.top{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:28px 5px;gap:3px 6px;align-items:center;padding:3px 6px;background:#0c131d;border-bottom:1px solid #233348;direction:ltr}.controls{display:flex;gap:4px;align-items:center}.iconBtn{width:28px;height:26px;border:1px solid #3b5670;background:#152235;color:var(--text);border-radius:8px;font-size:14px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;line-height:1}.iconBtn:hover{border-color:var(--blue)}.speed{height:26px;background:#101925;color:var(--text);border:1px solid #3b5670;border-radius:8px;padding:0 4px;font-weight:800;max-width:56px}.meta{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-align:center;font-size:11px;color:var(--muted);direction:ltr}.meta b{color:var(--text);font-size:11px}.meta a{color:#8fd0ff;text-decoration:none}.timeBox{color:var(--gold);font-weight:1000;min-width:46px;text-align:center;font-size:12px;direction:ltr}.progressRow{grid-column:1/4;height:7px;position:relative}.trackLayer{position:absolute;left:0;right:0;top:1px;height:5px;border-radius:999px;overflow:visible;background:#233348;pointer-events:none;z-index:7}.trackSegment{position:absolute;top:0;height:100%;opacity:.9}.trackSegment.full{background:#16c784}.trackSegment.quick{background:#ff9f1a}.trackMarker{position:absolute;top:-14px;transform:translateX(-50%);font-size:14px;line-height:1;text-shadow:0 1px 4px #000;z-index:12}.progress{appearance:none;position:relative;z-index:8;background:transparent!important;width:100%;height:5px;border-radius:999px;display:block;margin:0}.progress::-webkit-slider-runnable-track{height:5px;background:transparent!important}.progress::-moz-range-track{height:5px;background:transparent!important}.progress::-webkit-slider-thumb{appearance:none;width:13px;height:13px;border-radius:50%;background:var(--blue);cursor:pointer}.progress::-moz-range-thumb{width:13px;height:13px;border:0;border-radius:50%;background:var(--blue);cursor:pointer}.main{min-height:0;position:relative;overflow:hidden;background:#05080d}.timeline{display:none}.stageWrap{position:absolute;inset:0;overflow:hidden;background:#05080d;direction:ltr}.viewport{position:absolute;inset:0;overflow:hidden;background:#05080d}.deviceFrame{position:absolute;left:0;top:0;flex:none;width:${ReplayViewport.Width}px;height:${ReplayViewport.Height}px;transform-origin:top left;background:white;box-shadow:0 12px 60px #000d;border:1px solid #ffffff26;will-change:transform;overflow:hidden}.pageFrame{position:absolute;inset:0;width:100%;height:100%;border:0;background:white;pointer-events:none;overflow:hidden}.interactionBlock{position:absolute;inset:0;z-index:4;background:transparent;touch-action:none}.trailLayer{position:absolute;inset:0;z-index:7;pointer-events:none}.trailPoint{position:absolute;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none}.trailPoint.mouse{background:#ff4b4b;box-shadow:0 0 14px #ff4b4bcc}.trailPoint.touch{background:#ffd233;box-shadow:0 0 14px #ffd233cc}.cursor{position:absolute;z-index:8;width:22px;height:22px;border:3px solid var(--red);border-radius:50%;pointer-events:none;display:none;transform:translate(-50%,-50%);box-shadow:0 0 0 8px #ff4b4b25}.cursor.pulse{animation:pulse .45s ease-out}.cursor.clicking{background:var(--red);border-color:var(--red)}.rotatedReplay .shell{grid-template-rows:1fr}.rotatedReplay .top{position:fixed;z-index:40;left:100vw;top:0;width:calc(var(--appH) - 4px);transform-origin:top left;transform:rotate(90deg);border:1px solid #233348;border-radius:10px;box-shadow:0 8px 30px #0008}.rotatedReplay .main{grid-row:1/2}.replayToast{position:absolute;z-index:12;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);min-width:96px;max-width:min(80vw,360px);padding:10px 18px;border-radius:999px;border:1px solid #ffffff3a;background:#05080ddf;color:#fff;font-weight:1000;font-size:20px;text-align:center;box-shadow:0 16px 50px #000b;opacity:0;pointer-events:none;transition:opacity .16s ease,transform .16s ease}.replayToast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}@keyframes pulse{from{box-shadow:0 0 0 4px #ff4b4b66}to{box-shadow:0 0 0 24px #ff4b4b00}}.srOnly{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}@media(max-width:650px){.top{grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:27px 5px;padding:3px 5px}.iconBtn{width:27px;height:25px}.speed{height:25px}.meta{font-size:10px}.meta b{font-size:10px}.timeBox{font-size:11px;min-width:40px}}
 </style>
 </head>
 <body>
@@ -509,21 +545,23 @@ function ResizeDeviceFrame() {
 	const TopBar = document.querySelector(".top");
 	const TopHeight = TopBar ? Math.ceil(TopBar.getBoundingClientRect().height) : 0;
 	const AvailableWidth = Math.max(1, window.innerWidth || document.documentElement.clientWidth || fViewport.clientWidth || 1);
-	const AvailableHeight = Math.max(1, AppHeight - TopHeight);
 	const SourceIsDesktopLandscape = cReplayViewportWidth >= 900 && cReplayViewportWidth > cReplayViewportHeight;
-	const ViewerIsPortraitMobile = AvailableWidth <= 700 && AvailableHeight > AvailableWidth;
+	const ViewerIsPortraitMobile = AvailableWidth <= 700 && AppHeight > AvailableWidth;
 	const RotateForMobilePreview = SourceIsDesktopLandscape && ViewerIsPortraitMobile;
+	document.body.classList.toggle("rotatedReplay", RotateForMobilePreview);
+	const RotatedControlThickness = RotateForMobilePreview ? Math.max(32, TopHeight) : 0;
+	const StageWidth = Math.max(1, AvailableWidth - RotatedControlThickness);
+	const StageHeight = Math.max(1, RotateForMobilePreview ? AppHeight : AppHeight - TopHeight);
 	const FitWidth = RotateForMobilePreview ? cReplayViewportHeight : cReplayViewportWidth;
 	const FitHeight = RotateForMobilePreview ? cReplayViewportWidth : cReplayViewportHeight;
-	const WidthScale = AvailableWidth / Math.max(1, FitWidth);
-	const HeightScale = AvailableHeight / Math.max(1, FitHeight);
+	const WidthScale = StageWidth / Math.max(1, FitWidth);
+	const HeightScale = StageHeight / Math.max(1, FitHeight);
 	fScale = Math.min(WidthScale, HeightScale);
 	if (!Number.isFinite(fScale) || fScale <= 0) fScale = 1;
 	fDeviceFrame.style.width = cReplayViewportWidth + "px";
 	fDeviceFrame.style.height = cReplayViewportHeight + "px";
-	fDeviceFrame.style.left = Math.max(0, (AvailableWidth - FitWidth * fScale) / 2) + "px";
-	fDeviceFrame.style.top = Math.max(0, (AvailableHeight - FitHeight * fScale) / 2) + "px";
-	document.body.classList.toggle("rotatedReplay", RotateForMobilePreview);
+	fDeviceFrame.style.left = Math.max(0, (StageWidth - FitWidth * fScale) / 2) + "px";
+	fDeviceFrame.style.top = Math.max(0, (StageHeight - FitHeight * fScale) / 2) + "px";
 	if (RotateForMobilePreview) {
 		fDeviceFrame.style.transform = "translateX(" + (cReplayViewportHeight * fScale) + "px) rotate(90deg) scale(" + fScale + ")";
 	} else {
@@ -668,12 +706,12 @@ function RenderPointerTrail(pMs) {
 		const Opacity = Math.max(0, 1 - Age / 2000);
 		const Dot = document.createElement("span");
 		Dot.className = "trailPoint " + (cReplayIsMobile ? "touch" : "mouse");
-		const Size = cReplayIsMobile ? 22 : Math.max(4, 16 * Opacity);
+		const Size = cReplayIsMobile ? 24 : Math.max(6, 22 * Opacity);
 		Dot.style.width = Size + "px";
 		Dot.style.height = Size + "px";
 		Dot.style.left = Point.x + "px";
 		Dot.style.top = Point.y + "px";
-		Dot.style.opacity = String(cReplayIsMobile ? Opacity * 0.75 : Opacity * 0.55);
+		Dot.style.opacity = String(cReplayIsMobile ? Opacity * 0.82 : Opacity * 0.72);
 		fTrailLayer.appendChild(Dot);
 	}
 }
@@ -750,9 +788,8 @@ function ClickToastText(pEvent) {
 	if (!pEvent) return "";
 	const Type = String(pEvent.type || "").toLowerCase();
 	const EventOn = String(pEvent.eventOn || "").toLowerCase();
-	const Href = String(pEvent.href || "").toLowerCase();
-	if (Type.includes("call") || Href.startsWith("tel:")) return "كليك اتصال";
-	if (Type.includes("whatsapp") || Href.includes("wa.me") || Href.includes("whatsapp")) return "كليك واتساب";
+	if (IsCallEvent(pEvent)) return "كليك اتصال";
+	if (IsWhatsappEvent(pEvent)) return "كليك واتساب";
 	if (Type.includes("click") || EventOn === "click") return "كليك";
 	return "";
 }
@@ -812,16 +849,18 @@ function ClientType(pEvent) {
 	return String(pEvent && pEvent.type || "").toLowerCase();
 }
 
+function ClientSearchText(pEvent) {
+	return String([pEvent && pEvent.type, pEvent && pEvent.eventOn, pEvent && pEvent.label, pEvent && pEvent.targetText, pEvent && pEvent.widget, pEvent && pEvent.href].join(" ")).toLowerCase();
+}
+
 function IsCallEvent(pEvent) {
-	const Type = ClientType(pEvent);
-	const Href = String(pEvent && pEvent.href || "").toLowerCase();
-	return Type.includes("call") || Href.startsWith("tel:");
+	const Text = ClientSearchText(pEvent);
+	return Text.includes("call") || Text.includes("phone") || Text.includes("tel:") || Text.includes("اتصال") || Text.includes("تليفون") || Text.includes("هاتف");
 }
 
 function IsWhatsappEvent(pEvent) {
-	const Type = ClientType(pEvent);
-	const Href = String(pEvent && pEvent.href || "").toLowerCase();
-	return Type.includes("whatsapp") || Href.includes("wa.me") || Href.includes("whatsapp");
+	const Text = ClientSearchText(pEvent);
+	return Text.includes("whatsapp") || Text.includes("wa.me") || Text.includes("واتساب") || Text.includes("واتس");
 }
 
 function IsFullReadEvent(pEvent) {
