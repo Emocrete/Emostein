@@ -178,6 +178,7 @@ export { default as FreeHero } from "./Sections/FreeHero.astro";
 export { default as FreeHeroItem } from "./Sections/FreeHeroItem.astro";
 export { default as FreeHeroMoveItem } from "./Sections/FreeHeroMoveItem.astro";
 export { FreeHeroKeyPoint } from "./Sections/FreeHeroMotion";
+export { Moving, MovingKeyPoint, BuildMovingMotionPoints, GetMovingDefaultIntervals, GetMovingDefaultLoop, GetMovingDefaultEase, type MovingMotion } from "../TypesLib";
 export { default as FreeHeroFadeIn } from "./Sections/FreeHeroMotion/FreeHeroFadeIn.astro";
 export { default as FreeHeroSlideInRight } from "./Sections/FreeHeroMotion/FreeHeroSlideInRight.astro";
 export { default as FreeHeroSlideInLeft } from "./Sections/FreeHeroMotion/FreeHeroSlideInLeft.astro";

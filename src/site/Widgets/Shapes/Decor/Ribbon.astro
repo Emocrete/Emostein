@@ -4,7 +4,27 @@ import { Place, type PlaceProps } from "@/TypesLib";
 
 interface Props extends HTMLAttributes<"div">, PlaceProps { pText?: string; pBg?: string; pColor?: string; }
 
-const { pText = "Emostein", pBg = "#A7C45C", pColor = "#111111", pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly, id: pGivenID = GetWidgetId("Ribbon"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
+const { pText = "Emostein", pBg = "#A7C45C", pColor = "#111111", pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+ id: pGivenID = GetWidgetId("Ribbon"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
 const cPlace = new Place(Astro.props as PlaceProps, `--RibbonBg:${pBg}; --RibbonColor:${pColor}; --ShapePointer:${pClickable === true ? "auto" : "none"}; ${cGivenStyle}`);
 ---

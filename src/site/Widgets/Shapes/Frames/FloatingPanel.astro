@@ -3,7 +3,27 @@ import type { HTMLAttributes } from "astro/types";
 import { Place, type PlaceProps } from "@/TypesLib";
 
 interface Props extends HTMLAttributes<"aside">, PlaceProps { pBg?: string; pBorder?: string; pAccent?: string; }
-const { pBg = "rgba(17,24,32,.88)", pBorder = "rgba(255,255,255,.18)", pAccent = "#fbff00", pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly, id: pGivenID = GetWidgetId("FloatingPanel"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
+const { pBg = "rgba(17,24,32,.88)", pBorder = "rgba(255,255,255,.18)", pAccent = "#fbff00", pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+ id: pGivenID = GetWidgetId("FloatingPanel"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
 const cPlace = new Place(Astro.props as PlaceProps, `--PanelBg:${pBg}; --PanelBorder:${pBorder}; --PanelAccent:${pAccent}; ${cGivenStyle}`);
 ---

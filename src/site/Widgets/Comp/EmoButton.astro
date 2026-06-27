@@ -1,8 +1,9 @@
 ---
 import type { HTMLAttributes } from "astro/types";
-import { Place, type PlaceProps } from "@/TypesLib";
+import { HoverColors, Place, type PlaceProps } from "@/TypesLib";
+import { GetBoolAttr, GetButtonPreset, GetButtonTitleColors, type ButtonPresetProps } from "./ButtonPresets";
 
-export interface Props extends HTMLAttributes<"button">, PlaceProps {
+export interface Props extends HTMLAttributes<"button">, PlaceProps, ButtonPresetProps {
 	pText?: string;
 	pIcon?: string;
 	pIconHover?: string;
@@ -25,6 +26,9 @@ export interface Props extends HTMLAttributes<"button">, PlaceProps {
 	pTextColorHover?: string;
 	pTextColorActive?: string;
 	pFontSize?: string;
+
+	/** Lets button keep its internal width inside Stack / Strip instead of being stretched. */
+	"data-own-size"?: boolean | string;
 }
 
 const {
@@ -38,7 +42,7 @@ const {
 	pHeight = "auto",
 	pRadius = "5px",
 
-	pBgColor = "#ffffff",
+	pBgColor,
 	pBgColorHover,
 	pBgColorActive,
 
@@ -46,10 +50,32 @@ const {
 	pBgImgHover,
 	pBgImgActive,
 
-	pTextColor = "#222222",
+	pTextColor,
 	pTextColorHover,
 	pTextColorActive,
 	pFontSize = "16px",
+
+	Black = false,
+	BlackOrange = false,
+	BlackSky = false,
+	BlackGreen = false,
+	BlackBistage = false,
+	BlackRed = false,
+	SkyBlack = false,
+	SkyBistage = false,
+	BistageBlack = false,
+	BistageSky = false,
+	BistageOrange = false,
+	OrangeBlack = false,
+	OrangeSky = false,
+	GreenBlack = false,
+	GreenSky = false,
+	GrayBlack = false,
+	GrayOrange = false,
+	CreamyBlack = false,
+	YellowBlack = false,
+	RedBlack = false,
+	WhiteBlack = false,
 
 	pLoc,
 	pSize,
@@ -60,7 +86,27 @@ const {
 	pClickable,
 	pLandOnly,
 	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
 
+	"data-own-size": pOwnSizeValue = true,
 	id:pId = "",
 	class: pClass = "",
 	style: pStyle = "",
@@ -68,15 +114,42 @@ const {
 	...cAttrs
 } = Astro.props as Props;
 
+const cPreset = GetButtonPreset({
+	Black,
+	BlackOrange,
+	BlackSky,
+	BlackGreen,
+	BlackBistage,
+	BlackRed,
+	SkyBlack,
+	SkyBistage,
+	BistageBlack,
+	BistageSky,
+	BistageOrange,
+	OrangeBlack,
+	OrangeSky,
+	GreenBlack,
+	GreenSky,
+	GrayBlack,
+	GrayOrange,
+	CreamyBlack,
+	YellowBlack,
+	RedBlack,
+	WhiteBlack,
+});
+
 const cLayoutClass = GetLayoutClass(pIconPos);
-
 const cIconSize = `calc(${pHeight} - 5px)`;
+const cOwnSize = GetBoolAttr(pOwnSizeValue, true);
 
-const cBgColorHover = pBgColorHover ?? pBgColor;
-const cBgColorActive = pBgColorActive ?? cBgColorHover;
+const cBgColorNormal = pBgColor ?? cPreset?.BgColors.Normal ?? "#ffffff";
+const cBgColorHover = pBgColorHover ?? cPreset?.BgColors.Hover ?? cBgColorNormal;
+const cBgColorActive = pBgColorActive ?? cPreset?.BgColors.Click ?? cBgColorHover;
 
-const cTextColorHover = pTextColorHover ?? pTextColor;
-const cTextColorActive = pTextColorActive ?? cTextColorHover;
+const cAutoTitleColors = GetButtonTitleColors(new HoverColors(cBgColorNormal, cBgColorHover, cBgColorActive));
+const cTextColorNormal = pTextColor ?? cPreset?.TitleColors.Normal ?? cAutoTitleColors.Normal;
+const cTextColorHover = pTextColorHover ?? cPreset?.TitleColors.Hover ?? cAutoTitleColors.Hover;
+const cTextColorActive = pTextColorActive ?? cPreset?.TitleColors.Click ?? cAutoTitleColors.Click;
 
 const cBgImgNormal = BuildCssUrl(pBgImg);
 const cBgImgHover = BuildCssUrl(pBgImgHover ?? pBgImg);
@@ -94,7 +167,7 @@ const cStyle = `
 	--Height: ${pHeight};
 	--Radius: ${pRadius};
 
-	--BgClr: ${pBgColor};
+	--BgClr: ${cBgColorNormal};
 	--BgClr-hover: ${cBgColorHover};
 	--BgClr-active: ${cBgColorActive};
 
@@ -102,7 +175,7 @@ const cStyle = `
 	--BgImg-hover: ${cBgImgHover};
 	--BgImg-active: ${cBgImgActive};
 
-	--TitleCrl: ${pTextColor};
+	--TitleCrl: ${cTextColorNormal};
 	--TitleCrl-hover: ${cTextColorHover};
 	--TitleCrl-active: ${cTextColorActive};
 	--TitleSize: ${pFontSize};
@@ -129,30 +202,12 @@ function GetLayoutClass(pValue: "right" | "left" | "top" | "bottom") {
 }
 ---
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <button
 	class = {`Btn ${cLayoutClass} ${cHasIcon ? "hasIcon" : "noIcon"} ${cPlace.Class} ${pClass}`.trim()}
 	style = {cPlace.Style}
 	id={pId}
 	type={pType}
+	data-own-size={cOwnSize ? "true" : undefined}
 	{...cAttrs}
 >
 
@@ -172,29 +227,7 @@ function GetLayoutClass(pValue: "right" | "left" | "top" | "bottom") {
 
 </button>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
-
-
-
 	.Btn {
 		display: block flex;
 		align-items: center;
@@ -232,6 +265,14 @@ function GetLayoutClass(pValue: "right" | "left" | "top" | "bottom") {
 		transform: scale(0.985);
 	}
 
+	.Btn:hover .BtnText {
+		color: var(--TitleCrl-hover);
+	}
+
+	.Btn:active .BtnText {
+		color: var(--TitleCrl-active);
+	}
+
 	.Btn:hover .BtnIcon {
 		background-image: var(--btn-icon-hover);
 	}
@@ -239,7 +280,6 @@ function GetLayoutClass(pValue: "right" | "left" | "top" | "bottom") {
 	.Btn:active .BtnIcon {
 		background-image: var(--btn-icon-active);
 	}
-
 
 	.BtnIcon {
 		flex: 0 0 auto;
@@ -251,7 +291,6 @@ function GetLayoutClass(pValue: "right" | "left" | "top" | "bottom") {
 		background-size: contain;
 	}
 
-
 	.BtnText {
 		display: block;
 		line-height: 1.2;
@@ -259,26 +298,25 @@ function GetLayoutClass(pValue: "right" | "left" | "top" | "bottom") {
 		color: var(--TitleCrl);
 		font-size: var(--TitleSize);
 		font-weight: 700;
+		text-align: center;
 		text-decoration: none;
 	}
 
-
+	.Btn.noIcon .BtnText {
+		width: 100%;
+	}
 
 	.Btn.isIconLeft {
 		flex-direction: row-reverse;
 	}
 
-
 	.Btn.isIconTop {
 		flex-direction: column;
 	}
 
-
 	.Btn.isIconBottom {
 		flex-direction: column-reverse;
 	}
-
-
 
 	.Btn.hasIcon.isIconRight .BtnIcon {
 		right: 20px;
@@ -289,7 +327,6 @@ function GetLayoutClass(pValue: "right" | "left" | "top" | "bottom") {
 		padding-left: 15px;
 	}
 
-
 	.Btn.hasIcon.isIconLeft .BtnIcon {
 		left: 20px;
 	}
@@ -299,14 +336,11 @@ function GetLayoutClass(pValue: "right" | "left" | "top" | "bottom") {
 		padding-right: 15px;
 	}
 
-
-
 	.Btn.hasIcon.isIconRight .BtnIcon,
 	.Btn.hasIcon.isIconLeft .BtnIcon
 	{
 		position: absolute;
 	}
-
 
 	.Btn.hasIcon.isIconTop,
 	.Btn.hasIcon.isIconBottom
@@ -314,13 +348,9 @@ function GetLayoutClass(pValue: "right" | "left" | "top" | "bottom") {
 		gap: 5px;
 	}
 
-
 	.Btn.hasIcon.isIconTop .BtnText,
 	.Btn.hasIcon.isIconBottom .BtnText
 	{
 		padding: 0;
 	}
-
-
-
 </style>

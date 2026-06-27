@@ -45,7 +45,7 @@ export type TFreeHeroMotion =
 export class FreeHeroKeyPoint {
 	constructor(
 		public readonly Loc: Location,
-		public readonly Box: Size = new Box(),
+		public readonly Box: Size = new Size(),
 		public readonly Rotate: string | RespString = "0deg",
 		public readonly Opacity: number | RespString = 1,
 		public readonly Transform?: string | RespString,

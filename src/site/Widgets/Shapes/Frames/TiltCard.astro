@@ -3,7 +3,27 @@ import type { HTMLAttributes } from "astro/types";
 import { Place, type PlaceProps } from "@/TypesLib";
 
 interface Props extends HTMLAttributes<"article">, PlaceProps { pBg?: string; pColor?: string; pTilt?: number; }
-const { pBg = "#353535", pColor = "#FAFAFA", pTilt = -3, pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly, id: pGivenID = GetWidgetId("TiltCard"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
+const { pBg = "#353535", pColor = "#FAFAFA", pTilt = -3, pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+ id: pGivenID = GetWidgetId("TiltCard"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
 const cPlace = new Place(Astro.props as PlaceProps, `--TiltBg:${pBg}; --TiltColor:${pColor}; --TiltDeg:${pTilt}deg; ${cGivenStyle}`);
 ---

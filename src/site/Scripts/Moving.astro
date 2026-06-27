@@ -1,0 +1,391 @@
+<script is:inline>
+	(() => {
+		if (window.__EmoMovingReady === true) {
+			return;
+		}
+
+		window.__EmoMovingReady = true;
+
+		const cMedia = window.matchMedia("(orientation: portrait)");
+		const cReduceMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+		function InitAll(pRoot = document) {
+			pRoot.querySelectorAll(".IsMoving").forEach(InitElement);
+		}
+
+		function InitElement(pElem) {
+			if (!(pElem instanceof HTMLElement) || pElem.dataset.emoMovingReady === "true") {
+				return;
+			}
+
+			pElem.dataset.emoMovingReady = "true";
+
+			const cState = {
+				Motion: null,
+				Timer: null,
+				Observer: null,
+				Started: false,
+				InView: false,
+			};
+
+			ApplyFirstPoint(pElem);
+
+			const cStartOnView = ReadCssBool(pElem, "--MoveStartOnView", true);
+
+			if (cStartOnView && "IntersectionObserver" in window) {
+				SetupViewObserver(pElem, cState);
+			}
+			else {
+				RunMotion(pElem, cState);
+			}
+
+			const cHandleMediaChange = () => {
+				StopMotion(cState, true);
+				cState.Started = false;
+
+				ApplyFirstPoint(pElem);
+
+				if (!cStartOnView || cState.InView) {
+					RunMotion(pElem, cState);
+				}
+			};
+
+			if (cMedia.addEventListener) {
+				cMedia.addEventListener("change", cHandleMediaChange);
+				cReduceMedia.addEventListener("change", cHandleMediaChange);
+			}
+			else if (cMedia.addListener) {
+				cMedia.addListener(cHandleMediaChange);
+				cReduceMedia.addListener(cHandleMediaChange);
+			}
+		}
+
+		function SetupViewObserver(pElem, pState) {
+			const cThreshold = ReadCssNumber(pElem, "--MoveViewThreshold", 0.15, 0, 1);
+			const cMargin = ReadCssText(pElem, "--MoveViewMargin", "0px 0px -10% 0px");
+			const cViewTargetMode = ReadCssText(pElem, "--MoveViewTarget", "parent");
+			const cViewTarget = cViewTargetMode === "self" ? pElem : pElem.parentElement || pElem;
+
+			pState.Observer = new IntersectionObserver(
+				(pEntries) => HandleViewChange(pEntries, pElem, cViewTarget, pState),
+				{
+					root: null,
+					rootMargin: cMargin,
+					threshold: cThreshold,
+				}
+			);
+
+			pState.Observer.observe(cViewTarget);
+		}
+
+		function HandleViewChange(pEntries, pElem, pViewTarget, pState) {
+			const cEntry = pEntries.find((pEntry) => pEntry.target === pViewTarget);
+
+			if (!cEntry) {
+				return;
+			}
+
+			pState.InView = cEntry.isIntersecting;
+
+			if (pState.InView) {
+				if (!pState.Started || ReadCssBool(pElem, "--MoveReplayOnView", false)) {
+					RunMotion(pElem, pState);
+				}
+				else if (pState.Motion && pState.Motion.playState === "paused") {
+					pState.Motion.play();
+				}
+
+				return;
+			}
+
+			if (ReadCssBool(pElem, "--MovePauseWhenOut", true) && pState.Motion && pState.Motion.playState === "running") {
+				pState.Motion.pause();
+			}
+
+			if (ReadCssBool(pElem, "--MoveReplayOnView", false)) {
+				StopMotion(pState, true);
+				pState.Started = false;
+				ApplyFirstPoint(pElem);
+			}
+		}
+
+		function ReadCssText(pElem, pName, pFallback = "") {
+			const cValue = getComputedStyle(pElem).getPropertyValue(pName).trim();
+			return cValue || pFallback;
+		}
+
+		function ReadCssBool(pElem, pName, pFallback) {
+			const cValue = ReadCssText(pElem, pName, "").toLowerCase();
+
+			if (cValue === "true") return true;
+			if (cValue === "false") return false;
+
+			return pFallback;
+		}
+
+		function ReadCssNumber(pElem, pName, pFallback, pMin = -Infinity, pMax = Infinity) {
+			const cNumber = Number(ReadCssText(pElem, pName, ""));
+
+			if (!Number.isFinite(cNumber)) {
+				return pFallback;
+			}
+
+			return Math.min(Math.max(cNumber, pMin), pMax);
+		}
+
+		function ReadCssJson(pElem, pName, pFallback) {
+			const cValue = ReadCssText(pElem, pName, "");
+
+			if (!cValue) {
+				return pFallback;
+			}
+
+			try {
+				return JSON.parse(decodeURIComponent(cValue));
+			}
+			catch {
+				return pFallback;
+			}
+		}
+
+		function GetValue(pPoint, pLandKey, pPortKey) {
+			return cMedia.matches
+				? pPoint[pPortKey]
+				: pPoint[pLandKey];
+		}
+
+		function ToAnimFrame(pPoint) {
+			return {
+				left: GetValue(pPoint, "xL", "xP"),
+				top: GetValue(pPoint, "yL", "yP"),
+				width: GetValue(pPoint, "wL", "wP"),
+				height: GetValue(pPoint, "hL", "hP"),
+				transform: GetValue(pPoint, "tL", "tP"),
+				opacity: GetValue(pPoint, "oL", "oP"),
+			};
+		}
+
+		function GetInterval(pIntervals, pIndex) {
+			if (!Array.isArray(pIntervals) || pIntervals.length === 0) {
+				return 800;
+			}
+
+			const cValue = Number(pIntervals[pIndex]);
+
+			if (Number.isFinite(cValue) && cValue > 0) {
+				return cValue;
+			}
+
+			const cLast = Number(pIntervals[pIntervals.length - 1]);
+
+			return Number.isFinite(cLast) && cLast > 0
+				? cLast
+				: 800;
+		}
+
+		function BuildForwardPath(pPoints, pIntervals) {
+			const cPath = [...pPoints];
+			const cIntervals = [];
+
+			for (let i = 0; i < pPoints.length - 1; i++) {
+				cIntervals.push(GetInterval(pIntervals, i));
+			}
+
+			return { Path: cPath, Intervals: cIntervals };
+		}
+
+		function BuildReversePath(pPoints, pIntervals) {
+			const cPath = [...pPoints];
+			const cIntervals = [];
+
+			for (let i = 0; i < pPoints.length - 1; i++) {
+				cIntervals.push(GetInterval(pIntervals, i));
+			}
+
+			for (let i = pPoints.length - 2; i >= 0; i--) {
+				cPath.push(pPoints[i]);
+				cIntervals.push(GetInterval(pIntervals, i));
+			}
+
+			return { Path: cPath, Intervals: cIntervals };
+		}
+
+		function BuildLoopPath(pElem, pPoints, pIntervals) {
+			const cPath = [...pPoints];
+			const cIntervals = [];
+
+			for (let i = 0; i < pPoints.length - 1; i++) {
+				cIntervals.push(GetInterval(pIntervals, i));
+			}
+
+			const cLoopInterval = ReadCssNumber(
+				pElem,
+				"--MoveLoopInterval",
+				GetInterval(pIntervals, pPoints.length - 2),
+				0
+			);
+
+			cPath.push(pPoints[0]);
+			cIntervals.push(cLoopInterval);
+
+			return { Path: cPath, Intervals: cIntervals };
+		}
+
+		function BuildOffsets(pIntervals) {
+			const cTotal = pIntervals.reduce((pTotal, pValue) => pTotal + pValue, 0);
+
+			if (cTotal <= 0) {
+				return { Offsets: [0, 1], Total: 1 };
+			}
+
+			const cOffsets = [0];
+			let cCurrent = 0;
+
+			for (const cInterval of pIntervals) {
+				cCurrent += cInterval;
+				cOffsets.push(cCurrent / cTotal);
+			}
+
+			cOffsets[cOffsets.length - 1] = 1;
+
+			return { Offsets: cOffsets, Total: cTotal };
+		}
+
+		function ApplyFrame(pElem, pPoint) {
+			const cFrame = ToAnimFrame(pPoint);
+			const cIsPlaced = pElem.classList.contains("IsPlaced");
+
+			if (cIsPlaced) {
+				pElem.style.left = cFrame.left;
+				pElem.style.top = cFrame.top;
+				pElem.style.width = cFrame.width;
+				pElem.style.height = cFrame.height;
+			}
+
+			pElem.style.transform = cFrame.transform;
+			pElem.style.opacity = cFrame.opacity;
+		}
+
+		function ApplyFirstPoint(pElem) {
+			const cPoints = ReadCssJson(pElem, "--MoveKeyPoints", []);
+
+			if (!Array.isArray(cPoints) || cPoints.length === 0) {
+				return;
+			}
+
+			ApplyFrame(pElem, cPoints[0]);
+		}
+
+		function StopMotion(pState, pCancel) {
+			clearTimeout(pState.Timer);
+			pState.Timer = null;
+
+			if (!pState.Motion) {
+				return;
+			}
+
+			if (pCancel) {
+				pState.Motion.cancel();
+			}
+			else {
+				pState.Motion.pause();
+			}
+
+			pState.Motion = null;
+		}
+
+		function RunMotion(pElem, pState) {
+			StopMotion(pState, true);
+
+			const cPoints = ReadCssJson(pElem, "--MoveKeyPoints", []);
+			const cIntervals = ReadCssJson(pElem, "--MoveIntervals", []);
+			const cEase = ReadCssText(pElem, "--MoveEase", "cubic-bezier(.42, 0, .18, 1)");
+			const cLoop = ReadCssBool(pElem, "--MoveLoop", false);
+			const cReverse = ReadCssBool(pElem, "--MoveReverse", false);
+			const cDelay = ReadCssNumber(pElem, "--MoveDelay", 0, 0);
+
+			if (!Array.isArray(cPoints) || cPoints.length === 0) {
+				return;
+			}
+
+			pState.Started = true;
+
+			if (cPoints.length === 1) {
+				ApplyFrame(pElem, cPoints[0]);
+				return;
+			}
+
+			let cMotionData;
+
+			if (cReverse) {
+				cMotionData = BuildReversePath(cPoints, cIntervals);
+			}
+			else if (cLoop) {
+				cMotionData = BuildLoopPath(pElem, cPoints, cIntervals);
+			}
+			else {
+				cMotionData = BuildForwardPath(cPoints, cIntervals);
+			}
+
+			const cOffsetData = BuildOffsets(cMotionData.Intervals);
+
+			if (cReduceMedia.matches) {
+				ApplyFrame(pElem, cMotionData.Path[cMotionData.Path.length - 1]);
+				return;
+			}
+
+			const cIsPlaced = pElem.classList.contains("IsPlaced");
+			const cFrames = cMotionData.Path.map((pPoint, pIndex) => {
+				const cFrame = ToAnimFrame(pPoint);
+				const cAnimFrame = {
+					transform: cFrame.transform,
+					opacity: cFrame.opacity,
+					offset: cOffsetData.Offsets[pIndex],
+					easing: pIndex < cMotionData.Path.length - 1 ? cEase : "linear",
+				};
+
+				if (cIsPlaced) {
+					cAnimFrame.left = cFrame.left;
+					cAnimFrame.top = cFrame.top;
+					cAnimFrame.width = cFrame.width;
+					cAnimFrame.height = cFrame.height;
+				}
+
+				return cAnimFrame;
+			});
+
+			const cLoopFor = ReadCssNumber(pElem, "--MoveLoopFor", 0, 0);
+			let cIterations = 1;
+
+			if (cLoop) {
+				cIterations = cLoopFor > 0
+					? cLoopFor / cOffsetData.Total
+					: Infinity;
+			}
+
+			ApplyFrame(pElem, cMotionData.Path[0]);
+
+			pState.Timer = setTimeout(() => {
+				pState.Motion = pElem.animate(
+					cFrames,
+					{
+						duration: cOffsetData.Total,
+						iterations: cIterations,
+						fill: "forwards",
+					}
+				);
+
+				pState.Motion.onfinish = () => {
+					ApplyFrame(pElem, cMotionData.Path[cMotionData.Path.length - 1]);
+				};
+			}, cDelay);
+		}
+
+		if (document.readyState === "loading") {
+			document.addEventListener("DOMContentLoaded", () => InitAll(), { once: true });
+		}
+		else {
+			InitAll();
+		}
+	})();
+</script>

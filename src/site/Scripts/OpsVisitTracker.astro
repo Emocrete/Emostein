@@ -1276,16 +1276,32 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	});
 	}
 
+	function IsTrackableContentVideo(pVideo) {
+	if (!pVideo) return false;
+	if (pVideo.dataset.opsTrackVideo === "1" || pVideo.closest("[data-ops-track-video='1']")) return true;
+	if (pVideo.dataset.opsIgnoreVideo === "1" || pVideo.closest("[data-ops-ignore-video='1']")) return false;
+	if (!pVideo.controls) return false;
+	if (pVideo.autoplay || pVideo.loop) return false;
+	return true;
+	}
+
 	function InitVideoEvents() {
 	document.querySelectorAll("video").forEach((pVideo, pIndex) => {
 	if (pVideo.dataset.opsVideoBound === "1") return;
 	pVideo.dataset.opsVideoBound = "1";
+	pVideo.dataset.opsUserVideoIntentAt = "0";
+	const MarkVideoIntent = () => { pVideo.dataset.opsUserVideoIntentAt = String(Date.now()); };
+	pVideo.addEventListener("pointerdown", MarkVideoIntent, { passive: true });
+	pVideo.addEventListener("keydown", MarkVideoIntent, { passive: true });
 	pVideo.addEventListener("play", () => {
+	if (!IsTrackableContentVideo(pVideo)) return;
+	const IntentAt = Number(pVideo.dataset.opsUserVideoIntentAt || "0");
+	if (!IntentAt || Date.now() - IntentAt > 4000) return;
 	const Source = pVideo.currentSrc || pVideo.getAttribute("src") || "";
 	const Title = pVideo.getAttribute("title") || pVideo.getAttribute("aria-label") || pVideo.dataset.opsLabel || BuildViewLabel(GetClosestWidget(pVideo)) || Source || `Video ${pIndex + 1}`;
 	TrackOpsEvent("video_play", {
-	eventOn: "video",
-	widget: "Video",
+	eventOn: "video_player",
+	widget: "VideoPlayer",
 	label: Title,
 	href: Source,
 	important: true,
@@ -1302,8 +1318,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	const Source = pFrame.getAttribute("src") || "";
 	const Title = pFrame.getAttribute("title") || pFrame.dataset.opsLabel || BuildViewLabel(GetClosestWidget(pFrame)) || Source || `Video ${pIndex + 1}`;
 	TrackOpsEvent("video_play", {
-	eventOn: "video",
-	widget: "Video",
+	eventOn: "video_player",
+	widget: "VideoPlayer",
 	label: Title,
 	href: Source,
 	important: true,

@@ -4,7 +4,27 @@ import { Place, type PlaceProps } from "@/TypesLib";
 
 interface Props extends HTMLAttributes<"div">, PlaceProps { pColor?: string; pColor2?: string; pBlur?: number; }
 
-const { pColor = "rgba(50,143,232,.45)", pColor2 = "rgba(167,196,92,.4)", pBlur = 18, pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly, id: pGivenID = GetWidgetId("BlurBlob"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
+const { pColor = "rgba(50,143,232,.45)", pColor2 = "rgba(167,196,92,.4)", pBlur = 18, pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+ id: pGivenID = GetWidgetId("BlurBlob"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
 const cPlace = new Place(Astro.props as PlaceProps, `--BlobColor:${pColor}; --BlobColor2:${pColor2}; --BlobBlur:${pBlur}px; --ShapePointer:${pClickable === true ? "auto" : "none"}; ${cGivenStyle}`);
 ---

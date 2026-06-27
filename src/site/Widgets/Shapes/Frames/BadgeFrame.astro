@@ -3,7 +3,27 @@ import type { HTMLAttributes } from "astro/types";
 import { Place, type PlaceProps } from "@/TypesLib";
 
 interface Props extends HTMLAttributes<"article">, PlaceProps { pBadge?: string; pBg?: string; pBadgeBg?: string; pColor?: string; }
-const { pBadge = "NEW", pBg = "#FAFAFA", pBadgeBg = "#A7C45C", pColor = "#111111", pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly, id: pGivenID = GetWidgetId("BadgeFrame"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
+const { pBadge = "NEW", pBg = "#FAFAFA", pBadgeBg = "#A7C45C", pColor = "#111111", pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+ id: pGivenID = GetWidgetId("BadgeFrame"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
 const cPlace = new Place(Astro.props as PlaceProps, `--BadgeFrameBg:${pBg}; --BadgeFrameColor:${pColor}; --BadgeBg:${pBadgeBg}; ${cGivenStyle}`);
 ---

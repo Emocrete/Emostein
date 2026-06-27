@@ -1,17 +1,11 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 import { Colors, HoverColors, HoverImg, Place, type PlaceProps } from "@/TypesLib";
+import { GetBoolAttr, GetButtonPreset, GetButtonTitleColors, type ButtonPresetProps } from "./ButtonPresets";
 
-export interface Props extends HTMLAttributes<"a">, PlaceProps {
+export interface Props extends HTMLAttributes<"a">, PlaceProps, ButtonPresetProps {
 	/** النص الظاهر داخل زر الاتصال. */
 	pText?: string;
-
-	/** Preset: خلفية سوداء مع هوفر برتقالي. */
-	Black?: boolean;
-	BlackOrange?: boolean;
-
-	/** Preset: خلفية سوداء مع هوفر سماوي. */
-	BlackSky?: boolean;
 
 	/** صور الأيقونة في الحالات الثلاث: Normal / Hover / Click. */
 	pIconImgs?: HoverImg;
@@ -33,6 +27,9 @@ export interface Props extends HTMLAttributes<"a">, PlaceProps {
 	pTitleColors?: HoverColors;
 
 	pFontSize?: string;
+
+	/** Lets button keep its internal width inside Stack / Strip instead of being stretched. */
+	"data-own-size"?: boolean | string;
 }
 
 const cCallPhoneText = "01014490054";
@@ -44,6 +41,24 @@ const {
 	Black = false,
 	BlackOrange = false,
 	BlackSky = false,
+	BlackGreen = false,
+	BlackBistage = false,
+	BlackRed = false,
+	SkyBlack = false,
+	SkyBistage = false,
+	BistageBlack = false,
+	BistageSky = false,
+	BistageOrange = false,
+	OrangeBlack = false,
+	OrangeSky = false,
+	GreenBlack = false,
+	GreenSky = false,
+	GrayBlack = false,
+	GrayOrange = false,
+	CreamyBlack = false,
+	YellowBlack = false,
+	RedBlack = false,
+	WhiteBlack = false,
 	pIconImgs,
 	pIconPos = "right",
 
@@ -66,31 +81,63 @@ const {
 	pClickable,
 	pLandOnly,
 	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
 
+	"data-own-size": pOwnSizeValue = true,
 	id: pId = GetWidgetId("EmoCall"),
 	class: pClass = "",
 	style: pStyle = "",
 	...cAttrs
 } = Astro.props as Props;
 
-const cCallPresets = {
-	BlackOrange: {
-		BgColors: new HoverColors(Colors.Black, Colors.OrangeDark),
-		TitleColors: new HoverColors("#ffffff"),
-	},
-	BlackSky: {
-		BgColors: new HoverColors(Colors.Black, Colors.Sky),
-		TitleColors: new HoverColors("#ffffff"),
-	},
-};
-
-const cPreset = GetPreset();
+const cPreset = GetButtonPreset({
+	Black,
+	BlackOrange,
+	BlackSky,
+	BlackGreen,
+	BlackBistage,
+	BlackRed,
+	SkyBlack,
+	SkyBistage,
+	BistageBlack,
+	BistageSky,
+	BistageOrange,
+	OrangeBlack,
+	OrangeSky,
+	GreenBlack,
+	GreenSky,
+	GrayBlack,
+	GrayOrange,
+	CreamyBlack,
+	YellowBlack,
+	RedBlack,
+	WhiteBlack,
+});
 const cText = pText ?? "تواصل معنا";
 const cLayoutClass = GetLayoutClass(pIconPos);
 const cIconSize = `calc(${pHeight} - 5px)`;
+const cOwnSize = GetBoolAttr(pOwnSizeValue, true);
 
 const cBgColors = pBgColors ?? cPreset?.BgColors ?? new HoverColors(Colors.WhiteOff);
-const cTitleColors = pTitleColors ?? cPreset?.TitleColors ?? new HoverColors(Colors.BlackOff);
+const cTitleColors = pTitleColors ?? cPreset?.TitleColors ?? GetButtonTitleColors(cBgColors);
 const cIconImgs = pIconImgs ?? new HoverImg("");
 const cBgImgs = pBgImgs ?? new HoverImg("");
 
@@ -130,23 +177,7 @@ const cStyle = [
 	GetStyleText(pStyle),
 ].filter(Boolean).join("\n");
 
-const cPlace = new Place({
-	pLoc,
-	pSize,
-	pRotate,
-	pZ,
-	pOrigin,
-	pOpacity,
-	pClickable,
-	pLandOnly,
-	pPortOnly,
-}, cStyle);
-
-function GetPreset() {
-	if (Black || BlackOrange) return cCallPresets.BlackOrange;
-	if (BlackSky) return cCallPresets.BlackSky;
-	return undefined;
-}
+const cPlace = new Place(Astro.props as PlaceProps, cStyle);
 
 function BuildCssUrl(pValue?: string) {
 	return pValue ? `url("${pValue}")` : "none";
@@ -203,6 +234,7 @@ function GetCssName(pName: string) {
 	id={pId}
 	href={cCallPhoneHref}
 	data-call-btn="true"
+	data-own-size={cOwnSize ? "true" : undefined}
 	{...cAttrs}
 >
 
@@ -341,6 +373,14 @@ function GetCssName(pName: string) {
 		transform: scale(0.985);
 	}
 
+	.CallBtn:hover .BtnText {
+		color: var(--TitleCrl-hover);
+	}
+
+	.CallBtn:active .BtnText {
+		color: var(--TitleCrl-active);
+	}
+
 	.CallBtn:hover .BtnIcon {
 		background-image: var(--btn-icon-hover);
 	}
@@ -368,9 +408,13 @@ function GetCssName(pName: string) {
 		color: var(--TitleCrl);
 		font-size: var(--TitleSize);
 		font-weight: 700;
+		text-align: center;
 		text-decoration: none;
 	}
 
+	.CallBtn.noIcon .BtnText {
+		width: 100%;
+	}
 
 	.BtnTextPhone {
 		display: none;

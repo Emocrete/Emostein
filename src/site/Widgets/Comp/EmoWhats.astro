@@ -1,8 +1,9 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 import { Colors, HoverColors, HoverImg, Place, type PlaceProps } from "@/TypesLib";
+import { CreateButtonPreset, GetBoolAttr, GetButtonPreset, GetButtonTitleColors, type ButtonColorPreset, type ButtonPresetProps } from "./ButtonPresets";
 
-export interface Props extends HTMLAttributes<"a">, PlaceProps {
+export interface Props extends HTMLAttributes<"a">, PlaceProps, ButtonPresetProps {
 	/** النص الظاهر داخل زر الواتساب. */
 	pText?: string;
 
@@ -15,13 +16,16 @@ export interface Props extends HTMLAttributes<"a">, PlaceProps {
 	/** صورة QR مخصصة عند الحاجة. الافتراضي مدمج للرقم الأساسي. */
 	pQrImg?: string;
 
-	/** Presets سريعة للألوان. */
-	Black?: boolean;
-	BlackOrange?: boolean;
-	BlackSky?: boolean;
+	/** Preset واتساب أخضر. */
 	Green?: boolean;
+
+	/** Preset واتساب أخضر داكن. */
 	GreenDark?: boolean;
+
+	/** Preset سماوي قديم للتوافق. */
 	Sky?: boolean;
+
+	/** Preset بيستاج قديم للتوافق. */
 	Bistage?: boolean;
 
 	/** صور الأيقونة في الحالات الثلاث: Normal / Hover / Click. */
@@ -44,6 +48,9 @@ export interface Props extends HTMLAttributes<"a">, PlaceProps {
 	pTitleColors?: HoverColors;
 
 	pFontSize?: string;
+
+	/** Lets button keep its internal width inside Stack / Strip instead of being stretched. */
+	"data-own-size"?: boolean | string;
 }
 
 const cDefaultPhoneText = "01014490054";
@@ -59,6 +66,24 @@ const {
 	Black = false,
 	BlackOrange = false,
 	BlackSky = false,
+	BlackGreen = false,
+	BlackBistage = false,
+	BlackRed = false,
+	SkyBlack = false,
+	SkyBistage = false,
+	BistageBlack = false,
+	BistageSky = false,
+	BistageOrange = false,
+	OrangeBlack = false,
+	OrangeSky = false,
+	GreenBlack = false,
+	GreenSky = false,
+	GrayBlack = false,
+	GrayOrange = false,
+	CreamyBlack = false,
+	YellowBlack = false,
+	RedBlack = false,
+	WhiteBlack = false,
 	Green = false,
 	GreenDark = false,
 	Sky = false,
@@ -85,7 +110,27 @@ const {
 	pClickable,
 	pLandOnly,
 	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
 
+	"data-own-size": pOwnSizeValue = true,
 	id: pId = GetWidgetId("EmoWhats"),
 	class: pClass = "",
 	style: pStyle = "",
@@ -94,31 +139,11 @@ const {
 	...cAttrs
 } = Astro.props as Props;
 
-const cWhatsappPresets = {
-	BlackOrange: {
-		BgColors: new HoverColors(Colors.Black, Colors.OrangeDark),
-		TitleColors: new HoverColors("#ffffff"),
-	},
-	BlackSky: {
-		BgColors: new HoverColors(Colors.Black, Colors.Sky),
-		TitleColors: new HoverColors("#ffffff"),
-	},
-	Green: {
-		BgColors: new HoverColors("#25D366", "#128C7E"),
-		TitleColors: new HoverColors("#ffffff"),
-	},
-	GreenDark: {
-		BgColors: new HoverColors("#128C7E", "#075E54"),
-		TitleColors: new HoverColors("#ffffff"),
-	},
-	Sky: {
-		BgColors: HoverColors.Sky,
-		TitleColors: new HoverColors(Colors.BlackOff),
-	},
-	Bistage: {
-		BgColors: HoverColors.Bistage,
-		TitleColors: new HoverColors(Colors.BlackOff),
-	},
+const cWhatsappPresets: Record<string, ButtonColorPreset> = {
+	Green: CreateButtonPreset("#25D366", "#128C7E"),
+	GreenDark: CreateButtonPreset("#128C7E", "#075E54"),
+	Sky: CreateButtonPreset(Colors.Sky, Colors.SkyDark),
+	Bistage: CreateButtonPreset(Colors.Bistage, Colors.BistageDark),
 };
 
 const cPreset = GetPreset();
@@ -131,9 +156,10 @@ const cTarget = pTarget ?? "_blank";
 const cRel = pRel ?? (cTarget === "_blank" ? "noopener noreferrer" : undefined);
 const cLayoutClass = GetLayoutClass(pIconPos);
 const cIconSize = `calc(${pHeight} - 5px)`;
+const cOwnSize = GetBoolAttr(pOwnSizeValue, true);
 
 const cBgColors = pBgColors ?? cPreset?.BgColors ?? cWhatsappPresets.Green.BgColors;
-const cTitleColors = pTitleColors ?? cPreset?.TitleColors ?? cWhatsappPresets.Green.TitleColors;
+const cTitleColors = pTitleColors ?? cPreset?.TitleColors ?? GetButtonTitleColors(cBgColors);
 const cIconImgs = pIconImgs ?? new HoverImg("");
 const cBgImgs = pBgImgs ?? new HoverImg("");
 
@@ -173,26 +199,37 @@ const cStyle = [
 	GetStyleText(pStyle),
 ].filter(Boolean).join("\n");
 
-const cPlace = new Place({
-	pLoc,
-	pSize,
-	pRotate,
-	pZ,
-	pOrigin,
-	pOpacity,
-	pClickable,
-	pLandOnly,
-	pPortOnly,
-}, cStyle);
+const cPlace = new Place(Astro.props as PlaceProps, cStyle);
 
 function GetPreset() {
-	if (Black || BlackOrange) return cWhatsappPresets.BlackOrange;
-	if (BlackSky) return cWhatsappPresets.BlackSky;
 	if (GreenDark) return cWhatsappPresets.GreenDark;
 	if (Green) return cWhatsappPresets.Green;
 	if (Sky) return cWhatsappPresets.Sky;
 	if (Bistage) return cWhatsappPresets.Bistage;
-	return undefined;
+
+	return GetButtonPreset({
+		Black,
+		BlackOrange,
+		BlackSky,
+		BlackGreen,
+		BlackBistage,
+		BlackRed,
+		SkyBlack,
+		SkyBistage,
+		BistageBlack,
+		BistageSky,
+		BistageOrange,
+		OrangeBlack,
+		OrangeSky,
+		GreenBlack,
+		GreenSky,
+		GrayBlack,
+		GrayOrange,
+		CreamyBlack,
+		YellowBlack,
+		RedBlack,
+		WhiteBlack,
+	});
 }
 
 function GetWhatsappNumber(pValue: string): string {
@@ -251,6 +288,7 @@ function GetCssName(pName: string) {
 	target={cTarget}
 	rel={cRel}
 	data-whats-btn="true"
+	data-own-size={cOwnSize ? "true" : undefined}
 	{...cAttrs}
 >
 
@@ -358,6 +396,14 @@ function GetCssName(pName: string) {
 		transform: scale(0.985);
 	}
 
+	.WhatsBtn:hover .BtnText {
+		color: var(--TitleCrl-hover);
+	}
+
+	.WhatsBtn:active .BtnText {
+		color: var(--TitleCrl-active);
+	}
+
 	.WhatsBtn:hover .BtnIcon {
 		background-image: var(--btn-icon-hover);
 	}
@@ -383,7 +429,12 @@ function GetCssName(pName: string) {
 		color: var(--TitleCrl);
 		font-size: var(--TitleSize);
 		font-weight: 700;
+		text-align: center;
 		text-decoration: none;
+	}
+
+	.WhatsBtn.noIcon .BtnText {
+		width: 100%;
 	}
 
 	.BtnTextPhone {

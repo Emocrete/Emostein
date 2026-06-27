@@ -1,8 +1,9 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 import { Colors, HoverColors, HoverImg, Place, type PlaceProps } from "@/TypesLib";
+import { CreateButtonPreset, GetBoolAttr, GetButtonPreset, GetButtonTitleColors, type ButtonColorPreset, type ButtonPresetProps } from "./ButtonPresets";
 
-export interface Props extends HTMLAttributes<"a">, PlaceProps {
+export interface Props extends HTMLAttributes<"a">, PlaceProps, ButtonPresetProps {
 	/** نص زر التفاصيل. */
 	pText?: string;
 
@@ -12,15 +13,22 @@ export interface Props extends HTMLAttributes<"a">, PlaceProps {
 	/** فتح الرابط في تبويب جديد مع rel آمن. */
 	pBlank?: boolean;
 
-	/** Presets سريعة للألوان. */
-	Black?: boolean;
-	BlackOrange?: boolean;
-	BlackSky?: boolean;
+	/** Preset سماوي قديم للتوافق. */
 	Sky?: boolean;
+
+	/** Preset بيستاج قديم للتوافق. */
 	Bistage?: boolean;
+
+	/** Preset ذهبي قديم للتوافق. */
 	Gold?: boolean;
+
+	/** Preset أخضر داكن قديم للتوافق. */
 	Green?: boolean;
+
+	/** Preset شفاف قديم للتوافق. */
 	Ghost?: boolean;
+
+	/** Preset فاتح قديم للتوافق. */
 	Light?: boolean;
 
 	/** صور الأيقونة في الحالات الثلاث: Normal / Hover / Click. */
@@ -43,6 +51,9 @@ export interface Props extends HTMLAttributes<"a">, PlaceProps {
 	pTitleColors?: HoverColors;
 
 	pFontSize?: string;
+
+	/** Lets button keep its internal width inside Stack / Strip instead of being stretched. */
+	"data-own-size"?: boolean | string;
 }
 
 const {
@@ -52,6 +63,24 @@ const {
 	Black = false,
 	BlackOrange = false,
 	BlackSky = false,
+	BlackGreen = false,
+	BlackBistage = false,
+	BlackRed = false,
+	SkyBlack = false,
+	SkyBistage = false,
+	BistageBlack = false,
+	BistageSky = false,
+	BistageOrange = false,
+	OrangeBlack = false,
+	OrangeSky = false,
+	GreenBlack = false,
+	GreenSky = false,
+	GrayBlack = false,
+	GrayOrange = false,
+	CreamyBlack = false,
+	YellowBlack = false,
+	RedBlack = false,
+	WhiteBlack = false,
 	Sky = false,
 	Bistage = false,
 	Gold = false,
@@ -80,7 +109,27 @@ const {
 	pClickable,
 	pLandOnly,
 	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
 
+	"data-own-size": pOwnSizeValue = true,
 	href: pHrefAttr,
 	target: pTargetAttr,
 	rel: pRelAttr,
@@ -90,39 +139,16 @@ const {
 	...cAttrs
 } = Astro.props as Props;
 
-const cDetPresets = {
-	BlackOrange: {
-		BgColors: new HoverColors(Colors.Black, Colors.OrangeDark),
-		TitleColors: new HoverColors("#ffffff"),
-	},
-	BlackSky: {
-		BgColors: new HoverColors(Colors.Black, Colors.Sky),
-		TitleColors: new HoverColors("#ffffff", Colors.BlackOff),
-	},
-	Sky: {
-		BgColors: HoverColors.Sky,
-		TitleColors: new HoverColors(Colors.BlackOff),
-	},
-	Bistage: {
-		BgColors: HoverColors.Bistage,
-		TitleColors: new HoverColors(Colors.BlackOff),
-	},
-	Gold: {
-		BgColors: new HoverColors("#D4AF37", "#F4D66A"),
-		TitleColors: new HoverColors("#07111F"),
-	},
-	Green: {
-		BgColors: new HoverColors("#1f3d34", "#284f44"),
-		TitleColors: new HoverColors("#ffffff"),
-	},
+const cDetPresets: Record<string, ButtonColorPreset> = {
+	Sky: CreateButtonPreset(Colors.Sky, Colors.SkyDark),
+	Bistage: CreateButtonPreset(Colors.Bistage, Colors.BistageDark),
+	Gold: CreateButtonPreset("#D4AF37", "#F4D66A"),
+	Green: CreateButtonPreset("#1f3d34", "#284f44"),
 	Ghost: {
 		BgColors: new HoverColors("rgba(255,255,255,.10)", "rgba(255,255,255,.18)"),
 		TitleColors: new HoverColors("#ffffff"),
 	},
-	Light: {
-		BgColors: new HoverColors(Colors.WhiteOff, Colors.Gray1),
-		TitleColors: new HoverColors(Colors.BlackOff),
-	},
+	Light: CreateButtonPreset(Colors.WhiteOff, Colors.Gray1),
 };
 
 const cPreset = GetPreset();
@@ -132,9 +158,11 @@ const cTarget = pBlank ? "_blank" : pTargetAttr;
 const cRel = pRelAttr ?? (cTarget === "_blank" ? "noopener noreferrer" : undefined);
 const cLayoutClass = GetLayoutClass(pIconPos);
 const cIconSize = `calc(${pHeight} - 5px)`;
+const cOwnSize = GetBoolAttr(pOwnSizeValue, true);
 
-const cBgColors = pBgColors ?? cPreset?.BgColors ?? cDetPresets.BlackSky.BgColors;
-const cTitleColors = pTitleColors ?? cPreset?.TitleColors ?? cDetPresets.BlackSky.TitleColors;
+const cFallbackPreset = GetButtonPreset({ BlackSky: true })!;
+const cBgColors = pBgColors ?? cPreset?.BgColors ?? cFallbackPreset.BgColors;
+const cTitleColors = pTitleColors ?? cPreset?.TitleColors ?? GetButtonTitleColors(cBgColors);
 const cIconImgs = pIconImgs ?? new HoverImg("");
 const cBgImgs = pBgImgs ?? new HoverImg("");
 
@@ -174,28 +202,39 @@ const cStyle = [
 	GetStyleText(pStyle),
 ].filter(Boolean).join("\n");
 
-const cPlace = new Place({
-	pLoc,
-	pSize,
-	pRotate,
-	pZ,
-	pOrigin,
-	pOpacity,
-	pClickable,
-	pLandOnly,
-	pPortOnly,
-}, cStyle);
+const cPlace = new Place(Astro.props as PlaceProps, cStyle);
 
 function GetPreset() {
-	if (Black || BlackOrange) return cDetPresets.BlackOrange;
-	if (BlackSky) return cDetPresets.BlackSky;
 	if (Sky) return cDetPresets.Sky;
 	if (Bistage) return cDetPresets.Bistage;
 	if (Gold) return cDetPresets.Gold;
 	if (Green) return cDetPresets.Green;
 	if (Ghost) return cDetPresets.Ghost;
 	if (Light) return cDetPresets.Light;
-	return undefined;
+
+	return GetButtonPreset({
+		Black,
+		BlackOrange,
+		BlackSky,
+		BlackGreen,
+		BlackBistage,
+		BlackRed,
+		SkyBlack,
+		SkyBistage,
+		BistageBlack,
+		BistageSky,
+		BistageOrange,
+		OrangeBlack,
+		OrangeSky,
+		GreenBlack,
+		GreenSky,
+		GrayBlack,
+		GrayOrange,
+		CreamyBlack,
+		YellowBlack,
+		RedBlack,
+		WhiteBlack,
+	});
 }
 
 function BuildCssUrl(pValue?: string) {
@@ -235,6 +274,7 @@ function GetCssName(pName: string) {
 	href={cHref}
 	target={cTarget}
 	rel={cRel}
+	data-own-size={cOwnSize ? "true" : undefined}
 	{...cAttrs}
 >
 
@@ -291,6 +331,14 @@ function GetCssName(pName: string) {
 		transform: scale(0.985);
 	}
 
+	.DetBtn:hover .BtnText {
+		color: var(--TitleCrl-hover);
+	}
+
+	.DetBtn:active .BtnText {
+		color: var(--TitleCrl-active);
+	}
+
 	.DetBtn:hover .BtnIcon {
 		background-image: var(--btn-icon-hover);
 	}
@@ -316,7 +364,12 @@ function GetCssName(pName: string) {
 		color: var(--TitleCrl);
 		font-size: var(--TitleSize);
 		font-weight: 800;
+		text-align: center;
 		text-decoration: none;
+	}
+
+	.DetBtn.noIcon .BtnText {
+		width: 100%;
 	}
 
 	.DetBtn.IsPlaced {
