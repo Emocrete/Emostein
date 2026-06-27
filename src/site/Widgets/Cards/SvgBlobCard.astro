@@ -5,6 +5,7 @@ const {
     fCtaText = "تفاصيل",
     fCtaHref = "#",
     fHue = 42,
+    ...RemAttr
 } = Astro.props;
 
 const fId = "blob_" + Math.random().toString(36).slice(2);
@@ -12,7 +13,7 @@ const fC1 = `hsl(${fHue} 92% 55%)`;
 const fC2 = `hsl(${(fHue + 40) % 360} 92% 55%)`;
 ---
 
-<article class="svgCard reveal" data-reveal="up">
+<article class="svgCard reveal" data-reveal="up" {...RemAttr}>
     <div class="svgBg" aria-hidden="true">
         <svg viewBox="0 0 600 360" preserveAspectRatio="none">
             <defs>

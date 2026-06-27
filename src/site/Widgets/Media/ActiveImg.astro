@@ -1,5 +1,8 @@
 ---
 interface Props {
+	Debug?: boolean | string;
+	DebugF?: boolean | string;
+	DebugG?: boolean | string;
 	pImg?: string;
 	pImgHover?: string;
 	pImgActive?: string;
@@ -27,7 +30,8 @@ const {
 	pScale = "",
 	pClass = "",
 	pFollowParentHover = false,
-} = Astro.props;
+	...RemAttr
+} = Astro.props as Props;
 
 const cId = `StateImg-${Math.random().toString(36).slice(2, 11)}`;
 const cImgNormal = pImg;
@@ -66,6 +70,7 @@ function NormalizeUnit(pValue: string | number | undefined) {
 		<a
 			id={cId}
 			class={cClass}
+			{...RemAttr}
 			href={pLink}
 			target={pTarget}
 			rel={cRel}
@@ -82,6 +87,7 @@ function NormalizeUnit(pValue: string | number | undefined) {
 		<div
 			id={cId}
 			class={cClass}
+			{...RemAttr}
 			data-mode={cMode}
 			data-size={cSizeValue}
 			data-normal={cImgNormal}

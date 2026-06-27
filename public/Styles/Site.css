@@ -263,19 +263,22 @@ body {
     transform: translateY(0);
 }
 
-:where([data-debug]) {
+/* Debug outline helpers
+   Debug  = العنصر نفسه
+   DebugF = عنصر الأب
+   DebugG = عنصر الجد
+   data-debug* متروكة للتوافق مع الاستخدامات القديمة. */
+:where([Debug], [debug], [data-debug]) {
 	outline: 3px solid red !important;
 	outline-offset: -3px !important;
 }
 
-
-:where([data-debugF]) {
+:where([DebugF], [debugf], [data-debugF], [data-debugf]) {
 	outline: 3px solid rgb(32, 158, 216) !important;
 	outline-offset: -3px !important;
 }
 
-
-:where([data-debugG]) {
+:where([DebugG], [debugg], [data-debugG], [data-debugg]) {
 	outline: 3px solid rgb(255, 166, 0) !important;
 	outline-offset: -3px !important;
 }

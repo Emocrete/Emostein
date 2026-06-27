@@ -141,7 +141,9 @@ function NormalizeEventType(pBody) {
 
 async function ReadBody(pRequest) {
 	try {
-		return await pRequest.json();
+		const Text = await pRequest.text();
+		if (!Text || !Text.trim()) return null;
+		return JSON.parse(Text);
 	} catch {
 		return null;
 	}

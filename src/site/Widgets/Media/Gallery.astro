@@ -1,9 +1,9 @@
 ---
-const { fId = "gallery1", fItems = [] } = Astro.props;
+const { fId = "gallery1", fItems = [], ...RemAttr } = Astro.props;
 // fItems: [{ fSrc, fAlt, fThumb? }]
 ---
 
-<div class="galleryGrid">
+<div class="galleryGrid" {...RemAttr}>
     {
         fItems.map((fIt, fI) => (
             <button

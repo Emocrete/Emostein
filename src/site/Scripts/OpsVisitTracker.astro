@@ -689,12 +689,40 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	};
 	}
 
+	function IsLifecycleEvent(pEventType) {
+	const Type = String(pEventType || "").trim().toLowerCase();
+	return Type === "page_focus_away"
+	|| Type === "page_focus_return"
+	|| Type === "page_exit"
+	|| Type === "page_close"
+	|| Type === "session_end"
+	|| Type === "page_ping";
+	}
+
+	function SendOpsPayload(pBody, pPreferBeacon) {
+	const JsonBody = JSON.stringify(pBody);
+	if (pPreferBeacon && navigator.sendBeacon) {
+	try {
+	const BlobBody = new Blob([JsonBody], { type: "application/json" });
+	if (navigator.sendBeacon(cApiUrl, BlobBody)) return Promise.resolve({ ok: true, beacon: true });
+	} catch {}
+	}
+
+	return fetch(cApiUrl, {
+	method: "POST",
+	headers: { "content-type": "application/json" },
+	body: JsonBody,
+	keepalive: true
+	}).catch(() => ({ ok: false }));
+	}
+
 	function TrackOpsEvent(pEventType, pOptions = {}) {
 	const EventType = String(pEventType || "").trim();
 	if (!EventType) return Promise.resolve({ ok: false, error: "Missing event type" });
 	if (IsSyntheticTraffic()) return Promise.resolve({ ok: true, skipped: true, reason: "synthetic_traffic", signal: BotSignal() });
 	if (EventType !== "page_open" && !fPageOpenSent) return Promise.resolve({ ok: true, skipped: true, reason: "page_not_visible_yet" });
 
+	const IsHiddenNow = document.hidden || document.visibilityState !== "visible";
 	const Body = {
 	eventType: EventType,
 	eventOn: String(pOptions.eventOn || "").trim(),
@@ -731,6 +759,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	sound: BoolValue(pOptions.sound),
 	durationMs: pOptions.durationMs ?? "",
 	awayReason: String(pOptions.awayReason || "").trim(),
+	focusState: String(pOptions.focusState || (IsHiddenNow ? "hidden" : "visible")).trim(),
+	isPageHidden: IsHiddenNow,
 	replayUrl: String(pOptions.replayUrl || BuildReplayPath()).trim(),
 	clarityUrl: String(pOptions.clarityUrl || pOptions.clarityRecordingUrl || GetClarityRecordingUrl()).trim(),
 	clarityRecordingUrl: String(pOptions.clarityRecordingUrl || pOptions.clarityUrl || GetClarityRecordingUrl()).trim(),
@@ -748,12 +778,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	createdAtClient: new Date().toISOString()
 	};
 
-	return fetch(cApiUrl, {
-	method: "POST",
-	headers: { "content-type": "application/json" },
-	body: JSON.stringify(Body),
-	keepalive: true
-	}).catch(() => ({ ok: false }));
+	const PreferBeacon = BoolValue(pOptions.useBeacon) || (IsHiddenNow && IsLifecycleEvent(EventType)) || EventType === "page_exit";
+	return SendOpsPayload(Body, PreferBeacon);
 	}
 
 	function TrackOpsEventOnce(pEventType, pOnceKey, pOptions = {}) {
@@ -1196,6 +1222,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	value: GetScrollPercent(),
 	durationMs: 0,
 	awayReason: fAwayReason,
+	focusState: "away",
+	useBeacon: true,
 	important: false,
 	notifyMobile: false,
 	sound: false
@@ -1224,6 +1252,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	value: Math.round(DurationMs / 1000),
 	durationMs: DurationMs,
 	awayReason: AwayReason,
+	focusState: "visible",
+	useBeacon: true,
 	important: false,
 	notifyMobile: false,
 	sound: false
@@ -1242,13 +1272,18 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	function TrackPagePing() {
-	if (!fPageOpenSent || document.hidden) return;
+	if (!fPageOpenSent) return;
+	const Hidden = document.hidden || document.visibilityState !== "visible";
+	if (Hidden && !fAwayStartedAt) MarkPageAway("hidden_ping");
 	TrackOpsEvent("page_ping", {
-	eventOn: "heartbeat",
+	eventOn: Hidden ? "heartbeat_hidden" : "heartbeat",
 	widget: "Page",
-	label: "الصفحة ما زالت مفتوحة",
+	label: Hidden ? "الصفحة ما زالت مفتوحة خارج التركيز" : "الصفحة ما زالت مفتوحة",
 	value: GetScrollPercent(),
 	durationMs: Math.round(GetPageElapsedMs()),
+	awayReason: Hidden ? (fAwayReason || "hidden") : "",
+	focusState: Hidden ? "away" : "visible",
+	useBeacon: Hidden,
 	notifyMobile: false,
 	sound: false
 	});
@@ -1264,7 +1299,10 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	widget: "Page",
 	label: "غادر الصفحة",
 	value: GetScrollPercent(),
-	awayReason: String(pReason || "pagehide")
+	durationMs: Math.round(GetPageElapsedMs()),
+	awayReason: String(pReason || "pagehide"),
+	focusState: document.hidden ? "hidden" : "visible",
+	useBeacon: true
 	});
 	}
 
@@ -1274,6 +1312,11 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 
 	window.addEventListener("pagehide", () => TrackPageExit("pagehide"));
 	window.addEventListener("beforeunload", () => TrackPageExit("beforeunload"));
+	window.addEventListener("freeze", () => {
+	MarkPageAway("freeze");
+	TrackPagePing();
+	});
+	setTimeout(TrackPagePing, 1000);
 	}
 
 	function TrackPageOpen() {

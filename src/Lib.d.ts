@@ -29,6 +29,12 @@ interface TImageSpec {
 	alt: string;
 	pos?: TLocationSpec;
 }
-
-
+interface DebugOutlineProps {
+	Debug?: boolean | string;
+	DebugF?: boolean | string;
+	DebugG?: boolean | string;
+	"data-debug"?: boolean | string;
+	"data-debugF"?: boolean | string;
+	"data-debugG"?: boolean | string;
+}
 

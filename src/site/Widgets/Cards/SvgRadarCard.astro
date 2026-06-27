@@ -3,12 +3,13 @@ const {
     fTitle = "رادار المتابعة",
     fText = "حركة لطيفة تشبه السونار…",
     fColor = "#7CFFB2",
+    ...RemAttr
 } = Astro.props;
 
 const fId = "rad_" + Math.random().toString(36).slice(2);
 ---
 
-<article class="radCard reveal" data-reveal="up">
+<article class="radCard reveal" data-reveal="up" {...RemAttr}>
     <div class="radSvg" aria-hidden="true">
         <svg viewBox="0 0 360 220" preserveAspectRatio="xMidYMid meet">
             <defs>
