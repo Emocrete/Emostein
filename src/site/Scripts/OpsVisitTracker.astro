@@ -891,11 +891,20 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	function GetLinkEvent(pLink) {
-	const Href = String(pLink.getAttribute("href") || "").toLowerCase();
-	if (Href.startsWith("tel:")) return "call_click";
-	if (Href.includes("wa.me") || Href.includes("whatsapp")) return "whatsapp_click";
+	const Href = String(pLink?.getAttribute?.("href") || pLink?.href || "").toLowerCase();
+	const Text = CleanText((pLink?.textContent || "") + " " + (pLink?.getAttribute?.("aria-label") || "") + " " + (pLink?.getAttribute?.("title") || "")).toLowerCase();
+	if (Href.startsWith("tel:") || Href.includes("tel:")) return "call_click";
+	if (Href.includes("wa.me") || Href.includes("whatsapp") || Href.includes("api.whatsapp.com") || Href.startsWith("whatsapp:") || Href.includes("wa.link") || Text.includes("واتساب") || Text.includes("whatsapp") || Text.includes("واتس")) return "whatsapp_click";
 	if (Href.includes("maps.google") || Href.includes("google.com/maps") || Href.startsWith("geo:")) return "map_click";
-	if (pLink.hasAttribute("download") || /\.(pdf|doc|docx|xls|xlsx|zip|rar)(\?|#|$)/i.test(Href)) return "download_click";
+	if (pLink?.hasAttribute?.("download") || /\.(pdf|doc|docx|xls|xlsx|zip|rar)(\?|#|$)/i.test(Href)) return "download_click";
+	return "";
+	}
+
+	function GetActionEvent(pElem) {
+	const Href = String(pElem?.getAttribute?.("href") || pElem?.dataset?.href || pElem?.dataset?.url || "").toLowerCase();
+	const Text = CleanText((pElem?.textContent || "") + " " + (pElem?.getAttribute?.("aria-label") || "") + " " + (pElem?.getAttribute?.("title") || "") + " " + (pElem?.className || "")).toLowerCase();
+	if (Href.startsWith("tel:") || Href.includes("tel:") || Text.includes("اتصال") || Text.includes("تليفون") || Text.includes("هاتف") || Text.includes("call")) return "call_click";
+	if (Href.includes("wa.me") || Href.includes("whatsapp") || Href.includes("api.whatsapp.com") || Href.startsWith("whatsapp:") || Href.includes("wa.link") || Text.includes("واتساب") || Text.includes("whatsapp") || Text.includes("واتس")) return "whatsapp_click";
 	return "";
 	}
 
@@ -935,9 +944,19 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	return;
 	}
 
-	const ActionButton = Target.closest("button.Btn, [data-service-btn], [data-lead-btn], [data-action-btn]");
+	const Link = Target.closest("a[href]");
+	if (Link) {
+	const EventType = GetLinkEvent(Link);
+	if (EventType) {
+	TrackFromElement(Link, EventType, "click", { href: Link.href, ...PointerExtra });
+	return;
+	}
+	}
+
+	const ActionButton = Target.closest("button.Btn, [data-service-btn], [data-lead-btn], [data-action-btn], .EmoCall, .EmoWhats, [data-whatsapp], [data-call]");
 	if (ActionButton) {
-	TrackFromElement(ActionButton, ActionButton.dataset.opsEvent || "button_click", "click", PointerExtra);
+	const ActionEvent = GetActionEvent(ActionButton) || ActionButton.dataset.opsEvent || "button_click";
+	TrackFromElement(ActionButton, ActionEvent, "click", PointerExtra);
 	return;
 	}
 
@@ -967,14 +986,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	return;
 	}
 
-	const Link = Target.closest("a[href]");
 	if (Link) {
-	const EventType = GetLinkEvent(Link);
-	if (EventType) {
-	TrackFromElement(Link, EventType, "click", { href: Link.href, ...PointerExtra });
-	return;
-	}
-
 	if (Link.closest(".ReadAlso, .ReadAlsoItem")) {
 	TrackFromElement(Link, "readalso_click", "click", { href: Link.href, widget: "ReadAlso", ...PointerExtra });
 	return;
@@ -1220,7 +1232,10 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	eventOn: "heartbeat",
 	widget: "Page",
 	label: "الصفحة ما زالت مفتوحة",
-	value: GetScrollPercent()
+	value: GetScrollPercent(),
+	durationMs: Math.round(GetPageElapsedMs()),
+	notifyMobile: false,
+	sound: false
 	});
 	}
 
@@ -1261,6 +1276,44 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	});
 	}
 
+	function InitVideoEvents() {
+	document.querySelectorAll("video").forEach((pVideo, pIndex) => {
+	if (pVideo.dataset.opsVideoBound === "1") return;
+	pVideo.dataset.opsVideoBound = "1";
+	pVideo.addEventListener("play", () => {
+	const Source = pVideo.currentSrc || pVideo.getAttribute("src") || "";
+	const Title = pVideo.getAttribute("title") || pVideo.getAttribute("aria-label") || pVideo.dataset.opsLabel || BuildViewLabel(GetClosestWidget(pVideo)) || Source || `Video ${pIndex + 1}`;
+	TrackOpsEvent("video_play", {
+	eventOn: "video",
+	widget: "Video",
+	label: Title,
+	href: Source,
+	important: true,
+	notifyMobile: false,
+	sound: false
+	});
+	}, { passive: true });
+	});
+
+	document.querySelectorAll("iframe[src*='youtube'], iframe[src*='youtu.be'], iframe[src*='vimeo']").forEach((pFrame, pIndex) => {
+	if (pFrame.dataset.opsVideoBound === "1") return;
+	pFrame.dataset.opsVideoBound = "1";
+	pFrame.addEventListener("pointerdown", () => {
+	const Source = pFrame.getAttribute("src") || "";
+	const Title = pFrame.getAttribute("title") || pFrame.dataset.opsLabel || BuildViewLabel(GetClosestWidget(pFrame)) || Source || `Video ${pIndex + 1}`;
+	TrackOpsEvent("video_play", {
+	eventOn: "video",
+	widget: "Video",
+	label: Title,
+	href: Source,
+	important: true,
+	notifyMobile: false,
+	sound: false
+	});
+	}, { passive: true });
+	});
+	}
+
 	function InitOps() {
 	if (IsSyntheticTraffic()) return;
 	GetVisitorId();
@@ -1277,6 +1330,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	InitToggleEvents();
 	InitClickEvents();
 	InitFormEvents();
+	InitVideoEvents();
 	InitAutoViews();
 	InitReadTracking();
 	InitScrollMilestones();
