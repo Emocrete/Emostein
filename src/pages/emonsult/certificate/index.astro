@@ -1,7 +1,7 @@
 ---
-import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, SecTitle } from "@/Widgets";
+import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, SecTitle, VrStack } from "@/Widgets";
 ---
 
 
@@ -27,12 +27,6 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	pSchemaType="CollectionPage"
 	pTitle="شهادات هندسية"
 	pDescr="خدمات استخراج واعتماد الشهادات الهندسية من نقابة المهندسين المصرية، وتشمل شهادة صلاحية المبنى للإشغال، شهادة إشراف هندسي على البناء، شهادة إشراف هندسي على الهدم، وشهادات وتقارير المعاينة والصلاحية المطلوبة للجهات الإدارية والمرافق."
-	pSchemaImages={[
-		"/Media/Emonsult/Certificate/HeroL.webp",
-		"/Media/Emonsult/Certificate/Validity/HeroL.webp",
-		"/Media/Emonsult/Certificate/ConSV/HeroL.webp",
-		"/Media/Emonsult/Certificate/DemSV/HeroD.webp"
-	]}
 >
 
 
@@ -41,21 +35,30 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<Hero
-		pImgF="/Media/Emonsult/Certificate/"
-		pTitle="شهادات هندسية"
-		pDesc="اعتماد شهادات هندسية من نقابة المهندسين لاستخدامها أمام الأحياء وأجهزة المدن والجهات الإدارية وشركات المرافق، مع تجهيز بيانات العقار والمالك والمهندس والسجل الهندسي حسب نوع الشهادة المطلوبة."
-		pTitleClr={Colors.WhiteOff}
-		pDescClr={Colors.WhiteOff}
-		pHzAlign="right"
-		pVrAlign="right"
-		pPosL="18% 48% 12% 8%"
-		pPosP="12% 8% 42% 8%"
-		pBlurL="on"
-		pBlurP="on"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="اطلب شهادة هندسية" />
+		<VrStack
+			pBlur={new Pixel(10)}
+			pBgOpacity={new Percent(50)}
+			pBgColor={new ElemBg(Colors.BlackOff)}
+			pLoc={new Loc(new NumPer("10%","5%"),new NumPer("40%","20%"))}
+			pSize={new Size(new NumPer("50%","90%"))}
+			pHzAlign="Center"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("شهادات هندسية")}
+				pText={Text.Body.White.OfSize(16).OfText("اعتماد شهادات هندسية من نقابة المهندسين لاستخدامها أمام الأحياء وأجهزة المدن والجهات الإدارية وشركات المرافق، مع تجهيز بيانات العقار والمالك والمهندس والسجل الهندسي حسب نوع الشهادة المطلوبة.")}
+			/>
+
+			<EmoCall
+				data-own-size
+				BlackSky
+				pText="تواصل معنا"
+			/>
+
+		</VrStack>
 
 	</Hero>
 
@@ -691,49 +694,8 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ReadAlso
-		pTitle={Text.H2.Centered.OfText("صفحات الشهادات الهندسية")}
-		pDesc={Text.Body.Centered.OfText("تفاصيل كل شهادة حسب الغرض والمرحلة والجهة التي ستستلم المستند.")}
-		pHeadBg={new ElemBg(Colors.SkyLite)}
-		pBodyBg={new ElemBg(Colors.WhiteOff)}
-		pCardBg={new ElemBg(Colors.WhiteOff)}
-	>
-
-		<ReadAlsoItem
-			pTitle="شهادة صلاحية المبنى للإشغال"
-			pDesc="شهادة مطلوبة بعد التنفيذ لإثبات صلاحية المبنى أو جزء منه للإشغال وتوصيل المرافق."
-			pHref="/emonsult/certificate/validity"
-		/>
-
-		<ReadAlsoItem
-			pTitle="شهادة إشراف هندسي على البناء"
-			pDesc="شهادة تستخدم في تصريح الحفر وبدء أعمال التنفيذ تحت إشراف مهندس معتمد."
-			pHref="/emonsult/certificate/con-supervision"
-		/>
-
-		<ReadAlsoItem
-			pTitle="شهادة إشراف هندسي على الهدم"
-			pDesc="شهادة تستخدم ضمن ملف الهدم أو قبل الشروع في التنفيذ تحت إشراف هندسي."
-			pHref="/emonsult/certificate/dem-supervision"
-		/>
-
-		<ReadAlsoItem
-			pTitle="تقارير هندسية"
-			pDesc="تقارير فنية عن حالة المباني والمنشآت والمداخن والحضانات والمصاعد وغيرها."
-			pHref="/emonsult/report"
-		/>
-
-	</ReadAlso>
-
-
-
-
-
-
-
 	<RelServices
-		pTitle={Text.H2.Centered.WithColor(Colors.BistageLite).OfText("خدمات ذات علاقة")}
-		pDesc={Text.Body.Centered.White.OfText("خدمات تجارية مرتبطة بالشهادات الهندسية والاعتماد والتراخيص والتقارير.")}
+		pTitle={Text.H2.Centered.WithColor(Colors.BistageLite).OfText("خدمات أخرى")}
 		pHeadBg={new ElemBg(Colors.Gray5)}
 		pBodyBg={new ElemBg(Colors.SkyLite)}
 		pCardBg={new ElemBg(Colors.WhiteOff)}
@@ -750,13 +712,6 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 			pTitle="تقرير هندسي عن حالة مبنى"
 			pDesc="تقرير فني لدعم شهادة صلاحية أو ملف هدم أو معاينة عقار قائم."
 			pHref="/emonsult/report"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="ترخيص هدم"
-			pDesc="تجهيز ملف رخصة الهدم والمستندات المرتبطة بها، ومنها شهادة الإشراف والتقرير الفني."
-			pHref="/emoperm/building/districts/demolish"
 			pBtnText="اطلب الخدمة"
 		/>
 

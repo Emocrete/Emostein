@@ -1,7 +1,8 @@
 ---
-import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle } from "@/Widgets";
+import { VrStack } from "../../../site/Widgets";
 ---
 
 
@@ -27,10 +28,6 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	pSchemaType="Service"
 	pTitle="شهادة إشراف هندسي على الهدم"
 	pDescr="استخراج شهادة إشراف هندسي على الهدم معتمدة من نقابة المهندسين المصرية، لاستخدامها ضمن ملف رخصة الهدم أو قبل الشروع في تنفيذ أعمال الهدم، مع توضيح المستندات المطلوبة ودور المهندس المشرف والتقرير الفني وخطوات الاعتماد."
-	pSchemaImages={[
-		"/Media/Emonsult/Certificate/DemSV/HeroD.webp",
-		"/Media/Emonsult/Certificate/DemSV/HeroM.webp"
-	]}
 >
 
 
@@ -39,23 +36,18 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<Hero
-		pImgF="/Media/Emonsult/Certificate/DemSV/"
-		pImgL="HeroD.webp"
-		pImgP="HeroM.webp"
-		pTitle="شهادة إشراف هندسي على الهدم"
-		pDesc="شهادة معتمدة من نقابة المهندسين تفيد تولي مهندس نقابي مسؤولية الإشراف على تنفيذ أعمال الهدم طبقًا للترخيص، مع مراعاة السلامة الإنشائية وتأمين الجوار والمارة والمرافق قبل بدء التنفيذ."
-		pTitleClr={Colors.WhiteOff}
-		pDescClr={Colors.WhiteOff}
-		pHzAlign="right"
-		pVrAlign="right"
-		pPosL="18% 48% 12% 8%"
-		pPosP="12% 8% 42% 8%"
-		pBlurL="on"
-		pBlurP="on"
-	>
+	<Hero pImgF="/Media/Emonsult/Certificate/DemSV">
 
-		<EmoCall BlackSky pText="اطلب شهادة إشراف هدم" />
+		<VrStack pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","10%"))} pSize={new Size(new NumPer("50%","95%"))}>
+
+			<Emograph
+				pTitle={Text.H1.White.OfText("شهادة إشراف هندسي على الهدم")}
+				pText={Text.Body.White.OfSize(16).OfText("شهادة معتمدة من نقابة المهندسين تفيد تولي مهندس نقابي مسؤولية الإشراف على تنفيذ أعمال الهدم طبقًا للترخيص، مع مراعاة السلامة الإنشائية وتأمين الجوار والمارة والمرافق قبل بدء التنفيذ.")}
+			/>
+
+			<EmoCall BlackSky pText="تواصل معنا" />
+
+		</VrStack>
 
 	</Hero>
 

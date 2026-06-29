@@ -1,7 +1,8 @@
 ---
-import { EmoBtn, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } from "@/Widgets";
-import { Align, Colors, ElemBg, RespString, Size, Text } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
+import { EmoBtn, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } from "@/Widgets";
+import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
+import { Badge, EmoCall } from "../../../site/Widgets";
 ---
 
 
@@ -35,49 +36,30 @@ import BLayout from "@/Layout.astro";
 
 
 
-	<Hero
-		pTitle="شهادة إشراف هندسي على البناء"
-		pDesc="مستند رسمي لاستخراج تصريح الحفر وبدء التنفيذ تحت إشراف هندسي معتمد"
-		pTitleClr="#2f2c3d"
-		pDescClr="#2f2c3d"
-		pHzAlign="center"
-		pVrAlign="center"
-		pPosL="10% 8% 10% 8%"
-		pPosP="18% 8% 8% 8%"
-		pBlurL="off"
-		pBlurP="on"
-	>
+	<Hero pImgF="/Media/Emonsult/Certificate/ConSV">
 
-		<HzStack>
+		<VrStack
+			pBlur={new Pixel(10)}
+			pBgOpacity={new Percent(50)}
+			pBgColor={new ElemBg(Colors.BlackOff)}
+			pLoc={new Loc(new NumPer("10%","5%"),new NumPer("40%","20%"))}
+			pSize={new Size(new NumPer("40%","90%"))}
+			pHzAlign="Center"
+			pVrAlign="Center"
+		>
 
-			<VrStack>
+			<Emograph
+				pTitle={Text.H1.White.OfText("شهادة إشراف هندسي على البناء")}
+				pText={Text.Body.White.OfSize(16).OfText("استخراج شهادة الإشراف الهندسي الصادرة من نقابة المهندسين المصرية للحصول على ترخيص الحفر وبدء التنفيذ، مع توضيح المستندات المطلوبة والتكلفة والرسوم الهندسية.")}
+			/>
 
-				<Emograph
-					pTitle={Text.H1.OfText("5").WithColor("#302c3c").Centered}
-					pText={Text.H3.OfText("سنوات خبرة").WithColor("#3d93ef").Centered}
-				/>
+			<EmoCall
+				data-own-size
+				BlackSky
+				pText="تواصل معنا"
+			/>
 
-			</VrStack>
-
-			<VrStack>
-
-				<Emograph
-					pTitle={Text.H1.OfText("+ 25").WithColor("#302c3c").Centered}
-					pText={Text.H3.OfText("شهادة إشراف").WithColor("#3d93ef").Centered}
-				/>
-
-			</VrStack>
-
-			<VrStack>
-
-				<Emograph
-					pTitle={Text.H1.OfText("24").WithColor("#302c3c").Centered}
-					pText={Text.H3.OfText("فقط خلال ساعة").WithColor("#3d93ef").Centered}
-				/>
-
-			</VrStack>
-
-		</HzStack>
+		</VrStack>
 
 	</Hero>
 
@@ -87,8 +69,11 @@ import BLayout from "@/Layout.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.Creamy)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Creamy};`}
@@ -113,8 +98,11 @@ import BLayout from "@/Layout.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.Creamy)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Creamy};`}
@@ -139,8 +127,11 @@ import BLayout from "@/Layout.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.Creamy)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #ded8c3 "
@@ -203,8 +194,11 @@ import BLayout from "@/Layout.astro";
 
 
 
-	<ESec pBg={new ElemBg("#c9bfb8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#c9bfb8")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #c9bfb8 "

@@ -1,6 +1,6 @@
 ---
-import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
 import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, Hero, HzStack, RespImg, VrStack } from "@/Widgets";
 ---
 
@@ -35,74 +35,18 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, He
 
 
 
-	<Hero
-		pTitle="شهادة صلاحية المبنى للإشغال"
-		pDesc="إصدار شهادة صلاحية مبنى للإشغال لتوصيل المرافق واعتماد جاهزية المبنى للاستخدام"
-		pTitleClr={Colors.WhiteOff}
-		pDescClr={Colors.WhiteOff}
-		pHzAlign="center"
-		pVrAlign="center"
-		pPosL="30% 40% 10% 8%"
-		pPosP="15% 5% 50% 5%"
-		pBlurL="off"
-		pBlurP="on"
-	>
+	<Hero>
 
-		<HzStack style = " justify-content : center ; margin-top : 25px " data-land-only>
+		<VrStack pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","10%"))} pSize={new Size(new NumPer("50%","95%"))}>
 
-			<HzStack>
-
-				<RespImg
-					pImg={new EmoMediaData("Img","/Media/","ExperienceIconGold.webp",false,"مهندس خبير شهادات صلاحية المبنى للإشغال من نقابة المهندسين",new Size(new NumPer(100, 30), new NumPer(100, 30)))}
-				/>
-
-				<Emograph pTitle={Text.Body.OfText("6").Bistage.Centered} pText={Text.Body.OfText("سنوات خبرة").Bistage.Centered} />
-
-			</HzStack>
-
-			<HzStack>
-
-				<RespImg
-					pImg={new EmoMediaData("Img","/Media/","TrustedIcon.webp",false,"مهندس خبير شهادات صلاحية المبنى للإشغال من نقابة المهندسين في القاهرة والجيزة",new Size(new NumPer(100, 50), new NumPer(100, 50)))}
-				/>
-
-				<Emograph pTitle={Text.Body.OfText("+ 35").Bistage.Centered} pText={Text.Body.OfText("شهادة صلاحية").Bistage.Centered} />
-
-			</HzStack>
-
-			<HzStack>
-
-				<RespImg
-					pImg={new EmoMediaData("Img","/Media/","Hours24Icon.webp",false,"مهندس خبير شهادات صلاحية المبنى للإشغال من نقابة المهندسين في القاهرة والجيزة",new Size(new NumPer(100, 50), new NumPer(100, 50)))}
-				/>
-
-				<Emograph pTitle={Text.Body.OfText("24").Bistage.Centered} pText={Text.Body.OfText("فقط خلال ساعة").Bistage.Centered} />
-
-			</HzStack>
-
-			<HzStack>
-
-				<RespImg
-					pImg={new EmoMediaData("Img","/Media/","LocationIcon.webp",false,"مهندس خبير شهادات صلاحية المبنى للإشغال من نقابة المهندسين في القاهرة والجيزة",new Size(new NumPer(100, 50), new NumPer(100, 50)))}
-				/>
-
-				<Emograph pTitle={Text.Body.OfText("القاهرة والجيزة").Bistage.Centered} />
-
-			</HzStack>
-
-		</HzStack>
-
-		<HzStack style = " margin-top : 50px ">
-
-			<EmoCall BlackSky pText="اطلب الخدمة" />
-
-			<EmoBtn
-				pHeight="40px"
-				pText="التفاصيل"
-				pWidth="150px"
+			<Emograph
+				pTitle={Text.H1.White.OfText("شهادة صلاحية المبنى للإشغال")}
+				pText={Text.Body.White.OfSize(16).OfText("إصدار شهادة صلاحية مبنى للإشغال لتوصيل المرافق واعتماد جاهزية المبنى للاستخدام")}
 			/>
 
-		</HzStack>
+			<EmoCall BlackSky pText="تواصل معنا" />
+
+		</VrStack>
 
 	</Hero>
 
@@ -112,62 +56,11 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, He
 
 
 
-	<ESec id="PadgesMobile" pBg={new ElemBg(Colors.BlackOff)}>
-
-		<HzStack data-port-only>
-
-			<HzStack>
-
-				<RespImg
-					pImg={new EmoMediaData("Img","/Media/","ExperienceIconGold.webp",false,"مهندس خبير شهادات صلاحية المبنى للإشغال من نقابة المهندسين",new Size(new NumPer(100, 100), new NumPer(100, 100)))}
-				/>
-
-				<Emograph pTitle={Text.Body.OfText("6").Bistage.Centered} pText={Text.Body.OfText("سنوات خبرة").Bistage.Centered} />
-
-			</HzStack>
-
-			<HzStack>
-
-				<RespImg
-					pImg={new EmoMediaData("Img","/Media/","TrustedIcon.webp",false,"مهندس خبير شهادات صلاحية المبنى للإشغال من نقابة المهندسين في القاهرة والجيزة",new Size(new NumPer(100, 100), new NumPer(100, 100)))}
-				/>
-
-				<Emograph pTitle={Text.Body.OfText("+ 35").Bistage.Centered} pText={Text.Body.OfText("شهادة صلاحية").Bistage.Centered} />
-
-			</HzStack>
-
-			<HzStack>
-
-				<RespImg
-					pImg={new EmoMediaData("Img","/Media/","Hours24Icon.webp",false,"مهندس خبير شهادات صلاحية المبنى للإشغال من نقابة المهندسين في القاهرة والجيزة",new Size(new NumPer(100, 100), new NumPer(100, 100)))}
-				/>
-
-				<Emograph pTitle={Text.Body.OfText("24").Bistage.Centered} pText={Text.Body.OfText("فقط خلال ساعة").Bistage.Centered} />
-
-			</HzStack>
-
-			<HzStack>
-
-				<RespImg
-					pImg={new EmoMediaData("Img","/Media/","LocationIcon.webp",false,"مهندس خبير شهادات صلاحية المبنى للإشغال من نقابة المهندسين في القاهرة والجيزة",new Size(new NumPer(100, 100), new NumPer(100, 100)))}
-				/>
-
-				<Emograph pTitle={Text.Body.OfText("القاهرة والجيزة").Bistage.Centered} />
-
-			</HzStack>
-
-		</HzStack>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={new Align("Center", "Center", "Center", "Center")}
- pVrAlign={new Align("Center", "Center", "Center", "Center")}>
+	<ESec
+		pBg={new ElemBg(Colors.Creamy)}
+		pHzAlign={new Align("Center", "Center", "Center", "Center")}
+		pVrAlign={new Align("Center", "Center", "Center", "Center")}
+	>
 
 		<Emograph
 			pTitle={Text.H2.OfText("ما هي شهادة صلاحية المبنى للإشغال ؟").WithColor("#8b1e2d").Centered}

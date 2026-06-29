@@ -51,6 +51,9 @@ interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
 	pMobMaxCols?: number;
 }
 
+const cProps = Astro.props as Props & Record<string, unknown>;
+const cHasExplicitScopeText = Object.prototype.hasOwnProperty.call(cProps, "pScopeText");
+
 const {
 	pYears,
 	pYearsText = "سنوات خبرة",
@@ -67,7 +70,7 @@ const {
 	pQualityText,
 	pQualityImg,
 
-	pScopeText = "القاهرة والجيزة",
+	pScopeText: pScopeTextRaw,
 	pScopeImg,
 
 	pTextPos = "Left",
@@ -119,9 +122,11 @@ const {
 	class: pGivenClass = "",
 	style: pGivenStyle = "",
 	...RemAttr
-} = Astro.props as Props;
+} = cProps;
 
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cHasPrimaryBadge = HasValue(pYears) || HasValue(pWorks) || HasValue(pDuration) || HasValue(pQualityText);
+const pScopeText = cHasExplicitScopeText ? String(pScopeTextRaw ?? "") : cHasPrimaryBadge ? "" : "القاهرة والجيزة";
 
 const cBadges = GetBadges();
 const cItemDir = pTextPos === "Top" || pTextPos === "Bottom" ? "Col" : "Row";
@@ -257,10 +262,12 @@ function GetImg(pImg: TBadgeImg | undefined, pDefaultFile: string, pAlt: string)
 			class = " BadgeItem "
 			style = {cItemStyle}
 			pDir={cItemDir}
+			pMainSizeMode="Own"
+			pCrossSizeMode="Own"
 			pGap={pImgTextGap}
 			pPad={new Pixel(0, 0)}
 			pFlipNarrow={false}
-			data-own-size="true"
+			data-own-size={true}
 			data-badge-item="true"
 		>
 
@@ -271,20 +278,23 @@ function GetImg(pImg: TBadgeImg | undefined, pDefaultFile: string, pAlt: string)
 						<Stack
 							class = " BadgeTextStack "
 							pDir="Col"
+							pMainSizeMode="Own"
+							pCrossSizeMode="Own"
 							pGap={pNumTextGap}
 							pPad={new Pixel(0, 0)}
 							pFlipNarrow={false}
+							data-own-size={true}
 						>
 
 							<Emograph pTitle={cNumFont.OfText(String(cBadge.Number))} />
 
-							<Emograph pTitle={cTextFont.OfText(cBadge.Text)} />
+							<Emograph pTitle={cTextFont.OfText(cBadge.Text)} data-own-size={true} />
 
 						</Stack>
 
 						) : (
 
-							<p class = " BadgeInlineText ">
+							<p class = " BadgeInlineText " data-own-size={true}>
 
 								<span class = " BadgeInlineNum ">
 									{cBadge.Number}
@@ -299,11 +309,11 @@ function GetImg(pImg: TBadgeImg | undefined, pDefaultFile: string, pAlt: string)
 						)
 						) : (
 
-							<Emograph pTitle={cTextFont.OfText(cBadge.Text)} />
+							<Emograph pTitle={cTextFont.OfText(cBadge.Text)} data-own-size={true} />
 
 						)) }
 
-				<RespImg pImg={cBadge.Img} />
+				<RespImg pImg={cBadge.Img} data-own-size={true} />
 
 				{ !cTextFirst && (
 					cBadge.Number !== undefined ? (
@@ -312,20 +322,23 @@ function GetImg(pImg: TBadgeImg | undefined, pDefaultFile: string, pAlt: string)
 							<Stack
 								class = " BadgeTextStack "
 								pDir="Col"
+								pMainSizeMode="Own"
+								pCrossSizeMode="Own"
 								pGap={pNumTextGap}
 								pPad={new Pixel(0, 0)}
 								pFlipNarrow={false}
+								data-own-size={true}
 							>
 
 								<Emograph pTitle={cNumFont.OfText(String(cBadge.Number))} />
 
-								<Emograph pTitle={cTextFont.OfText(cBadge.Text)} />
+								<Emograph pTitle={cTextFont.OfText(cBadge.Text)} data-own-size={true} />
 
 							</Stack>
 
 							) : (
 
-								<p class = " BadgeInlineText ">
+								<p class = " BadgeInlineText " data-own-size={true}>
 
 									<span class = " BadgeInlineNum ">
 										{cBadge.Number}
@@ -340,7 +353,7 @@ function GetImg(pImg: TBadgeImg | undefined, pDefaultFile: string, pAlt: string)
 							)
 							) : (
 
-								<Emograph pTitle={cTextFont.OfText(cBadge.Text)} />
+								<Emograph pTitle={cTextFont.OfText(cBadge.Text)} data-own-size={true} />
 
 							)) }
 
@@ -348,7 +361,7 @@ function GetImg(pImg: TBadgeImg | undefined, pDefaultFile: string, pAlt: string)
 
 				)) }
 
-		</Stack>
+		</HzStack>
 
 
 
@@ -399,12 +412,24 @@ function GetImg(pImg: TBadgeImg | undefined, pDefaultFile: string, pAlt: string)
 
 
 	:global(.BadgeItem.EmoStack) {
-		min-width: fit-content;
+		width: max-content;
+		min-width: max-content;
+		max-width: 100%;
+		flex: 0 1 auto !important;
 	}
 
 
 	:global(.BadgeTextStack.EmoStack) {
-		min-width: fit-content;
+		width: max-content;
+		min-width: max-content;
+		max-width: 100%;
+	}
+
+
+	:global(.BadgeTextStack.EmoStack .Emograph) {
+		width: max-content;
+		min-width: max-content;
+		max-width: 100%;
 	}
 
 
