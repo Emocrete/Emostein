@@ -813,11 +813,7 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 			pZ={1}
 		/>
 
-		<SecTitle
-			BistageLite
-			pTitle="إجراءات ترخيص صيدلية"
-			pDesc="المسار العملي للترخيص يبدأ بتجهيز الملف وإرساله، ثم انتظار المعاينة الأولى، واستكمال تجهيز الصيدلية للمعاينة الثانية، ثم تقديم المستندات النهائية حتى إصدار الترخيص."
-		/>
+		<SecTitle BistageLite pTitle="إجراءات ترخيص صيدلية" />
 
 		<LinePath
 			pStroke="rgba(50,143,232,.42)"
@@ -909,7 +905,11 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 		</Grid>
 
-		<HzStack pGap={new Pixel(28, 14)} pPad={new Pixel(30, 18)}>
+		<HzStack
+			pGap={new Pixel(28, 14)}
+			pPad={new Pixel(30, 18)}
+			hidden
+		>
 
 			<RespImg
 				pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "PreparePharmacyFile.webp", false, "تجهيز ملف ترخيص صيدلية", new Size(new NumPer(360, 280), new NumPer("auto", "auto")))}
@@ -933,73 +933,9 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 
 
-	<BottTriSep
-		pTopColor={Colors.WhiteOff}
-		pBottomColor={Colors.Gray5}
-		pHeight={620}
-		pTipX={500}
-		pTipY={300}
-		pContentWidth={1200}
-		pPadInline={50}
-	>
-
-		<DuoStr
-			pContentSize={new Size(new NumPer("92%", "96%"))}
-			pGap={new Pixel(26, 16)}
-			pPad={new Pixel(30, 18)}
-		>
-
-			<DuoCol pBgColor={new ElemBg(Colors.BlackOff)}>
-
-				<EmoList
-					pWidth={new RespString("100%", "100%")}
-					pTitle={Text.H3.Bistage.OfText("عناوين إرسال الطلب")}
-					pDesc={Text.Body.White.OfText("يتم الإرسال إلى الفرع الرئيسي الخاص بالمحافظة، مع الاحتفاظ بما يثبت الإرسال أو التقديم.")}
-					pItemFnt={Text.Body.White}
-					pItemsBg={new ElemBg("transparent")}
-					pNumbered={false}
-					pItems={[
-						"عنوان فرع القاهرة الرئيسي: 22 ش الإخشيد - المنيل.",
-						"عنوان فرع الجيزة الرئيسي: 5 ش ابن بطوطة - مدكور - الطالبية - الهرم."
-					]}
-				/>
-
-			</DuoCol>
-
-			<DuoCol pBgColor={new ElemBg(Colors.BistageLite)}>
-
-				<Emograph
-					pTitle={Text.H3.Centered.OfText("قبل استئجار محل الصيدلية")}
-					pText={Text.Body.Centered.OfText("الفحص المبكر يوفر تكلفة كبيرة. المسافة غير المطابقة أو المساحة غير المحسوبة بدقة أو الارتفاع غير الكافي قد تجعل المحل غير صالح للترخيص حتى لو كان موقعه التجاري جيدًا.")}
-				/>
-
-				<EmoCall
-					BlackSky
-					pText="فحص قبل التعاقد"
-					pWidth="260px"
-					pHeight="54px"
-					pRadius="18px"
-				/>
-
-			</DuoCol>
-
-		</DuoStr>
-
-	</BottTriSep>
-
-
-
-
-
-
-
 	<ESec id="validity" pBg={new ElemBg(Colors.SkyLite)}>
 
-		<SecTitle
-			WhiteOff
-			pTitle="صلاحية ترخيص الصيدلية بعد إصداره"
-			pDesc="الحصول على الترخيص لا يعني تركه بلا تشغيل أو نقل النشاط بحرية. توجد حالات عملية قد تؤدي إلى اعتبار الترخيص ملغى أو تستلزم إجراءات جديدة."
-		/>
+		<SecTitle Gray1 pTitle="صلاحية ترخيص الصيدلية بعد إصداره" />
 
 		<GlassCard
 			pBg="rgba(255,255,255,.82)"
@@ -1011,8 +947,8 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 			<EmoList
 				pWidth={new RespString("100%", "100%")}
-				pTitle={Text.H3.Centered.Sky.OfText("متى يعتبر الترخيص ملغيًا؟")}
-				pDesc={Text.Body.Centered.OfText("بعد الحصول على ترخيص صيدلية يعتبر الترخيص ملغى في الحالات التالية:")}
+				pTitle={Text.H3.Centered.DarkSky.OfText("متى يعتبر الترخيص لاغياً؟")}
+				pDesc={Text.Body.OfText("​بعد الحصول على ترخيص صيدلية يعتبر الترخيص لاغياً في الحالات التالية:")}
 				pItemFnt={Text.Body}
 				pNumbered={false}
 				pItems={[
