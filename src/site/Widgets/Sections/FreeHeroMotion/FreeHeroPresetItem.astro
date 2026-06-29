@@ -1,6 +1,6 @@
 ---
+import { Loc, NumPer, RespString, Size } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import { Size, Location, RespString } from "@/TypesLib";
 import FreeHeroMoveItem from "../FreeHeroMoveItem.astro";
 import {
 	BuildFreeHeroMotionPoints,
@@ -12,7 +12,7 @@ import {
 
 export interface Props extends DebugOutlineProps, HTMLAttributes<"div"> {
 	pMotion: TFreeHeroMotion;
-	pLoc?: Location;
+	pLoc?: Loc;
 	pBox?: Size;
 	pDistance?: string | RespString;
 	pDuration?: number;
@@ -35,7 +35,7 @@ export interface Props extends DebugOutlineProps, HTMLAttributes<"div"> {
 
 const {
 	pMotion,
-	pLoc = new Location(0, 0, 0, 0),
+	pLoc = new Loc(new NumPer(0, 0), new NumPer(0, 0)),
 	pBox = new Size(),
 	pDistance = new RespString("180px", "90px"),
 	pDuration = 900,
@@ -82,26 +82,25 @@ const cLoop = pLoop ?? GetDefaultLoop(pMotion);
 
 
 
-<FreeHeroMoveItem
-	pKeyPoints={cKeyPoints}
-	pIntervals={cIntervals}
-	pDelay={pDelay}
-	pEase={cEase}
-	pLoop={cLoop}
-	pLoopFor={pLoopFor}
-	pLoopInterval={pLoopInterval}
-	pReverse={pReverse}
+
+
+	<slot
+	{...RemAttr}
+	pMoveKeyPoints={cKeyPoints}
+	pMoveIntervals={cIntervals}
+	pMoveDelay={pDelay}
+	pMoveEase={cEase}
+	pMoveLoop={cLoop}
+	pMoveLoopFor={pLoopFor}
+	pMoveLoopInterval={pLoopInterval}
+	pMoveReverse={pReverse}
 	pZ={pZ}
 	pOrigin={pOrigin}
-	pFit={pFit}
-	pPointer={pPointer}
-	pHideLand={pHideLand}
-	pHidePort={pHidePort}
+	pClickable={pPointer}
 	pLandOnly={pLandOnly}
 	pPortOnly={pPortOnly}
-	{...RemAttr}
->
+	pPortOnly={pHideLand}
+	pLandOnly={pHidePort}
+/>
 
-	<slot />
 
-</FreeHeroMoveItem>

@@ -1,0 +1,186 @@
+<script is:inline>
+	(() => {
+		const cContainerSelector = "[data-emo-auto-container]";
+		const cIgnoredChildSelector = "[data-emo-container-bg], script, style, template, link, meta";
+		const cDefaultEmptyHeight = 200;
+		const fObserved = new WeakMap();
+		let fQueued = false;
+
+		function ToNumber(pValue, pFallback = 0) {
+			const cValue = Number.parseFloat(`${pValue}`);
+			return Number.isFinite(cValue) ? cValue : pFallback;
+		}
+
+		function IsExplicitHeight(pContainer) {
+			return pContainer.dataset.emoExplicitHeight === "true";
+		}
+
+		function IsIgnoredChild(pChild) {
+			return pChild.matches(cIgnoredChildSelector) || pChild.closest("[data-emo-container-bg]") !== null;
+		}
+
+		function IsVisibleElement(pElem) {
+			if (!(pElem instanceof HTMLElement)) return false;
+			if (pElem.hidden) return false;
+
+			const cStyle = window.getComputedStyle(pElem);
+			return cStyle.display !== "none" && cStyle.visibility !== "collapse";
+		}
+
+		function GetContentChildren(pContainer) {
+			return Array.from(pContainer.children).filter((pChild) => {
+				return pChild instanceof HTMLElement && !IsIgnoredChild(pChild) && IsVisibleElement(pChild);
+			});
+		}
+
+		function HasDirectTextContent(pContainer) {
+			return Array.from(pContainer.childNodes).some((pNode) => {
+				return pNode.nodeType === Node.TEXT_NODE && (pNode.textContent ?? "").trim().length > 0;
+			});
+		}
+
+		function GetBaseMinHeight(pContainer) {
+			const cPreviousMinHeight = pContainer.style.minHeight;
+			pContainer.style.minHeight = "";
+			const cBaseMinHeight = ToNumber(window.getComputedStyle(pContainer).minHeight, 0);
+			pContainer.style.minHeight = cPreviousMinHeight;
+			return cBaseMinHeight;
+		}
+
+		function IsOutOfFlowElement(pElem) {
+			const cPosition = window.getComputedStyle(pElem).position;
+			return cPosition === "absolute" || cPosition === "fixed";
+		}
+
+		function MeasureContentHeight(pContainer, pChildren) {
+			const cPreviousMinHeight = pContainer.style.minHeight;
+			pContainer.style.minHeight = "";
+
+			const cContainerRect = pContainer.getBoundingClientRect();
+			const cStyle = window.getComputedStyle(pContainer);
+			const cBorderTop = ToNumber(cStyle.borderTopWidth, 0);
+			const cBorderBottom = ToNumber(cStyle.borderBottomWidth, 0);
+			const cPaddingBottom = ToNumber(cStyle.paddingBottom, 0);
+			let cHeight = pContainer.scrollHeight;
+
+			for (const cChild of pChildren) {
+				const cChildRect = cChild.getBoundingClientRect();
+				const cChildBottom = cChildRect.bottom - cContainerRect.top + cBorderBottom;
+
+				if (IsOutOfFlowElement(cChild)) {
+					cHeight = Math.max(cHeight, cChildBottom);
+					continue;
+				}
+
+				cHeight = Math.max(cHeight, cChildBottom + cPaddingBottom);
+			}
+
+			pContainer.style.minHeight = cPreviousMinHeight;
+			return Math.max(0, Math.ceil(cHeight + cBorderTop));
+		}
+
+		function ApplyContainerHeight(pContainer) {
+			if (!(pContainer instanceof HTMLElement)) return;
+
+			if (IsExplicitHeight(pContainer)) {
+				pContainer.style.minHeight = "";
+				return;
+			}
+
+			const cBaseMinHeight = GetBaseMinHeight(pContainer);
+			const cChildren = GetContentChildren(pContainer);
+			const cHasDirectTextContent = HasDirectTextContent(pContainer);
+
+			if (cChildren.length === 0 && !cHasDirectTextContent) {
+				const cEmptyHeight = ToNumber(pContainer.dataset.emoEmptyHeight, cDefaultEmptyHeight);
+				pContainer.style.minHeight = `${Math.max(cEmptyHeight, cBaseMinHeight)}px`;
+				return;
+			}
+
+			const cContentHeight = MeasureContentHeight(pContainer, cChildren);
+			pContainer.style.minHeight = `${Math.max(cContentHeight, cBaseMinHeight)}px`;
+		}
+
+		function ApplyAll() {
+			fQueued = false;
+			document.querySelectorAll(cContainerSelector).forEach(ApplyContainerHeight);
+		}
+
+		function QueueApplyAll() {
+			if (fQueued) return;
+			fQueued = true;
+			window.requestAnimationFrame(ApplyAll);
+		}
+
+		function ObserveContainerChildren(pContainer, pRecord) {
+			if (!pRecord.ResizeObserver) return;
+
+			Array.from(pContainer.children).forEach((pChild) => {
+				if (!(pChild instanceof HTMLElement) || pRecord.Children.has(pChild)) return;
+				pRecord.Children.add(pChild);
+				pRecord.ResizeObserver.observe(pChild);
+			});
+		}
+
+		function ObserveContainers() {
+			document.querySelectorAll(cContainerSelector).forEach((pContainer) => {
+				if (!(pContainer instanceof HTMLElement)) return;
+
+				const cExistingRecord = fObserved.get(pContainer);
+				if (cExistingRecord) {
+					ObserveContainerChildren(pContainer, cExistingRecord);
+					return;
+				}
+
+				const cRecord = {
+					ResizeObserver: null,
+					MutationObserver: null,
+					Children: new WeakSet(),
+				};
+
+				if ("ResizeObserver" in window) {
+					cRecord.ResizeObserver = new ResizeObserver(QueueApplyAll);
+					cRecord.ResizeObserver.observe(pContainer);
+				}
+
+				ObserveContainerChildren(pContainer, cRecord);
+
+				if ("MutationObserver" in window) {
+					cRecord.MutationObserver = new MutationObserver(() => {
+						ObserveContainerChildren(pContainer, cRecord);
+						QueueApplyAll();
+					});
+
+					cRecord.MutationObserver.observe(pContainer, {
+						childList: true,
+						subtree: true,
+						attributes: true,
+						attributeFilter: ["class", "style", "hidden", "data-emo-explicit-height"],
+					});
+				}
+
+				fObserved.set(pContainer, cRecord);
+			});
+		}
+
+		window.addEventListener("load", QueueApplyAll, { passive: true });
+		window.addEventListener("resize", QueueApplyAll, { passive: true });
+		window.addEventListener("orientationchange", QueueApplyAll, { passive: true });
+		document.addEventListener("astro:page-load", () => {
+			ObserveContainers();
+			QueueApplyAll();
+		});
+
+		if (document.fonts?.ready) {
+			document.fonts.ready.then(QueueApplyAll).catch(() => {});
+		}
+
+		document.querySelectorAll("img, video").forEach((pMedia) => {
+			pMedia.addEventListener("load", QueueApplyAll, { passive: true });
+			pMedia.addEventListener("loadedmetadata", QueueApplyAll, { passive: true });
+		});
+
+		ObserveContainers();
+		QueueApplyAll();
+	})();
+</script>

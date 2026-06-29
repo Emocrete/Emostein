@@ -1,6 +1,6 @@
 ---
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Align, Colors, DirectSize, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip, ESec, FaqItem, Hero, HzStack, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle } from "@/Widgets";
 import { VrStack } from "../../../site/Widgets";
 ---
@@ -39,10 +39,11 @@ import { VrStack } from "../../../site/Widgets";
 	<Hero>
 
 		<VrStack
-			pSize={new DirectSize(new NumPer("30%","100%"))}
+			pSize={new Size(new NumPer("30%","100%"))}
 			pLoc={new Loc(new NumPer("5%","0%"),new NumPer("5%","12%"))}
 			pGap={new Pixel(20, 10)}
-			pAlign="Center"
+			pHzAlign="Center"
+			pVrAlign="Center"
 		>
 
 			<Emograph
@@ -69,7 +70,8 @@ import { VrStack } from "../../../site/Widgets";
 	<ESec
 		id="station-nature"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -78,18 +80,19 @@ import { VrStack } from "../../../site/Widgets";
 			pDesc="المحطة ليست مبنى تجاريًا فقط؛ هي موقع حركة سيارات وتخزين وقود وبيع وتشغيل ومخاطر حريق ومسافات أمان ومداخل ومخارج، لذلك يتم تقييم الأرض قبل الدخول في تكلفة التصميم والتعاقدات."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", "/Media/Emoperm/FuelStation/", "HeroD.webp", false, "ترخيص محطة وقود ومراجعة موقع محطة تموين سيارات", new Size(540, 360, 320, 210))}
+					pImg={new EmoMediaData("Img", "/Media/Emoperm/FuelStation/", "HeroD.webp", false, "ترخيص محطة وقود ومراجعة موقع محطة تموين سيارات", new Size(new NumPer(540, 320), new NumPer(360, 210)))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.OfText("لماذا لا يكفي وجود قطعة أرض؟")}
 					pText={Text.Body.OfText(`قطعة الأرض قد تكون مملوكة ومطلة على طريق واضح، ومع ذلك لا تصلح لمحطة وقود. الفحص لا يقتصر على الملكية، بل يشمل المساحة والواجهة، علاقة الموقع بالطريق، المسافة بينه وبين المحطات القائمة على نفس الاتجاه، حركة الدخول والخروج، قربه من منشآت حساسة، إمكانية تنفيذ الخزانات والطرمبات والمظلات والمباني الخدمية، وقدرة الموقع على استيفاء اشتراطات الحماية المدنية والجهات ذات الولاية. لذلك تبدأ الخدمة بقراءة الموقع قبل إنتاج رسومات نهائية.`)}
-					pSize={new Size(600, "auto", 320, "auto")}
+					pSize={new Size(new NumPer(600, 320), new NumPer("auto", "auto"))}
 				/>
 
 			</HzStack>
@@ -107,7 +110,8 @@ import { VrStack } from "../../../site/Widgets";
 	<ESec
 		id="station-site"
 		pBg={new ElemBg(Colors.BlackOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -116,7 +120,8 @@ import { VrStack } from "../../../site/Widgets";
 			pDesc="الموقع الجيد في التسويق قد لا يكون موقعًا صالحًا للترخيص؛ لذلك يجب مراجعة القيود الهندسية والتنظيمية قبل اعتماد الفكرة الاستثمارية."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1200px", "100%")}
@@ -145,7 +150,8 @@ import { VrStack } from "../../../site/Widgets";
 	<ESec
 		id="station-approvals"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -154,7 +160,8 @@ import { VrStack } from "../../../site/Widgets";
 			pDesc="الملف يتحرك بين شركة التسويق والهيئة المختصة والجهات المحلية والفنية، ولا يصح اختزال الترخيص في رخصة مباني أو رسم هندسي فقط."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("1050px", "100%")}
@@ -188,7 +195,8 @@ import { VrStack } from "../../../site/Widgets";
 	<ESec
 		id="station-fire"
 		pBg={new ElemBg(Colors.BlackOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -197,7 +205,8 @@ import { VrStack } from "../../../site/Widgets";
 			pDesc="موافقة الحماية المدنية في محطة الوقود مرتبطة بتصميم الموقع نفسه: الخزانات، نقاط التموين، مصادر الكهرباء، معدات الإطفاء، مسارات الحركة، وعدم وجود مصادر خطورة غير مسموح بها."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(24, 16)} pPad={new Pixel(30, 15)}>
 
@@ -243,7 +252,8 @@ import { VrStack } from "../../../site/Widgets";
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -251,7 +261,8 @@ import { VrStack } from "../../../site/Widgets";
 			pDesc="الملف النهائي يتغير حسب موقع الأرض وشركة التسويق والجهات المطلوبة، لكن هذه العناصر تمثل العمود الأساسي للتحضير قبل التقديم."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1200px", "100%")}
@@ -280,7 +291,8 @@ import { VrStack } from "../../../site/Widgets";
 	<ESec
 		id="station-service"
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -289,7 +301,8 @@ import { VrStack } from "../../../site/Widgets";
 			pDesc="الخدمة موجهة لمالك أرض أو مستثمر يريد تقييم موقعه وتجهيز ملفه الهندسي والإداري قبل التقديم أو أثناء الاستيفاءات."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(24, 16)} pPad={new Pixel(30, 15)}>
 

@@ -1,12 +1,13 @@
 ---
+import { GetHzAlignCss, GetVrAlignCss, type HzAlignValue, Place, type PlaceProps, type VrAlignValue } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import { Place, type PlaceProps } from "@/TypesLib";
-
 interface Props extends DebugOutlineProps, HTMLAttributes<"article">, PlaceProps {
 	pBg?: string;
 	pBorder?: string;
 	pRadius?: number;
 	pBlur?: number;
+	pHzAlign?: HzAlignValue;
+	pVrAlign?: VrAlignValue;
 }
 
 const {
@@ -14,6 +15,8 @@ const {
 	pBorder = "rgba(255,255,255,.72)",
 	pRadius = 28,
 	pBlur = 16,
+	pHzAlign = "Stretch",
+	pVrAlign = "Center",
 
 	pLoc,
 	pSize,
@@ -60,10 +63,17 @@ const cSizeStyle = [
 	`--FrameHeightP:${pSize?.HeightP ?? pSize?.HeightL ?? "auto"};`,
 ].join(" ");
 
+const cHasExplicitHeight = HasExplicitCssSize(pSize?.HeightL) || HasExplicitCssSize(pSize?.HeightP);
+
 const cPlace = new Place(
 	Astro.props as PlaceProps,
-	`--FrameBg:${pBg}; --FrameBorder:${pBorder}; --FrameRadius:${pRadius}px; --FrameBlur:${pBlur}px; ${cSizeStyle} ${cGivenStyle}`
+	`--FrameBg:${pBg}; --FrameBorder:${pBorder}; --FrameRadius:${pRadius}px; --FrameBlur:${pBlur}px; --FrameHzAlign:${GetHzAlignCss(pHzAlign)}; --FrameVrAlign:${GetVrAlignCss(pVrAlign)}; ${cSizeStyle} ${cGivenStyle}`
 );
+
+function HasExplicitCssSize(pValue?: string) {
+	const cValue = `${pValue ?? ""}`.trim().toLowerCase();
+	return cValue !== "" && cValue !== "auto" && cValue !== "fit-content" && cValue !== "max-content" && cValue !== "min-content";
+}
 ---
 
 
@@ -90,6 +100,9 @@ const cPlace = new Place(
 	style = {cPlace.Style}
 	id={pGivenID}
 	data-own-size={pSize ? "true" : undefined}
+	data-emo-auto-container="true"
+	data-emo-explicit-height={cHasExplicitHeight ? "true" : "false"}
+	data-emo-empty-height="200"
 	{...RemAttr}
 >
 
@@ -136,7 +149,8 @@ const cPlace = new Place(
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
+		align-items: var(--FrameHzAlign, stretch);
+		justify-content: var(--FrameVrAlign, center);
 		width: var(--FrameWidthL, 100%);
 		max-width: 100%;
 		height: var(--FrameHeightL, auto);

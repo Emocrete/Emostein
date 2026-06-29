@@ -1,7 +1,7 @@
 ---
+import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, Topic, ElemBg, EmoMediaData, RespString, Pixel, Size, Align } from "@/TypesLib";
-import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, EmoFaq, ReadAlso, RelServices, SecTitle, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle } from "@/Widgets";
 ---
 
 
@@ -41,7 +41,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 		pDesc="رسومات ميكانيكية منظمة للسباكة والصرف والتكييف والتهوية ومكافحة الحريق، من الفكرة الفنية حتى مخططات قابلة للتنسيق والتنفيذ."
 		pTitleClr="#EED7A1"
 		pDescClr="#FFFFFF"
-		pAlign="right"
+		pHzAlign="right"
+		pVrAlign="right"
 		pPosL="14% 8% 18% 50%"
 		pPosP="12% 8% 48% 8%"
 		pBlurL="on"
@@ -69,7 +70,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#101820").OfText("تصميم ميكانيكا قبل التنفيذ")}
 				pText={Text.Body.WithColor("#333333").OfText("نبدأ من طبيعة المبنى واستخدامه، ثم نحدد الأنظمة المطلوبة، ومسارات المواسير والدكت، ومواقع المعدات، وغرف الخدمات، ونقاط الربط مع المعماري والإنشائي والكهرباء. النتيجة تكون ملفًا ميكانيكيًا واضحًا يساعد في التسعير والتنفيذ والمراجعة وتقليل التعارضات داخل الموقع.")}
 			/>
@@ -81,7 +82,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 					"HeroL.webp",
 					false,
 					"تصميم ميكانيكا للمباني",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -125,18 +126,19 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<EmoStrip pBg={new ElemBg("#101820")} pSize={new Size("100%", "auto", "100%", "auto")}>
+	<EmoStrip pBg={new ElemBg("#101820")} pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}>
 
 		<EmoStrip
 			pBg={new ElemBg("#172430")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#C6A15B").OfText("من الرسم إلى نظام قابل للتشغيل")}
 				pText={Text.Body.Centered.WithColor("#F7F1E8").OfText("رسومات الميكانيكا الجيدة لا تكتفي بوضع خطوط على المسقط، بل توضح المسار، المنسوب، القطر، المعدة، نقطة الصيانة، ومساحة الحركة حول كل عنصر مهم.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -315,18 +317,19 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<EmoStrip pBg={new ElemBg("#101820")} pSize={new Size("100%", "auto", "100%", "auto")}>
+	<EmoStrip pBg={new ElemBg("#101820")} pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}>
 
 		<EmoStrip
 			pBg={new ElemBg("#172430")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#C6A15B").OfText("مخرجات رسومات HVAC")}
 				pText={Text.Body.Centered.WithColor("#F7F1E8").OfText("يتم إعداد رسومات التكييف والتهوية بطريقة تسمح بالمراجعة الفنية، والتنسيق مع الديكور والسقف المستعار والكهرباء، ثم التطوير إلى تنفيذ أو حصر كميات.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -469,18 +472,19 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<EmoStrip pBg={new ElemBg("#101820")} pSize={new Size("100%", "auto", "100%", "auto")}>
+	<EmoStrip pBg={new ElemBg("#101820")} pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}>
 
 		<EmoStrip
 			pBg={new ElemBg("#172430")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#C6A15B").OfText("تنسيق التصميم الميكانيكي مع باقي التخصصات")}
 				pText={Text.Body.Centered.WithColor("#F7F1E8").OfText("أغلب مشاكل الموقع لا تأتي من ضعف كل تخصص منفردًا، بل من اصطدام مسارات التخصصات معًا. لذلك يتم التفكير في الشفتات والفتحات والمناسيب وغرف الخدمات ومناطق الصيانة منذ مرحلة التصميم.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -635,18 +639,19 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<EmoStrip pBg={new ElemBg("#101820")} pSize={new Size("100%", "auto", "100%", "auto")}>
+	<EmoStrip pBg={new ElemBg("#101820")} pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}>
 
 		<EmoStrip
 			pBg={new ElemBg("#172430")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#C6A15B").OfText("ابدأ بملف ميكانيكا واضح قبل التنفيذ")}
 				pText={Text.Body.Centered.WithColor("#F7F1E8").OfText("أرسل المخططات المعمارية ونوع المشروع ونطاق الخدمات المطلوبة. سنراجع البيانات ونحدد هل الأفضل البدء بتصميم مبدئي، رسومات تفصيلية، شوب دروينج، أو حصر كميات.")}
-				pSize={new Size(980, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(980, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -656,7 +661,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 			<EmoCall BlackSky pText="اتصال مباشر" />
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#EED7A1").OfText("بيانات تساعدنا في التسعير")}
 				pText={Text.Body.WithColor("#F7F1E8").OfText("نوع المبنى، المساحة، عدد الأدوار، النظام المطلوب، مرحلة المشروع، وجود ملفات CAD أو PDF، وهل المطلوب تصميم فقط أم شوب دروينج وحصر كميات أيضًا.")}
 			/>

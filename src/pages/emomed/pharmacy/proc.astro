@@ -1,6 +1,6 @@
 ---
+import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Align, Colors, ElemBg, EmoMediaData, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle } from "@/Widgets";
 ---
 
@@ -49,7 +49,8 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 		pDesc="خطوات عملية لترخيص صيدلية من فحص المكان وتجهيز المستندات، إلى رفع الطلب عبر برنامج ميكنة التراخيص، ثم المعاينة الأولى، والمعاينة الثانية، واستكمال المستندات حتى إصدار الرخصة."
 		pTitleClr={Colors.WhiteOff}
 		pDescClr={Colors.WhiteOff}
-		pAlign="right"
+		pHzAlign="right"
+		pVrAlign="right"
 		pPosL="18% 50% 12% 8%"
 		pPosP="12% 8% 42% 8%"
 		pBlurL="on"
@@ -69,7 +70,8 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	<ESec
 		id="intro"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -81,7 +83,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(620, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(620, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.OfText("المسار العملي لترخيص الصيدلية")}
 				pText={Text.Body.OfText("إجراءات الترخيص تمر بمسار واضح: فحص مقر الصيدلية، تجهيز مستندات الصيدلي والمقر، إعداد الرسم الهندسي، رفع الطلب عبر برنامج ميكنة التراخيص، مراجعة الملف، المعاينة الأولى، تجهيز الصيدلية، المعاينة الثانية، ثم الاستكمال وإصدار الترخيص.")}
 			/>
@@ -93,7 +95,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 					"PreparePharmacyFile.webp",
 					false,
 					"تجهيز ملف ترخيص صيدلية",
-					new Size(420, "auto", 300, "auto")
+					new Size(new NumPer(420, 300), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -110,7 +112,8 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	<ESec
 		id="procedure-map"
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -144,20 +147,22 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	<EmoStrip
 		id="pre-check"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.BistageLite)}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.OfText("المرحلة الأولى: فحص مقر الصيدلية قبل التقديم")}
 				pText={Text.Body.Centered.OfText("هذه المرحلة تقلل احتمال رفض الملف أو حفظه بسبب عيب جوهري في المكان. لا تبدأ بإجراءات رسمية قبل قراءة صلاحية المقر.")}
-				pSize={new Size(980, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(980, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -190,7 +195,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 					"Inspection.webp",
 					false,
 					"معاينة مقر الصيدلية قبل الترخيص",
-					new Size(420, "auto", 300, "auto")
+					new Size(new NumPer(420, 300), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -207,7 +212,8 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	<ESec
 		id="pharmacist-docs"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -247,7 +253,8 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	<ESec
 		id="place-docs"
 		pBg={new ElemBg(Colors.SkyLite)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -305,20 +312,22 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	<EmoStrip
 		id="drawing"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.BistageLite)}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.OfText("المرحلة الرابعة: إعداد الرسم الهندسي للصيدلية")}
 				pText={Text.Body.Centered.OfText("الرسم الهندسي ليس ملحقًا شكليًا. هو المستند الذي يربط بين بيانات الطلب والمعاينة على الطبيعة.")}
-				pSize={new Size(980, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(980, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -326,7 +335,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(520, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(520, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.OfText("رسم للمعاينة الأولى ورسم نهائي")}
 				pText={Text.Body.OfText("يستخدم الرسم الأول في إثبات صلاحية المقر مبدئيًا من حيث المساحة والارتفاع والحدود والموقع. بعد التجهيز قد يلزم رسم نهائي مطابق للحالة التي سيتم تشغيل الصيدلية عليها، خاصة إذا حدثت تعديلات في الحمام أو المعمل أو التقسيمات الداخلية.")}
 			/>
@@ -363,7 +372,8 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	<ESec
 		id="digital-application"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -381,7 +391,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 					"SendReq.webp",
 					false,
 					"رفع طلب ترخيص صيدلية",
-					new Size(420, "auto", 300, "auto")
+					new Size(new NumPer(420, 300), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -416,7 +426,8 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	<ESec
 		id="review-first-inspection"
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -450,20 +461,22 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	<EmoStrip
 		id="after-first-inspection"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.BistageLite)}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.OfText("بعد اجتياز المعاينة الأولى")}
 				pText={Text.Body.Centered.OfText("بعد قبول المكان مبدئيًا لا يبدأ التشغيل، بل تبدأ مرحلة التجهيز للمعاينة الثانية واستكمال المستندات النهائية.")}
-				pSize={new Size(980, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(980, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -498,7 +511,8 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	<ESec
 		id="second-inspection"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -558,7 +572,8 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	<ESec
 		id="final-docs"
 		pBg={new ElemBg(Colors.SkyLite)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -599,20 +614,22 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	<EmoStrip
 		id="deadlines"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.BistageLite)}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.OfText("المهل والملاحظات وحفظ الطلب")}
 				pText={Text.Body.Centered.OfText("إجراءات ترخيص الصيدلية لا تتوقف عند تقديم الطلب. يجب متابعة المهل والملاحظات حتى لا يتم حفظ الطلب أو تعطيله بسبب عدم الاستيفاء.")}
-				pSize={new Size(980, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(980, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -642,7 +659,8 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	<ESec
 		id="after-license"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -672,7 +690,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 			/>
 
 			<Emograph
-				pSize={new Size(480, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(480, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.OfText("متى يصبح الترخيص في خطر؟")}
 				pText={Text.Body.OfText("قد يتأثر الترخيص إذا لم يتم تشغيل الصيدلية خلال المهلة المطلوبة، أو إذا أغلقت مدة طويلة، أو إذا تم نقل النشاط دون إجراء صحيح، أو إذا تغيرت الحالة الفعلية للصيدلية بصورة تخالف ما صدر الترخيص بناءً عليه.")}
 			/>
@@ -690,7 +708,8 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	<ESec
 		id="mistakes"
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle

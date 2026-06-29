@@ -1,0 +1,662 @@
+---
+import { Place, Size, type PlaceProps } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+
+type StepLike = {
+	Title?: string;
+	Name?: string;
+	Done?: boolean;
+	Completed?: boolean;
+	Time?: string;
+	Duration?: string;
+	Percent?: number | string;
+	Pct?: number | string;
+	Weight?: number | string;
+};
+
+interface Props extends DebugOutlineProps, HTMLAttributes<"article">, PlaceProps {
+	pName?: string;
+	pAddress?: string;
+	pActivity?: string;
+	pActivityLabel?: string;
+	pSteps?: StepLike[];
+	pCode?: string;
+	pStatus?: string;
+	pUpdatedAt?: string;
+	pAccent?: string;
+	pAccent2?: string;
+	pSize?: Size;
+	pCompact?: boolean | string;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+
+const {
+	pName = "صيدلية تحت الترخيص",
+	pAddress = "عنوان الصيدلية",
+	pActivity = "جاري تحديث النشاط الحالي.",
+	pActivityLabel = "النشاط الحالي",
+	pSteps = [],
+	pCode = "ملف ترخيص",
+	pStatus = "قيد التنفيذ",
+	pUpdatedAt = "",
+	pAccent = "#22c55e",
+	pAccent2 = "#0ea5e9",
+	pSize,
+	pCompact = false,
+
+	pLoc,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+
+	id: pGivenID = GetWidgetId("PharmacyWorkCard"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = cProps;
+
+const cDefaultSteps: StepLike[] = [
+	{ Title: "استلام البيانات", Done: true, Time: "يوم", Percent: 10 },
+	{ Title: "فحص شروط المكان", Done: false, Time: "1-2 يوم", Percent: 20 },
+	{ Title: "قياس المسافة", Done: false, Time: "يوم", Percent: 20 },
+	{ Title: "رفع المقاسات", Done: false, Time: "يوم", Percent: 15 },
+	{ Title: "إعداد الرسم الهندسي", Done: false, Time: "2-3 أيام", Percent: 25 },
+	{ Title: "تسليم الملف", Done: false, Time: "يوم", Percent: 10 },
+];
+
+const cSteps = NormalizeSteps(pSteps.length ? pSteps : cDefaultSteps);
+const cProgress = GetProgress(cSteps);
+const cDoneCount = cSteps.filter((pStep) => pStep.Done).length;
+const cActiveIndex = Math.max(0, Math.min(cSteps.length - 1, cSteps.findIndex((pStep) => !pStep.Done)));
+const cAllDone = cDoneCount === cSteps.length && cSteps.length > 0;
+const cCompact = GetBoolAttr(pCompact);
+
+const cCoreStyle = [
+	`--PwcAccent:${pAccent};`,
+	`--PwcAccent2:${pAccent2};`,
+	`--PwcProgress:${cProgress};`,
+	`--PwcWidthL:${pSize?.WidthL || "100%"};`,
+	`--PwcWidthP:${pSize?.WidthP || pSize?.WidthL || "100%"};`,
+	`--PwcHeightL:${pSize?.HeightL || "auto"};`,
+	`--PwcHeightP:${pSize?.HeightP || pSize?.HeightL || "auto"};`,
+	GetStyleText(pGivenStyle),
+].filter(Boolean).join(" ");
+
+const cPlace = new Place({
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+}, cCoreStyle);
+
+const cRootClass = [
+	"PharmacyWorkCard",
+	cCompact ? "IsCompact" : "",
+	cAllDone ? "IsComplete" : "IsOpen",
+	cPlace.Class,
+	pGivenClass,
+].filter(Boolean).join(" ");
+
+function NormalizeSteps(pSteps: StepLike[]) {
+	const cRawSteps = pSteps
+		.map((pStep) => ({
+			Title: `${pStep.Title ?? pStep.Name ?? ""}`.trim(),
+			Done: pStep.Done === true || pStep.Completed === true,
+			Time: `${pStep.Time ?? pStep.Duration ?? ""}`.trim(),
+			Percent: NormalizePercent(pStep.Percent ?? pStep.Pct ?? pStep.Weight),
+		}))
+		.filter((pStep) => pStep.Title !== "");
+
+	const cFallbackPercent = cRawSteps.length ? 100 / cRawSteps.length : 0;
+	const cWeightedSteps = cRawSteps.map((pStep) => ({
+		...pStep,
+		Percent: pStep.Percent > 0 ? pStep.Percent : cFallbackPercent,
+	}));
+	const cTotal = cWeightedSteps.reduce((pSum, pStep) => pSum + pStep.Percent, 0);
+
+	return cWeightedSteps.map((pStep, pIndex) => ({
+		...pStep,
+		Index: pIndex + 1,
+		NormalizedPercent: cTotal > 0 ? pStep.Percent / cTotal * 100 : cFallbackPercent,
+	}));
+}
+
+function NormalizePercent(pValue: unknown) {
+	if (typeof pValue === "number") return Clamp(pValue, 0, 100);
+	const cText = `${pValue ?? ""}`.replace("%", "").trim();
+	const cValue = Number.parseFloat(cText);
+	return Number.isFinite(cValue) ? Clamp(cValue, 0, 100) : 0;
+}
+
+function GetProgress(pSteps: ReturnType<typeof NormalizeSteps>) {
+	const cDonePercent = pSteps.reduce((pSum, pStep) => pSum + (pStep.Done ? pStep.NormalizedPercent : 0), 0);
+	return `${Clamp(Number(cDonePercent.toFixed(2)), 0, 100)}%`;
+}
+
+function Clamp(pValue: number, pMin: number, pMax: number) {
+	return Math.min(pMax, Math.max(pMin, pValue));
+}
+
+function GetBoolAttr(pValue: unknown) {
+	return pValue === true || pValue === "" || pValue === "true";
+}
+
+function GetStyleText(pStyle: unknown) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+	if (typeof pStyle !== "object") return "";
+
+	return Object.entries(pStyle as Record<string, string | number | null | undefined>)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+<article
+	class={cRootClass}
+	style={cPlace.Style}
+	id={pGivenID}
+	data-pharmacy-work-card="true"
+	{...RemAttr}
+>
+	<svg class="PwcDefs" aria-hidden="true">
+		<symbol id="PwcIconCheck" viewBox="0 0 24 24">
+			<path d="M9.55 16.65 4.9 12l1.7-1.7 2.95 2.95 7.85-7.85 1.7 1.7-9.55 9.55Z" />
+		</symbol>
+		<symbol id="PwcIconPin" viewBox="0 0 24 24">
+			<path d="M12 2.4a7.1 7.1 0 0 0-7.1 7.1c0 5.15 7.1 12.1 7.1 12.1s7.1-6.95 7.1-12.1A7.1 7.1 0 0 0 12 2.4Zm0 9.7a2.65 2.65 0 1 1 0-5.3 2.65 2.65 0 0 1 0 5.3Z" />
+		</symbol>
+		<symbol id="PwcIconPulse" viewBox="0 0 24 24">
+			<path d="M13.1 3 6.8 13h4.45L10.9 21l6.3-10h-4.45L13.1 3Z" />
+		</symbol>
+	</svg>
+
+	<header class="PwcHeader">
+		<div class="PwcTitleBox">
+			<span class="PwcCode">{pCode}</span>
+			<h3>{pName}</h3>
+			<p>
+				<svg aria-hidden="true"><use href="#PwcIconPin"></use></svg>
+				{pAddress}
+			</p>
+		</div>
+
+		<div class="PwcScore" aria-label={`نسبة إنجاز ${pName}: ${cProgress}`}>
+			<strong>{cProgress}</strong>
+			<span>{pStatus}</span>
+		</div>
+	</header>
+
+	<div class="PwcActivity">
+		<span>
+			<svg aria-hidden="true"><use href="#PwcIconPulse"></use></svg>
+			{pActivityLabel}
+		</span>
+		<strong>{pActivity}</strong>
+	</div>
+
+	<ol class="PwcTimeline" aria-label={`خطوات تنفيذ ${pName}`}>
+		{cSteps.map((pStep, pIndex) => (
+			<li
+				class:list={["PwcStep", pStep.Done ? "IsDone" : "IsTodo", pIndex === cActiveIndex && !pStep.Done ? "IsActive" : ""]}
+				style={`--PwcStepWeight:${pStep.NormalizedPercent};`}
+			>
+				<span class="PwcStepIcon" aria-hidden="true">
+					<svg><use href="#PwcIconCheck"></use></svg>
+				</span>
+				<div class="PwcStepText">
+					<b>{pStep.Title}</b>
+					<span>{pStep.Time || `${Math.round(pStep.NormalizedPercent)}% من العملية`}</span>
+				</div>
+				<em>{Math.round(pStep.NormalizedPercent)}%</em>
+			</li>
+		))}
+	</ol>
+
+	<div class="PwcProgress" aria-hidden="true">
+		<span></span>
+	</div>
+
+	<footer class="PwcFooter">
+		<span>{cDoneCount} / {cSteps.length} خطوات مكتملة</span>
+		{pUpdatedAt && <time>{pUpdatedAt}</time>}
+	</footer>
+</article>
+
+<style>
+	.PharmacyWorkCard {
+		position: relative;
+		isolation: isolate;
+		display: grid;
+		grid-template-rows: auto auto 1fr auto auto;
+		gap: 16px;
+		width: var(--PwcWidthL);
+		height: var(--PwcHeightL);
+		min-height: 460px;
+		padding: 22px;
+		box-sizing: border-box;
+		direction: rtl;
+		overflow: hidden;
+		border: 1px solid rgba(13, 28, 45, 0.12);
+		border-radius: 30px;
+		background:
+			radial-gradient(circle at 8% 10%, color-mix(in srgb, var(--PwcAccent2) 20%, transparent), transparent 28%),
+			radial-gradient(circle at 92% 4%, color-mix(in srgb, var(--PwcAccent) 24%, transparent), transparent 30%),
+			linear-gradient(145deg, rgba(255,255,255,.98), rgba(244,248,252,.94));
+		box-shadow: 0 24px 70px rgba(4, 20, 34, .13), inset 0 1px 0 rgba(255,255,255,.8);
+		color: #0f172a;
+	}
+
+	.PharmacyWorkCard::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background:
+			linear-gradient(90deg, rgba(15,23,42,.05) 1px, transparent 1px),
+			linear-gradient(0deg, rgba(15,23,42,.04) 1px, transparent 1px);
+		background-size: 32px 32px;
+		mask-image: linear-gradient(180deg, black, transparent 72%);
+		opacity: .5;
+	}
+
+	.PharmacyWorkCard::after {
+		content: "";
+		position: absolute;
+		inset-inline-start: -80px;
+		top: -90px;
+		width: 210px;
+		height: 210px;
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--PwcAccent) 16%, transparent);
+		filter: blur(4px);
+		z-index: -1;
+	}
+
+	.PwcDefs {
+		position: absolute;
+		width: 0;
+		height: 0;
+		overflow: hidden;
+	}
+
+	.PwcHeader {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: start;
+		gap: 14px;
+		min-width: 0;
+	}
+
+	.PwcTitleBox {
+		display: grid;
+		gap: 8px;
+		min-width: 0;
+	}
+
+	.PwcCode {
+		display: inline-flex;
+		width: fit-content;
+		padding: 5px 11px;
+		border: 1px solid color-mix(in srgb, var(--PwcAccent2) 26%, transparent);
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--PwcAccent2) 9%, white);
+		color: color-mix(in srgb, var(--PwcAccent2) 78%, #0f172a);
+		font-size: 11px;
+		font-weight: 950;
+		line-height: 1.2;
+	}
+
+	.PwcTitleBox h3 {
+		margin: 0;
+		font-size: 25px;
+		font-weight: 950;
+		line-height: 1.25;
+		letter-spacing: -.02em;
+		color: #0b1220;
+	}
+
+	.PwcTitleBox p {
+		display: flex;
+		align-items: center;
+		gap: 7px;
+		min-width: 0;
+		margin: 0;
+		color: rgba(15, 23, 42, .68);
+		font-size: 13px;
+		font-weight: 800;
+		line-height: 1.55;
+	}
+
+	.PwcTitleBox p svg {
+		width: 17px;
+		height: 17px;
+		min-width: 17px;
+		fill: var(--PwcAccent2);
+	}
+
+	.PwcScore {
+		position: relative;
+		display: grid;
+		place-items: center;
+		width: 96px;
+		height: 96px;
+		border-radius: 999px;
+		background:
+			linear-gradient(#fff, #fff) padding-box,
+			conic-gradient(var(--PwcAccent) var(--PwcProgress), rgba(15,23,42,.10) 0) border-box;
+		border: 8px solid transparent;
+		box-shadow: 0 14px 28px rgba(15, 23, 42, .11);
+	}
+
+	.PwcScore strong {
+		color: #0b1220;
+		font-size: 21px;
+		font-weight: 950;
+		line-height: 1;
+		direction: ltr;
+	}
+
+	.PwcScore span {
+		margin-top: -10px;
+		color: rgba(15, 23, 42, .56);
+		font-size: 10px;
+		font-weight: 950;
+		line-height: 1.2;
+		text-align: center;
+	}
+
+	.PwcActivity {
+		display: grid;
+		gap: 7px;
+		padding: 14px 16px;
+		border: 1px solid color-mix(in srgb, var(--PwcAccent) 21%, transparent);
+		border-radius: 20px;
+		background: linear-gradient(135deg, color-mix(in srgb, var(--PwcAccent) 10%, white), rgba(255,255,255,.76));
+	}
+
+	.PwcActivity span {
+		display: inline-flex;
+		align-items: center;
+		gap: 7px;
+		color: color-mix(in srgb, var(--PwcAccent) 78%, #0f172a);
+		font-size: 12px;
+		font-weight: 950;
+	}
+
+	.PwcActivity svg {
+		width: 16px;
+		height: 16px;
+		fill: currentColor;
+	}
+
+	.PwcActivity strong {
+		color: #111827;
+		font-size: 15px;
+		font-weight: 900;
+		line-height: 1.65;
+	}
+
+	.PwcTimeline {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+		align-content: start;
+		gap: 12px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		counter-reset: PwcStep;
+	}
+
+	.PwcStep {
+		position: relative;
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		align-items: center;
+		gap: 10px;
+		min-height: 74px;
+		padding: 12px;
+		border: 1px solid rgba(15,23,42,.09);
+		border-radius: 18px;
+		background: rgba(255,255,255,.74);
+		box-shadow: inset 0 1px 0 rgba(255,255,255,.82);
+		box-sizing: border-box;
+	}
+
+	.PwcStep::before {
+		counter-increment: PwcStep;
+		content: counter(PwcStep);
+		position: absolute;
+		inset-inline-start: 12px;
+		top: -9px;
+		display: grid;
+		place-items: center;
+		width: 22px;
+		height: 22px;
+		border-radius: 999px;
+		background: #f8fafc;
+		border: 1px solid rgba(15,23,42,.1);
+		color: rgba(15,23,42,.55);
+		font-size: 11px;
+		font-weight: 950;
+		direction: ltr;
+	}
+
+	.PwcStepIcon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 34px;
+		height: 34px;
+		border-radius: 14px;
+		background: #e5e7eb;
+		color: #94a3b8;
+	}
+
+	.PwcStepIcon svg {
+		width: 19px;
+		height: 19px;
+		fill: currentColor;
+	}
+
+	.PwcStepText {
+		display: grid;
+		gap: 4px;
+		min-width: 0;
+	}
+
+	.PwcStepText b {
+		color: #111827;
+		font-size: 13px;
+		font-weight: 950;
+		line-height: 1.35;
+	}
+
+	.PwcStepText span {
+		color: rgba(15,23,42,.58);
+		font-size: 11px;
+		font-weight: 850;
+		line-height: 1.35;
+	}
+
+	.PwcStep em {
+		font-style: normal;
+		color: rgba(15,23,42,.48);
+		font-size: 11px;
+		font-weight: 950;
+		direction: ltr;
+	}
+
+	.PwcStep.IsDone {
+		border-color: color-mix(in srgb, var(--PwcAccent) 30%, transparent);
+		background: linear-gradient(135deg, color-mix(in srgb, var(--PwcAccent) 10%, white), rgba(255,255,255,.86));
+	}
+
+	.PwcStep.IsDone .PwcStepIcon {
+		background: var(--PwcAccent);
+		color: white;
+		box-shadow: 0 9px 18px color-mix(in srgb, var(--PwcAccent) 28%, transparent);
+	}
+
+	.PwcStep.IsDone::before {
+		background: var(--PwcAccent);
+		border-color: transparent;
+		color: white;
+	}
+
+	.PwcStep.IsActive {
+		border-color: color-mix(in srgb, var(--PwcAccent2) 34%, transparent);
+		background: linear-gradient(135deg, color-mix(in srgb, var(--PwcAccent2) 10%, white), rgba(255,255,255,.86));
+	}
+
+	.PwcStep.IsActive .PwcStepIcon {
+		background: color-mix(in srgb, var(--PwcAccent2) 18%, white);
+		color: var(--PwcAccent2);
+	}
+
+	.PwcProgress {
+		position: relative;
+		height: 12px;
+		border-radius: 999px;
+		background: rgba(15,23,42,.09);
+		overflow: hidden;
+		box-shadow: inset 0 1px 2px rgba(15,23,42,.12);
+	}
+
+	.PwcProgress span {
+		display: block;
+		width: var(--PwcProgress);
+		height: 100%;
+		border-radius: inherit;
+		background: linear-gradient(90deg, var(--PwcAccent), var(--PwcAccent2));
+		box-shadow: 0 0 20px color-mix(in srgb, var(--PwcAccent) 28%, transparent);
+	}
+
+	.PwcFooter {
+		display: flex;
+		justify-content: space-between;
+		gap: 10px;
+		color: rgba(15,23,42,.56);
+		font-size: 12px;
+		font-weight: 850;
+		line-height: 1.4;
+	}
+
+	.PwcFooter time {
+		font: inherit;
+		white-space: nowrap;
+	}
+
+	.PharmacyWorkCard.IsCompact {
+		min-height: 380px;
+		gap: 12px;
+		padding: 18px;
+	}
+
+	.PharmacyWorkCard.IsCompact .PwcTimeline {
+		grid-template-columns: 1fr;
+		gap: 8px;
+	}
+
+	.PharmacyWorkCard.IsCompact .PwcStep {
+		min-height: 56px;
+	}
+
+	@media (orientation: portrait) {
+		.PharmacyWorkCard {
+			width: var(--PwcWidthP);
+			height: var(--PwcHeightP);
+			min-height: 0;
+			padding: 18px;
+			border-radius: 24px;
+			gap: 13px;
+		}
+
+		.PwcHeader {
+			grid-template-columns: 1fr;
+		}
+
+		.PwcScore {
+			grid-row: 1;
+			justify-self: start;
+			width: 84px;
+			height: 84px;
+			border-width: 7px;
+		}
+
+		.PwcTitleBox h3 {
+			font-size: 21px;
+		}
+
+		.PwcTimeline {
+			grid-template-columns: 1fr;
+			gap: 9px;
+		}
+
+		.PwcStep {
+			min-height: 62px;
+			padding: 10px;
+		}
+
+		.PwcFooter {
+			display: grid;
+		}
+	}
+</style>

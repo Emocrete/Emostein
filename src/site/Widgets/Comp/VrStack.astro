@@ -1,9 +1,9 @@
 ---
-import { DirectSize, ElemBg, Percent, Pixel, Place, type PlaceProps } from "@/TypesLib";
+import { ElemBg, GetHzAlignCss, GetVrAlignCss, type HzAlignValue, Percent, Pixel, Place, type PlaceProps, Size, type VrAlignValue } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
 
 interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
-	pSize?: DirectSize;
+	pSize?: Size;
 	pWidth?: Pixel;
 	pHeight?: Pixel;
 	pGap?: Pixel;
@@ -14,7 +14,8 @@ interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
 	pBgOpacity?: Percent;
 	pBlur?: Pixel;
 	pRadius?: Pixel;
-	pAlign?: "Start" | "Center" | "End";
+	pHzAlign?: HzAlignValue;
+	pVrAlign?: VrAlignValue;
 	pFitContent?: boolean;
 }
 
@@ -32,7 +33,8 @@ const {
 	pBgOpacity = new Percent(100),
 	pBlur = new Pixel(0),
 	pRadius = new Pixel(0),
-	pAlign = "Start",
+	pHzAlign,
+	pVrAlign,
 	pFitContent = false,
 
 	pLoc,
@@ -96,8 +98,11 @@ const cMainBgVid = cBgVidL || cBgVidP;
 const cHasBgImg = cFinalBgImgL !== "" || cFinalBgImgP !== "";
 const cHasBgVid = cMainBgVid !== "";
 
-const cAlignItems = pAlign === "Center" ? "center" : pAlign === "End" ? "flex-end" : "flex-start";
-const cJustifyContent = pAlign === "Center" ? "center" : pAlign === "End" ? "flex-end" : "flex-start";
+const cHzAlign = pHzAlign ?? "Start";
+const cVrAlign = pVrAlign ?? "Start";
+const cAlignItems = GetHzAlignCss(cHzAlign);
+const cJustifyContent = GetVrAlignCss(cVrAlign);
+const cHasExplicitHeight = HasExplicitCssValue(pHeight) || HasExplicitCssValue(pSize?.HeightL) || HasExplicitCssValue(pSize?.HeightP);
 
 const cCoreStyle = [
 	`--VrWidthL:${cWidthL};`,
@@ -130,6 +135,12 @@ const cStackClass = [
 	cPlace.Class,
 	pGivenClass,
 ].filter(Boolean).join(" ");
+
+function HasExplicitCssValue(pValue: unknown) {
+	if (pValue === undefined || pValue === null) return false;
+	const cValue = `${pValue}`.trim().toLowerCase();
+	return cValue !== "" && cValue !== "auto" && cValue !== "fit-content" && cValue !== "max-content" && cValue !== "min-content";
+}
 
 function GetBoolAttr(pValue: unknown) {
 	return pValue === true || pValue === "" || pValue === "true";
@@ -178,6 +189,9 @@ function GetCssName(pName: string) {
 	class = {cStackClass}
 	style = {cPlace.Style}
 	id={pGivenID}
+	data-emo-auto-container="true"
+	data-emo-explicit-height={cHasExplicitHeight ? "true" : "false"}
+	data-emo-empty-height="200"
 	{...RemAttr}
 >
 
@@ -185,6 +199,7 @@ function GetCssName(pName: string) {
 
 		<video
 			class = " VrStackBg VrStackBgVid "
+			data-emo-container-bg="true"
 			crossorigin="anonymous"
 			playsinline
 			preload="auto"
@@ -211,7 +226,7 @@ function GetCssName(pName: string) {
 
 				) : cHasBgImg ? (
 
-					<picture class = " VrStackBg VrStackBgPic ">
+					<picture class = " VrStackBg VrStackBgPic " data-emo-container-bg="true">
 
 						<source media="(orientation: portrait)" srcset={cFinalBgImgP} />
 

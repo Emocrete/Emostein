@@ -1,7 +1,7 @@
 ---
+import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, EmoMediaData, Colors, Pixel, Topic, Size, Align, RespString } from "@/TypesLib";
-import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, ReadAlso, RelServices, EmoFaq, SecTitle, VrStack, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
 ---
 
 
@@ -40,7 +40,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 		pDesc="استخراج ترخيص مطعم ومتابعة الملف أمام الجهة المختصة بداية من تجهيز المستندات وحتى استلام الرخصة"
 		pTitleClr={Colors.WhiteOff}
 		pDescClr={Colors.WhiteOff}
-		pAlign="center"
+		pHzAlign="center"
+		pVrAlign="center"
 		pBlurL="on"
 		pBlurP="on"
 		pPosL="42% 8% 12% 8%"
@@ -60,7 +61,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="Intro"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -69,12 +71,13 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="خدمة احترافية للسير في إجراءات استخراج ترخيص مطعم"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(28, 16)} pPad={new Pixel(0, 0)}>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp/v1/fill/w_980%2Ch_408%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_auto/308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp", false, "ترخيص مطعم", new Size(480, "auto", 320, "auto"))}
+					pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp/v1/fill/w_980%2Ch_408%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_auto/308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp", false, "ترخيص مطعم", new Size(new NumPer(480, 320), new NumPer("auto", "auto")))}
 				/>
 
 				<VrStack
@@ -86,7 +89,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 					<Emograph
 						pTitle={Text.H3.OfText("المطعم ليس محلًا تجاريًا عاديًا")}
 						pText={Text.Body.OfText("ترخيص المطعم يجمع بين ملف المحل العام واشتراطات النشاط الغذائي؛ لذلك لا يكفي تجهيز عقد الإيجار وبطاقة صاحب الطلب فقط، بل يجب النظر إلى العاملين، الشهادات الصحية، الحالة الجنائية، الرسم الهندسي، التهوية، السلامة، وتجهيزات التشغيل التي ستظهر عند المعاينة.")}
-						pSize={new Size(700, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(700, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<CardsGr
@@ -116,7 +119,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="Documents"
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -125,7 +129,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="الأوراق الأساسية التي يبدأ بها ملف الترخيص قبل مراجعة الاشتراطات الخاصة بالنشاط الغذائي والمعاينة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("980px", "100%")}
@@ -155,7 +160,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -163,7 +169,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="قد تختلف تفاصيل الملف حسب الحي أو الجهاز أو طبيعة النشاط، لذلك يجب مراجعة هذه النقاط قبل بدء إجراءات الترخيص"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -189,7 +196,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="Procedures"
 		pBg={new ElemBg(Colors.Creamy)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -198,7 +206,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="يمر طلب الترخيص من تقديم الملف إلى القبول المبدئي ثم الاشتراطات والمعاينة وسداد الرسوم واستلام الترخيص"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("980px", "100%")}
@@ -229,7 +238,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -237,7 +247,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="المعاينة هي المرحلة التي تربط بين الورق والواقع، وفي المطاعم تكون أكثر حساسية بسبب المطبخ والتهوية والحريق والصرف والتشغيل"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(28, 16)} pPad={new Pixel(0, 0)}>
 
@@ -250,19 +261,19 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 					<Emograph
 						pTitle={Text.H3.OfText("ما الذي تنظر إليه الجهة عند المعاينة؟")}
 						pText={Text.Body.OfText("لا تنظر المعاينة إلى اسم النشاط فقط، بل إلى قابلية المكان لتشغيل مطعم فعليًا: مساحة التحضير، منطقة الخدمة، المداخل، التهوية، المدخنة عند الحاجة، وسائل الحماية من الحريق، الصرف، الكهرباء، نظافة مناطق تداول الغذاء، ومطابقة الرسم الهندسي للحالة القائمة.")}
-						pSize={new Size(680, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(680, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<Emograph
 						pTitle={Text.H3.OfText("لماذا يتعطل ملف مطعم رغم اكتمال الورق؟")}
 						pText={Text.Body.OfText("قد يكون الملف الورقي مكتملًا، لكن المطعم نفسه غير مستوفٍ فنيًا. أكثر ما يسبب التعطيل هو اختلاف الرسم عن الواقع، ضعف التهوية، غموض مسار المدخنة، عدم وضوح الصرف، أو تنفيذ تشطيب لا يراعي اشتراطات النشاط قبل طلب المعاينة.")}
-						pSize={new Size(680, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(680, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</VrStack>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp/v1/fill/w_980%2Ch_408%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_auto/308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp", false, "مطعم وتجهيزات تشغيل", new Size(460, "auto", 320, "auto"))}
+					pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp/v1/fill/w_980%2Ch_408%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_auto/308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp", false, "مطعم وتجهيزات تشغيل", new Size(new NumPer(460, 320), new NumPer("auto", "auto")))}
 				/>
 
 			</HzStack>
@@ -280,7 +291,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="Drawing"
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -289,7 +301,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="يجب أن يتضمن الرسم الهندسي للمحل التجاري عدة عناصر رئيسية لتوصيف المحل وتوضيح مدى ملاءمته للمواصفات المطلوبة للنشاط الذي سيتم له ترخيص المحل التجاري."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("980px", "100%")}
@@ -316,7 +329,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -324,7 +338,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="نماذج رسومات توضح طريقة عرض المسقط والواجهة والقطاع وكروكي الموقع ضمن ملف ترخيص المطعم"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack
 				pWidth={new Pixel(1120, 340)}
@@ -335,21 +350,21 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 				<HzStack pGap={new Pixel(18, 14)} pPad={new Pixel(0, 0)}>
 
 					<RespImg
-						pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_d8e96ad2e5cf407f8774a05ffb1ed8a7~mv2.jpg/v1/fill/w_250%2Ch_176%2Cal_c%2Cq_90%2Cenc_auto/308dfd_d8e96ad2e5cf407f8774a05ffb1ed8a7~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(350, "auto", 300, "auto"))}
+						pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_d8e96ad2e5cf407f8774a05ffb1ed8a7~mv2.jpg/v1/fill/w_250%2Ch_176%2Cal_c%2Cq_90%2Cenc_auto/308dfd_d8e96ad2e5cf407f8774a05ffb1ed8a7~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(new NumPer(350, 300), new NumPer("auto", "auto")))}
 					/>
 
 					<RespImg
-						pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_76ac6416a15e443f910aabecd06451b3~mv2.jpg/v1/fill/w_250%2Ch_176%2Cal_c%2Cq_90%2Cenc_auto/308dfd_76ac6416a15e443f910aabecd06451b3~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(350, "auto", 300, "auto"))}
+						pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_76ac6416a15e443f910aabecd06451b3~mv2.jpg/v1/fill/w_250%2Ch_176%2Cal_c%2Cq_90%2Cenc_auto/308dfd_76ac6416a15e443f910aabecd06451b3~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(new NumPer(350, 300), new NumPer("auto", "auto")))}
 					/>
 
 					<RespImg
-						pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_af2f73fa44bc4bbc992930c79a91a632~mv2.jpg/v1/fill/w_250%2Ch_176%2Cal_c%2Cq_90%2Cenc_auto/308dfd_af2f73fa44bc4bbc992930c79a91a632~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(350, "auto", 300, "auto"))}
+						pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_af2f73fa44bc4bbc992930c79a91a632~mv2.jpg/v1/fill/w_250%2Ch_176%2Cal_c%2Cq_90%2Cenc_auto/308dfd_af2f73fa44bc4bbc992930c79a91a632~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(new NumPer(350, 300), new NumPer("auto", "auto")))}
 					/>
 
 				</HzStack>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_1cac27102827417dae8d180632d80e89~mv2.jpg/v1/fill/w_250%2Ch_353%2Cal_c%2Cq_90%2Cenc_auto/308dfd_1cac27102827417dae8d180632d80e89~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(350, "auto", 300, "auto"))}
+					pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_1cac27102827417dae8d180632d80e89~mv2.jpg/v1/fill/w_250%2Ch_353%2Cal_c%2Cq_90%2Cenc_auto/308dfd_1cac27102827417dae8d180632d80e89~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(new NumPer(350, 300), new NumPer("auto", "auto")))}
 				/>
 
 			</VrStack>
@@ -367,7 +382,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="ServiceScope"
 		pBg={new ElemBg(Colors.Creamy)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -376,7 +392,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="نطاق الخدمة محدد من البداية حتى يعرف صاحب المطعم ما يدخل ضمن المتابعة وما يخرج عنها"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack
 				pWidth={new Pixel(1100, 340)}
@@ -418,7 +435,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -426,7 +444,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="هذه البنود تحتاج اتفاقًا مستقلًا أو تسدد حسب ما تطلبه الجهات المختصة أثناء سير الملف"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("920px", "100%")}
@@ -453,7 +472,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -461,7 +481,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="تقسيم الأتعاب على مراحل العمل يجعل التعاقد واضحًا ومرتبطًا بتقدم ملف الترخيص"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1100px", "100%")}
@@ -483,7 +504,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -491,7 +513,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="القرار الصحيح في مرحلة الترخيص قد يوفر تكلفة تعديلات كبيرة بعد تنفيذ الديكور والمطبخ والتهوية"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}

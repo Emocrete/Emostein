@@ -1,7 +1,7 @@
 ---
+import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, Topic, ElemBg, EmoMediaData, RespString, Pixel, Size, Align } from "@/TypesLib";
-import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, EmoBtn, EmoFaq, ReadAlso, RelServices, SecTitle, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle } from "@/Widgets";
 ---
 
 
@@ -48,7 +48,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 		pDesc="تنظيم المشروع من الفكرة والتصميم والتسعير إلى التعاقد والتنفيذ والمتابعة، مع خطة واضحة للوقت والتكلفة والجودة والقرارات المطلوبة من كل طرف."
 		pTitleClr="#F4E5C4"
 		pDescClr="#FFFFFF"
-		pAlign="right"
+		pHzAlign="right"
+		pVrAlign="right"
 		pPosL="18% 50% 12% 8%"
 		pPosP="12% 8% 44% 8%"
 		pBlurL="on"
@@ -123,7 +124,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 	<ESec
 		id="manage-map"
 		pBg={new ElemBg("#F7F1E6")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -135,7 +137,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("المشكلة ليست في وجود مقاول فقط")}
 				pText={Text.Body.WithColor("#333333").OfText("كثير من المشاريع تبدأ بعرض سعر من مقاول، ثم تظهر الأسئلة الصعبة: ما نطاق العمل الحقيقي؟ من يراجع التصميم؟ هل الكميات صحيحة؟ هل جدول التنفيذ منطقي؟ متى تُدفع المستخلصات؟ كيف يتم قبول الخامات؟ من يسجل التغييرات؟ إدارة المشروعات الهندسية تضع هذه الأسئلة في نظام واضح قبل أن تتحول إلى خلافات أثناء التنفيذ.")}
 			/>
@@ -147,7 +149,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1503387762-592deb58ef4e?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"مخططات مشروع هندسي قبل تنظيم مراحل الإدارة",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -161,7 +163,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#0E1118")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#0E1118")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -193,20 +196,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 	<EmoStrip
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("إدارة المشروع تبدأ قبل التنفيذ")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("أغلى أخطاء المشاريع لا تظهر دائمًا في الموقع؛ كثير منها يبدأ قبل التعاقد: تصميم ناقص، مقايسة غير واضحة، جدول غير منطقي، عقد مفتوح، أو مستخلصات غير مربوطة بتقدم فعلي. لذلك تبدأ إدارة المشروع من ترتيب النطاق قبل أول بند تنفيذ.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -258,7 +263,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 	<ESec
 		id="project-stages"
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -291,7 +297,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -308,7 +315,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1517048676732-d65bc937f952?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"اجتماع تنسيق بين أطراف مشروع هندسي",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -339,7 +346,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -392,20 +400,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 	<EmoStrip
 		id="time-cost"
 		pBg={new ElemBg("#F7F1E6")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#111318")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("الوقت والتكلفة والجودة ليست ملفات منفصلة")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("أي ضغط على الوقت يؤثر في التكلفة والجودة. وأي تغيير في الخامة قد يؤثر في المدة والتوريد. وأي تأخير في قرار المالك قد يضغط التنفيذ. الإدارة الهندسية تقرأ هذه العلاقات كمنظومة واحدة بدل متابعة كل بند في عزلة.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -432,7 +442,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -449,7 +460,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"HeroL.webp",
 					false,
 					"جدول زمني لمشروع هندسي",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -478,7 +489,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -526,20 +538,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 	<EmoStrip
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("إدارة المخاطر في المشروع")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("الخطر ليس كارثة بعد حدوثها. الخطر هو احتمال معروف يمكن الاستعداد له: تأخر توريد، اختلاف مقاس، تغيير رغبة المالك، تضارب رسومات، زيادة أسعار، أو اعتماد متأخر. الإدارة الجيدة لا تمنع كل المخاطر، لكنها تجعلها مرئية وقابلة للقرار.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -566,7 +580,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -577,7 +592,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("التغيير غير المسجل يتحول إلى خلاف")}
 				pText={Text.Body.WithColor("#333333").OfText("قد يطلب المالك تعديلًا بسيطًا في التوزيع، وقد يقترح المقاول بديلًا في الخامة، وقد تظهر مشكلة موقع تفرض تغيير المسار. هذه القرارات إذا تمت شفهيًا تتحول لاحقًا إلى اختلاف في الحساب أو الوقت أو الجودة. لذلك يتم تسجيل سبب التغيير، وصفه، أثره، واعتماده قبل التنفيذ قدر الإمكان.")}
 			/>
@@ -609,7 +624,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -626,7 +642,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"تقرير ومتابعة مستندات مشروع هندسي",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -656,7 +672,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -690,20 +707,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 	<EmoStrip
 		pBg={new ElemBg("#F7F1E6")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#111318")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("الفرق بين إدارة المشروع والإشراف الهندسي")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("الإشراف يركز غالبًا على مطابقة التنفيذ للرسومات والمواصفات أثناء العمل. إدارة المشروع أوسع من ذلك: نطاق، تعاقد، جدول، تكلفة، مشتريات، تواصل، مخاطر، تقارير، وتنسيق قرارات المالك والمقاول والمصمم.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -746,7 +765,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -776,7 +796,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -810,7 +831,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -866,20 +888,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 	<EmoStrip
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("أخطاء شائعة نعالجها في إدارة المشاريع")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("هذه الأخطاء لا تحتاج مشروعًا ضخمًا لتظهر. قد تظهر في شقة تشطيب، فيلا، مطعم، عيادة، أو مبنى كامل. الفرق أن اكتشافها مبكرًا أرخص بكثير من علاجها بعد التعاقد أو التنفيذ.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -932,7 +956,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -964,7 +989,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -996,7 +1022,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1497366754035-f200968a6e72?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"إدارة مرحلة التصميم داخل مكتب هندسي",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -1010,7 +1036,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1042,7 +1069,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1059,7 +1087,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1541888946425-d81bb19240f5?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"إدارة موقع بناء ومتابعة تقدم التنفيذ",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -1088,7 +1116,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1118,7 +1147,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1148,7 +1178,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1204,20 +1235,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 	<EmoStrip
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("مؤشرات نجاح الإدارة")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("نجاح الإدارة لا يعني أن المشروع لم يواجه أي مشكلة. النجاح أن المشكلات تظهر مبكرًا، تسجل بوضوح، يعرف صاحب القرار أثرها، ويتم التعامل معها قبل أن تتحول إلى تكلفة كبيرة أو خلاف مفتوح.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -1246,7 +1279,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1296,7 +1330,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1313,7 +1348,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1521791055366-0d553872125f?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"اجتماع قرار بين مالك ومقاول ومهندس مشروع",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -1343,7 +1378,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1375,7 +1411,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1431,20 +1468,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 	<EmoStrip
 		pBg={new ElemBg("#F7F1E6")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#111318")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("طرق التعاقد وتأثيرها على الإدارة")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("طريقة التعاقد تغير طريقة الإدارة. التعاقد بسعر مقطوع لا يشبه التعاقد بالمتر أو بالمصنعية أو التكلفة مضافًا إليها نسبة. لذلك يجب فهم طريقة الدفع والقياس قبل متابعة المستخلصات والتغييرات.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -1471,7 +1510,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1501,7 +1541,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1533,7 +1574,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1579,7 +1621,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1611,7 +1654,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1667,20 +1711,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 	<EmoStrip
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("الإغلاق النهائي وتسليم المشروع")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("نهاية المشروع لا يجب أن تكون فوضى ملاحظات. الإغلاق المنظم يعني معرفة ما تم، ما تبقى، ما تم دفعه، ما هو تحت الضمان، وما المستندات التي يجب أن تبقى مع المالك بعد التسليم.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -1707,7 +1753,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1787,7 +1834,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "

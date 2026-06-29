@@ -1,9 +1,8 @@
 ---
+import { GetHzAlignCss, GetVrAlignCss, type HzAlignValue, Place, type PlaceProps, type VrAlignValue } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import { Place, type PlaceProps } from "@/TypesLib";
-
-interface Props extends DebugOutlineProps, HTMLAttributes<"article">, PlaceProps { pBg?: string; pColor?: string; pTilt?: number; }
-const { pBg = "#353535", pColor = "#FAFAFA", pTilt = -3, pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly,
+interface Props extends DebugOutlineProps, HTMLAttributes<"article">, PlaceProps { pBg?: string; pColor?: string; pTilt?: number; pHzAlign?: HzAlignValue; pVrAlign?: VrAlignValue; }
+const { pBg = "#353535", pColor = "#FAFAFA", pTilt = -3, pHzAlign = "Stretch", pVrAlign = "Center", pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly,
 	pMove,
 	pMoveDuration,
 	pMoveLoc,
@@ -25,11 +24,17 @@ const { pBg = "#353535", pColor = "#FAFAFA", pTilt = -3, pLoc, pSize, pRotate, p
 	pMoveViewTarget,
  id: pGivenID = GetWidgetId("TiltCard"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
-const cPlace = new Place(Astro.props as PlaceProps, `--TiltBg:${pBg}; --TiltColor:${pColor}; --TiltDeg:${pTilt}deg; ${cGivenStyle}`);
+const cHasExplicitHeight = HasExplicitCssSize(pSize?.HeightL) || HasExplicitCssSize(pSize?.HeightP);
+const cPlace = new Place(Astro.props as PlaceProps, `--TiltBg:${pBg}; --TiltColor:${pColor}; --TiltDeg:${pTilt}deg; --TiltHzAlign:${GetHzAlignCss(pHzAlign)}; --TiltVrAlign:${GetVrAlignCss(pVrAlign)}; ${cGivenStyle}`);
+
+function HasExplicitCssSize(pValue?: string) {
+	const cValue = `${pValue ?? ""}`.trim().toLowerCase();
+	return cValue !== "" && cValue !== "auto" && cValue !== "fit-content" && cValue !== "max-content" && cValue !== "min-content";
+}
 ---
-<article class={`TiltCard ${cPlace.Class} ${pGivenClass}`.trim()} style={cPlace.Style} id={pGivenID} {...RemAttr}><slot /></article>
+<article class={`TiltCard ${cPlace.Class} ${pGivenClass}`.trim()} style={cPlace.Style} id={pGivenID} data-emo-auto-container="true" data-emo-explicit-height={cHasExplicitHeight ? "true" : "false"} data-emo-empty-height="200" {...RemAttr}><slot /></article>
 <style>
-	.TiltCard { position: relative; display: flex; flex-direction: column; justify-content: center; width: 100%; height: auto; padding: clamp(18px, 2.6vw, 34px); border-radius: 26px; background: var(--TiltBg); color: var(--TiltColor); box-shadow: 0 28px 50px rgba(0,0,0,.22); transform: rotate(var(--TiltDeg)); box-sizing: border-box; }
+	.TiltCard { position: relative; display: flex; flex-direction: column; align-items: var(--TiltHzAlign, stretch); justify-content: var(--TiltVrAlign, center); width: 100%; height: auto; padding: clamp(18px, 2.6vw, 34px); border-radius: 26px; background: var(--TiltBg); color: var(--TiltColor); box-shadow: 0 28px 50px rgba(0,0,0,.22); transform: rotate(var(--TiltDeg)); box-sizing: border-box; }
 	.TiltCard::before { content: ""; position: absolute; inset: 10px; border: 1px solid rgba(255,255,255,.24); border-radius: 20px; pointer-events: none; }
 .TiltCard.IsPlaced {
 		position: absolute;

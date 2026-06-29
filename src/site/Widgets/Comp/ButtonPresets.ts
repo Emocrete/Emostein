@@ -1,5 +1,4 @@
 import { Colors, HoverColors } from "@/TypesLib";
-
 export interface ButtonPresetProps {
 	/** Preset: خلفية سوداء وهوفر داكن. */
 	Black?: boolean;

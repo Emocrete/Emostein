@@ -1,7 +1,7 @@
 ---
+import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, Topic, ElemBg, Colors, RespString, Pixel, Size, Align } from "@/TypesLib";
-import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, ReadAlso, RelServices, SecTitle, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, SecTitle } from "@/Widgets";
 ---
 
 
@@ -47,7 +47,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		pDesc="اعتماد شهادات هندسية من نقابة المهندسين لاستخدامها أمام الأحياء وأجهزة المدن والجهات الإدارية وشركات المرافق، مع تجهيز بيانات العقار والمالك والمهندس والسجل الهندسي حسب نوع الشهادة المطلوبة."
 		pTitleClr={Colors.WhiteOff}
 		pDescClr={Colors.WhiteOff}
-		pAlign="right"
+		pHzAlign="right"
+		pVrAlign="right"
 		pPosL="18% 48% 12% 8%"
 		pPosP="12% 8% 42% 8%"
 		pBlurL="on"
@@ -67,7 +68,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 	<ESec
 		id="Intro"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -79,13 +81,13 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.OfText("الشهادة ليست ختمًا فقط")}
 				pText={Text.Body.OfText("قيمة الشهادة الهندسية في أنها تربط العقار أو الأعمال الهندسية بمهندس محدد وسجل هندسي محدد ومسؤولية مهنية محددة. لذلك لا يصح التعامل معها كختم منفصل عن البيانات، أو كنموذج عام يصلح لأي عقار دون معاينة أو مراجعة أو توصيف واضح.")}
 			/>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.OfText("متى تحتاج شهادة هندسية؟")}
 				pText={Text.Body.OfText("تحتاج شهادة هندسية عند استخراج تصريح حفر، أو بدء تنفيذ بناء، أو استكمال رخصة هدم، أو توصيل مرافق بعد انتهاء التنفيذ، أو إثبات صلاحية مبنى، أو تقديم رأي فني معتمد لجهة إدارية أو مالك أو شركة مرافق أو اتحاد ملاك.")}
 			/>
@@ -103,7 +105,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 	<ESec
 		id="CertificateTypes"
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -138,20 +141,22 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 	<EmoStrip
 		id="Difference"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.BistageLite)}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.OfText("الفرق بين الشهادة والتقرير والختم والرخصة")}
 				pText={Text.Body.Centered.OfText("الخلط بين هذه المصطلحات يسبب نقصًا في الملفات وتعطيلًا أمام الجهات الإدارية. كل مستند له وظيفة مختلفة ولا يغني تلقائيًا عن غيره.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -181,7 +186,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 	<ESec
 		id="UseCases"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -239,7 +245,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 	<ESec
 		id="Validity"
 		pBg={new ElemBg(Colors.SkyLite)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -251,7 +258,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(520, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(520, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.OfText("متى تطلب؟")}
 				pText={Text.Body.OfText("تطلب بعد إتمام تنفيذ الأعمال الصادر بها الترخيص، عند الحاجة إلى إيداع الشهادة لدى الجهة الإدارية المختصة أو استخراج خطابات توصيل المرافق أو إثبات جاهزية المبنى أو جزء منه للإشغال.")}
 			/>
@@ -286,20 +293,22 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 	<EmoStrip
 		id="Supervision"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.BistageLite)}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.OfText("شهادات الإشراف الهندسي")}
 				pText={Text.Body.Centered.OfText("شهادة الإشراف تثبت أن هناك مهندسًا مسؤولًا عن متابعة التنفيذ أو الهدم ضمن حدود الترخيص والرسومات والتعليمات الفنية، وليست مجرد توقيع منفصل عن المشروع.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -353,7 +362,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 	<ESec
 		id="Requirements"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -411,7 +421,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 	<ESec
 		id="Process"
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -448,20 +459,22 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 	<EmoStrip
 		id="CommonMistakes"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.BistageLite)}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.OfText("أخطاء تعطل اعتماد الشهادات الهندسية")}
 				pText={Text.Body.Centered.OfText("أغلب التعطيل لا يكون بسبب صعوبة الشهادة نفسها، بل بسبب نقص البيانات أو اختيار نوع شهادة غير مناسب للغرض المطلوب.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -497,7 +510,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 	<ESec
 		id="WhatWeNeed"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -555,7 +569,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 	<ESec
 		id="WhyUs"
 		pBg={new ElemBg(Colors.SkyLite)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -590,20 +605,22 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 	<EmoStrip
 		id="CTA"
 		pBg={new ElemBg(Colors.BistageLite)}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.BistageLite)}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.OfText("اطلب شهادة هندسية معتمدة")}
 				pText={Text.Body.Centered.OfText("أرسل نوع الشهادة أو صورة طلب الجهة الإدارية، وسنحدد لك المستند الصحيح، والمرفقات المطلوبة، وخطوات الاعتماد المناسبة لحالتك.")}
-				pSize={new Size(900, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(900, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>

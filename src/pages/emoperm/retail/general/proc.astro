@@ -1,7 +1,7 @@
 ---
+import { Align, Angle, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, EmoMediaData, Colors, Pixel, Topic, Size, Align, Percent, RespString, Loc, NumPer, DirectSize, Angle } from "@/TypesLib";
-import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, ReadAlso, RelServices, EmoFaq, VrStack, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, VrStack } from "@/Widgets";
 ---
 
 
@@ -42,8 +42,9 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pBgOpacity={new Percent(50)}
 			pBgColor={new ElemBg(Colors.BlackOff)}
 			pLoc={new Loc(new NumPer("10%","5%"),new NumPer("40%","20%"))}
-			pSize={new DirectSize(new NumPer("40%","90%"))}
-			pAlign="Center"
+			pSize={new Size(new NumPer("40%","90%"))}
+			pHzAlign="Center"
+			pVrAlign="Center"
 		>
 
 			<Emograph pTitle={Text.H1.White.Centered.OfText("إجراءات ترخيص محل تجاري")} />
@@ -66,7 +67,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 	<ESec id="secProc">
 
-		<EmoStrip pBg={new ElemBg(Colors.GreenLite)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.GreenLite)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<Emograph
 				pTitle={Text.H2.Centered.OfText("اجراءات ترخيص محل تجاري أو صناعي أو محل عام")}
@@ -117,7 +119,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		</EmoStrip>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -151,7 +154,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		</EmoStrip>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("980px", "100%")}
@@ -186,7 +190,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		</EmoStrip>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1200px", "100%")}
@@ -217,7 +222,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		</EmoStrip>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(28, 16)} pPad={new Pixel(0, 0)}>
 
@@ -242,7 +248,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 				</VrStack>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", "https://images.akhbarelyom.com/UP/", "20221211102524498.jpg", false, "نموذج طلب استصدار رخصة محل", new Size(420, "auto", 300, "auto"))}
+					pImg={new EmoMediaData("Img", "https://images.akhbarelyom.com/UP/", "20221211102524498.jpg", false, "نموذج طلب استصدار رخصة محل", new Size(new NumPer(420, 300), new NumPer("auto", "auto")))}
 				/>
 
 			</HzStack>
@@ -268,7 +274,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		</EmoStrip>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack pWidth={new Pixel(1050, 340)} pGap={new Pixel(22, 14)}>
 

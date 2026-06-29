@@ -1,7 +1,7 @@
 ---
+import { Align, Angle, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, EmoMediaData, Colors, Pixel, Topic, Loc, NumPer, Percent, DirectSize, Angle, Align} from "@/TypesLib";
-import { Hero, IndexSec, ESec, EmoStrip, Card, IncLineSep, BottTriSep, EmoBtn, IndexBtn, YTPlayer, DataCard, CardsGr, EmoList, Tree, Emograph, EmoCall, RelServices, VrStack, HzStack, RelServiceItem } from "@/Widgets";
+import { BottTriSep, Card, CardsGr, DataCard, EmoBtn, EmoCall, Emograph, EmoList, EmoStrip, ESec, Hero, HzStack, IncLineSep, IndexBtn, IndexSec, RelServiceItem, RelServices, Tree, VrStack, YTPlayer } from "@/Widgets";
 import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 import { number } from "astro:schema";
 ---
@@ -44,8 +44,9 @@ import { number } from "astro:schema";
 			pBgOpacity={new Percent(50)}
 			pBgColor={new ElemBg(Colors.BlackOff)}
 			pLoc={new Loc(new NumPer("10%","5%"),new NumPer("40%","20%"))}
-			pSize={new DirectSize(new NumPer("40%","90%"))}
-			pAlign="Center"
+			pSize={new Size(new NumPer("40%","90%"))}
+			pHzAlign="Center"
+			pVrAlign="Center"
 		>
 
 			<Emograph
@@ -102,9 +103,9 @@ import { number } from "astro:schema";
 
 		</EmoStrip>
 
-		<HzStack pSize={new DirectSize(new NumPer("90%","95%"),new NumPer(500,"auto"))}>
+		<HzStack pSize={new Size(new NumPer("90%","95%"),new NumPer(500,"auto"))}>
 
-			<EmoStrip pBg={new ElemBg(Colors.Gray1)} pSize={new DirectSize(new NumPer("80%"),new NumPer(500,"auto"))}>
+			<EmoStrip pBg={new ElemBg(Colors.Gray1)} pSize={new Size(new NumPer("80%"),new NumPer(500,"auto"))}>
 
 				<EmoList
 					pTitle={Text.H3.OfText("أولا: مستندات أساسية لجميع المحلات العامة:")}
@@ -123,7 +124,7 @@ import { number } from "astro:schema";
 
 			</EmoStrip>
 
-			<EmoStrip pBg={new ElemBg(Colors.Gray1)} pSize={new DirectSize(new NumPer("80%"),new NumPer(500,"auto"))}>
+			<EmoStrip pBg={new ElemBg(Colors.Gray1)} pSize={new Size(new NumPer("80%"),new NumPer(500,"auto"))}>
 
 				<EmoList
 					pTitle={Text.H3.OfText("ثانيا: مستندات خاصة بالمطاعم والأنشطة الخاصة بالمأكولات والمشروبات")}
@@ -136,7 +137,7 @@ import { number } from "astro:schema";
 
 			</EmoStrip>
 
-			<EmoStrip pBg={new ElemBg(Colors.Gray1)} pSize={new DirectSize(new NumPer("80%"),new NumPer(500,"auto"))}>
+			<EmoStrip pBg={new ElemBg(Colors.Gray1)} pSize={new Size(new NumPer("80%"),new NumPer(500,"auto"))}>
 
 				<EmoList pTitle={Text.H3.OfText("ثالثا: مستندات خاصة بمحال الأنشطة العامة والترفيهية")} pItems={	[
 				"صحيفة الحالة الجنائية"

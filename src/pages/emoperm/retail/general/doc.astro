@@ -1,7 +1,7 @@
 ---
+import { Align, Angle, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, EmoMediaData, Colors, Pixel, Topic, Loc,RespString, NumPer,Size, Percent, DirectSize, Angle, Align} from "@/TypesLib";
-import { Hero, IndexSec,FaqItem,EmoFaq, ESec, EmoStrip,RespImg,ReadAlsoItem,ReadAlso, Card,SecTitle, IncLineSep, BottTriSep, EmoBtn, IndexBtn, YTPlayer, DataCard, CardsGr, EmoList, Tree, Emograph, EmoCall, RelServices, VrStack, HzStack, RelServiceItem } from "@/Widgets";
+import { BottTriSep, Card, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, IncLineSep, IndexBtn, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, Tree, VrStack, YTPlayer } from "@/Widgets";
 ---
 
 
@@ -42,8 +42,9 @@ import { Hero, IndexSec,FaqItem,EmoFaq, ESec, EmoStrip,RespImg,ReadAlsoItem,Read
 			pBgOpacity={new Percent(50)}
 			pBgColor={new ElemBg(Colors.BlackOff)}
 			pLoc={new Loc(new NumPer("10%","5%"),new NumPer("40%","20%"))}
-			pSize={new DirectSize(new NumPer("40%","90%"))}
-			pAlign="Center"
+			pSize={new Size(new NumPer("40%","90%"))}
+			pHzAlign="Center"
+			pVrAlign="Center"
 		>
 
 			<Emograph
@@ -70,12 +71,14 @@ import { Hero, IndexSec,FaqItem,EmoFaq, ESec, EmoStrip,RespImg,ReadAlsoItem,Read
 	<ESec
 		id="RequiredDocuments"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle SkyLite pTitle="المستندات المطلوبة لترخيص محل تجاري" />
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1600px", "100%")}
@@ -110,11 +113,13 @@ import { Hero, IndexSec,FaqItem,EmoFaq, ESec, EmoStrip,RespImg,ReadAlsoItem,Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle Bistage pTitle="مستندات قد تطلب حسب صفة طالب الترخيص" />
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1600px", "100%")}
@@ -137,7 +142,8 @@ import { Hero, IndexSec,FaqItem,EmoFaq, ESec, EmoStrip,RespImg,ReadAlsoItem,Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			Sky
@@ -145,7 +151,8 @@ import { Hero, IndexSec,FaqItem,EmoFaq, ESec, EmoStrip,RespImg,ReadAlsoItem,Read
 			pDesc="أكبر سبب لتعطل ملف الترخيص غالبًا لا يكون بطاقة صاحب الطلب، بل حالة العين نفسها: الملكية، الإيجار، القيمة الإيجارية، موقف العقار، والرسم التوضيحي"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("980px", "100%")}
@@ -172,7 +179,8 @@ import { Hero, IndexSec,FaqItem,EmoFaq, ESec, EmoStrip,RespImg,ReadAlsoItem,Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -180,7 +188,8 @@ import { Hero, IndexSec,FaqItem,EmoFaq, ESec, EmoStrip,RespImg,ReadAlsoItem,Read
 			pDesc="بعد إثبات صفة طالب الترخيص وحالة العين، تأتي مستندات النشاط نفسه: ضريبة، سجل، تأمينات، شهادات صحية، وموافقات خاصة عند الحاجة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(28, 16)}>
 
@@ -204,7 +213,7 @@ import { Hero, IndexSec,FaqItem,EmoFaq, ESec, EmoStrip,RespImg,ReadAlsoItem,Read
 				</VrStack>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", "https://images.akhbarelyom.com/UP/", "20221211102524498.jpg", false, "نموذج طلب استصدار رخصة محل", new Size(420, "auto", 300, "auto"))}
+					pImg={new EmoMediaData("Img", "https://images.akhbarelyom.com/UP/", "20221211102524498.jpg", false, "نموذج طلب استصدار رخصة محل", new Size(new NumPer(420, 300), new NumPer("auto", "auto")))}
 				/>
 
 			</HzStack>
@@ -219,7 +228,8 @@ import { Hero, IndexSec,FaqItem,EmoFaq, ESec, EmoStrip,RespImg,ReadAlsoItem,Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -227,7 +237,8 @@ import { Hero, IndexSec,FaqItem,EmoFaq, ESec, EmoStrip,RespImg,ReadAlsoItem,Read
 			pDesc="القائمة الصحيحة لا تكفي إذا كانت النسخ غير واضحة أو البيانات غير متطابقة أو النشاط مكتوبًا بأكثر من صيغة بين المستندات"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1180px", "100%")}
@@ -250,7 +261,8 @@ import { Hero, IndexSec,FaqItem,EmoFaq, ESec, EmoStrip,RespImg,ReadAlsoItem,Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -258,7 +270,8 @@ import { Hero, IndexSec,FaqItem,EmoFaq, ESec, EmoStrip,RespImg,ReadAlsoItem,Read
 			pDesc="الخدمة ليست تجميع صور فقط، بل مراجعة منطق الملف قبل دخوله إلى الجهة الإدارية"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack pWidth={new Pixel(1050, 340)} pGap={new Pixel(22, 14)}>
 

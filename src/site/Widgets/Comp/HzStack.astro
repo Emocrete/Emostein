@@ -1,14 +1,16 @@
 ---
-import { DirectSize, ElemBg, Pixel, Place, type PlaceProps } from "@/TypesLib";
+import { ElemBg, GetHzAlignCss, GetVrAlignCss, type HzAlignValue, Pixel, Place, type PlaceProps, Size, type VrAlignValue } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
 
 interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
-	pSize?: DirectSize;
+	pSize?: Size;
 	pGap?: Pixel;
 	pPad?: Pixel;
 	pMargin?: Pixel;
 	pBg?: ElemBg;
 	pRadius?: Pixel;
+	pHzAlign?: HzAlignValue;
+	pVrAlign?: VrAlignValue;
 	pForceHz?: boolean;
 }
 
@@ -21,6 +23,8 @@ const {
 	pMargin = new Pixel(0),
 	pBg,
 	pRadius = new Pixel(0),
+	pHzAlign = "Start",
+	pVrAlign = "Stretch",
 	pForceHz = false,
 
 	pLoc,
@@ -75,6 +79,9 @@ const cBgVidL = pBg?.Vid?.LinkL || "";
 const cBgVidP = pBg?.Vid?.LinkP || pBg?.Vid?.LinkL || "";
 
 const cBgAlt = pBg?.Img?.Alt || pBg?.Vid?.Alt || "";
+const cHzAlign = GetHzAlignCss(pHzAlign);
+const cVrAlign = GetVrAlignCss(pVrAlign);
+const cHasExplicitHeight = HasExplicitCssSize(pSize?.HeightL) || HasExplicitCssSize(pSize?.HeightP);
 
 const cFinalBgImgL = cBgImgL || cBgImgP;
 const cFinalBgImgP = cBgImgP || cBgImgL;
@@ -97,6 +104,8 @@ const cCoreStyle = [
 	`--HzBgColor:${cBgColor};`,
 	`--HzRadiusL:${pRadius.Landscape};`,
 	`--HzRadiusP:${pRadius.Portrait};`,
+	`--HzAlignItems:${cVrAlign};`,
+	`--HzJustifyContent:${cHzAlign};`,
 	GetStyleText(pGivenStyle),
 ].filter(Boolean).join(" ");
 
@@ -109,6 +118,11 @@ const cStackClass = [
 	cPlace.Class,
 	pGivenClass,
 ].filter(Boolean).join(" ");
+
+function HasExplicitCssSize(pValue?: string) {
+	const cValue = `${pValue ?? ""}`.trim().toLowerCase();
+	return cValue !== "" && cValue !== "auto" && cValue !== "fit-content" && cValue !== "max-content" && cValue !== "min-content";
+}
 
 function GetBoolAttr(pValue: unknown) {
 	return pValue === true || pValue === "" || pValue === "true";
@@ -157,6 +171,9 @@ function GetCssName(pName: string) {
 	class = {cStackClass}
 	style = {cPlace.Style}
 	id={pGivenID}
+	data-emo-auto-container="true"
+	data-emo-explicit-height={cHasExplicitHeight ? "true" : "false"}
+	data-emo-empty-height="200"
 	{...RemAttr}
 >
 
@@ -164,6 +181,7 @@ function GetCssName(pName: string) {
 
 		<video
 			class = " HzStackBg HzStackBgVid "
+			data-emo-container-bg="true"
 			crossorigin="anonymous"
 			playsinline
 			preload="auto"
@@ -190,7 +208,7 @@ function GetCssName(pName: string) {
 
 				) : cHasBgImg ? (
 
-					<picture class = " HzStackBg HzStackBgPic ">
+					<picture class = " HzStackBg HzStackBgPic " data-emo-container-bg="true">
 
 						<source media="(orientation: portrait)" srcset={cFinalBgImgP} />
 
@@ -248,8 +266,8 @@ function GetCssName(pName: string) {
 		border-radius: var(--HzRadiusL, 0);
 		background-color: var(--HzBgColor, transparent);
 		overflow: hidden;
-		align-items: stretch;
-		justify-content: flex-start;
+		align-items: var(--HzAlignItems, stretch);
+		justify-content: var(--HzJustifyContent, flex-start);
 		min-width: 0;
 	}
 

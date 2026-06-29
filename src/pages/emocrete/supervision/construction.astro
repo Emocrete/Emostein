@@ -1,42 +1,13 @@
 ---
+import { Align, Angle, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, EmoMediaData, Colors, Pixel, Topic, Size, Align, RespString } from "@/TypesLib";
-import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, ReadAlso, RelServices, EmoFaq, EmoContactStrip, SecTitle, VrStack, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { Badge, CardsGr, DuoCol, DuoStr, EmoCall, EmoContactStrip, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStatsStrip, EmoStrip, ESec, FaqItem, FreeHero, Grid, Hero, HzStack, PriceCard, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
+import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard, LinePath, Ribbon, SvgDots, TiltCard, WaveBottom } from "@/Widgets/Shapes";
 
-	import {
-		DirectSize,
-		NumPer,
-		Loc,
-		Angle,
-		Percent,
-		Location
-	} from "@/TypesLib";
 
-	import {
-		FreeHero,
-		FreeHeroItem,
-		DuoSec,
-		DuoCol,
-		Grid,
-		Badge,
-		PriceCard,
-		EmoPipelineStrip,
-		EmoStatsStrip
-	} from "@/Widgets";
 
-	import {
-		BlurBlob,
-		CircleGlow,
-		LinePath,
-		SvgDots,
-		DoubleWave,
-		FloatingPanel,
-		GlassCard,
-		BadgeFrame,
-		TiltCard,
-		Ribbon,
-		WaveBottom
-	} from "@/Widgets/Shapes";
+
+
 
 	const cMedia = "/Media/Emocrete/Supervision/Construction/";
 	const cDark = "#172331";
@@ -83,7 +54,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 		pDesc="خدمات الإشراف الهندسي على التنفيذ لأعمال البناء والتشييد، ومتابعة تنفيذ الهيكل الإنشائي والتحقق من مطابقة الأعمال للرسومات والمواصفات الهندسية قبل انتقال المقاول من مرحلة إلى المرحلة التالية."
 		pTitleClr={Colors.SkyDark}
 		pDescClr={Colors.WhiteOff}
-		pAlign="center"
+		pHzAlign="center"
+		pVrAlign="center"
 		pPosL="42% 58% 10% 5%"
 		pPosP="54% 5% 5% 5%"
 		pBlurL="on"
@@ -103,7 +75,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="Intro"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -112,7 +85,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="الإشراف الهندسي على البناء ليس حضورًا شكليًا في الموقع، بل نظام استلام ومراجعة قبل وأثناء وبعد البنود الحساسة، حتى لا يتحول الخطأ الصغير في النجارة أو الحدادة أو الصب إلى تكلفة علاج كبيرة بعد التنفيذ."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 16)} pPad={new Pixel(0, 0)}>
 
@@ -125,7 +99,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 					<Emograph
 						pTitle={Text.H3.OfText("المهندس المشرف يمثل عين المالك الفنية")}
 						pText={Text.Body.OfText("المقاول مسؤول عن تنفيذ الأعمال، لكن مصلحته التجارية قد تجعله يميل إلى السرعة أو تقليل الهدر أو تمرير بعض التفاصيل. دور الإشراف الهندسي هو مراجعة التنفيذ بعين مستقلة، ومقارنة ما يحدث في الموقع بالرسومات والمواصفات، ورفض انتقال العمل للمرحلة التالية قبل علاج الملاحظات المؤثرة.")}
-						pSize={new Size(700, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(700, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<CardsGr
@@ -141,7 +115,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 				</VrStack>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", "/Media/Emocrete/Supervision/Construction/", "HeroL.webp", false, "إشراف هندسي على البناء", new Size(500, "auto", 320, "auto"))}
+					pImg={new EmoMediaData("Img", "/Media/Emocrete/Supervision/Construction/", "HeroL.webp", false, "إشراف هندسي على البناء", new Size(new NumPer(500, 320), new NumPer("auto", "auto")))}
 				/>
 
 			</HzStack>
@@ -159,7 +133,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="Tasks"
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -168,20 +143,21 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="صفحة الإشراف القديمة ركزت على ثلاث مهام أساسية في الهيكل الخرساني: النجارة المسلحة، الحدادة المسلحة، وصب الخرسانة والفرمجة. هنا يتم الحفاظ على نفس المحور مع توضيح قيمته التنفيذية للمالك."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(25, 16)} pPad={new Pixel(0, 0)}>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", "/Media/Emocrete/Supervision/Construction/", "SV_Tasks_Step1.webp", false, "أعمال النجارة المسلحة", new Size(360, "auto", 320, "auto"))}
+					pImg={new EmoMediaData("Img", "/Media/Emocrete/Supervision/Construction/", "SV_Tasks_Step1.webp", false, "أعمال النجارة المسلحة", new Size(new NumPer(360, 320), new NumPer("auto", "auto")))}
 				/>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", "/Media/Emocrete/Supervision/Construction/", "SV_Tasks_Step2.webp", false, "أعمال الحدادة المسلحة", new Size(360, "auto", 320, "auto"))}
+					pImg={new EmoMediaData("Img", "/Media/Emocrete/Supervision/Construction/", "SV_Tasks_Step2.webp", false, "أعمال الحدادة المسلحة", new Size(new NumPer(360, 320), new NumPer("auto", "auto")))}
 				/>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", "/Media/Emocrete/Supervision/Construction/", "SV_Tasks_Step3.webp", false, "صب الخرسانة والفرمجة", new Size(360, "auto", 320, "auto"))}
+					pImg={new EmoMediaData("Img", "/Media/Emocrete/Supervision/Construction/", "SV_Tasks_Step3.webp", false, "صب الخرسانة والفرمجة", new Size(new NumPer(360, 320), new NumPer("auto", "auto")))}
 				/>
 
 			</HzStack>
@@ -209,7 +185,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="Why"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -218,7 +195,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="القيمة الحقيقية للإشراف لا تظهر عندما يكون كل شيء يسير بصورة جيدة، بل تظهر عند أول تعارض بين الرسومات والموقع، أو عند محاولة تمرير بند غير مطابق، أو عند صب عنصر قبل استلامه هندسيًا."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -246,7 +224,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="Scope"
 		pBg={new ElemBg(Colors.Creamy)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -255,7 +234,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="النطاق الأساسي هنا يركز على أعمال البناء والهيكل الخرساني، بداية من الحفر والمحاور، مرورًا بالأساسات والأعمدة والأسقف، وحتى متابعة الصب والاستلام الفني للبنود الحساسة."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(28, 16)} pPad={new Pixel(0, 0)}>
 
@@ -308,13 +288,15 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<EmoStrip
 		id="Foundations"
 		pBg={new ElemBg(Colors.Gray5)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.Gray5)}
-			pSize={new Size(1200, "auto", "calc(100% - 24px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 24px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<HzStack>
@@ -322,11 +304,11 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 				<Emograph
 					pTitle={Text.H2.Bistage.OfText("مراحل الإشراف على أعمال الأساسات")}
 					pText={Text.Body.White.OfText("الأساسات هي المرحلة التي يصعب علاج أخطائها لاحقًا دون تكلفة كبيرة، لذلك تبدأ المتابعة من الحفر والمحاور والخرسانة العادية ثم النجارة والحدادة والصب للأساسات المسلحة.")}
-					pSize={new Size("58%", "auto", "100%", "auto")}
+					pSize={new Size(new NumPer("58%", "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", "/Media/Emocrete/Supervision/Construction/", "FoundationLevel.webp", false, "استلام أعمال الأساسات", new Size(430, "auto", 320, "auto"))}
+					pImg={new EmoMediaData("Img", "/Media/Emocrete/Supervision/Construction/", "FoundationLevel.webp", false, "استلام أعمال الأساسات", new Size(new NumPer(430, 320), new NumPer("auto", "auto")))}
 				/>
 
 			</HzStack>
@@ -381,25 +363,27 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<EmoStrip
 		id="Columns"
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.SkyLite)}
-			pSize={new Size(1200, "auto", "calc(100% - 24px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 24px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<HzStack>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", "/Media/Emocrete/Supervision/Construction/", "ColumnsLevel.webp", false, "استلام أعمال الأعمدة", new Size(430, "auto", 320, "auto"))}
+					pImg={new EmoMediaData("Img", "/Media/Emocrete/Supervision/Construction/", "ColumnsLevel.webp", false, "استلام أعمال الأعمدة", new Size(new NumPer(430, 320), new NumPer("auto", "auto")))}
 				/>
 
 				<Emograph
 					pTitle={Text.H2.OfText("مراحل الإشراف على أعمال الأعمدة")}
 					pText={Text.Body.OfText("الأعمدة عناصر رأسية حساسة؛ أي انحراف في الأبعاد أو الرأسية أو التسليح أو الكانات قد ينعكس على سلامة الدور التالي وشكل الفراغات وتشطيب الحوائط. لذلك يتم الاستلام على أكثر من نقطة لا في لحظة الصب فقط.")}
-					pSize={new Size("58%", "auto", "100%", "auto")}
+					pSize={new Size(new NumPer("58%", "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</HzStack>
@@ -444,13 +428,15 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<EmoStrip
 		id="Slabs"
 		pBg={new ElemBg(Colors.Gray5)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.Gray5)}
-			pSize={new Size(1200, "auto", "calc(100% - 24px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 24px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<HzStack>
@@ -458,11 +444,11 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 				<Emograph
 					pTitle={Text.H2.Bistage.OfText("مراحل الإشراف على أعمال السقف")}
 					pText={Text.Body.White.OfText("السقف يجمع النجارة والحدادة والفتحات والمناسيب والتقويات، وغالبًا يكون أكثر مرحلة تظهر فيها نتائج ضعف التخطيط أو الاستعجال، لذلك تتم متابعته على خطوات قبل يوم الصب.")}
-					pSize={new Size("58%", "auto", "100%", "auto")}
+					pSize={new Size(new NumPer("58%", "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", "/Media/Emocrete/Supervision/Construction/", "SlabLevel.webp", false, "استلام أعمال السقف", new Size(430, "auto", 320, "auto"))}
+					pImg={new EmoMediaData("Img", "/Media/Emocrete/Supervision/Construction/", "SlabLevel.webp", false, "استلام أعمال السقف", new Size(new NumPer(430, 320), new NumPer("auto", "auto")))}
 				/>
 
 			</HzStack>
@@ -507,7 +493,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="DecisionMatrix"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -516,7 +503,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="نظام الزيارة يناسب مراحل استلام محددة، بينما المتابعة المستمرة أو النسبة تناسب المواقع التي تحتاج حضورًا متكررًا بسبب سرعة التنفيذ أو تعقيد البنود أو ضعف خبرة فريق التنفيذ."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -542,7 +530,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="Pricing"
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -551,7 +540,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="الأرقام التالية مأخوذة من محتوى الصفحة الأصلية وتعرض كنقطة بداية لفهم نظام التسعير، مع ضرورة تثبيت السعر النهائي بعد معرفة موقع المشروع ومساحته وعدد مراحل الاستلام المطلوبة."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -576,7 +566,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="BeforeStart"
 		pBg={new ElemBg(Colors.Creamy)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -585,7 +576,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="حتى تكون الزيارة مؤثرة وليست مجرد مشاهدة للموقع، يجب توفير الحد الأدنى من المستندات والمعلومات التي تسمح بمراجعة الأعمال على أساس هندسي واضح."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(28, 16)} pPad={new Pixel(0, 0)}>
 
@@ -638,7 +630,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="Mistakes"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -647,7 +640,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="هذه ليست قائمة نظرية، بل أمثلة عملية من طبيعة أعمال البناء التي تتكرر في مواقع كثيرة عندما يغيب الاستلام الفني أو يتم الاعتماد على خبرة الصنايعي وحدها."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -675,7 +669,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="Reports"
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -684,7 +679,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="الملاحظة الجيدة لا تقول إن هناك خطأ فقط، بل توضح موضع الخطأ، درجة تأثيره، وطريقة التصرف: قبول، تعديل، إعادة تنفيذ، أو الرجوع للمصمم قبل القرار."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -710,7 +706,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="Limits"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -719,7 +716,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="توضيح الحدود يحمي العميل والمهندس والمقاول. الزيارة لا تعني أن المهندس كان حاضرًا في كل دقيقة تنفيذ، لكنها تعني أنه استلم أو راجع مرحلة محددة في توقيت محدد بناءً على ما ظهر له بالموقع والرسومات المتاحة."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(28, 16)} pPad={new Pixel(0, 0)}>
 
@@ -770,7 +768,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="Compare"
 		pBg={new ElemBg(Colors.Creamy)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -779,7 +778,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pDesc="الهيكل الخرساني أخطاؤه غالبًا مخفية ومكلفة، أما التشطيبات فأخطاؤها أكثر ظهورًا لكنها مؤثرة في الجودة النهائية والتكلفة. لذلك يتم فصل الخدمتين حتى يعرف العميل ما يطلبه بدقة."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -878,7 +878,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 		pHeadBg={new ElemBg(Colors.Gray5)}
 		pBodyBg={new ElemBg(Colors.Gray1)}
 		pCardBg={new ElemBg(Colors.WhiteOff)}
-		pWidth={new Size("90%","auto","95%","auto")}
+		pWidth={new Size(new NumPer("90%", "95%"), new NumPer("auto", "auto"))}
 	>
 
 		<RelServiceItem
@@ -929,7 +929,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		<SvgDots
 			pLoc={new Loc(new NumPer(0), new NumPer(0))}
-			pSize={new DirectSize(new NumPer("100%"), new NumPer("100%"))}
+			pSize={new Size(new NumPer("100%"), new NumPer("100%"))}
 			pZ={1}
 			pOpacity={new Percent(40, 25)}
 			pColor="rgba(255,255,255,.38)"
@@ -939,7 +939,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		<BlurBlob
 			pLoc={new Loc(new NumPer("8%", "-18%"), new NumPer("14%", "8%"))}
-			pSize={new DirectSize(new NumPer(420, 240), new NumPer(420, 300))}
+			pSize={new Size(new NumPer(420, 240), new NumPer(420, 300))}
 			pZ={2}
 			pOpacity={new Percent(78, 55)}
 			pColor="rgba(50,143,232,.55)"
@@ -948,7 +948,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		<LinePath
 			pLoc={new Loc(new NumPer("calc(100% - 360px)", "calc(100% - 200px)"), new NumPer(80, 120))}
-			pSize={new DirectSize(new NumPer(280, 160), new NumPer(150, 115))}
+			pSize={new Size(new NumPer(280, 160), new NumPer(150, 115))}
 			pRotate={new Angle(8, 4)}
 			pZ={3}
 			pOpacity={new Percent(90, 70)}
@@ -957,80 +957,69 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			pWidth={4}
 		/>
 
-		<FreeHeroItem
-			pLoc={new Location("7%", "6%", "24%", "17%")}
-			pSize={new Size("560px", "auto", "88%", "auto")}
+		<FloatingPanel
+			pBg="rgba(17,24,32,.82)"
+			pBorder="rgba(255,255,255,.22)"
+			pAccent={cMint}
+			pLoc={new Loc(new NumPer("7%", "6%"), new NumPer("24%", "17%"))}
+			pSize={new Size(new NumPer("560px", "88%"), new NumPer("auto", "auto"))}
 			pZ={10}
-			pFit
 		>
 
-			<FloatingPanel
-				pBg="rgba(17,24,32,.82)"
-				pBorder="rgba(255,255,255,.22)"
-				pAccent={cMint}
+			<Emograph
+				pTitle={Text.H1.White.OfText("إشراف هندسي على البناء")}
+				pText={Text.Body.White.OfSize(20, 14).OfText("خدمة متابعة واستلام للهيكل الخرساني قبل انتقال المقاول من مرحلة إلى المرحلة التالية: الحفر، المحاور، النجارة، الحدادة، وصب الخرسانة. الهدف ليس الوجود الشكلي في الموقع، بل منع دفن الخطأ داخل الخرسانة.")}
+			/>
+
+			<HzStack
+				pGap={new Pixel(18, 12)}
+				pPad={new Pixel(0)}
+				pForceHz
 			>
 
-				<Emograph
-					pTitle={Text.H1.White.OfText("إشراف هندسي على البناء")}
-					pText={Text.Body.White.OfSize(20, 14).OfText("خدمة متابعة واستلام للهيكل الخرساني قبل انتقال المقاول من مرحلة إلى المرحلة التالية: الحفر، المحاور، النجارة، الحدادة، وصب الخرسانة. الهدف ليس الوجود الشكلي في الموقع، بل منع دفن الخطأ داخل الخرسانة.")}
+				<EmoCall BlackSky pText="اطلب إشراف بناء" />
+
+				<Badge
+					pYears="3"
+					pYearsText="بوابات استلام رئيسية"
+					pWorks="2000"
+					pWorksText="جنيه / زيارة مبدئيًا"
+					pDuration="3%"
+					pDurationText="للمتابعة الدورية"
+					pUseBg={true}
+					pBgColor="rgba(255,255,255,.10)"
+					pColor={Colors.WhiteOff}
+					pMobMaxCols={1}
 				/>
 
-				<HzStack
-					pGap={new Pixel(18, 12)}
-					pPad={new Pixel(0)}
-					pForceHz
-				>
+			</HzStack>
 
-					<EmoCall BlackSky pText="اطلب إشراف بناء" />
+		</FloatingPanel>
 
-					<Badge
-						pYears="3"
-						pYearsText="بوابات استلام رئيسية"
-						pWorks="2000"
-						pWorksText="جنيه / زيارة مبدئيًا"
-						pDuration="3%"
-						pDurationText="للمتابعة الدورية"
-						pUseBg={true}
-						pBgColor="rgba(255,255,255,.10)"
-						pColor={Colors.WhiteOff}
-						pMobMaxCols={1}
-					/>
-
-				</HzStack>
-
-			</FloatingPanel>
-
-		</FreeHeroItem>
-
-		<FreeHeroItem
-			pLoc={new Location("calc(100% - 430px)", "8%", "calc(100% - 240px)", "calc(100% - 245px)")}
-			pSize={new Size(360, "auto", "84%", "auto")}
-			pRot={new RespString("-2deg", "0deg")}
+		<GlassCard
+			pBg="rgba(255,255,255,.76)"
+			pBorder="rgba(255,255,255,.9)"
+			pRadius={26}
+			pBlur={18}
+			pLoc={new Loc(new NumPer("calc(100% - 430px)", "8%"), new NumPer("calc(100% - 240px)", "calc(100% - 245px)"))}
+			pSize={new Size(new NumPer(360, "84%"), new NumPer("auto", "auto"))}
+			pRotate={new RespString("-2deg", "0deg")}
 			pZ={9}
 		>
 
-			<GlassCard
-				pBg="rgba(255,255,255,.76)"
-				pBorder="rgba(255,255,255,.9)"
-				pRadius={26}
-				pBlur={18}
-			>
+			<Emograph
+				pTitle={Text.H3.DarkSky.OfText("قاعدة الصفحة")}
+				pText={Text.Body.OfText("لا صب، لا إغلاق، لا انتقال للمرحلة التالية قبل استلام هندسي واضح للملاحظات المؤثرة.")}
+			/>
 
-				<Emograph
-					pTitle={Text.H3.DarkSky.OfText("قاعدة الصفحة")}
-					pText={Text.Body.OfText("لا صب، لا إغلاق، لا انتقال للمرحلة التالية قبل استلام هندسي واضح للملاحظات المؤثرة.")}
-				/>
-
-			</GlassCard>
-
-		</FreeHeroItem>
+		</GlassCard>
 
 		<Ribbon
 			pText="STRUCTURE CHECKPOINTS"
 			pBg={cMint}
 			pColor={cInk}
 			pLoc={new Loc(new NumPer("calc(100% - 270px)", "calc(100% - 230px)"), new NumPer(34, 46))}
-			pSize={new DirectSize(new NumPer(220, 190), new NumPer("auto"))}
+			pSize={new Size(new NumPer(220, 190), new NumPer("auto"))}
 			pRotate={new Angle(10, 6)}
 			pZ={8}
 		/>
@@ -1046,13 +1035,14 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="ControlIdea"
 		pBg={new ElemBg(cDark)}
-		pBox={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
-		pAlign={Align.Center}
+		pBox={new Size(new NumPer("100%"), new NumPer("auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<CircleGlow
 			pLoc={new Loc(new NumPer("8%", "5%"), new NumPer(60, 40))}
-			pSize={new DirectSize(new NumPer(260, 180), new NumPer(170, 130))}
+			pSize={new Size(new NumPer(260, 180), new NumPer(170, 130))}
 			pZ={1}
 			pOpacity={new Percent(50, 40)}
 			pColor="rgba(215,245,140,.65)"
@@ -1061,8 +1051,9 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		<EmoStrip
 			pBg={new ElemBg("transparent")}
-			pSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<SecTitle
@@ -1075,7 +1066,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 				pMax={3}
 				pMaxP={1}
 				pGap={new Pixel(22, 18)}
-				pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+				pSize={new Size(new NumPer("100%"), new NumPer("auto"))}
 				Centered
 			>
 
@@ -1127,7 +1118,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		<DoubleWave
 			pLoc={new Loc(new NumPer(0), new NumPer("calc(100% - 120px)", "calc(100% - 85px)"))}
-			pSize={new DirectSize(new NumPer("100%"), new NumPer(120, 85))}
+			pSize={new Size(new NumPer("100%"), new NumPer(120, 85))}
 			pZ={2}
 			pFill={Colors.Gray1}
 			pFill2="rgba(215,245,140,.28)"
@@ -1142,10 +1133,10 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 
 
-	<DuoSec
+	<DuoStr
 		id="OwnerEye"
 		pBg={new ElemBg(Colors.Gray1)}
-		pContentSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+		pContentSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
 		pGap={new Pixel(26, 16)}
 		pPad={new Pixel(70, 34)}
 	>
@@ -1153,7 +1144,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 		<DuoCol
 			pBgColor={new ElemBg(Colors.WhiteOff)}
 			pPad={new Pixel(44, 22)}
-			pAlign="Start"
+			pHzAlign="Start"
+			pVrAlign="Start"
 		>
 
 			<Emograph
@@ -1180,7 +1172,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 		>
 
 			<RespImg
-				pImg={new EmoMediaData("Img", cMedia, "HeroL.webp", false, "إشراف هندسي على البناء", new Size("100%", "auto", "100%", "auto"))}
+				pImg={new EmoMediaData("Img", cMedia, "HeroL.webp", false, "إشراف هندسي على البناء", new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto")))}
 			/>
 
 			<GlassCard
@@ -1199,7 +1191,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		</DuoCol>
 
-	</DuoSec>
+	</DuoStr>
 
 
 
@@ -1210,7 +1202,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="CoreTasks"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1221,15 +1214,16 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.WhiteOff)}
-			pSize={new DirectSize(new NumPer("min(1240px, calc(100% - 24px))"), new NumPer("auto"))}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer("min(1240px, calc(100% - 24px))"), new NumPer("auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Grid
 				pMax={3}
 				pMaxP={1}
 				pGap={new Pixel(24, 18)}
-				pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+				pSize={new Size(new NumPer("100%"), new NumPer("auto"))}
 				Centered
 			>
 
@@ -1240,7 +1234,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 				>
 
 					<RespImg
-						pImg={new EmoMediaData("Img", cMedia, "SV_Tasks_Step1.webp", false, "أعمال النجارة المسلحة", new Size("100%", "auto", "100%", "auto"))}
+						pImg={new EmoMediaData("Img", cMedia, "SV_Tasks_Step1.webp", false, "أعمال النجارة المسلحة", new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto")))}
 					/>
 
 					<Emograph
@@ -1257,7 +1251,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 				>
 
 					<RespImg
-						pImg={new EmoMediaData("Img", cMedia, "SV_Tasks_Step2.webp", false, "أعمال الحدادة المسلحة", new Size("100%", "auto", "100%", "auto"))}
+						pImg={new EmoMediaData("Img", cMedia, "SV_Tasks_Step2.webp", false, "أعمال الحدادة المسلحة", new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto")))}
 					/>
 
 					<Emograph
@@ -1274,7 +1268,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 				>
 
 					<RespImg
-						pImg={new EmoMediaData("Img", cMedia, "SV_Tasks_Step3.webp", false, "صب الخرسانة والفرمجة", new Size("100%", "auto", "100%", "auto"))}
+						pImg={new EmoMediaData("Img", cMedia, "SV_Tasks_Step3.webp", false, "صب الخرسانة والفرمجة", new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto")))}
 					/>
 
 					<Emograph
@@ -1296,10 +1290,10 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 
 
-	<DuoSec
+	<DuoStr
 		id="Scope"
 		pBg={new ElemBg(Colors.Creamy)}
-		pContentSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+		pContentSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
 		pGap={new Pixel(28, 16)}
 		pPad={new Pixel(70, 34)}
 	>
@@ -1313,7 +1307,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 		<DuoCol
 			pBgColor={new ElemBg(Colors.WhiteOff)}
 			pPad={new Pixel(34, 20)}
-			pAlign="Start"
+			pHzAlign="Start"
+			pVrAlign="Start"
 		>
 
 			<EmoList
@@ -1337,7 +1332,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 		<DuoCol
 			pBgColor={new ElemBg(Colors.WhiteOff)}
 			pPad={new Pixel(34, 20)}
-			pAlign="Start"
+			pHzAlign="Start"
+			pVrAlign="Start"
 		>
 
 			<EmoList
@@ -1358,7 +1354,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		</DuoCol>
 
-	</DuoSec>
+	</DuoStr>
 
 
 
@@ -1369,21 +1365,22 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="Foundations"
 		pBg={new ElemBg(cDark)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<LinePath
 			pLoc={new Loc(new NumPer(40, 20), new NumPer(50, 40))}
-			pSize={new DirectSize(new NumPer(260, 160), new NumPer(150, 105))}
+			pSize={new Size(new NumPer(260, 160), new NumPer(150, 105))}
 			pZ={2}
 			pOpacity={new Percent(70, 55)}
 			pStroke="rgba(215,245,140,.86)"
 			pDot="#FAFAFA"
 		/>
 
-		<DuoSec
+		<DuoStr
 			pBg={new ElemBg("transparent")}
-			pContentSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+			pContentSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
 			pGap={new Pixel(28, 16)}
 			pPad={new Pixel(72, 34)}
 		>
@@ -1391,7 +1388,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			<DuoCol
 				pBgColor={new ElemBg("rgba(255,255,255,.08)")}
 				pPad={new Pixel(36, 20)}
-				pAlign="Start"
+				pHzAlign="Start"
+				pVrAlign="Start"
 				pBlur={new Pixel(10)}
 			>
 
@@ -1401,7 +1399,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 				/>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", cMedia, "FoundationLevel.webp", false, "استلام أعمال الأساسات", new Size("100%", "auto", "100%", "auto"))}
+					pImg={new EmoMediaData("Img", cMedia, "FoundationLevel.webp", false, "استلام أعمال الأساسات", new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto")))}
 				/>
 
 			</DuoCol>
@@ -1409,7 +1407,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			<DuoCol
 				pBgColor={new ElemBg(Colors.WhiteOff)}
 				pPad={new Pixel(32, 18)}
-				pAlign="Start"
+				pHzAlign="Start"
+				pVrAlign="Start"
 			>
 
 				<EmoList
@@ -1447,7 +1446,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 			</DuoCol>
 
-		</DuoSec>
+		</DuoStr>
 
 	</ESec>
 
@@ -1460,12 +1459,13 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="Columns"
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
-		<DuoSec
+		<DuoStr
 			pBg={new ElemBg("transparent")}
-			pContentSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+			pContentSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
 			pGap={new Pixel(28, 16)}
 			pPad={new Pixel(72, 34)}
 		>
@@ -1477,7 +1477,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", cMedia, "ColumnsLevel.webp", false, "استلام أعمال الأعمدة", new Size("100%", "auto", "100%", "auto"))}
+					pImg={new EmoMediaData("Img", cMedia, "ColumnsLevel.webp", false, "استلام أعمال الأعمدة", new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto")))}
 				/>
 
 				<GlassCard pBg="rgba(255,255,255,.72)" pBorder="rgba(255,255,255,.88)">
@@ -1494,7 +1494,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			<DuoCol
 				pBgColor={new ElemBg(Colors.WhiteOff)}
 				pPad={new Pixel(32, 18)}
-				pAlign="Start"
+				pHzAlign="Start"
+				pVrAlign="Start"
 			>
 
 				<EmoList
@@ -1525,7 +1526,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 			</DuoCol>
 
-		</DuoSec>
+		</DuoStr>
 
 	</ESec>
 
@@ -1538,21 +1539,22 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="Slabs"
 		pBg={new ElemBg(cDark)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<BlurBlob
 			pLoc={new Loc(new NumPer("calc(100% - 340px)", "calc(100% - 220px)"), new NumPer(45, 40))}
-			pSize={new DirectSize(new NumPer(280, 180), new NumPer(180, 130))}
+			pSize={new Size(new NumPer(280, 180), new NumPer(180, 130))}
 			pZ={1}
 			pOpacity={new Percent(55, 40)}
 			pColor="rgba(50,143,232,.55)"
 			pColor2="rgba(215,245,140,.32)"
 		/>
 
-		<DuoSec
+		<DuoStr
 			pBg={new ElemBg("transparent")}
-			pContentSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+			pContentSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
 			pGap={new Pixel(28, 16)}
 			pPad={new Pixel(72, 34)}
 		>
@@ -1560,7 +1562,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			<DuoCol
 				pBgColor={new ElemBg("rgba(255,255,255,.08)")}
 				pPad={new Pixel(36, 20)}
-				pAlign="Start"
+				pHzAlign="Start"
+				pVrAlign="Start"
 				pBlur={new Pixel(10)}
 			>
 
@@ -1570,7 +1573,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 				/>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", cMedia, "SlabLevel.webp", false, "استلام أعمال السقف", new Size("100%", "auto", "100%", "auto"))}
+					pImg={new EmoMediaData("Img", cMedia, "SlabLevel.webp", false, "استلام أعمال السقف", new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto")))}
 				/>
 
 			</DuoCol>
@@ -1578,7 +1581,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 			<DuoCol
 				pBgColor={new ElemBg(Colors.WhiteOff)}
 				pPad={new Pixel(32, 18)}
-				pAlign="Start"
+				pHzAlign="Start"
+				pVrAlign="Start"
 			>
 
 				<EmoList
@@ -1609,7 +1613,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 			</DuoCol>
 
-		</DuoSec>
+		</DuoStr>
 
 	</ESec>
 
@@ -1622,7 +1626,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="DecisionMatrix"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1633,15 +1638,16 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.WhiteOff)}
-			pSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Grid
 				pMax={4}
 				pMaxP={1}
 				pGap={new Pixel(20, 16)}
-				pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+				pSize={new Size(new NumPer("100%"), new NumPer("auto"))}
 				Centered
 			>
 
@@ -1716,7 +1722,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="Pricing"
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1727,8 +1734,9 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.Gray1)}
-			pSize={new DirectSize(new NumPer("min(1120px, calc(100% - 24px))"), new NumPer("auto"))}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer("min(1120px, calc(100% - 24px))"), new NumPer("auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<HzStack pGap={new Pixel(24, 16)} pPad={new Pixel(0)}>
@@ -1738,7 +1746,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 					pStart={Text.H3.Bold.OfText("تبدأ من")}
 					pPrice={2000}
 					pCurrency={Text.H3.Bold.OfText("جنيه")}
-					pSize={new DirectSize(new NumPer(420, 320), new NumPer(130, 105))}
+					pSize={new Size(new NumPer(420, 320), new NumPer(130, 105))}
 					data-own-size
 				/>
 
@@ -1747,7 +1755,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 					pStart={Text.H3.Bold.OfText("نسبة")}
 					pPrice={3}
 					pCurrency={Text.H3.Bold.OfText("%")}
-					pSize={new DirectSize(new NumPer(420, 320), new NumPer(130, 105))}
+					pSize={new Size(new NumPer(420, 320), new NumPer(130, 105))}
 					data-own-size
 				/>
 
@@ -1773,10 +1781,10 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 
 
-	<DuoSec
+	<DuoStr
 		id="BeforeStart"
 		pBg={new ElemBg(Colors.Creamy)}
-		pContentSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+		pContentSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
 		pGap={new Pixel(28, 16)}
 		pPad={new Pixel(70, 34)}
 	>
@@ -1790,7 +1798,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 		<DuoCol
 			pBgColor={new ElemBg(Colors.WhiteOff)}
 			pPad={new Pixel(34, 20)}
-			pAlign="Start"
+			pHzAlign="Start"
+			pVrAlign="Start"
 		>
 
 			<EmoList
@@ -1814,7 +1823,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 		<DuoCol
 			pBgColor={new ElemBg(Colors.WhiteOff)}
 			pPad={new Pixel(34, 20)}
-			pAlign="Start"
+			pHzAlign="Start"
+			pVrAlign="Start"
 		>
 
 			<EmoList
@@ -1835,7 +1845,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		</DuoCol>
 
-	</DuoSec>
+	</DuoStr>
 
 
 
@@ -1846,7 +1856,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="Mistakes"
 		pBg={new ElemBg(cDark)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1857,15 +1868,16 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		<EmoStrip
 			pBg={new ElemBg("transparent")}
-			pSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Grid
 				pMax={3}
 				pMaxP={1}
 				pGap={new Pixel(22, 16)}
-				pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+				pSize={new Size(new NumPer("100%"), new NumPer("auto"))}
 				Centered
 			>
 
@@ -1929,7 +1941,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		<WaveBottom
 			pLoc={new Loc(new NumPer(0), new NumPer("calc(100% - 95px)", "calc(100% - 70px)"))}
-			pSize={new DirectSize(new NumPer("100%"), new NumPer(95, 70))}
+			pSize={new Size(new NumPer("100%"), new NumPer(95, 70))}
 			pZ={2}
 			pFill={Colors.Gray1}
 			pFill2="rgba(215,245,140,.24)"
@@ -1943,10 +1955,10 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 
 
-	<DuoSec
+	<DuoStr
 		id="ReportsAndLimits"
 		pBg={new ElemBg(Colors.Gray1)}
-		pContentSize={new DirectSize(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
+		pContentSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
 		pGap={new Pixel(28, 16)}
 		pPad={new Pixel(70, 34)}
 	>
@@ -1960,7 +1972,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 		<DuoCol
 			pBgColor={new ElemBg(Colors.WhiteOff)}
 			pPad={new Pixel(34, 20)}
-			pAlign="Start"
+			pHzAlign="Start"
+			pVrAlign="Start"
 		>
 
 			<CardsGr
@@ -1979,7 +1992,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 		<DuoCol
 			pBgColor={new ElemBg(Colors.WhiteOff)}
 			pPad={new Pixel(34, 20)}
-			pAlign="Start"
+			pHzAlign="Start"
+			pVrAlign="Start"
 		>
 
 			<EmoList
@@ -1999,7 +2013,7 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		</DuoCol>
 
-	</DuoSec>
+	</DuoStr>
 
 
 
@@ -2010,7 +2024,8 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 	<ESec
 		id="Compare"
 		pBg={new ElemBg(Colors.Creamy)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -2021,8 +2036,9 @@ import { Hero, ESec, EmoStrip, EmoCall, CardsGr, EmoList, Emograph, RespImg, Rea
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.Creamy)}
-			pSize={new DirectSize(new NumPer("min(1120px, calc(100% - 24px))"), new NumPer("auto"))}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer("min(1120px, calc(100% - 24px))"), new NumPer("auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<CardsGr

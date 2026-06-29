@@ -1,9 +1,8 @@
 ---
+import { GetHzAlignCss, GetVrAlignCss, type HzAlignValue, Place, type PlaceProps, type VrAlignValue } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import { Place, type PlaceProps } from "@/TypesLib";
-
-interface Props extends DebugOutlineProps, HTMLAttributes<"article">, PlaceProps { pBadge?: string; pBg?: string; pBadgeBg?: string; pColor?: string; }
-const { pBadge = "NEW", pBg = "#FAFAFA", pBadgeBg = "#A7C45C", pColor = "#111111", pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly,
+interface Props extends DebugOutlineProps, HTMLAttributes<"article">, PlaceProps { pBadge?: string; pBg?: string; pBadgeBg?: string; pColor?: string; pHzAlign?: HzAlignValue; pVrAlign?: VrAlignValue; }
+const { pBadge = "NEW", pBg = "#FAFAFA", pBadgeBg = "#A7C45C", pColor = "#111111", pHzAlign = "Stretch", pVrAlign = "Center", pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly,
 	pMove,
 	pMoveDuration,
 	pMoveLoc,
@@ -25,7 +24,13 @@ const { pBadge = "NEW", pBg = "#FAFAFA", pBadgeBg = "#A7C45C", pColor = "#111111
 	pMoveViewTarget,
  id: pGivenID = GetWidgetId("BadgeFrame"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
-const cPlace = new Place(Astro.props as PlaceProps, `--BadgeFrameBg:${pBg}; --BadgeFrameColor:${pColor}; --BadgeBg:${pBadgeBg}; ${cGivenStyle}`);
+const cHasExplicitHeight = HasExplicitCssSize(pSize?.HeightL) || HasExplicitCssSize(pSize?.HeightP);
+const cPlace = new Place(Astro.props as PlaceProps, `--BadgeFrameBg:${pBg}; --BadgeFrameColor:${pColor}; --BadgeBg:${pBadgeBg}; --BadgeFrameHzAlign:${GetHzAlignCss(pHzAlign)}; --BadgeFrameVrAlign:${GetVrAlignCss(pVrAlign)}; ${cGivenStyle}`);
+
+function HasExplicitCssSize(pValue?: string) {
+	const cValue = `${pValue ?? ""}`.trim().toLowerCase();
+	return cValue !== "" && cValue !== "auto" && cValue !== "fit-content" && cValue !== "max-content" && cValue !== "min-content";
+}
 ---
 
 
@@ -51,6 +56,9 @@ const cPlace = new Place(Astro.props as PlaceProps, `--BadgeFrameBg:${pBg}; --Ba
 	class = {`BadgeFrame ${cPlace.Class} ${pGivenClass}`.trim()}
 	style = {cPlace.Style}
 	id={pGivenID}
+	data-emo-auto-container="true"
+	data-emo-explicit-height={cHasExplicitHeight ? "true" : "false"}
+	data-emo-empty-height="200"
 	{...RemAttr}
 >
 
@@ -107,7 +115,8 @@ const cPlace = new Place(Astro.props as PlaceProps, `--BadgeFrameBg:${pBg}; --Ba
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
+		align-items: var(--BadgeFrameHzAlign, stretch);
+		justify-content: var(--BadgeFrameVrAlign, center);
 		width: 100%;
 		height: auto;
 		padding: clamp(22px, 3vw, 40px);

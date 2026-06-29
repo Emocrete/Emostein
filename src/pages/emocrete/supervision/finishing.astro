@@ -1,7 +1,7 @@
 ---
+import { Align, Angle, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, EmoMediaData, Colors, Pixel, Topic, Size, Align,Loc, RespString,Angle, DirectSize,   NumPer, Percent } from "@/TypesLib";
-import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePath, FloatingIcon, Ribbon, GlassCard, FloatingPanel, BadgeFrame, TiltCard, TornPaper, DuoSec, DuoCol, EmoCall, CardsGr, EmoList, Emograph, RespImg, ReadAlso, RelServices, EmoFaq, EmoContactStrip, SecTitle, VrStack, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { Badge, BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, EmoContactStrip, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, FloatingIcon, FloatingPanel, GlassCard, Grid, Hero, HzStack, LinePath, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, Ribbon, SecTitle, SvgDots, TiltCard, TornPaper, VrStack } from "@/Widgets";
 ---
 
 
@@ -40,8 +40,9 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 	>
 
 		<VrStack
-			pAlign="Center"
-			pSize={new DirectSize(new NumPer("40%","98%"))}
+			pHzAlign="Center"
+			pVrAlign="Center"
+			pSize={new Size(new NumPer("40%","98%"))}
 			pLoc={new Loc(new NumPer("5%","1%"),new NumPer("20%","10%"))}
 			pGap={new Pixel(50,5)}
 		>
@@ -61,7 +62,7 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 
 		<VrStack
 			pLandOnly
-			pSize={new DirectSize(new NumPer("60%","95%"))}
+			pSize={new Size(new NumPer("60%","95%"))}
 			pLoc={new Loc(new NumPer("40%","2.5%"),new NumPer("65%","60%"))}
 			data-own-size
 		>
@@ -80,14 +81,15 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 
 	<ESec
 		id="FinishSupervisionOpening"
-		pBox={new DirectSize(new NumPer("100%"), new NumPer(690, 920))}
+		pBox={new Size(new NumPer("100%"), new NumPer(690, 920))}
 		pBg={new ElemBg("#101722")}
-		pAlign={new Align("Center", "Center")}
+		pHzAlign={new Align("Center", "Center")}
+		pVrAlign={new Align("Center", "Center")}
 	>
 
 		<CircleGlow
 			pLoc={new Loc(new NumPer("6%", "-18%"), new NumPer("8%", "2%"))}
-			pSize={new DirectSize(new NumPer(430, 260), new NumPer(430, 260))}
+			pSize={new Size(new NumPer(430, 260), new NumPer(430, 260))}
 			pOpacity={new Percent(38, 44)}
 			pColor="rgba(242,193,78,.72)"
 			pColor2="rgba(255,255,255,.22)"
@@ -95,7 +97,7 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 
 		<BlurBlob
 			pLoc={new Loc(new NumPer("calc(100% - 420px)", "52%"), new NumPer("calc(100% - 300px)", "62%"))}
-			pSize={new DirectSize(new NumPer(360, 260), new NumPer(260, 230))}
+			pSize={new Size(new NumPer(360, 260), new NumPer(260, 230))}
 			pRotate={new Angle(-12, -8)}
 			pOpacity={new Percent(40, 34)}
 			pColor="rgba(44,118,173,.68)"
@@ -105,7 +107,7 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 
 		<SvgDots
 			pLoc={new Loc(new NumPer("calc(100% - 410px)", "calc(100% - 210px)"), new NumPer(70, 95))}
-			pSize={new DirectSize(new NumPer(320, 220), new NumPer(170, 180))}
+			pSize={new Size(new NumPer(320, 220), new NumPer(170, 180))}
 			pOpacity={new Percent(42, 36)}
 			pColor="rgba(255,255,255,.34)"
 			pGap={24}
@@ -114,7 +116,7 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 
 		<LinePath
 			pLoc={new Loc(new NumPer("8%", "3%"), new NumPer("calc(100% - 210px)", "calc(100% - 190px)"))}
-			pSize={new DirectSize(new NumPer("84%", "94%"), new NumPer(160, 120))}
+			pSize={new Size(new NumPer("84%", "94%"), new NumPer(160, 120))}
 			pOpacity={new Percent(36, 42)}
 			pStroke="rgba(242,193,78,.75)"
 			pDot="#F2C14E"
@@ -123,7 +125,7 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 
 		<GlassCard
 			pLoc={new Loc(new NumPer("calc(50% - 420px)", "calc(50% - 170px)"), new NumPer("calc(50% - 210px)", "calc(50% - 315px)"))}
-			pSize={new DirectSize(new NumPer(840, 340), new NumPer(420, 630))}
+			pSize={new Size(new NumPer(840, 340), new NumPer(420, 630))}
 			pBg="rgba(255,255,255,.86)"
 			pBorder="rgba(255,255,255,.95)"
 			pRadius={34}
@@ -134,14 +136,14 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 			<Emograph
 				pTitle={Text.H1.Centered.WithColor("#101722").OfText("إشراف هندسي على التشطيبات")}
 				pText={Text.Body.Centered.WithColor("#1D2A3B").OfText("متابعة هندسية منظمة لأعمال التشطيب الداخلي والخارجي، تضبط تسلسل البنود، تراجع الخامات قبل الاستخدام، تتابع التنفيذ في الموقع، وتستلم الأعمال مرحلة بعد مرحلة حتى يصل المشروع إلى جاهزية فعلية للتسليم وفق الرسومات المعتمدة والمواصفات الفنية.")}
-				pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+				pSize={new Size(new NumPer("100%"), new NumPer("auto"))}
 			/>
 
 			<Grid
 				pMax={3}
 				pMaxP={1}
 				pGap={new Pixel(18, 12)}
-				pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+				pSize={new Size(new NumPer("100%"), new NumPer("auto"))}
 			>
 
 				<BadgeFrame
@@ -190,7 +192,7 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		<FloatingIcon
 			pIcon="check"
 			pLoc={new Loc(new NumPer("16%", "8%"), new NumPer("calc(100% - 145px)", "calc(100% - 120px)"))}
-			pSize={new DirectSize(new NumPer(76, 52), new NumPer(76, 52))}
+			pSize={new Size(new NumPer(76, 52), new NumPer(76, 52))}
 			pBg="#F2C14E"
 			pFill="#101722"
 			pZ={12}
@@ -199,7 +201,7 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		<FloatingIcon
 			pIcon="pin"
 			pLoc={new Loc(new NumPer("calc(100% - 150px)", "calc(100% - 90px)"), new NumPer(150, 140))}
-			pSize={new DirectSize(new NumPer(82, 54), new NumPer(82, 54))}
+			pSize={new Size(new NumPer(82, 54), new NumPer(82, 54))}
 			pBg="#2C76AD"
 			pFill="#FFFFFF"
 			pZ={12}
@@ -213,10 +215,10 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 
 
 
-	<DuoSec
+	<DuoStr
 		id="FinishSupervisionScope"
 		pBg={new ElemBg("#F3E8D2")}
-		pContentSize={new DirectSize(new NumPer("min(1180px, calc(100% - 24px))"), new NumPer("auto"))}
+		pContentSize={new Size(new NumPer("min(1180px, calc(100% - 24px))"), new NumPer("auto"))}
 		pGap={new Pixel(26, 18)}
 		pPad={new Pixel(70, 36)}
 	>
@@ -231,11 +233,11 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 			<Emograph
 				pTitle={Text.H2.White.OfText("نطاق الخدمة")}
 				pText={Text.Body.White.OfText("تبدأ الخدمة بمراجعة الرسومات والمواصفات ونطاق العمل، ثم تحويلها إلى خطة تنفيذ عملية تشمل ترتيب البنود، تقدير الكميات المطلوبة، تنظيم مواعيد التوريد، والتنسيق بين أعمال الجدران والأرضيات والأسقف والإنارة والتمديدات والنجارة والدهانات وبقية عناصر التشطيب بحسب طبيعة المشروع.")}
-				pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+				pSize={new Size(new NumPer("100%"), new NumPer("auto"))}
 			/>
 
 			<LinePath
-				pSize={new DirectSize(new NumPer("100%"), new NumPer(120, 90))}
+				pSize={new Size(new NumPer("100%"), new NumPer(120, 90))}
 				pStroke="rgba(242,193,78,.7)"
 				pDot="#F2C14E"
 				pWidth={3}
@@ -280,7 +282,7 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 
 		</DuoCol>
 
-	</DuoSec>
+	</DuoStr>
 
 
 
@@ -303,13 +305,14 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 	<ESec
 		id="ExecutionPath"
 		pBg={new ElemBg("#101722")}
-		pBox={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
-		pAlign={new Align("Center", "Center")}
+		pBox={new Size(new NumPer("100%"), new NumPer("auto"))}
+		pHzAlign={new Align("Center", "Center")}
+		pVrAlign={new Align("Center", "Center")}
 	>
 
 		<CircleGlow
 			pLoc={new Loc(new NumPer("calc(100% - 300px)", "calc(100% - 170px)"), new NumPer(60, 70))}
-			pSize={new DirectSize(new NumPer(240, 150), new NumPer(150, 110))}
+			pSize={new Size(new NumPer(240, 150), new NumPer(150, 110))}
 			pOpacity={new Percent(34, 32)}
 			pColor="rgba(242,193,78,.62)"
 			pColor2="rgba(255,255,255,.22)"
@@ -317,21 +320,22 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 
 		<SvgDots
 			pLoc={new Loc(new NumPer(40, 18), new NumPer("calc(100% - 260px)", "calc(100% - 210px)"))}
-			pSize={new DirectSize(new NumPer(360, 220), new NumPer(210, 170))}
+			pSize={new Size(new NumPer(360, 220), new NumPer(210, 170))}
 			pOpacity={new Percent(30, 28)}
 			pColor="rgba(255,255,255,.28)"
 		/>
 
 		<EmoStrip
 			pBg={new ElemBg("transparent")}
-			pSize={new DirectSize(new NumPer("min(1180px, calc(100% - 24px))"), new NumPer("auto"))}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer("min(1180px, calc(100% - 24px))"), new NumPer("auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.White.OfText("مسار الإشراف من التخطيط إلى التسليم")}
 				pText={Text.Body.Centered.White.OfText("الخامات، الجودة، الاستلام، الملاحظات، والدفعات ليست فقرات منفصلة هنا؛ كلها جزء من مسار واحد يبدأ من التخطيط وينتهي بتسليم قابل للمراجعة.")}
-				pSize={new DirectSize(new NumPer("min(940px, 100%)"), new NumPer("auto"))}
+				pSize={new Size(new NumPer("min(940px, 100%)"), new NumPer("auto"))}
 			/>
 
 			<Grid
@@ -339,7 +343,7 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 				pMaxP={1}
 				pGap={new Pixel(22, 16)}
 				pPad={new Pixel(18, 0)}
-				pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+				pSize={new Size(new NumPer("100%"), new NumPer("auto"))}
 			>
 
 				<FloatingPanel
@@ -435,20 +439,22 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 	<ESec
 		id="SiteFollowUp"
 		pBg={new ElemBg("#FAFAFA")}
-		pBox={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
-		pAlign={Align.Center}
+		pBox={new Size(new NumPer("100%"), new NumPer("auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#FAFAFA")}
-			pSize={new DirectSize(new NumPer("min(1180px, calc(100% - 24px))"), new NumPer("auto"))}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer("min(1180px, calc(100% - 24px))"), new NumPer("auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<HzStack
 				pGap={new Pixel(28, 18)}
 				pPad={new Pixel(70, 34)}
-				pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+				pSize={new Size(new NumPer("100%"), new NumPer("auto"))}
 			>
 
 				<GlassCard
@@ -469,7 +475,7 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 					pMax={2}
 					pMaxP={1}
 					pGap={new Pixel(18, 14)}
-					pSize={new DirectSize(new NumPer("560px", "100%"), new NumPer("auto"))}
+					pSize={new Size(new NumPer("560px", "100%"), new NumPer("auto"))}
 				>
 
 					<TiltCard
@@ -538,10 +544,10 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 
 
 
-	<DuoSec
+	<DuoStr
 		id="AcceptancePaymentsReports"
 		pBg={new ElemBg("#F3E8D2")}
-		pContentSize={new DirectSize(new NumPer("min(1180px, calc(100% - 24px))"), new NumPer("auto"))}
+		pContentSize={new Size(new NumPer("min(1180px, calc(100% - 24px))"), new NumPer("auto"))}
 		pGap={new Pixel(24, 18)}
 		pPad={new Pixel(78, 38)}
 	>
@@ -554,7 +560,7 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 
 			<Ribbon
 				pText="اعتماد الأعمال"
-				pSize={new DirectSize(new NumPer("100%"), new NumPer(64, 54))}
+				pSize={new Size(new NumPer("100%"), new NumPer(64, 54))}
 				pBg="#15233A"
 				pColor="#FAFAFA"
 			/>
@@ -585,7 +591,7 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 
 			<Ribbon
 				pText="الخامات والدفعات"
-				pSize={new DirectSize(new NumPer("100%"), new NumPer(64, 54))}
+				pSize={new Size(new NumPer("100%"), new NumPer(64, 54))}
 				pBg="#F2C14E"
 				pColor="#101722"
 			/>
@@ -608,7 +614,7 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 
 		</DuoCol>
 
-	</DuoSec>
+	</DuoStr>
 
 
 
@@ -619,13 +625,14 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 	<ESec
 		id="ProjectTypesAndTiming"
 		pBg={new ElemBg("#FFFFFF")}
-		pBox={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
-		pAlign={Align.Center}
+		pBox={new Size(new NumPer("100%"), new NumPer("auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<BlurBlob
 			pLoc={new Loc(new NumPer(-80, -60), new NumPer(80, 90))}
-			pSize={new DirectSize(new NumPer(280, 170), new NumPer(170, 130))}
+			pSize={new Size(new NumPer(280, 170), new NumPer(170, 130))}
 			pOpacity={new Percent(28, 24)}
 			pColor="rgba(242,193,78,.62)"
 			pColor2="rgba(44,118,173,.42)"
@@ -634,14 +641,15 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 
 		<EmoStrip
 			pBg={new ElemBg("#FFFFFF")}
-			pSize={new DirectSize(new NumPer("min(1180px, calc(100% - 24px))"), new NumPer("auto"))}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer("min(1180px, calc(100% - 24px))"), new NumPer("auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#15233A").OfText("أنواع المشاريع وتوقيت بدء الإشراف")}
 				pText={Text.Body.Centered.WithColor("#15233A").OfText("الخدمة مناسبة للشقق، الفلل، العمارات، المكاتب، المحلات، والمشاريع التجارية والإدارية التي تحتاج إلى جهة هندسية تتابع التنفيذ على الأرض، وتنسق بين الأطراف، وتحافظ على مستوى واضح من الجودة حتى التسليم.")}
-				pSize={new DirectSize(new NumPer("min(980px, 100%)"), new NumPer("auto"))}
+				pSize={new Size(new NumPer("min(980px, 100%)"), new NumPer("auto"))}
 			/>
 
 			<Grid
@@ -649,7 +657,7 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 				pMaxP={1}
 				pGap={new Pixel(20, 14)}
 				pPad={new Pixel(24, 0)}
-				pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+				pSize={new Size(new NumPer("100%"), new NumPer("auto"))}
 			>
 
 				<BadgeFrame
@@ -748,10 +756,10 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 
 
 
-	<DuoSec
+	<DuoStr
 		id="StartAndOwnerOutput"
 		pBg={new ElemBg("#101722")}
-		pContentSize={new DirectSize(new NumPer("min(1180px, calc(100% - 24px))"), new NumPer("auto"))}
+		pContentSize={new Size(new NumPer("min(1180px, calc(100% - 24px))"), new NumPer("auto"))}
 		pGap={new Pixel(26, 18)}
 		pPad={new Pixel(78, 38)}
 	>
@@ -799,7 +807,7 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 
 		</DuoCol>
 
-	</DuoSec>
+	</DuoStr>
 
 
 
@@ -810,13 +818,15 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 	<ESec
 		id="OriginalTasks"
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 		hidden
 	>
 
 		<SecTitle OrangeDark pTitle="المحاور الأساسية لخدمة الإشراف على التشطيبات" />
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1200px", "100%")}
@@ -842,12 +852,14 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		hidden
 		id="Fees"
 		pBg={new ElemBg("#F7F1E6")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle Sky pTitle="أتعاب الإشراف الهندسي على التشطيبات" />
 
-		<EmoStrip pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(25, 16)} pPad={new Pixel(0, 0)}>
 
@@ -893,19 +905,21 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		hidden
 		id="WorkFlow"
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#15233A")}
-			pSize={new Size(1200, "auto", "calc(100% - 24px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 24px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.White.OfText("مسار الإشراف من أول معاينة إلى التسليم")}
 				pText={Text.Body.Centered.White.OfText("الإشراف على التشطيبات لا يبدأ عند دهان آخر حائط. يبدأ قبل دخول أول عامل، لأن ترتيب الأعمال هو الذي يمنع إعادة التكسير وإعادة الشراء وإعادة التركيب.")}
-				pSize={new Size(1000, "auto", "100%", "auto")}
+				pSize={new Size(new NumPer(1000, "100%"), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -935,7 +949,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		hidden
 		id="FinishItems"
 		pBg={new ElemBg("#F7F1E6")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -944,7 +959,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 			pDesc="كل بند تشطيب له لحظة استلام حرجة. بعد هذه اللحظة يصبح العلاج أصعب أو أغلى أو ظاهرًا في الشكل النهائي."
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(25, 16)} pPad={new Pixel(0, 0)}>
 
@@ -994,7 +1010,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		hidden
 		id="Quality"
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1003,7 +1020,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 			pDesc="التشطيب يعتمد على عشرات القرارات الصغيرة. عند تركها للموقع وحده، يصبح الحكم النهائي للسرعة أو العادة أو مصلحة المقاول، لا لما اتفق عليه المالك في الجودة والشكل والتكلفة."
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1200px", "100%")}
@@ -1032,19 +1050,21 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		hidden
 		id="Payments"
 		pBg={new ElemBg("#F7F1E6")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#F2C14E")}
-			pSize={new Size(1200, "auto", "calc(100% - 24px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 24px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#15233A").OfText("متابعة الخامات والدفعات المالية")}
 				pText={Text.Body.Centered.OfText("أكبر مساحة نزاع في التشطيبات ليست دائمًا جودة التنفيذ، بل: من اشترى؟ ماذا استُهلك؟ هل البند انتهى؟ وهل يستحق المقاول الدفعة المطلوبة؟")}
-				pSize={new Size(1000, "auto", "100%", "auto")}
+				pSize={new Size(new NumPer(1000, "100%"), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -1097,7 +1117,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		hidden
 		id="ProjectTypes"
 		pBg={new ElemBg("#F7F1E6")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1106,7 +1127,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 			pDesc="نفس كلمة تشطيب لا تعني نفس نطاق المتابعة. الشقة تختلف عن الفيلا، والمحل التجاري يختلف عن الصيدلية أو العيادة أو المكتب."
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1200px", "100%")}
@@ -1135,7 +1157,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		hidden
 		id="Boundaries"
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1144,7 +1167,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 			pDesc="تحديد الحدود من البداية يحمي المالك والمهندس والمقاول. بعض الخدمات تكون ضمن الإشراف، وبعضها يحتاج اتفاقًا مستقلًا حسب درجة تدخل المهندس المطلوبة."
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(25, 16)} pPad={new Pixel(0, 0)}>
 
@@ -1198,19 +1222,21 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		hidden
 		id="Snagging"
 		pBg={new ElemBg("#F7F1E6")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#F2C14E")}
-			pSize={new Size(1200, "auto", "calc(100% - 24px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 24px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#15233A").OfText("الاستلام النهائي وقائمة الملاحظات")}
 				pText={Text.Body.Centered.OfText("التسليم الجيد لا يعتمد على جولة سريعة بعد انتهاء العمل. الأفضل أن تُدار الملاحظات طوال المشروع، ثم يتم تجميع المتبقي في قائمة واضحة قبل الدفعة الأخيرة.")}
-				pSize={new Size(1000, "auto", "100%", "auto")}
+				pSize={new Size(new NumPer(1000, "100%"), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -1240,7 +1266,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		hidden
 		id="Deliverables"
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1249,7 +1276,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 			pDesc="طريقة التوثيق تختلف حسب حجم المشروع، لكن الهدف واحد: أن يعرف المالك ما تم استلامه، وما عليه ملاحظات، وما يمكن صرفه، وما يجب إيقافه."
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1200px", "100%")}
@@ -1278,7 +1306,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		hidden
 		id="ServiceIntro"
 		pBg={new ElemBg("#F7F1E6")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1299,7 +1328,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		hidden
 		id="ServiceScope"
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1308,7 +1338,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 			pDesc="تبدأ الخدمة من قراءة الرسومات والمواصفات ونطاق العمل، ثم تحويلها إلى خطة تنفيذ واضحة يمكن متابعتها في الموقع."
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -1337,7 +1368,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		hidden
 		id="SiteFollowUp"
 		pBg={new ElemBg("#F7F1E6")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1346,14 +1378,15 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 			pDesc="المتابعة لا تقتصر على حضور المهندس في الموقع، بل تشمل توجيه التنفيذ، تفسير التفاصيل، مراجعة الخامات، وضبط التعارضات قبل انتقالها إلى مراحل لاحقة."
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 18)} pPad={new Pixel(0, 0)}>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#15233A").OfText("ما الذي يحدث أثناء المتابعة؟")}
 					pText={Text.Body.OfText("تشمل المتابعة اليومية أو الدورية توجيه فرق التنفيذ، تفسير التفاصيل الفنية للعمالة والمقاولين، مراجعة جودة الأعمال والخامات والتفاصيل النهائية، ومعالجة التعارضات بين البنود قبل انتقالها إلى المراحل التالية.")}
-					pSize={new Size(560, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(560, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<EmoList
@@ -1388,7 +1421,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		hidden
 		id="WorkPath"
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1397,7 +1431,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 			pDesc="الخدمة تسير في مسار واحد يبدأ من فهم المطلوب، ثم ضبط التنفيذ، ثم الاستلام والتوثيق، بدل توزيع نفس النقاط تحت عناوين متكررة."
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -1426,7 +1461,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		hidden
 		id="AcceptanceReports"
 		pBg={new ElemBg("#F7F1E6")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1435,7 +1471,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 			pDesc="الإشراف الجيد يربط بين جودة التنفيذ، توثيق الملاحظات، اعتماد الخامات، ومراجعة الدفعات على أساس ما تم تنفيذه فعليًا."
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 18)} pPad={new Pixel(0, 0)}>
 
@@ -1487,7 +1524,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		hidden
 		id="ProjectTypes"
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1496,7 +1534,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 			pDesc="الخدمة مناسبة لأي مشروع تشطيب يحتاج جهة هندسية تتابع التنفيذ على الأرض، وتنسق بين الأطراف، وتحافظ على مستوى واضح من الجودة حتى التسليم."
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -1525,7 +1564,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		hidden
 		id="StartTiming"
 		pBg={new ElemBg("#F7F1E6")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1534,12 +1574,13 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 			pDesc="أفضل نقطة لبدء الإشراف تكون مع دخول المشروع إلى مرحلة التشطيبات أو قبلها مباشرة بعد اكتمال الهيكل الأساسي."
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<Emograph
 				pTitle={Text.H3.WithColor("#15233A").OfText("لماذا يبدأ الإشراف قبل اتساع التنفيذ؟")}
 				pText={Text.Body.OfText("مرحلة التشطيبات تحتاج قراءة مبكرة للرسومات، تحديد نطاق العمل، تنظيم الدفعات، وضبط أي تعديل في المواد أو البنود أو المدة قبل أن تتحول القرارات الصغيرة إلى تعديلات واسعة داخل الموقع.")}
-				pSize={new Size(980, "auto", "100%", "auto")}
+				pSize={new Size(new NumPer(980, "100%"), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -1556,7 +1597,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		hidden
 		id="OwnerOutput"
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1565,7 +1607,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 			pDesc="المالك يحصل في النهاية على متابعة فنية واضحة، وتسلسل تنفيذ منضبط، وقرارات موثقة، واستلام مرحلي منظم حتى إغلاق الملاحظات والتسليم."
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -1656,8 +1699,8 @@ import { Hero, ESec, EmoStrip, Grid, BlurBlob,Badge, CircleGlow, SvgDots, LinePa
 		pHeadBg={new ElemBg("#89afec")}
 		pBodyBg={new ElemBg("#F7F1E6")}
 		pCardBg={new ElemBg("#FFFFFF")}
-		pSize={new DirectSize(new NumPer("90%","95%"),new NumPer("auto","auto"))}
-		pWidth={new Size("90%","auto","95%","auto")}
+		pSize={new Size(new NumPer("90%","95%"),new NumPer("auto","auto"))}
+		pWidth={new Size(new NumPer("90%", "95%"), new NumPer("auto", "auto"))}
 	>
 
 		<RelServiceItem

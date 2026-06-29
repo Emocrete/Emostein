@@ -1,7 +1,7 @@
 ---
+import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, Topic, ElemBg, EmoMediaData, RespString, Pixel, Size, Align } from "@/TypesLib";
-import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, EmoBtn, EmoFaq, ReadAlso, RelServices, SecTitle, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle } from "@/Widgets";
 ---
 
 
@@ -41,7 +41,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 		pDesc="تصميم خارجي متكامل للحديقة والروف ومدخل الفيلا والجلسات والمشايات والزراعة والري والإضاءة، حتى تتحول المساحة المفتوحة إلى جزء مستخدم من المشروع لا مجرد فراغ أخضر حول المبنى."
 		pTitleClr="#F4E5C4"
 		pDescClr="#FFFFFF"
-		pAlign="right"
+		pHzAlign="right"
+		pVrAlign="right"
 		pPosL="18% 50% 12% 8%"
 		pPosP="12% 8% 45% 8%"
 		pBlurL="on"
@@ -136,7 +137,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 	<ESec
 		id="landscape-meaning"
 		pBg={new ElemBg("#F7F1E6")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -148,7 +150,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("المساحة الخارجية جزء من تشغيل المشروع")}
 				pText={Text.Body.WithColor("#333333").OfText("حديقة الفيلا أو الروف أو المدخل التجاري لا تنجح بمجرد إضافة نباتات كثيرة. النجاح يبدأ من سؤال الاستخدام: أين يجلس أصحاب المكان، أين تمر حركة الضيوف، أين تتحرك الخدمة، أين تظهر الخصوصية، كيف يتم الري، كيف تعمل الإضاءة ليلًا، وما الخامات التي تتحمل الشمس والمياه والصيانة. التصميم الجيد يرتب هذه الأسئلة في مخطط واحد قبل شراء النباتات أو الأحجار أو وحدات الإضاءة.")}
 			/>
@@ -160,7 +162,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1681465766418-6474cfdcbb3c?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"جلسة خارجية وممشى حجري داخل تصميم لاندسكيب حديث",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -174,7 +176,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#0E1118")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#0E1118")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -206,20 +209,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 	<EmoStrip
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#B9D6A5").OfText("تجميع محتوى الصفحة من واقع السوق لا من قالب جاهز")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("مواقع اللاندسكيب القوية في السوق تعرض الخدمة كمنظومة تشمل التصميم، الزراعة، الهاردسكيب، الري الذكي، الإضاءة الخارجية، وتجديد الحدائق القائمة. لذلك تم بناء الصفحة حول هذه المحاور بدل الاكتفاء بكلام عام عن الجمال والرفاهية.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -270,7 +275,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 	<ESec
 		id="landscape-axes"
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -321,7 +327,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -338,12 +345,12 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1752646011500-0a5b82275415?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"ممشى حجري وحديقة فيلا",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("الممشى يصنع تجربة الدخول")}
 				pText={Text.Body.WithColor("#333333").OfText("مسار الدخول ليس خطًا يصل البوابة بالباب. هو أول تجربة يراها الزائر في المشروع: عرض المسار، خامته، طريقة الإضاءة، النباتات حوله، إحساس الخصوصية، ونقطة ظهور الواجهة. لذلك يتم تصميم المشايات كجزء من المشهد الكامل، مع مراعاة الاستخدام اليومي، سهولة التنظيف، صرف المياه، ومقاومة الانزلاق.")}
 			/>
@@ -361,7 +368,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 	<ESec
 		id="villa-landscape"
 		pBg={new ElemBg("#0E1118")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -394,7 +402,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -428,20 +437,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 	<EmoStrip
 		pBg={new ElemBg("#F7F1E6")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#111318")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#B9D6A5").OfText("اللاندسكيب التجاري يحتاج منطقًا مختلفًا")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("المساحة الخارجية في كافيه أو مطعم أو عيادة أو مكتب لا تخدم المالك فقط. هي واجهة بيع، مسار دخول، تجربة انتظار، ومنطقة تشغيل. لذلك يتم تصميمها لزيادة الوضوح والجاذبية وسهولة الصيانة.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -473,7 +484,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 	<ESec
 		id="roof-garden"
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -504,7 +516,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1681465766418-6474cfdcbb3c?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"جلسة خارجية حديثة تصلح لفكرة روف أو حديقة فيلا",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -518,7 +530,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -572,7 +585,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -607,7 +621,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 	<ESec
 		id="irrigation-lighting"
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -619,7 +634,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("الإضاءة الخارجية لا تعني زيادة عدد المصابيح")}
 				pText={Text.Body.WithColor("#333333").OfText("الإضاءة الناجحة تجعل المسار آمنًا، والجلسة مريحة، والنباتات لها عمق، والواجهة تظهر دون إزعاج بصري. يتم توزيع المصابيح حسب الوظيفة: إضاءة طريق، إضاءة نبات، إضاءة جدار، إضاءة جلسة، أو إضاءة أمان. كما يجب التفكير في مسارات الكهرباء والحماية من المياه وسهولة الصيانة.")}
 			/>
@@ -631,7 +646,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1658692051708-519fbdac7e8f?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"إضاءة لاندسكيب خارجية بين النباتات",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -645,7 +660,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -695,7 +711,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#0E1118")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#0E1118")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -725,7 +742,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -742,7 +760,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1640365554715-cfbb20efcf91?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"إضاءة جلسة خارجية في حديقة",
-					new Size(520, "auto", 320, "auto")
+					new Size(new NumPer(520, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -773,7 +791,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -805,7 +824,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -829,7 +849,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 			/>
 
 			<Emograph
-				pSize={new Size(575, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(575, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("الخصوصية لا يجب أن تلغي الانفتاح")}
 				pText={Text.Body.WithColor("#333333").OfText("الخطأ المتكرر هو تحويل الحديقة إلى صندوق مغلق باسم الخصوصية. التصميم الأفضل يحجب ما يجب حجبه، ويترك المشاهد الجميلة مفتوحة، ويستخدم النبات والإضاءة والمستويات لتكوين إحساس آمن ومريح دون فقد الهواء والضوء والاتساع.")}
 			/>
@@ -844,7 +864,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -876,7 +897,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -887,7 +909,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("الحديقة تكمل قراءة المبنى")}
 				pText={Text.Body.WithColor("#333333").OfText("عندما تكون الواجهة مودرن بخطوط صريحة، تحتاج الحديقة إلى ممرات وأحواض واضحة لا تتعارض مع هذا الإيقاع. وعندما تكون الواجهة كلاسيكية أو حجرية، قد تحتاج الحديقة إلى خامات أدفأ ونباتات أكثر كثافة. لذلك لا يتم تصميم اللاندسكيب بمعزل عن واجهة الفيلا أو مدخل المشروع.")}
 			/>
@@ -899,7 +921,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1752646011500-0a5b82275415?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"علاقة الممشى والحديقة بواجهة منزل حجرية",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -913,7 +935,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -966,7 +989,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 	<ESec
 		id="deliverables"
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -999,7 +1023,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#0E1118")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#0E1118")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -1031,7 +1056,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -1085,7 +1111,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1117,7 +1144,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -1128,7 +1156,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("لماذا تختلف تكلفة التصميم؟")}
 				pText={Text.Body.WithColor("#333333").OfText("تصميم حديقة صغيرة مع مسبح وشبكة ري وإضاءة وتفاصيل برجولة يختلف عن توزيع مسطح أخضر ومشايات بسيطة. كما أن ملف التصور ثلاثي الأبعاد يختلف عن ملف رسومات تفصيلية يصلح للتسعير والتنفيذ. لذلك يتم تحديد الأتعاب بعد فهم مستوى المخرجات وليس بمجرد معرفة المساحة.")}
 			/>
@@ -1160,7 +1188,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1192,7 +1221,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -1238,7 +1268,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1270,7 +1301,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -1322,7 +1354,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1354,7 +1387,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -1371,7 +1405,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1752646011500-0a5b82275415?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"مدخل حجري ومشايات ضمن لاندسكيب فيلا",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -1402,7 +1436,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1434,7 +1469,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -1484,7 +1520,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1516,7 +1553,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -1570,7 +1608,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1602,7 +1641,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -1648,7 +1688,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1680,7 +1721,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -1712,7 +1754,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "

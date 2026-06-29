@@ -1,7 +1,7 @@
 ---
+import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, Size, Align, Colors, RespString, Topic, Pixel, EmoMediaData } from "@/TypesLib";
-import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, ReadAlso, RelServices, SecTitle, VrStack, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
 import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 ---
 
@@ -43,7 +43,8 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 		pDesc="خامات مصرية قوية للمطابخ والسلالم والأرضيات والواجهات والمداخل والمشايات وعتبات الأبواب"
 		pTitleClr={Colors.WhiteOff}
 		pDescClr={Colors.WhiteOff}
-		pAlign="center"
+		pHzAlign="center"
+		pVrAlign="center"
 		pBlurL="on"
 		pBlurP="on"
 		pPosL="44% 42% 10% 8%"
@@ -60,7 +61,8 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -82,7 +84,8 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 			pSecondaryHref="#details"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -96,7 +99,7 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("محاجر مصرية")}
 						pText={Text.Body.Centered.OfText("أنواع مصرية معروفة من عائلات حلايب وأسوان وجندولا وروزا ورمادي الشركة وفانتستك وايت.")}
-						pSize={new Size(350, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</VrStack>
@@ -111,7 +114,7 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("تحمل يومي")}
 						pText={Text.Body.Centered.OfText("الجرانيت المصري مناسب للحركة العالية والمطابخ والسلالم والمداخل بسبب صلابته ومقاومته الجيدة للاستخدام.")}
-						pSize={new Size(350, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</VrStack>
@@ -126,7 +129,7 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("استخدامات واسعة")}
 						pText={Text.Body.Centered.OfText("مطابخ، سلالم، أرضيات، واجهات، مداخل، مشايات، عتبات، كونترات، وأعمال خارجية حسب التشطيب المناسب.")}
-						pSize={new Size(350, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</VrStack>
@@ -143,7 +146,8 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -151,7 +155,8 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 			pDesc="الصور التالية مرتبطة بأسماء أنواع مصرية محددة، وتم تجنب الأنواع التي لم تتوفر لها صورة مؤكدة باسمها"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack
 				pWidth={new Pixel(1300, 340)}
@@ -175,14 +180,14 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 								"498793_d08a28f9a39647a380851767047153fe~mv2.png",
 								false,
 								"نيو حلايب جرانيت مصري",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("نيو حلايب")}
 							pText={Text.Body.Centered.OfText("حبيبات رمادية وبيضاء وسوداء، مناسب للمطابخ والسلالم والأرضيات والواجهات.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -201,14 +206,14 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 								"498793_12db851a083c48d1bbcf0bd192f8694b~mv2.webp",
 								false,
 								"حلايب جرانيت مصري",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("حلايب")}
 							pText={Text.Body.Centered.OfText("جرانيت مصري فاتح الحبيبات، مناسب للأرضيات والمداخل والدرج والكونترات.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -227,14 +232,14 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 								"498793_8f83511404254389b6f944e4d967d224~mv2.webp",
 								false,
 								"بلاك أسوان جرانيت مصري",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("بلاك أسوان")}
 							pText={Text.Body.Centered.OfText("أسود مصري من أسوان، مناسب للمطابخ والعتبات والسلالم والتطعيمات والواجهات الراقية.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -253,14 +258,14 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 								"498793_3108bc83e20443189c1e8dc3e6d8173b~mv2.png",
 								false,
 								"رمادي الشركة جرانيت مصري",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("رمادي الشركة")}
 							pText={Text.Body.Centered.OfText("درجة رمادية عملية، مناسبة للأرضيات الخارجية والمداخل والمشايات والسلالم.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -283,14 +288,14 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 								"498793_1e54f23307b5474fba3ddf47468660fc~mv2.png",
 								false,
 								"جندولا جرانيت مصري",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("جندولا")}
 							pText={Text.Body.Centered.OfText("جرانيت مصري فاتح، مناسب للمطابخ والكونترات والأرضيات والسلالم الداخلية.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -309,14 +314,14 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 								"498793_d570c1360fc6420f9152825f44cc39d5~mv2.webp",
 								false,
 								"روزا هودي جرانيت مصري",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("روزا هودي")}
 							pText={Text.Body.Centered.OfText("درجة وردية دافئة، مناسبة للسلالم والمداخل والأرضيات ذات الطابع الكلاسيكي.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -335,14 +340,14 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 								"498793_71766e43e6274ee8a913ac1d5795fdda~mv2.png",
 								false,
 								"جندولا جرانيت مصري في مطبخ",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("جندولا للمطابخ")}
 							pText={Text.Body.Centered.OfText("صورة استخدام لجرانيت جندولا في سطح مطبخ، مع حبيبات هادئة وسطح عملي.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -361,14 +366,14 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 								"498793_3d3208c93da84f9891b6305ab0338475~mv2.png",
 								false,
 								"سطح مطبخ من جندولا جرانيت مصري",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("سطح مطبخ مصري")}
 							pText={Text.Body.Centered.OfText("تطبيق عملي لجرانيت مصري في كونتر مطبخ مع فتحات وتجهيزات يومية.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -387,7 +392,8 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -395,7 +401,8 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 			pDesc="القائمة التالية تجمع أسماء مصرية متداولة في السوق، مع فصلها حسب العائلة اللونية والاستخدام"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(25, 15)} pPad={new Pixel(30, 15)}>
 
@@ -463,7 +470,8 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -471,7 +479,8 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 			pDesc="الجرانيت المصري مناسب للمساحات التي تحتاج سطحًا قويًا وتحملًا للحركة والتنظيف المتكرر"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack
 				pWidth={new Pixel(1300, 340)}
@@ -485,28 +494,28 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 						style = {`background:${Colors.WhiteOff}; padding:25px;`}
 						pTitle={Text.H4.Centered.OfText("المطابخ")}
 						pText={Text.Body.Centered.OfText("نيو حلايب وجندولا وبلاك أسوان اختيارات عملية لأسطح المطابخ والجزيرات والفتحات اليومية.")}
-						pSize={new Size(300, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<Emograph
 						style = {`background:${Colors.SkyLite}; padding:25px;`}
 						pTitle={Text.H4.Centered.OfText("السلالم")}
 						pText={Text.Body.Centered.OfText("روزا هودي وروزا النصر وحلايب ونيو حلايب تناسب السلالم عند اختيار سمك وتشطيب وحافة مناسبة.")}
-						pSize={new Size(300, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<Emograph
 						style = {`background:${Colors.Creamy}; padding:25px;`}
 						pTitle={Text.H4.Centered.OfText("الأرضيات")}
 						pText={Text.Body.Centered.OfText("الأرضيات التجارية والمداخل العامة تحتاج جرانيتًا متماسكًا في اللون والحبيبات مع تركيب مضبوط وفواصل منتظمة.")}
-						pSize={new Size(300, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<Emograph
 						style = {`background:${Colors.GreenLite}; padding:25px;`}
 						pTitle={Text.H4.Centered.OfText("الواجهات")}
 						pText={Text.Body.Centered.OfText("الواجهات تحتاج نوعًا يتحمل الشمس والمطر والغبار، مع تثبيت مناسب وفواصل تمدد واضحة.")}
-						pSize={new Size(300, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</HzStack>
@@ -517,28 +526,28 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 						style = {`background:${Colors.OrangeLite}; padding:25px;`}
 						pTitle={Text.H4.Centered.OfText("المشايات الخارجية")}
 						pText={Text.Body.Centered.OfText("المشايات تحتاج سطحًا مقاومًا للانزلاق، لذلك يناسبها التشطيب الفليم أو الرملي أو الخشن حسب الموقع.")}
-						pSize={new Size(300, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<Emograph
 						style = {`background:${Colors.WhiteOff}; padding:25px;`}
 						pTitle={Text.H4.Centered.OfText("عتبات الأبواب")}
 						pText={Text.Body.Centered.OfText("العتبات تحتاج سمكًا مناسبًا وقطعًا نظيفًا وحافة قوية تتحمل الاحتكاك والتنظيف المستمر.")}
-						pSize={new Size(300, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<Emograph
 						style = {`background:${Colors.SkyLite}; padding:25px;`}
 						pTitle={Text.H4.Centered.OfText("المداخل")}
 						pText={Text.Body.Centered.OfText("المداخل تستفيد من درجات رمادية أو وردية أو سوداء حسب لون الواجهة وحركة الدخول اليومية.")}
-						pSize={new Size(300, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<Emograph
 						style = {`background:${Colors.Creamy}; padding:25px;`}
 						pTitle={Text.H4.Centered.OfText("اللاندسكيب")}
 						pText={Text.Body.Centered.OfText("الجرانيت المصري يستخدم في أحواض الزرع والدرجات الخارجية والمسارات والأعمال الديكورية الصلبة.")}
-						pSize={new Size(300, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</HzStack>
@@ -555,7 +564,8 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -563,7 +573,8 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 			pDesc="التشطيب يحدد اللمعان ومقاومة الانزلاق وطريقة التنظيف ومظهر الحبيبات"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(25, 15)} pPad={new Pixel(30, 15)}>
 
@@ -627,7 +638,8 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -635,7 +647,8 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 			pDesc="كل بند يحتاج قراءة مختلفة في اللون والحبيبات والسمك والتشطيب والهالك"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -679,7 +692,8 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -687,7 +701,8 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 			pDesc="الخدمة تشمل اختيار النوع، فرز الألواح، رفع المقاسات، التقطيع، التركيب، التشطيب، والاستلام النهائي"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -738,7 +753,8 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 	<ESec
 		id="cta"
 		pBg={new ElemBg(Colors.BlackOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -747,14 +763,15 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 			pDesc="أرسل صور المكان ونوع الاستخدام والمقاسات التقريبية، وسنرشح لك نوعًا مصريًا مناسبًا للتنفيذ والميزانية"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
 				<Emograph
 					pTitle={Text.H3.WithAlign("right").White.OfText("بيانات تساعد في الاختيار")}
 					pText={Text.Body.WithAlign("right").White.OfText("نوع البند، درجة الحركة، موقع التنفيذ داخلي أو خارجي، اللون المطلوب، المقاسات التقريبية، صور المكان، وهل المطلوب سطح مطبخ أو سلم أو واجهة أو مشاية أو عتبات. بعد مراجعة هذه البيانات يتم ترشيح نوع مناسب مثل نيو حلايب أو حلايب أو بلاك أسوان أو جندولا أو رمادي الشركة أو روزا هودي حسب الحالة.")}
-					pSize={new Size(750, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(750, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<VrStack
@@ -767,7 +784,7 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("01014490054")}
 						pText={Text.Body.Centered.OfText("اتصل أو ارسل صور المكان على واتساب لبدء الترشيح والمعاينة.")}
-						pSize={new Size(300, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<EmoCall BlackSky pText="اطلب الخدمة" />
@@ -832,7 +849,7 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 		pHeadBg={new ElemBg(Colors.SkyLite)}
 		pBodyBg={new ElemBg(Colors.WhiteOff)}
 		pCardBg={new ElemBg(Colors.SkyLite)}
-		pWidth={new Size(1300, "auto", "calc(100% - 30px)", "auto")}
+		pWidth={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
 		pGap={new Pixel(20, 15)}
 	>
 
@@ -871,7 +888,7 @@ import StoneInfoCard from "@/Widgets/Stone/StoneInfoCard.astro";
 		pHeadBg={new ElemBg(Colors.Gray5)}
 		pBodyBg={new ElemBg(Colors.Gray1)}
 		pCardBg={new ElemBg(Colors.WhiteOff)}
-		pWidth={new Size(1300, "auto", "calc(100% - 30px)", "auto")}
+		pWidth={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
 		pGap={new Pixel(20, 15)}
 	>
 

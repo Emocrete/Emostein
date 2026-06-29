@@ -1,7 +1,7 @@
 ---
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic, HoverColors } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { DirectSize, NumPer,  Loc,HoverColors,Text, ElemBg, EmoMediaData, Colors, Pixel, Topic, Size, Align, RespString } from "@/TypesLib";
-import { Hero, ESec,FaqItem,RelServiceItem, EmoStrip, Badge, EmoCall, HzStack, VrStack, SecTitle, CardsGr, PriceCard, EmoList, EmoBtn, EmoContactStrip, Emograph, RespImg, ReadAlso, RelServices, EmoFaq, RetailDwgMonthlyOffer, ReadAlsoItem } from "@/Widgets";
+import { Badge, CardsGr, EmoBtn, EmoCall, EmoContactStrip, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, PriceCard, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, RetailDwgMonthlyOffer, SecTitle, VrStack } from "@/Widgets";
 import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 ---
 
@@ -39,8 +39,9 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 	<Hero pImgAlt="طائرة ورقية تذهب في الفضاء تعبر عن الرسم الهندسي لترخيص محل تجاري بأنه يذهب ولا يعود ويقبل من المرة الأولى">
 
 		<VrStack
-			pAlign="Center"
-			pSize={new DirectSize(new NumPer("35%","95%"))}
+			pHzAlign="Center"
+			pVrAlign="Center"
+			pSize={new Size(new NumPer("35%","95%"))}
 			pLoc={new Loc(new NumPer("55%","2.5%"),new NumPer("20%","15%"))}
 		>
 
@@ -60,13 +61,13 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 		<Emograph
 			pTitle={Text.Body.Bold.OfSize(60,40).Centered.OfText("يذهب ..............")}
 			pText={Text.Body.Bold.OfSize(60,40).OfText("ولا يعود ;)")}
-			pSize={new DirectSize(new NumPer("20%","80%"))}
+			pSize={new Size(new NumPer("20%","80%"))}
 			pLoc={new Loc(new NumPer("30%","10%"),new NumPer("20%","40%"))}
 		/>
 
 		<VrStack
 			pLandOnly
-			pSize={new DirectSize(new NumPer("60%","95%"))}
+			pSize={new Size(new NumPer("60%","95%"))}
 			pLoc={new Loc(new NumPer("40%","2.5%"),new NumPer("65%","60%"))}
 			data-own-size
 		>
@@ -117,7 +118,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 		<SecTitle GreenLite pTitle="خدمات الرسم الهندسي لترخيص محل تجاري" />
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack>
 
@@ -135,7 +137,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 				<VrStack
 					pWidth={new Pixel(1200, 340)}
 					pGap={new Pixel(20, 14)}
-					pAlign="Center"
+					pHzAlign="Center"
+					pVrAlign="Center"
 				>
 
 					<Emograph
@@ -179,7 +182,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 		<SecTitle Bistage pTitle="مواصفات الرسم الهندسي لـترخيص محل تجاري" />
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<EmoList
 				pDesc={Text.Body.Centered.OfText("يجب أن يتضمن الرسم الهندسي للمحل التجاري عدة عناصر رئيسية لتوصيف المحل وتوضيح مدى ملاءمته للمواصفات المطلوبة للنشاط الذي سيتم له ترخيص المحل التجاري.")}

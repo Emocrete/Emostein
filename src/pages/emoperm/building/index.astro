@@ -1,7 +1,7 @@
 ---
+import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, Size, Align, Colors, RespString, Topic, Pixel } from "@/TypesLib";
-import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, ReadAlso, RelServices, SecTitle, VrStack, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, SecTitle, VrStack } from "@/Widgets";
 ---
 
 
@@ -40,7 +40,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		pDesc="صفحة توزيعية لفهم المسارين المختلفين: ترخيص بناء داخل نطاق الأحياء، وترخيص بناء داخل المدن الجديدة التابعة لهيئة المجتمعات العمرانية"
 		pTitleClr={Colors.WhiteOff}
 		pDescClr={Colors.WhiteOff}
-		pAlign="center"
+		pHzAlign="center"
+		pVrAlign="center"
 		pBlurL="on"
 		pBlurP="on"
 		pPosL="44% 44% 10% 7%"
@@ -57,7 +58,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -68,7 +70,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		<EmoStrip
 			pBg={new ElemBg(Colors.WhiteOff)}
 
-			pAlign={Align.Center}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 >
 
 			<VrStack
@@ -81,7 +84,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("قبل تجهيز الرسومات يجب تحديد الجهة صاحبة الولاية")}
 					pText={Text.Body.Centered.OfText(`أول قرار في ملف ترخيص البناء ليس اختيار شكل الواجهة ولا عدد الغرف ولا نظام الإنشاء، بل تحديد الجهة التي ستراجع الملف وتصدر الترخيص. إذا كانت الأرض داخل نطاق حي أو وحدة محلية، فالمسار يدور غالبًا حول المركز التكنولوجي، الإدارة الهندسية، بيان صلاحية الموقع، الاشتراطات التخطيطية والبنائية المعتمدة، مستند الملكية، الرسومات الهندسية، ومراجعة الملف داخل الجهة الإدارية. أما إذا كانت الأرض داخل مدينة جديدة، فالمسار يبدأ من علاقة المالك بجهاز المدينة وهيئة المجتمعات العمرانية: تخصيص أو عقد أو محضر استلام، موقف مالي وإداري، كود قطعة الأرض، اشتراطات الكراسة أو النماذج العمرانية، ثم تقديم ملف إلكتروني أو ورقي طبقًا لما يحدده الجهاز والبوابة. لذلك فهذه الصفحة لا تتعامل مع تراخيص البناء كقائمة مستندات محفوظة، بل كفرعين مختلفين في الميدان، لكل فرع مخاطر وأخطاء واختبارات قبول مختلفة.`)}
-					pSize={new Size(1100, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(1100, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<CardsGr
@@ -108,7 +111,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -119,7 +123,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		<EmoStrip
 			pBg={new ElemBg(Colors.Gray1)}
 
-			pAlign={Align.Center}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 >
 
 			<VrStack
@@ -132,13 +137,13 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("طبيعة ترخيص البناء داخل الحي")}
 					pText={Text.Body.WithAlign("right").OfText(`ترخيص البناء داخل الأحياء يتعامل مع أرض أو عقار داخل كتلة عمرانية قائمة، وقد تكون الأرض فضاء بين مبانٍ قائمة، أو عقارًا قديمًا تم هدمه، أو قطعة داخل تقسيم قديم، أو حالة تعلية على مبنى قائم، أو بناء جديد بعد إزالة. هذا النوع من التراخيص لا يراجع الرسومات كتصميم هندسي مجرد فقط، بل يراجع علاقتها بالشارع وخط التنظيم والارتفاعات المسموح بها والجيران والمرافق وعرض الطريق وحالة الملكية. لذلك فإن الملف الناجح يبدأ من قراءة الموقع قبل الرسم: هل الأرض داخل حيز عمراني؟ هل لها مخطط تفصيلي أو خط تنظيم واضح؟ هل الشارع يسمح بالارتفاع المطلوب؟ هل هناك ارتدادات أو قيود واجهة أو حد أقصى للكثافة؟ هل يوجد تعارض مع أملاك دولة أو منافع عامة أو مرافق؟ هل مستند الملكية كافٍ للتعامل أم يحتاج استكمالًا أو توضيحًا؟ هذه الأسئلة ليست أسئلة نظرية، لأنها هي التي تحدد هل سيتم إعداد مشروع قابل للترخيص أم سيتم إنتاج رسومات جميلة لكنها مرفوضة إداريًا.`)}
-					pSize={new Size(1120, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(1120, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("لماذا يبدأ ملف الحي ببيان صلاحية الموقع؟")}
 					pText={Text.Body.WithAlign("right").OfText(`بيان صلاحية الموقع هو نقطة الفصل بين الرغبة في البناء والقدرة القانونية والتخطيطية على البناء. المالك قد يرى أن الأرض ملكه، وأنه يستطيع بناء عمارة مثل العمارات المجاورة، لكن الجهة الإدارية لا تنظر إلى الأمر بهذا التبسيط. البيان يوضح مدى صلاحية الموقع للبناء من الناحية التخطيطية والاشتراطات البنائية، ويفتح الطريق أمام المكتب الهندسي لكي يصمم داخل حدود معلومة بدل الاعتماد على التوقع. في الأحياء، قد تؤثر تفاصيل صغيرة على النتيجة: عرض الشارع الفعلي، وجود ناصية، وقوع الأرض داخل منطقة لها اشتراطات خاصة، وجود خطوط تنظيم قديمة، اختلاف المساحة بالعقد عن الطبيعة، أو وجود مبنى قائم يحتاج موقفًا واضحًا قبل إصدار رخصة جديدة. لذلك فإن استخراج بيان الصلاحية ليس ورقة شكلية؛ هو قراءة مبكرة للمخاطر التي قد تظهر لاحقًا بعد دفع تكلفة التصميم أو بدء التعاقدات.`)}
-					pSize={new Size(1120, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(1120, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<CardsGr
@@ -167,7 +172,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -178,7 +184,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		<EmoStrip
 			pBg={new ElemBg(Colors.WhiteOff)}
 
-			pAlign={Align.Center}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 >
 
 			<HzStack
@@ -230,7 +237,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.BistageDark};`}
@@ -241,7 +249,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		<EmoStrip
 			pBg={new ElemBg(Colors.BlackOff)}
 
-			pAlign={Align.Center}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 >
 
 			<VrStack
@@ -254,7 +263,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 				<Emograph
 					pTitle={Text.H3.Centered.White.OfText("المستند الإداري لا يغني عن سلامة الرسم")}
 					pText={Text.Body.WithAlign("right").White.OfText(`في ملفات الأحياء يظهر خطأ متكرر: المالك يجمع صور بطاقات وعقود وتوكيلات ويظن أن ملفه جاهز، بينما جوهر الترخيص لا يزال ناقصًا لأن الرسم لم يقرأ الاشتراطات. الجهة الإدارية لا تمنح الترخيص لأن العقد موجود فقط؛ هي تمنحه عندما يثبت الملف أن البناء المقترح مطابق لما يسمح به الموقع. لذلك يجب أن تتكلم المستندات واللوحات لغة واحدة. المساحة في العقد يجب ألا تتعارض مع المساحة المرفوعة دون تفسير. الواجهة في الرسم يجب أن تتفق مع الواقع. عدد الأدوار يجب أن ينبع من بيان الصلاحية لا من رغبة المالك. المناور والردود والفتحات والسلالم يجب أن تكون قابلة للفحص. الإنشائي يجب ألا يهدم فكرة المعماري. وقيمة الأعمال يجب ألا تبدو رقمًا عشوائيًا منفصلًا عن حجم المشروع. كلما كان الملف مترابطًا، قل احتمال طلب الاستيفاءات المتكررة.`)}
-					pSize={new Size(1080, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(1080, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<EmoList
@@ -284,7 +293,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -295,7 +305,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		<EmoStrip
 			pBg={new ElemBg(Colors.WhiteOff)}
 
-			pAlign={Align.Center}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 >
 
 			<CardsGr
@@ -358,7 +369,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.BistageDark};`}
@@ -369,7 +381,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		<EmoStrip
 			pBg={new ElemBg(Colors.BlackOff)}
 
-			pAlign={Align.Center}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 >
 
 			<VrStack
@@ -382,13 +395,13 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 				<Emograph
 					pTitle={Text.H3.Centered.White.OfText("ترخيص المدن الجديدة يبدأ من ملف الأرض قبل ملف المبنى")}
 					pText={Text.Body.WithAlign("right").White.OfText(`داخل المدن الجديدة لا تكفي فكرة أن المالك معه عقد أو أن قطعة الأرض ظاهرة على الطبيعة. جهاز المدينة يتعامل مع الأرض بوصفها جزءًا من منظومة تخصيص وتنمية عمرانية، ولذلك يسأل قبل التصميم: ما نوع التخصيص؟ هل القطعة سكنية أم خدمية أم تجارية أم مختلطة؟ هل صدر محضر استلام؟ هل توجد مهلة بناء؟ هل هناك أقساط أو مستحقات أو غرامات أو موقف مالي يجب تسويته؟ هل الكراسة أو الاشتراطات تسمح بالنموذج المقترح؟ هل سبق صدور رخصة؟ هل المطلوب إنشاء جديد أم تعديل أم تعلية أم استكمال غرف سطح؟ هل هناك مخالفة أو موقف تنفيذي قائم؟ هذه الأسئلة تجعل ملف المدن الجديدة مختلفًا جذريًا عن ملف الحي. في الحي قد يكون الخطر الأكبر في خط التنظيم والشارع والملكية القديمة، أما في المدينة الجديدة فالخطر الأكبر غالبًا في علاقة الأرض بالجهاز: تخصيص، استلام، مهلة، اشتراطات، نموذج معماري، موقف مالي، ومطابقة إلكترونية للبيانات.`)}
-					pSize={new Size(1100, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(1100, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.Centered.White.OfText("التحول الإلكتروني لا يلغي الحاجة إلى ملف هندسي منضبط")}
 					pText={Text.Body.WithAlign("right").White.OfText(`تفعيل خدمات تراخيص البناء إلكترونيًا في المدن الجديدة يغير طريقة التقديم والمتابعة والسداد، لكنه لا يحول الترخيص إلى رفع ملفات فقط. بالعكس، النظام الإلكتروني يجعل الأخطاء أكثر وضوحًا لأن كل مستند يجب أن يكون قابلًا للتحميل والمطابقة والفحص، وكل حساب يجب أن يكون مفعلًا، وكل صفة يجب أن تظهر داخل بيانات المالك أو المكتب الهندسي. في هذا المسار يصبح تنسيق الملف مهمًا بقدر صحة التصميم: اسم المالك، سند الملكية، كود الأرض، بيان الصلاحية، الرسومات، مستندات المكتب، البطاقة الضريبية أو السجل الهندسي عند الحاجة، وأي رخص سابقة أو طلبات تعديل يجب أن تكون مرتبة ومتسقة. الخطأ في ملف إلكتروني لا يختفي داخل دوسيه ورقي؛ يظهر كرفض تفعيل، أو طلب استيفاء، أو توقف في مرحلة رفع المستندات، أو تعارض بين بيانات الملكية والرسومات. لذلك فالتجهيز الجيد قبل فتح الطلب أهم من سرعة الضغط على زر التقديم.`)}
-					pSize={new Size(1100, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(1100, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<CardsGr
@@ -417,7 +430,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Sky};`}
@@ -428,7 +442,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		<EmoStrip
 			pBg={new ElemBg(Colors.WhiteOff)}
 
-			pAlign={Align.Center}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 >
 
 			<VrStack
@@ -458,7 +473,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("المدن الجديدة لا تقبل تصميمًا منفصلًا عن الكراسة")}
 					pText={Text.Body.WithAlign("right").OfText(`في كثير من قطع المدن الجديدة، الكراسة أو اشتراطات الطرح أو النموذج العمراني تمثل مرجعًا أساسيًا لا يقل أهمية عن الكود الهندسي. قد يكون المالك معتادًا على تخطيط معين لفيلا أو عمارة أو مبنى خدمي، لكن جهاز المدينة يراجع المشروع داخل سياق عمراني محدد: نسبة بنائية، ارتفاع، ردود، بدروم، سور، غرف سطح، أماكن انتظار، شكل واجهات، استخدام مسموح، وتوقيتات تنفيذ. أي تجاهل لهذه الشروط ينتج ملفًا جميلًا هندسيًا لكنه ضعيف ترخيصيًا. لذلك يجب قراءة الكراسة قبل توزيع المساقط، وليس بعد انتهاء اللوحات. أحيانًا يكون التعديل المطلوب صغيرًا مثل رد أو فتحة أو غرفة سطح، وأحيانًا يكون جوهريًا مثل تقليل المسطح أو تغيير الاستخدام أو تعديل البدروم أو فصل مداخل. الصفحة المخصصة للمدن الجديدة تتعامل مع هذه النقطة باعتبارها قلب الخدمة، لأن نجاح الترخيص هناك ليس مجرد إيداع رسومات، بل ترجمة اشتراطات جهاز المدينة إلى مشروع قابل للاعتماد.`)}
-					pSize={new Size(1080, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(1080, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</VrStack>
@@ -473,7 +488,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -484,7 +500,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		<EmoStrip
 			pBg={new ElemBg(Colors.Gray1)}
 
-			pAlign={Align.Center}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 >
 
 			<HzStack
@@ -536,7 +553,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -547,7 +565,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		<EmoStrip
 			pBg={new ElemBg(Colors.WhiteOff)}
 
-			pAlign={Align.Center}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 >
 
 			<CardsGr
@@ -610,7 +629,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -621,7 +641,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		<EmoStrip
 			pBg={new ElemBg(Colors.BlackOff)}
 
-			pAlign={Align.Center}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 >
 
 			<VrStack
@@ -648,7 +669,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 				<Emograph
 					pTitle={Text.H3.Centered.White.OfText("الصفحة الحالية بوابة توزيع وليست بديلًا عن الصفحات المتخصصة")}
 					pText={Text.Body.WithAlign("right").White.OfText(`الغرض من هذه الصفحة أن يفهم العميل أن خدمة تراخيص البناء ليست صندوقًا واحدًا. من يريد بناء عقار داخل حي يحتاج قراءة مختلفة عن مالك قطعة في بيت الوطن أو الأندلس أو أكتوبر أو العبور أو الشروق أو أي مدينة جديدة. ومن يريد تعلية مبنى قائم لا يحتاج نفس مسار إنشاء مبنى من الصفر. ومن لديه رخصة سابقة أو تنفيذ قائم أو مخالفة أو مهلة منتهية لا يجب أن يبدأ بنفس أوراق مالك قطعة جديدة لم تبن بعد. لذلك تم تقسيم الصفحات الفرعية حسب نية العميل التجارية المباشرة: ترخيص بناء بالأحياء، ترخيص بناء بالمدن الجديدة، ترخيص تعلية، ترخيص هدم، ترخيص استكمال روف، والتصالح أو توفيق الأوضاع عند الحاجة. هذا التقسيم يمنع خلط العملاء، ويجعل كل صفحة لاحقة أكثر دقة في المستندات والخطوات والكلمات المفتاحية والمشكلات الميدانية.`)}
-					pSize={new Size(1080, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(1080, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</VrStack>
@@ -666,7 +687,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 	<ESec
 		id="cta"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -678,7 +700,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		<EmoStrip
 			pBg={new ElemBg(Colors.WhiteOff)}
 
-			pAlign={Align.Center}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 >
 
 			<VrStack
@@ -707,7 +730,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("أرسل بيانات الأرض قبل تنفيذ أي تصميم نهائي")}
 					pText={Text.Body.Centered.OfText(`أفضل توقيت للتواصل هو قبل رسم المشروع النهائي، لأن مرحلة ما قبل التصميم تسمح بتغيير المسار بأقل تكلفة. بمجرد معرفة الجهة، والعنوان، ونوع سند الأرض، وحالة الموقع، ونوع الطلب، يمكن تحديد هل الملف أقرب إلى ترخيص حي أم ترخيص مدينة جديدة، وهل يحتاج بيان صلاحية أولًا، وهل توجد مخاطر تخص الملكية أو الارتفاع أو الموقف المالي أو الرخص السابقة. هذه القراءة المبكرة تختصر وقتًا كبيرًا وتمنع الدخول في دائرة تعديل رسومات أو استيفاءات متكررة.`)}
-					pSize={new Size(980, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(980, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<EmoCall BlackSky pText="اتصل لمراجعة مسار الترخيص" />

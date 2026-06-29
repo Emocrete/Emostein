@@ -717,20 +717,29 @@ body {
 }
 
 /* =========================
-   Optional placed widgets
+   Optional direct widget sizing / styling / placement
 ========================= */
+
+.PlaceSized {
+	width: var(--PlaceWidthL);
+	height: var(--PlaceHeightL);
+	box-sizing: border-box;
+	min-width: 0;
+}
+
+.PlaceStyled,
+.IsPlaced {
+	z-index: var(--PlaceZ, auto);
+	opacity: var(--PlaceOpacityL, 100%);
+	transform: rotate(var(--PlaceRotateL, 0deg));
+	transform-origin: var(--PlaceOrigin, center center);
+	pointer-events: var(--PlaceClickable, auto);
+}
 
 .IsPlaced {
 	position: absolute;
 	left: var(--PlaceXL);
 	top: var(--PlaceYL);
-	width: var(--PlaceWidthL);
-	height: var(--PlaceHeightL);
-	z-index: var(--PlaceZ, 1);
-	opacity: var(--PlaceOpacityL, 100%);
-	transform: rotate(var(--PlaceRotateL, 0deg));
-	transform-origin: var(--PlaceOrigin, center center);
-	pointer-events: var(--PlaceClickable, auto);
 	box-sizing: border-box;
 	min-width: 0;
 }
@@ -740,13 +749,20 @@ body {
 }
 
 @media (orientation: portrait) {
+	.PlaceSized {
+		width: var(--PlaceWidthP);
+		height: var(--PlaceHeightP);
+	}
+
+	.PlaceStyled,
+	.IsPlaced {
+		opacity: var(--PlaceOpacityP, var(--PlaceOpacityL, 100%));
+		transform: rotate(var(--PlaceRotateP, var(--PlaceRotateL, 0deg)));
+	}
+
 	.IsPlaced {
 		left: var(--PlaceXP);
 		top: var(--PlaceYP);
-		width: var(--PlaceWidthP);
-		height: var(--PlaceHeightP);
-		opacity: var(--PlaceOpacityP, var(--PlaceOpacityL, 100%));
-		transform: rotate(var(--PlaceRotateP, var(--PlaceRotateL, 0deg)));
 	}
 
 	.PlaceHideLand {

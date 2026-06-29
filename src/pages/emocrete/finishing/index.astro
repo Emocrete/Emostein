@@ -1,7 +1,7 @@
 ---
+import { Align, Colors, ElemBg, EmoMediaData, NumPer, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, Topic, ElemBg, EmoMediaData, Colors, RespString, Size, Align } from "@/TypesLib";
-import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, DataCard, CardsGr, EmoContactStrip, EmoList, Emograph, SecTitle, VrStack, HzStack } from "@/Widgets";
+import { CardsGr, DataCard, EmoBtn, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, Hero, HzStack, IndexSec, SecTitle, VrStack } from "@/Widgets";
 ---
 
 
@@ -34,7 +34,8 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, DataCard, CardsGr, EmoContactSt
 		pTitleClr="#ffffff"
 		pDesc="مدخل واحد لاختيار خدمة التشطيب المناسبة حسب نوع المشروع: شقة، فيلا، محل تجاري أو صيدلية"
 		pDescClr="#ffffff"
-		pAlign="right"
+		pHzAlign="right"
+		pVrAlign="right"
 		pPosL="34% 46% 12% 6%"
 		pPosP="46% 8% 8% 8%"
 		pBlurL="on"
@@ -129,7 +130,8 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, DataCard, CardsGr, EmoContactSt
 
 	<ESec
 		pBg={new ElemBg("#FFFDF8")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="صفحة عامة لتوجيه العميل إلى خدمة التشطيب المناسبة"
@@ -137,12 +139,13 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, DataCard, CardsGr, EmoContactSt
 			style="--StripBg:#F6F1E8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFDF8")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#FFFDF8")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<Emograph
 				pTitle={Text.H3.WithColor("#17345C").OfText("التشطيب خدمة واحدة في الاسم، لكنها أربع خدمات مختلفة في الواقع")}
 				pText={Text.Body.WithColor("#333333").OfText("الغرض من هذه الصفحة هو توزيع الزائر على المسار الصحيح قبل الدخول في تفاصيل فرعية. تشطيب الشقة السكنية يركز على استغلال المساحة والميزانية اليومية للأسرة. تشطيب الفيلا يضيف طبقات أكبر من الواجهات واللاندسكيب والمداخل والأنظمة. تشطيب المحل التجاري يرتبط بالهوية البصرية وتجربة العميل ومتطلبات النشاط. أما تشطيب الصيدلية فيحتاج قراءة مختلفة بسبب اشتراطات النشاط الطبي، حركة الجمهور، مناطق التخزين، وأسلوب عرض الدواء والمنتجات.")}
-				pSize={new Size(980, "auto", "100%", "auto")}
+				pSize={new Size(new NumPer(980, "100%"), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -152,7 +155,8 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, DataCard, CardsGr, EmoContactSt
 	<ESec
 		id="finishing-branches"
 		pBg={new ElemBg("#F6F1E8")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="اختر نوع مشروع التشطيب"
@@ -160,7 +164,8 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, DataCard, CardsGr, EmoContactSt
 			style="--StripBg:#17345C;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F6F1E8")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#F6F1E8")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack>
 
@@ -201,7 +206,8 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, DataCard, CardsGr, EmoContactSt
 	<ESec
 		id="scope-difference"
 		pBg={new ElemBg("#ffffff")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="كيف تختلف المقايسة حسب نوع التشطيب؟"
@@ -209,20 +215,21 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, DataCard, CardsGr, EmoContactSt
 			style="--StripBg:#FFFDF8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#ffffff")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#ffffff")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("الشقق")}
 					pText={Text.Body.WithColor("#333333").OfText("حساب الشقة يبدأ غالبا من المساحة الداخلية الصافية، ثم حالة الاستلام، وعدد الحمامات، ونوع الأرضيات، ومستوى الجبس والدهانات، ونطاق أعمال المطبخ والنجارة. الهدف الأساسي هو تسليم وحدة عملية ومريحة بدون هدر في بنود لا تضيف قيمة حقيقية للسكن.")}
-					pSize={new Size(520, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(520, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("الفلل")}
 					pText={Text.Body.WithColor("#333333").OfText("حساب الفيلا لا يعتمد على المساحة الداخلية فقط، لأن هناك بنودا خارجية ومناطق انتقالية كثيرة: واجهات، تراسات، سلالم، أسوار، مداخل، حدائق، غرف خدمات، وأحيانا حمامات سباحة أو أنظمة ري وإنارة خارجية. لذلك تحتاج الفيلا مقايسة مقسمة على مناطق لا على رقم إجمالي مبهم.")}
-					pSize={new Size(520, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(520, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</HzStack>
@@ -232,13 +239,13 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, DataCard, CardsGr, EmoContactSt
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("المحلات")}
 					pText={Text.Body.WithColor("#333333").OfText("في المحلات التجارية لا يكفي أن تكون الخامات جيدة؛ المهم أن تخدم طريقة البيع. يتم حساب الواجهة، اللافتة، الإضاءة، أماكن العرض، مسار العميل، التشطيبات المقاومة للاستخدام الكثيف، ونقاط الكهرباء والإنترنت والكاميرات بطريقة مرتبطة بالنشاط التجاري نفسه.")}
-					pSize={new Size(520, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(520, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("الصيدليات")}
 					pText={Text.Body.WithColor("#333333").OfText("تشطيب الصيدلية يجمع بين الشكل التجاري والانضباط الوظيفي. يتم الاهتمام بمناطق عرض الدواء والمنتجات، الكاونتر، التخزين، الإضاءة البيضاء الواضحة، سهولة الحركة، النظافة البصرية، وأي تجهيزات خاصة يحتاجها النشاط قبل التشغيل.")}
-					pSize={new Size(520, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(520, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</HzStack>
@@ -250,7 +257,8 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, DataCard, CardsGr, EmoContactSt
 	<ESec
 		id="cost-logic"
 		pBg={new ElemBg("#F6F1E8")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="من أين يبدأ حساب تكلفة التشطيب؟"
@@ -258,7 +266,8 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, DataCard, CardsGr, EmoContactSt
 			style="--StripBg:#B78A25;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F6F1E8")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#F6F1E8")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("min(1120px, 100%)", "100%")}
@@ -281,7 +290,8 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, DataCard, CardsGr, EmoContactSt
 	<ESec
 		id="work-steps"
 		pBg={new ElemBg("#ffffff")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="مسار العمل في خدمة التشطيب"
@@ -345,7 +355,8 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, DataCard, CardsGr, EmoContactSt
 	<ESec
 		id="cost-pages"
 		pBg={new ElemBg("#FFFDF8")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="صفحات تفصيلية لتكلفة التشطيب"
@@ -353,7 +364,8 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, DataCard, CardsGr, EmoContactSt
 			style="--StripBg:#17345C;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFDF8")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#FFFDF8")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack>
 
@@ -393,7 +405,8 @@ import { Hero, IndexSec, ESec, EmoStrip, EmoBtn, DataCard, CardsGr, EmoContactSt
 
 	<ESec
 		pBg={new ElemBg("#ffffff")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="هل تحتاج اختيار المسار الأنسب؟"

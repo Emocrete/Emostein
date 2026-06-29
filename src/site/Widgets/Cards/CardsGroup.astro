@@ -1,6 +1,6 @@
 ---
+import { ElemBg, Pixel, Place, type PlaceProps, RespString, Text, Topic } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import { Text, Topic , RespString , ElemBg,Pixel, Place, type PlaceProps } from "../../TypesLib";
 import Emograph from "../Comp/Emograph.astro";
 import Stack from "../Comp/Stack.astro";
 import EmoList from "../Comp/EmoList.astro";
@@ -154,7 +154,6 @@ const {
 	...RemAttr
 } = Astro.props as Props;
 
-const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
 
 const cTopics = GetValidTopics();
 
@@ -162,8 +161,7 @@ function GetValidTopics(): Topic[] {
 
 	const cRawCards = [pTopic1, pTopic2, pTopic3, pTopic4, pTopic5, pTopic6, pTopic7, pTopic8];
 
-	return cRawCards.filter(
-		(pItem): pItem is Topic =>
+	return cRawCards.filter((pItem): pItem is Topic =>
 		!!pItem && ((pItem.Title ?? "").trim() !== "" || (pItem.Body ?? "").trim() !== ""),
 	);
 }
@@ -184,8 +182,6 @@ const CardCssVar = [
 	`--pCardBg:${pCardBg?.Color};`,
 	`--pCardRadius:${pCardRadius}px;`,
 ].filter(Boolean).join(" ");
-
-
 ---
 
 
@@ -229,8 +225,10 @@ const CardCssVar = [
 		<Stack
 			class = " MainBox "
 			pDir={pStackDir}
-			pGap="30px"
+			pGap={new Pixel(30,10)}
 			pFlipNarrow={true}
+			pMainSizeMode="Equal"
+			pCrossSizeMode="Equal"
 		>
 		
 			{ cTopics.map((pTopic) => (
@@ -242,9 +240,7 @@ const CardCssVar = [
 		
 							<Emograph pTitle={pCardTitleFnt.OfText(pTopic.Title)} pText={pCardBodyFnt.OfText(pTopic.Body)}>
 		
-								<EmoList pItems={pTopic.Items}>
-		
-								</EmoList>
+								<EmoList pItems={pTopic.Items} />
 		
 							</Emograph>
 		
@@ -316,6 +312,33 @@ const CardCssVar = [
 		min-height: var(--pCardHeight);
 		box-sizing: border-box;
 	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
 
 	@media (orientation: portrait) {
 		.CardsGrCard {

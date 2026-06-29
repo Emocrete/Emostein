@@ -1,14 +1,19 @@
 ---
-import { Align, DirectSize, ElemBg, NumPer, Place, type PlaceProps } from "@/TypesLib";
+import { Align, ElemBg, GetHzAlignCss, GetVrAlignCss, type HzAlignValue, NumPer, Pixel, Place, type PlaceProps, Size, type VrAlignValue } from "@/TypesLib";
 import { Media } from "@/Media";
 import { SeoText } from "@/SeoText";
 import type { HTMLAttributes } from "astro/types";
 
+type SectionCssValue = Pixel | NumPer | string | number;
+
 interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps {
 	pBg?: ElemBg;
-	pBox?: DirectSize;
+	pBox?: Size;
 	pMinH?: NumPer;
-	pAlign?: Align;
+	pHzAlign?: HzAlignValue;
+	pVrAlign?: VrAlignValue;
+	pGap?: SectionCssValue;
+	pPad?: SectionCssValue;
 	pImgF?: string;
 	pImgL?: string;
 	pImgP?: string;
@@ -20,7 +25,10 @@ const {
 	pBg,
 	pBox,
 	pMinH,
-	pAlign = Align.Center,
+	pHzAlign,
+	pVrAlign,
+	pGap = new Pixel(0),
+	pPad = new Pixel(0),
 	pImgF = "",
 	pImgL = "",
 	pImgP = "",
@@ -89,6 +97,12 @@ const cFinalBgImgP = cBgImgP || cBgImgL;
 const cHasBgImg = cFinalBgImgL !== "" || cFinalBgImgP !== "";
 const cBgAlt = pImgAlt || pBg?.Img?.Alt || SeoText.GetLocalsImageAlt(Astro.locals);
 
+const cHzAlign = pHzAlign ?? Align.Center;
+const cVrAlign = pVrAlign ?? Align.Center;
+const cGap = GetResponsiveCssValue(pGap, "0px", "0px");
+const cPad = GetResponsiveCssValue(pPad, "0px", "0px");
+const cHasExplicitHeight = HasExplicitCssSize(pBox?.HeightL) || HasExplicitCssSize(pBox?.HeightP) || HasExplicitCssSize(pSize?.HeightL) || HasExplicitCssSize(pSize?.HeightP);
+
 const cSectionStyle = [
 	`--SecBg:${pBg?.Color || "transparent"};`,
 	`--SecWidthL:${pBox?.WidthL || "100%"};`,
@@ -97,14 +111,53 @@ const cSectionStyle = [
 	`--SecHeightP:${pBox?.HeightP || pBox?.HeightL || "auto"};`,
 	`--SecMinHeightL:${pMinH?.Landscape || (cIsHero ? "100svh" : "auto")};`,
 	`--SecMinHeightP:${pMinH?.Portrait || (cIsHero ? "100svh" : "auto")};`,
-	`--SecAlignL:${GetHorizontalAlign(pAlign.HzL)};`,
-	`--SecAlignP:${GetHorizontalAlign(pAlign.HzP)};`,
-	`--SecJustifyL:${GetVerticalAlign(pAlign.VrL)};`,
-	`--SecJustifyP:${GetVerticalAlign(pAlign.VrP)};`,
+	`--SecAlignL:${GetHzAlignCss(cHzAlign, "Landscape")};`,
+	`--SecAlignP:${GetHzAlignCss(cHzAlign, "Portrait")};`,
+	`--SecJustifyL:${GetVrAlignCss(cVrAlign, "Landscape")};`,
+	`--SecJustifyP:${GetVrAlignCss(cVrAlign, "Portrait")};`,
+	`--SecGapL:${cGap.Landscape};`,
+	`--SecGapP:${cGap.Portrait};`,
+	`--SecPadL:${cPad.Landscape};`,
+	`--SecPadP:${cPad.Portrait};`,
 	cGivenStyle,
 ].filter(Boolean).join(" ");
 
 const cPlace = new Place(Astro.props as PlaceProps, cSectionStyle);
+
+function GetResponsiveCssValue(
+	pValue: SectionCssValue | undefined,
+	pLandscapeFallback: string,
+	pPortraitFallback: string = pLandscapeFallback,
+) {
+	if (pValue === undefined || pValue === null) {
+		return {
+			Landscape: pLandscapeFallback,
+			Portrait: pPortraitFallback,
+		};
+	}
+
+	if (typeof pValue === "number") {
+		return {
+			Landscape: `${pValue}px`,
+			Portrait: `${pValue}px`,
+		};
+	}
+
+	if (typeof pValue === "string") {
+		return {
+			Landscape: pValue,
+			Portrait: pValue,
+		};
+	}
+
+	const cValue = pValue as { Landscape?: string; Portrait?: string };
+	const cLandscape = cValue.Landscape ?? pLandscapeFallback;
+
+	return {
+		Landscape: cLandscape,
+		Portrait: cValue.Portrait ?? cLandscape ?? pPortraitFallback,
+	};
+}
 
 function GetStyleText(pStyle: Props["style"]) {
 	if (!pStyle) return "";
@@ -128,16 +181,9 @@ function GetBoolAttr(pValue: unknown) {
 	return pValue === true || pValue === "" || pValue === "true";
 }
 
-function GetHorizontalAlign(pValue?: string) {
-	if (pValue === "left") return "flex-start";
-	if (pValue === "right") return "flex-end";
-	return "center";
-}
-
-function GetVerticalAlign(pValue?: string) {
-	if (pValue === "top") return "flex-start";
-	if (pValue === "bottom") return "flex-end";
-	return "center";
+function HasExplicitCssSize(pValue?: string) {
+	const cValue = `${pValue ?? ""}`.trim().toLowerCase();
+	return cValue !== "" && cValue !== "auto" && cValue !== "fit-content" && cValue !== "max-content" && cValue !== "min-content";
 }
 ---
 
@@ -164,12 +210,15 @@ function GetVerticalAlign(pValue?: string) {
 	class = {`EmoSection ${cPlace.Class} ${pGivenClass}`.trim()}
 	style = {cPlace.Style}
 	id={pGivenID}
+	data-emo-auto-container="true"
+	data-emo-explicit-height={cHasExplicitHeight ? "true" : "false"}
+	data-emo-empty-height="200"
 	{...RemAttr}
 >
 
 	{ cHasBgImg && (
 
-		<picture class = " EmoSectionBg ">
+		<picture class = " EmoSectionBg " data-emo-container-bg="true">
 		
 		
 		
@@ -249,6 +298,8 @@ function GetVerticalAlign(pValue?: string) {
 		height: var(--SecHeightL, auto);
 		min-height: var(--SecMinHeightL, auto);
 		max-width: 100%;
+		padding: var(--SecPadL, 0);
+		gap: var(--SecGapL, 0);
 		background-color: var(--SecBg, transparent);
 		min-width: 0;
 		inline-size: 100%;
@@ -327,6 +378,8 @@ function GetVerticalAlign(pValue?: string) {
 			width: var(--SecWidthP, var(--SecWidthL, 100%));
 			height: var(--SecHeightP, var(--SecHeightL, auto));
 			min-height: var(--SecMinHeightP, var(--SecMinHeightL, auto));
+			padding: var(--SecPadP, var(--SecPadL, 0));
+			gap: var(--SecGapP, var(--SecGapL, 0));
 		}
 
 		.EmoSection.IsPlaced {

@@ -1,7 +1,6 @@
 ---
+import { Colors, NumPer, Place, type PlaceProps, Size } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import { Colors, DirectSize, NumPer, Place, type PlaceProps } from "@/TypesLib";
-
 interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
 	/**
 	 * Final deadline used by the client countdown.
@@ -11,9 +10,9 @@ interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
 
 	/**
 	 * Responsive width/height box for the widget.
-	 ** DefVal = new DirectSize(new NumPer("1120px", "94%"))
+	 ** DefVal = new Size(new NumPer("1120px", "94%"))
 	 */
-	pSize?: DirectSize;
+	pSize?: Size;
 
 	/**
 	 * Accent color used for the first card, separators, and live glow.
@@ -36,7 +35,7 @@ interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
 
 const {
 	pDeadline,
-	pSize = new DirectSize(new NumPer("1120px", "94%")),
+	pSize = new Size(new NumPer("1120px", "94%")),
 	pAccent = Colors.Yellow,
 	pTextColor = Colors.WhiteOff,
 	pExpiredText = "",

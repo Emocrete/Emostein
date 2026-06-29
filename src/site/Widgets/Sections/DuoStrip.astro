@@ -1,0 +1,300 @@
+---
+import { Align, ElemBg, GetHzAlignCss, GetVrAlignCss, type HzAlignValue, NumPer, Pixel, Place, Size, type PlaceProps, type VrAlignValue } from "@/TypesLib";
+import { Media } from "@/Media";
+import { SeoText } from "@/SeoText";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
+	pBg?: ElemBg;
+	pBox?: Size;
+	pMinH?: NumPer;
+	pHzAlign?: HzAlignValue;
+	pVrAlign?: VrAlignValue;
+	pImgF?: string;
+	pImgL?: string;
+	pImgP?: string;
+	pImgAlt?: string;
+	pContentSize?: Size;
+	pGap?: Pixel;
+	pPad?: Pixel;
+}
+
+const {
+	pBg,
+	pBox,
+	pMinH,
+	pHzAlign,
+	pVrAlign,
+	pImgF = "",
+	pImgL = "",
+	pImgP = "",
+	pImgAlt = "",
+	pContentSize,
+	pGap = new Pixel(35, 18),
+	pPad = new Pixel(0),
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+
+	id: pGivenID = GetWidgetId("DuoStr"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cPagePath = Astro.url.pathname;
+const cImgFolder = pImgF || Media.GetPageFolder(cPagePath);
+const cUseAutoHeroImg = GetBoolAttr((Astro.props as Record<string, unknown>)["data-hero"]) || pImgF !== "";
+const cLoading: "eager" | "lazy" = cUseAutoHeroImg ? "eager" : "lazy";
+const cFetchPriority: "high" | undefined = cUseAutoHeroImg ? "high" : undefined;
+
+const cBgImgL = pImgL
+	? Media.GetPageFile(cPagePath, pImgL, { pFolder: cImgFolder })
+	: cUseAutoHeroImg
+		? Media.GetHeroLandscape(cPagePath, { pFolder: cImgFolder })
+		: pBg?.Img?.LinkL || "";
+
+const cBgImgP = pImgP
+	? Media.GetPageFile(cPagePath, pImgP, { pFolder: cImgFolder })
+	: pImgL
+		? cBgImgL
+		: cUseAutoHeroImg
+			? Media.GetHeroPortrait(cPagePath, { pFolder: cImgFolder })
+			: pBg?.Img?.LinkP || pBg?.Img?.LinkL || "";
+
+const cFinalBgImgL = cBgImgL || cBgImgP;
+const cFinalBgImgP = cBgImgP || cBgImgL;
+const cHasBgImg = cFinalBgImgL !== "" || cFinalBgImgP !== "";
+const cBgAlt = pImgAlt || pBg?.Img?.Alt || SeoText.GetLocalsImageAlt(Astro.locals);
+
+const cHzAlign = pHzAlign ?? Align.Center;
+const cVrAlign = pVrAlign ?? Align.Center;
+const cHasExplicitHeight = HasExplicitCssSize(pBox?.HeightL) || HasExplicitCssSize(pBox?.HeightP) || HasExplicitCssSize(pSize?.HeightL) || HasExplicitCssSize(pSize?.HeightP);
+
+const cBoxWidthL = pBox?.WidthL || "100%";
+const cBoxWidthP = pBox?.WidthP || pBox?.WidthL || "100%";
+const cBoxHeightL = pBox?.HeightL || "auto";
+const cBoxHeightP = pBox?.HeightP || pBox?.HeightL || "auto";
+const cMinHeightL = pMinH?.Landscape || "auto";
+const cMinHeightP = pMinH?.Portrait || pMinH?.Landscape || "auto";
+const cColMinHeightL = GetColumnMinHeightL(cBoxHeightL, cMinHeightL, pPad.Landscape);
+const cColMinHeightP = GetColumnMinHeightP(cBoxHeightP, cMinHeightP, pPad.Portrait, pGap.Portrait);
+
+const cDuoStyle = [
+	`--DuoBg:${pBg?.Color || "transparent"};`,
+	`--DuoBoxWidthL:${cBoxWidthL};`,
+	`--DuoBoxWidthP:${cBoxWidthP};`,
+	`--DuoBoxHeightL:${cBoxHeightL};`,
+	`--DuoBoxHeightP:${cBoxHeightP};`,
+	`--DuoMinHeightL:${cMinHeightL};`,
+	`--DuoMinHeightP:${cMinHeightP};`,
+	`--DuoWidthL:${pContentSize?.WidthL || "100%"};`,
+	`--DuoWidthP:${pContentSize?.WidthP || pContentSize?.WidthL || "100%"};`,
+	`--DuoJustifyL:${GetHzAlignCss(cHzAlign, "Landscape")};`,
+	`--DuoJustifyP:${GetHzAlignCss(cHzAlign, "Portrait")};`,
+	`--DuoAlignL:${GetVrAlignCss(cVrAlign, "Landscape")};`,
+	`--DuoAlignP:${GetVrAlignCss(cVrAlign, "Portrait")};`,
+	`--DuoGapL:${pGap.Landscape};`,
+	`--DuoGapP:${pGap.Portrait};`,
+	`--DuoPadL:${pPad.Landscape};`,
+	`--DuoPadP:${pPad.Portrait};`,
+	`--DuoColMinHeightL:${cColMinHeightL};`,
+	`--DuoColMinHeightP:${cColMinHeightP};`,
+	GetStyleText(pGivenStyle),
+].filter(Boolean).join(" ");
+
+const cPlace = new Place(Astro.props as PlaceProps, cDuoStyle);
+
+function GetColumnMinHeightL(pHeight: string, pMinHeight: string, pPadValue: string) {
+	const cBase = pHeight !== "auto" ? pHeight : pMinHeight;
+
+	if (!cBase || cBase === "auto") {
+		return "auto";
+	}
+
+	return `max(0px, calc(${cBase} - ${pPadValue} - ${pPadValue}))`;
+}
+
+function GetColumnMinHeightP(pHeight: string, pMinHeight: string, pPadValue: string, pGapValue: string) {
+	const cBase = pHeight !== "auto" ? pHeight : pMinHeight;
+
+	if (!cBase || cBase === "auto") {
+		return "auto";
+	}
+
+	return `max(0px, calc((${cBase} - ${pPadValue} - ${pPadValue} - ${pGapValue}) / 2))`;
+}
+
+function GetStyleText(pStyle: Props["style"]) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+
+	return Object.entries(pStyle)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+
+function GetBoolAttr(pValue: unknown) {
+	return pValue === true || pValue === "" || pValue === "true";
+}
+
+function HasExplicitCssSize(pValue?: string) {
+	const cValue = `${pValue ?? ""}`.trim().toLowerCase();
+	return cValue !== "" && cValue !== "auto" && cValue !== "fit-content" && cValue !== "max-content" && cValue !== "min-content";
+}
+---
+
+<div
+	class={`DuoStr ${cPlace.Class} ${pGivenClass}`.trim()}
+	style={cPlace.Style}
+	id={pGivenID}
+	data-emo-auto-container="true"
+	data-emo-explicit-height={cHasExplicitHeight ? "true" : "false"}
+	data-emo-empty-height="200"
+	{...RemAttr}
+>
+	{cHasBgImg && (
+		<picture class="DuoStrBg" data-emo-container-bg="true">
+			<source media="(orientation: portrait)" srcset={cFinalBgImgP} />
+			<img
+				class="DuoStrBgImg"
+				src={cFinalBgImgL}
+				alt={cBgAlt}
+				loading={cLoading}
+				decoding="async"
+				fetchpriority={cFetchPriority}
+			/>
+		</picture>
+	)}
+
+	<slot />
+</div>
+
+<style is:global>
+	.DuoStr {
+		position: relative;
+		isolation: isolate;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: stretch;
+		align-content: var(--DuoAlignL, center);
+		justify-content: var(--DuoJustifyL, center);
+		box-sizing: border-box;
+		width: var(--DuoBoxWidthL, 100%);
+		height: var(--DuoBoxHeightL, auto);
+		min-height: var(--DuoMinHeightL, auto);
+		max-width: 100%;
+		min-width: 0;
+		padding: var(--DuoPadL, 0px);
+		gap: var(--DuoGapL, 0px);
+		background-color: var(--DuoBg, transparent);
+		overflow: visible;
+	}
+
+	.DuoStrBg {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		display: block;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+	}
+
+	.DuoStrBgImg {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		pointer-events: none;
+		user-select: none;
+	}
+
+	.DuoStr > :not(.DuoStrBg):not(.DuoCol):not(.IsPlaced):not(.PlaceSized) {
+		flex: 0 0 100%;
+		width: 100%;
+		max-width: 100%;
+		box-sizing: border-box;
+	}
+
+	.DuoStr > .DuoCol {
+		flex: 1 1 calc((var(--DuoWidthL, 100%) - var(--DuoGapL, 0px)) / 2);
+		width: calc((var(--DuoWidthL, 100%) - var(--DuoGapL, 0px)) / 2);
+		max-width: calc((var(--DuoWidthL, 100%) - var(--DuoGapL, 0px)) / 2);
+		min-width: 0;
+		min-height: var(--DuoColMinHeightL, auto);
+		align-self: stretch;
+		box-sizing: border-box;
+		margin-inline: 0;
+	}
+
+	.DuoStr.IsPlaced {
+		position: absolute;
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+	.DuoStr[hidden] {
+		display: none;
+	}
+
+	@media (orientation: portrait) {
+		.DuoStr {
+			align-content: var(--DuoAlignP, var(--DuoAlignL, center));
+			justify-content: var(--DuoJustifyP, var(--DuoJustifyL, center));
+			width: var(--DuoBoxWidthP, var(--DuoBoxWidthL, 100%));
+			height: var(--DuoBoxHeightP, var(--DuoBoxHeightL, auto));
+			min-height: var(--DuoMinHeightP, var(--DuoMinHeightL, auto));
+			padding: var(--DuoPadP, var(--DuoPadL, 0px));
+			gap: var(--DuoGapP, var(--DuoGapL, 0px));
+		}
+
+		.DuoStr > .DuoCol {
+			flex: 0 0 var(--DuoWidthP, 100%);
+			width: var(--DuoWidthP, 100%);
+			max-width: var(--DuoWidthP, 100%);
+			min-height: var(--DuoColMinHeightP, auto);
+		}
+
+		.DuoStr.IsPlaced {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+	}
+</style>

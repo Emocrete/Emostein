@@ -115,7 +115,7 @@ import EmoCallBase from "./Comp/EmoCall.astro";
  * النص الظاهر داخل الزر.
  *
  * pSize:
- * مقاس الزر باستخدام DirectSize.
+ * مقاس الزر باستخدام Size.
  *
  * pWidth / pHeight:
  * عرض وارتفاع الزر كقيم CSS مباشرة مثل "200px" أو "fit-content".
@@ -175,50 +175,7 @@ export { default as RetailDwgMonthlyOffer } from "./Offers/RetailDwgMonthlyOffer
 export { default as Badge } from "./Comp/Badge.astro";
 export { default as Price } from "./Prices/Price.astro";
 export { default as FreeHero } from "./Sections/FreeHero.astro";
-export { default as FreeHeroItem } from "./Sections/FreeHeroItem.astro";
-export { default as FreeHeroMoveItem } from "./Sections/FreeHeroMoveItem.astro";
-export { FreeHeroKeyPoint } from "./Sections/FreeHeroMotion";
 export { Moving, MovingKeyPoint, BuildMovingMotionPoints, GetMovingDefaultIntervals, GetMovingDefaultLoop, GetMovingDefaultEase, type MovingMotion } from "../TypesLib";
-export { default as FreeHeroFadeIn } from "./Sections/FreeHeroMotion/FreeHeroFadeIn.astro";
-export { default as FreeHeroSlideInRight } from "./Sections/FreeHeroMotion/FreeHeroSlideInRight.astro";
-export { default as FreeHeroSlideInLeft } from "./Sections/FreeHeroMotion/FreeHeroSlideInLeft.astro";
-export { default as FreeHeroSlideInTop } from "./Sections/FreeHeroMotion/FreeHeroSlideInTop.astro";
-export { default as FreeHeroSlideInBottom } from "./Sections/FreeHeroMotion/FreeHeroSlideInBottom.astro";
-export { default as FreeHeroZoomIn } from "./Sections/FreeHeroMotion/FreeHeroZoomIn.astro";
-export { default as FreeHeroZoomInRight } from "./Sections/FreeHeroMotion/FreeHeroZoomInRight.astro";
-export { default as FreeHeroZoomInLeft } from "./Sections/FreeHeroMotion/FreeHeroZoomInLeft.astro";
-export { default as FreeHeroZoomInTop } from "./Sections/FreeHeroMotion/FreeHeroZoomInTop.astro";
-export { default as FreeHeroZoomInBottom } from "./Sections/FreeHeroMotion/FreeHeroZoomInBottom.astro";
-export { default as FreeHeroFlipInX } from "./Sections/FreeHeroMotion/FreeHeroFlipInX.astro";
-export { default as FreeHeroFlipInY } from "./Sections/FreeHeroMotion/FreeHeroFlipInY.astro";
-export { default as FreeHeroFlipInRight } from "./Sections/FreeHeroMotion/FreeHeroFlipInRight.astro";
-export { default as FreeHeroFlipInLeft } from "./Sections/FreeHeroMotion/FreeHeroFlipInLeft.astro";
-export { default as FreeHeroFlipInTop } from "./Sections/FreeHeroMotion/FreeHeroFlipInTop.astro";
-export { default as FreeHeroFlipInBottom } from "./Sections/FreeHeroMotion/FreeHeroFlipInBottom.astro";
-export { default as FreeHeroRotateIn } from "./Sections/FreeHeroMotion/FreeHeroRotateIn.astro";
-export { default as FreeHeroRotateInRight } from "./Sections/FreeHeroMotion/FreeHeroRotateInRight.astro";
-export { default as FreeHeroRotateInLeft } from "./Sections/FreeHeroMotion/FreeHeroRotateInLeft.astro";
-export { default as FreeHeroSpinReveal } from "./Sections/FreeHeroMotion/FreeHeroSpinReveal.astro";
-export { default as FreeHeroBounceIn } from "./Sections/FreeHeroMotion/FreeHeroBounceIn.astro";
-export { default as FreeHeroBounceInRight } from "./Sections/FreeHeroMotion/FreeHeroBounceInRight.astro";
-export { default as FreeHeroBounceInLeft } from "./Sections/FreeHeroMotion/FreeHeroBounceInLeft.astro";
-export { default as FreeHeroBounceInTop } from "./Sections/FreeHeroMotion/FreeHeroBounceInTop.astro";
-export { default as FreeHeroBounceInBottom } from "./Sections/FreeHeroMotion/FreeHeroBounceInBottom.astro";
-export { default as FreeHeroBackInRight } from "./Sections/FreeHeroMotion/FreeHeroBackInRight.astro";
-export { default as FreeHeroBackInLeft } from "./Sections/FreeHeroMotion/FreeHeroBackInLeft.astro";
-export { default as FreeHeroBackInTop } from "./Sections/FreeHeroMotion/FreeHeroBackInTop.astro";
-export { default as FreeHeroBackInBottom } from "./Sections/FreeHeroMotion/FreeHeroBackInBottom.astro";
-export { default as FreeHeroRollInRight } from "./Sections/FreeHeroMotion/FreeHeroRollInRight.astro";
-export { default as FreeHeroRollInLeft } from "./Sections/FreeHeroMotion/FreeHeroRollInLeft.astro";
-export { default as FreeHeroLightSpeedInRight } from "./Sections/FreeHeroMotion/FreeHeroLightSpeedInRight.astro";
-export { default as FreeHeroLightSpeedInLeft } from "./Sections/FreeHeroMotion/FreeHeroLightSpeedInLeft.astro";
-export { default as FreeHeroFloatY } from "./Sections/FreeHeroMotion/FreeHeroFloatY.astro";
-export { default as FreeHeroFloatX } from "./Sections/FreeHeroMotion/FreeHeroFloatX.astro";
-export { default as FreeHeroPulse } from "./Sections/FreeHeroMotion/FreeHeroPulse.astro";
-export { default as FreeHeroBreathe } from "./Sections/FreeHeroMotion/FreeHeroBreathe.astro";
-export { default as FreeHeroWiggle } from "./Sections/FreeHeroMotion/FreeHeroWiggle.astro";
-export { default as FreeHeroDriftBox } from "./Sections/FreeHeroMotion/FreeHeroDriftBox.astro";
-export { default as FreeHeroOrbitSmall } from "./Sections/FreeHeroMotion/FreeHeroOrbitSmall.astro";
 
 export { default as SiteIntro } from "./Intro/SiteIntro.astro";
 export { default as SiteSearch404 } from "./Comp/SiteSearch404.astro";
@@ -228,7 +185,7 @@ export { default as PriceCard } from "./Prices/PriceCard.astro";
 export { default as HzStack } from "./Comp/HzStack.astro";
 export { default as VrStack } from "./Comp/VrStack.astro";
 export { default as SecTitle } from "./Comp/SecTitle.astro";
-export { default as DuoSec } from "./Sections/DuoSection.astro";
+export { default as DuoStr } from "./Sections/DuoStrip.astro";
 export { default as DuoCol } from "./Sections/DuoCol.astro";
 
 export { default as Grid } from "./Comp/Grid.astro";
@@ -251,4 +208,4 @@ export { default as ThemedPriceCardHz } from "./Prices/ThemedPriceCardHz.astro";
 
 export { default as EmoWhats } from "./Comp/EmoWhats.astro";
 export { default as EmoDet } from "./Comp/EmoDet.astro";
-
+export { default as PharmacyWorkCard } from "./Pharmacy/PharmacyWorkCard.astro";

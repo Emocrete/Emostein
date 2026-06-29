@@ -72,11 +72,11 @@ export type PlaceOrigin =
 
 export interface PlaceProps extends MovingProps {
 	pLoc?: Loc;
-	pSize?: DirectSize;
-	pRotate?: Angle;
+	pSize?: Size;
+	pRotate?: Angle | RespString;
 	pZ?: number;
 	pOrigin?: PlaceOrigin;
-	pOpacity?: Percent;
+	pOpacity?: Percent | RespString | number;
 	pClickable?: boolean;
 	pLandOnly?: boolean;
 	pPortOnly?: boolean;
@@ -99,13 +99,15 @@ export class Place {
 
 		this.Class = [
 			this.IsPlaced ? "IsPlaced" : "",
+			Place.HasSize(pProps, this.IsPlaced) ? "PlaceSized" : "",
+			Place.HasVisualStyle(pProps) ? "PlaceStyled" : "",
 			this.IsMoving ? "IsMoving" : "",
 			pProps.pPortOnly ? "PlaceHideLand" : "",
 			pProps.pLandOnly ? "PlaceHidePort" : "",
 		].filter(Boolean).join(" ");
 
 		this.Style = [
-			this.IsPlaced ? Place.GetStyle(pProps) : "",
+			Place.HasStyle(pProps, this.IsPlaced) ? Place.GetStyle(pProps, this.IsPlaced) : "",
 			this.IsMoving ? Moving.GetStyle(pProps) : "",
 			pStyle || "",
 		].filter(Boolean).join(" ").trim();
@@ -115,25 +117,54 @@ export class Place {
 	static IsPlaced(pProps: PlaceProps) {
 		return !!(
 			pProps.pLoc !== undefined ||
-			pProps.pRotate !== undefined ||
-			pProps.pZ !== undefined ||
-			pProps.pOrigin !== undefined ||
-			pProps.pOpacity !== undefined ||
-			pProps.pClickable !== undefined ||
-			pProps.pLandOnly ||
-			pProps.pPortOnly ||
 			pProps.pMoveLoc !== undefined ||
 			Moving.HasCustomPath(pProps)
 		);
 	}
 
+	static HasSize(pProps: PlaceProps, pIsPlaced: boolean = Place.IsPlaced(pProps)) {
+		return !!(
+			pProps.pSize !== undefined ||
+			(pIsPlaced && pProps.pMoveBox !== undefined)
+		);
+	}
 
-	private static GetStyle(pProps: PlaceProps) {
+	static HasVisualStyle(pProps: PlaceProps) {
+		return !!(
+			pProps.pRotate !== undefined ||
+			pProps.pZ !== undefined ||
+			pProps.pOrigin !== undefined ||
+			pProps.pOpacity !== undefined ||
+			pProps.pClickable !== undefined
+		);
+	}
 
-		const cLoc = pProps.pLoc ?? Moving.GetLocFromLocation(pProps.pMoveLoc) ?? new Loc(new NumPer(0), new NumPer(0));
-		const cSize = pProps.pSize ?? Moving.GetDirectSizeFromSize(pProps.pMoveBox) ?? new DirectSize(new NumPer("auto"), new NumPer("auto"));
+	static HasStyle(pProps: PlaceProps, pIsPlaced: boolean = Place.IsPlaced(pProps)) {
+		return !!(
+			pIsPlaced ||
+			Place.HasSize(pProps, pIsPlaced) ||
+			Place.HasVisualStyle(pProps)
+		);
+	}
+
+	private static GetOpacity(pOpacity?: Percent | RespString | number) {
+		if (pOpacity instanceof Percent || pOpacity instanceof RespString) {
+			return pOpacity;
+		}
+
+		if (typeof pOpacity === "number") {
+			return new RespString(`${pOpacity}`, `${pOpacity}`);
+		}
+
+		return new Percent(100);
+	}
+
+	private static GetStyle(pProps: PlaceProps, pIsPlaced: boolean = Place.IsPlaced(pProps)) {
+
+		const cLoc = pProps.pLoc ?? pProps.pMoveLoc ?? new Loc(new NumPer(0), new NumPer(0));
+		const cSize = pProps.pSize ?? (pIsPlaced ? pProps.pMoveBox : undefined) ?? new Size();
 		const cRotate = pProps.pRotate ?? new Angle(0);
-		const cOpacity = pProps.pOpacity ?? new Percent(100);
+		const cOpacity = Place.GetOpacity(pProps.pOpacity);
 
 		return [
 			`--PlaceXL:${cLoc.XL};`,
@@ -181,25 +212,6 @@ export class Loc {
 
 }
 
-export class Location {
-	public readonly XL: number | string;
-	public readonly XP: number | string;
-	public readonly YL: number | string;
-	public readonly YP: number | string;
-
-	constructor(
-		pXL: number | string,
-		pXP: number | string,
-		pVL: number | string,
-		pVP: number | string,
-	) {
-		this.XL = typeof pXL === "number" ? `${pXL}px` : `${pXL}`;
-		this.XP = typeof pXP === "number" ? `${pXP}px` : `${pXP}`;
-		this.YL = typeof pVL === "number" ? `${pVL}px` : `${pVL}`;
-		this.YP = typeof pVP === "number" ? `${pVP}px` : `${pVP}`;
-	}
-}
-
 
 export class Topic {
 	constructor(
@@ -208,6 +220,9 @@ export class Topic {
 		public readonly Items?: string[],
 	) { }
 }
+
+export type HzAlignValue = Align | "Left" | "Center" | "Right" | "Start" | "End" | "Stretch" | "left" | "center" | "right" | "start" | "end" | "stretch";
+export type VrAlignValue = Align | "Top" | "Center" | "Bottom" | "Start" | "End" | "Stretch" | "top" | "center" | "bottom" | "start" | "end" | "stretch";
 
 export class Align {
 	public readonly HzL: string;
@@ -232,7 +247,29 @@ export class Align {
 
 }
 
-export class DirectSize {
+export function GetHzAlignCss(pValue: HzAlignValue | undefined, pOrientation: "Landscape" | "Portrait" = "Landscape") {
+	const cValue = pValue instanceof Align
+		? (pOrientation === "Portrait" ? pValue.HzP : pValue.HzL)
+		: `${pValue ?? "center"}`.toLowerCase();
+
+	if (cValue === "left" || cValue === "start") return "flex-start";
+	if (cValue === "right" || cValue === "end") return "flex-end";
+	if (cValue === "stretch") return "stretch";
+	return "center";
+}
+
+export function GetVrAlignCss(pValue: VrAlignValue | undefined, pOrientation: "Landscape" | "Portrait" = "Landscape") {
+	const cValue = pValue instanceof Align
+		? (pOrientation === "Portrait" ? pValue.VrP : pValue.VrL)
+		: `${pValue ?? "center"}`.toLowerCase();
+
+	if (cValue === "top" || cValue === "start") return "flex-start";
+	if (cValue === "bottom" || cValue === "end") return "flex-end";
+	if (cValue === "stretch") return "stretch";
+	return "center";
+}
+
+export class Size {
 	public readonly WidthL: string;
 	public readonly HeightL: string;
 	public readonly WidthP: string;
@@ -249,33 +286,15 @@ export class DirectSize {
 	}
 }
 
-export class Size {
-	public readonly WidthL: string;
-	public readonly HeightL: string;
-	public readonly WidthP: string;
-	public readonly HeightP: string;
-	constructor(
-		pWidthL: number | string = "auto",
-		pHeightL: number | string = "auto",
-		pWidthP: number | string = "auto",
-		pHeightP: number | string = "auto",
-	) {
-		this.WidthL = typeof pWidthL === "number" ? `${pWidthL}px` : `${pWidthL}`;
-		this.HeightL = typeof pHeightL === "number" ? `${pHeightL}px` : `${pHeightL}`;
-		this.WidthP = typeof pWidthP === "number" ? `${pWidthP}px` : `${pWidthP}`;
-		this.HeightP = typeof pHeightP === "number" ? `${pHeightP}px` : `${pHeightP}`;
-	}
-}
-
 
 export interface MovingProps {
 	/** حركة جاهزة على نفس الودجت، بدون أي wrapper خارجي. */
 	pMove?: MovingMotion;
 	/** مدة الحركة الافتراضية عند استخدام pMove. */
 	pMoveDuration?: number;
-	/** مكان النهاية/المرجع للحركة، ويستخدم أيضاً كتموضع اختياري عند عدم إدخال pLoc. */
-	pMoveLoc?: Location;
-	/** مقاس النهاية/المرجع للحركة، ويستخدم أيضاً كتموضع اختياري عند عدم إدخال pSize. */
+	/** مكان مباشر للحركة. وجوده يعني أن العنصر له تموضع صريح ويخرج من التدفق الطبيعي. */
+	pMoveLoc?: Loc;
+	/** مقاس مباشر للحركة. يطبق كحجم فعلي عندما يكون العنصر متموضعًا بواسطة pLoc أو pMoveLoc أو مسار حركة مخصص. */
 	pMoveBox?: Size;
 	/** مسافة الحركة في presets مثل Slide/Float/Back. */
 	pMoveDistance?: string | RespString;
@@ -309,15 +328,6 @@ export class Moving {
 		return Array.isArray(pProps.pMoveKeyPoints) && pProps.pMoveKeyPoints.length > 0;
 	}
 
-	static GetLocFromLocation(pLocation?: Location) {
-		if (!pLocation) return undefined;
-		return new Loc(new NumPer(pLocation.XL, pLocation.XP), new NumPer(pLocation.YL, pLocation.YP));
-	}
-
-	static GetDirectSizeFromSize(pSize?: Size) {
-		if (!pSize) return undefined;
-		return new DirectSize(new NumPer(pSize.WidthL, pSize.WidthP), new NumPer(pSize.HeightL, pSize.HeightP));
-	}
 
 	static GetStyle(pProps: PlaceProps) {
 		const cKeyPoints = Moving.GetKeyPointsData(pProps);
@@ -391,11 +401,8 @@ export class Moving {
 			return [];
 		}
 
-		const cLoc = pProps.pMoveLoc
-			?? (pProps.pLoc ? new Location(pProps.pLoc.XL, pProps.pLoc.XP, pProps.pLoc.YL, pProps.pLoc.YP) : new Location(0, 0, 0, 0));
-
-		const cBox = pProps.pMoveBox
-			?? (pProps.pSize ? new Size(pProps.pSize.WidthL, pProps.pSize.HeightL, pProps.pSize.WidthP, pProps.pSize.HeightP) : new Size());
+		const cLoc = pProps.pMoveLoc ?? pProps.pLoc ?? new Loc(new NumPer(0), new NumPer(0));
+		const cBox = pProps.pMoveBox ?? pProps.pSize ?? new Size();
 
 		return BuildMovingMotionPoints(
 			pProps.pMove,
@@ -454,7 +461,7 @@ export type MovingMotion =
 
 export class MovingKeyPoint {
 	constructor(
-		public readonly Loc: Location,
+		public readonly Loc: Loc,
 		public readonly Box: Size = new Size(),
 		public readonly Rotate: string | RespString = "0deg",
 		public readonly Opacity: number | RespString = 1,
@@ -463,18 +470,13 @@ export class MovingKeyPoint {
 }
 
 export function OffsetLocation(
-	pLoc: Location,
+	pLoc: Loc,
 	pDeltaXL: string = "0px",
 	pDeltaXP: string = "0px",
 	pDeltaYL: string = "0px",
 	pDeltaYP: string = "0px",
-): Location {
-	return new Location(
-		AddCss(pLoc.XL, pDeltaXL),
-		AddCss(pLoc.XP, pDeltaXP),
-		AddCss(pLoc.YL, pDeltaYL),
-		AddCss(pLoc.YP, pDeltaYP),
-	);
+): Loc {
+	return new Loc(new NumPer(AddCss(pLoc.XL, pDeltaXL), AddCss(pLoc.XP, pDeltaXP)), new NumPer(AddCss(pLoc.YL, pDeltaYL), AddCss(pLoc.YP, pDeltaYP)));
 }
 
 export function AddCss(pBase: string | number, pDelta: string): string {
@@ -512,7 +514,7 @@ export function GetDistanceP(pDistance: string | RespString): string {
 
 export function BuildMovingMotionPoints(
 	pMotion: MovingMotion,
-	pLoc: Location,
+	pLoc: Loc,
 	pBox: Size,
 	pDistance: string | RespString = new RespString("180px", "90px"),
 ): MovingKeyPoint[] {
@@ -1148,6 +1150,7 @@ export class Colors {
 	static readonly Gray5 = "#353535";
 
 	static readonly GreenLite = "#D7F58C";
+	static readonly Green = "#1c8801";
 	static readonly GreenDark = "green";
 
 	static readonly OrangeLite = "#FDCB9E";
@@ -1237,7 +1240,7 @@ export class EmoMediaData {
 		pResp: boolean = false,
 		public readonly Alt: string = "",
 		public readonly Size?: Size,
-		public readonly Pos?: Location,
+		public readonly Pos?: Loc,
 		public readonly SwitchLimit?: number,
 	) {
 		this.LinkL = EmoMediaData.BuildLink(pSrcFolder, pFile, pResp ? "L" : null);

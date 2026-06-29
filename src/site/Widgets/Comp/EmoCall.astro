@@ -1,9 +1,9 @@
 ---
+import { Colors, Place, type PlaceProps, HoverColors, HoverImg } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import { Colors, HoverColors, HoverImg, Place, type PlaceProps } from "@/TypesLib";
 import { GetBoolAttr, GetButtonPreset, GetButtonTitleColors, type ButtonPresetProps } from "./ButtonPresets";
 
-export interface Props extends DebugOutlineProps, HTMLAttributes<"a">, PlaceProps, ButtonPresetProps {
+export interface Props extends HTMLAttributes<"a">, PlaceProps, ButtonPresetProps {
 	/** النص الظاهر داخل زر الاتصال. */
 	pText?: string;
 
@@ -654,12 +654,14 @@ function GetCssName(pName: string) {
 	window.addEventListener("keydown", HandleWindowKeyDown);
 
 	function SetupCallButton(pButton: HTMLElement): void {
+	if (pButton.dataset.callReady === "true") return;
+
 	const cOverlay = pButton.nextElementSibling;
 
 	if (!(cOverlay instanceof HTMLElement)) return;
 	if (cOverlay.dataset.callOverlay !== "true") return;
-	if (pButton.dataset.callReady === "true") return;
 
+	MoveOverlayToBody(cOverlay);
 	pButton.dataset.callReady = "true";
 
 	pButton.addEventListener("click", function HandleCallButtonClick(pEvent: MouseEvent): void {
@@ -678,6 +680,12 @@ function GetCssName(pName: string) {
 	HideCallOverlay(cOverlay);
 	}
 	});
+	}
+
+	function MoveOverlayToBody(pOverlay: HTMLElement): void {
+	if (pOverlay.parentElement === document.body) return;
+
+	document.body.appendChild(pOverlay);
 	}
 
 	function HandleWindowKeyDown(pEvent: KeyboardEvent): void {

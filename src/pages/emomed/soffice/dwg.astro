@@ -1,7 +1,7 @@
 ---
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, Size, Align, Colors, RespString, Pixel, NumPer, DirectSize, Percent, Loc, EmoMediaData } from "@/TypesLib";
-import { Hero, SecTitle, ESec, EmoStrip, Emograph, ReadAlsoItem, HzStack, VrStack, Grid, EmoList, EmoCall, EmoFaq, ReadAlso, RelServices, FaqItem, RelServiceItem } from "@/Widgets";
+import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Grid, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, SecTitle, VrStack } from "@/Widgets";
 ---
 
 
@@ -38,7 +38,7 @@ import { Hero, SecTitle, ESec, EmoStrip, Emograph, ReadAlsoItem, HzStack, VrStac
 	<Hero pImgF="/Media/Emomed/Office">
 
 		<VrStack
-			pSize={new DirectSize(new NumPer("35%","95%"))}
+			pSize={new Size(new NumPer("35%","95%"))}
 			pLoc={new Loc(new NumPer("52%","2.5%"),new NumPer("20%","60%"))}
 			pBgColor={new ElemBg(Colors.Gray5)}
 			pBgOpacity={new Percent(50)}
@@ -69,26 +69,27 @@ import { Hero, SecTitle, ESec, EmoStrip, Emograph, ReadAlsoItem, HzStack, VrStac
 			pDesc="ملف المكتب العلمي يحتاج لوحة تقرأ العنوان والحدود والارتفاع وعلاقة مخزن العينات بالمقر قبل دخول لجنة المعاينة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("مقر المكتب")}
 					pText={Text.Body.Centered.OfText("نحدد حدود المقر، عنوانه التفصيلي، مدخله، علاقته بالدور، ومساحاته التي تظهر في سند الحيازة والرسم.")}
-					pSize={new Size(350, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("مخزن العينات")}
 					pText={Text.Body.Centered.OfText("نرسم مخزن العينات كفراغ واضح، مع أطواله وارتفاعه وموضعه داخل المقر أو خارجه وبيانات الصيدلي المسئول.")}
-					pSize={new Size(350, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("مطابقة المعاينة")}
 					pText={Text.Body.Centered.OfText("نراجع اللوحة مع الواقع قبل الطباعة، لأن المعاينة تقارن العنوان والحدود والمخزن والارتفاع وسند الحيازة بنفس البيانات.")}
-					pSize={new Size(350, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</HzStack>
@@ -111,7 +112,8 @@ import { Hero, SecTitle, ESec, EmoStrip, Emograph, ReadAlsoItem, HzStack, VrStac
 			pDesc="نجهز اللوحة بحيث تجمع بيانات هندسية وتنظيمية تساعد في مراجعة ملف المكتب العلمي"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -178,7 +180,7 @@ import { Hero, SecTitle, ESec, EmoStrip, Emograph, ReadAlsoItem, HzStack, VrStac
 				<Emograph
 					pTitle={Text.H4.Centered.OfText("مخزن داخل المقر")}
 					pText={Text.Body.Centered.OfText("نظهر المخزن كفراغ داخل حدود المكتب، ونحدد علاقته بمسار الدخول والحركة الداخلية وباقي الغرف.")}
-					pSize={new Size(260, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</VrStack>
@@ -193,7 +195,7 @@ import { Hero, SecTitle, ESec, EmoStrip, Emograph, ReadAlsoItem, HzStack, VrStac
 				<Emograph
 					pTitle={Text.H4.Centered.OfText("مخزن بعنوان منفصل")}
 					pText={Text.Body.Centered.OfText("نجهز لوحة مستقلة للمخزن عند اختلاف عنوانه، مع ربطها ببيانات المكتب العلمي في ملف الترخيص.")}
-					pSize={new Size(260, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</VrStack>
@@ -208,7 +210,7 @@ import { Hero, SecTitle, ESec, EmoStrip, Emograph, ReadAlsoItem, HzStack, VrStac
 				<Emograph
 					pTitle={Text.H4.Centered.OfText("إضافة مخزن عينات")}
 					pText={Text.Body.Centered.OfText("عند إضافة مخزن جديد لمكتب قائم، نركز على بيانات المخزن الجديد وعنوانه وارتباطه بالرخصة الحالية.")}
-					pSize={new Size(260, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</VrStack>
@@ -223,7 +225,7 @@ import { Hero, SecTitle, ESec, EmoStrip, Emograph, ReadAlsoItem, HzStack, VrStac
 				<Emograph
 					pTitle={Text.H4.Centered.OfText("تغيير مقر")}
 					pText={Text.Body.Centered.OfText("طلب تغيير مقر يحتاج لوحة جديدة تقرأ العنوان الجديد وحدود العين ومخزن العينات والبيانات المعدلة.")}
-					pSize={new Size(260, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</VrStack>
@@ -238,7 +240,7 @@ import { Hero, SecTitle, ESec, EmoStrip, Emograph, ReadAlsoItem, HzStack, VrStac
 				<Emograph
 					pTitle={Text.H4.Centered.OfText("تغيير مخزن")}
 					pText={Text.Body.Centered.OfText("نراجع المخزن البديل هندسيًا، ثم نعد لوحة مطابقة للعنوان الجديد والمساحة والارتفاع والتهوية.")}
-					pSize={new Size(260, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</VrStack>
@@ -253,7 +255,7 @@ import { Hero, SecTitle, ESec, EmoStrip, Emograph, ReadAlsoItem, HzStack, VrStac
 				<Emograph
 					pTitle={Text.H4.Centered.OfText("تجديد ترخيص")}
 					pText={Text.Body.Centered.OfText("عند التجديد نراجع احتفاظ المكتب بالرسم والرخصة ومطابقة الواقع للبيانات القديمة قبل استخدام نفس اللوحة أو تحديثها.")}
-					pSize={new Size(260, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</VrStack>
@@ -268,7 +270,7 @@ import { Hero, SecTitle, ESec, EmoStrip, Emograph, ReadAlsoItem, HzStack, VrStac
 				<Emograph
 					pTitle={Text.H4.Centered.OfText("تعدد الشركات")}
 					pText={Text.Body.Centered.OfText("المكتب المشترك يحتاج قراءة واضحة للشركات المرتبطة بالمقر ومخزن العينات داخل مستندات الملف.")}
-					pSize={new Size(260, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</VrStack>
@@ -283,7 +285,7 @@ import { Hero, SecTitle, ESec, EmoStrip, Emograph, ReadAlsoItem, HzStack, VrStac
 				<Emograph
 					pTitle={Text.H4.Centered.OfText("مستندات مترجمة")}
 					pText={Text.Body.Centered.OfText("ملفات الشركات الخارجية تحتاج توافقًا بين اسم الشركة في التفويض والترجمة والرسم وطلب الترخيص.")}
-					pSize={new Size(260, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</VrStack>
@@ -306,7 +308,8 @@ import { Hero, SecTitle, ESec, EmoStrip, Emograph, ReadAlsoItem, HzStack, VrStac
 			pDesc="نبدأ بمراجعة الملف، ثم نرفع المقاسات، ثم نجهز اللوحة النهائية للمراجعة والاعتماد"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("1100px", "100%")}
@@ -343,7 +346,8 @@ import { Hero, SecTitle, ESec, EmoStrip, Emograph, ReadAlsoItem, HzStack, VrStac
 			pDesc="هذه النقاط ترفع جودة اللوحة وتقلل ملاحظات المراجعة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -399,7 +403,8 @@ import { Hero, SecTitle, ESec, EmoStrip, Emograph, ReadAlsoItem, HzStack, VrStac
 			pDesc="نحدد منذ البداية ما الذي سيستلمه العميل وما الذي يحتاجه في ملف الترخيص"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(25, 15)} pPad={new Pixel(30, 15)}>
 
@@ -471,14 +476,15 @@ import { Hero, SecTitle, ESec, EmoStrip, Emograph, ReadAlsoItem, HzStack, VrStac
 			pDesc="أرسل بيانات الشركة وعنوان المقر ومخزن العينات وصور المكان، وسنحدد المطلوب للرفع والرسم والمراجعة قبل التقديم"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Sky)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Sky)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
 				<Emograph
 					pTitle={Text.H3.OfText("بيانات نحتاجها قبل الزيارة")}
 					pText={Text.Body.OfText("اسم الشركة، اسم المكتب العلمي، عنوان المقر، عنوان مخزن العينات، صورة عقد الحيازة إن وجد، صور الواجهة والمدخل والفراغات الداخلية، وبيانات المدير والصيدلي المسئول إذا كانت جاهزة. بعد مراجعة البيانات نحدد زيارة الرفع ونجهز اللوحة المناسبة لحالة الملف.")}
-					pSize={new Size(750, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(750, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<VrStack
@@ -491,7 +497,7 @@ import { Hero, SecTitle, ESec, EmoStrip, Emograph, ReadAlsoItem, HzStack, VrStac
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("01014490054")}
 						pText={Text.Body.Centered.OfText("اتصل أو ارسل بيانات المقر ومخزن العينات على واتساب لبدء خدمة الرسم الهندسي.")}
-						pSize={new Size(300, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<EmoCall BlackSky pText="اطلب الخدمة" />
@@ -554,7 +560,7 @@ import { Hero, SecTitle, ESec, EmoStrip, Emograph, ReadAlsoItem, HzStack, VrStac
 		pHeadBg={new ElemBg(Colors.Sky)}
 		pBodyBg={new ElemBg(Colors.WhiteOff)}
 		pCardBg={new ElemBg(Colors.SkyLite)}
-		pWidth={new Size(1600, "auto", "calc(100% - 30px)", "auto")}
+		pWidth={new Size(new NumPer(1600, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
 		pGap={new Pixel(20, 15)}
 	>
 
@@ -600,7 +606,7 @@ import { Hero, SecTitle, ESec, EmoStrip, Emograph, ReadAlsoItem, HzStack, VrStac
 		pHeadBg={new ElemBg(Colors.Gray5)}
 		pBodyBg={new ElemBg(Colors.Gray1)}
 		pCardBg={new ElemBg(Colors.WhiteOff)}
-		pWidth={new Size(1300, "auto", "calc(100% - 30px)", "auto")}
+		pWidth={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
 		pGap={new Pixel(20, 15)}
 	>
 

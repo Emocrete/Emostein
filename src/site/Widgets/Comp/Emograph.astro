@@ -1,7 +1,6 @@
 ---
+import { NumPer, Place, type PlaceProps, Size, Text } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import { Text, DirectSize, NumPer, Place, type PlaceProps } from "@/TypesLib";
-
 interface Props extends DebugOutlineProps, HTMLAttributes<"div"> , PlaceProps {
 
 	/**
@@ -21,7 +20,7 @@ interface Props extends DebugOutlineProps, HTMLAttributes<"div"> , PlaceProps {
 	 * Responsive width box used to control the widget width in landscape and portrait orientations.
 	 ** DefVal = new Box()
 	 */
-	pSize?: DirectSize;
+	pSize?: Size;
 
 	/**
 	 * Lets the widget keep its own size instead of being stretched by parent Stack row sizing.
@@ -34,7 +33,7 @@ interface Props extends DebugOutlineProps, HTMLAttributes<"div"> , PlaceProps {
 let {
 	pTitle,
 	pText,
-	pSize = new DirectSize(),
+	pSize = new Size(),
 
 	pLoc,
 pRotate,

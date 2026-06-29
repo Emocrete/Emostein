@@ -1,7 +1,7 @@
 ---
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, Size, Align, Colors, RespString, Topic, Pixel, EmoMediaData } from "@/TypesLib";
-import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, EmoFaq, ReadAlso, RelServices, Badge, SecTitle, VrStack, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { Badge, CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
 import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 ---
 
@@ -39,7 +39,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 	<Hero
 		pTitle="توريد وتركيب رخام وجرانيت"
 		pDesc="حلول تناسب مختلف المشاريع السكنية والتجارية والصناعية، من اختيار الخامات عالية الجودة حتى التشطيب النهائي"
-		pAlign="center"
+		pHzAlign="center"
+		pVrAlign="center"
 		pBlurP="on"
 		pPosL="55% 13% 10% 35%"
 		pPosP="50% 2% 5% 2%"
@@ -66,7 +67,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 	<ESec
 		hidden
 		pBg={new ElemBg(Colors.Creamy)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -75,7 +77,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="خبرة في اختيار الخامات، فرز الألواح، التوريد، التركيب، التشطيب، والصيانة داخل القاهرة والجيزة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -93,14 +96,14 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 							"Experience%20Icon.webp",
 							false,
 							"خبرة",
-							new Size(80, "auto", "80px", "auto")
+							new Size(new NumPer(80, "80px"), new NumPer("auto", "auto"))
 						)}
 					/>
 
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("+ 15 عام")}
 						pText={Text.Body.Centered.OfText("خبرة في توريد وتركيب الرخام والجرانيت للأرضيات والواجهات والسلالم والمطابخ والحمامات.")}
-						pSize={new Size(300, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</VrStack>
@@ -119,14 +122,14 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 							"Diamond%20Icon.webp",
 							false,
 							"فرز أول",
-							new Size(80, "auto", "80px", "auto")
+							new Size(new NumPer(80, "80px"), new NumPer("auto", "auto"))
 						)}
 					/>
 
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("فرز أول")}
 						pText={Text.Body.Centered.OfText("مراجعة الخامة قبل التوريد من حيث اللون والعروق والشروخ والكسور وجودة التلميع.")}
-						pSize={new Size(300, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</VrStack>
@@ -142,17 +145,17 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 						pImg={new EmoMediaData(
 							"Img",
 							"https://static.wixstatic.com/media/308dfd_50c25a6580834545bec5af2ebf36503b~mv2.webp/v1/fill/w_88,h_88,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/",
-							"Location%20Icon.webp",
+							"Loc%20Icon.webp",
 							false,
 							"القاهرة والجيزة",
-							new Size(80, "auto", "80px", "auto")
+							new Size(new NumPer(80, "80px"), new NumPer("auto", "auto"))
 						)}
 					/>
 
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("القاهرة والجيزة")}
 						pText={Text.Body.Centered.OfText("تنفيذ للمشاريع السكنية والتجارية والصناعية داخل القاهرة والجيزة وما حولهما.")}
-						pSize={new Size(300, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</VrStack>
@@ -172,14 +175,15 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 	<ESec
 		id="secCompare"
 		pBg={new ElemBg(Colors.WhiteOff,new EmoMediaData("Img","/Media/Emostone/","MarbleVsGranite.webp",true,"قطعة رخام بألوان براقة ومبهجة مع قطعة جرانيت أبيض بنقاط سوداء"))}
-		pAlign={Align.LeftCenter}
+		pHzAlign={Align.LeftCenter}
+		pVrAlign={Align.LeftCenter}
 	>
 
 		<SecTitle style = {`--StripBg:${Colors.Gray5};`} pTitle="أيهما أفضل ؟ الرخام أم الجرانيت ؟" />
 
 		<EmoStrip pBg={new ElemBg("transparent")}>
 
-			<EmoStrip pSize={new Size(1000, "auto", "calc(100% - 30px)", "auto")}>
+			<EmoStrip pSize={new Size(new NumPer(1000, "calc(100% - 30px)"), new NumPer("auto", "auto"))}>
 
 				<HzStack>
 
@@ -190,14 +194,14 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 					"151014152582533.jpg",
 					false,
 					"رخام أبيض مستورد",
-					new Size(420, "auto", "100%", "auto")
+					new Size(new NumPer(420, "100%"), new NumPer("auto", "auto"))
 				)}
 					/>
 
 					<Emograph
 						pTitle={Text.H3.OfText("الرخام للأناقة والنعومة البصرية")}
 						pText={Text.Body.OfText("يتميز الرخام بمظهره الأنيق وسطحه الناعم، ويستخدم في التصميم الداخلي والخارجي عند اختيار النوع المناسب. نوفر رخامًا مصريًا أصليًا، ورخامًا مستوردًا، وخيارات متعددة تناسب الأرضيات والحوائط والمداخل والحمامات والديكورات.")}
-						pSize={new Size(700, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(700, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</HzStack>
@@ -208,14 +212,14 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 		<EmoStrip pBg={new ElemBg("transparent")}>
 
-			<EmoStrip pSize={new Size(1300, "auto", "calc(100% - 30px)", "auto")}>
+			<EmoStrip pSize={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}>
 
 				<HzStack>
 
 					<Emograph
 						pTitle={Text.H3.WithAlign("right").OfText("الجرانيت للتحمل والاستخدام الخارجي")}
 						pText={Text.Body.WithAlign("right").OfText("يشتهر الجرانيت بتحمله للصدمات والخدوش وملائمته للاستخدام الخارجي والواجهات. يستخدم أيضًا في المطابخ والسلالم والأرضيات عالية الحركة، مع تنوع كبير في الألوان مثل الأسود والبني والنجراني والروزا والجلاكسي.")}
-						pSize={new Size(700, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(700, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<RespImg
@@ -225,7 +229,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 					"new%20halayeb.webp",
 					false,
 					"جرانيت نيو حلايب",
-					new Size(420, "auto", "100%", "auto")
+					new Size(new NumPer(420, "100%"), new NumPer("auto", "auto"))
 				)}
 					/>
 
@@ -243,7 +247,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -257,18 +262,18 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 				<Emograph
 					pText={Text.Body.Centered.OfText("لكل نوع ميزاته واستخداماته. الرخام الطبيعي يعطي شعورًا بالفخامة ومتانة طويلة الأمد عند العناية به، والرخام الصناعي يقدم مرونة في التصميم وسعرًا أقل، مع إمكانية تقليد شكل الرخام الطبيعي بجودة مناسبة حسب نوع الخامة.")}
-					pSize={new Size(1100, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(1100, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<HzStack>
 
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("رخام مصري")}
-						pSize={new Size(100,30)}
+						pSize={new Size(new NumPer(100, "auto"), new NumPer(30, "auto"))}
 						data-own-size
 					/>
 
-					<EmoGallery pFolder="/Media/Emostone/Marble/Eg/Samples" pSize={new Size(1700,600)} />
+					<EmoGallery pFolder="/Media/Emostone/Marble/Eg/Samples" pSize={new Size(new NumPer(1700, "auto"), new NumPer(600, "auto"))} />
 
 				</HzStack>
 
@@ -276,11 +281,11 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("رخام مستورد")}
-						pSize={new Size(100,30)}
+						pSize={new Size(new NumPer(100, "auto"), new NumPer(30, "auto"))}
 						data-own-size
 					/>
 
-					<EmoGallery pFolder="/Media/Emostone/Marble/Imp/Samples" pSize={new Size(1700,600,300)} />
+					<EmoGallery pFolder="/Media/Emostone/Marble/Imp/Samples" pSize={new Size(new NumPer(1700, 300), new NumPer(600, "auto"))} />
 
 				</HzStack>
 
@@ -299,7 +304,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 	<ESec
 		id="secGraniteTypes"
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -319,7 +325,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 						"new%20halayeb.webp",
 						false,
 						"جرانيت نيو حلايب",
-						new Size(360, "auto", "100%", "auto")
+						new Size(new NumPer(360, "100%"), new NumPer("auto", "auto"))
 					)}
 				/>
 
@@ -352,7 +358,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -360,7 +367,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="الخدمة تشمل التوريد والتركيب والتشطيب والتلميع والتقطيع حسب المقاسات والتصاميم المطلوبة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -407,7 +415,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -415,14 +424,15 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="التشطيب الجيد يبرز اللون واللمعان ويؤثر على عمر الخامة ومقاومتها للبقع والخدوش"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
 				<Emograph
 					pTitle={Text.H3.WithAlign("right").White.OfText("التشطيب النهائي والتلميع")}
 					pText={Text.Body.WithAlign("right").White.OfText("بعد التركيب، يتم تلميع السطح وإزالة الشوائب وبقايا التنفيذ لإظهار ألوان الرخام أو الجرانيت بأفضل صورة. تلميع الرخام يكشف اللون الطبيعي ويزيد اللمعان، وتشطيب الجرانيت يعزز مقاومته للخدوش والحرارة، خاصة في المطابخ والأرضيات الخارجية.")}
-					pSize={new Size(650, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(650, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<EmoList
@@ -454,7 +464,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -462,7 +473,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="معرفة الفرق تساعد في اختيار المادة المناسبة للتصميم والميزانية والاستخدام"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -510,7 +522,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -518,7 +531,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="كل استخدام يحتاج خامة وتشطيب وطريقة تركيب مناسبة لطبيعة الحركة والرطوبة والشمس والتنظيف"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1300px", "100%")}
@@ -545,7 +559,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -553,7 +568,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="الاختيار يعتمد على المساحة والاستخدام واللون والتصميم والميزانية والفرز"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -580,7 +596,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 						"Galala.jpg",
 						false,
 						"رخام جلالة",
-						new Size(420, "auto", "100%", "auto")
+						new Size(new NumPer(420, "100%"), new NumPer("auto", "auto"))
 					)}
 				/>
 
@@ -596,7 +612,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -604,7 +621,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="تركيب الرخام والجرانيت يحتاج خبرة هندسية ومعرفة بالمواد وطريقة التحضير والتثبيت والتشطيب"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("1100px", "100%")}
@@ -633,7 +651,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -641,7 +660,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="نوفر أنواعًا حديثة ومطلوبة لتلبية أذواق العملاء المختلفة في الأرضيات والواجهات والمطابخ"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1300px", "100%")}
@@ -668,7 +688,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -676,20 +697,21 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="معرفة الفرق تساعد في اختيار المادة الأنسب للأرضيات والواجهات والمطابخ والسلالم"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("الرخام")}
 					pText={Text.Body.Centered.OfText("أكثر نعومة ولمعانًا، سهل الصقل، ويعطي إحساسًا بالفخامة والاتساع. مقاومته للصدمات والخدوش أقل من الجرانيت في الاستخدامات الشاقة، لذلك يحتاج اختيارًا مناسبًا وصيانة دورية.")}
-					pSize={new Size(500, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(500, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("الجرانيت")}
 					pText={Text.Body.Centered.OfText("متين للغاية، مقاوم للحرارة والخدوش، مناسب للأرضيات والواجهات الخارجية والمطابخ والسلالم كثيرة الحركة. لمعانه مختلف عن الرخام الطبيعي لكنه يقدم أداءً عمليًا قويًا.")}
-					pSize={new Size(500, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(500, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</HzStack>
@@ -704,7 +726,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -712,7 +735,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="الرخام والجرانيت يرفعان القيمة الجمالية والوظيفية للمكان عند اختيار الخامة المناسبة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack
 				pWidth={new Pixel(1200, 340)}
@@ -723,19 +747,19 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("الأرضيات الرخامية والجرانيتية")}
 					pText={Text.Body.Centered.OfText("استخدام الرخام والجرانيت للأرضيات شائع في الفيلات والمنازل والمكاتب والفنادق. الأرضيات الرخامية تضيف فخامة واتساعًا بصريًا، وأرضيات الجرانيت تقدم متانة وتحملًا طويلًا، خاصة في المناطق عالية الحركة.")}
-					pSize={new Size(1100, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(1100, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("واجهات الرخام والجرانيت")}
 					pText={Text.Body.Centered.OfText("الواجهات الخارجية بالرخام أو الجرانيت تعطي المبنى طابعًا فخمًا وتحملًا جيدًا ضد العوامل الجوية عند اختيار خامة مناسبة وطريقة تثبيت صحيحة. واجهات المحلات تستفيد من الشكل الجمالي للحجر في جذب العملاء ورفع قيمة العقار.")}
-					pSize={new Size(1100, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(1100, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("تصميم الرخام والجرانيت")}
 					pText={Text.Body.Centered.OfText("دمج الألوان واختيار النقوش وقص البلاطات وتنسيقها يحقق الجمال والوظيفة في نفس الوقت. الألواح الكبيرة تعطي مظهرًا فاخرًا وتوحد السطح بفواصل أقل، والقصات الخاصة تسمح برسومات هندسية أو كلاسيكية حسب التصميم.")}
-					pSize={new Size(1100, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(1100, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</VrStack>
@@ -750,7 +774,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -758,7 +783,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="سعر التوريد والتركيب يتغير حسب نوع الخامة والمساحة وطريقة التركيب والتشطيب النهائي"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -781,7 +807,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 				<Emograph
 					pTitle={Text.H3.WithAlign("right").White.OfText("الرخام المصري مقابل المستورد")}
 					pText={Text.Body.WithAlign("right").White.OfText("الرخام المصري متوفر بسهولة، وأسعاره مناسبة، وله ألوان طبيعية جميلة، ويخدم المشاريع الداخلية والأرضيات بدرجة جيدة. الرخام المستورد يأتي بألوان ونقشات فريدة، ويضيف لمسة فخمة وعصرية، ويناسب المشاريع الكبيرة والواجهات الفاخرة. الاختيار العملي يعتمد على نوع المشروع ومساحة المكان والميزانية وجودة التركيب والتشطيب.")}
-					pSize={new Size(550, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(550, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</HzStack>
@@ -796,7 +822,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -804,7 +831,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="اختيار المورد والخامة وطريقة التركيب يحدد نتيجة المشروع قبل بداية التنفيذ"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -852,7 +880,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -860,7 +889,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="العناية الجيدة تحافظ على اللمعان وتقلل البقع والخدوش وتطيل عمر الخامة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -874,7 +904,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("تنظيف دوري")}
 						pText={Text.Body.Centered.OfText("تنظيف الأرضيات بشكل دوري باستخدام منظفات خاصة بالرخام أو الجرانيت، مع تجفيف السطح بعد التنظيف.")}
-						pSize={new Size(350, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</VrStack>
@@ -889,7 +919,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("تجنب المواد الحمضية")}
 						pText={Text.Body.Centered.OfText("المواد الحمضية تؤثر على لمعان الرخام، لذلك يفضل استخدام منظفات متعادلة ومناسبة للحجر الطبيعي.")}
-						pSize={new Size(350, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</VrStack>
@@ -904,7 +934,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("إعادة التلميع")}
 						pText={Text.Body.Centered.OfText("إعادة تلميع الأسطح بشكل دوري يحافظ على اللمعان الطبيعي، خصوصًا في المداخل والسلالم والأماكن كثيرة الحركة.")}
-						pSize={new Size(350, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</VrStack>
@@ -921,7 +951,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -929,7 +960,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="الثقة في توريد وتركيب الرخام والجرانيت تقوم على جودة الخامة ودقة التركيب والاستشارة قبل الشراء"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1300px", "100%")}
@@ -954,7 +986,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -962,7 +995,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="نوفر استشارة تصميمية، توريد مواد، تركيب محترف، وتشطيب نهائي وتلميع"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("1100px", "100%")}
@@ -994,7 +1028,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 	<ESec
 		id="cta"
 		pBg={new ElemBg(Colors.BlackOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1003,14 +1038,15 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="اتصل بالرقم 01014490054 أو اضغط زر واتساب لبدء محادثة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
 				<Emograph
 					pTitle={Text.H3.WithAlign("right").White.OfText("للمساعدة والتفاصيل اتصل بنا")}
 					pText={Text.Body.WithAlign("right").White.OfText("أرسل صور المكان والمقاسات التقريبية ونوع الاستخدام المطلوب، وسنرشح الخامة الأنسب ونوضح بنود التوريد والتركيب والتشطيب في عرض سعر واضح.")}
-					pSize={new Size(700, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(700, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<VrStack
@@ -1023,7 +1059,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("01014490054")}
 						pText={Text.Body.Centered.OfText("أرسل رسالة أو راسلنا على واتس أب لطلب الخدمة.")}
-						pSize={new Size(300, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<EmoCall BlackSky pText="اطلب الخدمة" />
@@ -1088,7 +1124,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 		pHeadBg={new ElemBg(Colors.GreenLite)}
 		pBodyBg={new ElemBg(Colors.WhiteOff)}
 		pCardBg={new ElemBg(Colors.SkyLite)}
-		pWidth={new Size(1300, "auto", "calc(100% - 30px)", "auto")}
+		pWidth={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
 		pGap={new Pixel(20, 15)}
 	>
 
@@ -1134,7 +1170,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 		pHeadBg={new ElemBg(Colors.Gray5)}
 		pBodyBg={new ElemBg(Colors.Gray1)}
 		pCardBg={new ElemBg(Colors.WhiteOff)}
-		pWidth={new Size(1300, "auto", "calc(100% - 30px)", "auto")}
+		pWidth={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
 		pGap={new Pixel(20, 15)}
 	>
 

@@ -1,6 +1,6 @@
 ---
+import { Align, Angle, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Align, Angle, Colors, DirectSize, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import { Badge, CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip, ESec, FaqItem, Hero, HzStack, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle } from "@/Widgets";
 import { PriceCard, VrStack } from "../../../site/Widgets";
 import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, Ribbon, SvgDots, TiltCard } from "../../../site/Widgets/Shapes";
@@ -40,10 +40,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 	<Hero>
 
 		<VrStack
-			pSize={new DirectSize(new NumPer("35%","100%"))}
+			pSize={new Size(new NumPer("35%","100%"))}
 			pLoc={new Loc(new NumPer("7%","0%"),new NumPer("35%","72%"))}
 			pGap={new Pixel(50, 5)}
-			pAlign="Center"
+			pHzAlign="Center"
+			pVrAlign="Center"
 		>
 
 			<Emograph
@@ -70,13 +71,14 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 	<ESec
 		id="factory-permit-service"
 		pBg={new ElemBg("#071419")}
-		pBox={new DirectSize(new NumPer("100%"), new NumPer(760, 980))}
-		pAlign={new Align("Center", "Center")}
+		pBox={new Size(new NumPer("100%"), new NumPer(760, 980))}
+		pHzAlign={new Align("Center", "Center")}
+		pVrAlign={new Align("Center", "Center")}
 	>
 
 		<BlurBlob
 			pLoc={new Loc(new NumPer("-8%", "-35%"), new NumPer("-18%", "-7%"))}
-			pSize={new DirectSize(new NumPer(520, 360), new NumPer(520, 420))}
+			pSize={new Size(new NumPer(520, 360), new NumPer(520, 420))}
 			pOpacity={new Percent(72, 64)}
 			pColor="rgba(50,143,232,.45)"
 			pColor2="rgba(167,196,92,.34)"
@@ -85,7 +87,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 		<CircleGlow
 			pLoc={new Loc(new NumPer("68%", "54%"), new NumPer("13%", "6%"))}
-			pSize={new DirectSize(new NumPer(360, 260), new NumPer(300, 240))}
+			pSize={new Size(new NumPer(360, 260), new NumPer(300, 240))}
 			pOpacity={new Percent(70, 62)}
 			pColor="rgba(251,255,0,.35)"
 			pColor2="rgba(167,196,92,.25)"
@@ -94,7 +96,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 		<SvgDots
 			pLoc={new Loc(new NumPer("7%", "6%"), new NumPer("69%", "76%"))}
-			pSize={new DirectSize(new NumPer("78%", "88%"), new NumPer(110, 90))}
+			pSize={new Size(new NumPer("78%", "88%"), new NumPer(110, 90))}
 			pOpacity={new Percent(54, 46)}
 			pColor="rgba(255,255,255,.28)"
 			pGap={24}
@@ -103,7 +105,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 		<LinePath
 			pLoc={new Loc(new NumPer("12%", "5%"), new NumPer("18%", "30%"))}
-			pSize={new DirectSize(new NumPer("76%", "88%"), new NumPer(210, 160))}
+			pSize={new Size(new NumPer("76%", "88%"), new NumPer(210, 160))}
 			pOpacity={new Percent(58, 42)}
 			pStroke="rgba(215,245,140,.58)"
 			pDot="#fbff00"
@@ -113,7 +115,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 		<Ribbon
 			pText="ملف تشغيل صناعي"
 			pLoc={new Loc(new NumPer("calc(100% - 390px)", "calc(100% - 250px)"), new NumPer(44, 34))}
-			pSize={new DirectSize(new NumPer(300, 220), new NumPer(54, 46))}
+			pSize={new Size(new NumPer(300, 220), new NumPer(54, 46))}
 			pRotate={new Angle(-4, -2)}
 			pBg={Colors.Bistage}
 			pColor={Colors.BlackOff}
@@ -121,7 +123,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 		<FloatingPanel
 			pLoc={new Loc(new NumPer("8%", "5%"), new NumPer(120, 110))}
-			pSize={new DirectSize(new NumPer(520, 320), new NumPer(360, 300))}
+			pSize={new Size(new NumPer(520, 320), new NumPer(360, 300))}
 			pZ={8}
 			pBg="rgba(17,24,32,.90)"
 			pBorder="rgba(255,255,255,.18)"
@@ -137,7 +139,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 		<GlassCard
 			pLoc={new Loc(new NumPer("calc(100% - 600px)", "5%"), new NumPer(180, 440))}
-			pSize={new DirectSize(new NumPer(510, 430), new NumPer(360, 370))}
+			pSize={new Size(new NumPer(510, 430), new NumPer(360, 370))}
 			pZ={9}
 			pBg="rgba(250,250,250,.88)"
 			pBorder="rgba(255,255,255,.62)"
@@ -165,7 +167,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 		<BadgeFrame
 			pBadge="النتيجة"
 			pLoc={new Loc(new NumPer("18%", "6%"), new NumPer(500, 775))}
-			pSize={new DirectSize(new NumPer(420, 250), new NumPer(360, 160))}
+			pSize={new Size(new NumPer(420, 250), new NumPer(360, 160))}
 			pZ={10}
 			pBg="#F7F0D7"
 			pBadgeBg={Colors.SkyDark}
@@ -181,7 +183,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 		<TiltCard
 			pLoc={new Loc(new NumPer("calc(100% - 455px)", "9%"), new NumPer(565, 610))}
-			pSize={new DirectSize(new NumPer(360, 150), new NumPer(330, 130))}
+			pSize={new Size(new NumPer(360, 150), new NumPer(330, 130))}
 			pZ={11}
 			pTilt={2}
 			pBg={Colors.Bistage}
@@ -196,7 +198,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			BlackSky
 			pText="راجع ملف المصنع"
 			pLoc={new Loc(new NumPer("calc(50% - 135px)", "calc(50% - 130px)"), new NumPer(680, 910))}
-			pSize={new DirectSize(new NumPer(270, 260), new NumPer(56, 52))}
+			pSize={new Size(new NumPer(270, 260), new NumPer(56, 52))}
 		/>
 
 	</ESec>
@@ -210,13 +212,14 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 	<ESec
 		id="factory-permit-prices"
 		pBg={new ElemBg("#F7F0D7")}
-		pBox={new DirectSize(new NumPer("100%"), new NumPer(720, 980))}
-		pAlign={new Align("Center", "Center")}
+		pBox={new Size(new NumPer("100%"), new NumPer(720, 980))}
+		pHzAlign={new Align("Center", "Center")}
+		pVrAlign={new Align("Center", "Center")}
 	>
 
 		<BlurBlob
 			pLoc={new Loc(new NumPer("63%", "42%"), new NumPer("-18%", "-8%"))}
-			pSize={new DirectSize(new NumPer(520, 360), new NumPer(420, 320))}
+			pSize={new Size(new NumPer(520, 360), new NumPer(420, 320))}
 			pOpacity={new Percent(58, 48)}
 			pColor="rgba(50,143,232,.28)"
 			pColor2="rgba(253,203,158,.42)"
@@ -225,7 +228,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 		<SvgDots
 			pLoc={new Loc(new NumPer("5%", "6%"), new NumPer(60, 54))}
-			pSize={new DirectSize(new NumPer(280, 190), new NumPer(180, 130))}
+			pSize={new Size(new NumPer(280, 190), new NumPer(180, 130))}
 			pOpacity={new Percent(66, 50)}
 			pColor="rgba(53,53,53,.22)"
 			pGap={22}
@@ -235,7 +238,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 		<Ribbon
 			pText="أسعار ترخيص مصنع"
 			pLoc={new Loc(new NumPer(70, 30), new NumPer(70, 58))}
-			pSize={new DirectSize(new NumPer(310, 240), new NumPer(54, 46))}
+			pSize={new Size(new NumPer(310, 240), new NumPer(54, 46))}
 			pRotate={new Angle(3, 1)}
 			pBg={Colors.BlackOff}
 			pColor={Colors.WhiteOff}
@@ -244,7 +247,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 		<BadgeFrame
 			pBadge="التسعير"
 			pLoc={new Loc(new NumPer("calc(50% - 500px)", "5%"), new NumPer(155, 130))}
-			pSize={new DirectSize(new NumPer(470, 270), new NumPer(360, 250))}
+			pSize={new Size(new NumPer(470, 270), new NumPer(360, 250))}
 			pZ={8}
 			pBg="#111820"
 			pBadgeBg={Colors.Bistage}
@@ -260,7 +263,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 		<PriceCard
 			pLoc={new Loc(new NumPer("calc(50% + 20px)", "calc(50% - 160px)"), new NumPer(150, 405))}
-			pSize={new DirectSize(new NumPer(420, 320), new NumPer(125, 112))}
+			pSize={new Size(new NumPer(420, 320), new NumPer(125, 112))}
 			pCaption={Text.H5.White.Bold.OfText("فحص مبدئي للنشاط والمستندات")}
 			pStart={Text.H4.Bold.OfText("يبدأ من")}
 			pPrice={3000}
@@ -269,7 +272,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 		<PriceCard
 			pLoc={new Loc(new NumPer("calc(50% + 20px)", "calc(50% - 160px)"), new NumPer(295, 535))}
-			pSize={new DirectSize(new NumPer(420, 320), new NumPer(125, 112))}
+			pSize={new Size(new NumPer(420, 320), new NumPer(125, 112))}
 			pCaption={Text.H5.White.Bold.OfText("تجهيز ومتابعة ملف الترخيص")}
 			pStart={Text.H4.Bold.OfText("حسب")}
 			pPrice="الحالة"
@@ -278,7 +281,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 		<PriceCard
 			pLoc={new Loc(new NumPer("calc(50% + 20px)", "calc(50% - 160px)"), new NumPer(440, 665))}
-			pSize={new DirectSize(new NumPer(420, 320), new NumPer(125, 112))}
+			pSize={new Size(new NumPer(420, 320), new NumPer(125, 112))}
 			pCaption={Text.H5.White.Bold.OfText("تقارير فنية أو موافقات إضافية")}
 			pStart={Text.H4.Bold.OfText("تسعر")}
 			pPrice="منفصلة"
@@ -287,7 +290,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 		<GlassCard
 			pLoc={new Loc(new NumPer("calc(50% - 490px)", "5%"), new NumPer(455, 690))}
-			pSize={new DirectSize(new NumPer(460, 220), new NumPer(360, 210))}
+			pSize={new Size(new NumPer(460, 220), new NumPer(360, 210))}
 			pZ={9}
 			pBg="rgba(255,255,255,.82)"
 			pBorder="rgba(255,255,255,.72)"
@@ -314,7 +317,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 		<FloatingPanel
 			pLoc={new Loc(new NumPer("calc(100% - 430px)", "5%"), new NumPer(580, 875))}
-			pSize={new DirectSize(new NumPer(340, 120), new NumPer(360, 86))}
+			pSize={new Size(new NumPer(340, 120), new NumPer(360, 86))}
 			pZ={11}
 			pBg="rgba(17,24,32,.92)"
 			pBorder="rgba(255,255,255,.18)"
@@ -329,7 +332,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			BlackSky
 			pText="اعرف تكلفة ملف مصنعك"
 			pLoc={new Loc(new NumPer("calc(50% - 135px)", "calc(50% - 130px)"), new NumPer(635, 910))}
-			pSize={new DirectSize(new NumPer(270, 260), new NumPer(56, 52))}
+			pSize={new Size(new NumPer(270, 260), new NumPer(56, 52))}
 		/>
 
 	</ESec>
@@ -343,7 +346,8 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 	<ESec
 		id="factory-service"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -351,7 +355,8 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			pDesc="تجهيز ومتابعة ملف ترخيص المصنع هندسيًا وإداريًا، من مراجعة النشاط والموقع والمستندات حتى تجهيز الملف الفني ومتابعة الاستيفاءات المطلوبة لرخصة التشغيل."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1200px", "100%")}
@@ -398,7 +403,8 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 		hidden
 		id="factory-prices"
 		pBg={new ElemBg(Colors.BlackOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -406,7 +412,8 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			pDesc="السعر النهائي يتحدد بعد معرفة النشاط، مساحة المصنع، حالة المستندات، وجود رسومات، واحتياج الملف لتقارير حريق أو بيئة أو صلاحية مبنى."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(24, 16)} pPad={new Pixel(30, 15)}>
 
@@ -463,7 +470,8 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 	<ESec
 		id="factory-nature"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -472,18 +480,19 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			pDesc="الجهة المختصة لا تراجع اسم المصنع فقط؛ هي تراجع النشاط، الموقع، سند الحيازة، سلامة المبنى، أثر التشغيل، الوقاية من الحريق، والملف الفني الذي يثبت أن المكان صالح لممارسة النشاط الصناعي المطلوب."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 				<Emograph
 					pTitle={Text.H3.OfText("ما الذي يجعل ترخيص المصنع حساسًا؟")}
 					pText={Text.Body.OfText(`المصنع ليس نشاطًا تجاريًا بسيطًا داخل عين مؤجرة، بل منشأة تشغيل لها خطوط إنتاج أو معدات أو خامات أو عمالة أو تخزين أو انبعاثات أو مخاطر حريق أو أحمال كهربائية وميكانيكية. لذلك يجب قراءة الملف من زاويتين في نفس الوقت: هل النشاط الصناعي مسموح في هذا الموقع؟ وهل المبنى والتجهيزات تصلح لممارسة النشاط بأمان؟ عند تجاهل أي زاوية منهما يتحول الملف إلى سلسلة استيفاءات: سند حيازة ناقص، نشاط غير مطابق للسجل، ملف بيئي غير واضح، تقرير حريق غير كاف، أو شهادة صلاحية لا تصف الواقع بدقة.`)}
-					pSize={new Size(600, "auto", 320, "auto")}
+					pSize={new Size(new NumPer(600, 320), new NumPer("auto", "auto"))}
 				/>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", "/Media/Emoperm/Factory/", "HeroD.webp", false, "ترخيص مصنع ومراجعة ملف منشأة صناعية", new Size(540, 360, 320, 210))}
+					pImg={new EmoMediaData("Img", "/Media/Emoperm/Factory/", "HeroD.webp", false, "ترخيص مصنع ومراجعة ملف منشأة صناعية", new Size(new NumPer(540, 320), new NumPer(360, 210)))}
 				/>
 
 			</HzStack>
@@ -498,7 +507,8 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 
 
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -506,7 +516,8 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			pDesc="تجهيز الملف يبدأ من تحديد مسار الترخيص: إخطار، مسبق، أو تقديم من خلال مكتب اعتماد، مع مراعاة أن طبيعة النشاط قد تنقل الملف من مسار سريع إلى فحص أعمق."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1200px", "100%")}
@@ -535,7 +546,8 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 	<ESec
 		id="factory-documents"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -544,7 +556,8 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			pDesc="القائمة التالية تصلح كبداية عملية لمراجعة ملف رخصة تشغيل المصنع، مع تعديلها حسب النشاط والمنطقة الصناعية وحالة المنشأة القائمة أو الجديدة."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("1050px", "100%")}
@@ -575,7 +588,8 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 	<ESec
 		id="factory-procedures"
 		pBg={new ElemBg(Colors.Creamy)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -584,7 +598,8 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			pDesc="الترتيب العملي للخدمة يبدأ من فرز الحالة، ثم تجهيز الملف، ثم التقديم والمتابعة والاستيفاءات حتى صدور رخصة التشغيل أو تحديد المطلوب لاستكمالها."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("1050px", "100%")}
@@ -618,7 +633,8 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 	<ESec
 		id="factory-engineering"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -627,7 +643,8 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			pDesc="أغلب التأخير لا يأتي من نقص صورة بطاقة، بل من تعارض هندسي أو تشغيلي يظهر عند مراجعة المبنى أو الحريق أو البيئة أو خطوط الإنتاج."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1200px", "100%")}
@@ -656,7 +673,8 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 	<ESec
 		id="factory-service"
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -665,7 +683,8 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			pDesc="الخدمة مناسبة للمصنع الجديد، المصنع القائم بدون رخصة واضحة، المصنع الذي يحتاج تعديل نشاط أو بيانات، والمنشأة التي تريد تجهيز ملفها قبل التقديم الرسمي."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(24, 16)} pPad={new Pixel(30, 15)}>
 

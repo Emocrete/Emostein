@@ -1,9 +1,9 @@
 ---
+import { Colors, Place, type PlaceProps, HoverColors, HoverImg } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import { Colors, HoverColors, HoverImg, Place, type PlaceProps } from "@/TypesLib";
 import { CreateButtonPreset, GetBoolAttr, GetButtonPreset, GetButtonTitleColors, type ButtonColorPreset, type ButtonPresetProps } from "./ButtonPresets";
 
-export interface Props extends DebugOutlineProps, HTMLAttributes<"a">, PlaceProps, ButtonPresetProps {
+export interface Props extends HTMLAttributes<"a">, PlaceProps, ButtonPresetProps {
 	/** النص الظاهر داخل زر الواتساب. */
 	pText?: string;
 
@@ -619,12 +619,14 @@ function GetCssName(pName: string) {
 	window.addEventListener("keydown", HandleWindowKeyDown);
 
 	function SetupWhatsButton(pButton: HTMLElement): void {
+		if (pButton.dataset.whatsReady === "true") return;
+
 		const cOverlay = pButton.nextElementSibling;
 
 		if (!(cOverlay instanceof HTMLElement)) return;
 		if (cOverlay.dataset.whatsOverlay !== "true") return;
-		if (pButton.dataset.whatsReady === "true") return;
 
+		MoveOverlayToBody(cOverlay);
 		pButton.dataset.whatsReady = "true";
 
 		pButton.addEventListener("click", function HandleWhatsButtonClick(pEvent: MouseEvent): void {
@@ -643,6 +645,12 @@ function GetCssName(pName: string) {
 				HideWhatsOverlay(cOverlay);
 			}
 		});
+	}
+
+	function MoveOverlayToBody(pOverlay: HTMLElement): void {
+		if (pOverlay.parentElement === document.body) return;
+
+		document.body.appendChild(pOverlay);
 	}
 
 	function HandleWindowKeyDown(pEvent: KeyboardEvent): void {

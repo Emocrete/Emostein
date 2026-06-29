@@ -1,7 +1,7 @@
 ---
+import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, Topic, ElemBg, EmoMediaData, RespString, Pixel, Size, Align } from "@/TypesLib";
-import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, EmoBtn, EmoFaq, ReadAlso, RelServices, SecTitle, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle } from "@/Widgets";
 ---
 
 
@@ -48,7 +48,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 		pDesc="جدول زمني هندسي يترجم الرسومات والبنود والتوريدات إلى خطة تنفيذ قابلة للمتابعة: أنشطة، علاقات، مدد، مراحل، مسار حرج، تحديثات، ومؤشرات تأخير مبكرة."
 		pTitleClr="#F4E5C4"
 		pDescClr="#FFFFFF"
-		pAlign="right"
+		pHzAlign="right"
+		pVrAlign="right"
 		pPosL="18% 50% 12% 8%"
 		pPosP="12% 8% 44% 8%"
 		pBlurL="on"
@@ -123,7 +124,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 	<ESec
 		id="schedule-problem"
 		pBg={new ElemBg("#F7F1E6")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -135,7 +137,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("ما الذي تشتريه فعليًا عند طلب جدول زمني؟")}
 				pText={Text.Body.WithColor("#333333").OfText("أنت لا تشتري ملفًا مرسومًا على برنامج فقط. أنت تشتري طريقة تفكير منظمة: تقسيم المشروع إلى أنشطة قابلة للمتابعة، ترتيب العلاقات بينها، تقدير مدد منطقية، كشف الأعمال التي تتحكم في تاريخ التسليم، وربط التوريدات والاعتمادات والدفعات بنقاط واضحة. الجدول الجيد يجعل التأخير ظاهرًا مبكرًا، بدل أن يكتشف المالك المشكلة عندما يتوقف الموقع فعلًا.")}
 			/>
@@ -147,7 +149,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&fm=jpg&q=70&w=1400",
 					false,
 					"إعداد خطة زمنية ومتابعة مؤشرات المشروع",
-					new Size(560, 360, 320, 230)
+					new Size(new NumPer(560, 320), new NumPer(360, 230))
 				)}
 			/>
 
@@ -161,7 +163,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#111318")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#111318")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -194,20 +197,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 	<EmoStrip
 		id="schedule-components"
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("مكونات الجدول الزمني القابل للاستخدام")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("الجدول الجيد لا يبدأ من التاريخ النهائي. يبدأ من نطاق العمل، ثم تقسيمه إلى أنشطة، ثم ترتيب العلاقات، ثم حساب المدد، ثم تثبيت خط أساس يمكن المقارنة به أثناء التنفيذ.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -255,7 +260,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -290,7 +296,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 	<ESec
 		id="critical-path"
 		pBg={new ElemBg("#F7F1E6")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -308,7 +315,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1503387762-592deb58ef4e?auto=format&fit=crop&fm=jpg&q=70&w=1400",
 					false,
 					"موقع تنفيذ يحتاج برنامجًا زمنيًا واضحًا",
-					new Size(560, 380, 320, 230)
+					new Size(new NumPer(560, 320), new NumPer(380, 230))
 				)}
 			/>
 
@@ -339,20 +346,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 	<EmoStrip
 		pBg={new ElemBg("#F7F1E6")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#111318")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("الفرق بين مدة المشروع وجدول المشروع")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("مدة المشروع رقم واحد: ٤ أشهر، ٦ أشهر، سنة. أما جدول المشروع فهو تفسير هذا الرقم: ماذا سيحدث؟ بأي ترتيب؟ من المسؤول؟ ما الأنشطة التي يمكن أن تتداخل؟ وما الأنشطة التي لا يمكن ضغطها؟")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -395,7 +404,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -445,7 +455,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -462,7 +473,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&fm=jpg&q=70&w=1400",
 					false,
 					"اجتماع مراجعة جدول زمني للمشروع",
-					new Size(560, 360, 320, 230)
+					new Size(new NumPer(560, 320), new NumPer(360, 230))
 				)}
 			/>
 
@@ -491,20 +502,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 	<EmoStrip
 		pBg={new ElemBg("#111318")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#0E1118")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("خط الأساس والتحديثات")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("الجدول الذي لا يتم تثبيته ومقارنته بالتقدم الفعلي يتحول إلى صورة قديمة. لذلك يتم التعامل مع البرنامج الزمني كوثيقة حية: يتم تثبيت خط أساس، ثم تحديثه بالموقع، ثم تحليل الانحرافات.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -555,7 +568,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -587,7 +601,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -644,20 +659,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 	<EmoStrip
 		id="deliverables"
 		pBg={new ElemBg("#F7F1E6")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#111318")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("مخرجات خدمة إعداد الجدول الزمني")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("صيغة التسليم تختلف حسب حجم المشروع والغرض من الخدمة. قد يكون المطلوب ملفًا بصريًا بسيطًا للمالك، أو برنامجًا تفصيليًا للمقاول، أو تقرير تحديث وتحليل تأخير.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -686,7 +703,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -703,7 +721,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1551836022-d5d88e9218df?auto=format&fit=crop&fm=jpg&q=70&w=1400",
 					false,
 					"اجتماع تنسيق التوريدات والبرنامج الزمني",
-					new Size(560, 360, 320, 230)
+					new Size(new NumPer(560, 320), new NumPer(360, 230))
 				)}
 			/>
 
@@ -735,7 +753,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -767,20 +786,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 	<EmoStrip
 		pBg={new ElemBg("#111318")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#0E1118")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("نماذج تطبيقية حسب نوع المشروع")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("نفس خدمة الجدول الزمني تتغير حسب نوع المشروع. جدول فيلا لا يساوي جدول تشطيب شقة، وجدول مطعم أو عيادة يحتاج عناية خاصة بالتوريدات والأنظمة والاعتمادات.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -809,7 +830,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -837,7 +859,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 			/>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("ماذا يحدث بعد المراجعة؟")}
 				pText={Text.Body.WithColor("#333333").OfText("يتم إصدار ملاحظات واضحة على الجدول: أنشطة تحتاج تفصيلًا، علاقات تحتاج تصحيحًا، مدد تحتاج تبريرًا، توريدات يجب إضافتها، أو مراحل تحتاج إعادة ترتيب. يمكن بعد ذلك اعتماد الجدول بعد التصحيح أو استخدامه كأساس للتفاوض مع المقاول حول المدة والموارد وطريقة التنفيذ.")}
 			/>
@@ -852,7 +874,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -884,7 +907,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -936,20 +960,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 	<EmoStrip
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("الجدول الزمني مع الإشراف وإدارة المشروع")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("يمكن طلب الجدول كخدمة مستقلة، ويمكن دمجه مع إدارة المشروع أو الإشراف. عند الدمج، لا يكون الجدول وثيقة تسليم فقط، بل أداة متابعة مستمرة داخل الموقع.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -976,7 +1002,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1022,7 +1049,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1074,7 +1102,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1106,7 +1135,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1138,7 +1168,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1170,7 +1201,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1181,7 +1213,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("من يتخذ القرار؟")}
 				pText={Text.Body.WithColor("#333333").OfText("الجدول لا يلغي دور المالك أو المهندس أو المقاول. لكنه يجعل القرار أكثر وضوحًا. عندما يتأخر بند، يصبح السؤال محددًا: هل نزيد الموارد؟ هل نغير ترتيب الأعمال؟ هل ننتظر خامة؟ هل نعدل تاريخ التسليم؟ وجود جدول يجعل النقاش مبنيًا على أثر زمني لا على انطباع عام.")}
 			/>
@@ -1193,7 +1225,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1497366754035-f200968a6e72?auto=format&fit=crop&fm=jpg&q=70&w=1400",
 					false,
 					"مكتب متابعة مشروع وجدول زمني",
-					new Size(560, 360, 320, 230)
+					new Size(new NumPer(560, 320), new NumPer(360, 230))
 				)}
 			/>
 
@@ -1207,7 +1239,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1263,20 +1296,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 	<EmoStrip
 		pBg={new ElemBg("#111318")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#0E1118")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("هيكل تقسيم العمل قبل الجدولة")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("قبل وضع الأنشطة على خط زمني، يجب تقسيم المشروع بطريقة يمكن متابعتها. التقسيم الضعيف يجعل الجدول إما عامًّا جدًا أو مليئًا بتفاصيل غير مفيدة.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -1319,7 +1354,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1351,7 +1387,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1405,7 +1442,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1439,20 +1477,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 	<EmoStrip
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("جدولة مشروع بتعاقد مقاول واحد أو مقاولين منفصلين")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("طريقة التعاقد تغير طريقة الجدولة. المقاول الواحد يتحمل تنسيقًا أكبر، أما المقاولون المنفصلون فيحتاجون خطة تفصيلية لتفادي فراغات المسؤولية بين الفرق.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -1495,7 +1535,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1527,7 +1568,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1581,7 +1623,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1615,20 +1658,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 	<EmoStrip
 		pBg={new ElemBg("#111318")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#0E1118")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("متى لا يكون الجدول وحده كافيًا؟")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("الجدول أداة قوية، لكنه لا يحل كل شيء وحده. أحيانًا يكون المشروع محتاجًا إدارة أو إشرافًا أو حصرًا أو مراجعة رسومات قبل أن يصبح الجدول قابلًا للتطبيق.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -1657,7 +1702,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1707,7 +1753,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "

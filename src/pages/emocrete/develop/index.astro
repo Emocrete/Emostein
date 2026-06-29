@@ -1,7 +1,7 @@
 ---
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, Topic , ElemBg,EmoMediaData, Colors,RespString,Location,Size,Align} from "src/site/TypesLib";
-import { Hero, IndexSec, ESec, EmoStrip, IncLineSep, BottTriSep, EmoBtn, YTPlayer, DataCard, CardsGr, EmoList, Tree, Emograph, SecTitle, VrStack, HzStack } from "@/Widgets";
+import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESec, Hero, HzStack, IncLineSep, IndexSec, SecTitle, Tree, VrStack, YTPlayer } from "@/Widgets";
 ---
 
 
@@ -44,7 +44,8 @@ import { Hero, IndexSec, ESec, EmoStrip, IncLineSep, BottTriSep, EmoBtn, YTPlaye
 
 	<ESec
 		pBg={new ElemBg("#FFFDF8")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="ما المقصود بخدمات التطوير العقاري هنا؟"
@@ -52,12 +53,13 @@ import { Hero, IndexSec, ESec, EmoStrip, IncLineSep, BottTriSep, EmoBtn, YTPlaye
 			style="--StripBg:#F6F1E8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFDF8")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#FFFDF8")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<Emograph
 				pTitle={Text.H3.WithColor("#17345C").OfText("التطوير العقاري هنا ليس مقاولة بناء فقط")}
 				pText={Text.Body.WithColor("#333333").OfText("المقصود هو إدارة مشروع عقاري كامل يبدأ من دراسة الأرض أو دراسة موقف الملاك، ثم تحويل الفكرة إلى تصميمات، وترخيص، ومقايسة، وجدول تمويل، وتعاقدات، وتنفيذ، ومتابعة جودة، وحسابات واضحة. هذه الصفحة تجمع النظامين الأساسيين في هذا المجال: نظام البناء على أراضي المشاركات، ونظام البناء لصالح اتحاد ملاك بتمويل من السكان أنفسهم.")}
-				pSize={new Size(920, "auto", "100%", "auto")}
+				pSize={new Size(new NumPer(920, "100%"), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -66,7 +68,8 @@ import { Hero, IndexSec, ESec, EmoStrip, IncLineSep, BottTriSep, EmoBtn, YTPlaye
 
 	<ESec
 		pBg={new ElemBg("#F6F1E8")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="نظامان مختلفان في التمويل والإدارة"
@@ -74,7 +77,8 @@ import { Hero, IndexSec, ESec, EmoStrip, IncLineSep, BottTriSep, EmoBtn, YTPlaye
 			style="--StripBg:#17345C;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F6F1E8")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#F6F1E8")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack>
 
@@ -100,7 +104,8 @@ import { Hero, IndexSec, ESec, EmoStrip, IncLineSep, BottTriSep, EmoBtn, YTPlaye
 
 	<ESec
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="ما الفرق العملي بين النظامين؟"
@@ -108,20 +113,21 @@ import { Hero, IndexSec, ESec, EmoStrip, IncLineSep, BottTriSep, EmoBtn, YTPlaye
 			style="--StripBg:#FFFDF8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("في نظام المشاركات")}
 					pText={Text.Body.WithColor("#333333").OfText("الأرض نفسها تكون جزءا أساسيا من هيكل المشروع. صاحب الأرض يدخل بقيمة الأرض، والطرف المطور أو مجموعة التمويل يدخل بخبرة الإدارة أو التمويل أو التنفيذ، ثم يتم الاتفاق على نسب عادلة بناء على الدراسة والتكلفة والقيمة المتوقعة للمشروع.")}
-					pSize={new Size(520, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(520, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("في نظام اتحاد الملاك")}
 					pText={Text.Body.WithColor("#333333").OfText("التمويل يأتي من السكان أو الملاك أنفسهم. الاحتياج الأساسي هنا هو ضبط القرار الجماعي، وتوزيع الالتزامات، وإدارة التعاقدات، ومتابعة الصرف والتنفيذ بطريقة شفافة تمنع الخلافات وتحافظ على حقوق كل مالك.")}
-					pSize={new Size(520, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(520, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</HzStack>
@@ -132,7 +138,8 @@ import { Hero, IndexSec, ESec, EmoStrip, IncLineSep, BottTriSep, EmoBtn, YTPlaye
 
 	<ESec
 		pBg={new ElemBg("#F6F1E8")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="دورنا في إدارة مشروع التطوير"
@@ -140,26 +147,27 @@ import { Hero, IndexSec, ESec, EmoStrip, IncLineSep, BottTriSep, EmoBtn, YTPlaye
 			style="--StripBg:#B78A25;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F6F1E8")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#F6F1E8")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("دراسة قبل القرار")}
 					pText={Text.Body.WithColor("#333333").OfText("نراجع الموقع، والمساحة، والاشتراطات، وإمكانية البناء، والتكلفة المتوقعة، وطريقة التمويل، ونموذج العائد أو التوفير قبل الدخول في التزام تنفيذي.")}
-					pSize={new Size(350, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("إدارة هندسية وقانونية")}
 					pText={Text.Body.WithColor("#333333").OfText("ندير التصميمات، والترخيص، والمقايسات، والتعاقدات، والمستخلصات، ومتابعة الجودة، وربط كل قرار هندسي بأثره المالي والقانوني على المشروع.")}
-					pSize={new Size(350, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("شفافية في التمويل والتنفيذ")}
 					pText={Text.Body.WithColor("#333333").OfText("سواء كان التمويل من قيمة الأرض في المشاركات أو من مساهمات السكان في اتحاد الملاك، يتم ضبط الحسابات والمراحل والتقارير بحيث يعرف كل طرف أين تذهب التكلفة.")}
-					pSize={new Size(350, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</HzStack>
@@ -170,7 +178,8 @@ import { Hero, IndexSec, ESec, EmoStrip, IncLineSep, BottTriSep, EmoBtn, YTPlaye
 
 	<ESec
 		pBg={new ElemBg("#FFFDF8")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="مسار العمل قبل اختيار الصفحة المتخصصة"
@@ -178,26 +187,27 @@ import { Hero, IndexSec, ESec, EmoStrip, IncLineSep, BottTriSep, EmoBtn, YTPlaye
 			style="--StripBg:#17345C;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFDF8")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#FFFDF8")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("1 — فحص الحالة الحالية")}
 					pText={Text.Body.WithColor("#333333").OfText("نراجع مستندات الأرض أو العقار، وموقف الملكية، والاشتراطات البنائية، والقيود القانونية أو التخطيطية التي قد تؤثر على المشروع.")}
-					pSize={new Size(900, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(900, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("2 — تصور هندسي ومالي")}
 					pText={Text.Body.WithColor("#333333").OfText("نجهز تصورا مبدئيا للمساحات، والتكلفة، ومراحل التنفيذ، وطريقة التمويل، ونموذج توزيع الحقوق أو الوحدات أو نسب المشاركة.")}
-					pSize={new Size(900, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(900, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("3 — تحديد النظام المناسب")}
 					pText={Text.Body.WithColor("#333333").OfText("إذا كانت الأرض هي محور الاتفاق فالغالب أن صفحة المشاركات هي البداية الصحيحة. أما إذا كان التمويل من مجموعة سكان أو ملاك فصفحة اتحاد الملاك هي الأقرب للحالة.")}
-					pSize={new Size(900, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(900, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</VrStack>
@@ -208,7 +218,8 @@ import { Hero, IndexSec, ESec, EmoStrip, IncLineSep, BottTriSep, EmoBtn, YTPlaye
 
 	<ESec
 		pBg={new ElemBg("#17345C")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="انتقل إلى الصفحة المناسبة لحالتك"
@@ -216,7 +227,8 @@ import { Hero, IndexSec, ESec, EmoStrip, IncLineSep, BottTriSep, EmoBtn, YTPlaye
 			style="--StripBg:#102744;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#17345C")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#17345C")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack>
 

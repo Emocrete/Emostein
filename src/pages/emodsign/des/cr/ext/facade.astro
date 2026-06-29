@@ -1,7 +1,7 @@
 ---
+import { Align, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, Topic, ElemBg, RespString, Pixel, Size, Align } from "@/TypesLib";
-import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, ReadAlso, RelServices, EmoContactStrip, SecTitle, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { CardsGr, EmoCall, EmoContactStrip, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, SecTitle } from "@/Widgets";
 ---
 
 
@@ -41,7 +41,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		pDesc="واجهة المبنى هي أول رسالة يراها العميل أو الزائر أو الساكن؛ لذلك نصممها كقرار معماري وتجاري وتنفيذي، لا كزخرفة خارجية منفصلة عن المبنى."
 		pTitleClr="#F6E7C6"
 		pDescClr="#FFFFFF"
-		pAlign="right"
+		pHzAlign="right"
+		pVrAlign="right"
 		pPosL="16% 52% 12% 8%"
 		pPosP="12% 8% 45% 8%"
 		pBlurL="on"
@@ -58,7 +59,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -69,7 +71,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("الواجهة ليست صورة جميلة فقط")}
 				pText={Text.Body.WithColor("#333333").OfText("الواجهة الناجحة تربط بين الجمال والوظيفة. تحدد أين تظهر الفتحات، كيف تدخل الإضاءة الطبيعية، كيف تُقرأ كتلة المبنى من الشارع، كيف تحافظ على الخصوصية، وكيف يمكن تنفيذ الخامات بدون تفاصيل تسبب تسريبًا أو تشققات أو تكلفة غير مبررة. لذلك نتعامل مع تصميم الواجهات كجزء من التصميم المعماري والتشطيب الخارجي في نفس الوقت.")}
 			/>
@@ -97,7 +99,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#111318")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#111318")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -131,20 +134,22 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 	<EmoStrip
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("من أين يبدأ تصميم الواجهة؟")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("الواجهة الجيدة لا تُرسم على كتلة مجهولة. نبدأ بقراءة المبنى ثم نصمم طبقات الواجهة: النسب، الفتحات، الخامات، الظلال، الإضاءة، التفاصيل، والتكلفة التقريبية.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -195,7 +200,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -227,7 +233,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -254,7 +261,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 			/>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("الخلطة الصحيحة أهم من سعر الخامة")}
 				pText={Text.Body.WithColor("#333333").OfText("واجهة مليئة بخامات غالية قد تبدو أضعف من واجهة بسيطة إذا كانت النسب غير صحيحة. القيمة في توزيع الخامات لا في عددها. نحدد أين يجب أن تكون الخامة الرئيسية، أين تظهر خامة مساعدة، أين نستخدم اللون فقط، وأين يكون الظل أو الإضاءة كافيًا لصناعة العمق دون زيادة تكلفة التنفيذ.")}
 			/>
@@ -269,7 +276,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -317,20 +325,22 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 	<EmoStrip
 		pBg={new ElemBg("#F7F1E6")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#111318")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#F6E7C6").OfText("تصميم واجهات العمارات والمباني المتعددة")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("واجهة العمارة لا يجب أن تتحول إلى شبكة مملة من الشبابيك والبلكونات. المطلوب إيقاع واضح يعالج التكرار، ويحافظ على تكلفة مناسبة، ويراعي الصيانة وسهولة التنفيذ على ارتفاعات متعددة.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -359,7 +369,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#111318")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#111318")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -409,7 +420,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -441,7 +453,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -473,7 +486,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#111318")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#111318")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -507,20 +521,22 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 	<EmoStrip
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("أخطاء شائعة في تصميم الواجهات")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("أغلب أخطاء الواجهات لا تظهر في الرندر فقط، بل تظهر عند التنفيذ والصيانة. لذلك نراجع قابلية التنفيذ قبل اعتماد الشكل النهائي.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -569,7 +585,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -615,7 +632,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -647,7 +665,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "

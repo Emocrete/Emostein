@@ -1,13 +1,14 @@
 ---
-import { Align, DirectSize, ElemBg, NumPer, Place, type PlaceProps } from "@/TypesLib";
+import { Align, ElemBg, GetHzAlignCss, GetVrAlignCss, type HzAlignValue, NumPer, Place, type PlaceProps, Size, type VrAlignValue } from "@/TypesLib";
 import { Media } from "@/Media";
 import type { HTMLAttributes } from "astro/types";
 
 interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
 	pBg?: ElemBg;
-	pSize?: DirectSize;
+	pSize?: Size;
 	pMinH?: NumPer;
-	pAlign?: Align;
+	pHzAlign?: HzAlignValue;
+	pVrAlign?: VrAlignValue;
 	pImgF?: string;
 	pImgL?: string;
 	pImgP?: string;
@@ -16,7 +17,8 @@ interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
 const {
 	pBg,
 	pMinH,
-	pAlign = Align.Center,
+	pHzAlign,
+	pVrAlign,
 	pImgF = "",
 	pImgL = "",
 	pImgP = "",
@@ -84,6 +86,10 @@ const cFinalBgImgP = cBgImgP || cBgImgL;
 const cHasBgImg = cFinalBgImgL !== "" || cFinalBgImgP !== "";
 const cBgAlt = pBg?.Img?.Alt || "";
 
+const cHzAlign = pHzAlign ?? Align.Center;
+const cVrAlign = pVrAlign ?? Align.Center;
+const cHasExplicitHeight = HasExplicitCssSize(pSize?.HeightL) || HasExplicitCssSize(pSize?.HeightP);
+
 const cStripStyle = [
 	`--StripBg:${pBg?.Color || "transparent"};`,
 	`--StripWidthL:${pSize?.WidthL || "100%"};`,
@@ -92,10 +98,10 @@ const cStripStyle = [
 	`--StripHeightP:${pSize?.HeightP || pSize?.HeightL || "auto"};`,
 	`--StripMinHeightL:${pMinH?.Landscape || (cIsHero ? "100svh" : "auto")};`,
 	`--StripMinHeightP:${pMinH?.Portrait || (cIsHero ? "100svh" : "auto")};`,
-	`--StripAlignL:${GetHorizontalAlign(pAlign.HzL)};`,
-	`--StripAlignP:${GetHorizontalAlign(pAlign.HzP)};`,
-	`--StripJustifyL:${GetVerticalAlign(pAlign.VrL)};`,
-	`--StripJustifyP:${GetVerticalAlign(pAlign.VrP)};`,
+	`--StripAlignL:${GetHzAlignCss(cHzAlign, "Landscape")};`,
+	`--StripAlignP:${GetHzAlignCss(cHzAlign, "Portrait")};`,
+	`--StripJustifyL:${GetVrAlignCss(cVrAlign, "Landscape")};`,
+	`--StripJustifyP:${GetVrAlignCss(cVrAlign, "Portrait")};`,
 	cGivenStyle,
 ].filter(Boolean).join(" ");
 
@@ -124,16 +130,9 @@ function GetBoolAttr(pValue: unknown) {
 	return pValue === true || pValue === "" || pValue === "true";
 }
 
-function GetHorizontalAlign(pValue?: string) {
-	if (pValue === "left") return "flex-start";
-	if (pValue === "right") return "flex-end";
-	return "center";
-}
-
-function GetVerticalAlign(pValue?: string) {
-	if (pValue === "top") return "flex-start";
-	if (pValue === "bottom") return "flex-end";
-	return "center";
+function HasExplicitCssSize(pValue?: string) {
+	const cValue = `${pValue ?? ""}`.trim().toLowerCase();
+	return cValue !== "" && cValue !== "auto" && cValue !== "fit-content" && cValue !== "max-content" && cValue !== "min-content";
 }
 ---
 
@@ -160,12 +159,15 @@ function GetVerticalAlign(pValue?: string) {
 	class = {`EmoStrip ${cPlace.Class} ${pGivenClass}`.trim()}
 	style = {cFinalStyle}
 	id={pGivenID}
+	data-emo-auto-container="true"
+	data-emo-explicit-height={cHasExplicitHeight ? "true" : "false"}
+	data-emo-empty-height="200"
 	{...RemAttr}
 >
 
 	{ cHasBgImg && (
 
-		<picture class = " EmoStripBg ">
+		<picture class = " EmoStripBg " data-emo-container-bg="true">
 		
 			<source media="(orientation: portrait)" srcset={cFinalBgImgP} />
 		

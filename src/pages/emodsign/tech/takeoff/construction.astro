@@ -1,11 +1,11 @@
 ---
+import { Align, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, Topic, ElemBg, EmoMediaData, RespString, Pixel, Size, Align } from "@/TypesLib";
-import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, EmoBtn, EmoFaq, ReadAlso, RelServices, SecTitle, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { CardsGr, DuoCol, DuoStr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, FreeHero, Grid, Hero, HzStack, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
+import { BadgeFrame, BlurBlob, DiagonalBottom, FloatingPanel, GlassCard, LinePath, Ribbon, SoftArc, SvgDots, TiltCard } from "@/Widgets/Shapes";
 
-import {NumPer,	Loc,Location,DirectSize,Percent} from "@/TypesLib";
-import {FreeHero,FreeHeroItem,VrStack,Grid,	DuoSec,	DuoCol} from "@/Widgets";
-import {GlassCard,FloatingPanel,TiltCard,BadgeFrame,LinePath,SvgDots,BlurBlob,Ribbon,SoftArc,DiagonalBottom} from "@/Widgets/Shapes";
+
+
 
 const cHeroFolder = "/Media/Emodsign/Tech/Takeoff/Construction/";
 const cTakeoffFolder = "/Media/Emodsign/Tech/Takeoff/";
@@ -25,11 +25,10 @@ const MakeLoc = (pXL: number | string, pXP: number | string, pYL: number | strin
 	new Loc(new NumPer(pXL, pXP), new NumPer(pYL, pYP));
 
 const MakePlaceSize = (pWL: number | string, pWP: number | string, pHL: number | string = "auto", pHP: number | string = pHL) =>
-	new DirectSize(new NumPer(pWL, pWP), new NumPer(pHL, pHP));
+	new Size(new NumPer(pWL, pWP), new NumPer(pHL, pHP));
 
 const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | string, pHP: number | string) =>
-	new Size(pWL, pHL, pWP, pHP);
-
+	new Size(new NumPer(pWL, pWP), new NumPer(pHL, pHP));
 ---
 
 
@@ -70,169 +69,142 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 	<FreeHero pImgF={cHeroFolder}>
 
-		<FreeHeroItem
+		<EmoStrip
 			style = " background : linear-gradient(90deg, rgba(8,10,14,.94) 0%, rgba(14,17,24,.82) 42%, rgba(14,17,24,.28) 100%) "
-			pLoc={new Location(0, 0, 0, 0)}
+			pLoc={new Loc(new NumPer(0, 0), new NumPer(0, 0))}
 			pSize={MakeHeroSize("100%", "100%", "100%", "100%")}
-			pFit={true}
-			pPointer={false}
 			pZ={1}
+			pClickable={false}
 		/>
 
-		<FreeHeroItem
-			pLoc={new Location("4%", "-18%", "8%", "9%")}
+		<BlurBlob
+			pColor="rgba(217,184,108,.35)"
+			pColor2="rgba(135,168,181,.28)"
+			pBlur={34}
+			pLoc={new Loc(new NumPer("4%", "-18%"), new NumPer("8%", "9%"))}
 			pSize={MakeHeroSize(520, 520, 520, 520)}
 			pZ={2}
-			pPointer={false}
-		>
+			pClickable={false}
+		/>
 
-			<BlurBlob
-				pColor="rgba(217,184,108,.35)"
-				pColor2="rgba(135,168,181,.28)"
-				pBlur={34}
-			/>
-
-		</FreeHeroItem>
-
-		<FreeHeroItem
-			pLoc={new Location("52%", "5%", "13%", "18%")}
+		<LinePath
+			pStroke="rgba(231,211,161,.55)"
+			pDot="rgba(255,249,237,.86)"
+			pWidth={3}
+			pLoc={new Loc(new NumPer("52%", "5%"), new NumPer("13%", "18%"))}
 			pSize={MakeHeroSize(620, 220, 320, 150)}
 			pZ={2}
-			pFit={true}
-			pPointer={false}
-		>
+			pClickable={false}
+		/>
 
-			<LinePath
-				pStroke="rgba(231,211,161,.55)"
-				pDot="rgba(255,249,237,.86)"
-				pWidth={3}
-			/>
-
-		</FreeHeroItem>
-
-		<FreeHeroItem
-			pLoc={new Location("7%", "6%", "15%", "10%")}
+		<GlassCard
+			pBg="rgba(247,241,230,.86)"
+			pBorder="rgba(255,255,255,.48)"
+			pRadius={34}
+			pBlur={18}
+			pLoc={new Loc(new NumPer("7%", "6%"), new NumPer("15%", "10%"))}
 			pSize={MakeHeroSize("46%", "auto", "88%", "auto")}
 			pZ={5}
 		>
 
-			<GlassCard
-				pBg="rgba(247,241,230,.86)"
-				pBorder="rgba(255,255,255,.48)"
-				pRadius={34}
-				pBlur={18}
-			>
+			<VrStack pGap={new Pixel(20, 14)} pPad={new Pixel(0)}>
 
-				<VrStack pGap={new Pixel(20, 14)} pPad={new Pixel(0)}>
+				<Emograph
+					pTitle={Text.H1.WithColor(cInk).OfText("خدمات الحصر الهندسي لأعمال البناء الخرسانية")}
+					pText={Text.Body.WithColor("#30343B").OfText("نحوّل رسومات المشروع ومواصفاته إلى جداول كميات واضحة للخرسانة والحديد والحفر والردم والشدات، بحيث يصبح قرار التسعير والتعاقد مبنيًا على أرقام قابلة للمراجعة لا على تقدير عام.")}
+					pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+				/>
 
-					<Emograph
-						pTitle={Text.H1.WithColor(cInk).OfText("خدمات الحصر الهندسي لأعمال البناء الخرسانية")}
-						pText={Text.Body.WithColor("#30343B").OfText("نحوّل رسومات المشروع ومواصفاته إلى جداول كميات واضحة للخرسانة والحديد والحفر والردم والشدات، بحيث يصبح قرار التسعير والتعاقد مبنيًا على أرقام قابلة للمراجعة لا على تقدير عام.")}
-						pSize={new Size("100%", "auto", "100%", "auto")}
+				<HzStack
+					pGap={new Pixel(14, 10)}
+					pPad={new Pixel(0)}
+					pForceHz={true}
+				>
+
+					<EmoCall
+						BlackSky
+						pText="اطلب حصر الخرسانات"
+						pWidth="230px"
+						pHeight="54px"
 					/>
 
-					<HzStack
-						pGap={new Pixel(14, 10)}
-						pPad={new Pixel(0)}
-						pForceHz={true}
-					>
+					<EmoBtn
+						pText="شاهد نطاق الحصر"
+						pBgColor={cGold2}
+						pBgColorHover={cPaper}
+						pTextColor={cInk}
+						pWidth="210px"
+						pHeight="54px"
+						onclick="location.href='#scope-map'"
+					/>
 
-						<EmoCall
-							BlackSky
-							pText="اطلب حصر الخرسانات"
-							pWidth="230px"
-							pHeight="54px"
-						/>
+				</HzStack>
 
-						<EmoBtn
-							pText="شاهد نطاق الحصر"
-							pBgColor={cGold2}
-							pBgColorHover={cPaper}
-							pTextColor={cInk}
-							pWidth="210px"
-							pHeight="54px"
-							onclick="location.href='#scope-map'"
-						/>
+			</VrStack>
 
-					</HzStack>
+		</GlassCard>
 
-				</VrStack>
-
-			</GlassCard>
-
-		</FreeHeroItem>
-
-		<FreeHeroItem
-			pLoc={new Location("59%", "10%", "40%", "58%")}
+		<FloatingPanel
+			pBg="rgba(14,17,24,.88)"
+			pBorder="rgba(231,211,161,.26)"
+			pAccent={cGold}
+			pLoc={new Loc(new NumPer("59%", "10%"), new NumPer("40%", "58%"))}
 			pSize={MakeHeroSize(430, 310, 290, 230)}
 			pZ={4}
 		>
 
-			<FloatingPanel
-				pBg="rgba(14,17,24,.88)"
-				pBorder="rgba(231,211,161,.26)"
-				pAccent={cGold}
-			>
+			<VrStack pGap={new Pixel(18, 12)} pPad={new Pixel(0)}>
 
-				<VrStack pGap={new Pixel(18, 12)} pPad={new Pixel(0)}>
+				<Emograph
+					pTitle={Text.H3.WithColor(cGold2).OfText("BOQ Control Board")}
+					pText={Text.Body.WithColor("#F8F4EA").OfText("كل بند يخرج بوحدة قياس، مصدر من اللوحة، ملاحظات قياس، وكمية قابلة للتسعير أو المراجعة.")}
+					pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+				/>
 
-					<Emograph
-						pTitle={Text.H3.WithColor(cGold2).OfText("BOQ Control Board")}
-						pText={Text.Body.WithColor("#F8F4EA").OfText("كل بند يخرج بوحدة قياس، مصدر من اللوحة، ملاحظات قياس، وكمية قابلة للتسعير أو المراجعة.")}
-						pSize={new Size("100%", "auto", "100%", "auto")}
-					/>
+				<Grid
+					pMax={2}
+					pMaxP={2}
+					pGap={new Pixel(12, 10)}
+					pPad={new Pixel(0)}
+				>
 
-					<Grid
-						pMax={2}
-						pMaxP={2}
-						pGap={new Pixel(12, 10)}
-						pPad={new Pixel(0)}
+					<BadgeFrame
+						pBadge="m³"
+						pBg="rgba(255,249,237,.96)"
+						pBadgeBg={cConcrete}
+						pColor={cInk}
 					>
 
-						<BadgeFrame
-							pBadge="m³"
-							pBg="rgba(255,249,237,.96)"
-							pBadgeBg={cConcrete}
-							pColor={cInk}
-						>
+						<Emograph pTitle={Text.H5.Centered.OfText("خرسانة")} pText={Text.Body.Centered.OfText("قواعد · أعمدة · كمرات")} />
 
-							<Emograph pTitle={Text.H5.Centered.OfText("خرسانة")} pText={Text.Body.Centered.OfText("قواعد · أعمدة · كمرات")} />
+					</BadgeFrame>
 
-						</BadgeFrame>
+					<BadgeFrame
+						pBadge="kg"
+						pBg="rgba(255,249,237,.96)"
+						pBadgeBg={cRust}
+						pColor={cInk}
+					>
 
-						<BadgeFrame
-							pBadge="kg"
-							pBg="rgba(255,249,237,.96)"
-							pBadgeBg={cRust}
-							pColor={cInk}
-						>
+						<Emograph pTitle={Text.H5.Centered.OfText("حديد")} pText={Text.Body.Centered.OfText("أقطار · أطوال · أوزان")} />
 
-							<Emograph pTitle={Text.H5.Centered.OfText("حديد")} pText={Text.Body.Centered.OfText("أقطار · أطوال · أوزان")} />
+					</BadgeFrame>
 
-						</BadgeFrame>
+				</Grid>
 
-					</Grid>
+			</VrStack>
 
-				</VrStack>
+		</FloatingPanel>
 
-			</FloatingPanel>
-
-		</FreeHeroItem>
-
-		<FreeHeroItem
-			pLoc={new Location("67%", "62%", "18%", "82%")}
+		<Ribbon
+			pText="Concrete Takeoff"
+			pBg={cGold2}
+			pColor={cInk}
+			pLoc={new Loc(new NumPer("67%", "62%"), new NumPer("18%", "82%"))}
 			pSize={MakeHeroSize(260, 62, 190, 54)}
+			pRotate={new RespString("-4deg", "3deg")}
 			pZ={6}
-			pRot={new RespString("-4deg", "3deg")}
-		>
-
-			<Ribbon
-				pText="Concrete Takeoff"
-				pBg={cGold2}
-				pColor={cInk}
-			/>
-
-		</FreeHeroItem>
+		/>
 
 	</FreeHero>
 
@@ -317,10 +289,10 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<DuoSec
+	<DuoStr
 		id="takeoff-meaning"
 		pBg={new ElemBg(cCream)}
-		pContentSize={new Size(1180, "auto", "calc(100% - 24px)", "auto")}
+		pContentSize={new Size(new NumPer(1180, "calc(100% - 24px)"), new NumPer("auto", "auto"))}
 		pPad={new Pixel(90, 36)}
 		pGap={new Pixel(34, 18)}
 	>
@@ -336,7 +308,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			<Emograph
 				pTitle={Text.H2.WithColor(cInk).OfText("الحصر الهندسي ليس عدّ كميات فقط")}
 				pText={Text.Body.WithColor("#333842").OfText("الحصر الهندسي هو قراءة منظمة للرسومات والمواصفات ثم تحويلها إلى بنود وكميات ووحدات وملاحظات قياس. النتيجة ليست رقم خرسانة أو حديد فقط، بل جدول كميات BOQ يساعد في تقدير التكلفة، ضبط ميزانية المشروع، مراجعة عروض المقاولين، وتقليل الهدر الناتج عن التقدير العشوائي.")}
-				pSize={new Size("100%", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
 			/>
 
 			<EmoList
@@ -395,7 +367,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</DuoCol>
 
-	</DuoSec>
+	</DuoStr>
 
 
 
@@ -419,7 +391,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 		id="documents"
 		pBg={new ElemBg(cDark)}
 		pMinH={new NumPer(700, 0)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SvgDots
@@ -437,8 +410,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pDesc="لا توجد كمية دقيقة من فراغ. دقة الحصر تعتمد على وضوح الرسومات التنفيذية، اكتمال الجداول، وجود المواصفات الفنية، وتحديد حدود الخدمة: هل المطلوب خرسانة وحديد فقط أم بنود بناء كاملة تشمل الحفر والردم والشدات والمباني؟"
 		/>
 
-		<DuoSec
-			pContentSize={new Size(1180, "auto", "calc(100% - 24px)", "auto")}
+		<DuoStr
+			pContentSize={new Size(new NumPer(1180, "calc(100% - 24px)"), new NumPer("auto", "auto"))}
 			pPad={new Pixel(36, 22)}
 			pGap={new Pixel(28, 16)}
 		>
@@ -495,7 +468,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 			</DuoCol>
 
-		</DuoSec>
+		</DuoStr>
 
 	</ESec>
 
@@ -520,7 +493,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 	<ESec
 		id="scope-map"
 		pBg={new ElemBg(cCream)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 		pMinH={new NumPer(780, 0)}
 	>
 
@@ -557,10 +531,10 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<DuoSec
+	<DuoStr
 		id="workflow"
 		pBg={new ElemBg(cDark)}
-		pContentSize={new Size(1180, "auto", "calc(100% - 24px)", "auto")}
+		pContentSize={new Size(new NumPer(1180, "calc(100% - 24px)"), new NumPer("auto", "auto"))}
 		pPad={new Pixel(90, 36)}
 		pGap={new Pixel(34, 18)}
 	>
@@ -664,7 +638,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</DuoCol>
 
-	</DuoSec>
+	</DuoStr>
 
 
 
@@ -675,7 +649,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 	<ESec
 		id="deliverables"
 		pBg={new ElemBg(cPaper)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 		pMinH={new NumPer(720, 0)}
 	>
 
@@ -697,7 +672,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 		<Grid
 			pMax={4}
 			pMaxP={1}
-			pSize={new DirectSize(new NumPer("1180px", "calc(100% - 24px)"))}
+			pSize={new Size(new NumPer("1180px", "calc(100% - 24px)"))}
 			pGap={new Pixel(22, 14)}
 			pPad={new Pixel(24, 8)}
 			Centered
@@ -772,8 +747,9 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 	<EmoStrip
 		id="risk-control"
 		pBg={new ElemBg(cDark)}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SvgDots
@@ -788,13 +764,13 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 		<Emograph
 			pTitle={Text.H2.Centered.WithColor(cGold2).OfText("لماذا تختار حصرًا هندسيًا منظمًا؟")}
 			pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("القيمة ليست في استخراج رقم سريع، بل في تقليل أخطاء التقدير، كشف النواقص، وضبط حدود التعاقد قبل أن تتحول الفروقات الصغيرة في اللوحات إلى تكلفة كبيرة في الموقع.")}
-			pSize={new Size(980, "auto", 320, "auto")}
+			pSize={new Size(new NumPer(980, 320), new NumPer("auto", "auto"))}
 		/>
 
 		<Grid
 			pMax={3}
 			pMaxP={1}
-			pSize={new DirectSize(new NumPer("1180px", "calc(100% - 24px)"))}
+			pSize={new Size(new NumPer("1180px", "calc(100% - 24px)"))}
 			pGap={new Pixel(22, 14)}
 			pPad={new Pixel(36, 16)}
 			Centered
@@ -851,7 +827,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 	<ESec
 		pBg={new ElemBg(cCream)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 		pMinH={new NumPer(560, 0)}
 	>
 
@@ -958,7 +935,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 		pDesc="تحويل رسومات المشروع إلى جداول كميات مفهومة: حفر، خرسانة، شدات، حديد، مباني، وبنود بناء قابلة للتسعير والمراجعة قبل التعاقد مع المقاول."
 		pTitleClr="#F4E5C4"
 		pDescClr="#FFFFFF"
-		pAlign="right"
+		pHzAlign="right"
+		pVrAlign="right"
 		pPosL="18% 50% 12% 8%"
 		pPosP="12% 8% 44% 8%"
 		pBlurL="on"
@@ -1053,7 +1031,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 	<ESec
 		id="takeoff-meaning"
 		pBg={new ElemBg("#F7F1E6")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1065,7 +1044,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("مشكلة العميل ليست معرفة كمية الخرسانة فقط")}
 				pText={Text.Body.WithColor("#333333").OfText("صاحب المشروع يحتاج أن يعرف أين ستذهب أمواله قبل التعاقد. الحصر الجيد لا يكتفي بعدّ الخرسانة والحديد، بل يربط كل كمية بمصدرها في الرسومات، وبندها في جدول الكميات، ووحدتها، وملاحظات القياس، وما إذا كانت الكمية صالحة للتسعير أو تحتاج رسومات أكثر تفصيلًا. لذلك تصبح خدمة الحصر أداة قرار مالي وفني وليست عملية حسابية معزولة.")}
 			/>
@@ -1077,7 +1056,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 					"photo-1503387762-592deb58ef4e?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"مكتب هندسي يراجع رسومات ومخططات قبل إعداد حصر كميات البناء",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -1091,7 +1070,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#0E1118")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#0E1118")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1123,20 +1103,22 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 	<EmoStrip
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("محتوى الصفحة مبني حول وظيفة الحصر في السوق الفعلي")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("خدمات الحصر العالمية تعرض القيمة عادة في تحويل الرسومات والمواصفات إلى كميات قابلة للتسعير، وإعداد جداول تفصيلية تساعد في المناقصات والميزانية وشراء الخامات وإدارة التكلفة. لذلك تم بناء الصفحة على هذه الوظائف لا على تعريف قصير للخدمة.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -1168,7 +1150,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 					"photo-1541888946425-d81bb19240f5?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"موقع بناء ورافعات كمثال على ارتباط الحصر بالتنفيذ والتكلفة",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -1185,7 +1167,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 	<ESec
 		id="construction-items"
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1218,7 +1201,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1264,7 +1248,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1299,20 +1284,22 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 	<EmoStrip
 		pBg={new ElemBg("#F7F1E6")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#111318")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("حصر الحديد يحتاج وضوحًا في مستوى الدقة")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("حديد التسليح من أكثر البنود حساسية لأن الفارق بين الحصر التقديري والحصر التفصيلي قد يظهر بقوة في الشراء والتعاقد. لذلك لا يتم تقديم كمية الحديد كرقم مطلق دون شرح مصدرها: جداول تسليح، لوحات تفصيلية، نسب تقريبية، أو مراجعة تنفيذية.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -1326,7 +1313,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 					"photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"حديد تسليح وموقع بناء مرتبط بحصر كميات الخرسانة والحديد",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -1356,7 +1343,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 	<ESec
 		id="workflow"
 		pBg={new ElemBg("#0E1118")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1389,7 +1377,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1446,7 +1435,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 	<ESec
 		id="deliverables"
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1481,20 +1471,22 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 	<EmoStrip
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("جدول الكميات ليس عرض سعر")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("خلط الحصر بالتسعير من أكثر أسباب سوء الفهم. الحصر يجيب عن سؤال: كم؟ أما التسعير فيجيب عن سؤال: بكام؟ وقد يختلف السعر حسب طريقة التنفيذ والخامات والموقع والمقاول وفترة التنفيذ والاشتراطات.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -1521,7 +1513,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -1567,7 +1560,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1602,7 +1596,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 	<ESec
 		id="risk-control"
 		pBg={new ElemBg("#0E1118")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1659,7 +1654,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -1691,20 +1687,22 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 	<EmoStrip
 		pBg={new ElemBg("#F7F1E6")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#111318")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("استخدام الحصر في متابعة التنفيذ")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("عندما يبدأ التنفيذ، يتحول جدول الكميات إلى مرجع لفهم ما تم شراؤه وما تم تنفيذه وما يستحق صرفه. لذلك يفضل أن يكون الجدول منظمًا منذ البداية بطريقة تسمح بالمراجعة لا بمجرد جمع رقم إجمالي.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -1712,7 +1710,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("من الحصر إلى المستخلص")}
 				pText={Text.Body.WithColor("#333333").OfText("الكمية التعاقدية لا تعني أن نفس الكمية تم تنفيذها بالفعل في الموقع. عند متابعة المشروع يتم قياس الأعمال المنفذة ومقارنتها بما كان مقدرًا أو متفقًا عليه. لذلك من المفيد أن يكون جدول الحصر الأصلي واضحًا في تقسيم البنود والوحدات حتى يسهل استخدامه لاحقًا في مراجعة الدفعات والمستخلصات وتغيرات الكميات.")}
 			/>
@@ -1740,7 +1738,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1772,7 +1771,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1800,7 +1800,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			/>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("لماذا يتم فصل النطاقات؟")}
 				pText={Text.Body.WithColor("#333333").OfText("لأن العميل قد يطلب حصر البناء وهو يقصد الهيكل الخرساني فقط، أو يقصد كل ما يلزم حتى الطوب، أو يقصد مقايسة كاملة للبناء والتشطيب. لو لم يتم تثبيت النطاق، ستظهر فجوة بين ما يتوقعه العميل وما يحتويه الجدول. لذلك يتم توضيح المشمول والمستبعد قبل البدء، وتعديل الخدمة إذا كان المطلوب أوسع من حصر البناء.")}
 			/>
@@ -1815,7 +1815,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1850,20 +1851,22 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 	<EmoStrip
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("حصر البناء للمالك يختلف عن حصر المقاول")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("المالك يريد أداة مقارنة وتحكم، بينما المقاول يريد كمية تساعده في التسعير والتنفيذ والشراء. يمكن للملف أن يخدم الطرفين، لكن يجب أن يكون الوصف واضحًا حتى لا يستخدم الجدول لغرض لم يصمم له.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -1890,7 +1893,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -1920,7 +1924,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1974,7 +1979,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -2004,7 +2010,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -2037,7 +2044,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#0E1118")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#0E1118")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -2067,7 +2075,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -2078,7 +2087,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("المتر لا يرى التفاصيل")}
 				pText={Text.Body.WithColor("#333333").OfText("عندما يقال إن تكلفة الهيكل كذا للمتر، فإن الرقم يخفي داخله مئات القرارات: عمق الحفر، نوع الأساسات، كمية الحديد، ارتفاع الدور، نوع البلاطة، عدد الكمرات، كثافة الأعمدة، وجود بدروم أو سلم خاص، وطريقة التنفيذ. لذلك يصلح سعر المتر للمؤشر الأولي، لكن الحصر هو الطريق العملي للمقارنة والتعاقد.")}
 			/>
@@ -2090,7 +2099,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 					"photo-1581094794329-c8112a89af12?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"مهندس يراجع بيانات مشروع قبل إعداد تقدير أو حصر كميات",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -2104,7 +2113,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -2136,7 +2146,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -2168,7 +2179,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -2224,20 +2236,22 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 	<EmoStrip
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("الحصر اليدوي والرقمي كلاهما يحتاج عقل هندسي")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("استخدام CAD أو أدوات قياس رقمية يسرع العمل، لكنه لا يضمن صحة الكمية إذا كانت اللوحات غير مفهومة أو النطاق غير محدد أو طريقة القياس خاطئة. الأداة تقيس، لكن المهندس يقرر ماذا يقاس وكيف يسجل ومتى يتحفظ.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -2280,7 +2294,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -2310,7 +2325,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -2364,7 +2380,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -2452,7 +2469,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -2484,7 +2502,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#0E1118")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#0E1118")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -2530,7 +2549,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -2562,7 +2582,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -2616,7 +2637,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -2646,7 +2668,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -2681,7 +2704,8 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 	<ESec
 		id="faq"
 		pBg={new ElemBg("#F7F1E6")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle

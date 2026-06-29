@@ -1,9 +1,30 @@
 ---
+import { GetHzAlignCss, GetVrAlignCss, type HzAlignValue, Place, type PlaceProps, type VrAlignValue } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import { Place, type PlaceProps } from "@/TypesLib";
 
-interface Props extends DebugOutlineProps, HTMLAttributes<"aside">, PlaceProps { pBg?: string; pBorder?: string; pAccent?: string; }
-const { pBg = "rgba(17,24,32,.88)", pBorder = "rgba(255,255,255,.18)", pAccent = "#fbff00", pLoc, pSize, pRotate, pZ, pOrigin, pOpacity, pClickable, pLandOnly, pPortOnly,
+interface Props extends DebugOutlineProps, HTMLAttributes<"aside">, PlaceProps {
+	pBg?: string;
+	pBorder?: string;
+	pAccent?: string;
+	pHzAlign?: HzAlignValue;
+	pVrAlign?: VrAlignValue;
+}
+
+const {
+	pBg = "rgba(17,24,32,.88)",
+	pBorder = "rgba(255,255,255,.18)",
+	pAccent = "#fbff00",
+	pHzAlign = "Stretch",
+	pVrAlign = "Center",
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
 	pMove,
 	pMoveDuration,
 	pMoveLoc,
@@ -23,13 +44,37 @@ const { pBg = "rgba(17,24,32,.88)", pBorder = "rgba(255,255,255,.18)", pAccent =
 	pMoveViewThreshold,
 	pMoveViewMargin,
 	pMoveViewTarget,
- id: pGivenID = GetWidgetId("FloatingPanel"), class: pGivenClass = "", style: pGivenStyle = "", ...RemAttr } = Astro.props as Props;
+	id: pGivenID = GetWidgetId("FloatingPanel"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
-const cPlace = new Place(Astro.props as PlaceProps, `--PanelBg:${pBg}; --PanelBorder:${pBorder}; --PanelAccent:${pAccent}; ${cGivenStyle}`);
+const cHasExplicitHeight = HasExplicitCssSize(pSize?.HeightL) || HasExplicitCssSize(pSize?.HeightP);
+const cPlace = new Place(
+	Astro.props as PlaceProps,
+	`--PanelBg:${pBg}; --PanelBorder:${pBorder}; --PanelAccent:${pAccent}; --PanelHzAlign:${GetHzAlignCss(pHzAlign)}; --PanelVrAlign:${GetVrAlignCss(pVrAlign)}; ${cGivenStyle}`
+);
+
+function HasExplicitCssSize(pValue?: string) {
+	const cValue = `${pValue ?? ""}`.trim().toLowerCase();
+	return cValue !== "" && cValue !== "auto" && cValue !== "fit-content" && cValue !== "max-content" && cValue !== "min-content";
+}
 ---
-<aside class={`FloatingPanel ${cPlace.Class} ${pGivenClass}`.trim()} style={cPlace.Style} id={pGivenID} {...RemAttr}><slot /></aside>
+<aside
+	class={`FloatingPanel ${cPlace.Class} ${pGivenClass}`.trim()}
+	style={cPlace.Style}
+	id={pGivenID}
+	data-emo-auto-container="true"
+	data-emo-explicit-height={cHasExplicitHeight ? "true" : "false"}
+	data-emo-empty-height="200"
+	{...RemAttr}
+>
+	<slot />
+</aside>
 <style>
-	.FloatingPanel { position: relative; display: flex; flex-direction: column; justify-content: center; width: 100%; height: auto; padding: clamp(22px, 3vw, 42px); border: 1px solid var(--PanelBorder); border-inline-start: 8px solid var(--PanelAccent); border-radius: 28px; background: var(--PanelBg); color: #FAFAFA; box-shadow: 0 30px 70px rgba(0,0,0,.28); backdrop-filter: blur(10px); box-sizing: border-box; }
+	.FloatingPanel { position: relative; display: flex; flex-direction: column; align-items: var(--PanelHzAlign, stretch); justify-content: var(--PanelVrAlign, center); width: 100%; height: auto; padding: clamp(22px, 3vw, 42px); border: 1px solid var(--PanelBorder); border-inline-start: 8px solid var(--PanelAccent); border-radius: 28px; background: var(--PanelBg); color: #FAFAFA; box-shadow: 0 30px 70px rgba(0,0,0,.28); backdrop-filter: blur(10px); box-sizing: border-box; }
 	.FloatingPanel::after { content: ""; position: absolute; inset-inline-end: 22px; inset-block-start: 22px; width: 48px; height: 48px; border-radius: 50%; background: radial-gradient(circle, var(--PanelAccent), transparent 70%); opacity: .6; pointer-events: none; }
 .FloatingPanel.IsPlaced {
 		position: absolute;

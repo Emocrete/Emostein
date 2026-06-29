@@ -1,7 +1,7 @@
 ---
+import { Align, Colors, ElemBg, EmoMediaData, HoverColors, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { DirectSize, NumPer, Loc, HoverColors, Text, ElemBg, EmoMediaData, Colors, Pixel, Topic, Size, Align, RespString, Percent } from "@/TypesLib";
-import { Hero, DuoSec, DuoCol, ESec,ThemedPriceCardHz,ThemedPriceCardVr, PhDwgMonthlyOffer, SecTitle, EmoStrip, ReadAlsoItem, Badge, EmoCall, HzStack, VrStack, CardsGr, PriceCard, EmoList, EmoBtn, EmoContactStrip, Emograph, RespImg, ReadAlso, RelServices, EmoFaq, RetailDwgMonthlyOffer, FaqItem, RelServiceItem } from "@/Widgets";
+import { Badge, CardsGr, DuoCol, DuoStr, EmoBtn, EmoCall, EmoContactStrip, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, PhDwgMonthlyOffer, PriceCard, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, RetailDwgMonthlyOffer, SecTitle, ThemedPriceCardHz, ThemedPriceCardVr, VrStack } from "@/Widgets";
 import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 ---
 
@@ -39,11 +39,12 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 	<Hero pImgAlt="واجهة صيدلية مرخصة مفروشة بالأدوية">
 
 		<VrStack
-			pSize={new DirectSize(new NumPer("35%","95%"))}
+			pSize={new Size(new NumPer("35%","95%"))}
 			pLoc={new Loc(new NumPer("52%","2.5%"),new NumPer("20%","60%"))}
 			pBgColor={new ElemBg(Colors.Gray5)}
 			pBgOpacity={new Percent(50)}
-			pAlign="Center"
+			pHzAlign="Center"
+			pVrAlign="Center"
 		>
 
 			<Emograph
@@ -61,7 +62,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 		<VrStack
 			pLandOnly
-			pSize={new DirectSize(new NumPer("60%","95%"))}
+			pSize={new Size(new NumPer("60%","95%"))}
 			pLoc={new Loc(new NumPer("40%","2.5%"),new NumPer("75%","60%"))}
 		>
 
@@ -117,8 +118,8 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="يتم تقديم الرسم الهندسي للصيدلية مرتين ، أحدهما يرسل كمرفق بطلب ترخيص الصيدلية عند التقديم ، والثاني يقدم كنسخة أخيرة مطابقة للواقع النهائي الذي سيتم تشغيل الصيدلية عليه"
 		/>
 
-		<DuoSec
-			pContentSize={new DirectSize(new NumPer("90%", "95%"))}
+		<DuoStr
+			pContentSize={new Size(new NumPer("90%", "95%"))}
 			pGap={new Pixel(40, 20)}
 			pPad={new Pixel(40,20)}
 		>
@@ -147,7 +148,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 			</DuoCol>
 
-		</DuoSec>
+		</DuoStr>
 
 	</ESec>
 
@@ -165,9 +166,9 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="يجب أن يتضمن الرسم الهندسي لترخيص الصيدلية عدة عناصر رئيسية لتوصيف مقر الصيدلية ، حيث يوضح الرسم الهندسي للمعاينة الأولى مدى استيفاء مقر الصيدلية للشروط القانونية المطلوبة لترخيص الصيدليات وهي ( المسافة - المساحة - الارتفاع ) ، وبناءا على محتوى الرسم الهندسي يتم عمل المعاينة الأولى للصيدلية وتحديد مدى صلاحية الموقع المبدئية لفتح صيدلية . ويوضح الرسم الهندسي للمعاينة الثانية مدى استيفاء المقر للشروط الصحية الخاصة بحوض المعمل والحمام إن وجد"
 		/>
 
-		<DuoSec
+		<DuoStr
 			id="secDwgTypes"
-			pContentSize={new DirectSize(new NumPer("90%", "95%"))}
+			pContentSize={new Size(new NumPer("90%", "95%"))}
 			pGap={new Pixel(40, 20)}
 		>
 
@@ -180,7 +181,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 					"Plan.webp",
 					false,
 					"مسقط أفقي لصيدلية",
-					new Size(600, "auto", 310, "auto")
+					new Size(new NumPer(600, 310), new NumPer("auto", "auto"))
 				)}
 				/>
 
@@ -204,11 +205,11 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 			</DuoCol>
 
-		</DuoSec>
+		</DuoStr>
 
-		<DuoSec
+		<DuoStr
 			id="secDwgTypes"
-			pContentSize={new DirectSize(new NumPer("90%", "95%"))}
+			pContentSize={new Size(new NumPer("90%", "95%"))}
 			pGap={new Pixel(40, 20)}
 		>
 
@@ -239,17 +240,17 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 				"Sec.webp",
 				false,
 				"قطاع رأسي لصيدلية",
-				new Size(600, "auto", 310, "auto")
+				new Size(new NumPer(600, 310), new NumPer("auto", "auto"))
 			)}
 				/>
 
 			</DuoCol>
 
-		</DuoSec>
+		</DuoStr>
 
-		<DuoSec
+		<DuoStr
 			id="secDwgTypes"
-			pContentSize={new DirectSize(new NumPer("90%", "95%"))}
+			pContentSize={new Size(new NumPer("90%", "95%"))}
 			pGap={new Pixel(40, 20)}
 		>
 
@@ -262,7 +263,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 					"Elev.webp",
 					false,
 					"واجهة الصيدلية",
-					new Size(600, "auto", 310, "auto")
+					new Size(new NumPer(600, 310), new NumPer("auto", "auto"))
 				)}
 				/>
 
@@ -286,11 +287,11 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 			</DuoCol>
 
-		</DuoSec>
+		</DuoStr>
 
-		<DuoSec
+		<DuoStr
 			id="secDwgTypes"
-			pContentSize={new DirectSize(new NumPer("90%", "95%"))}
+			pContentSize={new Size(new NumPer("90%", "95%"))}
 			pGap={new Pixel(40, 20)}
 		>
 
@@ -321,13 +322,13 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 					"Map.webp",
 					false,
 					"كروكي الموقع العام لصيدلية",
-					new Size(600, "auto", 310, "auto")
+					new Size(new NumPer(600, 310), new NumPer("auto", "auto"))
 				)}
 				/>
 
 			</DuoCol>
 
-		</DuoSec>
+		</DuoStr>
 
 	</ESec>
 
@@ -355,12 +356,14 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 		<SecTitle BistageLite pTitle="خدمات الرسم الهندسي للصيدليات" />
 
-		<EmoStrip pAlign={Align.Center}>
+		<EmoStrip pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack
 				pPad={new Pixel(50,20)}
 				pGap={new Pixel(50,20)}
-				pAlign="Center"
+				pHzAlign="Center"
+				pVrAlign="Center"
 			>
 
 				<ThemedPriceCardHz
@@ -369,7 +372,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 					pIcon="/Media/Emomed/Pharmacy/Dwg/Offers/First-Visit.webp"
 					pActionTitle="اطلب الخدمة"
 					pActionLink="/emocrete/"
-					pSize={new DirectSize(new NumPer(1200,"95%"),new NumPer(500,"auto"))}
+					pSize={new Size(new NumPer(1200,"95%"),new NumPer(500,"auto"))}
 					pActionColor="black"
 				>
 
@@ -388,7 +391,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 					pIcon="/Media/Emomed/Pharmacy/Dwg/Offers/First-Visit.webp"
 					pActionTitle="اطلب الخدمة"
 					pActionLink="/emocrete/"
-					pSize={new DirectSize(new NumPer(1200,"95%"),new NumPer(500,"auto"))}
+					pSize={new Size(new NumPer(1200,"95%"),new NumPer(500,"auto"))}
 					pActionColor="black"
 				>
 
@@ -411,7 +414,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 					pIcon="/Media/Emomed/Pharmacy/Dwg/Offers/First-Visit.webp"
 					pActionTitle="اطلب الخدمة"
 					pActionLink="/emocrete/"
-					pSize={new DirectSize(new NumPer(1200,"95%"),new NumPer(500,"auto"))}
+					pSize={new Size(new NumPer(1200,"95%"),new NumPer(500,"auto"))}
 					pActionColor="black"
 				>
 

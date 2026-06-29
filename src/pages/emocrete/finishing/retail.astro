@@ -1,7 +1,7 @@
 ---
+import { Align, ElemBg, NumPer, Size, Text } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, Size, Align } from "@/TypesLib";
-import { Hero, EmoStrip, IncLineSep, BottTriSep, EmoBtn, EmoContactStrip, Emograph, VrStack, HzStack } from "@/Widgets";
+import { BottTriSep, EmoBtn, EmoContactStrip, Emograph, EmoStrip, Hero, HzStack, IncLineSep, VrStack } from "@/Widgets";
 ---
 
 
@@ -34,7 +34,8 @@ import { Hero, EmoStrip, IncLineSep, BottTriSep, EmoBtn, EmoContactStrip, Emogra
 		pDesc="تصميم وتنفيذ محل يخدم البيع والتشغيل اليومي: واجهة واضحة، توزيع مدروس، فرش مناسب للنشاط، تأسيسات محسوبة، وخامات تتحمل الاستخدام التجاري."
 		pTitleClr="#ffffff"
 		pDescClr="#ffffff"
-		pAlign="right"
+		pHzAlign="right"
+		pVrAlign="right"
 		pPosL="30% 48% 12% 6%"
 		pPosP="44% 8% 8% 8%"
 		pBlurL="on"
@@ -74,22 +75,24 @@ import { Hero, EmoStrip, IncLineSep, BottTriSep, EmoBtn, EmoContactStrip, Emogra
 
 	<EmoStrip
 		pBg={new ElemBg("#F6EFE7")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 
 
 >
 
 	<EmoStrip
 		pBg={new ElemBg("#F6EFE7")}
-		pSize={new Size("min(1120px, 100%)", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("min(1120px, 100%)", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<Emograph
 			pTitle={Text.H2.Centered.WithColor("#1F1A14").OfText("المحل التجاري يبدأ من نموذج التشغيل")}
 			pText={Text.Body.Centered.WithColor("#5C4B3C").OfText("كل نشاط له طريقة بيع، وطريقة عرض، ودرجة احتكاك مختلفة بين العميل والمنتج والخدمة. لذلك يتم بناء التشطيب حول طريقة التشغيل قبل تثبيت الخامات والفرش.")}
-			pSize={new Size("92%", "auto", "92%", "auto")}
+			pSize={new Size(new NumPer("92%", "92%"), new NumPer("auto", "auto"))}
 		/>
 
 	</EmoStrip>
@@ -97,7 +100,7 @@ import { Hero, EmoStrip, IncLineSep, BottTriSep, EmoBtn, EmoContactStrip, Emogra
 		<Emograph
 			pTitle={Text.H3.WithAlign("right").WithColor("#7C3F16").OfText("القرار التجاري يتحول إلى قرار هندسي")}
 			pText={Text.Body.WithAlign("right").WithColor("#2E241C").OfText("تجهيز المحل لا يُقاس بعدد بنود التشطيب وحدها، بل بقدرة المكان على عرض البضاعة، تنظيم الخدمة، توجيه الحركة، دعم أجهزة البيع، واستيعاب التخزين والصيانة اليومية. من هنا يتم تحديد مكان الكاونتر، نوع الرفوف، مستوى الإضاءة، قدرة الكهرباء، احتياج التكييف، طبيعة الأرضيات، شكل الواجهة، وطريقة الإغلاق والحماية.")}
-			pSize={new Size("1000px", "auto", "100%", "auto")}
+			pSize={new Size(new NumPer("1000px", "100%"), new NumPer("auto", "auto"))}
 		/>
 
 	</EmoStrip>
@@ -105,22 +108,24 @@ import { Hero, EmoStrip, IncLineSep, BottTriSep, EmoBtn, EmoContactStrip, Emogra
 	<EmoStrip
 		id="retail-classes"
 		pBg={new ElemBg("#ffffff")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 
 
 >
 
 	<EmoStrip
 		pBg={new ElemBg("#ffffff")}
-		pSize={new Size("min(1120px, 100%)", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("min(1120px, 100%)", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<Emograph
 			pTitle={Text.H2.Centered.WithColor("#1F1A14").OfText("فئات المحلات حسب احتياج التشطيب")}
 			pText={Text.Body.Centered.WithColor("#5C4B3C").OfText("التصنيف العملي لا يعتمد على اسم النشاط فقط، بل على طبيعة العرض والفرش والتأسيسات المطلوبة.")}
-			pSize={new Size("92%", "auto", "92%", "auto")}
+			pSize={new Size(new NumPer("92%", "92%"), new NumPer("auto", "auto"))}
 		/>
 
 	</EmoStrip>
@@ -130,31 +135,31 @@ import { Hero, EmoStrip, IncLineSep, BottTriSep, EmoBtn, EmoContactStrip, Emogra
 			<Emograph
 				pTitle={Text.H3.WithAlign("right").WithColor("#7C3F16").OfText("محلات العرض الكثيف ودوران المخزون")}
 				pText={Text.Body.WithAlign("right").WithColor("#2E241C").OfText("هذه الفئة تجمع الأنشطة التي تعتمد على عدد كبير من الأصناف وحركة بيع متكررة، مثل البقالة والميني ماركت والأدوات المنزلية والمكتبات وبعض محلات المستلزمات اليومية. الأولوية هنا لمنظومة رفوف واضحة، ممرات محسوبة، تصنيف داخلي سهل القراءة، قدرة كهربائية مناسبة للثلاجات أو الأجهزة، وخامات أرضيات تتحمل الحركة وإعادة الرص والتنظيف المتكرر.")}
-				pSize={new Size("1000px", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("1000px", "100%"), new NumPer("auto", "auto"))}
 			/>
 
 			<Emograph
 				pTitle={Text.H3.WithAlign("right").WithColor("#7C3F16").OfText("محلات الاختيار والتجربة")}
 				pText={Text.Body.WithAlign("right").WithColor("#2E241C").OfText("هذه الفئة تشمل الأنشطة التي يحتاج فيها العميل إلى وقت للمقارنة أو القياس أو تجربة اللون والخامة، مثل الملابس والأحذية والنظارات والعطور ومستحضرات التجميل. التصميم هنا يوازن بين العرض الهادئ ومساحات التجربة والمرايا والإضاءة الدقيقة ومخزن المقاسات أو الأصناف الخلفية، مع واجهة تعكس مستوى النشاط بدل ازدحام بصري يضعف قيمة المنتج.")}
-				pSize={new Size("1000px", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("1000px", "100%"), new NumPer("auto", "auto"))}
 			/>
 
 			<Emograph
 				pTitle={Text.H3.WithAlign("right").WithColor("#7C3F16").OfText("محلات الخدمة والكاونتر")}
 				pText={Text.Body.WithAlign("right").WithColor("#2E241C").OfText("هذه الفئة تعتمد على نقطة تعامل رئيسية بين العميل ومقدم الخدمة، مثل الموبايلات والإلكترونيات والصيانة السريعة وخدمات الطباعة وبعض الأنشطة المتخصصة. الكاونتر في هذه الحالة عنصر تشغيل أساسي، ويرتبط بواجهات عرض آمنة، نقاط كهرباء وبيانات، كاميرات، تخزين صغير، إضاءة مركزة، ومكان مريح لإتمام البيع أو الاستلام دون تعطيل باقي المساحة.")}
-				pSize={new Size("1000px", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("1000px", "100%"), new NumPer("auto", "auto"))}
 			/>
 
 			<Emograph
 				pTitle={Text.H3.WithAlign("right").WithColor("#7C3F16").OfText("أنشطة الطعام والمشروبات")}
 				pText={Text.Body.WithAlign("right").WithColor("#2E241C").OfText("هذه الفئة تتحرك حول التحضير والنظافة والتخزين والتهوية قبل الشكل النهائي. تجهيز مطعم أو كافيه أو عصائر أو مخبوزات يحتاج قراءة لمناطق التحضير والغسيل والصرف والشفاطات ومسارات الخدمة وخامات سهلة التنظيف، ثم يتم بناء الواجهة والجلسات أو منطقة الاستلام بما يناسب حجم التشغيل ونوع المنتج.")}
-				pSize={new Size("1000px", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("1000px", "100%"), new NumPer("auto", "auto"))}
 			/>
 
 			<Emograph
 				pTitle={Text.H3.WithAlign("right").WithColor("#7C3F16").OfText("المعارض ومحلات المنتجات كبيرة الحجم")}
 				pText={Text.Body.WithAlign("right").WithColor("#2E241C").OfText("هذه الفئة تضم الأنشطة التي تعرض قطعًا كبيرة أو منتجات تحتاج مساحة رؤية وشرح، مثل الأثاث والأجهزة والسيراميك والأدوات الصحية وبعض مواد التشطيب. القيمة هنا في توزيع مناطق العرض، إضاءة المنتج، مسار الزيارة، مناطق الاستشارة، ومكان تخزين أو تسليم لا يؤثر على الواجهة التجارية.")}
-				pSize={new Size("1000px", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("1000px", "100%"), new NumPer("auto", "auto"))}
 			/>
 
 		</VrStack>
@@ -176,13 +181,13 @@ import { Hero, EmoStrip, IncLineSep, BottTriSep, EmoBtn, EmoContactStrip, Emogra
 			<Emograph
 				pTitle={Text.H3.WithAlign("right").WithColor("#1F1A14").OfText("محلات الشارع والمناطق السكنية")}
 				pText={Text.Body.WithAlign("right").WithColor("#3C3027").OfText("موقع الشارع يضيف اعتبارات عملية على التشطيب: وضوح اللافتة من مسافة مناسبة، تحمل الواجهة للتراب والاحتكاك، جودة الباب أو الشتر، مواضع الكاميرات، الإضاءة الخارجية، سهولة الصيانة، وطريقة إدخال البضاعة. لذلك يتم اختيار الخامات والتفاصيل التنفيذية بمستوى يتحمل التشغيل اليومي لا بمجرد شكل الافتتاح.")}
-				pSize={new Size("500px", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("500px", "100%"), new NumPer("auto", "auto"))}
 			/>
 
 			<Emograph
 				pTitle={Text.H3.WithAlign("right").WithColor("#1F1A14").OfText("محلات المولات والبلازات")}
 				pText={Text.Body.WithAlign("right").WithColor("#3C3027").OfText("المول يفرض مسارًا مختلفًا قبل التنفيذ: رسومات اعتماد، حدود للواجهة، اشتراطات للافتة، تنسيق مع أنظمة الحريق والتكييف والكهرباء، ومواعيد عمل داخلية. في هذه الحالة يصبح ضبط الملف الفني قبل الموقع جزءًا من الخدمة، لأن أي تعديل مطلوب من الإدارة قد يؤثر في التكلفة والمدة والتصميم النهائي.")}
-				pSize={new Size("500px", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("500px", "100%"), new NumPer("auto", "auto"))}
 			/>
 
 		</HzStack>
@@ -191,22 +196,24 @@ import { Hero, EmoStrip, IncLineSep, BottTriSep, EmoBtn, EmoContactStrip, Emogra
 
 	<EmoStrip
 		pBg={new ElemBg("#1F1A14")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 
 
 >
 
 	<EmoStrip
 		pBg={new ElemBg("#1F1A14")}
-		pSize={new Size("min(1120px, 100%)", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("min(1120px, 100%)", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<Emograph
 			pTitle={Text.H2.Centered.WithColor("#ffffff").OfText("التأسيسات التي تصنع الفرق بعد الافتتاح")}
 			pText={Text.Body.Centered.WithColor("#EADCCB").OfText("جودة المحل تظهر في تفاصيل التشغيل اليومية: إنارة المنتج، ثبات الكهرباء، راحة التكييف، وضوح الكاشير، ونظافة مسار الخدمة.")}
-			pSize={new Size("92%", "auto", "92%", "auto")}
+			pSize={new Size(new NumPer("92%", "92%"), new NumPer("auto", "auto"))}
 		/>
 
 	</EmoStrip>
@@ -216,19 +223,19 @@ import { Hero, EmoStrip, IncLineSep, BottTriSep, EmoBtn, EmoContactStrip, Emogra
 			<Emograph
 				pTitle={Text.H3.WithAlign("right").WithColor("#DDA15E").OfText("الكهرباء والبيانات")}
 				pText={Text.Body.WithAlign("right").WithColor("#F5EBDD").OfText("توزيع الكهرباء يتبع الفرش والأجهزة: كاشير، نقاط دفع، شاشات، كاميرات، راوتر، ثلاجات، إضاءة رفوف، لافتة، وأجهزة تشغيل خاصة بالنشاط. هذا الترتيب يحافظ على نظافة التشطيب ويقلل التعديلات الظاهرة بعد تركيب الكاونتر أو وحدات العرض.")}
-				pSize={new Size("330px", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("330px", "100%"), new NumPer("auto", "auto"))}
 			/>
 
 			<Emograph
 				pTitle={Text.H3.WithAlign("right").WithColor("#DDA15E").OfText("الإضاءة التجارية")}
 				pText={Text.Body.WithAlign("right").WithColor("#F5EBDD").OfText("الإضاءة التجارية تُقسم إلى إضاءة عامة للحركة، وإضاءة عرض للمنتج، وإضاءة عمل عند مناطق الخدمة أو التحضير. مستوى اللون، زاوية الضوء، وانعكاسه على الزجاج أو الخامات يؤثرون في قراءة المنتج وجودة تجربة الشراء.")}
-				pSize={new Size("330px", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("330px", "100%"), new NumPer("auto", "auto"))}
 			/>
 
 			<Emograph
 				pTitle={Text.H3.WithAlign("right").WithColor("#DDA15E").OfText("التكييف والتهوية")}
 				pText={Text.Body.WithAlign("right").WithColor("#F5EBDD").OfText("اختيار مواقع وحدات التكييف ومسارات المواسير والصرف واتجاه الهواء يرتبط بكثافة الرفوف وعدد الزوار ومناطق الخدمة. وفي أنشطة الطعام والمشروبات تدخل التهوية ضمن أساسيات التشغيل وليست بندًا جماليًا تابعًا للسقف.")}
-				pSize={new Size("330px", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("330px", "100%"), new NumPer("auto", "auto"))}
 			/>
 
 		</HzStack>
@@ -250,7 +257,7 @@ import { Hero, EmoStrip, IncLineSep, BottTriSep, EmoBtn, EmoContactStrip, Emogra
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#1F1A14").OfText("الفرش التجاري يدخل في التصميم من البداية")}
 				pText={Text.Body.Centered.WithColor("#3C3027").OfText("الكاونتر، الأرفف، الثلاجات، الستاندات، غرف القياس، فترينات العرض، وحدات التخزين والجلسات تؤثر في مسارات الكهرباء والإضاءة والتكييف والحركة. إدخال الفرش ضمن مرحلة التصميم يمنح المقايسة دقة أعلى، ويجعل التنفيذ أقرب لاحتياج النشاط الفعلي.")}
-				pSize={new Size("980px", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("980px", "100%"), new NumPer("auto", "auto"))}
 			/>
 
 			<HzStack>
@@ -258,19 +265,19 @@ import { Hero, EmoStrip, IncLineSep, BottTriSep, EmoBtn, EmoContactStrip, Emogra
 				<Emograph
 					pTitle={Text.H3.WithAlign("right").WithColor("#7C3F16").OfText("وحدات العرض")}
 					pText={Text.Body.WithAlign("right").WithColor("#2E241C").OfText("يتم تحديد العمق والارتفاع والخامة ومواقع الإنارة بما يناسب حجم المنتج ومعدل تداوله وطريقة وصول العميل أو البائع إليه.")}
-					pSize={new Size("315px", "auto", "100%", "auto")}
+					pSize={new Size(new NumPer("315px", "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithAlign("right").WithColor("#7C3F16").OfText("منطقة البيع")}
 					pText={Text.Body.WithAlign("right").WithColor("#2E241C").OfText("يتم ضبط الكاونتر أو نقطة المحاسبة مع أجهزة الدفع والكاميرات والتخزين القريب، بما يحقق سرعة خدمة وشكلًا منظمًا.")}
-					pSize={new Size("315px", "auto", "100%", "auto")}
+					pSize={new Size(new NumPer("315px", "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithAlign("right").WithColor("#7C3F16").OfText("الخدمات الخلفية")}
 					pText={Text.Body.WithAlign("right").WithColor("#2E241C").OfText("يتم تخصيص مساحة للأدوات والمخزون والصيانة اليومية، حتى تبقى الواجهة التجارية ومساحة البيع مرتبة أثناء التشغيل.")}
-					pSize={new Size("315px", "auto", "100%", "auto")}
+					pSize={new Size(new NumPer("315px", "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</HzStack>
@@ -281,22 +288,24 @@ import { Hero, EmoStrip, IncLineSep, BottTriSep, EmoBtn, EmoContactStrip, Emogra
 
 	<EmoStrip
 		pBg={new ElemBg("#F6EFE7")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 
 
 >
 
 	<EmoStrip
 		pBg={new ElemBg("#F6EFE7")}
-		pSize={new Size("min(1120px, 100%)", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("min(1120px, 100%)", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<Emograph
 			pTitle={Text.H2.Centered.WithColor("#1F1A14").OfText("نطاق خدمة تشطيب وتجهيز المحلات")}
 			pText={Text.Body.Centered.WithColor("#5C4B3C").OfText("يمكن تنفيذ الخدمة كتصميم ومقايسة، أو تنفيذ كامل، أو إشراف على مقاولين، حسب مرحلة المشروع وحالة المكان.")}
-			pSize={new Size("92%", "auto", "92%", "auto")}
+			pSize={new Size(new NumPer("92%", "92%"), new NumPer("auto", "auto"))}
 		/>
 
 	</EmoStrip>
@@ -306,19 +315,19 @@ import { Hero, EmoStrip, IncLineSep, BottTriSep, EmoBtn, EmoContactStrip, Emogra
 			<Emograph
 				pTitle={Text.H3.WithAlign("right").WithColor("#7C3F16").OfText("معاينة ورفع مقاسات")}
 				pText={Text.Body.WithAlign("right").WithColor("#2E241C").OfText("تبدأ الخدمة بقراءة حالة المحل الحالية، مساحة الواجهة، المدخل، المناسيب، مصادر الكهرباء، احتياج الصرف أو المياه، أماكن التكييف، وقيود الموقع أو إدارة المول. هذه المعاينة تتحول إلى تصور عملي قبل تثبيت التكلفة.")}
-				pSize={new Size("1000px", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("1000px", "100%"), new NumPer("auto", "auto"))}
 			/>
 
 			<Emograph
 				pTitle={Text.H3.WithAlign("right").WithColor("#7C3F16").OfText("تصور توزيع وفرش")}
 				pText={Text.Body.WithAlign("right").WithColor("#2E241C").OfText("يتم وضع توزيع مبدئي يربط نوع النشاط بالواجهة ومساحة العرض والخدمات الخلفية والتخزين ونقطة البيع. التصور هنا يستخدم كقاعدة للمقايسة وليس كرسمة منفصلة عن التنفيذ.")}
-				pSize={new Size("1000px", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("1000px", "100%"), new NumPer("auto", "auto"))}
 			/>
 
 			<Emograph
 				pTitle={Text.H3.WithAlign("right").WithColor("#7C3F16").OfText("مقايسة وتنفيذ أو إشراف")}
 				pText={Text.Body.WithAlign("right").WithColor("#2E241C").OfText("تُقسم الأعمال إلى بنود قابلة للمراجعة: واجهة، أرضيات، سقف، دهانات، كهرباء، بيانات، إضاءة، تكييف، فرش، وحدات عرض، وتجهيزات خاصة بالنشاط. بعدها يتم تحديد أنسب مسار: تنفيذ كامل أو إشراف فني على التنفيذ أو تسليم تصميم ومقايسة فقط.")}
-				pSize={new Size("1000px", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("1000px", "100%"), new NumPer("auto", "auto"))}
 			/>
 
 		</VrStack>
@@ -327,22 +336,24 @@ import { Hero, EmoStrip, IncLineSep, BottTriSep, EmoBtn, EmoContactStrip, Emogra
 
 	<EmoStrip
 		pBg={new ElemBg("#1F1A14")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 
 
 >
 
 	<EmoStrip
 		pBg={new ElemBg("#1F1A14")}
-		pSize={new Size("min(1120px, 100%)", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("min(1120px, 100%)", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<Emograph
 			pTitle={Text.H2.Centered.WithColor("#ffffff").OfText("ابدأ تجهيز المحل من نموذج النشاط")}
 			pText={Text.Body.Centered.WithColor("#EADCCB").OfText("أرسل نوع النشاط، مساحة المحل، موقعه، حالة الاستلام، وصور الواجهة والداخل، وسيتم تحديد نطاق التصميم أو التنفيذ المناسب.")}
-			pSize={new Size("92%", "auto", "92%", "auto")}
+			pSize={new Size(new NumPer("92%", "92%"), new NumPer("auto", "auto"))}
 		/>
 
 	</EmoStrip>

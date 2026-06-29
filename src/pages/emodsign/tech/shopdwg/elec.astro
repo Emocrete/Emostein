@@ -1,7 +1,7 @@
 ---
+import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, Topic, ElemBg, EmoMediaData, RespString, Pixel, Size, Align } from "@/TypesLib";
-import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, EmoBtn, EmoFaq, ReadAlso, RelServices, EmoRatingStrip, SecTitle, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoRatingStrip, EmoStrip, ESec, FaqItem, Hero, HzStack, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle } from "@/Widgets";
 ---
 
 
@@ -48,7 +48,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 		pDesc="رسومات تنفيذية كهربائية تقلل الارتجال في الموقع: إنارة، قوى، لوحات، كابلات، مسارات، تيار خفيف، تأريض، جداول، تفاصيل تركيب، وتنسيق مع باقي التخصصات قبل بدء التنفيذ."
 		pTitleClr="#F4E5C4"
 		pDescClr="#FFFFFF"
-		pAlign="right"
+		pHzAlign="right"
+		pVrAlign="right"
 		pPosL="18% 50% 12% 8%"
 		pPosP="12% 8% 44% 8%"
 		pBlurL="on"
@@ -133,7 +134,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 	<ESec
 		id="execution-gap"
 		pBg={new ElemBg("#F7F1E6")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -145,7 +147,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("ما المشكلة التي تحلها الخدمة؟")}
 				pText={Text.Body.WithColor("#333333").OfText("في الموقع لا يكفي أن يعرف الفني أن هناك نقطة إنارة أو بريزة في مكان ما. يجب أن يعرف الدائرة التي تغذيها، مسار السلك أو الكابل، رقم اللوحة، وسيلة الحماية، ارتفاع التركيب، علاقة النقطة بالأثاث أو السقف أو الجهاز، وهل تمر التغذية داخل حائط أم سقف أم أرضية أم تريه. كل نقطة غير محسومة تتحول إلى سؤال في الموقع، وكل سؤال غير موثق يتحول إلى اجتهاد قد يسبب تكسيرًا أو إعادة تمديد أو تعارضًا مع السباكة والتكييف والديكور.")}
 			/>
@@ -157,7 +159,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1621905252507-b35492cc74b4?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"فني كهرباء يراجع لوحة توزيع ومسارات كهرباء",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -171,7 +173,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#111318")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#111318")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -206,20 +209,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 	<EmoStrip
 		id="drawing-scope"
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("نطاق لوحات الشوب دروينج الكهربائي")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("الملف الكهربائي التنفيذي يجب أن يجيب على أسئلة الموقع: أين النقطة؟ من أي لوحة تتغذى؟ ما رقم الدائرة؟ ما المسار؟ ما نوع الكابل أو السلك؟ هل يوجد تعارض مع السقف أو التكييف أو السباكة؟ وما الذي سيتم توريده وتركيبه فعلًا؟")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -250,7 +255,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -296,7 +302,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -326,7 +333,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1518770660439-4636190af475?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"مكونات كهربائية ولوحات إلكترونية مرتبطة بتنسيق أنظمة الكهرباء",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -343,20 +350,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 	<EmoStrip
 		id="coordination"
 		pBg={new ElemBg("#F7F1E6")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#111318")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("تنسيق المسارات الكهربائية مع باقي التخصصات")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("أكبر قيمة في شوب دروينج الكهرباء ليست في رسم الرموز فقط، بل في منع التصادم مع التكييف والسباكة والإنشائي والديكور قبل التنفيذ. المسارات الكهربائية تشغل فراغات حقيقية داخل الأسقف والحوائط والأرضيات، ويجب أن تترك مساحة للصيانة والتركيب الآمن.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -385,7 +394,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -431,7 +441,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -463,7 +474,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -480,7 +492,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1581092160607-ee22621dd758?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"مراجعة مخططات كهرباء وجداول لوحات",
-					new Size(560, "auto", 320, "auto")
+					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -507,7 +519,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -541,7 +554,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -578,20 +592,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 	<EmoStrip
 		id="workflow"
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("مراحل إعداد شوب دروينج الكهرباء")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("العمل يبدأ بفهم مستندات المشروع، ثم تنسيق المسارات والنقاط، ثم إخراج ملف قابل للمراجعة والاعتماد. كل مرحلة لها هدف واضح حتى لا يتحول الشوب دروينج إلى نقل رموز بلا قيمة تنفيذية.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -625,7 +641,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 	<ESec
 		id="deliverables"
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -672,7 +689,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -706,7 +724,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -756,20 +775,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 	<EmoStrip
 		pBg={new ElemBg("#F7F1E6")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#111318")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("شوب دروينج الكهرباء وعلاقته بالحصر والتوريد")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("كلما كانت اللوحات التنفيذية أوضح، أصبح تقدير الكابلات والمواسير والعلب واللوحات والمهمات أكثر منطقية. لذلك تساعد الخدمة في تحسين قرار الشراء ومقارنة عروض المقاولين، بشرط أن تكون المدخلات كافية.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -798,7 +819,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -844,7 +866,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -861,7 +884,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1621905251189-08b45d6a269e?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"فحص تمديدات ومكونات كهربائية داخل موقع",
-					new Size(380, "auto", 320, "auto")
+					new Size(new NumPer(380, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -872,7 +895,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1558002038-1055907df827?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"مراجعة كهرباء داخل مبنى أثناء التنفيذ",
-					new Size(380, "auto", 320, "auto")
+					new Size(new NumPer(380, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -883,7 +906,7 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 					"photo-1537432376769-00f5c2f4c8d2?auto=format&fit=crop&fm=jpg&q=70&w=1600",
 					false,
 					"تفاصيل إلكترونية وشبكات مرتبطة بأنظمة التيار الخفيف",
-					new Size(380, "auto", 320, "auto")
+					new Size(new NumPer(380, 320), new NumPer("auto", "auto"))
 				)}
 			/>
 
@@ -897,7 +920,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -929,7 +953,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -975,7 +1000,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1007,7 +1033,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1053,7 +1080,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1085,7 +1113,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1131,7 +1160,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1163,7 +1193,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1209,7 +1240,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1243,20 +1275,22 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 	<EmoStrip
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("تفاصيل خاصة بكل نوع من لوحات الكهرباء")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("كل لوحة داخل ملف الكهرباء لها هدف مختلف. لوحات الإنارة ليست مثل لوحات القوى، وجداول اللوحات ليست مثل مخططات المسارات. لذلك يتم إعداد كل جزء بمنطق يناسب استخدامه داخل الموقع.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -1329,7 +1363,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1361,7 +1396,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1407,7 +1443,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1439,7 +1476,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1485,7 +1523,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1517,7 +1556,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1549,7 +1589,8 @@ import { Hero, IndexSec, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, Em
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "

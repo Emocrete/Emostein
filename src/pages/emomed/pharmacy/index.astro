@@ -1,7 +1,7 @@
 ---
+import { Align, Colors, ElemBg, EmoMediaData, HoverColors, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Align, Colors, DirectSize, ElemBg, EmoMediaData, HoverColors, Loc, Location, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
-import { Badge, BottTriSep, CardsGr, DuoCol, DuoSec, EmoBtn, EmoCall, EmoContactStrip, EmoCoverageMapStrip, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoRatingStrip, EmoStatsStrip, EmoStrip, ESec, FaqItem, FreeHero, FreeHeroFadeIn, FreeHeroFloatY, FreeHeroItem, FreeHeroPulse, FreeHeroSlideInBottom, FreeHeroSlideInLeft, FreeHeroSlideInRight, Grid, HzStack, IncLineSep, IndexBtn, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack, YTPlayer } from "@/Widgets";
+import { Badge, BottTriSep, CardsGr, DuoCol, DuoStr, EmoBtn, EmoCall, EmoContactStrip, EmoCoverageMapStrip, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoRatingStrip, EmoStatsStrip, EmoStrip, EmoWhats, ESec, FaqItem, FreeHero, Grid, HzStack, IncLineSep, IndexBtn, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack, YTPlayer } from "@/Widgets";
 import BlurBlob from "@/Widgets/Shapes/Decor/BlurBlob.astro";
 import CircleGlow from "@/Widgets/Shapes/Decor/CircleGlow.astro";
 import FloatingIcon from "@/Widgets/Shapes/Decor/FloatingIcon.astro";
@@ -16,7 +16,7 @@ import GlassCard from "@/Widgets/Shapes/Frames/GlassCard.astro";
 import TiltCard from "@/Widgets/Shapes/Frames/TiltCard.astro";
 import SvgBlobCard from "@/Widgets/Cards/SvgBlobCard.astro";
 import SvgRadarCard from "@/Widgets/Cards/SvgRadarCard.astro";
-import { Hero, PriceCard } from "../../../site/Widgets";
+import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPriceCardVr } from "../../../site/Widgets";
 ---
 
 
@@ -41,7 +41,7 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 <BLayout
 	pSchemaType="Service"
 	pTitle="خدمات ترخيص الصيدليات"
-	pDescr="شروط ترخيص صيدلية والأوراق المطلوبة والإجراءات وخدمات الرسم الهندسي وقياس المسافة بين الصيدليات في القاهرة والجيزة."
+	pDescr="نتولى السير في إجراءات ترخيص الصيدليات وتجهيز وتقديم كافة الأوراق المطلوبة لترخيص صيدلية بهيئة الدواء المصرية ، ومتابعة الحي والجهات ذات العلاقة"
 >
 
 
@@ -52,32 +52,24 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 
 	<Hero>
 
-		<SvgDots
-			pColor="rgba(255,255,255,.34)"
-			pGap={24}
-			pDot={2}
-			pLoc={new Loc(new NumPer("4%", "6%"), new NumPer("4%", "5%"))}
-			pSize={new DirectSize(new NumPer("36%", "88%"), new NumPer("70%", "36%"))}
-			pZ={1}
-		/>
-
 		<GlassCard
 			pMove="SlideInRight"
-			pMoveLoc={new Location("6%", "5%", "12%", "9%")}
-			pMoveBox={new Size("48%", "auto", "90%", "auto")}
-			pMoveDuration={900}
+			pMoveLoc={new Loc(new NumPer("45%", "2.5%"), new NumPer("50%", "45%"))}
+			pMoveBox={new Size(new NumPer("50%", "95%"), new NumPer("auto", "auto"))}
+			pMoveDuration={1000}
 			pMoveViewTarget="self"
 			pZ={4}
 			pBg="rgba(17,24,32,.74)"
 			pBorder="rgba(255,255,255,.22)"
-			pRadius={32}
-			pBlur={14}
+			pRadius={20}
+			pBlur={5}
 		>
 
 			<VrStack
-				pGap={new Pixel(18, 12)}
-				pPad={new Pixel(0)}
-				pAlign="Center"
+				pGap={new Pixel(20, 10)}
+				pPad={new Pixel(10,5)}
+				pHzAlign="Center"
+				pVrAlign="Center"
 			>
 
 				<Emograph
@@ -85,89 +77,17 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 					pText={Text.Body.Centered.White.OfText("دليل عملي وخدمة هندسية لترخيص الصيدليات: فحص صلاحية المكان، قياس المسافة، حساب المساحة والارتفاع، تجهيز الرسم الهندسي، ترتيب المستندات، ومتابعة إجراءات الترخيص في القاهرة والجيزة.")}
 				/>
 
-				<HzStack pGap={new Pixel(14, 10)} pPad={new Pixel(0)}>
+				<HzStack pGap={new Pixel(20, 10)} pPad={new Pixel(20,10)}>
 
-					<EmoCall
-						BlackSky
-						pText="للطلب والاستفسار"
-						pWidth="220px"
-						pHeight="54px"
-						pRadius="18px"
-					/>
+					<EmoCall BlackSky pText="للطلب والاستفسار" />
 
-					<EmoCall
-						pText="واتساب سريع"
-						pWidth="220px"
-						pHeight="54px"
-						pRadius="18px"
-						pBgColors={new HoverColors(Colors.BistageLite, Colors.Bistage)}
-						pTitleColors={new HoverColors(Colors.BlackOff)}
-					/>
+					<EmoWhats BistageBlack pText="أرسل رسالة" />
 
 				</HzStack>
 
 			</VrStack>
 
 		</GlassCard>
-
-		<FreeHeroFadeIn
-			pLoc={new Location("63%", "10%", "12%", "56%")}
-			pBox={new Size("29%", "auto", "80%", "auto")}
-			pDelay={500}
-			pZ={4}
-		>
-
-			<FloatingPanel
-				pBg="rgba(255,255,255,.86)"
-				pBorder="rgba(255,255,255,.55)"
-				pAccent={Colors.BistageLite}
-			>
-
-				<CardsGr
-					pWidth={new RespString("100%", "100%")}
-					pCardBg={new ElemBg("rgba(255,255,255,.92)")}
-					pGrTitle={Text.H4.Centered.Sky.OfText("أرقام لا يبدأ الترخيص بدونها")}
-					pCardTitleFnt={Text.H3.Centered.Bistage}
-					pCardBodyFnt={Text.Body.Centered}
-					pStackDir="Col"
-					pTopic1={new Topic("100 م", "أقل مسافة عن أقرب صيدلية مرخصة.")}
-					pTopic2={new Topic("25 م²", "الحد الأدنى للمساحة الصافية الداخلية.")}
-					pTopic3={new Topic("2.6 م", "أقل ارتفاع صافي داخل الصيدلية.")}
-				/>
-
-			</FloatingPanel>
-
-		</FreeHeroFadeIn>
-
-		<FreeHeroFloatY
-			pLoc={new Location("77%", "73%", "78%", "78%")}
-			pBox={new Size(150, 150, 96, 96)}
-			pDelay={1800}
-			pZ={5}
-		>
-
-			<FloatingIcon
-				pIcon="check"
-				pBg={Colors.BistageLite}
-				pFill={Colors.BlackOff}
-			/>
-
-		</FreeHeroFloatY>
-
-		<FreeHeroPulse
-			pLoc={new Location("7%", "7%", "76%", "84%")}
-			pBox={new Size(360, 64, 270, 54)}
-			pDelay={900}
-			pZ={5}
-		>
-
-			<Ribbon
-				pText="خدمة هندسية في القاهرة والجيزة"
-				pBg={Colors.BistageLite}
-				pColor={Colors.BlackOff}
-			/>
-
-		</FreeHeroPulse>
 
 	</Hero>
 
@@ -217,134 +137,94 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 
 
 	<ESec
-		id="pharmacy-license-service"
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={new Align("Center", "Center", "Center", "Center")}
+		id="secCondVerification"
+		pMinH={new NumPer(800)}
+		pHzAlign={new Align("Center","Top","Center","Top")}
+		pVrAlign={new Align("Center","Top","Center","Top")}
 	>
 
-		<BlurBlob
-			pColor="rgba(50,143,232,.22)"
-			pColor2="rgba(215,245,140,.34)"
-			pBlur={34}
-			pLoc={new Loc(new NumPer("-10%", "-28%"), new NumPer("-14%", "-6%"))}
-			pSize={new DirectSize(new NumPer("42%", "78%"), new NumPer("360px", "230px"))}
-			pOpacity={new Percent(82, 70)}
-			pZ={1}
-		/>
+		<SecTitle pTitle="تأكد من صلاحية المكان قبل البدء بترخيص الصيدلية" />
 
-		<CircleGlow
-			pColor="rgba(215,245,140,.46)"
-			pColor2="rgba(255,255,255,.24)"
-			pBlur={42}
-			pLoc={new Loc(new NumPer("68%", "48%"), new NumPer("12%", "62%"))}
-			pSize={new DirectSize(new NumPer("30%", "70%"), new NumPer("300px", "190px"))}
-			pZ={1}
-		/>
-
-		<SvgDots
-			pColor="rgba(50,143,232,.13)"
-			pGap={24}
-			pDot={2}
-			pLoc={new Loc(new NumPer("2%", "0%"), new NumPer("2%", "0%"))}
-			pSize={new DirectSize(new NumPer("96%", "100%"), new NumPer("90%", "100%"))}
-			pZ={1}
-		/>
-
-		<SecTitle
-			SkyLite
-			pTitle="خدمة ترخيص الصيدليات"
-			pDesc="خدمة هندسية مختصرة هدفها التأكد من صلاحية مقر الصيدلية قبل التقديم، وتجهيز الرسم الهندسي وقياس المسافة ومراجعة البنود التي قد توقف الترخيص."
-		/>
-
-		<DuoSec
-			pContentSize={new DirectSize(new NumPer("92%", "96%"))}
-			pGap={new Pixel(28, 16)}
-			pPad={new Pixel(30, 16)}
+		<DuoStr
+			pMinH={new NumPer(800)}
+			pHzAlign={new Align("Center","Top","Center","Top")}
+			pVrAlign={new Align("Center","Top","Center","Top")}
+			pContentSize={new Size(new NumPer("100%") )}
+			pPad={new Pixel(50,5)}
+			pGap={new Pixel(50,5)}
 		>
 
-			<DuoCol pBgColor={new ElemBg(Colors.BlackOff)} pGap={new Pixel(22, 14)}>
+			<DuoCol>
 
-				<GlassCard
-					pBg="rgba(17,24,32,.92)"
-					pBorder="rgba(255,255,255,.16)"
-					pRadius={34}
-					pBlur={12}
+				<FloatingPanel
+					pMove="SlideInRight"
+					pMoveLoc={new Loc(new NumPer("0%", "0%"), new NumPer("10%", "13%"))}
+					pMoveBox={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+					pMoveDuration={900}
+					pMoveViewTarget="self"
+					pZ={4}
+					pBg="rgb(39, 39, 39)"
+					pBorder="rgb(255, 186, 37)"
+					pAccent={Colors.Green}
 				>
 
-					<Emograph
-						pTitle={Text.H3.Bistage.OfText("طبيعة الخدمة")}
-						pText={Text.Body.White.OfText("نراجع المكان كحالة ترخيص فعلية، وليس كشرح عام للشروط. يتم فحص المسافة والمساحة والارتفاع، ورفع المقاسات، وتجهيز الرسم الهندسي، وتحديد المخاطر قبل دفع مقدم الإيجار أو البدء في التشطيب.")}
-					/>
-
-					<EmoList
+					<CardsGr
 						pWidth={new RespString("100%", "100%")}
-						pTitle={Text.H4.Bistage.OfText("ما الذي يتم تنفيذه؟")}
-						pDesc={Text.Body.White.OfText("بنود عملية مباشرة مرتبطة بقبول مقر الصيدلية.")}
-						pItemFnt={Text.Body.White}
-						pItemsBg={new ElemBg("transparent")}
-						pNumbered={false}
-						pItems={[
-						"قياس المسافة من أقرب صيدلية مرخصة طبقًا لمسار المشاة الصحيح.",
-						"رفع أبعاد العين وحساب المساحة الصافية القابلة للترخيص.",
-						"قياس الارتفاع الصافي ومراجعة تأثير السقف المستعار أو التشطيبات.",
-						"تجهيز الرسم الهندسي المطلوب للملف بعد المعاينة.",
-						"تنبيه العميل إلى المخاطر الفنية قبل الالتزام بالمكان."
-					]}
+						pCardBg={new ElemBg(Colors.Green)}
+						pGrTitle={Text.H3.Centered.OfText("إذا كان لديك مقر يحقق الآتي ..")}
+						pCardTitleFnt={Text.H4.Centered}
+						pCardBodyFnt={Text.Body.Centered}
+						pStackDir="Col"
+						pTopic1={new Topic("100 م", "أقل مسافة عن أقرب صيدلية مرخصة.")}
+						pTopic2={new Topic("25 م²", "الحد الأدنى للمساحة الصافية الداخلية.")}
+						pTopic3={new Topic("2.6 م", "أقل ارتفاع صافي داخل الصيدلية.")}
 					/>
 
-				</GlassCard>
+					<Emograph pTitle={Text.Body.Centered.OfSize(25,20).OfText("فأنت مؤهل لاجتياز المعاينة الأولى")} />
+
+					<FloatingIcon
+						pMove="FloatY"
+						pLoc={new Loc(new NumPer("20%", "5%"),new NumPer( "68%", "85%"))}
+						pMoveBox={new Size(new NumPer(100, 50), new NumPer(100, 50))}
+						pMoveDistance="300px"
+						pMoveDuration={3000}
+						pZ={5}
+						pIcon="check"
+						pBg={Colors.BistageLite}
+						pFill={Colors.BlackOff}
+					/>
+
+				</FloatingPanel>
 
 			</DuoCol>
 
-			<DuoCol
-				Centered
-				pBgColor={new ElemBg(Colors.SkyLite)}
-				pGap={new Pixel(20, 14)}
-			>
+			<DuoCol>
 
-				<CardsGr
-					pWidth={new RespString("100%", "100%")}
-					pCardBg={new ElemBg(Colors.WhiteOff)}
-					pCardRadius={new Pixel(24, 18)}
-					pGrTitle={Text.H3.Centered.Sky.OfText("النقاط الحاسمة قبل التقديم")}
-					pCardTitleFnt={Text.H3.Centered.Bistage}
-					pCardBodyFnt={Text.Body.Centered}
-					pStackDir="Col"
-					pSpacing={16}
-					pTopic1={new Topic("100 م", "شرط المسافة عن أقرب صيدلية مرخصة.")}
-					pTopic2={new Topic("25 م²", "الحد الأدنى للمساحة الصافية الداخلية.")}
-					pTopic3={new Topic("2.60 م", "الحد الأدنى للارتفاع الصافي داخل الصيدلية.")}
-					pTopic4={new Topic("رسم مختوم", "لوحة هندسية معتمدة ضمن ملف الترخيص.")}
-				/>
-
-				<HzStack
-					pGap={new Pixel(14, 10)}
-					pPad={new Pixel(0)}
-					pForceHz
+				<FloatingPanel
+					pMove="SlideInLeft"
+					pMoveLoc={new Loc(new NumPer("0%", "2.5%"), new NumPer("10%", "13%"))}
+					pMoveBox={new Size(new NumPer("100%", "95%"), new NumPer("auto", "auto"))}
+					pMoveDuration={900}
+					pMoveViewTarget="self"
+					pZ={4}
+					pBg="rgb(39, 39, 39)"
+					pBorder="rgb(255, 186, 37)"
+					pAccent={Colors.OrangeDark}
 				>
 
-					<EmoCall
-						BlackSky
-						pText="فحص مقر صيدلية"
-						pWidth="230px"
-						pHeight="54px"
-						pRadius="18px"
-					/>
+					<VrStack pHzAlign="Center" pVrAlign="Center">
 
-					<EmoCall
-						pText="واتساب سريع"
-						pWidth="210px"
-						pHeight="54px"
-						pRadius="18px"
-						pBgColors={new HoverColors(Colors.BistageLite, Colors.Bistage)}
-						pTitleColors={new HoverColors(Colors.BlackOff)}
-					/>
+						<Emograph pTitle={Text.Body.Centered.OfSize(25,20).OfText("إذا كنت غير متأكد من تحقق الشروط يمكنك طلب المساعدة")} />
 
-				</HzStack>
+						<EmoCall SkyBistage />
+
+					</VrStack>
+
+				</FloatingPanel>
 
 			</DuoCol>
 
-		</DuoSec>
+		</DuoStr>
 
 	</ESec>
 
@@ -355,110 +235,93 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 
 
 	<ESec
-		id="pharmacy-license-cost"
+		id="secServiceCost"
 		pBg={new ElemBg(Colors.Gray5)}
-		pAlign={new Align("Center", "Center", "Center", "Center")}
+		pMinH={new NumPer(780, 980)}
+		pHzAlign={new Align("Center", "Center", "Center", "Center")}
+		pVrAlign={new Align("Center", "Center", "Center", "Center")}
+		pPad={new Pixel(50,20)}
+		pGap={new Pixel(50,30)}
 	>
 
-		<CircleGlow
-			pColor="rgba(215,245,140,.40)"
-			pColor2="rgba(255,255,255,.16)"
-			pBlur={48}
-			pLoc={new Loc(new NumPer("74%", "42%"), new NumPer("-16%", "-8%"))}
-			pSize={new DirectSize(new NumPer("30%", "70%"), new NumPer("260px", "170px"))}
-			pZ={1}
-		/>
-
 		<SvgDots
-			pColor="rgba(255,255,255,.12)"
-			pGap={22}
+			pColor="rgba(255,255,255,.10)"
+			pGap={24}
 			pDot={2}
-			pLoc={new Loc(new NumPer("0%", "0%"), new NumPer("0%", "0%"))}
-			pSize={new DirectSize(new NumPer("100%"), new NumPer("100%"))}
+			pLoc={new Loc(new NumPer("0%"), new NumPer("0%"))}
+			pSize={new Size(new NumPer("100%"), new NumPer("100%"))}
 			pZ={1}
-		/>
-
-		<Ribbon
-			pText="القاهرة والجيزة"
-			pBg={Colors.BistageLite}
-			pColor={Colors.BlackOff}
-			pLoc={new Loc(new NumPer("6%", "12%"), new NumPer("28px", "20px"))}
-			pSize={new DirectSize(new NumPer("310px", "250px"), new NumPer("58px", "48px"))}
-			pZ={3}
 		/>
 
 		<SecTitle
 			BistageLite
-			pTitle="تكلفة خدمة ترخيص الصيدلية"
-			pDesc="التكلفة التالية تخص البنود الهندسية العملية: قياس المسافة والرسم الهندسي. أي رسوم حكومية أو نقابية أو تشطيبات أو متابعة إضافية خارج هذه البنود لا تدخل في السعر."
+			pTitle="تكلفة خدمات ترخيص الصيدليات"
+			pDesc="اختر باقة الخدمات المناسبة لحالتك"
 		/>
 
 		<Grid
 			pMax={3}
 			pMaxP={1}
-			pSize={new DirectSize(new NumPer("1120px", "94%"))}
-			pGap={new Pixel(22, 16)}
-			pPad={new Pixel(30, 16)}
+			pSize={new Size(new NumPer("80%", "95%"))}
+			pGap={new Pixel(40, 40)}
+			pPad={new Pixel(50, 5)}
 			Centered
 		>
 
 			<BadgeFrame
-				pBadge="قياس"
-				pBg="rgba(255,255,255,.96)"
+				pBadge="أساسية"
+				pBg="white"
 				pBadgeBg={Colors.SkyDark}
 				pColor={Colors.BlackOff}
+				pMove="SlideInRight"
+				pMoveDuration={800}
+				pMoveViewTarget="self"
 			>
 
-				<PriceCard
-					pCaption={Text.H4.White.Bold.OfText("قياس المسافة بين الصيدليات")}
-					pStart={Text.H3.Bold.OfText("قيمة")}
-					pPrice={1000}
-					pCurrency={Text.H3.Bold.OfText("جنيه")}
-					pSize={new DirectSize(new NumPer("100%", "300px"), new NumPer(126, 104))}
-					data-own-size
-				/>
+				<Emograph pTitle={Text.Body.Bold.DarkSky.OfSize(80,50).Centered.OfText("10,000")} pText={Text.Body.Centered.OfText("جنيه")} />
 
-				<Emograph pText={Text.Body.Centered.OfText("فحص شرط المسافة قبل التعاقد أو قبل تقديم ملف الترخيص.")} />
+				<Emograph
+					pTitle={Text.H3.Centered.OfText("استخراج ترخيص صيدلية")}
+					pText={Text.Body.Centered.OfText("مناسبة لمن لديه مقاسات ورسومات جاهزة ويريد البدء باستخراج الترخيص فقط.")}
+				/>
 
 			</BadgeFrame>
 
 			<BadgeFrame
-				pBadge="رسم"
-				pBg="rgba(255,255,255,.96)"
+				pBadge="الأكثر طلبًا"
+				pBg="white"
 				pBadgeBg={Colors.BistageLite}
 				pColor={Colors.BlackOff}
+				pMove="SlideInTop"
+				pMoveDuration={850}
+				pMoveViewTarget="self"
 			>
 
-				<PriceCard
-					pCaption={Text.H4.White.Bold.OfText("الرسم الهندسي للمعاينة الأولى")}
-					pStart={Text.H3.Bold.OfText("يبدأ من")}
-					pPrice={2500}
-					pCurrency={Text.H3.Bold.OfText("جنيه")}
-					pSize={new DirectSize(new NumPer("100%", "300px"), new NumPer(126, 104))}
-					data-own-size
-				/>
+				<Emograph pTitle={Text.Body.Bold.Bistage.OfSize(80,50).Centered.OfText("11,000")} pText={Text.Body.Centered.OfText("جنيه")} />
 
-				<Emograph pText={Text.Body.Centered.OfText("يشمل رفع المقاسات وتجهيز 3 نسخ مختومة بختم مهندس نقابي.")} />
+				<Emograph
+					pTitle={Text.H3.Centered.OfText("رسم هندسي + ترخيص")}
+					pText={Text.Body.Centered.OfText("اختيار عملي لمن يريد تجهيز الرسم المطلوب للملف مع متابعة إجراءات الترخيص.")}
+				/>
 
 			</BadgeFrame>
 
 			<BadgeFrame
-				pBadge="باقة"
+				pBadge="كاملة"
 				pBg="rgba(255,255,255,.96)"
-				pBadgeBg={Colors.SkyDark}
+				pBadgeBg={Colors.OrangeDark}
 				pColor={Colors.BlackOff}
+				pMove="SlideInLeft"
+				pMoveDuration={900}
+				pMoveViewTarget="self"
 			>
 
-				<PriceCard
-					pCaption={Text.H4.White.Bold.OfText("أقل باقة عملية للترخيص")}
-					pStart={Text.H3.Bold.OfText("تبدأ من")}
-					pPrice={3500}
-					pCurrency={Text.H3.Bold.OfText("جنيه")}
-					pSize={new DirectSize(new NumPer("100%", "300px"), new NumPer(126, 104))}
-					data-own-size
-				/>
+				<Emograph pTitle={Text.Body.Bold.OrangeDark.OfSize(80,50).Centered.OfText("12,000")} pText={Text.Body.Centered.OfText("جنيه")} />
 
-				<Emograph pText={Text.Body.Centered.OfText("قياس المسافة + الرسم الهندسي. السعر النهائي يراجع حسب موقع الصيدلية وحالة المقر.")} />
+				<Emograph
+					pTitle={Text.H3.Centered.OfText("قياس + رسم + ترخيص")}
+					pText={Text.Body.Centered.OfText("أفضل اختيار قبل الالتزام بالمكان أو عند الحاجة لفحص صلاحية المقر وتجهيز ملف الترخيص.")}
+				/>
 
 			</BadgeFrame>
 
@@ -467,32 +330,26 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 		<GlassCard
 			pBg="rgba(255,255,255,.10)"
 			pBorder="rgba(255,255,255,.20)"
-			pRadius={30}
+			pRadius={20}
 			pBlur={10}
-			pSize={new DirectSize(new NumPer("980px", "94%"))}
+			pSize={new Size(new NumPer("60%", "95%"))}
+			pHzAlign={new Align("Center", "Center", "Center", "Center")}
 		>
 
-			<CardsGr
-				pWidth={new RespString("100%", "100%")}
-				pCardBg={new ElemBg("rgba(255,255,255,.92)")}
-				pCardRadius={new Pixel(22, 16)}
-				pGrTitle={Text.H3.Centered.Bistage.OfText("حدود السعر")}
-				pCardTitleFnt={Text.H4.Centered.Sky}
-				pCardBodyFnt={Text.Body.Centered}
-				pStackDir="Row"
-				pSpacing={18}
-				pTopic1={new Topic("لا يشمل", "رسوم حكومية أو نقابية أو تكاليف تشطيب وتجهيز الصيدلية.")}
-				pTopic2={new Topic("يتغير عند", "طلب متابعة ملف بدأ بالفعل أو مراجعة ملاحظات معاينة أو انتقال خارج النطاق المعتاد.")}
-				pTopic3={new Topic("يثبت بعد", "معرفة عنوان المقر ونوع المطلوب: قياس فقط، رسم فقط، أو قياس مع رسم.")}
-			/>
+			<VrStack
+				pPad={new Pixel(30,10)}
+				pGap={new Pixel(30,10)}
+				pHzAlign={new Align("Center","Center")}
+			>
 
-			<EmoCall
-				BlackSky
-				pText="اسأل عن تكلفة حالتك"
-				pWidth="270px"
-				pHeight="54px"
-				pRadius="18px"
-			/>
+				<Emograph
+					pTitle={Text.H3.Centered.Bistage.OfText("لا يشمل")}
+					pText={Text.Body.Centered.White.OfText("رسوم حكومية أو نقابية أو تكاليف تشطيب وتجهيز الصيدلية.")}
+				/>
+
+				<EmoCall BlackSky />
+
+			</VrStack>
 
 		</GlassCard>
 
@@ -505,16 +362,108 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 
 
 	<ESec
+		hidden
+		id="pharmacy-current-works"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pHzAlign={new Align("Center", "Top", "Center", "Top")}
+		pVrAlign={new Align("Center", "Top", "Center", "Top")}
+	>
+
+		<SecTitle
+			SkyLite
+			pTitle="أعمال ترخيص الصيدليات الجارية"
+			pDesc="متابعة مختصرة لحالة ملفات الصيدليات المفتوحة ونسبة إنجاز كل ملف."
+		/>
+
+		<Grid
+			pMax={3}
+			pMaxP={1}
+			pSize={new Size(new NumPer("1180px", "94%"))}
+			pGap={new Pixel(22, 16)}
+			pPad={new Pixel(24, 12)}
+			Centered
+		>
+
+			<PharmacyWorkCard
+				pName="صيدلية النور"
+				pAddress="مدينة نصر - القاهرة"
+				pCode="ملف PH-01"
+				pStatus="قيد التنفيذ"
+				pActivity="جاري إعداد الرسم الهندسي بعد رفع المقاسات."
+				pUpdatedAt="آخر تحديث: هذا الأسبوع"
+				pAccent="#22c55e"
+				pAccent2="#0ea5e9"
+				pSteps={[
+				{ Title: "استلام بيانات المكان", Done: true, Time: "يوم", Percent: 10 },
+				{ Title: "فحص شروط الترخيص", Done: true, Time: "يوم", Percent: 15 },
+				{ Title: "قياس المسافة لأقرب صيدلية", Done: true, Time: "يوم", Percent: 20 },
+				{ Title: "رفع المقاسات", Done: true, Time: "يوم", Percent: 15 },
+				{ Title: "إعداد الرسم الهندسي", Done: false, Time: "2-3 أيام", Percent: 30 },
+				{ Title: "تسليم الملف", Done: false, Time: "يوم", Percent: 10 }
+			]}
+			/>
+
+			<PharmacyWorkCard
+				pName="صيدلية الرحمة"
+				pAddress="الهرم - الجيزة"
+				pCode="ملف PH-02"
+				pStatus="مرحلة فحص"
+				pActivity="جاري مراجعة شرط المسافة قبل بدء الرسم الهندسي."
+				pUpdatedAt="آخر تحديث: اليوم"
+				pAccent="#16a34a"
+				pAccent2="#f59e0b"
+				pSteps={[
+				{ Title: "استلام بيانات المكان", Done: true, Time: "يوم", Percent: 10 },
+				{ Title: "فحص شروط الترخيص", Done: true, Time: "يوم", Percent: 20 },
+				{ Title: "قياس المسافة لأقرب صيدلية", Done: false, Time: "يوم", Percent: 25 },
+				{ Title: "رفع المقاسات", Done: false, Time: "يوم", Percent: 15 },
+				{ Title: "إعداد الرسم الهندسي", Done: false, Time: "2-3 أيام", Percent: 20 },
+				{ Title: "تسليم الملف", Done: false, Time: "يوم", Percent: 10 }
+			]}
+			/>
+
+			<PharmacyWorkCard
+				pName="صيدلية الشفاء"
+				pAddress="فيصل - الجيزة"
+				pCode="ملف PH-03"
+				pStatus="قرب التسليم"
+				pActivity="جاري تجهيز النسخ النهائية للتسليم."
+				pUpdatedAt="آخر تحديث: أمس"
+				pAccent="#22c55e"
+				pAccent2="#6366f1"
+				pSteps={[
+				{ Title: "استلام بيانات المكان", Done: true, Time: "يوم", Percent: 10 },
+				{ Title: "فحص شروط الترخيص", Done: true, Time: "يوم", Percent: 15 },
+				{ Title: "قياس المسافة لأقرب صيدلية", Done: true, Time: "يوم", Percent: 20 },
+				{ Title: "رفع المقاسات", Done: true, Time: "يوم", Percent: 15 },
+				{ Title: "إعداد الرسم الهندسي", Done: true, Time: "2-3 أيام", Percent: 30 },
+				{ Title: "تسليم الملف", Done: false, Time: "يوم", Percent: 10 }
+			]}
+			/>
+
+		</Grid>
+
+	</ESec>
+
+
+
+
+
+
+
+	<ESec
+		hidden
 		id="overview"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={new Align("Center", "Center", "Center", "Center")}
+		pHzAlign={new Align("Center", "Center", "Center", "Center")}
+		pVrAlign={new Align("Center", "Center", "Center", "Center")}
 	>
 
 		<Splash
 			pFill="rgba(215,245,140,.34)"
 			pFill2="rgba(50,143,232,.18)"
 			pLoc={new Loc(new NumPer("-5%", "-12%"), new NumPer("5%", "3%"))}
-			pSize={new DirectSize(new NumPer("36%", "70%"), new NumPer("260px", "170px"))}
+			pSize={new Size(new NumPer("36%", "70%"), new NumPer("260px", "170px"))}
 			pZ={1}
 		/>
 
@@ -524,8 +473,8 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 			pDesc="أكبر مخاطرة في ترخيص الصيدليات أن يتم اختيار محل غير مطابق ثم تظهر المشكلة عند المعاينة الأولى. لذلك يتم التعامل مع الترخيص كقرار فني وإجرائي يبدأ بفحص الموقع، وليس مجرد تجميع مستندات وإرسال طلب."
 		/>
 
-		<DuoSec
-			pContentSize={new DirectSize(new NumPer("92%", "96%"))}
+		<DuoStr
+			pContentSize={new Size(new NumPer("92%", "96%"))}
 			pGap={new Pixel(28, 16)}
 			pPad={new Pixel(28, 18)}
 		>
@@ -576,17 +525,8 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 						"PhRet.webp",
 						false,
 						"فحص وتجهيز مقر صيدلية للترخيص",
-						new Size(520, "auto", 310, "auto")
+						new Size(new NumPer(520, 310), new NumPer("auto", "auto"))
 					)}
-				/>
-
-				<Badge
-					pYears={6}
-					pWorks={120}
-					pDuration={24}
-					pDurationText="خلال يوم واحد للرسم"
-					pUseBg={true}
-					pBgColor="white"
 				/>
 
 				<EmoCall
@@ -599,21 +539,9 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 
 			</DuoCol>
 
-		</DuoSec>
+		</DuoStr>
 
 	</ESec>
-
-
-
-
-
-
-
-	<EmoPipelineStrip
-		pTitle="قرار الترخيص ليس ورقة.. هو مسار فني"
-		pDesc="لو المحل لم يتم اختياره بعد، نبدأ بفحص المسافة والمساحة والارتفاع وموقف العقار. ولو الملف بدأ بالفعل، نراجع النواقص وملاحظات المعاينة ونحدد الخطوة التالية."
-		pServiceName="ترخيص صيدلية"
-	/>
 
 
 
@@ -628,7 +556,7 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 			pColor2="rgba(255,255,255,.22)"
 			pBlur={42}
 			pLoc={new Loc(new NumPer("70%", "45%"), new NumPer("-12%", "-5%"))}
-			pSize={new DirectSize(new NumPer("32%", "60%"), new NumPer("250px", "180px"))}
+			pSize={new Size(new NumPer("32%", "60%"), new NumPer("250px", "180px"))}
 			pZ={1}
 		/>
 
@@ -652,9 +580,9 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 			pTopic4={new Topic("رابعا: بعد المعاينة الثانية", "يتم التحقق من استيفاء باقي المستندات المطلوبة قبل إصدار ترخيص الصيدلية.")}
 		/>
 
-		<DuoSec
+		<DuoStr
 			id="inspection"
-			pContentSize={new DirectSize(new NumPer("92%", "96%"))}
+			pContentSize={new Size(new NumPer("92%", "96%"))}
 			pGap={new Pixel(28, 18)}
 			pPad={new Pixel(36, 18)}
 		>
@@ -695,7 +623,7 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 						"Inspection.webp",
 						false,
 						"معاينة مقر صيدلية قبل الترخيص",
-						new Size(430, "auto", 290, "auto")
+						new Size(new NumPer(430, 290), new NumPer("auto", "auto"))
 					)}
 				/>
 
@@ -706,11 +634,11 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 
 			</DuoCol>
 
-		</DuoSec>
+		</DuoStr>
 
-		<DuoSec
+		<DuoStr
 			pBg={new ElemBg(Colors.WhiteOff)}
-			pContentSize={new DirectSize(new NumPer("92%", "96%"))}
+			pContentSize={new Size(new NumPer("92%", "96%"))}
 			pGap={new Pixel(28, 18)}
 			pPad={new Pixel(36, 18)}
 		>
@@ -754,7 +682,7 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 
 			</DuoCol>
 
-		</DuoSec>
+		</DuoStr>
 
 	</ESec>
 
@@ -792,8 +720,8 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 			pDesc="ينقسم ملف الترخيص إلى مستندات أساسية يتم تقديمها مع طلب الترخيص، ومستندات استكمال بعد المعاينة الثانية وقبل إصدار الترخيص النهائي."
 		/>
 
-		<DuoSec
-			pContentSize={new DirectSize(new NumPer("92%", "96%"))}
+		<DuoStr
+			pContentSize={new Size(new NumPer("92%", "96%"))}
 			pGap={new Pixel(28, 18)}
 			pPad={new Pixel(36, 18)}
 		>
@@ -864,7 +792,7 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 
 			</DuoCol>
 
-		</DuoSec>
+		</DuoStr>
 
 	</ESec>
 
@@ -881,7 +809,7 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 			pGap={22}
 			pDot={2}
 			pLoc={new Loc(new NumPer("0%", "0%"), new NumPer("0%", "0%"))}
-			pSize={new DirectSize(new NumPer("100%"), new NumPer("100%"))}
+			pSize={new Size(new NumPer("100%"), new NumPer("100%"))}
 			pZ={1}
 		/>
 
@@ -896,14 +824,14 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 			pDot={Colors.Bistage}
 			pWidth={4}
 			pLoc={new Loc(new NumPer("5%", "5%"), new NumPer("270px", "330px"))}
-			pSize={new DirectSize(new NumPer("90%", "90%"), new NumPer("130px", "90px"))}
+			pSize={new Size(new NumPer("90%", "90%"), new NumPer("130px", "90px"))}
 			pZ={1}
 		/>
 
 		<Grid
 			pMax={5}
 			pMaxP={1}
-			pSize={new DirectSize(new NumPer("92%", "96%"))}
+			pSize={new Size(new NumPer("92%", "96%"))}
 			pGap={new Pixel(18, 16)}
 			pPad={new Pixel(34, 18)}
 			Centered
@@ -984,15 +912,15 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 		<HzStack pGap={new Pixel(28, 14)} pPad={new Pixel(30, 18)}>
 
 			<RespImg
-				pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "PreparePharmacyFile.webp", false, "تجهيز ملف ترخيص صيدلية", new Size(360, "auto", 280, "auto"))}
+				pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "PreparePharmacyFile.webp", false, "تجهيز ملف ترخيص صيدلية", new Size(new NumPer(360, 280), new NumPer("auto", "auto")))}
 			/>
 
 			<RespImg
-				pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "SendReq.webp", false, "إرسال طلب ترخيص صيدلية", new Size(360, "auto", 280, "auto"))}
+				pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "SendReq.webp", false, "إرسال طلب ترخيص صيدلية", new Size(new NumPer(360, 280), new NumPer("auto", "auto")))}
 			/>
 
 			<RespImg
-				pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "Inspection.webp", false, "معاينة صيدلية للترخيص", new Size(360, "auto", 280, "auto"))}
+				pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "Inspection.webp", false, "معاينة صيدلية للترخيص", new Size(new NumPer(360, 280), new NumPer("auto", "auto")))}
 			/>
 
 		</HzStack>
@@ -1015,8 +943,8 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 		pPadInline={50}
 	>
 
-		<DuoSec
-			pContentSize={new DirectSize(new NumPer("92%", "96%"))}
+		<DuoStr
+			pContentSize={new Size(new NumPer("92%", "96%"))}
 			pGap={new Pixel(26, 16)}
 			pPad={new Pixel(30, 18)}
 		>
@@ -1055,7 +983,7 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 
 			</DuoCol>
 
-		</DuoSec>
+		</DuoStr>
 
 	</BottTriSep>
 
@@ -1078,7 +1006,7 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 			pBorder="rgba(255,255,255,.74)"
 			pRadius={30}
 			pBlur={12}
-			pSize={new DirectSize(new NumPer("1000px", "94%"))}
+			pSize={new Size(new NumPer("1000px", "94%"))}
 		>
 
 			<EmoList
@@ -1095,69 +1023,6 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 			/>
 
 		</GlassCard>
-
-	</ESec>
-
-
-
-
-
-
-
-	<EmoCoverageMapStrip
-		pTitle="نطاق خدمة ترخيص الصيدليات"
-		pDesc="الخدمة الميدانية المباشرة لقياس المسافة ورفع أبعاد المكان وتجهيز الرسم الهندسي متاحة في القاهرة والجيزة. يمكن مراجعة حالات المحافظات الأخرى حسب طبيعة المطلوب وإمكانية التنفيذ."
-		pDetectedGovernorate="القاهرة"
-		pDetectedArea="القاهرة والجيزة"
-		pCurrentServiceName="ترخيص صيدلية"
-	/>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.WhiteOff)}>
-
-		<SecTitle
-			SkyLite
-			pTitle="الخدمات العملية داخل ملف الترخيص"
-			pDesc="الخدمة لا تقف عند شرح الشروط؛ الأهم هو تحويل حالة المكان والملف إلى خطوات قابلة للتنفيذ والمتابعة."
-		/>
-
-		<Grid
-			pMax={3}
-			pMaxP={1}
-			pSize={new DirectSize(new NumPer("92%", "96%"))}
-			pGap={new Pixel(24, 16)}
-			pPad={new Pixel(28, 18)}
-			Centered
-		>
-
-			<SvgBlobCard
-				fTitle="رسم هندسي لصيدلية"
-				fText="إعداد الرسم المطلوب للمعاينة الأولى أو الرسم النهائي بعد التشطيب، مع مطابقة الأبعاد والحالة التي سيتم التشغيل عليها."
-				fCtaText="اطلب الرسم"
-				fCtaHref="/emomed/pharmacy/dwg"
-				fHue={198}
-			/>
-
-			<SvgRadarCard
-				fTitle="قياس المسافة بين صيدليتين"
-				fText="فحص شرط المسافة من أقصر مسار مشاة فعلي قبل التعاقد على المحل أو قبل تقديم ملف الترخيص."
-				fColor={Colors.BistageLite}
-			/>
-
-			<SvgBlobCard
-				fTitle="مراجعة ملاحظات المعاينة"
-				fText="قراءة ملاحظات الجهة المختصة وترتيب المطلوب قبل المعاينة التالية أو قبل استكمال المستندات النهائية."
-				fCtaText="تواصل للمراجعة"
-				fCtaHref="#EmoContactStrip"
-				fHue={92}
-			/>
-
-		</Grid>
 
 	</ESec>
 
@@ -1235,60 +1100,13 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 
 
 
-	<ReadAlso
-		pTitle={Text.H2.Centered.OfText("اقرأ أيضًا")}
-		pDesc={Text.Body.Centered.OfText("صفحات تفصيلية مرتبطة بترخيص الصيدليات وفحص المقر والرسم الهندسي.")}
-		pHeadBg={new ElemBg(Colors.BistageLite)}
-		pBodyBg={new ElemBg(Colors.WhiteOff)}
-		pCardBg={new ElemBg("#FFFFFF")}
-		pMax={4}
-		pMaxP={1}
-	>
-
-		<ReadAlsoItem
-			pTitle="شروط ترخيص صيدلية"
-			pDesc="تفصيل شروط الصيدلي وشروط العين والمعاينات."
-			pHref="/emomed/pharmacy/cond"
-			pImg="/Media/Emomed/Pharmacy/Cond/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="إجراءات ترخيص صيدلية"
-			pDesc="خطوات تقديم الملف والمعاينة والاستكمال."
-			pHref="/emomed/pharmacy/proc"
-			pImg="/Media/Emomed/Pharmacy/Proc/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="رسم هندسي لصيدلية"
-			pDesc="ما يجب أن يتضمنه الرسم الهندسي للمعاينة الأولى والثانية."
-			pHref="/emomed/pharmacy/dwg"
-			pImg="/Media/Emomed/Pharmacy/Dwg/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="قياس المسافة بين الصيدليات"
-			pDesc="طريقة فحص شرط المسافة قبل التعاقد على محل الصيدلية."
-			pHref="/emomed/pharmacy/distance"
-			pImg="/Media/Emomed/Pharmacy/Distance/HeroL.webp"
-		/>
-
-	</ReadAlso>
-
-
-
-
-
-
-
 	<RelServices
 		id="related-services"
-		pTitle={Text.H2.Centered.WithColor(Colors.BistageLite).OfText("خدمات ذات علاقة")}
-		pDesc={Text.Body.Centered.WithColor(Colors.WhiteOff).OfText("خدمات هندسية وتنفيذية مرتبطة بالصيدليات قبل الترخيص أو أثناء الترخيص أو بعده.")}
+		pTitle={Text.H2.Centered.WithColor(Colors.BistageLite).OfText("خدمات أخرى")}
 		pHeadBg={new ElemBg(Colors.Gray5)}
 		pBodyBg={new ElemBg(Colors.SkyLite)}
 		pCardBg={new ElemBg("#FFFFFF")}
-		pMax={3}
+		pMax={4}
 		pMaxP={1}
 	>
 
@@ -1296,90 +1114,27 @@ import { Hero, PriceCard } from "../../../site/Widgets";
 			pTitle="رسم هندسي لصيدلية"
 			pDesc="إعداد الرسم الهندسي المطلوب للمعاينة الأولى أو الرسم النهائي بعد التشطيب."
 			pHref="/emomed/pharmacy/dwg"
-			pImg="/Media/Emomed/Pharmacy/Dwg/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="قياس المسافة بين صيدليتين"
 			pDesc="فحص شرط المسافة قبل استئجار المحل أو تقديم ملف الترخيص."
 			pHref="/emomed/pharmacy/distance"
-			pImg="/Media/Emomed/Pharmacy/Distance/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 		<RelServiceItem
-			pTitle="تقرير هندسي عن حالة المبنى"
+			pTitle="تقرير هندسي عن حالة مبنى مقر الصيدلية"
 			pDesc="تقرير فني عن العقار عند الحاجة إلى توضيح الحالة الإنشائية أو موقف المقر."
 			pHref="/emonsult/report/safety"
-			pImg="/Media/Emonsult/Report/Safety/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="تشطيب وتجهيز الصيدليات"
 			pDesc="تصميم وتنفيذ تشطيبات وتجهيزات الصيدلية بما يناسب التشغيل والميزانية."
 			pHref="/emocrete/finishing/pharmacy"
-			pImg="/Media/Emocrete/Finishing/Pharmacy/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 	</RelServices>
-
-
-
-
-
-
-
-	<EmoStatsStrip
-		pTitle="مؤشرات قراءة صفحة ترخيص الصيدليات"
-		pDesc="استخدم هذه الصفحة كمرجع سريع قبل اختيار مقر الصيدلية أو قبل تجهيز ملف الترخيص، ثم اطلب مراجعة الحالة الفعلية للمكان أو المستندات عند الحاجة."
-		pOfferTitle="فحص مبكر قبل الالتزام بالمحل"
-		pOfferDesc="الفحص قبل دفع مقدم الإيجار أو بدء التشطيب قد يمنع رفض الملف بسبب المسافة أو المساحة أو الارتفاع."
-		pOfferButtonText="سجّل طلب فحص"
-	/>
-
-
-
-
-
-
-
-	<EmoRatingStrip
-		pTitle="قيّم وضوح معلومات ترخيص الصيدلية"
-		pSubmitText="إرسال التقييم"
-		pCommentPlaceholder="اكتب ملاحظة عن الجزء غير الواضح أو السؤال الذي لم تجد إجابته..."
-		pSourceName="صفحة ترخيص صيدلية"
-	/>
-
-
-
-
-
-
-
-	<EmoContactStrip
-		pTitle="تحتاج مراجعة مقر صيدلية أو ملف ترخيص؟"
-		pDesc="اتصل أو أرسل واتساب لتحديد المطلوب: قياس مسافة، رسم هندسي، مراجعة مستندات، أو متابعة إجراءات الترخيص في القاهرة والجيزة."
-		pCallText="اتصال مباشر"
-		pWhatsappText="واتساب مباشر"
-		pLeadTitle="اترك رقمك وسبب التواصل"
-		pLeadButtonText="تسجيل طلب التواصل"
-		pSourceName="صفحة ترخيص صيدلية"
-	/>
-
-
-
-
-
-
-
-	<DoubleWave
-		pHeight={new NumPer(150, 90)}
-		pFill={Colors.Gray5}
-		pFill2="rgba(50,143,232,.28)"
-	/>
 
 
 

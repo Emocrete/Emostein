@@ -1,12 +1,13 @@
 ---
+import { ElemBg, GetHzAlignCss, GetVrAlignCss, type HzAlignValue, NumPer, Percent, Pixel, type PlaceProps, Size, type VrAlignValue } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import { DirectSize, ElemBg, NumPer, Percent, Pixel, type PlaceProps } from "@/TypesLib";
 import Stack from "../Comp/Stack.astro";
 
 interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
 	Centered?: boolean;
 	centered?: boolean;
-	pAlign?: "Start" | "Center" | "End";
+	pHzAlign?: HzAlignValue;
+	pVrAlign?: VrAlignValue;
 	pGap?: Pixel;
 	pPad?: Pixel;
 	pBg?: ElemBg;
@@ -20,7 +21,8 @@ const cProps = Astro.props as Props & Record<string, unknown>;
 const {
 	Centered = false,
 	centered = false,
-	pAlign = "Center",
+	pHzAlign,
+	pVrAlign,
 	pGap = new Pixel(18, 12),
 	pPad = new Pixel(40, 20),
 	pBg,
@@ -67,15 +69,10 @@ const {
 const cIsCentered = Centered || centered || GetBoolAttr(cProps["data-centered"]);
 const cBg = pBg ?? pBgColor;
 
-const cAlignItems = cIsCentered
-	? "center"
-	: pAlign === "End"
-		? "flex-end"
-		: pAlign === "Start"
-			? "flex-start"
-			: "center";
-
-const cJustifyContent = cIsCentered ? "center" : "flex-start";
+const cHzAlign = cIsCentered ? "Center" : pHzAlign ?? "Center";
+const cVrAlign = cIsCentered ? "Center" : pVrAlign ?? "Start";
+const cAlignItems = GetHzAlignCss(cHzAlign);
+const cJustifyContent = GetVrAlignCss(cVrAlign);
 
 const cStyle = [
 	`--StackAlignItems:${cAlignItems};`,
@@ -130,10 +127,11 @@ function GetCssName(pName: string) {
 	class = {`DuoCol ${cIsCentered ? "IsCentered" : "IsTop"} ${pGivenClass}`.trim()}
 	style = {cStyle}
 	pDir="Col"
-	pAlign="Center"
+	pHzAlign="Center"
+	pVrAlign="Start"
 	pGap={pGap}
 	pPad={pPad}
-	pSize={pSize ?? new DirectSize(new NumPer("100%"))}
+	pSize={pSize ?? new Size(new NumPer("100%"))}
 	pBgColor={cBg}
 	pBgOpacity={pBgOpacity}
 	pBlur={pBlur}

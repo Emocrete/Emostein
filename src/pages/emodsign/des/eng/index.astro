@@ -1,7 +1,7 @@
 ---
+import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, Topic, ElemBg, EmoMediaData, Colors, RespString, Pixel, Size, Align } from "@/TypesLib";
-import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, EmoFaq, ReadAlso, RelServices, EmoContactStrip, SecTitle, VrStack, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { CardsGr, EmoCall, EmoContactStrip, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
 ---
 
 
@@ -41,7 +41,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 		pDesc="من الفكرة الأولى إلى ملف رسومات منسق بين المعماري والإنشائي والكهرباء والميكانيكا، يصلح للمراجعة والتسعير والترخيص والتنفيذ حسب نطاق مشروعك."
 		pTitleClr="#F4E5C4"
 		pDescClr="#FFFFFF"
-		pAlign="right"
+		pHzAlign="right"
+		pVrAlign="right"
 		pPosL="16% 52% 12% 8%"
 		pPosP="12% 8% 44% 8%"
 		pBlurL="on"
@@ -58,7 +59,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -69,7 +71,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("التصميم الهندسي ملف قرار قبل أن يكون ملف رسومات")}
 				pText={Text.Body.WithColor("#333333").OfText("العميل غالبًا يبدأ بسؤال بسيط: أريد تصميم منزل، فيلا، عمارة، محل، مطعم، عيادة، أو مبنى إداري. لكن القرار الهندسي لا يقف عند شكل المسقط أو الواجهة. كل فتحة معمارية تؤثر في الإنشائي، وكل عمود يؤثر في الفراغ، وكل حمام ومطبخ يحتاج مسارات صرف وتغذية وتهوية، وكل استخدام له أحمال كهربائية وتشغيلية. لذلك يتم التعامل مع التصميم كمنظومة مترابطة، لا كلوحات منفصلة يجمعها المقاول وقت التنفيذ.")}
 			/>
@@ -114,7 +116,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg("#111318")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#111318")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -146,20 +149,22 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 	<EmoStrip
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("التصميم المتكامل يمنع أخطاء لا تظهر في اللوحة الواحدة")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("المشكلة في كثير من الملفات أن كل تخصص يخرج لوحاته بمعزل عن الآخر. النتيجة تظهر في الموقع: عمود في مكان باب، ماسورة تمر داخل كمرة، سقف ساقط يقتل ارتفاع غرفة، لوحة كهرباء في مكان غير مناسب، أو مسار تكييف يصطدم بالإنشائي. لذلك قيمة التصميم الهندسي لا تقاس بعدد اللوحات فقط، بل بقدرة الملف على تجميع القرارات قبل التنفيذ.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -207,7 +212,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -253,7 +259,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -285,7 +292,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -371,20 +379,22 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 	<EmoStrip
 		pBg={new ElemBg("#F7F1E6")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#111318")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("خدماتنا حسب نوع المشروع")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("نفس عنوان الخدمة قد يختلف في التفاصيل حسب طبيعة المبنى. تصميم فيلا لا يشبه تصميم مطعم، وتصميم عيادة لا يشبه تصميم مخزن أو ورشة. لذلك يتم ضبط نطاق الرسومات على الاستخدام لا على المساحة فقط.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -413,7 +423,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -445,7 +456,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -499,7 +511,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg("#111318")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#111318")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -545,7 +558,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -597,20 +611,22 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 	<EmoStrip
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("الفرق بين التصميم والشوب دروينج والحصر")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("من أكثر أسباب الخلط في المشاريع أن العميل يطلب تصميمًا وهو يحتاج شوب دروينج، أو يطلب حصرًا دون وجود رسومات كافية، أو يطلب تنفيذًا قبل مراجعة التخصصات. لذلك يتم توجيه العميل للخدمة الصحيحة بدل بيع خدمة غير مناسبة.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -637,7 +653,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -669,7 +686,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -680,7 +698,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("لماذا لا يوجد سعر واحد لكل التصميمات؟")}
 				pText={Text.Body.WithColor("#333333").OfText("تصميم فيلا بمساحات مفتوحة وواجهات خاصة لا يساوي تصميم شقة صغيرة. تصميم مطعم يحتاج تهوية وصرف وكهرباء وتشغيل لا يشبه تصميم محل بيع بسيط. ومراجعة ملف قائم تختلف عن إنتاج ملف كامل من الصفر. لذلك يتم تحديد الأتعاب بعد فهم نطاق العمل، وليس بمجرد معرفة المساحة فقط.")}
 			/>
@@ -712,7 +730,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "

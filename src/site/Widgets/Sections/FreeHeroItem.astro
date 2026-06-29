@@ -1,9 +1,8 @@
 ---
+import { Loc, NumPer, RespString, Size } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import { Size, Location, RespString } from "@/TypesLib";
-
 export interface Props extends DebugOutlineProps, HTMLAttributes<"div"> {
-	pLoc?: Location;
+	pLoc?: Loc;
 	pSize?: Size;
 	pRot?: string | RespString;
 	pZ?: number;
@@ -18,7 +17,7 @@ export interface Props extends DebugOutlineProps, HTMLAttributes<"div"> {
 }
 
 const {
-	pLoc = new Location(0, 0, 0, 0),
+	pLoc = new Loc(new NumPer(0, 0), new NumPer(0, 0)),
 	pSize: pBox = new Size(),
 	pRot: pRotate = "0deg",
 	pZ = 1,

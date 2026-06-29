@@ -1,7 +1,7 @@
 ---
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, EmoMediaData, Colors, Pixel, Topic,DirectSize,NumPer,Loc, Size, Align, RespString } from "@/TypesLib";
-import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespImg, ReadAlso, RelServices, EmoFaq, SecTitle, VrStack, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { Badge, CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
 ---
 
 
@@ -38,8 +38,9 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 	<Hero pImgAlt="أواني مطعم تيفال سوداء فاخرة موضوعة على كوانتر كوريان أسود مط في مطعم تم عمل الرسم الهندسي له للترخيص">
 
 		<VrStack
-			pAlign="Center"
-			pSize={new DirectSize(new NumPer("35%","95%"))}
+			pHzAlign="Center"
+			pVrAlign="Center"
+			pSize={new Size(new NumPer("35%","95%"))}
 			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","70%"))}
 		>
 
@@ -59,7 +60,7 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 		<VrStack
 			pLandOnly
 			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("65%","60%"))}
-			pSize={new DirectSize(new NumPer("60%","95%"))}
+			pSize={new Size(new NumPer("60%","95%"))}
 			data-own-size
 		>
 
@@ -84,7 +85,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 	<ESec
 		id="ServiceIntro"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -93,12 +95,13 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 			pDesc="خدمة احترافية لإعداد الرسم الهندسي المطلوب لترخيص مطعم، مع قراءة هندسية لطبيعة النشاط وليس مجرد رفع أبعاد لمحل فارغ"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(28, 16)} pPad={new Pixel(0, 0)}>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp/v1/fill/w_980%2Ch_408%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_auto/308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp", false, "رسم هندسي لمطعم", new Size(430, "auto", 300, "auto"))}
+					pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp/v1/fill/w_980%2Ch_408%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_auto/308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp", false, "رسم هندسي لمطعم", new Size(new NumPer(430, 300), new NumPer("auto", "auto")))}
 				/>
 
 				<VrStack
@@ -119,7 +122,7 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 					<Emograph
 						pTitle={Text.H3.OfText("الرسم الهندسي للمطعم يختلف عن رسم المحل العادي")}
 						pText={Text.Body.OfText("المطعم ليس مساحة بيع فقط، بل نشاط غذائي له مناطق تشغيل وتحضير وغسيل وخدمة وتهوية وصرف وحركة عاملين وعملاء. لذلك يجب أن يوضح الرسم الهندسي عناصر المطعم التي ستراجعها الجهة المختصة عند فحص الملف أو أثناء المعاينة.")}
-						pSize={new Size(720, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(720, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</VrStack>
@@ -136,7 +139,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -144,7 +148,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 			pDesc="الرسم المطلوب لترخيص مطعم يجب أن يكون واضحًا ومقروءًا ومطابقًا لحالة المكان الفعلية ومتطلبات النشاط الغذائي"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1240px", "100%")}
@@ -167,7 +172,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -175,7 +181,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 			pDesc="قيمة واضحة قبل بدء المعاينة حتى يعرف العميل تكلفة إعداد الرسم الهندسي المطلوبة ضمن ملف ترخيص المطعم"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack pWidth={new Pixel(820, 340)} pGap={new Pixel(20, 14)}>
 
@@ -202,7 +209,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.BistageDark};`}
@@ -210,7 +218,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 			pDesc="يجب أن يتضمن الرسم الهندسي للمطعم عدة عناصر رئيسية لتوصيف المكان وتوضيح مدى ملاءمته للمواصفات المطلوبة للنشاط الغذائي"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("980px", "100%")}
@@ -237,7 +246,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -245,7 +255,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 			pDesc="نماذج رسومات توضح طريقة عرض المسقط والواجهة والقطاع وكروكي الموقع ضمن ملف ترخيص المطعم"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack
 				pWidth={new Pixel(1120, 340)}
@@ -256,21 +267,21 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 				<HzStack pGap={new Pixel(18, 14)} pPad={new Pixel(0, 0)}>
 
 					<RespImg
-						pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_d8e96ad2e5cf407f8774a05ffb1ed8a7~mv2.jpg/v1/fill/w_250%2Ch_176%2Cal_c%2Cq_90%2Cenc_auto/308dfd_d8e96ad2e5cf407f8774a05ffb1ed8a7~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(350, "auto", 300, "auto"))}
+						pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_d8e96ad2e5cf407f8774a05ffb1ed8a7~mv2.jpg/v1/fill/w_250%2Ch_176%2Cal_c%2Cq_90%2Cenc_auto/308dfd_d8e96ad2e5cf407f8774a05ffb1ed8a7~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(new NumPer(350, 300), new NumPer("auto", "auto")))}
 					/>
 
 					<RespImg
-						pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_76ac6416a15e443f910aabecd06451b3~mv2.jpg/v1/fill/w_250%2Ch_176%2Cal_c%2Cq_90%2Cenc_auto/308dfd_76ac6416a15e443f910aabecd06451b3~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(350, "auto", 300, "auto"))}
+						pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_76ac6416a15e443f910aabecd06451b3~mv2.jpg/v1/fill/w_250%2Ch_176%2Cal_c%2Cq_90%2Cenc_auto/308dfd_76ac6416a15e443f910aabecd06451b3~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(new NumPer(350, 300), new NumPer("auto", "auto")))}
 					/>
 
 					<RespImg
-						pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_af2f73fa44bc4bbc992930c79a91a632~mv2.jpg/v1/fill/w_250%2Ch_176%2Cal_c%2Cq_90%2Cenc_auto/308dfd_af2f73fa44bc4bbc992930c79a91a632~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(350, "auto", 300, "auto"))}
+						pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_af2f73fa44bc4bbc992930c79a91a632~mv2.jpg/v1/fill/w_250%2Ch_176%2Cal_c%2Cq_90%2Cenc_auto/308dfd_af2f73fa44bc4bbc992930c79a91a632~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(new NumPer(350, 300), new NumPer("auto", "auto")))}
 					/>
 
 				</HzStack>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_1cac27102827417dae8d180632d80e89~mv2.jpg/v1/fill/w_250%2Ch_353%2Cal_c%2Cq_90%2Cenc_auto/308dfd_1cac27102827417dae8d180632d80e89~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(350, "auto", 300, "auto"))}
+					pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_1cac27102827417dae8d180632d80e89~mv2.jpg/v1/fill/w_250%2Ch_353%2Cal_c%2Cq_90%2Cenc_auto/308dfd_1cac27102827417dae8d180632d80e89~mv2.jpg", false, "رسم هندسي لترخيص مطعم", new Size(new NumPer(350, 300), new NumPer("auto", "auto")))}
 				/>
 
 			</VrStack>
@@ -285,7 +296,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -293,7 +305,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 			pDesc="كلما كان النشاط الغذائي أكثر تعقيدًا، زادت أهمية توضيح مناطق التشغيل والتجهيزات داخل المسقط وليس الاكتفاء بحدود المكان"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1240px", "100%")}
@@ -316,7 +329,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -324,7 +338,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 			pDesc="لا تتعامل كل المطاعم مع الرسم بنفس الطريقة؛ اختلاف نموذج التشغيل يغير العناصر التي يجب إبرازها داخل اللوحة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1240px", "100%")}
@@ -347,7 +362,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.BistageDark};`}
@@ -355,12 +371,13 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 			pDesc="في المطاعم التي تعتمد على طهي فعلي، قد يكون مسار التهوية والمدخنة أهم من شكل المسقط نفسه عند مراجعة الملف"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(28, 16)} pPad={new Pixel(0, 0)}>
 
 				<RespImg
-					pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_d8e96ad2e5cf407f8774a05ffb1ed8a7~mv2.jpg/v1/fill/w_250%2Ch_176%2Cal_c%2Cq_90%2Cenc_auto/308dfd_d8e96ad2e5cf407f8774a05ffb1ed8a7~mv2.jpg", false, "مسار التهوية في رسم مطعم", new Size(430, "auto", 300, "auto"))}
+					pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_d8e96ad2e5cf407f8774a05ffb1ed8a7~mv2.jpg/v1/fill/w_250%2Ch_176%2Cal_c%2Cq_90%2Cenc_auto/308dfd_d8e96ad2e5cf407f8774a05ffb1ed8a7~mv2.jpg", false, "مسار التهوية في رسم مطعم", new Size(new NumPer(430, 300), new NumPer("auto", "auto")))}
 				/>
 
 				<VrStack
@@ -372,13 +389,13 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 					<Emograph
 						pTitle={Text.H3.OfText("اللوحة يجب أن تساعد على فهم مصدر الأبخرة")}
 						pText={Text.Body.OfText("عندما يحتوي المطعم على منطقة طهي أو قلي أو شواية، لا يكفي أن يذكر الرسم كلمة مطبخ فقط. الأفضل أن يكون موضع منطقة الطهي واضحًا، وأن تظهر علاقة هذه المنطقة بالتهوية أو المدخنة أو فتحة العادم المطلوبة، خصوصًا إذا كان مسار العادم يمر داخل منور أو واجهة أو سطح.")}
-						pSize={new Size(700, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(700, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<Emograph
 						pTitle={Text.H3.OfText("الرسم لا يغني عن تقرير المدخنة عند طلبه")}
 						pText={Text.Body.OfText("الرسم الهندسي يوضح الموضع والعلاقة العامة، لكنه لا يكون بديلًا عن تقرير فني متخصص إذا طلبت الجهة المختصة تقرير مدخنة أو تقرير سلامة لمسار العادم أو ملاحظات متعلقة بالروائح أو الأبخرة أو تأثيرها على العقار والمجاورين.")}
-						pSize={new Size(700, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(700, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</VrStack>
@@ -395,7 +412,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Sky};`}
@@ -403,7 +421,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 			pDesc="المعاينة الهندسية قبل الرسم هي التي تحدد دقة اللوحة، لأن الرسم النهائي يجب أن يعبر عن المطعم كما هو لا كما يفترض أن يكون"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("980px", "100%")}
@@ -432,7 +451,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -440,7 +460,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 			pDesc="هذه الأخطاء لا تظهر للعميل دائمًا عند استلام اللوحة، لكنها تظهر عند فحص الملف أو عند المعاينة على الطبيعة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -463,7 +484,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -471,7 +493,8 @@ import { Hero, ESec, EmoStrip, EmoCall,Badge, CardsGr, EmoList, Emograph, RespIm
 			pDesc="المطلوب ليس فقط تسليم لوحة، بل تسليم رسم قابل للدخول في ملف الترخيص ومرتبط بمستندات المطعم وحالته الفعلية"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack pWidth={new Pixel(1050, 340)} pGap={new Pixel(22, 14)}>
 

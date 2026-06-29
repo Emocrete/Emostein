@@ -1,7 +1,7 @@
 ---
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, EmoMediaData, Colors,DirectSize,Loc,NumPer,Percent, Pixel, Topic, Size, Align, RespString } from "@/TypesLib";
-import { Hero, IndexSec, ESec,EmoContactStrip,HzStack,EmoCountdown , EmoStrip,Badge, EmoBtn, IndexBtn, EmoCall, CardsGr, EmoList, Emograph, RespImg, EmoFaq, ReadAlso, RelServices, EmoPipelineStrip, SecTitle, VrStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { Badge, CardsGr, EmoBtn, EmoCall, EmoContactStrip, EmoCountdown, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip, ESec, FaqItem, Hero, HzStack, IndexBtn, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
 ---
 
 
@@ -38,8 +38,9 @@ import { Hero, IndexSec, ESec,EmoContactStrip,HzStack,EmoCountdown , EmoStrip,Ba
 	<Hero pImgAlt="عمارات سكنية مخالفة تم تسوية وضعها القانوني وعمل تقارير السلامة الإنشائية للتصالح">
 
 		<VrStack
-			pAlign="Center"
-			pSize={new DirectSize(new NumPer("55%","95%"))}
+			pHzAlign="Center"
+			pVrAlign="Center"
+			pSize={new Size(new NumPer("55%","95%"))}
 			pLoc={new Loc(new NumPer("7%","2.5%"),new NumPer("20%","15%"))}
 			pBgOpacity={new Percent(60)}
 			pBgColor={new ElemBg(Colors.Black)}
@@ -57,7 +58,7 @@ import { Hero, IndexSec, ESec,EmoContactStrip,HzStack,EmoCountdown , EmoStrip,Ba
 
 		<VrStack
 			pLandOnly
-			pSize={new DirectSize(new NumPer("60%","95%"))}
+			pSize={new Size(new NumPer("60%","95%"))}
 			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("70%","60%"))}
 			data-own-size
 			pBgOpacity={new Percent(75)}
@@ -85,7 +86,8 @@ import { Hero, IndexSec, ESec,EmoContactStrip,HzStack,EmoCountdown , EmoStrip,Ba
 	<ESec
 		id="reconcile-update"
 		pBg={new ElemBg(Colors.BlackOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 		data-ops-event="ReconcileUpdate"
 		data-ops-on="view"
 		data-ops-label="آخر تحديث تنظيمي"
@@ -97,9 +99,10 @@ import { Hero, IndexSec, ESec,EmoContactStrip,HzStack,EmoCountdown , EmoStrip,Ba
 			pDesc="طبقا لقرار مجلس الوزراء رقم 1098 لسنة 2026"
 		/>
 
-		<EmoCountdown pDeadline="2026-11-05T23:59:59+02:00" pSize={new DirectSize(new NumPer("1120px", "94%"))} />
+		<EmoCountdown pDeadline="2026-11-05T23:59:59+02:00" pSize={new Size(new NumPer("1120px", "94%"))} />
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		</EmoStrip>
 
@@ -114,7 +117,8 @@ import { Hero, IndexSec, ESec,EmoContactStrip,HzStack,EmoCountdown , EmoStrip,Ba
 	<ESec
 		id="secReport"
 		pBg={new ElemBg(Colors.BlackOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -134,7 +138,8 @@ import { Hero, IndexSec, ESec,EmoContactStrip,HzStack,EmoCountdown , EmoStrip,Ba
 	<ESec
 		id="reconcile-scope"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 		data-ops-event="ReconcileScope"
 		data-ops-on="view"
 		data-ops-label="نطاق خدمة التصالح"
@@ -146,7 +151,8 @@ import { Hero, IndexSec, ESec,EmoContactStrip,HzStack,EmoCountdown , EmoStrip,Ba
 			pDesc="الصفحة موجهة لصاحب ملف التصالح الذي يحتاج مستندًا هندسيًا واضحًا: رسم معماري للوضع القائم، تقرير سلامة إنشائية، شهادة قيد مؤمنة، أو ملف رقمي قابل للتقديم والمتابعة."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1240px", "100%")}
@@ -174,7 +180,8 @@ import { Hero, IndexSec, ESec,EmoContactStrip,HzStack,EmoCountdown , EmoStrip,Ba
 	<ESec
 		id="reconcile-documents"
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 		data-ops-event="ReconcileDocuments"
 		data-ops-on="view"
 		data-ops-label="المستندات الأساسية"
@@ -186,7 +193,8 @@ import { Hero, IndexSec, ESec,EmoContactStrip,HzStack,EmoCountdown , EmoStrip,Ba
 			pDesc="لا نعرض قائمة أوراق إدارية طويلة فقط، لكن نرتب المستندات الفنية التي تؤثر فعليًا على قبول وفحص الملف."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("1180px", "100%")}
@@ -216,7 +224,8 @@ import { Hero, IndexSec, ESec,EmoContactStrip,HzStack,EmoCountdown , EmoStrip,Ba
 	<ESec
 		id="reconcile-deliverables"
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 		data-ops-event="ReconcileDeliverables"
 		data-ops-on="view"
 		data-ops-label="مخرجات التسليم"
@@ -224,7 +233,8 @@ import { Hero, IndexSec, ESec,EmoContactStrip,HzStack,EmoCountdown , EmoStrip,Ba
 
 		<SecTitle SkyDark pTitle="مخرجات التسليم من خدمة التصالح" />
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1240px", "100%")}

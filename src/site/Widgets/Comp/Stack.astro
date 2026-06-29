@@ -1,41 +1,74 @@
 ---
-import { Colors, ElemBg, Pixel,Percent, Place, type PlaceProps } from "@/TypesLib";
+import { GetHzAlignCss, GetVrAlignCss, type ElemBg, type HzAlignValue, type NumPer, Percent, Pixel, Place, type PlaceProps, type VrAlignValue } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
 
-interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
-	pDir?: "Row" | "Col" | "Grid";
-	pWidth?:Pixel;
-	pHeight?: Pixel;
-	pAlign?: "Start" | "Center" | "End";
-	pGap?: Pixel;
-	pPad?: Pixel;
+type StackDir = "Row" | "Col" | "Grid";
+type StackItemSizeMode = "Own" | "Equal" | "Fixed";
+type StackCssValue = Pixel | Percent | NumPer | string | number;
+
+interface Props extends HTMLAttributes<"div">, PlaceProps {
+	pDir?: StackDir;
+	pWidth?: StackCssValue;
+	pHeight?: StackCssValue;
+	pHzAlign?: HzAlignValue;
+	pVrAlign?: VrAlignValue;
+	pGap?: StackCssValue;
+	pPad?: StackCssValue;
 	pFlipNarrow?: boolean;
-	pBgColor?:ElemBg;
+	pBgColor?: ElemBg;
 	pBgOpacity?: Percent;
-pBlur?: Pixel;
+	pBlur?: StackCssValue;
+
+	/**
+	 * اتجاه Row: المقاس الأساسي = العرض.
+	 * اتجاه Col: المقاس الأساسي = الارتفاع.
+	 * Own   : كل عنصر بحجمه الطبيعي.
+	 * Equal : Row يوزع العرض بالتساوي، و Col يساوي الارتفاع على أكبر عنصر.
+	 * Fixed : كل العناصر تلتزم بقيمة pItemMainSize.
+	 */
+	pMainSizeMode?: StackItemSizeMode;
+
+	/**
+	 * اتجاه Row: المقاس الثانوي = الارتفاع.
+	 * اتجاه Col: المقاس الثانوي = العرض.
+	 * Own   : كل عنصر بحجمه الطبيعي.
+	 * Equal : كل العناصر على أكبر مقاس ثانوي داخل المجموعة.
+	 * Fixed : كل العناصر تلتزم بقيمة pItemCrossSize.
+	 */
+	pCrossSizeMode?: StackItemSizeMode;
+
+	pItemMainSize?: StackCssValue;
+	pItemCrossSize?: StackCssValue;
 }
+
+const cProps = Astro.props as Props & Record<string, unknown>;
 
 let {
 	pDir = "Col",
 	pWidth,
 	pHeight,
-	pAlign = "Center",
-	pGap = new Pixel(30,10),
-	pPad = new Pixel(30,10),
-	pFlipNarrow= true,
-	pBgColor ,
+	pHzAlign,
+	pVrAlign,
+	pGap = new Pixel(30, 10),
+	pPad = new Pixel(30, 10),
+	pFlipNarrow = true,
+	pBgColor,
 	pBgOpacity = new Percent(100),
-pBlur = new Pixel(0),
+	pBlur = new Pixel(0),
+	pMainSizeMode,
+	pCrossSizeMode,
+	pItemMainSize,
+	pItemCrossSize,
 
 	pLoc,
-pSize,
-pRotate,
-pZ,
-pOrigin,
-pOpacity,
-pClickable,
-pLandOnly,
-pPortOnly,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
 	pMove,
 	pMoveDuration,
 	pMoveLoc,
@@ -56,66 +89,154 @@ pPortOnly,
 	pMoveViewMargin,
 	pMoveViewTarget,
 
-
 	id: pGivenID = GetWidgetId("EmoStack"),
 	class: pGivenClass = "",
 	style: pGivenStyle = "",
 	...RemAttr
-} = Astro.props as Props;
+} = cProps;
 
-const cIsRow = pDir === "Row";
-const cHasCrossSize = pHeight ? true : false ;
+const cBaseDir = pDir === "Row" ? "Row" : "Col";
+const cIsRow = cBaseDir === "Row";
 const cDirClass = cIsRow ? "IsRow" : "IsCol";
-const cCrossClass = cHasCrossSize ? "HasCrossSize" : "";
-const cFlipClass = pFlipNarrow ? "FlipAllowed" : "";
-const cAlignClass =	pAlign === "Center"	? "IsCenter" : pAlign === "End"	? "IsEnd" : "IsStart";
-const cAlignItems = pAlign === "Center" ? "center" : pAlign === "End" ? "flex-end" : "flex-start";
-const cJustifyContent = pAlign === "Center" ? "center" : pAlign === "End" ? "flex-end" : "flex-start";
-const cJustifyItems = pAlign === "Center" ? "center" : pAlign === "End" ? "end" : "start";
-const cPlace = new Place(Astro.props as PlaceProps);
+const cRuntimeClass = cIsRow ? "RuntimeRow" : "RuntimeCol";
+const cFlipClass = cIsRow && pFlipNarrow ? "FlipAllowed" : "";
 
+const cMainSizeMode: StackItemSizeMode = pMainSizeMode ?? (pItemMainSize ? "Fixed" : cIsRow ? "Equal" : "Own");
+const cCrossSizeMode: StackItemSizeMode = pCrossSizeMode ?? (pItemCrossSize ? "Fixed" : "Own");
+
+const cMainModeClass = `Main${cMainSizeMode}`;
+const cCrossModeClass = `Cross${cCrossSizeMode}`;
+const cHzAlign = pHzAlign ?? "Center";
+const cVrAlign = pVrAlign ?? "Center";
+const cHzAlignCss = GetHzAlignCss(cHzAlign);
+const cVrAlignCss = GetVrAlignCss(cVrAlign);
+const cAlignClass = `Hz${GetAlignClassName(cHzAlignCss)} Vr${GetAlignClassName(cVrAlignCss)}`;
+const cAlignItems = cHzAlignCss;
+const cJustifyContent = cVrAlignCss;
+const cJustifyItems = cHzAlignCss === "flex-start" ? "start" : cHzAlignCss === "flex-end" ? "end" : "center";
+const cAlignSelf = cHzAlignCss;
+const cHasExplicitHeight = HasExplicitCssValue(pHeight) || HasExplicitCssValue(pSize?.HeightL) || HasExplicitCssValue(pSize?.HeightP);
+
+const cGap = GetResponsiveCssValue(pGap, "30px", "10px");
+const cPad = GetResponsiveCssValue(pPad, "30px", "10px");
+const cWidth = GetResponsiveCssValue(pWidth, "", "");
+const cHeight = GetResponsiveCssValue(pHeight, "", "");
+const cBlur = GetResponsiveCssValue(pBlur, "0px", "0px");
+const cBgOpacity = GetResponsiveCssValue(pBgOpacity, "100%", "100%");
+const cItemMain = GetResponsiveCssValue(pItemMainSize, "auto", "auto");
+const cItemCross = GetResponsiveCssValue(pItemCrossSize, "auto", "auto");
+
+const cPlace = new Place(cProps as PlaceProps);
 const cSizeForStack = cPlace.IsPlaced ? undefined : pSize;
 const cIsInsidePlace = cPlace.IsPlaced;
-const cMainSizeClass = pWidth || cSizeForStack || cIsInsidePlace ? "HasMainSize" : "";
 
-const cStackDimL = cIsInsidePlace
-? "100%"
-: cSizeForStack?.WidthL || pWidth?.Landscape || "fit-content";
+const cStackWidthL = cIsInsidePlace ? "100%" : cSizeForStack?.WidthL || cWidth.Landscape || "fit-content";
+const cStackWidthP = cIsInsidePlace ? "100%" : cSizeForStack?.WidthP || cWidth.Portrait || (cIsRow && pFlipNarrow ? "100%" : cStackWidthL);
+const cStackHeightL = cIsInsidePlace ? "100%" : cSizeForStack?.HeightL || cHeight.Landscape || "fit-content";
+const cStackHeightP = cIsInsidePlace ? "100%" : cSizeForStack?.HeightP || cHeight.Portrait || cStackHeightL;
 
-const cStackDimP = cIsInsidePlace
-? "100%"
-: cSizeForStack?.WidthP || pWidth?.Portrait || (cIsRow && pFlipNarrow ? "100%" : cStackDimL);
+const CssStyle = [
+	`--StackGapL:${cGap.Landscape};`,
+	`--StackGapP:${cGap.Portrait};`,
+	`--StackPadL:${cPad.Landscape};`,
+	`--StackPadP:${cPad.Portrait};`,
+	`--StackWidthL:${cStackWidthL};`,
+	`--StackWidthP:${cStackWidthP};`,
+	`--StackHeightL:${cStackHeightL};`,
+	`--StackHeightP:${cStackHeightP};`,
+	`--StackItemMainSizeL:${cItemMain.Landscape};`,
+	`--StackItemMainSizeP:${cItemMain.Portrait};`,
+	`--StackItemCrossSizeL:${cItemCross.Landscape};`,
+	`--StackItemCrossSizeP:${cItemCross.Portrait};`,
+	`--BgColor:${pBgColor?.Color || "transparent"};`,
+	`--BgOpacityL:${cBgOpacity.Landscape};`,
+	`--BgOpacityP:${cBgOpacity.Portrait};`,
+	`--StackBlurL:${cBlur.Landscape};`,
+	`--StackBlurP:${cBlur.Portrait};`,
+	`--StackAlignItems:${cAlignItems};`,
+	`--StackJustifyContent:${cJustifyContent};`,
+	`--StackJustifyItems:${cJustifyItems};`,
+	`--StackAlignSelf:${cAlignSelf};`,
+	GetStyleText(pGivenStyle),
+].filter(Boolean).join(" ");
 
-const cStackHeightL = cIsInsidePlace
-? "100%"
-: cSizeForStack?.HeightL || pHeight?.Landscape || "fit-content";
+const cStackClass = [
+	"EmoStack",
+	cDirClass,
+	cRuntimeClass,
+	cFlipClass,
+	cAlignClass,
+	cMainModeClass,
+	cCrossModeClass,
+	pGivenClass,
+].filter(Boolean).join(" ");
 
-const cStackHeightP = cIsInsidePlace
-? "100%"
-: cSizeForStack?.HeightP || pHeight?.Portrait || cStackHeightL;
+function GetAlignClassName(pValue: string) {
+	if (pValue === "flex-start") return "Start";
+	if (pValue === "flex-end") return "End";
+	return "Center";
+}
 
-let CssStyle = `
---StackGapL:${pGap.Landscape};
---StackGapP:${pGap.Portrait};
---StackPadL:${pPad.Landscape};
---StackPadP:${pPad.Portrait};
---StackDimL:${cStackDimL};
---StackDimP:${cStackDimP};
---StackHeightL:${cStackHeightL};
---StackHeightP:${cStackHeightP};
---BgColor:${pBgColor?.Color || "transparent"};
---BgOpacityL:${pBgOpacity.Landscape};
---BgOpacityP:${pBgOpacity.Portrait};
---StackBlurL:${pBlur.Landscape};
---StackBlurP:${pBlur.Portrait};
---StackAlignItems:${cAlignItems};
---StackJustifyContent:${cJustifyContent};
---StackJustifyItems:${cJustifyItems};
-${pGivenStyle}
-`;
+function HasExplicitCssValue(pValue: unknown) {
+	if (pValue === undefined || pValue === null) return false;
+	if (typeof pValue === "number") return true;
+	const cValue = `${pValue}`.trim().toLowerCase();
+	return cValue !== "" && cValue !== "auto" && cValue !== "fit-content" && cValue !== "max-content" && cValue !== "min-content";
+}
 
-const cStackClass = `EmoStack ${cDirClass} ${cCrossClass} ${cFlipClass} ${cAlignClass} ${cMainSizeClass} ${pGivenClass}`.trim();
+function GetResponsiveCssValue(
+	pValue: StackCssValue | undefined,
+	pLandscapeFallback: string,
+	pPortraitFallback: string = pLandscapeFallback,
+) {
+	if (pValue === undefined || pValue === null) {
+		return {
+			Landscape: pLandscapeFallback,
+			Portrait: pPortraitFallback,
+		};
+	}
 
+	if (typeof pValue === "number") {
+		return {
+			Landscape: `${pValue}px`,
+			Portrait: `${pValue}px`,
+		};
+	}
+
+	if (typeof pValue === "string") {
+		return {
+			Landscape: pValue,
+			Portrait: pValue,
+		};
+	}
+
+	const cValue = pValue as { Landscape?: string; Portrait?: string };
+	const cLandscape = cValue.Landscape ?? pLandscapeFallback;
+
+	return {
+		Landscape: cLandscape,
+		Portrait: cValue.Portrait ?? cLandscape ?? pPortraitFallback,
+	};
+}
+
+function GetStyleText(pStyle: unknown) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+	if (typeof pStyle !== "object") return "";
+
+	return Object.entries(pStyle as Record<string, string | number | null | undefined>)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
 ---
 
 
@@ -141,18 +262,36 @@ const cStackClass = `EmoStack ${cDirClass} ${cCrossClass} ${cFlipClass} ${cAlign
 
 	<div class = {cPlace.Class} style = {cPlace.Style}>
 	
+	
+	
+	
+	
+	
+	
 		<div
 			class = {cStackClass}
 			style = {CssStyle}
 			id={pGivenID}
+			data-stack="true"
 			data-flip-allowed={pFlipNarrow ? "true" : "false"}
-			data-base-dir={pDir}
+			data-base-dir={cBaseDir}
+			data-main-size-mode={cMainSizeMode}
+			data-cross-size-mode={cCrossSizeMode}
+			data-emo-auto-container="true"
+			data-emo-explicit-height={cHasExplicitHeight ? "true" : "false"}
+			data-emo-empty-height="200"
 			{...RemAttr}
 		>
 	
 			<slot />
 	
 		</div>
+	
+	
+	
+	
+	
+	
 	
 	</div>
 ) : (
@@ -161,12 +300,30 @@ const cStackClass = `EmoStack ${cDirClass} ${cCrossClass} ${cFlipClass} ${cAlign
 		class = {cStackClass}
 		style = {CssStyle}
 		id={pGivenID}
+		data-stack="true"
 		data-flip-allowed={pFlipNarrow ? "true" : "false"}
-		data-base-dir={pDir}
+		data-base-dir={cBaseDir}
+		data-main-size-mode={cMainSizeMode}
+		data-cross-size-mode={cCrossSizeMode}
+		data-emo-auto-container="true"
+		data-emo-explicit-height={cHasExplicitHeight ? "true" : "false"}
+		data-emo-empty-height="200"
 		{...RemAttr}
 	>
 	
+	
+	
+	
+	
+	
+	
 		<slot />
+	
+	
+	
+	
+	
+	
 	
 	</div>
 ) }
@@ -198,19 +355,20 @@ const cStackClass = `EmoStack ${cDirClass} ${cCrossClass} ${cFlipClass} ${cAlign
 		position: relative;
 		display: flex;
 		box-sizing: border-box;
-		width: min(100%, var(--StackDimL, fit-content));
+		width: var(--StackWidthL, fit-content);
 		max-width: 100%;
 		height: var(--StackHeightL, fit-content);
-		padding: var(--StackPadL);
-		gap: var(--StackGapL);
+		padding: var(--StackPadL, 0);
+		gap: var(--StackGapL, 0);
 		background-color: color-mix(in srgb, var(--BgColor) var(--BgOpacityL), transparent);
-		backdrop-filter: blur(var(--StackBlurL));
-		-webkit-backdrop-filter: blur(var(--StackBlurL));
+		backdrop-filter: blur(var(--StackBlurL, 0));
+		-webkit-backdrop-filter: blur(var(--StackBlurL, 0));
 		overflow: visible;
-		align-items: var(--StackAlignItems);
-		justify-content: var(--StackJustifyContent);
-		justify-items: var(--StackJustifyItems);
+		align-items: var(--StackAlignItems, center);
+		justify-content: var(--StackJustifyContent, center);
+		justify-items: var(--StackJustifyItems, center);
 		margin-inline: auto;
+		min-width: 0;
 	}
 
 	.EmoStack > :global(*) {
@@ -220,27 +378,19 @@ const cStackClass = `EmoStack ${cDirClass} ${cCrossClass} ${cFlipClass} ${cAlign
 		max-width: 100%;
 	}
 
+	.EmoStack > :global([data-own-size]) {
+		flex: 0 0 auto !important;
+		width: auto;
+		height: auto;
+		min-width: 0;
+		max-width: 100%;
+		align-self: var(--StackAlignSelf, center);
+	}
+
 
 
 	.EmoStack.IsRow {
 		flex-direction: row;
-	}
-
-	.EmoStack.IsRow > :global(:not([data-own-size])) {
-		flex: 1 1 0;
-		min-width: 0;
-		max-width: 100%;
-	}
-
-	.EmoStack.IsRow > :global([data-own-size]) {
-		flex: 0 0 auto;
-		min-width: 0;
-		max-width: 100%;
-	}
-
-
-	.EmoStack.HasMainSize {
-		margin-inline: auto;
 	}
 
 
@@ -249,93 +399,162 @@ const cStackClass = `EmoStack ${cDirClass} ${cCrossClass} ${cFlipClass} ${cAlign
 	}
 
 
-	.EmoStack.IsMobFlip {
-		flex-direction: column;
+
+	.EmoStack.RuntimeRow.MainOwn > :global(:not([data-own-size])) {
+		flex-grow: 0 !important;
+		flex-shrink: 1 !important;
+		flex-basis: auto !important;
+		width: auto;
+		min-width: 0 !important;
+		max-width: 100% !important;
 	}
 
-	.EmoStack.IsMobFlip > :global(*) {
-		flex: 0 0 auto;
-		width: 100%;
+
+	.EmoStack.RuntimeRow.MainEqual > :global(:not([data-own-size])) {
+		flex-grow: 1 !important;
+		flex-shrink: 1 !important;
+		flex-basis: 0 !important;
+		width: 0 !important;
+		min-width: 0 !important;
+		max-width: none !important;
+	}
+
+
+	.EmoStack.RuntimeRow.MainFixed > :global(:not([data-own-size])) {
+		flex-grow: 0 !important;
+		flex-shrink: 0 !important;
+		flex-basis: var(--StackItemMainSizeL, auto) !important;
+		width: var(--StackItemMainSizeL, auto) !important;
+		min-width: 0 !important;
+		max-width: var(--StackItemMainSizeL, 100%) !important;
+	}
+
+
+	.EmoStack.RuntimeCol.MainOwn > :global(:not([data-own-size])) {
+		flex-grow: 0 !important;
+		flex-shrink: 0 !important;
+		flex-basis: auto !important;
 		height: auto;
-		min-width: 0;
+		min-height: 0;
+	}
+
+
+	.EmoStack.RuntimeCol.MainEqual > :global(:not([data-own-size])) {
+		flex-grow: 0 !important;
+		flex-shrink: 0 !important;
+		flex-basis: var(--StackEqualMainSize, auto) !important;
+		height: var(--StackEqualMainSize, auto) !important;
+		min-height: 0;
+	}
+
+
+	.EmoStack.RuntimeCol.MainFixed > :global(:not([data-own-size])) {
+		flex-grow: 0 !important;
+		flex-shrink: 0 !important;
+		flex-basis: var(--StackItemMainSizeL, auto) !important;
+		height: var(--StackItemMainSizeL, auto) !important;
+		min-height: 0;
+	}
+
+
+	.EmoStack.RuntimeRow.CrossOwn > :global(:not([data-own-size])) {
+		height: auto;
+		align-self: var(--StackAlignSelf, center);
+	}
+
+
+	.EmoStack.RuntimeRow.CrossEqual > :global(:not([data-own-size])) {
+		height: var(--StackEqualCrossSize, auto) !important;
+		align-self: stretch !important;
+	}
+
+
+	.EmoStack.RuntimeRow.CrossFixed > :global(:not([data-own-size])) {
+		height: var(--StackItemCrossSizeL, auto) !important;
+		align-self: var(--StackAlignSelf, center);
+	}
+
+
+	.EmoStack.RuntimeCol.CrossOwn > :global(:not([data-own-size])) {
+		width: auto;
 		max-width: 100%;
+		align-self: var(--StackAlignSelf, center);
+	}
+
+
+	.EmoStack.RuntimeCol.CrossEqual > :global(:not([data-own-size])) {
+		width: var(--StackEqualCrossSize, auto) !important;
+		max-width: 100% !important;
+		align-self: var(--StackAlignSelf, center);
+	}
+
+
+	.EmoStack.RuntimeCol.CrossFixed > :global(:not([data-own-size])) {
+		width: var(--StackItemCrossSizeL, auto) !important;
+		max-width: 100% !important;
+		align-self: var(--StackAlignSelf, center);
 	}
 
 
 
-	.EmoStack.IsRow.HasCrossSize {
-		height: var(--StackCrossSizeL);
-		align-items: stretch;
-	}
-
-	.EmoStack.IsRow.HasCrossSize > :global(*) {
-		height: 100%;
-	}
+</style>
 
 
-	.EmoStack.IsCol.HasCrossSize {
-		width: var(--StackCrossSizeL);
-		align-items: stretch;
-	}
-
-	.EmoStack.IsCol.HasCrossSize > :global(*) {
-		width: 100%;
-	}
 
 
-	.EmoStack.IsMobFlip.HasCrossSize {
-		width: var(--StackCrossSizeP);
-		height: auto;
-		align-items: stretch;
-	}
 
-	.EmoStack.IsMobFlip.HasCrossSize > :global(*) {
-		width: 100%;
-		height: auto;
-	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
 
 
 
 	@media (orientation: portrait) {
 		.EmoStack {
-			width: min(100%, var(--StackDimP, var(--StackDimL)));
-			padding: var(--StackPadP, var(--StackPadL));
-			gap: var(--StackGapP, var(--StackGapL));
-			background-color: color-mix(in srgb, var(--BgColor) var(--BgOpacityP), transparent);
-			backdrop-filter: blur(var(--StackBlurP));
-			-webkit-backdrop-filter: blur(var(--StackBlurP));
+			width: var(--StackWidthP, var(--StackWidthL, fit-content));
 			height: var(--StackHeightP, var(--StackHeightL, fit-content));
+			padding: var(--StackPadP, var(--StackPadL, 0));
+			gap: var(--StackGapP, var(--StackGapL, 0));
+			background-color: color-mix(in srgb, var(--BgColor) var(--BgOpacityP), transparent);
+			backdrop-filter: blur(var(--StackBlurP, var(--StackBlurL, 0)));
+			-webkit-backdrop-filter: blur(var(--StackBlurP, var(--StackBlurL, 0)));
 		}
 
 		.EmoStack.IsRow.FlipAllowed {
 			flex-direction: column;
 		}
 
-		.EmoStack.IsRow.FlipAllowed > :global(*) {
-			flex: 0 0 auto;
-			width: 100%;
-			height: auto;
-			min-width: 0;
-			max-width: 100%;
+		.EmoStack.RuntimeRow.MainFixed > :global(:not([data-own-size])) {
+			flex-basis: var(--StackItemMainSizeP, var(--StackItemMainSizeL, auto)) !important;
+			width: var(--StackItemMainSizeP, var(--StackItemMainSizeL, auto)) !important;
+			max-width: var(--StackItemMainSizeP, var(--StackItemMainSizeL, 100%)) !important;
 		}
 
-		.EmoStack.IsRow.HasCrossSize {
-			height: var(--StackCrossSizeP, auto);
+		.EmoStack.RuntimeCol.MainFixed > :global(:not([data-own-size])) {
+			flex-basis: var(--StackItemMainSizeP, var(--StackItemMainSizeL, auto)) !important;
+			height: var(--StackItemMainSizeP, var(--StackItemMainSizeL, auto)) !important;
 		}
 
-		.EmoStack.IsCol.HasCrossSize,
-		.EmoStack.IsRow.FlipAllowed.HasCrossSize
-		{
-			width: min(100%, var(--StackCrossSizeP, var(--StackCrossSizeL)));
-			height: auto;
-			align-items: stretch;
+		.EmoStack.RuntimeRow.CrossFixed > :global(:not([data-own-size])) {
+			height: var(--StackItemCrossSizeP, var(--StackItemCrossSizeL, auto)) !important;
 		}
 
-		.EmoStack.IsCol.HasCrossSize > :global(*),
-		.EmoStack.IsRow.FlipAllowed.HasCrossSize > :global(*)
-		{
-			width: 100%;
-			height: auto;
+		.EmoStack.RuntimeCol.CrossFixed > :global(:not([data-own-size])) {
+			width: var(--StackItemCrossSizeP, var(--StackItemCrossSizeL, auto)) !important;
+			max-width: 100% !important;
 		}
 	}
 
@@ -363,17 +582,21 @@ const cStackClass = `EmoStack ${cDirClass} ${cCrossClass} ${cFlipClass} ${cAlign
 
 
 <script is:inline>
-	(function InitEmoStackFlip() {
-	if (window.__EmoStackFlipReady) return;
-	window.__EmoStackFlipReady = true;
+	(function InitEmoStackRuntimeSizing() {
+	if (window.__EmoStackRuntimeSizingReady) return;
+	window.__EmoStackRuntimeSizingReady = true;
 
-	const cBreakPoint = 460;
 	let cResizeFrame = 0;
 
 	window.addEventListener("resize", RequestRefreshStacks);
 	window.addEventListener("orientationchange", RequestRefreshStacks);
 	document.addEventListener("astro:page-load", RefreshStacks);
 	window.addEventListener("load", RefreshStacks);
+	document.addEventListener("load", HandleInnerAssetLoad, true);
+
+	if (document.fonts && document.fonts.ready) {
+	document.fonts.ready.then(RequestRefreshStacks);
+	}
 
 	RequestRefreshStacks();
 
@@ -383,14 +606,80 @@ const cStackClass = `EmoStack ${cDirClass} ${cCrossClass} ${cFlipClass} ${cAlign
 	}
 
 	function RefreshStacks() {
-	const cIsMobile = window.innerWidth <= cBreakPoint;
-	const cStacks = document.querySelectorAll('.EmoStack[data-flip-allowed="true"][data-base-dir="Row"]');
+	const cStacks = Array.from(document.querySelectorAll('.EmoStack[data-stack="true"]'));
 
-	cStacks.forEach(ApplyStackFlipState);
-
-	function ApplyStackFlipState(pStackElem) {
-	pStackElem.classList.toggle("IsMobFlip", cIsMobile);
+	for (const cStack of cStacks) {
+	ApplyStackRuntimeDir(cStack);
+	SyncStackEqualSizes(cStack);
 	}
+	}
+
+	function ApplyStackRuntimeDir(pStackElem) {
+	const cBaseDir = pStackElem.dataset.baseDir === "Row" ? "Row" : "Col";
+	const cFlexDir = window.getComputedStyle(pStackElem).flexDirection;
+	const cRuntimeDir = cFlexDir.startsWith("row") ? "Row" : "Col";
+
+	pStackElem.classList.toggle("IsMobFlip", cRuntimeDir === "Col" && cBaseDir === "Row");
+	pStackElem.classList.toggle("RuntimeRow", cRuntimeDir === "Row");
+	pStackElem.classList.toggle("RuntimeCol", cRuntimeDir === "Col");
+	}
+
+	function SyncStackEqualSizes(pStackElem) {
+	const cMainMode = pStackElem.dataset.mainSizeMode || "Own";
+	const cCrossMode = pStackElem.dataset.crossSizeMode || "Own";
+	const cNeedMainEqual = cMainMode === "Equal" && pStackElem.classList.contains("RuntimeCol");
+	const cNeedCrossEqual = cCrossMode === "Equal";
+
+	pStackElem.style.removeProperty("--StackEqualMainSize");
+	pStackElem.style.removeProperty("--StackEqualCrossSize");
+
+	if (!cNeedMainEqual && !cNeedCrossEqual) return;
+
+	const cItems = GetStackItems(pStackElem);
+	if (cItems.length === 0) return;
+
+	pStackElem.offsetWidth;
+
+	if (cNeedCrossEqual) {
+	const cCrossProp = pStackElem.classList.contains("RuntimeRow") ? "height" : "width";
+	const cCrossSize = GetMaxItemSize(cItems, cCrossProp);
+	if (cCrossSize > 0) pStackElem.style.setProperty("--StackEqualCrossSize", `${cCrossSize}px`);
+	}
+
+	pStackElem.offsetWidth;
+
+	if (cNeedMainEqual) {
+	const cMainSize = GetMaxItemSize(cItems, "height");
+	if (cMainSize > 0) pStackElem.style.setProperty("--StackEqualMainSize", `${cMainSize}px`);
+	}
+	}
+
+	function GetStackItems(pStackElem) {
+	return Array.from(pStackElem.children).filter((pChild) => {
+	return pChild instanceof HTMLElement && !pChild.hasAttribute("data-own-size");
+	});
+	}
+
+	function GetMaxItemSize(pItems, pAxis) {
+	let cMaxSize = 0;
+
+	for (const cItem of pItems) {
+	const cRect = cItem.getBoundingClientRect();
+	const cSize = pAxis === "width"
+	? Math.max(cRect.width, cItem.scrollWidth)
+	: Math.max(cRect.height, cItem.scrollHeight);
+
+	cMaxSize = Math.max(cMaxSize, Math.ceil(cSize));
+	}
+
+	return cMaxSize;
+	}
+
+	function HandleInnerAssetLoad(pEvent) {
+	const cTarget = pEvent.target;
+	if (!(cTarget instanceof HTMLElement)) return;
+	if (!cTarget.closest('.EmoStack[data-stack="true"]')) return;
+	RequestRefreshStacks();
 	}
 	})();
 </script>

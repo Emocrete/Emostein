@@ -1,8 +1,7 @@
 ---
+import { EmoBtn, Emograph, EmoStrip, Stack } from "@/Widgets";
+import { Align, ElemBg, NumPer, Pixel, Place, type PlaceProps, Size, Text } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import { EmoStrip, Stack, Emograph, EmoBtn } from "@/Widgets";
-import { Align, Size, ElemBg, Pixel, Text, Place, type PlaceProps } from "@/TypesLib";
-
 interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
 	pForceShow?: boolean;
 }
@@ -77,8 +76,8 @@ const cWidgetId = pGivenID;
 	hidden
 	data-ph-dwg-monthly-offer
 	pBg={new ElemBg("#102d25")}
-	pSize={new Size("100%", 400, "100%", "auto")}
-	pSlot={{ Size: new Size("100%", "100%", "100%", "auto"), Align: Align.Center }}
+	pSize={new Size(new NumPer("100%", "100%"), new NumPer(400, "auto"))}
+	pSlot={{ Size: new Size(new NumPer("100%", "100%"), new NumPer("100%", "auto")), Align: Align.Center }}
 	pLoc={pLoc}
 	pSize={pSize}
 	pRotate={pRotate}
@@ -314,7 +313,8 @@ const cWidgetId = pGivenID;
 			pWidth={new Pixel(900, 360)}
 			pPad={new Pixel(0, 0)}
 			pGap={new Pixel(8, 8)}
-			pAlign="Start"
+			pHzAlign="Start"
+			pVrAlign="Start"
 			pFlipNarrow={false}
 		>
 

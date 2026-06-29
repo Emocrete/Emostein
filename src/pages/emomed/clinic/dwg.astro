@@ -1,7 +1,7 @@
 ---
+import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, Size, Align, Colors, RespString, Pixel } from "@/TypesLib";
-import { Hero, ESec, EmoStrip, Emograph, EmoList, EmoCall, EmoFaq, ReadAlso, RelServices, SecTitle, VrStack, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, SecTitle, VrStack } from "@/Widgets";
 ---
 
 
@@ -38,7 +38,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, EmoCall, EmoFaq, ReadAlso, Rel
 	<Hero
 		pTitle="رسم هندسي لعيادة"
 		pDesc="إعداد رسم واضح لمقر العيادة يوضح توزيع الفراغات والتجهيزات والخدمات بما يساعد على تجهيز ملف الترخيص ومراجعة المكان قبل المعاينة"
-		pAlign="center"
+		pHzAlign="center"
+		pVrAlign="center"
 		pBlurL="on"
 		pBlurP="on"
 		pPosL="45% 12% 35% 50%"
@@ -55,7 +56,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, EmoCall, EmoFaq, ReadAlso, Rel
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -63,20 +65,21 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, EmoCall, EmoFaq, ReadAlso, Rel
 			pDesc="الرسم المطلوب لترخيص العيادة يربط بين بيانات المكان وحالة التشطيب وتوزيع الفراغات وطبيعة النشاط الطبي، لذلك يجب أن يكون واضحًا ومقروءًا ومطابقًا للواقع قبل تقديمه ضمن ملف الترخيص"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
 				<Emograph
 					pTitle={Text.H3.OfText("ما وظيفة الرسم في ملف ترخيص العيادة؟")}
 					pText={Text.Body.OfText("الرسم يوضح حدود العيادة ومساحتها وتوزيع غرفها وعلاقتها بالخدمات والمداخل والفتحات. وهو يساعد جهة الفحص أو لجنة المعاينة على فهم المكان بسرعة، ومقارنة الواقع بالمستندات المقدمة بدل الاعتماد على وصف شفهي غير دقيق.")}
-					pSize={new Size(600, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(600, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.OfText("متى تحتاج إلى رسم جديد؟")}
 					pText={Text.Body.OfText("تحتاج إلى رسم جديد عند فتح عيادة لأول مرة، أو نقل العيادة إلى مقر آخر، أو تعديل توزيع الفراغات، أو تجهيز مقر قائم قبل التقديم، أو عند طلب استيفاء رسم أو كروكي أو بيان أوضح من الإدارة المختصة.")}
-					pSize={new Size(600, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(600, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</HzStack>
@@ -91,7 +94,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, EmoCall, EmoFaq, ReadAlso, Rel
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -99,7 +103,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, EmoCall, EmoFaq, ReadAlso, Rel
 			pDesc="العناصر التالية تجعل الرسم قابلًا للقراءة والمراجعة وتقلل ملاحظات الملف أثناء الفحص أو المعاينة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(20, 15)} pPad={new Pixel(30, 15)}>
 
@@ -135,7 +140,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, EmoCall, EmoFaq, ReadAlso, Rel
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -143,7 +149,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, EmoCall, EmoFaq, ReadAlso, Rel
 			pDesc="نبدأ من واقع المكان، وليس من تصور نظري، لأن الرسم الذي لا يطابق الواقع يسبب ملاحظات أثناء المعاينة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -193,7 +200,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, EmoCall, EmoFaq, ReadAlso, Rel
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray5)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Gray5)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -201,7 +209,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, EmoCall, EmoFaq, ReadAlso, Rel
 			pDesc="ليست كل العيادات تحتاج نفس مستوى التفصيل، لذلك نحدد المطلوب حسب حالة المكان ومرحلة الترخيص"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray5)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray5)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(20, 15)} pPad={new Pixel(30, 15)}>
 
@@ -237,7 +246,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, EmoCall, EmoFaq, ReadAlso, Rel
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -245,7 +255,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, EmoCall, EmoFaq, ReadAlso, Rel
 			pDesc="تسلسل العمل مصمم لتقليل الأخطاء بين المقاس المرفوع والرسم المسلم وحالة المكان وقت المعاينة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("1200px", "100%")}
@@ -273,7 +284,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, EmoCall, EmoFaq, ReadAlso, Rel
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -281,7 +293,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, EmoCall, EmoFaq, ReadAlso, Rel
 			pDesc="هذه الأخطاء لا تظهر دائمًا عند الرسم على الورق، لكنها تظهر سريعًا عند مراجعة الملف أو مطابقة الرسم على الطبيعة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(20, 15)} pPad={new Pixel(30, 15)}>
 
@@ -317,7 +330,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, EmoCall, EmoFaq, ReadAlso, Rel
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -325,26 +339,27 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, EmoCall, EmoFaq, ReadAlso, Rel
 			pDesc="الرسم الجيد لا يبالغ في التفاصيل غير المطلوبة، ولا يختصر العناصر التي تحتاجها المعاينة لفهم المقر"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
 				<Emograph
 					pTitle={Text.H3.OfText("واضح للجهة الإدارية")}
 					pText={Text.Body.OfText("نستخدم تسمية مباشرة للفراغات، وأبعادًا مقروءة، وتوزيعًا مفهومًا، حتى لا يحتاج الموظف أو المعاين إلى تفسير طويل لفهم الرسم.")}
-					pSize={new Size(400, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(400, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.OfText("مطابق للواقع")}
 					pText={Text.Body.OfText("لا يتم رسم توزيع مثالي منفصل عن حالة المكان. إذا كان الواقع يحتاج تعديلًا، يتم توضيح ذلك قبل تقديم الرسم بدل رسم حالة لن تقبلها المعاينة.")}
-					pSize={new Size(400, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(400, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.OfText("مناسب لطبيعة العيادة")}
 					pText={Text.Body.OfText("عيادة الأسنان أو الجلدية أو الباطنة أو النساء قد تختلف في احتياجها للتجهيز والخدمات. لذلك لا يتم نسخ رسم ثابت لكل الحالات.")}
-					pSize={new Size(400, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(400, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</HzStack>
@@ -362,7 +377,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, EmoCall, EmoFaq, ReadAlso, Rel
 	<ESec
 		id="cta"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -371,14 +387,15 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, EmoCall, EmoFaq, ReadAlso, Rel
 			pDesc="أرسل موقع العيادة وصور المكان وأي أبعاد متاحة، وسنوضح لك المطلوب لإعداد الرسم المناسب لملف الترخيص أو المعاينة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
 				<Emograph
 					pTitle={Text.H3.OfText("البيانات المطلوبة لبدء الرسم")}
 					pText={Text.Body.OfText("يفضل إرسال عنوان العيادة، صور واضحة من الداخل، صورة أو وصف لتوزيع الغرف الحالي، وأي مقاسات متاحة إن وجدت. إذا كانت العيادة ما زالت تحت التجهيز، يمكن مراجعة التوزيع المقترح قبل تنفيذ التشطيبات.")}
-					pSize={new Size(700, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(700, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<VrStack
@@ -391,7 +408,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, EmoCall, EmoFaq, ReadAlso, Rel
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("تواصل مباشر")}
 						pText={Text.Body.Centered.OfText("المراجعة الأولى تساعد على تحديد هل المطلوب رسم فقط، أم مراجعة توزيع وتجهيزات قبل المعاينة.")}
-						pSize={new Size(320, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(320, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<EmoCall BlackSky pText="اتصل الآن" />

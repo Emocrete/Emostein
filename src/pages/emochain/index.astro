@@ -1,7 +1,7 @@
 ---
+import { Align, Angle, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Align, Angle, Colors, DirectSize, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
-import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, FloatingPanel, GlassCard, Grid, Hero, HzStack, PriceCard, RelServiceItem, RelServices, Ribbon, SecTitle, SvgDots, TiltCard, VrStack } from "@/Widgets";
+import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, FloatingPanel, GlassCard, Grid, Hero, HzStack, PriceCard, RelServiceItem, RelServices, Ribbon, SecTitle, SvgDots, TiltCard, VrStack } from "@/Widgets";
 ---
 
 
@@ -38,10 +38,11 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 	<Hero>
 
 		<VrStack
-			pSize={new DirectSize(new NumPer("40%","95%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
 			pLoc={new Loc(new NumPer("10%","2.5%"),new NumPer("30%","12%"))}
 			pGap={new Pixel(50, 20)}
-			pAlign="Center"
+			pHzAlign="Center"
+			pVrAlign="Center"
 		>
 
 			<Emograph
@@ -69,17 +70,18 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 
 
 
-	<DuoSec
+	<DuoStr
 		id="GeneralSuppliesCompactOffer"
 		pBg={new ElemBg("#101820")}
 		pGap={new Pixel(50, 20)}
 		pPad={new Pixel(50, 20)}
-		pAlign={new Align("Center", "Center")}
+		pHzAlign={new Align("Center", "Center")}
+		pVrAlign={new Align("Center", "Center")}
 	>
 
 		<CircleGlow
 			pLoc={new Loc(new NumPer("7%", "-18%"), new NumPer("8%", "2%"))}
-			pSize={new DirectSize(new NumPer(420, 260), new NumPer(300, 240))}
+			pSize={new Size(new NumPer(420, 260), new NumPer(300, 240))}
 			pOpacity={new Percent(34, 38)}
 			pColor="rgba(167,196,92,.72)"
 			pColor2="rgba(255,255,255,.20)"
@@ -87,7 +89,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 
 		<BlurBlob
 			pLoc={new Loc(new NumPer("calc(100% - 440px)", "50%"), new NumPer("calc(100% - 320px)", "66%"))}
-			pSize={new DirectSize(new NumPer(360, 260), new NumPer(260, 220))}
+			pSize={new Size(new NumPer(360, 260), new NumPer(260, 220))}
 			pRotate={new Angle(-12, -8)}
 			pOpacity={new Percent(38, 32)}
 			pColor="rgba(50,143,232,.58)"
@@ -97,7 +99,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 
 		<SvgDots
 			pLoc={new Loc(new NumPer("calc(100% - 380px)", "calc(100% - 220px)"), new NumPer(70, 90))}
-			pSize={new DirectSize(new NumPer(300, 210), new NumPer(170, 160))}
+			pSize={new Size(new NumPer(300, 210), new NumPer(170, 160))}
 			pOpacity={new Percent(34, 30)}
 			pColor="rgba(255,255,255,.30)"
 			pGap={24}
@@ -120,14 +122,14 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 				<Emograph
 					pTitle={Text.H2.White.OfText("من الطلب حتى التسليم")}
 					pText={Text.Body.White.OfText("نخدم الشركات والمواقع والمحلات والأنشطة التجارية داخل القاهرة والجيزة في طلبات التوريد العامة: صنف واحد، قائمة مشتريات، طلب عاجل، أو مراجعة عرض مورد. دورنا أن نحول الطلب غير الواضح إلى مواصفة وسعر وشروط تسليم مفهومة قبل اعتماد الشراء.")}
-					pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+					pSize={new Size(new NumPer("100%"), new NumPer("auto"))}
 				/>
 
 				<Grid
 					pMax={3}
 					pMaxP={1}
 					pGap={new Pixel(16, 12)}
-					pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+					pSize={new Size(new NumPer("100%"), new NumPer("auto"))}
 				>
 
 					<BadgeFrame
@@ -188,7 +190,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 				pPrice="10%"
 				pPriceFnt={Text.H3.OfSize(36, 26).Bold.WithColor("#3797F5")}
 				pCurrency={Text.H3.OfSize(20, 16).Bold.OfText("من قيمة التوريد")}
-				pSize={new DirectSize(new NumPer(430, 320), new NumPer(125, 110))}
+				pSize={new Size(new NumPer(430, 320), new NumPer(125, 110))}
 			/>
 
 			<FloatingPanel
@@ -219,7 +221,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 
 		</DuoCol>
 
-	</DuoSec>
+	</DuoStr>
 
 
 
@@ -227,18 +229,19 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 
 
 
-	<DuoSec
+	<DuoStr
 		id="GeneralSuppliesOrderCta"
 		pBg={new ElemBg("#F3E8D2")}
-		pContentSize={new DirectSize(new NumPer("80%","95%"), new NumPer("auto"))}
+		pContentSize={new Size(new NumPer("80%","95%"), new NumPer("auto"))}
 		pGap={new Pixel(26, 18)}
 		pPad={new Pixel(50, 5)}
-		pAlign={new Align("Center", "Center")}
+		pHzAlign={new Align("Center", "Center")}
+		pVrAlign={new Align("Center", "Center")}
 	>
 
 		<BlurBlob
 			pLoc={new Loc(new NumPer("4%", "-20%"), new NumPer("calc(100% - 260px)", "calc(100% - 220px)"))}
-			pSize={new DirectSize(new NumPer(340, 240), new NumPer(240, 200))}
+			pSize={new Size(new NumPer(340, 240), new NumPer(240, 200))}
 			pOpacity={new Percent(24, 26)}
 			pColor="rgba(16,24,32,.35)"
 			pColor2="rgba(50,143,232,.30)"
@@ -255,14 +258,14 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 			<Emograph
 				pTitle={Text.H2.White.OfText("اطلب التوريد برسالة واحدة")}
 				pText={Text.Body.White.OfText("أرسل صورة الصنف أو قائمة المشتريات أو عرض المورد الذي تريد مراجعته. سنطلب البيانات الناقصة فقط، ثم نوضح إمكانية التنفيذ والسعر والمدة والنقل والعمولة قبل اعتماد الطلب.")}
-				pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+				pSize={new Size(new NumPer("100%"), new NumPer("auto"))}
 			/>
 
 			<Grid
 				pMax={2}
 				pMaxP={1}
 				pGap={new Pixel(14, 12)}
-				pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+				pSize={new Size(new NumPer("100%"), new NumPer("auto"))}
 			>
 
 				<BadgeFrame
@@ -310,7 +313,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 
 				<Emograph
 					pText={Text.Body.WithColor("#101820").OfText("نقوم بتنفيذ وإدارة طلبات التوريد العمومية لصالح الشركات والمواقع والمحلات داخل القاهرة والجيزة، بداية من فهم المطلوب وضبط المواصفة وحتى عرض السعر وتنسيق التسليم، مقابل عمولة إدارة 10% من قيمة التوريد بعد اعتماد العرض.")}
-					pSize={new DirectSize(new NumPer("100%"), new NumPer("auto"))}
+					pSize={new Size(new NumPer("100%"), new NumPer("auto"))}
 				/>
 
 				<FloatingPanel
@@ -338,7 +341,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 
 		</DuoCol>
 
-	</DuoSec>
+	</DuoStr>
 
 
 
@@ -349,7 +352,8 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 	<ESec
 		hidden
 		pBg={new ElemBg(Colors.Creamy)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -361,7 +365,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(620, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(620, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.OfText("ما الذي يشتريه العميل فعليًا؟")}
 				pText={Text.Body.OfText(`عندما تحتاج شركة أو موقع تنفيذ أو محل تجاري أو مكتب إداري إلى شراء أصناف متفرقة، فإن المشكلة لا تكون دائمًا في وجود الصنف داخل السوق. المشكلة الأكبر غالبًا تكون في تحديد الصنف الصحيح، والوصول إلى مورد مناسب، ومقارنة السعر بالمواصفة، وترتيب النقل، والتأكد من أن ما يصل إلى العميل هو ما تم طلبه بالفعل. من هنا تأتي خدمة التوريدات العمومية باعتبارها خدمة عملية لإدارة طلبات الشراء والتوريد، وليست مجرد وسيط يبيع منتجًا ثم ينتهي دوره.
 
@@ -397,13 +401,14 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 		<EmoStrip
 			hidden
 			pBg={new ElemBg("#111820")}
-			pAlign={Align.Center}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 				<Emograph
-					pSize={new Size(600, "auto", 320, "auto")}
+					pSize={new Size(new NumPer(600, 320), new NumPer("auto", "auto"))}
 					pTitle={Text.H3.WithColor(Colors.GreenLite).OfText("المشكلة لا تبدأ عند التسليم")}
 					pText={Text.Body.White.OfText(`تبدو طلبات التوريد في ظاهرها بسيطة: صنف مطلوب، كمية محددة، وسعر يتم الاتفاق عليه. لكن الواقع العملي مختلف. كثير من الخلافات في الشراء لا تنتج عن سوء نية بقدر ما تنتج عن طلب غير محدد، أو مواصفة ناقصة، أو افتراضات لم تُكتب بوضوح. قد يطلب العميل مستلزمات مكتب، فيفهم المورد نوعًا معينًا من الجودة بينما يتوقع العميل درجة أخرى. وقد يطلب خامة تشطيب دون تحديد المقاس أو اللون أو طريقة الاستخدام، فتصل خامة صالحة في ذاتها لكنها غير مناسبة للمكان. وقد يحصل العميل على سعر جيد ظاهريًا، ثم يكتشف أن النقل أو الضريبة أو التحميل أو التركيب غير مشمول.
 
@@ -443,7 +448,8 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 	<ESec
 		hidden
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -455,7 +461,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(620, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(620, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.OfText("إدارة طلب شراء لا بيع صنف فقط")}
 				pText={Text.Body.OfText(`التوريدات العمومية هي خدمة توفير أصناف ومنتجات ومستلزمات يحتاجها العميل لأغراض التشغيل أو التجهيز أو التنفيذ أو الصيانة أو الإدارة، مع إدارة جزء من عملية البحث والمقارنة والتنسيق بدل أن يتحملها العميل بالكامل. كلمة عمومية هنا لا تعني أن الخدمة بلا حدود أو أنها تتعهد بتوفير أي سلعة تحت أي شرط، لكنها تعني أن نطاق الطلبات واسع ولا يقتصر على فئة واحدة من المنتجات.
 
@@ -519,7 +525,8 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 	<ESec
 		hidden
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -535,7 +542,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 		>
 
 			<Emograph
-				pSize={new Size(1100, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1100, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.Centered.OfText("الاختلاف ليس في السلعة فقط، بل في سبب الشراء")}
 				pText={Text.Body.OfText(`تخدم التوريدات العمومية أكثر من نوع من العملاء، لكن كل عميل يدخل إلى الصفحة بدافع مختلف. لذلك لا يكفي أن تقول الصفحة إن الخدمة مناسبة للشركات والأفراد، بل يجب أن تشرح كيف يستفيد كل نوع عميل وما المشكلة التي يحاول حلها. فالشركة لا تفكر مثل صاحب محل قبل الافتتاح، والمقاول لا يقلقه ما يقلق إدارة مكتب، والعميل الفردي قد يحتاج إلى مساعدة في فهم اسم الصنف قبل أن يحتاج إلى سعر.
 
@@ -558,7 +565,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 			/>
 
 			<Emograph
-				pSize={new Size(1100, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1100, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.Centered.OfText("القاسم المشترك بين هذه الحالات")}
 				pText={Text.Body.OfText(`القاسم المشترك بين هؤلاء العملاء ليس نوع السلعة، بل الحاجة إلى جهة تساعد في تحويل الطلب إلى عملية شراء أكثر تنظيمًا. لذلك تظل الصفحة عامة في نطاقها، لكنها دقيقة في شرح آلية الخدمة وحدودها. لا يتم إغراق الزائر بقائمة منتجات متنافرة، ولا يتم تقديم وعود مفتوحة. يتم توجيهه إلى طريقة إرسال الطلب، والبيانات التي تساعد على التسعير، والمخاطر التي يمكن تقليلها، وحدود ما يمكن الالتزام به.`)}
 			/>
@@ -575,7 +582,8 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 
 	<ESec hidden>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack
 				pWidth={new Pixel(1300, 340)}
@@ -584,7 +592,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 			>
 
 				<Emograph
-					pSize={new Size(1100, "auto", 320, "auto")}
+					pSize={new Size(new NumPer(1100, 320), new NumPer("auto", "auto"))}
 					pTitle={Text.H3.Centered.OfText("لكل شكل طلب طريقة تعامل مختلفة")}
 					pText={Text.Body.OfText(`ليست كل طلبات التوريد متشابهة. بعض الطلبات يبدأ بصنف واحد واضح، وبعضها يبدأ بقائمة طويلة، وبعضها يبدأ بصورة، وبعضها يبدأ بعرض سعر يحتاج إلى مراجعة، وبعضها عاجل لدرجة أن معيار الوقت يصبح أهم من البحث الطويل عن أقل سعر. فهم نوع الطلب يساعد على تحديد طريقة التعامل معه، ويمنع استخدام نفس المسار لكل الحالات.
 
@@ -623,7 +631,8 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 	<ESec
 		hidden
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -655,7 +664,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 			/>
 
 			<Emograph
-				pSize={new Size(630, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(630, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.OfText("لماذا لا نبدأ بالسعر مباشرة؟")}
 				pText={Text.Body.OfText(`تنفيذ طلب التوريد الجيد يحتاج إلى مسار واضح. العميل الذي يزور الصفحة يجب أن يعرف ماذا سيحدث بعد أن يرسل رسالته. الوضوح في هذه المرحلة يقلل القلق ويزيد احتمالات التواصل، لأن كثيرًا من العملاء يترددون عندما لا يعرفون هل طلبهم مكتمل أم لا، أو هل سيتم تجاهله لأنه غير منظم. لذلك يجب شرح رحلة الطلب بلغة بسيطة ومهنية.
 
@@ -677,7 +686,8 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 	<ESec
 		hidden
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -689,7 +699,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(610, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(610, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.OfText("السعر يحتاج سياقًا")}
 				pText={Text.Body.OfText(`كثير من العملاء يرسلون سؤالًا مختصرًا مثل: كم سعر هذا الصنف؟ أو هل متوفر؟ ثم يرفقون صورة أو اسمًا عامًا. هذا مفهوم تمامًا، لكنه لا يكفي دائمًا لإعطاء سعر قابل للتنفيذ. التسعير الجيد يحتاج إلى معلومات أساسية، لأن السعر لا يتأثر بالصنف وحده، بل يتأثر بالكمية ومكان التسليم ووقت التوريد والفاتورة وشروط النقل والبدائل المقبولة.
 
@@ -730,7 +740,8 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 
 	<ESec hidden>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack
 				pWidth={new Pixel(1300, 340)}
@@ -739,7 +750,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 			>
 
 				<Emograph
-					pSize={new Size(1100, "auto", 320, "auto")}
+					pSize={new Size(new NumPer(1100, 320), new NumPer("auto", "auto"))}
 					pTitle={Text.H3.Centered.OfText("المخاطرة ليست نظرية")}
 					pText={Text.Body.OfText(`التوريد العشوائي لا يعني بالضرورة التعامل مع مورد سيئ. أحيانًا يكون المورد جيدًا، لكن الطلب نفسه غير واضح. وأحيانًا يكون السعر مناسبًا، لكن شروط التسليم غير مكتوبة. وأحيانًا يكون المنتج صحيحًا، لكن الكمية أو المقاس أو التوقيت غير مناسب. لذلك فإن تقليل المخاطر لا يعتمد على الثقة وحدها، بل على توضيح التفاصيل التي يمكن أن تتحول إلى خلاف لاحقًا.
 
@@ -778,7 +789,8 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 	<ESec
 		hidden
 		pBg={new ElemBg(Colors.Creamy)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -811,7 +823,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 			/>
 
 			<Emograph
-				pSize={new Size(1100, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1100, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.Centered.OfText("الهدف من الأمثلة")}
 				pText={Text.Body.OfText(`هذه الأمثلة لا تحصر الخدمة في حالات محددة، لكنها توضح أن التوريدات العمومية بطبيعتها تتعامل مع طلبات متنوعة بشرط أن يتم تنظيمها. العميل قد يرسل صنفًا واحدًا، أو قائمة طويلة، أو صورة غير واضحة، أو عرض سعر يحتاج مراجعة، أو احتياجًا دوريًا. دور الخدمة هو تحويل هذه البداية إلى طلب يمكن بحثه وتسعيره ومتابعته بصورة أفضل.`)}
 			/>
@@ -829,7 +841,8 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 	<ESec
 		hidden
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -841,7 +854,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(620, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(620, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.OfText("الاسم لا يكفي للتسعير")}
 				pText={Text.Body.OfText(`التسعير في التوريدات العمومية لا يصح أن يعتمد على اسم الصنف وحده. الاسم بداية فقط، وليس قرارًا. قد يحمل صنفان الاسم نفسه لكنهما يختلفان في الجودة أو المقاس أو الكمية أو بلد المنشأ أو العبوة أو الضمان أو شروط التسليم. لذلك فإن السعر المهني هو السعر المرتبط بمواصفة وشروط واضحة، لا السعر الذي يقال للعميل بسرعة ثم يتغير عند التنفيذ.
 
@@ -882,12 +895,13 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 
 	<ESec hidden>
 
-		<EmoStrip pBg={new ElemBg("#111820")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#111820")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 				<Emograph
-					pSize={new Size(620, "auto", 320, "auto")}
+					pSize={new Size(new NumPer(620, 320), new NumPer("auto", "auto"))}
 					pTitle={Text.H3.WithColor(Colors.GreenLite).OfText("الشفافية هي أساس التعامل")}
 					pText={Text.Body.White.OfText(`في عالم المعاملات التجارية بين الشركات والمواقع والأنشطة، لا يكفي الاعتماد على الثقة الشفهية. بناء علاقة مستدامة يتطلب عروضًا واضحة ومعايير عمل تحمي حقوق العميل ومقدم الخدمة معًا. أول هذه المعايير هو توضيح المواصفة قبل السعر النهائي. لا يتحول الطلب الغامض إلى سعر نهائي لمجرد استعجال العميل. يمكن إعطاء تقدير مبدئي عند الحاجة، لكن يجب توضيح أن السعر النهائي مرتبط باستكمال البيانات.
 
@@ -924,7 +938,8 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 	<ESec
 		hidden
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -936,7 +951,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(620, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(620, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.OfText("الخدمة واسعة لكنها ليست بلا شروط")}
 				pText={Text.Body.OfText(`الصفحة الجيدة لا تكتفي بذكر ما تستطيع الخدمة فعله، بل تذكر أيضًا حدودها. فالعميل الجاد يقدر الوضوح، ومقدم الخدمة الجاد لا يريد أن يبني توقعات غير قابلة للتنفيذ. التوريدات العمومية مجال واسع، وإذا لم يتم وضع حدود واضحة فقد تتحول الصفحة إلى باب لطلبات غير مناسبة أو غير قانونية أو غير مجدية اقتصاديًا.
 
@@ -977,7 +992,8 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 		hidden
 		id="SupplyRequest"
 		pBg={new ElemBg("#111820")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -993,7 +1009,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 		>
 
 			<Emograph
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.Centered.WithColor(Colors.GreenLite).OfText("ابدأ بما تملكه من بيانات")}
 				pText={Text.Body.White.OfText(`إذا كان لديك صورة صنف، أرسل الصورة مع الكمية التقريبية ومكان التسليم. الصورة تساعد في بدء البحث، لكن إضافة الاستخدام أو المقاس يجعل النتيجة أدق. إذا كان الصنف له موديل أو رقم أو علامة ظاهرة، حاول تصويرها بوضوح. إذا كانت لديك قائمة مشتريات، أرسلها كما هي حتى لو كانت غير مرتبة. يمكن بعد ذلك تصنيف البنود وتحديد ما يحتاج توضيحًا. الأفضل أن تذكر هل القائمة مرتبطة بشركة أو محل أو موقع أو تجهيز مكان جديد، لأن الغرض يساعد في فهم الأولويات.
 
@@ -1028,7 +1044,8 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 	<ESec
 		hidden
 		pBg={new ElemBg(Colors.Creamy)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1040,7 +1057,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(620, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(620, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.OfText("لماذا لا تكفي فكرة المورد؟")}
 				pText={Text.Body.OfText(`في التوريد العادي يكون مركز الخدمة هو الصنف نفسه: هل هو متوفر؟ كم سعره؟ متى يمكن تسليمه؟ وهذه الأسئلة مهمة، لكنها لا تكفي عندما يكون الطلب جزءًا من تشغيل شركة أو تجهيز محل أو تنفيذ مشروع أو صيانة عاجلة. في هذه الحالات يصبح الصنف عنصرًا داخل دورة أكبر تشمل البحث، والتحقق، والاعتماد، والنقل، والمستندات، والاستلام، وإمكانية الاستبدال. لذلك قد يكون المورد قادرًا على بيع المنتج، لكنه لا يدير بالضرورة قرار الشراء كله.
 
@@ -1073,12 +1090,13 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 
 	<ESec hidden>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 				<Emograph
-					pSize={new Size(620, "auto", 320, "auto")}
+					pSize={new Size(new NumPer(620, 320), new NumPer("auto", "auto"))}
 					pTitle={Text.H3.OfText("الاختيارات كثيرة ولكن القرار يحتاج ضبطًا")}
 					pText={Text.Body.OfText(`يظن بعض العملاء أن وجود عدد كبير من الموردين داخل القاهرة والجيزة يجعل عملية الشراء سهلة تلقائيًا. الواقع أن كثافة السوق تعطي فرصًا أفضل، لكنها تخلق أيضًا تحديات في المقارنة والمتابعة. قد يجد العميل عشرات الأسعار للصنف نفسه، لكنه لا يعرف هل هذه الأسعار تتحدث عن نفس الجودة ونفس الكمية ونفس طريقة التسليم. وقد يكون الصنف متوفرًا في منطقة بعيدة داخل نفس المحافظة، لكن تكلفة نقله أو زمن وصوله يجعلان العرض أقل ملاءمة من بديل أقرب وأكثر وضوحًا.
 
@@ -1120,7 +1138,8 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 	<ESec
 		hidden
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1136,7 +1155,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 		>
 
 			<Emograph
-				pSize={new Size(1120, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1120, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.Centered.OfText("كيف تتحول القائمة إلى طلب قابل للتنفيذ؟")}
 				pText={Text.Body.OfText(`قوائم المشتريات الخاصة بالمشروعات أو التجهيزات الجديدة قد تبدو في البداية مجرد جدول يحتوي على أسماء وكميات. لكن عند التطبيق تظهر أسئلة كثيرة: هل كل بند مكتوب بوحدة قياس واضحة؟ هل يوجد تكرار بأسماء مختلفة لنفس الصنف؟ هل بعض البنود تحتاج ماركة محددة وبعضها يقبل بدائل؟ هل يمكن توريد القائمة من مصدر واحد أم من الأفضل تقسيمها؟ هل الكميات نهائية أم تقديرية؟ وهل التسليم مطلوب دفعة واحدة أم حسب مراحل العمل؟
 
@@ -1171,7 +1190,8 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 	<ESec
 		hidden
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1183,7 +1203,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(620, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(620, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.OfText("عندما يصبح النفاد نمطًا متكررًا")}
 				pText={Text.Body.OfText(`كثير من الشركات والأنشطة لا تعاني من صعوبة شراء الصنف مرة واحدة، بل من تكرار نفس دورة الشراء كل فترة. تنفد مستهلكات تشغيل، أو أدوات صيانة، أو مواد تعبئة، أو أصناف إدارية، فيبدأ الموظفون في البحث والاتصال والشراء العاجل. يتكرر المشهد كل أسبوع أو شهر، ومعه تتكرر نفس الخسارة: وقت ضائع، أسعار غير ثابتة، موردون مختلفون، وفواتير متعددة.
 
@@ -1222,12 +1242,13 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 
 	<ESec hidden>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 				<Emograph
-					pSize={new Size(620, "auto", 320, "auto")}
+					pSize={new Size(new NumPer(620, 320), new NumPer("auto", "auto"))}
 					pTitle={Text.H3.OfText("العرض الأرخص ليس دائمًا العرض الأوضح")}
 					pText={Text.Body.OfText(`كثير من العملاء يصلون إلى مرحلة متقدمة من الشراء قبل أن يكتشفوا أن عرض السعر الذي حصلوا عليه لا يكفي للاعتماد. قد يحتوي العرض على اسم الصنف والسعر فقط، دون توضيح الكمية الدقيقة أو وحدة القياس أو تكلفة النقل أو مدة التوريد أو الضريبة أو سياسة الاستبدال. وقد يكون السعر منخفضًا لأن جزءًا مهمًا من الخدمة غير مشمول، أو لأن المواصفة أقل مما يتوقعه العميل.
 
@@ -1270,7 +1291,8 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 	<ESec
 		hidden
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1299,7 +1321,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 			/>
 
 			<Emograph
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.Centered.OfText("خلاصة الصفحة")}
 				pText={Text.Body.OfText(`إذا كان لديك طلب توريد عام، فلا تبدأ بالسؤال عن السعر فقط. ابدأ بتجميع ما تعرفه عن الصنف: صورة، اسم، كمية، استخدام، مكان التسليم، والموعد المطلوب. بعد ذلك يمكن تحويل الطلب إلى صورة أوضح تساعد على البحث والمقارنة والتسعير. خدمة التوريدات العمومية مصممة لتقليل الوقت الضائع في البحث العشوائي، وتقليل أخطاء المواصفة، وتوضيح التكلفة قبل اعتماد الشراء.
 
@@ -1321,7 +1343,8 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 	<ESec
 		hidden
 		pBg={new ElemBg(Colors.Gray1)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -1333,7 +1356,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.OfText("لا نعرض كتالوجًا وهميًا")}
 				pText={Text.Body.OfText(`أضعف معالجة لصفحة توريدات عمومية هي تحويلها إلى قائمة طويلة من أصناف لا يجمعها منطق واضح. رص أسماء منتجات كثيرة قد يعطي انطباعًا أوليًا بالاتساع، لكنه لا يجيب عن أسئلة العميل المهمة: كيف أرسل طلبي؟ من يراجع المواصفة؟ هل السعر يشمل النقل؟ هل يمكن البحث بالصورة؟ ماذا يحدث إذا لم يتوفر الصنف؟ وكيف أعرف أن العرض قابل للمقارنة؟ لذلك لا تكون الصفحة القوية قائمة منتجات، بل دليل خدمة يوضح طريقة تحويل الاحتياج إلى طلب توريد قابل للتنفيذ.
 
@@ -1341,7 +1364,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoSec, EmoCall, Emo
 			/>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.OfText("نركز على قرار الشراء")}
 				pText={Text.Body.OfText(`المحتوى الجيد في هذه الصفحة يجب أن يساعد الزائر على اتخاذ خطوة عملية: إرسال صورة، ترتيب قائمة، مراجعة عرض مورد، أو تحديد بيانات طلب عاجل. لذلك لا يتم تكرار نفس الفكرة في أكثر من قسم، ولا يتم استخدام عناوين تبدو كبيرة لكنها لا تضيف معلومة. كل قسم له وظيفة: قسم يشرح المشكلة، قسم يعرف الخدمة، قسم يوضح أنواع الطلبات، قسم يبين مسار العمل، قسم يعالج المخاطر، وقسم يدفع العميل إلى إرسال بياناته بالطريقة الصحيحة.
 

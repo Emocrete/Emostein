@@ -1,10 +1,10 @@
 ---
+import { Loc, NumPer, RespString, Size } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import { Size, Location, RespString } from "@/TypesLib";
-import { FreeHeroKeyPoint } from "./FreeHeroMotion";
+import { MovingKeyPoint } from "./FreeHeroMotion";
 
 export interface Props extends DebugOutlineProps, HTMLAttributes<"div"> {
-	pKeyPoints?: FreeHeroKeyPoint[];
+	pKeyPoints?: MovingKeyPoint[];
 	pIntervals?: number[];
 	pDelay?: number;
 	pEase?: string;
@@ -30,8 +30,8 @@ pViewTarget?: "self" | "parent";
 
 const {
 	pKeyPoints = [
-		new FreeHeroKeyPoint(
-			new Location(0, 0, 0, 0),
+		new MovingKeyPoint(
+			new Loc(new NumPer(0, 0), new NumPer(0, 0)),
 			new Size(),
 			"0deg",
 			1
@@ -68,7 +68,7 @@ pViewTarget = "parent",
 
 const cSafeKeyPoints = pKeyPoints.length > 0
 	? pKeyPoints
-	: [new FreeHeroKeyPoint(new Location(0, 0, 0, 0), new Size(), "0deg", 1)];
+	: [new MovingKeyPoint(new Loc(new NumPer(0, 0), new NumPer(0, 0)), new Size(), "0deg", 1)];
 
 const cFirstPoint = cSafeKeyPoints[0];
 const cFirstRotateL = cFirstPoint.Rotate instanceof RespString ? cFirstPoint.Rotate.Landscape : cFirstPoint.Rotate;

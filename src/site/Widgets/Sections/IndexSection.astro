@@ -1,9 +1,9 @@
 ---
 import type { HTMLAttributes } from "astro/types";
-import { RespString, Text, ElemBg, EmoMediaData ,Size,Align, Colors, Place, type PlaceProps } from "@/TypesLib";
-import {BgMedia,RespImg,Stack} from "@/Widgets";
+import { EmoMediaData, Pixel, Place, type PlaceProps } from "@/TypesLib";
+import Stack from "../Comp/Stack.astro";
 
-export interface Props  extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
+export interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps {
 	pMedia?: EmoMediaData;
 	pTitleClr?: string;
 	pBlurL?: "auto" | "on" | "off";
@@ -45,7 +45,6 @@ const {
 	pMoveViewMargin,
 	pMoveViewTarget,
 
-
 	id: pGivenID = GetWidgetId("IndexSec"),
 	class: pGivenClass = "",
 	style: pGivenStyle = "",
@@ -86,35 +85,38 @@ const cPlace = new Place(Astro.props as PlaceProps, CssVars);
 	style = {cPlace.Style}
 	id={pGivenID}
 	{...RemAttr}
-	data-hero-l={pMedia?.LinkL}
-	data-hero-p={pMedia?.LinkP}
 	data-blur-l={pBlurL}
 	data-blur-p={pBlurP}
 >
 
-	{ pMedia?.Type ==="Vid" ? (
+	{ pMedia?.Type === "Vid" ? (
 
 		<video
 			class = " IndexSecBgBox IndexSecBgImg "
-			id="BgVid"
 			crossorigin="anonymous"
 			playsinline
 			preload="auto"
 			loop
 			autoplay
 			muted
-			src={pMedia.LinkL}
 		>
+
+			<source media="(orientation: portrait)" src={pMedia.LinkP} />
+
+			<source media="(orientation: landscape)" src={pMedia.LinkL} />
+
+			<source src={pMedia.LinkL} />
 
 		</video>
 
-		) : pMedia?.Type ==="Img" ? (
+		) : pMedia?.Type === "Img" ? (
 
 			<picture class = " IndexSecBgBox ">
 
+				<source media="(orientation: portrait)" srcset={pMedia.LinkP} />
+
 				<img
 					class = " IndexSecBgImg "
-					style = " object-fit : cover "
 					src={pMedia.LinkL}
 					alt={pMedia.Alt}
 					loading="lazy"
@@ -125,17 +127,34 @@ const cPlace = new Place(Astro.props as PlaceProps, CssVars);
 
 			) : (
 
-				<div class = " IndexSecBgBox BgFallback ">
-
-				</div>
+				<div class = " IndexSecBgBox BgFallback " />
 
 			) }
 
-		<Stack pDir="Row" pAlign="Center" pGap="50px">
+		<Stack
+			class = " IndexSecContentBox "
+			pDir="Row"
+			pHzAlign="Center"
+			pVrAlign="Center"
+			pGap={new Pixel(50, 12)}
+			pPad="0px"
+			pMainSizeMode="Own"
+			pCrossSizeMode="Own"
+		>
 
-			<Stack pDir="Col" pAlign="Center" pGap="0px">
+			<Stack
+				class = " IndexSecTitleBox "
+				pDir="Col"
+				pHzAlign="Center"
+				pVrAlign="Center"
+				pGap={new Pixel(0)}
+				pPad="0px"
+				pMainSizeMode="Own"
+				pCrossSizeMode="Own"
+			>
 
 				<img
+					class = " IndexSecIcon "
 					src="/Media/IndexIcon.webp"
 					alt=""
 					loading="lazy"
@@ -151,7 +170,16 @@ const cPlace = new Place(Astro.props as PlaceProps, CssVars);
 
 			</Stack>
 
-			<Stack pDir="Row" pAlign="Center" pGap="50px">
+			<Stack
+				class = " IndexSecLinksBox "
+				pDir="Row"
+				pHzAlign="Center"
+				pVrAlign="Center"
+				pGap={new Pixel(50, 8)}
+				pPad="0px"
+				pMainSizeMode="Own"
+				pCrossSizeMode="Own"
+			>
 
 				<slot />
 
@@ -185,16 +213,15 @@ const cPlace = new Place(Astro.props as PlaceProps, CssVars);
 
 
 	.IndexSecBox {
-		width: 100%;
 		position: relative;
+		isolation: isolate;
 		display: flex;
-		overflow: hidden;
-		padding-top: 30px;
-		padding-bottom: 30px;
 		align-items: center;
-		align-content: center;
 		justify-content: center;
-		justify-items: center;
+		box-sizing: border-box;
+		width: 100%;
+		padding-block: 30px;
+		overflow: hidden;
 	}
 
 
@@ -202,6 +229,11 @@ const cPlace = new Place(Astro.props as PlaceProps, CssVars);
 		position: absolute;
 		inset: 0;
 		z-index: 0;
+		display: block;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+		user-select: none;
 	}
 
 
@@ -213,52 +245,124 @@ const cPlace = new Place(Astro.props as PlaceProps, CssVars);
 	}
 
 
-	.IndexSecContentBox {
-		position: relative;
-		z-index: 1;
-		box-sizing: border-box;
-		display: flex;
-		align-content: center;
-		align-items: center;
-		justify-content: center;
-		width: 100%;
-	}
-
-	.IndexSecContentBox > div:first-child {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		text-align: center;
-	}
-
-	@media (orientation: portrait) {
-		.IndexSecContentBox > div:first-child {
-			align-items: center;
-			text-align: center;
-			flex-direction: column;
-		}
-	}
-
-
 	.BgFallback {
 		background: #808080;
 	}
 
 
+	.IndexSecIcon {
+		display: block;
+		width: 136px;
+		height: auto;
+		flex: 0 0 auto;
+	}
+
+
 	.IndexSecTitle {
+		margin: 0;
 		font-size: clamp(25px, 3vw, 35px);
+		font-weight: 800;
+		line-height: 1.15;
 		color: var(--TitleClr);
 		text-align: center;
 	}
 
 
 
-	.IndexSecContentBox.isBlur {
-		background: rgba(255, 255, 255, 0.2);
+	:global(.IndexSecContentBox) {
+		position: relative;
+		z-index: 1;
+		box-sizing: border-box;
+		width: min(100%, 980px) !important;
+		height: auto !important;
+	}
+
+
+	:global(.IndexSecTitleBox) {
+		flex: 0 0 auto !important;
+	}
+
+
+	:global(.IndexSecLinksBox) {
+		width: fit-content !important;
+		max-width: 100% !important;
+	}
+
+
+	:global(.IndexSecLinksBox > .VrStack) {
+		width: fit-content !important;
+		max-width: 100% !important;
+		padding: 0 !important;
+		gap: 10px !important;
+		align-items: center !important;
+	}
+
+
+	:global(.IndexSecLinksBox .Btn) {
+		width: min(360px, calc(100vw - 48px)) !important;
+	}
+
+
+	:global(.IndexSecContentBox.isBlur) {
+		background: rgba(0, 0, 0, 0.28);
 		backdrop-filter: blur(10px);
 		-webkit-backdrop-filter: blur(10px);
 		border-radius: 20px;
-		padding: clamp(16px, 2vw, 28px);
+		padding: clamp(16px, 2vw, 28px) !important;
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.IndexSecBox {
+			padding-block: 14px;
+		}
+
+		:global(.IndexSecContentBox) {
+			width: min(100%, 320px) !important;
+		}
+
+		.IndexSecIcon {
+			width: 100px;
+		}
+
+		.IndexSecTitle {
+			font-size: 22px;
+		}
+
+		:global(.IndexSecLinksBox > .VrStack) {
+			gap: 6px !important;
+		}
+
+		:global(.IndexSecLinksBox .Btn) {
+			height: 36px !important;
+			min-height: 36px !important;
+		}
 	}
 
 
@@ -285,298 +389,52 @@ const cPlace = new Place(Astro.props as PlaceProps, CssVars);
 
 
 <script is:inline>
-	(function InitContentSecResponsiveScript() {
-	/**
-	* ============================================================
-	* السكريبت ده مسؤول عن إدارة سلوك الـ Hero Section ديناميكيًا
-	* حسب اتجاه الشاشة ونسبة أبعادها.
-	*
-	* الوظائف الأساسية:
-	* 1) اختيار صورة الخلفية المناسبة:
-	*    - صورة للوضع الأفقي Landscape
-	*    - صورة للوضع الرأسي Portrait
-	*
-	* 2) ضبط موضع صندوق النص TitleBox
-	*    اعتمادًا على data attributes مختلفة لكل اتجاه.
-	*
-	* 3) تحديد هل يتم تفعيل تأثير البلور isBlur أم لا،
-	*    بناءً على:
-	*    - أمر مباشر: on / off
-	*    - أو وضع تلقائي auto يعتمد على مقارنة نسبة الشاشة
-	*      الحالية بالنسبة المستهدفة مع هامش سماح محدد.
-	*
-	* 4) إعادة الحساب عند:
-	*    - تغيير حجم النافذة resize
-	*    - تغيير اتجاه الجهاز orientationchange
-	*
-	* ملاحظة:
-	* السكريبت يفترض وجود عنصر رئيسي يحمل الكلاس .SecBox
-	* وداخله عنصر .TitleBox وعنصر صورة .BgImg
-	* ============================================================
-	*/
-
-	/**
-	* النسبة المرجعية المستهدفة للوضع الأفقي.
-	* تستخدم عند مقارنة Ratio الشاشة الحالية لتحديد
-	* هل الشكل قريب من التصميم المثالي أم لا.
-	*/
+	(function InitIndexSecResponsiveScript() {
 	const cTargetRatioL = 16 / 9;
-
-	/**
-	* النسبة المرجعية المستهدفة للوضع الرأسي.
-	*/
 	const cTargetRatioP = 9 / 20;
-
-	/**
-	* هامش السماح المسموح به في الوضع الأفقي.
-	* لو الفرق بين نسبة الشاشة الحالية والنسبة المستهدفة
-	* أكبر من هذه القيمة، يتم اعتبار ذلك انحرافًا واضحًا.
-	*/
 	const cTolL = 0.12;
-
-	/**
-	* هامش السماح في الوضع الرأسي.
-	* وهو أصغر من الوضع الأفقي لأن التصميم الرأسي هنا
-	* يبدو أنه حساس أكثر للفروق في النسبة.
-	*/
 	const cTolP = 0.035;
-
-	/**
-	* عنصر الـ Hero الرئيسي.
-	*
-	* متوقع أن يحمل data attributes مثل:
-	* - data-hero-l : رابط صورة الأفقي
-	* - data-hero-p : رابط صورة الرأسي
-	* - data-pos-l  : inset لصندوق العنوان في الأفقي
-	* - data-pos-p  : inset لصندوق العنوان في الرأسي
-	* - data-blur-l : وضع البلور في الأفقي
-	* - data-blur-p : وضع البلور في الرأسي
-	*/
-	const cHeroElem = document.querySelector(".IndexSecBox");
-
-	/**
-	* صندوق العنوان/المحتوى النصي داخل الـ Hero.
-	* يتم تحريك مكانه باستخدام style.inset
-	* ويتم إضافة أو إزالة الكلاس isBlur عليه.
-	*/
-	const cTitleBoxElem = cHeroElem?.querySelector(".IndexSecContentBox");
-
-	/**
-	* عنصر الصورة الخلفية داخل الـ Hero.
-	* يتم تغيير خاصية src له حسب اتجاه الشاشة.
-	*/
-	const cImgElem = cHeroElem?.querySelector(".IndexSecBgImg");
-
-	/**
-	* مؤقت يستخدم لتنفيذ Debounce أثناء resize/orientationchange
-	* حتى لا تتكرر إعادة الحساب مرات كثيرة جدًا خلال فترة قصيرة.
-	*/
 	let fTimer = 0;
 
-	/**
-	* لو العناصر الأساسية غير موجودة، لا يوجد سبب لمواصلة التشغيل.
-	* نخرج مبكرًا لمنع أي أخطاء runtime.
-	*/
-	if (!cHeroElem || !cTitleBoxElem || !cImgElem) return;
+	const cSections = Array.from(document.querySelectorAll(".IndexSecBox"));
+	if (cSections.length === 0) return;
 
-	/**
-	* ------------------------------------------------------------
-	* تسجيل الـ Event Listeners
-	* ------------------------------------------------------------
-	*/
+	window.addEventListener("resize", RefreshIndexSections);
+	window.addEventListener("orientationchange", RefreshIndexSections);
 
-	window.addEventListener("resize", RefreshHeroStates);
-	window.addEventListener("orientationchange", RefreshHeroStates);
+	UpdateIndexSections();
 
-	/**
-	* ------------------------------------------------------------
-	* التشغيل الأولي
-	* ------------------------------------------------------------
-	* ننفذ تحديثًا فوريًا بمجرد تحميل السكريبت
-	* حتى تتضبط حالة الهيرو من أول لحظة.
-	*/
-	UpdateHeroState();
-
-	/**
-	* يعيد جدولة تحديث حالة الهيرو مع Debounce.
-	*
-	* لماذا؟
-	* لأن resize قد يطلق الحدث مرات كثيرة جدًا خلال السحب،
-	* وبالتالي الأفضل أن ننتظر قليلًا ثم ننفذ مرة واحدة.
-	*/
-	function RefreshHeroStates() {
+	function RefreshIndexSections() {
 	clearTimeout(fTimer);
-	fTimer = window.setTimeout(UpdateHeroState, 80);
+	fTimer = window.setTimeout(UpdateIndexSections, 80);
 	}
 
-	/**
-	* الدالة المركزية التي:
-	* 1) تحسب نسبة الشاشة الحالية
-	* 2) تحدد هل الاتجاه الحالي أفقي أم رأسي
-	* 3) تستدعي الدالة المناسبة لكل حالة
-	*/
-	function UpdateHeroState() {
-	const cScrRatio = GetScreenRatio();
+	function UpdateIndexSections() {
 	const cIsLandscape = window.innerWidth >= window.innerHeight;
+	const cRatio = window.innerWidth / Math.max(window.innerHeight, 1);
+	const cTargetRatio = cIsLandscape ? cTargetRatioL : cTargetRatioP;
+	const cTol = cIsLandscape ? cTolL : cTolP;
 
-	if (cIsLandscape) {
-	UpdateLandscape(cScrRatio);
-	return;
+	for (const cSection of cSections) {
+	const cContentBox = cSection.querySelector(".IndexSecContentBox");
+	if (!cContentBox) continue;
+
+	const cBlurMode = cIsLandscape
+	? cSection.dataset.blurL || "auto"
+	: cSection.dataset.blurP || "auto";
+
+	cContentBox.classList.toggle(
+	"isBlur",
+	IsNeedBlur(cBlurMode, cRatio, cTargetRatio, cTol)
+	);
+	}
 	}
 
-	UpdatePortrait(cScrRatio);
-	}
-
-	/**
-	* تحسب نسبة الشاشة الحالية بعد محاولة توحيد
-	* اتجاه العرض والارتفاع مع اتجاه الواجهة الحالي.
-	*
-	* المنطق:
-	* - نقرأ window.screen.width / height
-	* - نقرأ هل الواجهة الحالية أفقية أم رأسية من innerWidth / innerHeight
-	* - لو ترتيب أبعاد screen لا يطابق الاتجاه الحالي،
-	*   نعكس القيم
-	* - نرجع النسبة النهائية width / height
-	*
-	* سبب ذلك:
-	* بعض الأجهزة أو المتصفحات قد تُبقي screen.width/screen.height
-	* بترتيب لا يعكس الاتجاه الحالي بدقة.
-	*
-	* @returns {number} نسبة العرض إلى الارتفاع للشاشة الحالية
-	*/
-	function GetScreenRatio() {
-	let cScrW = window.screen.width;
-	let cScrH = window.screen.height;
-
-	const cIsLandscape = window.innerWidth >= window.innerHeight;
-
-	if ((cScrW >= cScrH) !== cIsLandscape) {
-	[cScrW, cScrH] = [cScrH, cScrW];
-	}
-
-	return cScrW / cScrH;
-	}
-
-	/**
-	* يطبق إعدادات الوضع الأفقي على الهيرو.
-	*
-	* ما الذي يفعله؟
-	* 1) يجلب رابط الصورة الأفقية من data-hero-l
-	* 2) يجلب وضع البلور من data-blur-l
-	* 3) يضبط inset لصندوق العنوان من data-pos-l
-	* 4) يغير src للصورة
-	* 5) يقرر تفعيل isBlur أو لا
-	*
-	* @param {number} pScrRatio
-	* نسبة الشاشة الحالية بعد الحساب
-	*/
-	function UpdateLandscape(pScrRatio) {
-	/**
-	* رابط صورة الخلفية الخاصة بالوضع الأفقي.
-	*/
-	const cImgLink = cHeroElem.dataset.heroL || "";
-
-	/**
-	* وضع البلور في الأفقي:
-	* - "on"   = تشغيل إجباري
-	* - "off"  = إيقاف إجباري
-	* - "auto" = قرار تلقائي حسب نسبة الشاشة
-	*/
-	const cBlurMode = cHeroElem.dataset.blurL || "auto";
-
-	/**
-	* موضع صندوق العنوان في الوضع الأفقي.
-	* يتم تمريره بصيغة inset:
-	* top right bottom left
-	*/
-	const cInsetValue = (cHeroElem.dataset.posL || "0% 0% 0% 0%").trim();
-
-	cTitleBoxElem.style.inset = cInsetValue;
-	if (cImgElem.tagName === "IMG") {
-	cImgElem.setAttribute("src", cImgLink);
-	}
-
-	const cShouldBlur = IsNeedBlur(cBlurMode, pScrRatio, cTargetRatioL, cTolL);
-
-	cTitleBoxElem.classList.toggle("isBlur", cShouldBlur);
-	}
-
-	/**
-	* يطبق إعدادات الوضع الرأسي على الهيرو.
-	*
-	* ما الذي يفعله؟
-	* 1) يجلب رابط الصورة الرأسية من data-hero-p
-	* 2) يجلب وضع البلور من data-blur-p
-	* 3) يضبط inset لصندوق العنوان من data-pos-p
-	* 4) يغير src للصورة
-	* 5) يقرر تفعيل isBlur أو لا
-	*
-	* @param {number} pScrRatio
-	* نسبة الشاشة الحالية بعد الحساب
-	*/
-	function UpdatePortrait(pScrRatio) {
-	/**
-	* رابط صورة الخلفية الخاصة بالوضع الرأسي.
-	*/
-	const cImgLink = cHeroElem.dataset.heroP || "";
-
-	/**
-	* وضع البلور في الرأسي:
-	* - "on"
-	* - "off"
-	* - "auto"
-	*/
-	const cBlurMode = cHeroElem.dataset.blurP || "auto";
-
-	/**
-	* موضع صندوق العنوان في الوضع الرأسي.
-	*/
-	const cInsetValue = (cHeroElem.dataset.posP || "0% 0% 0% 0%").trim();
-
-	cTitleBoxElem.style.inset = cInsetValue;
-	if (cImgElem.tagName === "IMG") {
-	cImgElem.setAttribute("src", cImgLink);
-	}
-
-	const cShouldBlur = IsNeedBlur(cBlurMode, pScrRatio, cTargetRatioP, cTolP);
-
-	cTitleBoxElem.classList.toggle("isBlur", cShouldBlur);
-	}
-
-	/**
-	* يحدد هل ينبغي تفعيل البلور أم لا.
-	*
-	* المنطق:
-	* - لو BlurMode = "on"  => true دائمًا
-	* - لو BlurMode = "off" => false دائمًا
-	* - لو BlurMode = "auto" أو أي قيمة أخرى:
-	*   يتم مقارنة الفرق المطلق بين نسبة الشاشة الحالية
-	*   والنسبة المستهدفة.
-	*
-	* إذا كان الفرق أكبر من هامش السماح Tol،
-	* فهذا يعني أن نسبة الشاشة خرجت بدرجة كافية
-	* عن الشكل المثالي، وبالتالي نفعّل البلور.
-	*
-	* @param {string} pBlurMode
-	* وضع البلور: on / off / auto
-	*
-	* @param {number} pScrRatio
-	* نسبة الشاشة الحالية
-	*
-	* @param {number} pTargetRatio
-	* النسبة المرجعية المستهدفة لهذا الاتجاه
-	*
-	* @param {number} pTol
-	* هامش السماح المسموح به
-	*
-	* @returns {boolean}
-	* هل يتم تفعيل البلور؟
-	*/
-	function IsNeedBlur(pBlurMode, pScrRatio, pTargetRatio, pTol) {
+	function IsNeedBlur(pBlurMode, pRatio, pTargetRatio, pTol) {
 	if (pBlurMode === "on") return true;
 	if (pBlurMode === "off") return false;
 
-	return Math.abs(pScrRatio - pTargetRatio) > pTol;
+	return Math.abs(pRatio - pTargetRatio) > pTol;
 	}
 	})();
 </script>

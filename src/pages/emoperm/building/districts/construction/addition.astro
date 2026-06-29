@@ -1,7 +1,7 @@
 ---
+import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, Size, Align, Colors, RespString, Topic, Pixel, EmoMediaData } from "@/TypesLib";
-import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, EmoFaq, ReadAlso, RelServices, SecTitle, VrStack, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
 ---
 
 
@@ -41,7 +41,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 		pDesc="التعلية ليست دورًا إضافيًا فوق مبنى قائم؛ هي اختبار قانوني وإنشائي وتنظيمي يثبت هل المبنى يتحمل وهل الحي يسمح وهل الملف يصلح للترخيص"
 		pTitleClr={Colors.WhiteOff}
 		pDescClr={Colors.WhiteOff}
-		pAlign="center"
+		pHzAlign="center"
+		pVrAlign="center"
 		pBlurL="on"
 		pBlurP="on"
 		pPosL="45% 45% 10% 8%"
@@ -58,7 +59,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -66,7 +68,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 			pDesc="قبل حساب تكلفة الدور الجديد أو توزيع الشقق، يجب فحص ثلاثة أشياء: هل المبنى قانوني؟ هل يتحمل إنشائيًا؟ وهل الاشتراطات تسمح بارتفاع إضافي؟"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -77,14 +80,14 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 						"ExistingBuildingAudit.webp",
 						false,
 						"فحص مبنى قائم قبل ترخيص التعلية",
-						new Size(520, "auto", "100%", "auto")
+						new Size(new NumPer(520, "100%"), new NumPer("auto", "auto"))
 					)}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.OfText("المالك يرى دورًا إضافيًا، والحي يرى ملفًا كاملًا")}
 					pText={Text.Body.OfText(`في ترخيص التعلية لا تبدأ الخدمة من رسم دور متكرر فوق السطح. البداية الصحيحة هي قراءة المبنى القائم نفسه: هل له رخصة أصلية؟ هل تم تنفيذه مطابقًا للرخصة؟ هل توجد مخالفات أو تصالح أو أدوار منفذة بدون ترخيص؟ هل الأساسات والأعمدة والكمرات تتحمل حمل الدور المطلوب؟ هل عرض الشارع والمخطط التفصيلي وبيان الصلاحية يسمحان بزيادة الارتفاع؟ وهل الحالة تدخل في وثيقة التأمين؟ هذه الأسئلة تجعل التعلية ملفًا أخطر من ترخيص بناء جديد؛ لأن الخطأ هنا لا يخص أرضًا فضاء فقط، بل مبنى قائم وسكان وجيران ومنشأ يحمل أحمالًا فعلية.`)}
-					pSize={new Size(700, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(700, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</HzStack>
@@ -99,7 +102,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -107,7 +111,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 			pDesc="هذا الفرز يمنع تحويل حالة غير قابلة للتعلية إلى ملف رسومات واستيفاءات لا ينتهي"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1300px", "100%")}
@@ -134,7 +139,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -142,7 +148,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 			pDesc="في البناء الجديد تقرأ الأرض، أما في التعلية فتقرأ الأرض والمبنى القديم والرخصة والتنفيذ والحالة الإنشائية معًا"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack
 				pWidth={new Pixel(1200, 340)}
@@ -153,7 +160,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("لماذا لا تكفي رخصة الدور الأرضي أو الرخصة القديمة؟")}
 					pText={Text.Body.WithAlign("right").OfText(`بعض الملاك يتعاملون مع الرخصة القديمة كأنها تصريح مفتوح لاستكمال أدوار كلما احتاجوا. هذا خطأ. الرخصة القديمة تثبت تاريخًا وموقفًا سابقًا، لكنها لا تثبت وحدها أن المبنى يتحمل الآن، ولا أن الاشتراطات الحالية تسمح بنفس الارتفاع، ولا أن التنفيذ تم مطابقًا للرسومات، ولا أن الأساسات لم تتأثر بتعديلات أو أحمال أو مياه جوفية أو شروخ أو هبوط. التعلية الناجحة تحتاج قراءة مشتركة: الرخصة السابقة، الرسومات القديمة إن وجدت، الطبيعة الحالية للمبنى، تقرير تحمل إنشائي، بيان صلاحية حديث أو اشتراطات سارية، ثم رسومات تعلية لا تتعارض مع القائم.`)}
-					pSize={new Size(1100, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(1100, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(0, 0)}>
@@ -204,7 +211,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -212,14 +220,15 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 			pDesc="أي تعلية بدون فحص إنشائي جاد هي مقامرة على المبنى القائم، حتى لو كان الدور المطلوب صغيرًا"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("تقرير التحمل يسبق التصميم المعماري")}
 					pText={Text.Body.WithAlign("right").OfText(`في حالات كثيرة يبدأ المالك بطلب توزيع دور جديد: شقتان، سلم، مناور، واجهة، ثم يبحث عن مهندس يوقّع. الترتيب الصحيح عكس ذلك. يجب أولًا فحص النظام الإنشائي القائم، قراءة أي لوحات قديمة، مطابقة الأعمدة والمناور والسلالم على الطبيعة، مراجعة الشروخ والهبوط والتعديلات، ثم تحديد هل المبنى يتحمل التعلية المقترحة. إذا ظهر أن المبنى لا يتحمل، فليس الحل أن نرسم دورًا أخف فقط؛ قد تكون النتيجة رفض التعلية، أو اشتراط تدعيم، أو تغيير نظام الحوائط، أو تقليل المسطح، أو تحويل الملف إلى مسار آخر. لذلك تقرير التحمل ليس ورقة لتكملة الملف، بل هو قرار هندسي يحدد هل ندخل مسار الترخيص من الأساس.`)}
-					pSize={new Size(700, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(700, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<RespImg
@@ -229,7 +238,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 						"StructuralCheck.webp",
 						false,
 						"فحص إنشائي قبل أعمال التعلية",
-						new Size(520, "auto", "100%", "auto")
+						new Size(new NumPer(520, "100%"), new NumPer("auto", "auto"))
 					)}
 				/>
 
@@ -245,7 +254,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -253,7 +263,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 			pDesc="محافظة القاهرة مقسمة إلى مناطق وأحياء، والتعلية في حي تاريخي أو قريب من المطار ليست مثل التعلية في منطقة حديثة أو شارع محلي ضيق"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack
 				pWidth={new Pixel(1300, 340)}
@@ -277,7 +288,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("ما الذي يتغير من حي لحي داخل القاهرة؟")}
 					pText={Text.Body.WithAlign("right").OfText(`الاختلاف لا يكون في عنوان الطلب، لأن نموذج طلب ترخيص أعمال تعلية قد يكون واحدًا. الاختلاف في القراءة الميدانية: مبنى في مصر الجديدة قد يصطدم بقيد ارتفاع أو طابع واجهات، ومبنى في وسط البلد قد يحتاج مراجعة تنسيق حضاري، ومبنى في منشأة ناصر أو المقطم قد يحتاج قراءة خاصة للمناسيب وطبيعة الأرض، ومبنى في شبرا أو الزاوية أو الساحل قد تكون مشكلته الحقيقية في ضيق الشارع وكثافة المباني والتعديلات القديمة. لذلك لا نكتب ملف تعلية القاهرة كإجراء واحد، بل نقرأ الحي والشارع والمبنى قبل الوعد بإمكانية الدور الإضافي.`)}
-					pSize={new Size(1100, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(1100, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</VrStack>
@@ -292,7 +303,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -300,7 +312,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 			pDesc="الهرم والعمرانية والطالبية وبولاق والدقي والعجوزة والوراق ليست ملفات متشابهة، حتى لو كانت كلها داخل نطاق محافظة الجيزة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -323,7 +336,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("في الجيزة لا تسأل عن التعلية قبل تحديد الحي والشارع")}
 					pText={Text.Body.WithAlign("right").OfText(`الجيزة مليئة بحالات يختلط فيها القانون بالميدان: مبنى قائم من عشرات السنين، رخصة قديمة، دور مخالف، تصالح، شارع ضيق، أعمدة معدلة، جراج تحول إلى محلات، أو سطح عليه غرف وخزانات وأحمال لم تكن محسوبة. التعلية في هذه البيئة لا تقبل إجابة عامة. يجب تحديد الحي أولًا، ثم الشارع، ثم رخصة العقار، ثم حالة المبنى. بعدها فقط يمكن معرفة هل الملف يصلح كتعلية عادية، أم يحتاج تقرير تحمل وتدعيم، أم يحتاج تصحيح موقف، أم أن التعلية غير مناسبة من الأساس.`)}
-					pSize={new Size(600, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(600, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</HzStack>
@@ -338,7 +351,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.BistageDark};`}
@@ -346,7 +360,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 			pDesc="في ترخيص التعلية، كل مستند يجيب على سؤال: من صاحب الحق؟ ماذا كان مرخصًا؟ ماذا تم تنفيذه؟ وهل يتحمل المبنى؟"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack
 				pWidth={new Pixel(1200, 340)}
@@ -361,7 +376,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 						"AdditionPermitFile.webp",
 						false,
 						"ملف مستندات ترخيص تعلية",
-						new Size(800, "auto", "100%", "auto")
+						new Size(new NumPer(800, "100%"), new NumPer("auto", "auto"))
 					)}
 				/>
 
@@ -394,7 +409,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -402,14 +418,15 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 			pDesc="التعلية من أكثر الحالات التي لا يصح فيها تجاهل التأمين، لأن الخطر مرتبط بمبنى قائم وأحمال إضافية ومسؤولية تنفيذ"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("التأمين ليس بندًا ماليًا فقط")}
 					pText={Text.Body.WithAlign("right").OfText(`في أعمال التعلية، وثيقة التأمين ترتبط بفكرة المسؤولية المدنية عن أخطار أعمال البناء. عمليًا، دخول الملف في مسار التأمين يعني أن الرسومات والتقرير الإنشائي وبيان قيمة الأعمال ومعلومات المهندس والمقاول يجب أن تكون قابلة للمراجعة، لأن الخطر لا يخص الدور الجديد وحده؛ أي خطأ قد يؤثر على المبنى كله. لذلك عند تسعير أو جدولة ترخيص التعلية يجب فصل وقت التأمين والمراجعة الفنية عن وقت تقديم الطلب داخل المركز التكنولوجي، وعدم وعد المالك بأن التعلية مجرد ختم سريع على لوحة دور متكرر.`)}
-					pSize={new Size(650, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(650, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<CardsGr
@@ -437,7 +454,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -445,7 +463,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 			pDesc="بعض الحالات يجب تحويلها لمسار آخر قبل التعلية، وإلا سيتحول الطلب إلى استيفاءات ورفض ومخاطر"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1300px", "100%")}
@@ -474,7 +493,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -482,7 +502,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 			pDesc="نرتب الملف من قرار الجدوى إلى التقديم، بدل رسم دور إضافي ثم اكتشاف أن المبنى أو الحي لا يسمح"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack
 				pWidth={new Pixel(1200, 340)}
@@ -523,7 +544,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 	<ESec
 		id="cta"
 		pBg={new ElemBg(Colors.WhiteOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -532,14 +554,15 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 			pDesc="أرسل بيانات العقار والرخصة القديمة وصور المبنى، وسنحدد هل نبدأ بملف تعلية أم تقرير تحمل أم تصحيح موقف"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("الخطوة الأولى ليست رسم الدور الجديد")}
 					pText={Text.Body.WithAlign("right").OfText(`أفضل بداية هي إرسال رخصة العقار القديمة إن وجدت، عنوان العقار والحي، عدد الأدوار القائمة، صور الواجهة والسلم والسطح وأي شروخ واضحة، وبيان هل توجد مخالفات أو تصالح أو قرارات إزالة. بعدها يتم تحديد المسار: هل نحتاج بيان صلاحية؟ هل نحتاج تقرير تحمل؟ هل التعلية ممكنة؟ هل توجد وثيقة تأمين؟ وهل الأفضل البدء بتصحيح موقف قبل أي ترخيص؟`)}
-					pSize={new Size(700, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(700, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<VrStack
@@ -552,7 +575,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 					<Emograph
 						pTitle={Text.H4.Centered.OfText("بيانات ابدأ بها")}
 						pText={Text.Body.Centered.OfText("اسم الحي، عنوان العقار، الرخص القديمة، عدد الأدوار، صور السطح، وصور الشروخ إن وجدت.")}
-						pSize={new Size(360, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(360, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<EmoCall BlackSky pText="اتصل لمراجعة التعلية" />
@@ -627,7 +650,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 		pHeadBg={new ElemBg(Colors.GreenLite)}
 		pBodyBg={new ElemBg(Colors.WhiteOff)}
 		pCardBg={new ElemBg(Colors.SkyLite)}
-		pWidth={new Size(1300, "auto", "calc(100% - 30px)", "auto")}
+		pWidth={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
 		pGap={new Pixel(20, 15)}
 	>
 
@@ -669,7 +692,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, RespImg, EmoCall, Emo
 		pHeadBg={new ElemBg(Colors.Gray5)}
 		pBodyBg={new ElemBg(Colors.Gray1)}
 		pCardBg={new ElemBg(Colors.WhiteOff)}
-		pWidth={new Size(1300, "auto", "calc(100% - 30px)", "auto")}
+		pWidth={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
 		pGap={new Pixel(20, 15)}
 	>
 

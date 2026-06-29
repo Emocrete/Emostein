@@ -1,7 +1,7 @@
 ---
+import { Align, ElemBg, NumPer, Size, Text } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, Size, Align } from "@/TypesLib";
-import { Hero, ESec, EmoStrip, Emograph, DataCard, SecTitle, VrStack, HzStack } from "@/Widgets";
+import { DataCard, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } from "@/Widgets";
 ---
 
 
@@ -34,7 +34,8 @@ import { Hero, ESec, EmoStrip, Emograph, DataCard, SecTitle, VrStack, HzStack } 
 		pDesc="نحول الأرض إلى مشروع عقاري قابل للتنفيذ من خلال دراسة هندسية ومالية واضحة تحفظ حقوق صاحب الأرض وباقي أطراف المشاركة"
 		pTitleClr="#17345C"
 		pDescClr="#17345C"
-		pAlign="center"
+		pHzAlign="center"
+		pVrAlign="center"
 		pPosL="12% 48% 18% 7%"
 		pPosP="7% 7% 48% 7%"
 		pBlurL="off"
@@ -43,7 +44,8 @@ import { Hero, ESec, EmoStrip, Emograph, DataCard, SecTitle, VrStack, HzStack } 
 
 	<ESec
 		pBg={new ElemBg("#FFFDF8")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="ما هي مشاركات البناء؟"
@@ -51,12 +53,13 @@ import { Hero, ESec, EmoStrip, Emograph, DataCard, SecTitle, VrStack, HzStack } 
 			style="--StripBg:#F6F1E8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFDF8")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#FFFDF8")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<Emograph
 				pTitle={Text.H3.WithColor("#17345C").OfText("الفكرة الأساسية")}
 				pText={Text.Body.WithColor("#333333").OfText("مشاركة البناء هي اتفاق بين صاحب أرض وطرف أو أكثر لديهم قدرة على التمويل أو الإدارة أو التطوير، بهدف إنشاء مشروع عقاري على الأرض ثم توزيع الناتج أو العائد طبقا لاتفاق واضح. قيمة الأرض لا تضيع في صورة بيع مباشر، والتمويل لا يدخل في مشروع غير محسوب، لأن القرار يبدأ بدراسة هندسية ومالية وقانونية قبل التعاقد والتنفيذ.")}
-				pSize={new Size(920, "auto", "100%", "auto")}
+				pSize={new Size(new NumPer(920, "100%"), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -65,7 +68,8 @@ import { Hero, ESec, EmoStrip, Emograph, DataCard, SecTitle, VrStack, HzStack } 
 
 	<ESec
 		pBg={new ElemBg("#F6F1E8")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="لمن يناسب نظام المشاركات؟"
@@ -73,20 +77,21 @@ import { Hero, ESec, EmoStrip, Emograph, DataCard, SecTitle, VrStack, HzStack } 
 			style="--StripBg:#17345C;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F6F1E8")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#F6F1E8")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("صاحب أرض لا يريد البيع")}
 					pText={Text.Body.WithColor("#333333").OfText("لو لديك أرض صالحة للبناء وتريد الاستفادة من قيمتها على هيئة وحدات أو عائد من مشروع بدلا من بيعها بسعر لحظي، فالمشاركة قد تكون خيارا مناسبا بشرط دراسة التكلفة والمخاطر ونسب التوزيع بدقة.")}
-					pSize={new Size(520, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(520, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("ممول أو مطور يبحث عن أرض")}
 					pText={Text.Body.WithColor("#333333").OfText("لو لديك قدرة على تمويل أو إدارة مشروع بناء ولا تريد شراء الأرض بالكامل في البداية، فقد يكون نظام المشاركة مدخلا مناسبا للدخول في مشروع عقاري بشرط وجود أرض واضحة الملكية وجدوى قابلة للتحقق.")}
-					pSize={new Size(520, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(520, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</HzStack>
@@ -97,7 +102,8 @@ import { Hero, ESec, EmoStrip, Emograph, DataCard, SecTitle, VrStack, HzStack } 
 
 	<ESec
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="ما الذي ندرسه قبل قبول مشروع مشاركة؟"
@@ -105,26 +111,27 @@ import { Hero, ESec, EmoStrip, Emograph, DataCard, SecTitle, VrStack, HzStack } 
 			style="--StripBg:#FFFDF8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("موقف الأرض")}
 					pText={Text.Body.WithColor("#333333").OfText("نراجع موقع الأرض، ومساحتها، وواجهاتها، وموقف الملكية، وحدودها، ومدى وضوح المستندات، وأي قيود قد تؤثر على البناء أو الترخيص أو البيع لاحقا.")}
-					pSize={new Size(350, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("الاشتراطات البنائية")}
 					pText={Text.Body.WithColor("#333333").OfText("نحدد ما يمكن بناؤه فعليا من حيث عدد الأدوار، ونسبة البناء، والارتدادات، والجراجات، والاستخدامات المتاحة، لأن هذه العناصر هي التي تحكم حجم المشروع وقيمته.")}
-					pSize={new Size(350, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("الجدوى والتكلفة")}
 					pText={Text.Body.WithColor("#333333").OfText("نقارن بين قيمة الأرض، وتكلفة التصميم والترخيص والتنفيذ، والقيمة المتوقعة للوحدات، حتى لا يتحول الاتفاق إلى نسبة شكلية غير قابلة للتحقيق ماليا.")}
-					pSize={new Size(350, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</HzStack>
@@ -135,7 +142,8 @@ import { Hero, ESec, EmoStrip, Emograph, DataCard, SecTitle, VrStack, HzStack } 
 
 	<ESec
 		pBg={new ElemBg("#F6F1E8")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="نماذج شائعة لاتفاق المشاركة"
@@ -143,26 +151,27 @@ import { Hero, ESec, EmoStrip, Emograph, DataCard, SecTitle, VrStack, HzStack } 
 			style="--StripBg:#B78A25;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F6F1E8")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#F6F1E8")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("الأرض مقابل نسبة من الوحدات")}
 					pText={Text.Body.WithColor("#333333").OfText("صاحب الأرض يدخل بقيمة الأرض، والطرف الآخر يتحمل التمويل والإدارة والتنفيذ، ثم يتم توزيع الوحدات أو العائد طبقا لنسبة يتم تحديدها بعد حساب قيمة الأرض والتكلفة والمخاطر وقيمة البيع المتوقعة.")}
-					pSize={new Size(900, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(900, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("الأرض مع مساهمة جزئية من المالك")}
 					pText={Text.Body.WithColor("#333333").OfText("في بعض الحالات يشارك صاحب الأرض بجزء من التمويل بجانب قيمة الأرض، بهدف تحسين حصته النهائية أو تقليل الاعتماد على ممول خارجي، ويحتاج هذا النموذج إلى ضبط واضح لمواعيد السداد ومسؤوليات كل طرف.")}
-					pSize={new Size(900, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(900, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("إدارة تطوير مقابل أجر أو نسبة")}
 					pText={Text.Body.WithColor("#333333").OfText("قد يكون دورنا إدارة المشروع لصالح الأطراف بدون الدخول كطرف مالك في المشاركة، بحيث تشمل الخدمة الدراسة والتصميم والترخيص والتعاقدات ومتابعة التنفيذ والحسابات مقابل أتعاب أو نسبة إدارة يتم الاتفاق عليها.")}
-					pSize={new Size(900, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(900, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</VrStack>
@@ -173,7 +182,8 @@ import { Hero, ESec, EmoStrip, Emograph, DataCard, SecTitle, VrStack, HzStack } 
 
 	<ESec
 		pBg={new ElemBg("#FFFDF8")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="مراحل خدمة إدارة المشاركة"
@@ -181,38 +191,39 @@ import { Hero, ESec, EmoStrip, Emograph, DataCard, SecTitle, VrStack, HzStack } 
 			style="--StripBg:#17345C;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFDF8")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#FFFDF8")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("1 — فحص الأرض والمستندات")}
 					pText={Text.Body.WithColor("#333333").OfText("نبدأ بفهم الأرض على الطبيعة ومراجعة المستندات المتاحة ومقارنة الوضع الفعلي بما يمكن ترخيصه وتنفيذه، لأن أي غموض في هذه المرحلة سينتقل مباشرة إلى التعاقد والتكلفة.")}
-					pSize={new Size(900, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(900, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("2 — تصور مبدئي للمشروع")}
 					pText={Text.Body.WithColor("#333333").OfText("نجهز تصورا مبدئيا للمساحات والاستخدامات وعدد الوحدات والتكلفة المتوقعة، بحيث يفهم كل طرف حجم المشروع قبل مناقشة نسبة المشاركة أو طريقة التوزيع.")}
-					pSize={new Size(900, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(900, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("3 — تقدير نسب المشاركة")}
 					pText={Text.Body.WithColor("#333333").OfText("نربط نسبة كل طرف بقيمة مساهمته الفعلية، سواء كانت أرضا أو تمويلا أو إدارة أو تنفيذ، مع توضيح أثر تغير التكلفة أو الأسعار على الاتفاق قبل تثبيته.")}
-					pSize={new Size(900, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(900, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("4 — التصميم والترخيص والتعاقد")}
 					pText={Text.Body.WithColor("#333333").OfText("بعد الاتفاق على الإطار العام، ننتقل إلى التصميمات والمقايسات والترخيص وتجهيز عقود التنفيذ والتوريد والإشراف، بحيث تكون القرارات التنفيذية مرتبطة بخطة مالية واضحة.")}
-					pSize={new Size(900, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(900, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("5 — متابعة التنفيذ والحسابات")}
 					pText={Text.Body.WithColor("#333333").OfText("أثناء التنفيذ تتم متابعة الجودة والمستخلصات والتكاليف والبرنامج الزمني، مع تقارير دورية تساعد الأطراف على معرفة موقف المشروع بدقة وتقلل فرص الخلافات.")}
-					pSize={new Size(900, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(900, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</VrStack>
@@ -223,7 +234,8 @@ import { Hero, ESec, EmoStrip, Emograph, DataCard, SecTitle, VrStack, HzStack } 
 
 	<ESec
 		pBg={new ElemBg("#FFFFFF")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="متى تكون المشاركة خطرة؟"
@@ -231,26 +243,27 @@ import { Hero, ESec, EmoStrip, Emograph, DataCard, SecTitle, VrStack, HzStack } 
 			style="--StripBg:#FFFDF8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("مستندات غير واضحة")}
 					pText={Text.Body.WithColor("#333333").OfText("أي غموض في الملكية أو الحدود أو حق التصرف أو موقف الترخيص قد يجعل المشروع متوقفا قبل أن يبدأ، لذلك لا نعامل المستندات كإجراء شكلي.")}
-					pSize={new Size(350, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("نسبة غير مرتبطة بالجدوى")}
 					pText={Text.Body.WithColor("#333333").OfText("النسبة العالية على الورق قد تكون غير واقعية إذا كانت تكلفة البناء والتمويل والمخاطر لا تسمح بها، لذلك يتم تقييم النسبة من داخل نموذج مالي وليس بالمقارنة العشوائية.")}
-					pSize={new Size(350, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<Emograph
 					pTitle={Text.H3.WithColor("#17345C").OfText("تداخل القرارات بين الأطراف")}
 					pText={Text.Body.WithColor("#333333").OfText("المشاركة تحتاج صلاحيات واضحة: من يقرر، ومن يعتمد المصروفات، ومن يراجع المستخلصات، ومن يملك حق التعديل، لأن غياب الإدارة يحول المشروع إلى نزاع مستمر.")}
-					pSize={new Size(350, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</HzStack>
@@ -261,7 +274,8 @@ import { Hero, ESec, EmoStrip, Emograph, DataCard, SecTitle, VrStack, HzStack } 
 
 	<ESec
 		pBg={new ElemBg("#17345C")}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 		<SecTitle
 			pTitle="ما الذي نقدمه في مشروع المشاركة؟"
@@ -269,7 +283,8 @@ import { Hero, ESec, EmoStrip, Emograph, DataCard, SecTitle, VrStack, HzStack } 
 			style="--StripBg:#102744;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#17345C")} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg("#17345C")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack>
 

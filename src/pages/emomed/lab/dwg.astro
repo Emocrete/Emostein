@@ -1,7 +1,7 @@
 ---
+import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, Size, Align, Colors, RespString, Pixel, EmoMediaData } from "@/TypesLib";
-import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, ReadAlso, RelServices, SecTitle, VrStack, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
 ---
 
 
@@ -42,7 +42,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 		pDesc="لوحة هندسية واضحة لموقع المعمل وغرفه وارتفاعه ومرافقه قبل تقديم ملف الترخيص والمعاينة"
 		pTitleClr={Colors.WhiteOff}
 		pDescClr={Colors.WhiteOff}
-		pAlign="center"
+		pHzAlign="center"
+		pVrAlign="center"
 		pBlurL="on"
 		pBlurP="on"
 		pPosL="40% 40% 10% 8%"
@@ -59,7 +60,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -67,7 +69,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 			pDesc="اللوحة تترجم المكان إلى مستند ترخيص: عنوان واضح، مساحات محسوبة، غرف محددة، ارتفاعات مكتوبة، مياه وصرف وتهوية ظاهرة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -81,7 +84,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("رفع هندسي")}
 						pText={Text.Body.Centered.OfText("نقيس حدود الوحدة، الغرف، الفتحات، الارتفاعات، دورة المياه، مصادر المياه، مخارج الصرف، ومسارات الحركة قبل رسم اللوحة.")}
-						pSize={new Size(350, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</VrStack>
@@ -96,7 +99,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("لوحة ترخيص")}
 						pText={Text.Body.Centered.OfText("نجهز المسقط الأفقي والقطاع الرأسي وكروكي الموقع وجداول الغرف والفتحات والمرافق في صيغة مفهومة للجنة الصحة.")}
-						pSize={new Size(350, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</VrStack>
@@ -111,7 +114,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("مطابقة قبل المعاينة")}
 						pText={Text.Body.Centered.OfText("نراجع الرسم مع الواقع ومع العقد والعنوان قبل الطباعة، لأن أي اختلاف في اللوحة يظهر مباشرة في تقرير المعاينة.")}
-						pSize={new Size(350, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</VrStack>
@@ -128,7 +131,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -138,14 +142,14 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 
 		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)}>
 
-			<EmoStrip pBg={new ElemBg(Colors.SkyLite)} pSize={new Size(1300, "auto", "calc(100% - 30px)", "auto")}>
+			<EmoStrip pBg={new ElemBg(Colors.SkyLite)} pSize={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}>
 
 				<HzStack>
 
 					<Emograph
 						pTitle={Text.H3.WithAlign("right").OfText("المسقط الأفقي يقرأ توزيع المعمل")}
 						pText={Text.Body.WithAlign("right").OfText("المسقط الأفقي يوضح حدود الوحدة، أبعاد الغرف، أماكن الأبواب والشبابيك، غرفة الاستقبال، غرفة سحب العينات، غرف التحليل، غرفة تجهيز العينات، غرفة الغسيل أو التحضير، المخزن، دورة المياه، مصادر المياه، ونقط الصرف. كل اسم غرفة يكتب على الرسم كما سيظهر في ملف الترخيص.")}
-						pSize={new Size(720, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(720, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<RespImg
@@ -155,7 +159,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 					"%D8%B1%D8%B3%D9%85%20%D9%87%D9%86%D8%AF%D8%B3%D9%8A%20%D9%84%D9%85%D8%B9%D9%85%D9%84%20%D8%AA%D8%AD%D8%A7%D9%84%D9%8A%D9%84%20%D8%B7%D8%A8%D9%8A%D8%A9%201.jpg",
 					false,
 					"نموذج رسم هندسي لمعمل تحاليل طبية",
-					new Size(430, "auto", "100%", "auto")
+					new Size(new NumPer(430, "100%"), new NumPer("auto", "auto"))
 				)}
 					/>
 
@@ -167,7 +171,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 
 		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)}>
 
-			<EmoStrip pBg={new ElemBg(Colors.Creamy)} pSize={new Size(1300, "auto", "calc(100% - 30px)", "auto")}>
+			<EmoStrip pBg={new ElemBg(Colors.Creamy)} pSize={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}>
 
 				<HzStack>
 
@@ -178,14 +182,14 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 					"HeroD.webp",
 					false,
 					"معمل تحاليل طبية",
-					new Size(430, "auto", "100%", "auto")
+					new Size(new NumPer(430, "100%"), new NumPer("auto", "auto"))
 				)}
 					/>
 
 					<Emograph
 						pTitle={Text.H3.WithAlign("right").OfText("القطاع الرأسي يثبت الارتفاع ومناسيب المكان")}
 						pText={Text.Body.WithAlign("right").OfText("القطاع الرأسي يوضح ارتفاع المعمل، أي كمرات أو سقوطات مؤثرة، مستوى الأرضية بالنسبة للمداخل، وجود صندرة إن وجدت، وعلاقة السقف بالتهوية والإضاءة. هذه البيانات تمنع تفسير المكان بشكل خاطئ أثناء المعاينة، خصوصًا في الدور الأرضي أو الوحدات ذات المناسيب المختلفة.")}
-						pSize={new Size(720, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(720, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</HzStack>
@@ -202,7 +206,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -210,7 +215,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 			pDesc="الرسم الجيد يجمع بيانات قانونية وهندسية وتشغيلية في لوحة واحدة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -258,7 +264,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -266,7 +273,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 			pDesc="التقسيم الصحيح يوضح مسار المريض والعينة والنتيجة والنفايات"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack
 				pWidth={new Pixel(1300, 340)}
@@ -286,7 +294,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("الاستقبال")}
 							pText={Text.Body.Centered.OfText("منطقة انتظار واستلام بيانات المريض، وتظهر على الرسم بعيدة عن طاولات التحليل ومناطق الكيماويات.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -301,7 +309,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("سحب العينات")}
 							pText={Text.Body.Centered.OfText("غرفة قريبة من الاستقبال، بها كرسي أو سرير سحب، حوض عند الحاجة، ومساحة حركة مناسبة للمريض والفني.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -316,7 +324,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("تجهيز العينات")}
 							pText={Text.Body.Centered.OfText("منطقة فصل وطرد مركزي وتحضير، وتحتاج ربطًا واضحًا بين سحب العينات وغرف التحليل.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -331,7 +339,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("غرف التحليل")}
 							pText={Text.Body.Centered.OfText("تظهر كفراغات عمل واضحة للكيمياء والهيماتولوجي والميكروبيولوجي أو غيرها حسب نشاط المعمل.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -350,7 +358,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("الغسيل والتحضير")}
 							pText={Text.Body.Centered.OfText("موضع الحوض والصرف وغسيل الأدوات أو تجهيز المحاليل يظهر بوضوح بعيدًا عن استقبال المرضى.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -365,7 +373,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("مخزن الكيماويات")}
 							pText={Text.Body.Centered.OfText("يوضح مكان تخزين الكواشف والمحاليل، مع مراعاة التهوية والفصل عن العينات والانتظار.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -380,7 +388,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("دورة المياه")}
 							pText={Text.Body.Centered.OfText("تظهر على الرسم مع اتجاه الفتح ومسار الصرف، ويفضل ألا تفتح مباشرة على غرفة تحليل أو تجهيز عينات.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -395,7 +403,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("النفايات الطبية")}
 							pText={Text.Body.Centered.OfText("تحدد نقطة تجميع آمنة للعبوات الحادة والمخلفات لحين تسليمها وفق عقد التخلص من النفايات.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -414,7 +422,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -422,7 +431,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 			pDesc="شكل اللوحة يتغير حسب طلب العميل: ترخيص جديد، نقل، تعديل، فرع، أو معمل ملحق بمنشأة طبية"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(25, 15)} pPad={new Pixel(30, 15)}>
 
@@ -486,7 +496,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -494,7 +505,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 			pDesc="نرتب الخدمة بحيث يصل العميل إلى لوحة قابلة للتقديم بدل رسمة شكلية تحتاج تعديل بعد المعاينة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("1100px", "100%")}
@@ -524,7 +536,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -532,7 +545,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 			pDesc="هذه النقاط تمنع أشهر ملاحظات المعاينة على رسومات معامل التحاليل"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -580,7 +594,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -590,14 +605,14 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 
 		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)}>
 
-			<EmoStrip pBg={new ElemBg(Colors.SkyLite)} pSize={new Size(1300, "auto", "calc(100% - 30px)", "auto")}>
+			<EmoStrip pBg={new ElemBg(Colors.SkyLite)} pSize={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}>
 
 				<HzStack>
 
 					<Emograph
 						pTitle={Text.H3.WithAlign("right").OfText("القاطع والحوض ومكان الجهاز قرارات ترخيصية")}
 						pText={Text.Body.WithAlign("right").OfText("توزيع القواطيع والأحواض والأجهزة داخل معمل التحاليل يؤثر على قبول الرسم وعلى سهولة التشغيل بعد الترخيص. نراجع مكان غرفة السحب، موضع أجهزة الطرد المركزي والثلاجات، مساحة الحركة حول طاولات العمل، ومكان النفايات قبل تنفيذ التشطيبات، حتى لا يضطر العميل لتكسير أو نقل تجهيزات بعد المعاينة.")}
-						pSize={new Size(820, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(820, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<RespImg
@@ -607,7 +622,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 					"HeroD.webp",
 					false,
 					"تجهيز معمل تحاليل طبية",
-					new Size(350, "auto", "100%", "auto")
+					new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))
 				)}
 					/>
 
@@ -625,7 +640,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -633,7 +649,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 			pDesc="نسلم ملفًا هندسيًا واضحًا يصلح للمراجعة والتقديم والمتابعة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(25, 15)} pPad={new Pixel(30, 15)}>
 
@@ -703,7 +720,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 	<ESec
 		id="cta"
 		pBg={new ElemBg(Colors.BlackOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -712,14 +730,15 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 			pDesc="أرسل عنوان المعمل وصور المكان والمساحة التقريبية ونوع الطلب، وسنحدد المطلوب للرفع والرسم والتقديم"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
 				<Emograph
 					pTitle={Text.H3.WithAlign("right").White.OfText("بيانات نحتاجها قبل الزيارة")}
 					pText={Text.Body.WithAlign("right").White.OfText("العنوان التفصيلي، صور الواجهة والمدخل والغرف، المساحة التقريبية، نوع الطلب، حالة التشطيب، صورة عقد الحيازة إن وجدت، هل المعمل مستقل أم ملحق بمستشفى أو مركز، عدد الغرف المطلوب، وهل توجد أجهزة أو قواطيع منفذة بالفعل. بعدها نحدد موعد الرفع ونجهز اللوحة المناسبة للترخيص.")}
-					pSize={new Size(750, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(750, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<VrStack
@@ -732,7 +751,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("01014490054")}
 						pText={Text.Body.Centered.OfText("اتصل أو ارسل بيانات المكان على واتساب لبدء خدمة الرسم الهندسي.")}
-						pSize={new Size(300, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<EmoCall BlackSky pText="اطلب الخدمة" />
@@ -797,7 +816,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 		pHeadBg={new ElemBg(Colors.SkyLite)}
 		pBodyBg={new ElemBg(Colors.WhiteOff)}
 		pCardBg={new ElemBg(Colors.SkyLite)}
-		pWidth={new Size(1300, "auto", "calc(100% - 30px)", "auto")}
+		pWidth={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
 		pGap={new Pixel(20, 15)}
 	>
 
@@ -843,7 +862,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 		pHeadBg={new ElemBg(Colors.Gray5)}
 		pBodyBg={new ElemBg(Colors.Gray1)}
 		pCardBg={new ElemBg(Colors.WhiteOff)}
-		pWidth={new Size(1300, "auto", "calc(100% - 30px)", "auto")}
+		pWidth={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
 		pGap={new Pixel(20, 15)}
 	>
 

@@ -1,11 +1,11 @@
 ---
+import { DataCard, EmoBtn, Emograph, EmoList, ESec, Hero, HzStack, IndexSec, SecTitle, VrStack } from "@/Widgets";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
 import Price from "@/Widgets/Prices/Price.astro";
-import { DataCard, EmoBtn, Emograph, EmoList, ESec, Hero, HzStack, IndexSec, SecTitle, VrStack } from "@/Widgets";
-import { Align, Colors, DirectSize, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import IndexBtn from "@/Widgets/Comp/IndexLinkButton.astro";
 import { BadgeFrame, BlurBlob, FloatingIcon, FloatingPanel, GlassCard, SvgDots, TiltCard } from "../../../site/Widgets/Shapes";
-import { CardsGr, DuoCol, DuoSec, EmoCall, Grid, PriceCard, RelServiceItem, RelServices } from "../../../site/Widgets";
+import { CardsGr, DuoCol, DuoStr, EmoCall, Grid, PriceCard, RelServiceItem, RelServices } from "../../../site/Widgets";
 import { SvgRadarCard } from "../../../site/Widgets/Cards";
 ---
 
@@ -45,7 +45,8 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 		pDesc="قياس دقيق للمسافة بين الصيدليات طبقاً للأسلوب المتبع من قبل هيئة الدواء المصرية ، للتحقق من شرط المسافة لأقرب صيدلية قبل المبادرة بالشراء أو الاستئجار"
 		pTitleClr="#f7ca34"
 		pDescClr="#ffffff"
-		pAlign="right"
+		pHzAlign="right"
+		pVrAlign="right"
 		pPosL="38% 45% 12% 6%"
 		pPosP="48% 8% 8% 8%"
 		pBlurL="on"
@@ -97,12 +98,13 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 
 
 
-	<DuoSec
+	<DuoStr
 		id="service-summary"
 		pBg={new ElemBg("#101820")}
 		pMinH={new NumPer(620, 780)}
-		pAlign={Align.Center}
-		pContentSize={new DirectSize(new NumPer("min(1180px, 92%)", "92%"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+		pContentSize={new Size(new NumPer("min(1180px, 92%)", "92%"))}
 		pGap={new Pixel(28, 18)}
 		pPad={new Pixel(70, 42)}
 	>
@@ -112,7 +114,7 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 			pColor2="rgba(215,245,140,.34)"
 			pBlur={30}
 			pLoc={new Loc(new NumPer("-8%", "-30%"), new NumPer("-18%", "-8%"))}
-			pSize={new DirectSize(new NumPer("48%", "90%"), new NumPer("55%", "32%"))}
+			pSize={new Size(new NumPer("48%", "90%"), new NumPer("55%", "32%"))}
 			pZ={1}
 		/>
 
@@ -121,7 +123,7 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 			pGap={26}
 			pDot={2}
 			pLoc={new Loc(new NumPer("62%", "8%"), new NumPer("8%", "4%"))}
-			pSize={new DirectSize(new NumPer("34%", "84%"), new NumPer("70%", "28%"))}
+			pSize={new Size(new NumPer("34%", "84%"), new NumPer("70%", "28%"))}
 			pZ={1}
 		/>
 
@@ -130,12 +132,13 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 			pBg={Colors.BistageLite}
 			pFill={Colors.BlackOff}
 			pLoc={new Loc(new NumPer("83%", "74%"), new NumPer("68%", "77%"))}
-			pSize={new DirectSize(new NumPer(92, 70), new NumPer(92, 70))}
+			pSize={new Size(new NumPer(92, 70), new NumPer(92, 70))}
 			pZ={3}
 		/>
 
 		<DuoCol
-			pAlign="Start"
+			pHzAlign="Start"
+			pVrAlign="Start"
 			pGap={new Pixel(18, 14)}
 			pPad={new Pixel(0)}
 		>
@@ -150,7 +153,8 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 				<VrStack
 					pGap={new Pixel(22, 16)}
 					pPad={new Pixel(0)}
-					pAlign="Center"
+					pHzAlign="Center"
+					pVrAlign="Center"
 				>
 
 					<Emograph
@@ -177,7 +181,8 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 		</DuoCol>
 
 		<DuoCol
-			pAlign="Start"
+			pHzAlign="Start"
+			pVrAlign="Start"
 			pGap={new Pixel(18, 14)}
 			pPad={new Pixel(0)}
 		>
@@ -191,7 +196,8 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 				<VrStack
 					pGap={new Pixel(18, 14)}
 					pPad={new Pixel(0)}
-					pAlign="Center"
+					pHzAlign="Center"
+					pVrAlign="Center"
 				>
 
 					<SvgRadarCard
@@ -243,7 +249,7 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 
 		</DuoCol>
 
-	</DuoSec>
+	</DuoStr>
 
 
 
@@ -251,12 +257,13 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 
 
 
-	<DuoSec
+	<DuoStr
 		id="service-price"
 		pBg={new ElemBg("#F5F1E8")}
 		pMinH={new NumPer(560, 720)}
-		pAlign={Align.Center}
-		pContentSize={new DirectSize(new NumPer("min(1120px, 92%)", "92%"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+		pContentSize={new Size(new NumPer("min(1120px, 92%)", "92%"))}
 		pGap={new Pixel(28, 18)}
 		pPad={new Pixel(70, 42)}
 	>
@@ -266,7 +273,7 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 			pColor2="rgba(50,143,232,.22)"
 			pBlur={34}
 			pLoc={new Loc(new NumPer("68%", "46%"), new NumPer("-14%", "-7%"))}
-			pSize={new DirectSize(new NumPer("42%", "78%"), new NumPer("46%", "28%"))}
+			pSize={new Size(new NumPer("42%", "78%"), new NumPer("46%", "28%"))}
 			pZ={1}
 		/>
 
@@ -275,12 +282,13 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 			pGap={22}
 			pDot={2}
 			pLoc={new Loc(new NumPer("3%", "6%"), new NumPer("60%", "70%"))}
-			pSize={new DirectSize(new NumPer("38%", "78%"), new NumPer("34%", "24%"))}
+			pSize={new Size(new NumPer("38%", "78%"), new NumPer("34%", "24%"))}
 			pZ={1}
 		/>
 
 		<DuoCol
-			pAlign="Center"
+			pHzAlign="Center"
+			pVrAlign="Center"
 			pGap={new Pixel(20, 14)}
 			pPad={new Pixel(0)}
 		>
@@ -294,7 +302,8 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 				<VrStack
 					pGap={new Pixel(20, 14)}
 					pPad={new Pixel(0)}
-					pAlign="Center"
+					pHzAlign="Center"
+					pVrAlign="Center"
 				>
 
 					<PriceCard
@@ -318,7 +327,8 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 		</DuoCol>
 
 		<DuoCol
-			pAlign="Start"
+			pHzAlign="Start"
+			pVrAlign="Start"
 			pGap={new Pixel(18, 14)}
 			pPad={new Pixel(0)}
 		>
@@ -333,7 +343,8 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 				<VrStack
 					pGap={new Pixel(22, 16)}
 					pPad={new Pixel(0)}
-					pAlign="Center"
+					pHzAlign="Center"
+					pVrAlign="Center"
 				>
 
 					<Emograph
@@ -389,7 +400,7 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 
 		</DuoCol>
 
-	</DuoSec>
+	</DuoStr>
 
 
 
@@ -408,7 +419,7 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 		<VrStack>
 
 			<Emograph
-				pSize={new Size("min(1100px, 100%)", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("min(1100px, 100%)", "100%"), new NumPer("auto", "auto"))}
 				pTitle={new Text(3, 26 as any, true, "#6f6b7c", "right", "inherit", "لماذا لا يتم إلغاء شرط المسافة بين الصيدليات ؟")}
 				pText={new Text(0, 19 as any, false, "#222222", "right", "inherit", "بالنظر إلى حقيقة أن أساس مهنة الصيدلة هو تقديم الخدمة الدوائية وليس تجارة الأدوية ، فإن هذا الشرط يعتبر محوريا جدا تقوم على أساسه مهنة الصيدلة والتي تهدف لتقديم الخدمة الصيدلانية إلى أكبر نطاق جغرافي ممكن ، وعدم وجود هذا الشرط يهدم فكرة الخدمة الصيدلانية من أساسها .")}
 			/>
@@ -439,13 +450,13 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 			/>
 
 			<Emograph
-				pSize={new Size("min(1100px, 100%)", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("min(1100px, 100%)", "100%"), new NumPer("auto", "auto"))}
 				pTitle={new Text(3, 26 as any, true, "#6f6b7c", "right", "inherit", "فائدة الالتزام بشرط المسافة بالنسبة للصيدلي")}
 				pText={new Text(0, 19 as any, false, "#222222", "right", "inherit", "حماية حقوق الصيدليات القائمة ، حيث يهدف الشرط إلى حماية المراكز القانونية للصيدليات المرخصة بالفعل ، من خلال منع فتح صيدلية جديدة على مسافة قريبة جدًا قد تؤثر بشكل كبير على مبيعاتها .")}
 			/>
 
 			<Emograph
-				pSize={new Size("min(1100px, 100%)", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("min(1100px, 100%)", "100%"), new NumPer("auto", "auto"))}
 				pTitle={new Text(3, 26 as any, true, "#6f6b7c", "right", "inherit", "فائدة الالتزام بشرط المسافة بالنسبة للمرضى")}
 				pText={new Text(0, 19 as any, false, "#222222", "right", "inherit", "ضمان التوزيع العادل ، الهدف الأساسي من وجود شرط المسافة هو تنظيم سوق الأدوية والصيدليات ، ومنع المنافسة غير العادلة التي قد تؤدي إلى تكدس الصيدليات في مناطق معينة وحرمان مناطق أخرى من الحصول على الخدمة الصيدلانية ، مما يضمن وصول المرضى للأدوية بسهولة .")}
 			/>
@@ -471,17 +482,17 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 		<VrStack>
 
 			<Emograph
-				pSize={new Size("min(1100px, 100%)", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("min(1100px, 100%)", "100%"), new NumPer("auto", "auto"))}
 				pText={new Text(0, 20 as any, false, "#222222", "right", "inherit", "مسار المشاة الذي يتم حسابه غير مقيد بفتحات الدوران المرورية المخصصة للسيارات ، ولا بمناطق عبور المشاة المخططة في الطريق العام المخصص للسيارات أو فتحات عبور المشاة المفتوحة بالرصيف ، يتم حساب نقطة عبور الطريق للجانب المقابل من أقرب نقطة يمكن للشخص السليم السوي العبور منها فعليا ما دام ارتفاع الرصيف مناسب ويمكن تخطيه .")}
 			/>
 
 			<Emograph
-				pSize={new Size("min(1100px, 100%)", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("min(1100px, 100%)", "100%"), new NumPer("auto", "auto"))}
 				pText={new Text(0, 20 as any, false, "#222222", "right", "inherit", "ويتم اختيار الصيدلية الثانية التي يتم القياس إليها باعتبارها الأقرب من أي اتجاه ، سواء كانت في نفس الجانب من نفس الشارع الموجود به الصيدلية المطلوب ترخيصها ، أو كانت في الجانب المقابل من نفس الشارع ، أو كانت في شارع عمودي على الشارع الموجود به الصيدلية المراد ترخيصها ، أو كانت في الشارع الموازي السابق أو التالي للشارع الموجود به الصيدلية الأولى .")}
 			/>
 
 			<Emograph
-				pSize={new Size("min(1100px, 100%)", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("min(1100px, 100%)", "100%"), new NumPer("auto", "auto"))}
 				pText={new Text(0, 20 as any, false, "#222222", "right", "inherit", "يتم قياس المسافة بين الصيدليات باعتبارها طول أقصر مسار للمشاة يمكن للشخص المترجل سلوكه مشيا على الأقدام بين الصيدليتين ، على أن يكون هذا المسار من خطوط مستقيمة عمودية تبدأ من منتصف الباب للصيدلية الأولى وتنتهي عند منتصف الباب للصيدلية الثانية .")}
 			/>
 
@@ -582,7 +593,7 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 				<VrStack>
 
 					<Emograph
-						pSize={new Size("min(850px, 100%)", "auto", "100%", "auto")}
+						pSize={new Size(new NumPer("min(850px, 100%)", "100%"), new NumPer("auto", "auto"))}
 						pText={new Text(0, 19 as any, false, "#2f3340", "right", "inherit", "قياس دقيق للمسافة بين الصيدليات طبقاً للأسلوب المتبع من قبل هيئة الدواء المصرية ، للتحقق من شرط المسافة لأقرب صيدلية قبل المبادرة بالشراء أو الاستئجار")}
 					/>
 
@@ -605,7 +616,7 @@ import { SvgRadarCard } from "../../../site/Widgets/Cards";
 			</DirectServiceValuePrice>
 
 			<Emograph
-				pSize={new Size("min(900px, 100%)", "auto", "100%", "auto")}
+				pSize={new Size(new NumPer("min(900px, 100%)", "100%"), new NumPer("auto", "auto"))}
 				pTitle={new Text(3, 26 as any, true, "#6f6b7c", "center", "inherit", "اطلب الخدمة")}
 				pText={new Text(0, 19 as any, false, "#222222", "center", "inherit", "للمساعدة والتفاصيل اتصل بنا 01014490054 أو راسلنا على واتس أب")}
 			/>

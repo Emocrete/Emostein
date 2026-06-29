@@ -1,5 +1,4 @@
-import { Size, Location, RespString } from "@/TypesLib";
-
+import { Loc, NumPer, RespString, Size } from "@/TypesLib";
 export type TFreeHeroMotion =
 	| "FadeIn"
 	| "SlideInRight"
@@ -42,9 +41,9 @@ export type TFreeHeroMotion =
 	| "DriftBox"
 	| "OrbitSmall";
 
-export class FreeHeroKeyPoint {
+export class MovingKeyPoint {
 	constructor(
-		public readonly Loc: Location,
+		public readonly Loc: Loc,
 		public readonly Box: Size = new Size(),
 		public readonly Rotate: string | RespString = "0deg",
 		public readonly Opacity: number | RespString = 1,
@@ -53,18 +52,13 @@ export class FreeHeroKeyPoint {
 }
 
 export function OffsetLocation(
-	pLoc: Location,
+	pLoc: Loc,
 	pDeltaXL: string = "0px",
 	pDeltaXP: string = "0px",
 	pDeltaYL: string = "0px",
 	pDeltaYP: string = "0px",
-): Location {
-	return new Location(
-		AddCss(pLoc.XL, pDeltaXL),
-		AddCss(pLoc.XP, pDeltaXP),
-		AddCss(pLoc.YL, pDeltaYL),
-		AddCss(pLoc.YP, pDeltaYP),
-	);
+): Loc {
+	return new Loc(new NumPer(AddCss(pLoc.XL, pDeltaXL), AddCss(pLoc.XP, pDeltaXP)), new NumPer(AddCss(pLoc.YL, pDeltaYL), AddCss(pLoc.YP, pDeltaYP)));
 }
 
 export function AddCss(pBase: string | number, pDelta: string): string {
@@ -102,10 +96,10 @@ export function GetDistanceP(pDistance: string | RespString): string {
 
 export function BuildFreeHeroMotionPoints(
 	pMotion: TFreeHeroMotion,
-	pLoc: Location,
+	pLoc: Loc,
 	pBox: Size,
 	pDistance: string | RespString = new RespString("180px", "90px"),
-): FreeHeroKeyPoint[] {
+): MovingKeyPoint[] {
 	const cDL = GetDistanceL(pDistance);
 	const cDP = GetDistanceP(pDistance);
 	const cNegDL = NegCss(cDL);
@@ -128,267 +122,267 @@ export function BuildFreeHeroMotionPoints(
 	switch (pMotion) {
 		case "FadeIn":
 			return [
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 0),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1),
+				new MovingKeyPoint(cSame, pBox, "0deg", 0),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1),
 			];
 
 		case "SlideInRight":
 			return [
-				new FreeHeroKeyPoint(cFromRight, pBox, "0deg", 0),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1),
+				new MovingKeyPoint(cFromRight, pBox, "0deg", 0),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1),
 			];
 
 		case "SlideInLeft":
 			return [
-				new FreeHeroKeyPoint(cFromLeft, pBox, "0deg", 0),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1),
+				new MovingKeyPoint(cFromLeft, pBox, "0deg", 0),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1),
 			];
 
 		case "SlideInTop":
 			return [
-				new FreeHeroKeyPoint(cFromTop, pBox, "0deg", 0),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1),
+				new MovingKeyPoint(cFromTop, pBox, "0deg", 0),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1),
 			];
 
 		case "SlideInBottom":
 			return [
-				new FreeHeroKeyPoint(cFromBottom, pBox, "0deg", 0),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1),
+				new MovingKeyPoint(cFromBottom, pBox, "0deg", 0),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1),
 			];
 
 		case "ZoomIn":
 			return [
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 0, "scale(.55)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 0, "scale(.55)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
 			];
 
 		case "ZoomInRight":
 			return [
-				new FreeHeroKeyPoint(cFromRight, pBox, "0deg", 0, "scale(.6)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
+				new MovingKeyPoint(cFromRight, pBox, "0deg", 0, "scale(.6)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
 			];
 
 		case "ZoomInLeft":
 			return [
-				new FreeHeroKeyPoint(cFromLeft, pBox, "0deg", 0, "scale(.6)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
+				new MovingKeyPoint(cFromLeft, pBox, "0deg", 0, "scale(.6)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
 			];
 
 		case "ZoomInTop":
 			return [
-				new FreeHeroKeyPoint(cFromTop, pBox, "0deg", 0, "scale(.6)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
+				new MovingKeyPoint(cFromTop, pBox, "0deg", 0, "scale(.6)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
 			];
 
 		case "ZoomInBottom":
 			return [
-				new FreeHeroKeyPoint(cFromBottom, pBox, "0deg", 0, "scale(.6)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
+				new MovingKeyPoint(cFromBottom, pBox, "0deg", 0, "scale(.6)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
 			];
 
 		case "FlipInX":
 			return [
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 0, "perspective(900px) rotateX(88deg) scale(.9)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "perspective(900px) rotateX(0deg) scale(1)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 0, "perspective(900px) rotateX(88deg) scale(.9)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "perspective(900px) rotateX(0deg) scale(1)"),
 			];
 
 		case "FlipInY":
 			return [
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 0, "perspective(900px) rotateY(88deg) scale(.9)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "perspective(900px) rotateY(0deg) scale(1)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 0, "perspective(900px) rotateY(88deg) scale(.9)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "perspective(900px) rotateY(0deg) scale(1)"),
 			];
 
 		case "FlipInRight":
 			return [
-				new FreeHeroKeyPoint(cFromRight, pBox, "0deg", 0, "perspective(900px) rotateY(-78deg) scale(.9)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "perspective(900px) rotateY(0deg) scale(1)"),
+				new MovingKeyPoint(cFromRight, pBox, "0deg", 0, "perspective(900px) rotateY(-78deg) scale(.9)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "perspective(900px) rotateY(0deg) scale(1)"),
 			];
 
 		case "FlipInLeft":
 			return [
-				new FreeHeroKeyPoint(cFromLeft, pBox, "0deg", 0, "perspective(900px) rotateY(78deg) scale(.9)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "perspective(900px) rotateY(0deg) scale(1)"),
+				new MovingKeyPoint(cFromLeft, pBox, "0deg", 0, "perspective(900px) rotateY(78deg) scale(.9)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "perspective(900px) rotateY(0deg) scale(1)"),
 			];
 
 		case "FlipInTop":
 			return [
-				new FreeHeroKeyPoint(cFromTop, pBox, "0deg", 0, "perspective(900px) rotateX(-78deg) scale(.9)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "perspective(900px) rotateX(0deg) scale(1)"),
+				new MovingKeyPoint(cFromTop, pBox, "0deg", 0, "perspective(900px) rotateX(-78deg) scale(.9)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "perspective(900px) rotateX(0deg) scale(1)"),
 			];
 
 		case "FlipInBottom":
 			return [
-				new FreeHeroKeyPoint(cFromBottom, pBox, "0deg", 0, "perspective(900px) rotateX(78deg) scale(.9)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "perspective(900px) rotateX(0deg) scale(1)"),
+				new MovingKeyPoint(cFromBottom, pBox, "0deg", 0, "perspective(900px) rotateX(78deg) scale(.9)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "perspective(900px) rotateX(0deg) scale(1)"),
 			];
 
 		case "RotateIn":
 			return [
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 0, "rotate(-90deg) scale(.75)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg) scale(1)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 0, "rotate(-90deg) scale(.75)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg) scale(1)"),
 			];
 
 		case "RotateInRight":
 			return [
-				new FreeHeroKeyPoint(cFromRight, pBox, "0deg", 0, "rotate(55deg) scale(.8)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg) scale(1)"),
+				new MovingKeyPoint(cFromRight, pBox, "0deg", 0, "rotate(55deg) scale(.8)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg) scale(1)"),
 			];
 
 		case "RotateInLeft":
 			return [
-				new FreeHeroKeyPoint(cFromLeft, pBox, "0deg", 0, "rotate(-55deg) scale(.8)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg) scale(1)"),
+				new MovingKeyPoint(cFromLeft, pBox, "0deg", 0, "rotate(-55deg) scale(.8)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg) scale(1)"),
 			];
 
 		case "SpinReveal":
 			return [
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 0, "rotate(-180deg) scale(.2)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", .7, "rotate(20deg) scale(1.08)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg) scale(1)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 0, "rotate(-180deg) scale(.2)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", .7, "rotate(20deg) scale(1.08)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg) scale(1)"),
 			];
 
 		case "BounceIn":
 			return [
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 0, "scale(.35)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(1.08)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(.96)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 0, "scale(.35)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(1.08)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(.96)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
 			];
 
 		case "BounceInRight":
 			return [
-				new FreeHeroKeyPoint(cFromRight, pBox, "0deg", 0, "scale(.9)"),
-				new FreeHeroKeyPoint(cOverRight, pBox, "0deg", 1, "scale(1.03)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
+				new MovingKeyPoint(cFromRight, pBox, "0deg", 0, "scale(.9)"),
+				new MovingKeyPoint(cOverRight, pBox, "0deg", 1, "scale(1.03)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
 			];
 
 		case "BounceInLeft":
 			return [
-				new FreeHeroKeyPoint(cFromLeft, pBox, "0deg", 0, "scale(.9)"),
-				new FreeHeroKeyPoint(cOverLeft, pBox, "0deg", 1, "scale(1.03)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
+				new MovingKeyPoint(cFromLeft, pBox, "0deg", 0, "scale(.9)"),
+				new MovingKeyPoint(cOverLeft, pBox, "0deg", 1, "scale(1.03)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
 			];
 
 		case "BounceInTop":
 			return [
-				new FreeHeroKeyPoint(cFromTop, pBox, "0deg", 0, "scale(.9)"),
-				new FreeHeroKeyPoint(cOverTop, pBox, "0deg", 1, "scale(1.03)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
+				new MovingKeyPoint(cFromTop, pBox, "0deg", 0, "scale(.9)"),
+				new MovingKeyPoint(cOverTop, pBox, "0deg", 1, "scale(1.03)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
 			];
 
 		case "BounceInBottom":
 			return [
-				new FreeHeroKeyPoint(cFromBottom, pBox, "0deg", 0, "scale(.9)"),
-				new FreeHeroKeyPoint(cOverBottom, pBox, "0deg", 1, "scale(1.03)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
+				new MovingKeyPoint(cFromBottom, pBox, "0deg", 0, "scale(.9)"),
+				new MovingKeyPoint(cOverBottom, pBox, "0deg", 1, "scale(1.03)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
 			];
 
 		case "BackInRight":
 			return [
-				new FreeHeroKeyPoint(cFromRight, pBox, "0deg", 0, "scale(.72)"),
-				new FreeHeroKeyPoint(cOverRight, pBox, "0deg", 1, "scale(1.03)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
+				new MovingKeyPoint(cFromRight, pBox, "0deg", 0, "scale(.72)"),
+				new MovingKeyPoint(cOverRight, pBox, "0deg", 1, "scale(1.03)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
 			];
 
 		case "BackInLeft":
 			return [
-				new FreeHeroKeyPoint(cFromLeft, pBox, "0deg", 0, "scale(.72)"),
-				new FreeHeroKeyPoint(cOverLeft, pBox, "0deg", 1, "scale(1.03)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
+				new MovingKeyPoint(cFromLeft, pBox, "0deg", 0, "scale(.72)"),
+				new MovingKeyPoint(cOverLeft, pBox, "0deg", 1, "scale(1.03)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
 			];
 
 		case "BackInTop":
 			return [
-				new FreeHeroKeyPoint(cFromTop, pBox, "0deg", 0, "scale(.72)"),
-				new FreeHeroKeyPoint(cOverTop, pBox, "0deg", 1, "scale(1.03)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
+				new MovingKeyPoint(cFromTop, pBox, "0deg", 0, "scale(.72)"),
+				new MovingKeyPoint(cOverTop, pBox, "0deg", 1, "scale(1.03)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
 			];
 
 		case "BackInBottom":
 			return [
-				new FreeHeroKeyPoint(cFromBottom, pBox, "0deg", 0, "scale(.72)"),
-				new FreeHeroKeyPoint(cOverBottom, pBox, "0deg", 1, "scale(1.03)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
+				new MovingKeyPoint(cFromBottom, pBox, "0deg", 0, "scale(.72)"),
+				new MovingKeyPoint(cOverBottom, pBox, "0deg", 1, "scale(1.03)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
 			];
 
 		case "RollInRight":
 			return [
-				new FreeHeroKeyPoint(cFromRight, pBox, "0deg", 0, "rotate(120deg)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg)"),
+				new MovingKeyPoint(cFromRight, pBox, "0deg", 0, "rotate(120deg)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg)"),
 			];
 
 		case "RollInLeft":
 			return [
-				new FreeHeroKeyPoint(cFromLeft, pBox, "0deg", 0, "rotate(-120deg)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg)"),
+				new MovingKeyPoint(cFromLeft, pBox, "0deg", 0, "rotate(-120deg)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg)"),
 			];
 
 		case "LightSpeedInRight":
 			return [
-				new FreeHeroKeyPoint(cFromRight, pBox, "0deg", 0, "skewX(-28deg)"),
-				new FreeHeroKeyPoint(cOverRight, pBox, "0deg", 1, "skewX(8deg)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "skewX(0deg)"),
+				new MovingKeyPoint(cFromRight, pBox, "0deg", 0, "skewX(-28deg)"),
+				new MovingKeyPoint(cOverRight, pBox, "0deg", 1, "skewX(8deg)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "skewX(0deg)"),
 			];
 
 		case "LightSpeedInLeft":
 			return [
-				new FreeHeroKeyPoint(cFromLeft, pBox, "0deg", 0, "skewX(28deg)"),
-				new FreeHeroKeyPoint(cOverLeft, pBox, "0deg", 1, "skewX(-8deg)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "skewX(0deg)"),
+				new MovingKeyPoint(cFromLeft, pBox, "0deg", 0, "skewX(28deg)"),
+				new MovingKeyPoint(cOverLeft, pBox, "0deg", 1, "skewX(-8deg)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "skewX(0deg)"),
 			];
 
 		case "FloatY":
 			return [
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1),
-				new FreeHeroKeyPoint(cFloatTop, pBox, "0deg", 1),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1),
+				new MovingKeyPoint(cFloatTop, pBox, "0deg", 1),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1),
 			];
 
 		case "FloatX":
 			return [
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1),
-				new FreeHeroKeyPoint(cFloatRight, pBox, "0deg", 1),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1),
+				new MovingKeyPoint(cFloatRight, pBox, "0deg", 1),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1),
 			];
 
 		case "Pulse":
 			return [
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(1.08)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(1.08)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(1)"),
 			];
 
 		case "Breathe":
 			return [
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", .72, "scale(.98)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "scale(1.04)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", .72, "scale(.98)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", .72, "scale(.98)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "scale(1.04)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", .72, "scale(.98)"),
 			];
 
 		case "Wiggle":
 			return [
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "rotate(-4deg)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "rotate(4deg)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "rotate(-4deg)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "rotate(4deg)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg)"),
 			];
 
 		case "DriftBox":
 			return [
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1),
-				new FreeHeroKeyPoint(cFloatRight, pBox, "0deg", 1),
-				new FreeHeroKeyPoint(cBoxCorner, pBox, "0deg", 1),
-				new FreeHeroKeyPoint(cBottomCorner, pBox, "0deg", 1),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1),
+				new MovingKeyPoint(cFloatRight, pBox, "0deg", 1),
+				new MovingKeyPoint(cBoxCorner, pBox, "0deg", 1),
+				new MovingKeyPoint(cBottomCorner, pBox, "0deg", 1),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1),
 			];
 
 		case "OrbitSmall":
 			return [
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg)"),
-				new FreeHeroKeyPoint(cFloatRight, pBox, "0deg", 1, "rotate(8deg)"),
-				new FreeHeroKeyPoint(cBoxCorner, pBox, "0deg", 1, "rotate(0deg)"),
-				new FreeHeroKeyPoint(cBottomCorner, pBox, "0deg", 1, "rotate(-8deg)"),
-				new FreeHeroKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg)"),
+				new MovingKeyPoint(cFloatRight, pBox, "0deg", 1, "rotate(8deg)"),
+				new MovingKeyPoint(cBoxCorner, pBox, "0deg", 1, "rotate(0deg)"),
+				new MovingKeyPoint(cBottomCorner, pBox, "0deg", 1, "rotate(-8deg)"),
+				new MovingKeyPoint(cSame, pBox, "0deg", 1, "rotate(0deg)"),
 			];
 	}
 }

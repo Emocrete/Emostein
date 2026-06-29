@@ -1,7 +1,7 @@
 ---
+import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, Topic, ElemBg, Colors, RespString, Pixel, Size, Align } from "@/TypesLib";
-import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, ReadAlso, RelServices, SecTitle, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, SecTitle } from "@/Widgets";
 ---
 
 
@@ -41,7 +41,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		pDesc="نحوّل المساحة إلى تجربة استخدام مريحة ومنظمة: توزيع ذكي، ألوان محسوبة، إضاءة مدروسة، خامات مناسبة، وأثاث يخدم الحياة اليومية أو التشغيل التجاري."
 		pTitleClr="#FFF2C8"
 		pDescClr={Colors.WhiteOff}
-		pAlign="right"
+		pHzAlign="right"
+		pVrAlign="right"
 		pPosL="14% 52% 12% 7%"
 		pPosP="12% 8% 46% 8%"
 		pBlurL="on"
@@ -58,7 +59,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #111318 "
@@ -69,7 +71,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("الديكور نتيجة، أما التصميم فهو قرار")}
 				pText={Text.Body.WithColor("#333333").OfText("عند تصميم شقة أو فيلا أو مكتب أو محل، يتجاوز القرار اختيار لون حائط أو شكل كنبة. التصميم الداخلي يربط المسقط بالأثاث، السقف بالإضاءة، الخامات بطريقة التنظيف والصيانة، الألوان بمساحة المكان، ومسارات الحركة باحتياج المستخدم. لذلك تكون قيمة الخدمة في تحويل المساحة إلى نظام واضح قابل للتنفيذ والتسعير، مع طابع بصري يناسب صاحب المكان أو هوية النشاط.")}
 			/>
@@ -98,7 +100,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#111318")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#111318")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -132,20 +135,22 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 	<EmoStrip
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("تصميم داخلي يربط الجمال بالتنفيذ")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("الصور المرجعية تعطي اتجاهًا بصريًا، لكنها لا تكفي لتنفيذ مكان ناجح. التنفيذ يحتاج مساقط أثاث، مخططات كهرباء، أماكن الإضاءة، خامات محددة، مقاسات نجارة، تفاصيل أسقف، ومراجعة العلاقة بين التصميم والتشطيب والميزانية.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -193,7 +198,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -225,7 +231,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #111318 "
@@ -249,7 +256,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 			/>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("الأفضل أن يسبق التصميم مرحلة التشطيب")}
 				pText={Text.Body.WithColor("#333333").OfText("عندما يبدأ التشطيب قبل التصميم، تظهر قرارات مكلفة لاحقًا: نقل كهرباء، إعادة دهان، تعديل جبس، تغيير مقاسات نجارة، أو شراء أثاث لا يناسب المساحة. لذلك نفضل تثبيت التصميم الداخلي قبل البنود التي يصعب تغييرها مثل نقاط الكهرباء، أماكن الإضاءة، توزيع التكييف، تفاصيل الأسقف، ومقاسات النجارة الثابتة.")}
 			/>
@@ -266,20 +273,22 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 	<EmoStrip
 		pBg={new ElemBg("#F7F1E6")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#111318")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#FFF2C8").OfText("خدماتنا حسب نوع المساحة")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("التصميم الداخلي السكني يختلف عن التجاري. المنزل يحتاج راحة وخصوصية وتخزينًا، بينما النشاط التجاري يحتاج هوية واضحة وحركة عملاء وتشغيلًا منظمًا وعائدًا من كل متر.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -308,7 +317,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -358,7 +368,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #111318 "
@@ -369,7 +380,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("من الذوق الشخصي إلى لغة تصميم")}
 				pText={Text.Body.WithColor("#333333").OfText("العميل قد يحب عشرات الصور المتناقضة. دور المصمم أن يكتشف ما يجمع هذه الصور: الهدوء، الفخامة، الخامات الطبيعية، الخطوط النظيفة، الدفء، أو التباين. بعدها يتحول الذوق إلى قواعد تصميم تساعد على اختيار الأرضيات، الألوان، النجارة، الأثاث، الإضاءة، والإكسسوارات دون أن يفقد المكان وحدته.")}
 			/>
@@ -403,20 +414,22 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 	<EmoStrip
 		pBg={new ElemBg("#0E1118")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#151923")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("التصميم الداخلي التجاري له هدف مختلف")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("في المحلات والمطاعم والمكاتب والعيادات، التصميم يعمل كأداة تشغيل وبيع وثقة. المساحة يجب أن تخدم العميل والموظف والماركة في نفس الوقت، مع احترام مسارات الخدمة والصيانة والتكلفة.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -464,7 +477,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -498,7 +512,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #111318 "
@@ -530,7 +545,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -584,7 +600,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #111318 "
@@ -595,7 +612,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("أولوية الخامات تختلف من عنصر لآخر")}
 				pText={Text.Body.WithColor("#333333").OfText("توزيع الميزانية الذكي يفرق بين العناصر التي تعيش طويلًا وتصعب إزالتها مثل الأرضيات والنجارة الثابتة والكهرباء، وبين عناصر يمكن تغييرها لاحقًا مثل بعض الإكسسوارات أو قطع الأثاث الجاهزة. لذلك نصمم المكان كنظام أولويات يحافظ على النتيجة البصرية ويمنع كسر الميزانية بسبب مشتريات غير محسوبة.")}
 			/>
@@ -625,20 +642,22 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 	<EmoStrip
 		pBg={new ElemBg("#F7F1E6")}
-		pSize={new Size("100%", "auto", "100%", "auto")}
-		pAlign={Align.Center}
+		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<EmoStrip
 			pBg={new ElemBg("#111318")}
-			pSize={new Size(1200, "auto", "calc(100% - 20px)", "auto")}
-			pAlign={Align.Center}
+			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
 		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#FFF2C8").OfText("تصميم داخلي لمساحة قائمة")}
 				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("عند وجود شقة أو مكتب أو محل مستخدم بالفعل، تصبح المهمة أكثر حساسية. نحتاج حلولًا تحترم الموجود وتحدد ما يمكن تطويره دون تكلفة هدم أو تعطيل مبالغ فيه.")}
-				pSize={new Size(1000, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
 		</EmoStrip>
@@ -667,7 +686,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -717,7 +737,8 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #111318 "
@@ -741,7 +762,7 @@ import { Hero, ESec, EmoStrip, Emograph, CardsGr, EmoList, EmoCall, EmoFaq, Read
 			/>
 
 			<Emograph
-				pSize={new Size(560, "auto", 320, "auto")}
+				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
 				pTitle={Text.H3.WithColor("#111318").OfText("التصميم الواضح يساعد في ضبط تكلفة التشطيب")}
 				pText={Text.Body.WithColor("#333333").OfText("عندما تكون الرسومات والاختيارات واضحة، يستطيع العميل مقارنة عروض المقاولين بصورة أفضل. تظهر البنود المطلوبة، وتقل القرارات المفاجئة، ويصبح تغيير الخامات أو تقليل بعض التفاصيل قرارًا محسوبًا بدل تخفيض عشوائي يضر بالشكل أو الجودة.")}
 			/>

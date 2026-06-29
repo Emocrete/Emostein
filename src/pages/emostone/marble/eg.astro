@@ -1,7 +1,7 @@
 ---
+import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Text, ElemBg, Size, Align, Colors, RespString, Topic, Pixel, EmoMediaData } from "@/TypesLib";
-import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, ReadAlso, RelServices, SecTitle, VrStack, HzStack, ReadAlsoItem, FaqItem, RelServiceItem } from "@/Widgets";
+import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
 ---
 
 
@@ -37,7 +37,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 
 	<Hero
 		pTitle="توريد وتركيب رخام مصري"
-		pAlign="center"
+		pHzAlign="center"
+		pVrAlign="center"
 		pBlurP="off"
 		pPosL="40% 60% 20% 10%"
 		pPosP="15% 5% 50% 5%"
@@ -53,7 +54,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -61,7 +63,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 			pDesc="الصفحة مخصصة للرخام المصري الطبيعي فقط، مع أسماء وصور واستخدامات تساعدك تختار الخامة المناسبة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -75,7 +78,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("مصري فقط")}
 						pText={Text.Body.Centered.OfText("الأنواع المعروضة هنا من الرخام المصري الطبيعي، مثل جلالة وصني وسيلفيا وسماحة وتريستا وملي جراي.")}
-						pSize={new Size(350, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</VrStack>
@@ -90,7 +93,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("فرز قبل التوريد")}
 						pText={Text.Body.Centered.OfText("نراجع اللون والعروق والسمك والتشطيب وحالة الألواح قبل اعتماد الخامة للموقع.")}
-						pSize={new Size(350, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</VrStack>
@@ -105,7 +108,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("استخدامات متعددة")}
 						pText={Text.Body.Centered.OfText("الأرضيات، السلالم، الحوائط، المداخل، الواجهات، العتبات، المشايات، المدافئ، والديكور الداخلي.")}
-						pSize={new Size(350, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 				</VrStack>
@@ -122,7 +125,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -130,7 +134,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 			pDesc="كل صورة مرتبطة باسم نوع مصري محدد من صفحات مورّدين تعرضه ضمن الرخام المصري"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack
 				pWidth={new Pixel(1300, 340)}
@@ -154,14 +159,14 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 								"9289d4_9e45b985cf8748b5a589e2d0869fccab~mv2.png",
 								false,
 								"جلالة إكسترا رخام مصري",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("جلالة إكسترا")}
 							pText={Text.Body.Centered.OfText("لون فاتح هادئ، مناسب للأرضيات الداخلية والحوائط والمداخل الواسعة.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -180,14 +185,14 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 								"9289d4_5b274629cdcf4b9da98a343d1c12c75c~mv2.jpg",
 								false,
 								"جلالة إكسترا بلاطة مصقولة",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("جلالة مصقول")}
 							pText={Text.Body.Centered.OfText("درجة كريمية فاتحة، مناسبة للحوائط والأرضيات والتطبيقات الهادئة.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -206,14 +211,14 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 								"9289d4_69819d592de54bd7bec159b3e00c08ea~mv2.jpg",
 								false,
 								"صني منيا رخام مصري",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("صني منيا")}
 							pText={Text.Body.Centered.OfText("بيج دافئ بخطوط وعروق خفيفة، شائع في الأرضيات والسلالم والواجهات.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -232,14 +237,14 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 								"9289d4_44b1d60cf5f3434e83aac2def80703a3~mv2.jpg",
 								false,
 								"صني لايت رخام مصري",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("صني لايت")}
 							pText={Text.Body.Centered.OfText("درجة فاتحة من عائلة صني، تعطي إضاءة جيدة للأرضيات الداخلية.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -262,14 +267,14 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 								"9289d4_69d891d2e0774ffe99e0ac673d2c4f3c~mv2.jpg",
 								false,
 								"صني ميديوم رخام مصري",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("صني ميديوم")}
 							pText={Text.Body.Centered.OfText("بيج يميل للأصفر، مناسب للأرضيات والمداخل التي تحتاج لونًا دافئًا.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -288,14 +293,14 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 								"9289d4_66c91879410b4c9488e9311d8799afe3~mv2.jpg",
 								false,
 								"صني دارك رخام مصري",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("صني دارك")}
 							pText={Text.Body.Centered.OfText("درجة ذهبية أغمق، مناسبة للسلالم والمشايات وبعض الحوائط الديكورية.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -314,14 +319,14 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 								"9289d4_e9e90f3f28b447da9453f1d1d6ad5074~mv2.jpg",
 								false,
 								"سيلفيا مينيا رخام مصري",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("سيلفيا مينيا")}
 							pText={Text.Body.Centered.OfText("عروق طولية هادئة، مناسب للحوائط والأرضيات التجارية والسلالم.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -340,14 +345,14 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 								"9289d4_f2cf1c2e31ec4bb28ddb29e12b962461~mv2.jpg",
 								false,
 								"سماحة رخام مصري",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("سماحة")}
 							pText={Text.Body.Centered.OfText("لون فاتح ناعم، مناسب للأرضيات الهادئة والحوائط وبعض أعمال المداخل.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -370,14 +375,14 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 								"9289d4_b2e72d4ee1dc4356981a813806240f87~mv2.jpg",
 								false,
 								"ملي جراي دارك رخام مصري",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("ملي جراي دارك")}
 							pText={Text.Body.Centered.OfText("رمادي داكن، مناسب للديكور الحديث والحوائط المميزة والأرضيات الخاصة.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -396,14 +401,14 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 								"9289d4_f0ab6ac4d8794c9388d5442e96199724~mv2.jpg",
 								false,
 								"ملي جراي فوسيلز رخام مصري",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("ملي جراي فوسيلز")}
 							pText={Text.Body.Centered.OfText("رمادي فاتح مع حركة فوسيلز، مناسب للحمامات الحديثة والحوائط والأرضيات الهادئة.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -422,14 +427,14 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 								"9289d4_2c6218aa253e4d6ebcec6ad755a0eeeb~mv2.jpg",
 								false,
 								"سربجنتي رخام مصري",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("سربجنتي")}
 							pText={Text.Body.Centered.OfText("درجة دافئة ذات حركة طولية، مناسبة للأرضيات والحوائط التي تحتاج شكلًا مميزًا.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -448,14 +453,14 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 								"9289d4_299b3c3f066d4619b5150b06409b6eed~mv2.jpg",
 								false,
 								"صني منيا لوح رخام مصري مصقول",
-								new Size(280, "auto", "100%", "auto")
+								new Size(new NumPer(280, "100%"), new NumPer("auto", "auto"))
 							)}
 						/>
 
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("صني مصقول")}
 							pText={Text.Body.Centered.OfText("سطح مصقول يصلح لعرض نتيجة الجلي والتلميع قبل اختيار درجة اللمعان.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -474,7 +479,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -482,7 +488,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 			pDesc="اختيار النوع يتغير حسب الحركة والرطوبة والشمس وطريقة التنظيف والتفاصيل المطلوبة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<VrStack
 				pWidth={new Pixel(1300, 340)}
@@ -502,7 +509,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("الأرضيات")}
 							pText={Text.Body.Centered.OfText("جلالة وصني وسماحة اختيارات مناسبة للأرضيات الداخلية الهادئة، مع فرز جيد للألواح وتناسق في اللون.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -517,7 +524,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("السلالم")}
 							pText={Text.Body.Centered.OfText("صني دارك وسيلفيا وتريستا تناسب السلالم عند اختيار سمك وتشطيب مناسبين للنوزنج والوزرات.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -532,7 +539,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("المداخل")}
 							pText={Text.Body.Centered.OfText("المداخل تحتاج خامة واضحة في اللون وسهلة التنظيف، مع عتبات ومشايات متناسقة مع الأرضية.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -547,7 +554,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("الواجهات")}
 							pText={Text.Body.Centered.OfText("الواجهات تحتاج اختيار نوع وتشطيب يتحمل الشمس والمطر، مع تثبيت مناسب وفواصل محسوبة.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -566,7 +573,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("الحوائط")}
 							pText={Text.Body.Centered.OfText("الألواح المتجانسة أو القصات الصغيرة تستخدم في الحوائط الداخلية، خلفيات الاستقبال، والديكورات الهادئة.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -581,7 +588,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("المدافئ والدفايات")}
 							pText={Text.Body.Centered.OfText("الرخام المصري يعطي إطارًا دافئًا للمدافئ والدفايات، مع اختيار نوع متماسك وتشطيب مناسب للحرارة والتنظيف.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -596,7 +603,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("المشايات")}
 							pText={Text.Body.Centered.OfText("المشايات تحتاج سطحًا آمنًا وتشطيبًا أقل انزلاقًا، خصوصًا في الحدائق والمداخل الخارجية.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -611,7 +618,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 						<Emograph
 							pTitle={Text.H4.Centered.OfText("عتبات الأبواب")}
 							pText={Text.Body.Centered.OfText("العتبات تحتاج سمكًا مناسبًا وقطعًا نظيفًا ومعالجة للحواف، لأنها أكثر عرضة للاحتكاك والتنظيف المتكرر.")}
-							pSize={new Size(260, "auto", "100%", "auto")}
+							pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
 						/>
 
 					</VrStack>
@@ -630,7 +637,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -638,7 +646,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 			pDesc="الألوان الفاتحة تعطي اتساعًا وهدوءًا، والدرجات الذهبية والرمادية تصلح للأماكن التي تحتاج حضورًا بصريًا أقوى"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -682,7 +691,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -690,7 +700,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 			pDesc="نفس النوع يعطي نتيجة مختلفة حسب التشطيب: لامع، مطفي، رملي، تمبلد، أو سبليت فيس"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("1100px", "100%")}
@@ -721,7 +732,8 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 	<ESec
 		id="cta"
 		pBg={new ElemBg(Colors.BlackOff)}
-		pAlign={Align.Center}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
@@ -730,14 +742,15 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 			pDesc="أرسل صورة المكان، نوع الاستخدام، المقاسات التقريبية، واللون المفضل، وسنرشح لك أنواعًا مصرية مناسبة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pAlign={Align.Center}>
+		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
+ pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
 				<Emograph
 					pTitle={Text.H3.WithAlign("right").White.OfText("بيانات تساعد في اختيار الرخام")}
 					pText={Text.Body.WithAlign("right").White.OfText("نوع المساحة، درجة الحركة، وجود رطوبة أو شمس مباشرة، اللون المطلوب، شكل العروق، المقاسات التقريبية، وطريقة التشطيب. بعد مراجعة هذه البيانات يتم ترشيح خامات مصرية مناسبة مثل جلالة أو صني أو سيلفيا أو سماحة أو ملي جراي حسب الحالة.")}
-					pSize={new Size(750, "auto", "100%", "auto")}
+					pSize={new Size(new NumPer(750, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 				<VrStack
@@ -750,7 +763,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 					<Emograph
 						pTitle={Text.H3.Centered.OfText("01014490054")}
 						pText={Text.Body.Centered.OfText("اتصل أو ارسل صور المكان على واتساب لبدء الترشيح والمعاينة.")}
-						pSize={new Size(300, "auto", "100%", "auto")}
+						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
 					/>
 
 					<EmoCall BlackSky pText="اطلب الخدمة" />
@@ -815,7 +828,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 		pHeadBg={new ElemBg(Colors.SkyLite)}
 		pBodyBg={new ElemBg(Colors.WhiteOff)}
 		pCardBg={new ElemBg(Colors.SkyLite)}
-		pWidth={new Size(1300, "auto", "calc(100% - 30px)", "auto")}
+		pWidth={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
 		pGap={new Pixel(20, 15)}
 	>
 
@@ -854,7 +867,7 @@ import { Hero, ESec, EmoStrip, Emograph, EmoList, RespImg, EmoCall, EmoFaq, Read
 		pHeadBg={new ElemBg(Colors.Gray5)}
 		pBodyBg={new ElemBg(Colors.Gray1)}
 		pCardBg={new ElemBg(Colors.WhiteOff)}
-		pWidth={new Size(1300, "auto", "calc(100% - 30px)", "auto")}
+		pWidth={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
 		pGap={new Pixel(20, 15)}
 	>
 
