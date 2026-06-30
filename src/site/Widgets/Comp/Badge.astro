@@ -1,8 +1,6 @@
 ---
-import { Colors, ElemBg, EmoMediaData, NumPer, Pixel, Place, type PlaceProps, Size, Text } from "@/TypesLib";
+import { Colors, EmoMediaData, NumPer, Pixel, Place, type PlaceProps, Size, Text } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import HzStack from "./HzStack.astro";
-import Stack from "./Stack.astro";
 import Emograph from "./Emograph.astro";
 import RespImg from "../Media/RespImage.astro";
 
@@ -117,37 +115,46 @@ const {
 	pMoveViewMargin,
 	pMoveViewTarget,
 
-
 	id: pGivenID = GetWidgetId("Badge"),
 	class: pGivenClass = "",
 	style: pGivenStyle = "",
 	...RemAttr
 } = cProps;
 
-const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cGivenStyle = GetStyleText(pGivenStyle);
 const cHasPrimaryBadge = HasValue(pYears) || HasValue(pWorks) || HasValue(pDuration) || HasValue(pQualityText);
 const pScopeText = cHasExplicitScopeText ? String(pScopeTextRaw ?? "") : cHasPrimaryBadge ? "" : "القاهرة والجيزة";
 
 const cBadges = GetBadges();
-const cItemDir = pTextPos === "Top" || pTextPos === "Bottom" ? "Col" : "Row";
 const cTextFirst = pTextPos === "Right" || pTextPos === "Top";
-const cItemStyle = pTextPos === "Right" || pTextPos === "Left" ? "direction:rtl;" : "";
 const cNumFont = Text.Body.WithSize(pNumSize).WithColor(pColor).Centered;
 const cTextFont = Text.Body.WithSize(pTextSize).WithColor(pColor).Centered;
-const cBg = pUseBg ? new ElemBg(pBgColor) : undefined;
-const cMobMaxCols = Math.max(1, Math.min(6, Number(pMobMaxCols) || 2));
+const cMobCols = Math.max(1, Math.min(6, Number(pMobMaxCols) || 2, cBadges.length || 1));
+const cTextPosClass = `Text${pTextPos}`;
+const cNumViewClass = `Number${pNumberView}`;
 
 const cCssVars = `
+--BadgeWidthL:${pWidth?.Landscape ?? "fit-content"};
+--BadgeWidthP:${pWidth?.Portrait ?? pWidth?.Landscape ?? "100%"};
+--BadgePadL:${pPad.Landscape};
+--BadgePadP:${pPad.Portrait};
+--BadgeItemGapL:${pItemGap.Landscape};
+--BadgeItemGapP:${pItemGap.Portrait};
+--BadgeImgTextGapL:${pImgTextGap.Landscape};
+--BadgeImgTextGapP:${pImgTextGap.Portrait};
+--BadgeNumTextGapL:${pNumTextGap.Landscape};
+--BadgeNumTextGapP:${pNumTextGap.Portrait};
 --BadgeNumSizeL:${pNumSize.Landscape};
 --BadgeNumSizeP:${pNumSize.Portrait};
 --BadgeTextSizeL:${pTextSize.Landscape};
 --BadgeTextSizeP:${pTextSize.Portrait};
---BadgeNumTextGapL:${pNumTextGap.Landscape};
---BadgeNumTextGapP:${pNumTextGap.Portrait};
 --BadgeColor:${pColor};
---BadgeItemWidthP:100%;
+--BadgeBg:${pUseBg ? pBgColor : "transparent"};
+--BadgeMobCols:${cMobCols};
 ${cGivenStyle}
 `;
+
+const cPlace = new Place(Astro.props as PlaceProps, cCssVars);
 
 function GetBadges(): BadgeData[] {
 	const cItems: BadgeData[] = [];
@@ -214,276 +221,208 @@ function GetImg(pImg: TBadgeImg | undefined, pDefaultFile: string, pAlt: string)
 
 	return new EmoMediaData("Img", "/Media/", pDefaultFile, false, pAlt, pImgSize);
 }
+
+function GetStyleText(pStyle: unknown): string {
+	if (typeof pStyle === "string") return pStyle;
+	if (!pStyle || typeof pStyle !== "object") return "";
+
+	return Object.entries(pStyle)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join("\n");
+}
+
+function GetCssName(pName: string): string {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
 ---
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<HzStack
-	class = {`Badge BadgeAutoMobile ${pGivenClass}`}
-	style = {cCssVars}
+<div
+	class={`Badge ${cPlace.Class} ${cTextPosClass} ${cNumViewClass} ${pGivenClass}`.trim()}
+	style={cPlace.Style}
 	id={pGivenID}
-	pGap={pItemGap}
-	pPad={pPad}
-	pBg={cBg}
-	pLoc={pLoc}
-	pSize={pSize}
-	pRotate={pRotate}
-	pZ={pZ}
-	pOrigin={pOrigin}
-	pOpacity={pOpacity}
-	pClickable={pClickable}
-	pLandOnly={pLandOnly}
-	pPortOnly={pPortOnly}
-	data-badge-auto-mobile="true"
-	data-badge-max-cols={cMobMaxCols}
+	data-badge-cols={cMobCols}
 	{...RemAttr}
 >
-
-	{ cBadges.map((cBadge) => (
-
-		<Stack
-			class = " BadgeItem "
-			style = {cItemStyle}
-			pDir={cItemDir}
-			pMainSizeMode="Own"
-			pCrossSizeMode="Own"
-			pGap={pImgTextGap}
-			pPad={new Pixel(0, 0)}
-			pFlipNarrow={false}
-			data-own-size={true}
-			data-badge-item="true"
-		>
-
-			{ cTextFirst && (
-				cBadge.Number !== undefined ? (
-					pNumberView === "Split" ? (
-
-						<Stack
-							class = " BadgeTextStack "
-							pDir="Col"
-							pMainSizeMode="Own"
-							pCrossSizeMode="Own"
-							pGap={pNumTextGap}
-							pPad={new Pixel(0, 0)}
-							pFlipNarrow={false}
-							data-own-size={true}
-						>
-
-							<Emograph pTitle={cNumFont.OfText(String(cBadge.Number))} />
-
-							<Emograph pTitle={cTextFont.OfText(cBadge.Text)} data-own-size={true} />
-
-						</Stack>
-
-						) : (
-
-							<p class = " BadgeInlineText " data-own-size={true}>
-
-								<span class = " BadgeInlineNum ">
-									{cBadge.Number}
-								</span>
-
-								<span class = " BadgeInlineDesc ">
-									{cBadge.Text}
-								</span>
-
-							</p>
-
-						)
-						) : (
-
-							<Emograph pTitle={cTextFont.OfText(cBadge.Text)} data-own-size={true} />
-
-						)) }
-
-				<RespImg pImg={cBadge.Img} data-own-size={true} />
-
-				{ !cTextFirst && (
+	<div class="BadgeList">
+		{cBadges.map((cBadge) => (
+			<div class="BadgeItem" data-badge-item="true">
+				{cTextFirst && (
 					cBadge.Number !== undefined ? (
 						pNumberView === "Split" ? (
-
-							<Stack
-								class = " BadgeTextStack "
-								pDir="Col"
-								pMainSizeMode="Own"
-								pCrossSizeMode="Own"
-								pGap={pNumTextGap}
-								pPad={new Pixel(0, 0)}
-								pFlipNarrow={false}
-								data-own-size={true}
-							>
-
+							<div class="BadgeTextBlock">
 								<Emograph pTitle={cNumFont.OfText(String(cBadge.Number))} />
+								<Emograph pTitle={cTextFont.OfText(cBadge.Text)} />
+							</div>
+						) : (
+							<p class="BadgeInlineText">
+								<span class="BadgeInlineNum">{cBadge.Number}</span>
+								<span class="BadgeInlineDesc">{cBadge.Text}</span>
+							</p>
+						)
+					) : (
+						<Emograph pTitle={cTextFont.OfText(cBadge.Text)} />
+					)
+				)}
 
-								<Emograph pTitle={cTextFont.OfText(cBadge.Text)} data-own-size={true} />
+				<RespImg class="BadgeImg" pImg={cBadge.Img} />
 
-							</Stack>
-
-							) : (
-
-								<p class = " BadgeInlineText " data-own-size={true}>
-
-									<span class = " BadgeInlineNum ">
-										{cBadge.Number}
-									</span>
-
-									<span class = " BadgeInlineDesc ">
-										{cBadge.Text}
-									</span>
-
-								</p>
-
-							)
-							) : (
-
-								<Emograph pTitle={cTextFont.OfText(cBadge.Text)} data-own-size={true} />
-
-							)) }
-
-				</Stack>
-
-				)) }
-
-		</HzStack>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+				{!cTextFirst && (
+					cBadge.Number !== undefined ? (
+						pNumberView === "Split" ? (
+							<div class="BadgeTextBlock">
+								<Emograph pTitle={cNumFont.OfText(String(cBadge.Number))} />
+								<Emograph pTitle={cTextFont.OfText(cBadge.Text)} />
+							</div>
+						) : (
+							<p class="BadgeInlineText">
+								<span class="BadgeInlineNum">{cBadge.Number}</span>
+								<span class="BadgeInlineDesc">{cBadge.Text}</span>
+							</p>
+						)
+					) : (
+						<Emograph pTitle={cTextFont.OfText(cBadge.Text)} />
+					)
+				)}
+			</div>
+		))}
+	</div>
+</div>
 
 <style>
+	.Badge {
+		position: relative;
+		display: block;
+		box-sizing: border-box;
+		width: var(--BadgeWidthL, fit-content);
+		max-width: 100%;
+		padding: var(--BadgePadL, 0px);
+		background-color: var(--BadgeBg, transparent);
+		color: var(--BadgeColor, currentColor);
+	}
 
+	.Badge.PlaceSized {
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
 
+	.Badge.IsPlaced {
+		position: absolute;
+	}
+
+	.BadgeList {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		gap: var(--BadgeItemGapL, 0px);
+		width: 100%;
+		max-width: 100%;
+		box-sizing: border-box;
+		direction: rtl;
+	}
+
+	.BadgeItem {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		gap: var(--BadgeImgTextGapL, 0px);
+		box-sizing: border-box;
+		min-width: 0;
+		max-width: 100%;
+		text-align: center;
+		color: var(--BadgeColor, currentColor);
+	}
+
+	.Badge.TextTop .BadgeItem,
+	.Badge.TextBottom .BadgeItem {
+		flex-direction: column;
+	}
+
+	.BadgeTextBlock {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: var(--BadgeNumTextGapL, 0px);
+		min-width: 0;
+		max-width: 100%;
+		text-align: center;
+	}
 
 	.BadgeInlineText {
 		margin: 0;
 		display: inline-flex;
-		align-items: center;
+		align-items: baseline;
 		justify-content: center;
-		gap: var(--BadgeNumTextGapL);
-		width: 100%;
-		color: var(--BadgeColor);
-		line-height: 2;
+		gap: var(--BadgeNumTextGapL, 0px);
+		max-width: 100%;
+		color: var(--BadgeColor, currentColor);
+		line-height: 1.35;
 		text-align: center;
-		white-space: nowrap;
+		white-space: normal;
 	}
-
 
 	.BadgeInlineNum {
 		font-size: var(--BadgeNumSizeL);
+		font-weight: 700;
+		line-height: 1;
 	}
-
 
 	.BadgeInlineDesc {
 		font-size: var(--BadgeTextSizeL);
+		line-height: 1.25;
 	}
 
-
-
-	:global(.BadgeItem.EmoStack) {
-		width: max-content;
-		min-width: max-content;
-		max-width: 100%;
-		flex: 0 1 auto !important;
-	}
-
-
-	:global(.BadgeTextStack.EmoStack) {
-		width: max-content;
-		min-width: max-content;
+	.Badge :global(.BadgeImg.RespImg) {
+		flex: 0 0 auto;
 		max-width: 100%;
 	}
 
-
-	:global(.BadgeTextStack.EmoStack .Emograph) {
+	.Badge :global(.Emograph) {
 		width: max-content;
-		min-width: max-content;
 		max-width: 100%;
 	}
-
-
-
-</style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<style>
-
-
 
 	@media (orientation: portrait) {
-		:global(.BadgeAutoMobile.EmoStack.IsRow.FlipAllowed),
-		:global(.BadgeAutoMobile.EmoStack.IsRow.IsMobFlip)
-		{
-			flex-direction: row !important;
-			flex-wrap: wrap !important;
-			align-items: center !important;
-			justify-content: center !important;
-			height: auto !important;
+		.Badge {
+			width: var(--BadgeWidthP, 100%);
+			padding: var(--BadgePadP, 0px);
 		}
 
-		:global(.BadgeAutoMobile.EmoStack.IsRow.FlipAllowed > .BadgeItem),
-		:global(.BadgeAutoMobile.EmoStack.IsRow.IsMobFlip > .BadgeItem)
-		{
-			flex: 0 0 var(--BadgeItemWidthP, 100%) !important;
-			width: var(--BadgeItemWidthP, 100%) !important;
-			max-width: 100% !important;
-			min-width: 0 !important;
-			height: auto !important;
-			justify-content: center !important;
-			align-items: center !important;
+		.Badge.PlaceSized {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.BadgeList {
+			display: grid;
+			grid-template-columns: repeat(var(--BadgeMobCols, 1), minmax(0, 1fr));
+			align-items: stretch;
+			justify-items: stretch;
+			gap: var(--BadgeItemGapP, 0px);
+		}
+
+		.BadgeItem {
+			flex-direction: column;
+			width: 100%;
+			gap: var(--BadgeImgTextGapP, 0px);
+			align-items: center;
+			justify-content: flex-start;
+		}
+
+		.BadgeTextBlock {
+			gap: var(--BadgeNumTextGapP, 0px);
 		}
 
 		.BadgeInlineText {
-			gap: var(--BadgeNumTextGapP);
+			gap: var(--BadgeNumTextGapP, 0px);
 		}
 
 		.BadgeInlineNum {
@@ -494,139 +433,4 @@ function GetImg(pImg: TBadgeImg | undefined, pDefaultFile: string, pAlt: string)
 			font-size: var(--BadgeTextSizeP);
 		}
 	}
-
-
-
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<script is:inline>
-	(function InitBadgeMobileLayout() {
-	if (window.__BadgeMobileLayoutReady) return;
-	window.__BadgeMobileLayoutReady = true;
-
-	let cFrame = 0;
-
-	window.addEventListener("resize", RequestRefreshBadgeMobileLayout);
-	window.addEventListener("orientationchange", RequestRefreshBadgeMobileLayout);
-	window.addEventListener("load", RequestRefreshBadgeMobileLayout);
-	document.addEventListener("astro:page-load", RequestRefreshBadgeMobileLayout);
-
-	if (document.fonts?.ready) {
-	document.fonts.ready.then(RequestRefreshBadgeMobileLayout);
-	}
-
-	document.addEventListener(
-	"load",
-	function (pEvent) {
-	if (pEvent.target instanceof HTMLImageElement) {
-	RequestRefreshBadgeMobileLayout();
-	}
-	},
-	true
-	);
-
-	RequestRefreshBadgeMobileLayout();
-
-	function RequestRefreshBadgeMobileLayout() {
-	cancelAnimationFrame(cFrame);
-	cFrame = requestAnimationFrame(RefreshBadgeMobileLayout);
-	}
-
-	function RefreshBadgeMobileLayout() {
-	const cIsPortrait = window.matchMedia("(orientation: portrait)").matches;
-	const cBadges = document.querySelectorAll(".BadgeAutoMobile[data-badge-auto-mobile='true']");
-
-	cBadges.forEach(function (pBadge) {
-	if (!cIsPortrait) {
-	pBadge.style.removeProperty("--BadgeItemWidthP");
-	pBadge.removeAttribute("data-badge-cols");
-	return;
-	}
-
-	const cItems = Array.from(pBadge.children).filter(function (pItem) {
-	return pItem instanceof HTMLElement && pItem.dataset.badgeItem === "true";
-	});
-
-	if (!cItems.length) return;
-
-	const cAvailableWidth = pBadge.clientWidth;
-	if (cAvailableWidth <= 0) return;
-
-	const cComputedStyle = window.getComputedStyle(pBadge);
-	const cGap = GetPixelValue(cComputedStyle.columnGap || cComputedStyle.gap);
-	const cMaxCols = Math.max(1, Math.min(Number(pBadge.dataset.badgeMaxCols) || 2, cItems.length));
-	const cNaturalItemWidth = Math.ceil(Math.max(...cItems.map(MeasureNaturalWidth)));
-	const cAllowedCols = GetAllowedCols(cAvailableWidth, cNaturalItemWidth, cGap, cMaxCols);
-
-	pBadge.dataset.badgeCols = String(cAllowedCols);
-	pBadge.style.setProperty("--BadgeItemWidthP", GetItemWidthValue(cAllowedCols));
-	});
-	}
-
-	function GetAllowedCols(pAvailableWidth, pItemWidth, pGap, pMaxCols) {
-	for (let cCols = pMaxCols; cCols >= 2; cCols--) {
-	const cRequiredWidth = pItemWidth * cCols + pGap * (cCols - 1);
-	if (cRequiredWidth <= pAvailableWidth) return cCols;
-	}
-
-	return 1;
-	}
-
-	function GetItemWidthValue(pCols) {
-	if (pCols <= 1) return "100%";
-
-	const cGapExpression = Array.from({ length: pCols - 1 }, function () {
-	return "var(--StackGapP, 0px)";
-	}).join(" - ");
-
-	return `calc((100% - ${cGapExpression}) / ${pCols})`;
-	}
-
-	function MeasureNaturalWidth(pItem) {
-	const cClone = pItem.cloneNode(true);
-
-	cClone.style.cssText = [
-	"position:absolute",
-	"visibility:hidden",
-	"pointer-events:none",
-	"left:-10000px",
-	"top:-10000px",
-	"width:max-content",
-	"max-width:none",
-	"min-width:0",
-	"height:auto",
-	"flex:none",
-	].join(";");
-
-	document.body.appendChild(cClone);
-	const cWidth = cClone.getBoundingClientRect().width;
-	cClone.remove();
-
-	return cWidth;
-	}
-
-	function GetPixelValue(pValue) {
-	const cValue = Number.parseFloat(pValue);
-	return Number.isFinite(cValue) ? cValue : 0;
-	}
-	})();
-</script>

@@ -246,22 +246,40 @@ function HasExplicitCssSize(pValue?: string) {
 		user-select: none;
 	}
 
-	.DuoStr > :not(.DuoStrBg):not(.DuoCol):not(.IsPlaced):not(.PlaceSized) {
+	.DuoStr.DuoStr > :not(.DuoStrBg):not(.DuoCol):not(.IsPlaced):not(.PlaceSized) {
 		flex: 0 0 100%;
 		width: 100%;
 		max-width: 100%;
 		box-sizing: border-box;
 	}
 
-	.DuoStr > .DuoCol {
-		flex: 1 1 calc((var(--DuoWidthL, 100%) - var(--DuoGapL, 0px)) / 2);
-		width: calc((var(--DuoWidthL, 100%) - var(--DuoGapL, 0px)) / 2);
-		max-width: calc((var(--DuoWidthL, 100%) - var(--DuoGapL, 0px)) / 2);
+	.DuoStr.DuoStr > .DuoCol.DuoCol {
+		flex-grow: 1;
+		flex-shrink: 1;
+		flex-basis: 0px;
+		width: auto;
+		max-width: 100%;
 		min-width: 0;
 		min-height: var(--DuoColMinHeightL, auto);
 		align-self: stretch;
 		box-sizing: border-box;
 		margin-inline: 0;
+	}
+
+	.DuoStr.DuoStr > .DuoCol.DuoCol[data-duo-width-l="true"] {
+		flex-grow: 0;
+		flex-shrink: 1;
+		flex-basis: var(--DuoColWidthL);
+		width: var(--DuoColWidthL);
+		max-width: min(100%, var(--DuoColWidthL));
+	}
+
+	.DuoStr.DuoStr > .DuoCol.DuoCol:not([data-duo-width-l="true"]):has(> [data-own-size]) {
+		flex-grow: 0;
+		flex-shrink: 1;
+		flex-basis: fit-content;
+		width: fit-content;
+		max-width: 100%;
 	}
 
 	.DuoStr.IsPlaced {
@@ -285,11 +303,17 @@ function HasExplicitCssSize(pValue?: string) {
 			gap: var(--DuoGapP, var(--DuoGapL, 0px));
 		}
 
-		.DuoStr > .DuoCol {
-			flex: 0 0 var(--DuoWidthP, 100%);
-			width: var(--DuoWidthP, 100%);
-			max-width: var(--DuoWidthP, 100%);
+		.DuoStr.DuoStr > .DuoCol.DuoCol {
+			flex: 0 0 auto;
+			width: var(--DuoColWidthP, 100%);
+			max-width: min(100%, var(--DuoColWidthP, 100%));
 			min-height: var(--DuoColMinHeightP, auto);
+		}
+
+		.DuoStr.DuoStr > .DuoCol.DuoCol:not([data-duo-width-p="true"]):has(> [data-own-size]) {
+			width: fit-content;
+			max-width: 100%;
+			align-self: center;
 		}
 
 		.DuoStr.IsPlaced {

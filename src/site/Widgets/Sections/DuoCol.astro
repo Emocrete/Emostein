@@ -1,7 +1,6 @@
 ---
-import { ElemBg, GetHzAlignCss, GetVrAlignCss, type HzAlignValue, NumPer, Percent, Pixel, type PlaceProps, Size, type VrAlignValue } from "@/TypesLib";
+import { ElemBg, GetHzAlignCss, GetVrAlignCss, type HzAlignValue, Percent, Pixel, Place, type PlaceProps, type VrAlignValue } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import Stack from "../Comp/Stack.astro";
 
 interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
 	Centered?: boolean;
@@ -59,7 +58,6 @@ const {
 	pMoveViewMargin,
 	pMoveViewTarget,
 
-
 	id: pGivenID = GetWidgetId("DuoCol"),
 	class: pGivenClass = "",
 	style: pGivenStyle = "",
@@ -68,20 +66,71 @@ const {
 
 const cIsCentered = Centered || centered || GetBoolAttr(cProps["data-centered"]);
 const cBg = pBg ?? pBgColor;
-
 const cHzAlign = cIsCentered ? "Center" : pHzAlign ?? "Center";
 const cVrAlign = cIsCentered ? "Center" : pVrAlign ?? "Start";
-const cAlignItems = GetHzAlignCss(cHzAlign);
-const cJustifyContent = GetVrAlignCss(cVrAlign);
+
+const cHasWidthL = HasExplicitCssSize(pSize?.WidthL);
+const cHasWidthP = HasExplicitCssSize(pSize?.WidthP);
+const cHasHeightL = HasExplicitCssSize(pSize?.HeightL);
+const cHasHeightP = HasExplicitCssSize(pSize?.HeightP);
 
 const cStyle = [
-	`--StackAlignItems:${cAlignItems};`,
-	`--StackJustifyContent:${cJustifyContent};`,
+	cHasWidthL ? `--DuoColWidthL:${pSize?.WidthL};` : "",
+	cHasWidthP ? `--DuoColWidthP:${pSize?.WidthP};` : "",
+	cHasHeightL ? `--DuoColHeightL:${pSize?.HeightL};` : "",
+	cHasHeightP ? `--DuoColHeightP:${pSize?.HeightP};` : "",
+	`--DuoColGapL:${pGap.Landscape};`,
+	`--DuoColGapP:${pGap.Portrait};`,
+	`--DuoColPadL:${pPad.Landscape};`,
+	`--DuoColPadP:${pPad.Portrait};`,
+	`--DuoColBg:${cBg?.Color || "transparent"};`,
+	`--DuoColBgOpacityL:${pBgOpacity.Landscape};`,
+	`--DuoColBgOpacityP:${pBgOpacity.Portrait};`,
+	`--DuoColBlurL:${pBlur.Landscape};`,
+	`--DuoColBlurP:${pBlur.Portrait};`,
+	`--DuoColAlignItems:${GetHzAlignCss(cHzAlign)};`,
+	`--DuoColJustifyContent:${GetVrAlignCss(cVrAlign)};`,
 	GetStyleText(pGivenStyle),
 ].filter(Boolean).join(" ");
 
+const cPlace = new Place({
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+} as PlaceProps, cStyle);
+
 function GetBoolAttr(pValue: unknown) {
 	return pValue === true || pValue === "" || pValue === "true";
+}
+
+function HasExplicitCssSize(pValue?: string) {
+	const cValue = `${pValue ?? ""}`.trim().toLowerCase();
+	return cValue !== "" && cValue !== "auto" && cValue !== "fit-content" && cValue !== "max-content" && cValue !== "min-content";
 }
 
 function GetStyleText(pStyle: unknown) {
@@ -104,49 +153,74 @@ function GetCssName(pName: string) {
 }
 ---
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<Stack
-	class = {`DuoCol ${cIsCentered ? "IsCentered" : "IsTop"} ${pGivenClass}`.trim()}
-	style = {cStyle}
-	pDir="Col"
-	pHzAlign="Center"
-	pVrAlign="Start"
-	pGap={pGap}
-	pPad={pPad}
-	pSize={pSize ?? new Size(new NumPer("100%"))}
-	pBgColor={cBg}
-	pBgOpacity={pBgOpacity}
-	pBlur={pBlur}
-	pLoc={pLoc}
-	pRotate={pRotate}
-	pZ={pZ}
-	pOrigin={pOrigin}
-	pOpacity={pOpacity}
-	pClickable={pClickable}
-	pLandOnly={pLandOnly}
-	pPortOnly={pPortOnly}
+<div
+	class={`DuoCol ${cIsCentered ? "IsCentered" : "IsTop"} ${cPlace.Class} ${pGivenClass}`.trim()}
+	style={cPlace.Style}
 	id={pGivenID}
+	data-duo-width-l={cHasWidthL ? "true" : undefined}
+	data-duo-width-p={cHasWidthP ? "true" : undefined}
+	data-emo-auto-container="true"
+	data-emo-explicit-height={cHasHeightL || cHasHeightP ? "true" : "false"}
+	data-emo-empty-height="200"
 	{...RemAttr}
 >
-
 	<slot />
+</div>
 
-</Stack>
+<style>
+	.DuoCol {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		box-sizing: border-box;
+		width: var(--DuoColWidthL, 100%);
+		height: var(--DuoColHeightL, auto);
+		max-width: 100%;
+		min-width: 0;
+		padding: var(--DuoColPadL, 0px);
+		gap: var(--DuoColGapL, 0px);
+		align-items: var(--DuoColAlignItems, center);
+		justify-content: var(--DuoColJustifyContent, flex-start);
+		background-color: color-mix(in srgb, var(--DuoColBg, transparent) var(--DuoColBgOpacityL, 100%), transparent);
+		backdrop-filter: blur(var(--DuoColBlurL, 0px));
+		-webkit-backdrop-filter: blur(var(--DuoColBlurL, 0px));
+		overflow: visible;
+	}
+
+	.DuoCol > :global(*) {
+		box-sizing: border-box;
+		max-width: 100%;
+		min-width: 0;
+	}
+
+	.DuoCol > :global(.Emograph:not(.IsPlaced):not(.PlaceSized)) {
+		width: 100%;
+	}
+
+	.DuoCol > :global(.EmoGallery:not(.IsPlaced):not(.PlaceSized)) {
+		width: 100%;
+	}
+
+	.DuoCol.IsPlaced {
+		position: absolute;
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+	@media (orientation: portrait) {
+		.DuoCol {
+			width: var(--DuoColWidthP, var(--DuoColWidthL, 100%));
+			height: var(--DuoColHeightP, var(--DuoColHeightL, auto));
+			padding: var(--DuoColPadP, var(--DuoColPadL, 0px));
+			gap: var(--DuoColGapP, var(--DuoColGapL, 0px));
+			background-color: color-mix(in srgb, var(--DuoColBg, transparent) var(--DuoColBgOpacityP, var(--DuoColBgOpacityL, 100%)), transparent);
+			backdrop-filter: blur(var(--DuoColBlurP, var(--DuoColBlurL, 0px)));
+			-webkit-backdrop-filter: blur(var(--DuoColBlurP, var(--DuoColBlurL, 0px)));
+		}
+
+		.DuoCol.IsPlaced {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+	}
+</style>
