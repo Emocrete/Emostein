@@ -1,0 +1,1067 @@
+---
+import { Place, type PlaceProps } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps {
+	/** عرض الطاولة القياسية بالمتر. DefVal = 1.8 */
+	pSlabWidth?: number;
+
+	/** طول الطاولة القياسية بالمتر. DefVal = 2.9 */
+	pSlabHeight?: number;
+
+	/** هامش الربح النهائي بعد حساب كل التكاليف. DefVal = 0.3 */
+	pProfitRate?: number;
+
+	/** تكلفة نقل ثابتة كبداية قبل التحميل بعدد الطاولات. DefVal = 850 */
+	pTransportBase?: number;
+
+	/** تحميل نقل لكل طاولة مطلوبة. DefVal = 180 */
+	pTransportPerSlab?: number;
+
+	/** سعر متر الطاولة الافتراضي عند فتح الودجت. DefVal = 1200 */
+	pDefaultTablePrice?: number;
+
+	/** عدد البلاطات الافتراضي. DefVal = 20 */
+	pDefaultQuantity?: number;
+
+	/** عرض البلاطة الافتراضي بالسنتيمتر. DefVal = 60 */
+	pDefaultTileWidth?: number;
+
+	/** طول البلاطة الافتراضي بالسنتيمتر. DefVal = 60 */
+	pDefaultTileHeight?: number;
+
+	/** السمك الافتراضي بالسنتيمتر. DefVal = 2 */
+	pDefaultThickness?: number;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+
+const {
+	pSlabWidth = 1.8,
+	pSlabHeight = 2.9,
+	pProfitRate = 0.3,
+	pTransportBase = 850,
+	pTransportPerSlab = 180,
+	pDefaultTablePrice = 1200,
+	pDefaultQuantity = 20,
+	pDefaultTileWidth = 60,
+	pDefaultTileHeight = 60,
+	pDefaultThickness = 2,
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+
+	id: pGivenID = GetWidgetId("StonePricingCalc"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = cProps;
+
+const cCssVars = [
+	`--StonePricingMaxWidth:1180px;`,
+	GetStyleText(pGivenStyle),
+].filter(Boolean).join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cCssVars);
+const cSlabArea = pSlabWidth * pSlabHeight;
+const cProfitPercent = pProfitRate * 100;
+
+function GetStyleText(pStyle: unknown) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+	if (typeof pStyle !== "object") return "";
+
+	return Object.entries(pStyle as Record<string, string | number | null | undefined>)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+<section
+	class={`StonePricingCalc ${cPlace.Class} ${pGivenClass}`.trim()}
+	style={cPlace.Style}
+	id={pGivenID}
+	dir="rtl"
+	data-emo-stone-pricing="true"
+	data-slab-width={pSlabWidth}
+	data-slab-height={pSlabHeight}
+	data-profit-rate={pProfitRate}
+	data-transport-base={pTransportBase}
+	data-transport-per-slab={pTransportPerSlab}
+	{...RemAttr}
+>
+
+	<header class="StonePricingHead">
+
+		<div class="StonePricingTitleBox">
+
+			<p class="StonePricingEyebrow">
+				حاسبة تسعير تقريبية
+			</p>
+
+			<h2 class="StonePricingTitle">
+				اعرف سعر الرخام أو الجرانيت بعد الهالك والنقل والتركيب
+			</h2>
+
+			<p class="StonePricingDesc">
+				الحسبة مبنية مبدئيًا على طاولة متوسطة {pSlabWidth.toFixed(2)} × {pSlabHeight.toFixed(2)} م = {cSlabArea.toFixed(2)} م²، وتفصل الفرق بين سعر متر الطاولة وسعر البيع النهائي.
+			</p>
+
+		</div>
+
+		<div class="StonePricingBadge" aria-label={`هامش ربح ${cProfitPercent}%`}>
+
+			<span class="StonePricingBadgeNum">
+				{cProfitPercent.toFixed(0)}%
+			</span>
+
+			<span class="StonePricingBadgeText">
+				هامش ربح بعد التكاليف
+			</span>
+
+		</div>
+
+	</header>
+
+	<div class="StonePricingGrid">
+
+		<form class="StonePricingForm" data-area="inputs">
+
+			<div class="StonePricingField Wide">
+
+				<label class="StonePricingLabel" for={`${pGivenID}-material`}>
+					نوع الخامة
+				</label>
+
+				<select
+					class="StonePricingInput"
+					id={`${pGivenID}-material`}
+					data-field="material"
+				>
+
+					<option value="marble-eg" data-price="1200" data-install="360" data-cut="28" data-transport="1" selected>
+						رخام مصري
+					</option>
+
+					<option value="marble-imp" data-price="3000" data-install="450" data-cut="38" data-transport="1.08">
+						رخام مستورد
+					</option>
+
+					<option value="granite-eg" data-price="1500" data-install="420" data-cut="42" data-transport="1.15">
+						جرانيت مصري
+					</option>
+
+					<option value="granite-imp" data-price="2800" data-install="520" data-cut="48" data-transport="1.2">
+						جرانيت مستورد
+					</option>
+
+				</select>
+
+			</div>
+
+			<div class="StonePricingField">
+
+				<label class="StonePricingLabel" for={`${pGivenID}-table-price`}>
+					سعر متر الطاولة المعلن
+				</label>
+
+				<div class="StonePricingInputUnit">
+
+					<input
+						class="StonePricingInput"
+						id={`${pGivenID}-table-price`}
+						data-field="tablePrice"
+						type="number"
+						min="1"
+						step="50"
+						value={pDefaultTablePrice}
+						inputmode="decimal"
+					/>
+
+					<span>
+						ج/م²
+					</span>
+
+				</div>
+
+			</div>
+
+			<div class="StonePricingField">
+
+				<label class="StonePricingLabel" for={`${pGivenID}-thickness`}>
+					السمك
+				</label>
+
+				<select
+					class="StonePricingInput"
+					id={`${pGivenID}-thickness`}
+					data-field="thickness"
+				>
+
+					<option value="2" selected={pDefaultThickness === 2}>2 سم</option>
+					<option value="3" selected={pDefaultThickness === 3}>3 سم</option>
+					<option value="4" selected={pDefaultThickness === 4}>4 سم</option>
+
+				</select>
+
+			</div>
+
+			<div class="StonePricingField">
+
+				<label class="StonePricingLabel" for={`${pGivenID}-qty`}>
+					عدد البلاطات / القطع
+				</label>
+
+				<input
+					class="StonePricingInput"
+					id={`${pGivenID}-qty`}
+					data-field="quantity"
+					type="number"
+					min="1"
+					step="1"
+					value={pDefaultQuantity}
+					inputmode="numeric"
+				/>
+
+			</div>
+
+			<div class="StonePricingField">
+
+				<label class="StonePricingLabel" for={`${pGivenID}-tile-width`}>
+					عرض البلاطة
+				</label>
+
+				<div class="StonePricingInputUnit">
+
+					<input
+						class="StonePricingInput"
+						id={`${pGivenID}-tile-width`}
+						data-field="tileWidth"
+						type="number"
+						min="1"
+						step="1"
+						value={pDefaultTileWidth}
+						inputmode="decimal"
+					/>
+
+					<span>
+						سم
+					</span>
+
+				</div>
+
+			</div>
+
+			<div class="StonePricingField">
+
+				<label class="StonePricingLabel" for={`${pGivenID}-tile-height`}>
+					طول البلاطة
+				</label>
+
+				<div class="StonePricingInputUnit">
+
+					<input
+						class="StonePricingInput"
+						id={`${pGivenID}-tile-height`}
+						data-field="tileHeight"
+						type="number"
+						min="1"
+						step="1"
+						value={pDefaultTileHeight}
+						inputmode="decimal"
+					/>
+
+					<span>
+						سم
+					</span>
+
+				</div>
+
+			</div>
+
+			<p class="StonePricingHint">
+				غيّر سعر متر الطاولة يدويًا لو النوع المختار له سعر فعلي مختلف في المعرض أو المخزن.
+			</p>
+
+		</form>
+
+		<div class="StonePricingResult" aria-live="polite">
+
+			<div class="StonePricingResultTop">
+
+				<div>
+
+					<p class="StonePricingSmallTitle">
+						السعر النهائي التقريبي
+					</p>
+
+					<p class="StonePricingTotal">
+						<span data-out="total">0</span>
+						<span>جنيه</span>
+					</p>
+
+				</div>
+
+				<div class="StonePricingFinalMeter">
+					<span data-out="finalMeter">0</span>
+					ج/م² بيع نهائي
+				</div>
+
+			</div>
+
+			<div class="StonePricingStats">
+
+				<div>
+					<span data-out="requestedArea">0</span>
+					<small>م² مساحة هندسية</small>
+				</div>
+
+				<div>
+					<span data-out="slabCount">0</span>
+					<small>طاولة مطلوبة</small>
+				</div>
+
+				<div>
+					<span data-out="piecesPerSlab">0</span>
+					<small>قطعة / طاولة</small>
+				</div>
+
+				<div>
+					<span data-out="wastePercent">0%</span>
+					<small>هالك تقريبي</small>
+				</div>
+
+			</div>
+
+			<p class="StonePricingWarning" data-out="warning" hidden></p>
+
+		</div>
+
+	</div>
+
+	<div class="StonePricingInvoice" data-area="invoice">
+
+		<div class="StonePricingInvoiceHead">
+
+			<h3>
+				فاتورة تحليل السعر
+			</h3>
+
+			<p>
+				من سعر متر الطاولة إلى سعر البيع النهائي للعميل
+			</p>
+
+		</div>
+
+		<div class="StonePricingRows">
+
+			<div class="StonePricingRow Head">
+				<span>البند</span>
+				<span>الأساس</span>
+				<span>القيمة</span>
+			</div>
+
+			<div class="StonePricingRow">
+				<span>قيمة الخام حسب المساحة الهندسية</span>
+				<span data-out="baseMaterialNote">0</span>
+				<strong data-out="baseMaterialCost">0</strong>
+			</div>
+
+			<div class="StonePricingRow">
+				<span>هالك تقطيع من الطاولات</span>
+				<span data-out="cutWasteNote">0</span>
+				<strong data-out="cutWasteCost">0</strong>
+			</div>
+
+			<div class="StonePricingRow">
+				<span>تحميل غلايق وفروق مساحة تركيب</span>
+				<span data-out="installWasteNote">0</span>
+				<strong data-out="installWasteCost">0</strong>
+			</div>
+
+			<div class="StonePricingRow">
+				<span>تقطيع وتجهيز حواف</span>
+				<span data-out="cuttingNote">0</span>
+				<strong data-out="cuttingCost">0</strong>
+			</div>
+
+			<div class="StonePricingRow">
+				<span>مصنعية تركيب</span>
+				<span data-out="installationNote">0</span>
+				<strong data-out="installationCost">0</strong>
+			</div>
+
+			<div class="StonePricingRow">
+				<span>نقل ومناولة</span>
+				<span data-out="transportNote">0</span>
+				<strong data-out="transportCost">0</strong>
+			</div>
+
+			<div class="StonePricingRow Subtotal">
+				<span>الإجمالي قبل هامش الربح</span>
+				<span data-out="subtotalNote">تكلفة مباشرة</span>
+				<strong data-out="subtotal">0</strong>
+			</div>
+
+			<div class="StonePricingRow Profit">
+				<span>هامش الربح</span>
+				<span>{cProfitPercent.toFixed(0)}% بعد كل التكاليف</span>
+				<strong data-out="profit">0</strong>
+			</div>
+
+			<div class="StonePricingRow Total">
+				<span>السعر النهائي المقترح</span>
+				<span data-out="totalNote">0</span>
+				<strong data-out="invoiceTotal">0</strong>
+			</div>
+
+		</div>
+
+	</div>
+
+	<p class="StonePricingDisclaimer">
+		الناتج تقديري للتوعية والمقارنة، وليس عرض سعر نهائي. التسعير الحقيقي يتغير بعد رفع المقاسات، اتجاه العروق، أماكن الغلايق، الدور، مسافة النقل، حالة الموقع، ودرجة فرز الخام.
+	</p>
+
+	<script is:inline>
+		(() => {
+			const fRoot = document.currentScript.closest("[data-emo-stone-pricing]");
+			if (!fRoot) return;
+
+			const fForm = fRoot.querySelector('[data-area="inputs"]');
+			if (fForm) {
+				fForm.addEventListener("submit", (pEvent) => pEvent.preventDefault());
+			}
+
+			const fFields = {
+				material: fRoot.querySelector('[data-field="material"]'),
+				tablePrice: fRoot.querySelector('[data-field="tablePrice"]'),
+				thickness: fRoot.querySelector('[data-field="thickness"]'),
+				quantity: fRoot.querySelector('[data-field="quantity"]'),
+				tileWidth: fRoot.querySelector('[data-field="tileWidth"]'),
+				tileHeight: fRoot.querySelector('[data-field="tileHeight"]'),
+			};
+
+			const fOut = (pName) => fRoot.querySelector(`[data-out="${pName}"]`);
+			const fSlabWidth = fNumber(fRoot.dataset.slabWidth, 1.8);
+			const fSlabHeight = fNumber(fRoot.dataset.slabHeight, 2.9);
+			const fSlabArea = fSlabWidth * fSlabHeight;
+			const fProfitRate = fNumber(fRoot.dataset.profitRate, 0.3);
+			const fTransportBase = fNumber(fRoot.dataset.transportBase, 850);
+			const fTransportPerSlab = fNumber(fRoot.dataset.transportPerSlab, 180);
+
+			let fPriceEdited = false;
+
+			function fArabicToEnglishDigits(pValue) {
+				return String(pValue ?? "")
+					.replace(/[٠-٩]/g, (pDigit) => String("٠١٢٣٤٥٦٧٨٩".indexOf(pDigit)))
+					.replace(/[۰-۹]/g, (pDigit) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(pDigit)))
+					.replace(/,/g, ".");
+			}
+
+			function fNumber(pValue, pFallback = 0) {
+				const fParsed = Number(fArabicToEnglishDigits(pValue));
+				return Number.isFinite(fParsed) ? fParsed : pFallback;
+			}
+
+			function fMoney(pValue) {
+				return Math.round(pValue).toLocaleString("ar-EG");
+			}
+
+			function fArea(pValue) {
+				return pValue.toLocaleString("ar-EG", {
+					maximumFractionDigits: 2,
+					minimumFractionDigits: 0,
+				});
+			}
+
+			function fPercent(pValue) {
+				return `${pValue.toLocaleString("ar-EG", { maximumFractionDigits: 1 })}%`;
+			}
+
+			function fSet(pName, pValue) {
+				const fEl = fOut(pName);
+				if (fEl) fEl.textContent = pValue;
+			}
+
+			function fGetThicknessFactor(pThickness) {
+				if (pThickness >= 4) return 1.35;
+				if (pThickness >= 3) return 1.18;
+				return 1;
+			}
+
+			function fGetInstallWasteRate(pArea, pTileWidth, pTileHeight) {
+				const fMaxSide = Math.max(pTileWidth, pTileHeight);
+				const fSizeRate = fMaxSide >= 120 ? 0.06 : fMaxSide >= 80 ? 0.04 : 0.025;
+				const fAreaRate = pArea < 10 ? 0.08 : pArea < 30 ? 0.05 : 0.035;
+				return fSizeRate + fAreaRate;
+			}
+
+			function fCalc() {
+				const fSelected = fFields.material.selectedOptions[0];
+				const fTablePrice = Math.max(0, fNumber(fFields.tablePrice.value, 0));
+				const fThickness = Math.max(1, fNumber(fFields.thickness.value, 2));
+				const fQuantity = Math.max(1, Math.floor(fNumber(fFields.quantity.value, 1)));
+				const fTileWidthCm = Math.max(1, fNumber(fFields.tileWidth.value, 1));
+				const fTileHeightCm = Math.max(1, fNumber(fFields.tileHeight.value, 1));
+				const fInstallRate = fNumber(fSelected.dataset.install, 360);
+				const fCutRate = fNumber(fSelected.dataset.cut, 28);
+				const fTransportFactor = fNumber(fSelected.dataset.transport, 1);
+				const fThicknessFactor = fGetThicknessFactor(fThickness);
+
+				const fTileArea = (fTileWidthCm * fTileHeightCm) / 10000;
+				const fRequestedArea = fQuantity * fTileArea;
+				const fSlabWidthCm = fSlabWidth * 100;
+				const fSlabHeightCm = fSlabHeight * 100;
+				const fFitA = Math.floor(fSlabWidthCm / fTileWidthCm) * Math.floor(fSlabHeightCm / fTileHeightCm);
+				const fFitB = Math.floor(fSlabWidthCm / fTileHeightCm) * Math.floor(fSlabHeightCm / fTileWidthCm);
+				let fPiecesPerSlab = Math.max(fFitA, fFitB);
+				const fImpossiblePiece = fPiecesPerSlab < 1;
+				if (fImpossiblePiece) fPiecesPerSlab = 1;
+
+				const fSlabCount = Math.max(1, Math.ceil(fQuantity / fPiecesPerSlab));
+				const fPurchasedArea = fSlabCount * fSlabArea;
+				const fCutWasteArea = Math.max(0, fPurchasedArea - fRequestedArea);
+				const fCutWasteRate = fRequestedArea > 0 ? fCutWasteArea / fRequestedArea : 0;
+				const fInstallWasteRate = fGetInstallWasteRate(fRequestedArea, fTileWidthCm, fTileHeightCm);
+				const fInstallWasteArea = fRequestedArea * fInstallWasteRate;
+				const fTotalWastePercent = ((fCutWasteArea + fInstallWasteArea) / Math.max(fRequestedArea, 1)) * 100;
+
+				const fBaseMaterialCost = fRequestedArea * fTablePrice;
+				const fCutWasteCost = fCutWasteArea * fTablePrice;
+				const fInstallWasteCost = fInstallWasteArea * fTablePrice;
+				const fCutLength = fQuantity * 2 * ((fTileWidthCm + fTileHeightCm) / 100);
+				const fCuttingCost = fCutLength * fCutRate * fThicknessFactor;
+				const fInstallationCost = Math.max(fRequestedArea * fInstallRate * fThicknessFactor, 1500);
+				const fTransportCost = fTransportBase + fSlabCount * fTransportPerSlab * fTransportFactor * fThicknessFactor;
+				const fSubtotal = fBaseMaterialCost + fCutWasteCost + fInstallWasteCost + fCuttingCost + fInstallationCost + fTransportCost;
+				const fProfit = fSubtotal * fProfitRate;
+				const fTotal = fSubtotal + fProfit;
+				const fFinalMeter = fRequestedArea > 0 ? fTotal / fRequestedArea : 0;
+				const fFinalPiece = fQuantity > 0 ? fTotal / fQuantity : 0;
+
+				fSet("total", fMoney(fTotal));
+				fSet("invoiceTotal", fMoney(fTotal));
+				fSet("finalMeter", fMoney(fFinalMeter));
+				fSet("requestedArea", fArea(fRequestedArea));
+				fSet("slabCount", fSlabCount.toLocaleString("ar-EG"));
+				fSet("piecesPerSlab", fPiecesPerSlab.toLocaleString("ar-EG"));
+				fSet("wastePercent", fPercent(fTotalWastePercent));
+				fSet("baseMaterialNote", `${fArea(fRequestedArea)} م² × ${fMoney(fTablePrice)} ج`);
+				fSet("baseMaterialCost", fMoney(fBaseMaterialCost));
+				fSet("cutWasteNote", `${fArea(fCutWasteArea)} م² من ${fSlabCount.toLocaleString("ar-EG")} طاولة`);
+				fSet("cutWasteCost", fMoney(fCutWasteCost));
+				fSet("installWasteNote", `${fPercent(fInstallWasteRate * 100)} غلايق وفروق تركيب`);
+				fSet("installWasteCost", fMoney(fInstallWasteCost));
+				fSet("cuttingNote", `${fArea(fCutLength)} متر طولي × معامل سمك ${fThicknessFactor.toLocaleString("ar-EG")}`);
+				fSet("cuttingCost", fMoney(fCuttingCost));
+				fSet("installationNote", `${fArea(fRequestedArea)} م²، حد أدنى ١٬٥٠٠ ج`);
+				fSet("installationCost", fMoney(fInstallationCost));
+				fSet("transportNote", `${fTransportBase.toLocaleString("ar-EG")} ج ثابت + تحميل ${fSlabCount.toLocaleString("ar-EG")} طاولة`);
+				fSet("transportCost", fMoney(fTransportCost));
+				fSet("subtotal", fMoney(fSubtotal));
+				fSet("profit", fMoney(fProfit));
+				fSet("totalNote", `${fMoney(fFinalPiece)} ج/قطعة تقريبًا`);
+
+				const fWarning = fOut("warning");
+				if (fWarning) {
+					if (fImpossiblePiece) {
+						fWarning.hidden = false;
+						fWarning.textContent = "تنبيه: مقاس البلاطة أكبر من الطاولة المتوسطة، لذلك الناتج غير صالح كحسبة تقطيع فعلية ويحتاج رفع مقاسات وتسعير يدوي.";
+					} else if (fCutWasteRate > 0.9) {
+						fWarning.hidden = false;
+						fWarning.textContent = "تنبيه: الهالك عالي جدًا مع هذه المقاسات والكمية. تغيير مقاس البلاطة أو زيادة الكمية قد يحسن استغلال الطاولة.";
+					} else {
+						fWarning.hidden = true;
+						fWarning.textContent = "";
+					}
+				}
+			}
+
+			function fSetDefaultPriceFromMaterial() {
+				const fSelected = fFields.material.selectedOptions[0];
+				const fDefaultPrice = fNumber(fSelected.dataset.price, 0);
+				fFields.tablePrice.value = String(fDefaultPrice);
+				fPriceEdited = false;
+				fCalc();
+			}
+
+			fFields.material.addEventListener("change", fSetDefaultPriceFromMaterial);
+			fFields.tablePrice.addEventListener("input", () => {
+				fPriceEdited = true;
+				fCalc();
+			});
+
+			[fFields.thickness, fFields.quantity, fFields.tileWidth, fFields.tileHeight].forEach((pField) => {
+				pField.addEventListener("input", fCalc);
+				pField.addEventListener("change", fCalc);
+			});
+
+			if (!fPriceEdited) fCalc();
+		})();
+	</script>
+
+</section>
+
+<style>
+	.StonePricingCalc {
+		box-sizing: border-box;
+		width: min(var(--StonePricingMaxWidth), calc(100% - 24px));
+		margin-inline: auto;
+		padding: clamp(18px, 3vw, 34px);
+		border-radius: 30px;
+		background:
+			radial-gradient(circle at 15% 0%, rgba(242, 193, 26, .18), transparent 34%),
+			linear-gradient(135deg, #23262b, #111317 62%, #2d2f32);
+		color: #fff;
+		box-shadow: 0 22px 55px rgba(0, 0, 0, .20);
+		direction: rtl;
+		isolation: isolate;
+	}
+
+	.StonePricingCalc,
+	.StonePricingCalc * {
+		box-sizing: border-box;
+	}
+
+	.StonePricingCalc.IsPlaced {
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+	.StonePricingHead {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 180px;
+		gap: 24px;
+		align-items: center;
+		margin-bottom: 24px;
+	}
+
+	.StonePricingEyebrow {
+		width: fit-content;
+		margin: 0 0 10px;
+		padding: 6px 12px;
+		border-radius: 999px;
+		background: rgba(242, 193, 26, .16);
+		color: #f2c11a;
+		font-size: 14px;
+		font-weight: 900;
+	}
+
+	.StonePricingTitle {
+		margin: 0;
+		font-size: clamp(24px, 3vw, 42px);
+		line-height: 1.35;
+	}
+
+	.StonePricingDesc {
+		max-width: 78ch;
+		margin: 12px 0 0;
+		color: rgba(255, 255, 255, .78);
+		font-size: clamp(15px, 1.4vw, 18px);
+		line-height: 1.9;
+	}
+
+	.StonePricingBadge {
+		min-height: 150px;
+		padding: 18px;
+		border-radius: 24px;
+		background: rgba(255, 255, 255, .09);
+		border: 1px solid rgba(255, 255, 255, .16);
+		display: grid;
+		place-items: center;
+		text-align: center;
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .04);
+	}
+
+	.StonePricingBadgeNum {
+		font-size: 44px;
+		font-weight: 950;
+		line-height: 1;
+		color: #f2c11a;
+		direction: ltr;
+	}
+
+	.StonePricingBadgeText {
+		font-size: 14px;
+		font-weight: 800;
+		color: rgba(255, 255, 255, .76);
+		line-height: 1.5;
+	}
+
+	.StonePricingGrid {
+		display: grid;
+		grid-template-columns: minmax(280px, .95fr) minmax(320px, 1.05fr);
+		gap: 18px;
+		align-items: stretch;
+	}
+
+	.StonePricingForm,
+	.StonePricingResult,
+	.StonePricingInvoice {
+		border: 1px solid rgba(255, 255, 255, .14);
+		background: rgba(255, 255, 255, .075);
+		border-radius: 24px;
+		backdrop-filter: blur(10px);
+	}
+
+	.StonePricingForm {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 14px;
+		padding: 18px;
+	}
+
+	.StonePricingField {
+		display: grid;
+		gap: 8px;
+		min-width: 0;
+	}
+
+	.StonePricingField.Wide,
+	.StonePricingHint {
+		grid-column: 1 / -1;
+	}
+
+	.StonePricingLabel {
+		font-size: 13px;
+		font-weight: 900;
+		color: rgba(255, 255, 255, .82);
+	}
+
+	.StonePricingInput,
+	.StonePricingInputUnit {
+		width: 100%;
+		min-height: 48px;
+		border: 1px solid rgba(255, 255, 255, .15);
+		border-radius: 16px;
+		background: rgba(255, 255, 255, .94);
+		color: #111317;
+		font-family: inherit;
+		font-size: 15px;
+		font-weight: 800;
+	}
+
+	.StonePricingInput {
+		padding: 10px 13px;
+		outline: none;
+	}
+
+	.StonePricingInput:focus {
+		border-color: #f2c11a;
+		box-shadow: 0 0 0 4px rgba(242, 193, 26, .20);
+	}
+
+	.StonePricingInputUnit {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: center;
+		overflow: hidden;
+	}
+
+	.StonePricingInputUnit .StonePricingInput {
+		min-height: 46px;
+		border: 0;
+		border-radius: 0;
+		background: transparent;
+	}
+
+	.StonePricingInputUnit span {
+		padding-inline: 12px;
+		color: rgba(17, 19, 23, .62);
+		font-weight: 900;
+		border-right: 1px solid rgba(0, 0, 0, .10);
+		white-space: nowrap;
+	}
+
+	.StonePricingHint,
+	.StonePricingDisclaimer {
+		margin: 0;
+		color: rgba(255, 255, 255, .68);
+		font-size: 13px;
+		line-height: 1.8;
+	}
+
+	.StonePricingResult {
+		padding: 18px;
+		display: grid;
+		gap: 16px;
+		align-content: start;
+	}
+
+	.StonePricingResultTop {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 14px;
+		flex-wrap: wrap;
+	}
+
+	.StonePricingSmallTitle {
+		margin: 0 0 6px;
+		font-size: 14px;
+		font-weight: 900;
+		color: rgba(255, 255, 255, .72);
+	}
+
+	.StonePricingTotal {
+		margin: 0;
+		display: flex;
+		align-items: baseline;
+		gap: 8px;
+		color: #f2c11a;
+		font-size: clamp(34px, 5vw, 58px);
+		font-weight: 950;
+		line-height: 1;
+	}
+
+	.StonePricingTotal span:last-child {
+		font-size: 18px;
+		color: rgba(255, 255, 255, .78);
+	}
+
+	.StonePricingFinalMeter {
+		padding: 10px 14px;
+		border-radius: 18px;
+		background: rgba(242, 193, 26, .14);
+		color: #ffe07a;
+		font-weight: 950;
+		white-space: nowrap;
+	}
+
+	.StonePricingStats {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 10px;
+	}
+
+	.StonePricingStats div {
+		min-height: 86px;
+		padding: 12px;
+		border-radius: 18px;
+		background: rgba(255, 255, 255, .08);
+		display: grid;
+		align-content: center;
+		gap: 5px;
+	}
+
+	.StonePricingStats span {
+		font-size: 24px;
+		font-weight: 950;
+		color: #fff;
+		line-height: 1;
+	}
+
+	.StonePricingStats small {
+		color: rgba(255, 255, 255, .68);
+		font-size: 12px;
+		font-weight: 800;
+		line-height: 1.5;
+	}
+
+	.StonePricingWarning {
+		margin: 0;
+		padding: 12px 14px;
+		border-radius: 16px;
+		background: rgba(255, 126, 74, .14);
+		color: #ffd4c1;
+		font-size: 13px;
+		font-weight: 800;
+		line-height: 1.75;
+	}
+
+	.StonePricingInvoice {
+		margin-top: 18px;
+		padding: 18px;
+	}
+
+	.StonePricingInvoiceHead {
+		display: flex;
+		align-items: end;
+		justify-content: space-between;
+		gap: 12px;
+		margin-bottom: 14px;
+		flex-wrap: wrap;
+	}
+
+	.StonePricingInvoiceHead h3,
+	.StonePricingInvoiceHead p {
+		margin: 0;
+	}
+
+	.StonePricingInvoiceHead h3 {
+		font-size: clamp(20px, 2.3vw, 28px);
+	}
+
+	.StonePricingInvoiceHead p {
+		color: rgba(255, 255, 255, .65);
+		font-size: 14px;
+		font-weight: 800;
+	}
+
+	.StonePricingRows {
+		display: grid;
+		gap: 8px;
+	}
+
+	.StonePricingRow {
+		display: grid;
+		grid-template-columns: minmax(180px, 1.1fr) minmax(190px, .9fr) minmax(110px, .45fr);
+		gap: 12px;
+		align-items: center;
+		padding: 12px 14px;
+		border-radius: 16px;
+		background: rgba(255, 255, 255, .07);
+		line-height: 1.6;
+	}
+
+	.StonePricingRow.Head {
+		background: rgba(255, 255, 255, .13);
+		color: rgba(255, 255, 255, .70);
+		font-size: 13px;
+		font-weight: 900;
+	}
+
+	.StonePricingRow span:first-child {
+		font-weight: 900;
+		color: #fff;
+	}
+
+	.StonePricingRow span:nth-child(2) {
+		font-size: 13px;
+		color: rgba(255, 255, 255, .66);
+		font-weight: 800;
+	}
+
+	.StonePricingRow strong {
+		text-align: left;
+		font-size: 18px;
+		font-weight: 950;
+		direction: ltr;
+		color: #fff;
+	}
+
+	.StonePricingRow.Subtotal {
+		background: rgba(255, 255, 255, .12);
+	}
+
+	.StonePricingRow.Profit {
+		background: rgba(242, 193, 26, .12);
+	}
+
+	.StonePricingRow.Total {
+		background: #f2c11a;
+		color: #111317;
+	}
+
+	.StonePricingRow.Total span:first-child,
+	.StonePricingRow.Total span:nth-child(2),
+	.StonePricingRow.Total strong {
+		color: #111317;
+	}
+
+	.StonePricingRow.Total strong {
+		font-size: 24px;
+	}
+
+	.StonePricingDisclaimer {
+		margin-top: 14px;
+		padding-inline: 4px;
+	}
+
+	@media (max-width: 900px) {
+		.StonePricingHead,
+		.StonePricingGrid {
+			grid-template-columns: 1fr;
+		}
+
+		.StonePricingBadge {
+			min-height: auto;
+			grid-template-columns: auto 1fr;
+			justify-items: start;
+			text-align: right;
+		}
+
+		.StonePricingStats {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (orientation: portrait) {
+		.StonePricingCalc {
+			width: min(100% - 16px, var(--StonePricingMaxWidth));
+			padding: 14px;
+			border-radius: 22px;
+		}
+
+		.StonePricingCalc.IsPlaced {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.StonePricingHead {
+			gap: 16px;
+			margin-bottom: 16px;
+		}
+
+		.StonePricingForm {
+			grid-template-columns: 1fr;
+			padding: 14px;
+		}
+
+		.StonePricingResult,
+		.StonePricingInvoice {
+			padding: 14px;
+			border-radius: 20px;
+		}
+
+		.StonePricingStats {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.StonePricingRow,
+		.StonePricingRow.Head {
+			grid-template-columns: 1fr;
+			gap: 4px;
+		}
+
+		.StonePricingRow strong {
+			text-align: right;
+		}
+	}
+</style>
