@@ -1,6 +1,8 @@
 ---
 import BLayout from "@/Layout.astro";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoList, EmoStrip, ESec, Hero, IncLineSep, IndexSec, Tree, YTPlayer } from "@/Widgets";
+import { Badge, EmoCall, Emograph, VrStack } from "../../../site/Widgets";
 ---
 
 
@@ -22,19 +24,48 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoList, EmoStrip, ESec, Hero, I
 
 
 
-<BLayout pSchemaType="Service" pTitle="توريد وتركيب حجر طبيعي" pDescr="توريد وتركيب حجر طبيعي">
+<BLayout
+	pSchemaType="Service"
+	pTitle="توريد وتركيب حجر طبيعي"
+	pDescr="توريد وتركيب حجر طبيعي"
+>
 
-	<Hero
-		pTitle="توريد وتركيب حجر طبيعي"
-		pDesc="توريد وتركيب حجر طبيعي"
-		pPosL="40% 50% 10% 10%"
-		pPosP="10% 10% 50% 10%"
-	>
 
-		<a class = " cta " href="#cta">
-			اطلب
-		</a>
+
+
+
+
+
+	<Hero>
+
+		<VrStack
+			pSize={new Size(new NumPer("40%","95%"))}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("20%","20%"))}
+			pHzAlign={"Center"}
+		>
+
+			<Emograph pTitle={Text.H1.Centered.OfText("توريد وتركيب حجر طبيعي")} pText={Text.Body.Centered.OfText("توريد وتركيب حجر طبيعي")} />
+
+			<Badge
+				pLandOnly
+				pYears={15}
+				pYearsText="سنوات الخبرة"
+				pQualityText="فرز أول"
+				pWorks={7}
+				pWorksText="سابقة الأعمال"
+				pMobMaxCols={2}
+			/>
+
+			<EmoCall BlackSky pText="اطلب عرض سعر" />
+
+		</VrStack>
 
 	</Hero>
+
+
+
+
+
+
 
 </BLayout>

@@ -1,7 +1,8 @@
 ---
-import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
+import { Badge, StoneProductStrip } from "../../../site/Widgets";
 ---
 
 
@@ -35,17 +36,32 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 
 
 
-	<Hero
-		pTitle="توريد وتركيب رخام مستورد"
-		pDesc="رخام طبيعي مستورد للمداخل والسلالم والحوائط والأرضيات والديكورات الفاخرة"
-		pHzAlign="center"
-		pVrAlign="center"
-		pPosL="40% 50% 20% 5%"
-		pPosP="10% 0% 50% 0%"
-		pBlurP="off"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="اطلب ترشيح خامة" />
+		<VrStack
+			pSize={new Size(new NumPer("40%","95%"))}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("15%","25%"))}
+			pHzAlign={"Center"}
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("توريد وتركيب رخام مستورد")}
+				pText={Text.Body.Centered.OfText("رخام طبيعي مستورد للمداخل والسلالم والحوائط والأرضيات والديكورات الفاخرة")}
+			/>
+
+			<Badge
+				pLandOnly
+				pYears={15}
+				pYearsText="سنوات الخبرة"
+				pQualityText="فرز أول"
+				pWorks={7}
+				pWorksText="سابقة الأعمال"
+				pMobMaxCols={2}
+			/>
+
+			<EmoCall BlackSky pText="اطلب عرض سعر" />
+
+		</VrStack>
 
 	</Hero>
 
@@ -55,70 +71,16 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
-			pTitle="معرض الرخام المستورد"
-			pDesc="اختيارات طبيعية مستوردة من مدارس لونية مختلفة: الأبيض الهادئ، الأسود بعروق بيضاء، البني الدافئ، الأحمر، الأخضر، والأونكس الشفاف"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<VrStack
-					pWidth={new Pixel(400, 340)}
-					pGap={new Pixel(15, 15)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.WhiteOff)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("ألوان عالمية")}
-						pText={Text.Body.Centered.OfText("رخام أبيض إيطالي، أسود إسباني، بيج إسباني، بني تركي وإسباني، وأحمر وفرنساوي ومغربي حسب التوفر.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-				<VrStack
-					pWidth={new Pixel(400, 340)}
-					pGap={new Pixel(15, 15)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.SkyLite)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("فرز ألواح")}
-						pText={Text.Body.Centered.OfText("نراجع العروق واتجاه القطع والتطابق بين الألواح قبل اعتماد الخامة، خصوصًا في الحوائط الكبيرة والديكورات المتقابلة.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-				<VrStack
-					pWidth={new Pixel(400, 340)}
-					pGap={new Pixel(15, 15)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.OrangeLite)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("استخدام فاخر")}
-						pText={Text.Body.Centered.OfText("المداخل، الريسبشن، السلالم الداخلية، الحوائط، المدافئ، الحمامات الفندقية، الطاولات، والديكورات الخاصة.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
+	<StoneProductStrip
+		pFolder="/Media/Emostone/ProductStripSample"
+		pStoneType="Marble"
+		pName="جلالة روزا"
+		pKind="رخام مصري طبيعي"
+		pColor="وردي مائل للبيج"
+		pCountry="مصر"
+		pUses={["أرضيات", "حوائط", "درج", "سلالم"]}
+		pSizes={["40", "60", "80", "ترابيع"]}
+	/>
 
 
 
@@ -126,8 +88,12 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		hidden
+		pBg={new ElemBg(Colors.Gray1)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -135,8 +101,11 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 			pDesc="المعرض التالي مخصص لأسماء مستوردة متداولة في السوق المصري، مع صور مرتبطة باسم كل نوع"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg(Colors.Gray1)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack
 				pWidth={new Pixel(1300, 340)}
@@ -588,361 +557,11 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.OrangeLite};`}
-			pTitle="أين نستخدم الرخام المستورد؟"
-			pDesc="الرخام المستورد يناسب المساحات التي تحتاج حضورًا بصريًا واضحًا وتفاصيل عروق مميزة"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<VrStack
-				pWidth={new Pixel(1300, 340)}
-				pGap={new Pixel(25, 15)}
-				pPad={new Pixel(30, 15)}
-			>
-
-				<HzStack pGap={new Pixel(20, 15)} pPad={new Pixel(0, 0)}>
-
-					<Emograph
-						style = {`background:${Colors.SkyLite}; padding:25px;`}
-						pTitle={Text.H4.Centered.OfText("المداخل والريسبشن")}
-						pText={Text.Body.Centered.OfText("ستتواريو، أربسكاتو، باندا وايت، وإمبرادور تعطي حضورًا واضحًا في المداخل الواسعة وحوائط الاستقبال.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						style = {`background:${Colors.Creamy}; padding:25px;`}
-						pTitle={Text.H4.Centered.OfText("السلالم الداخلية")}
-						pText={Text.Body.Centered.OfText("إمبرادور، كريما مارفيل، ودرجات البيج والبني تناسب السلالم الهادئة داخل الفلل والمداخل الخاصة.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						style = {`background:${Colors.GreenLite}; padding:25px;`}
-						pTitle={Text.H4.Centered.OfText("الحوائط والبانوهات")}
-						pText={Text.Body.Centered.OfText("الأبيض الإيطالي، أربسكاتو، باندا وايت، وأونكس يناسبون الحوائط الكبيرة والبوكماتش والإضاءة الخلفية.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						style = {`background:${Colors.OrangeLite}; padding:25px;`}
-						pTitle={Text.H4.Centered.OfText("المدافئ والدفايات")}
-						pText={Text.Body.Centered.OfText("نيرو ماركينا، إمبرادور، أحمر أليكانتي، وأربسكاتو تعطي إطارًا قويًا للمدافئ والدفايات.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</HzStack>
-
-				<HzStack pGap={new Pixel(20, 15)} pPad={new Pixel(0, 0)}>
-
-					<Emograph
-						style = {`background:${Colors.WhiteOff}; padding:25px;`}
-						pTitle={Text.H4.Centered.OfText("الأرضيات الفاخرة")}
-						pText={Text.Body.Centered.OfText("الأبيض والبيج يناسبان الأرضيات الهادئة، والأسود والأحمر يستخدمان كحدود أو تطعيمات أو مسارات مميزة.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						style = {`background:${Colors.SkyLite}; padding:25px;`}
-						pTitle={Text.H4.Centered.OfText("الحمامات الفندقية")}
-						pText={Text.Body.Centered.OfText("ستتواريو، بيانكو، أونكس، ووود فين يستخدمون في الحوائط والأرضيات والكونتر حسب طبيعة الصيانة.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						style = {`background:${Colors.Creamy}; padding:25px;`}
-						pTitle={Text.H4.Centered.OfText("العتبات والحليات")}
-						pText={Text.Body.Centered.OfText("الأسود الإسباني والأحمر والإمبرادور يستخدمون في العتبات والحليات والفواصل بين الأرضيات.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						style = {`background:${Colors.GreenLite}; padding:25px;`}
-						pTitle={Text.H4.Centered.OfText("الطاولات والكونسول")}
-						pText={Text.Body.Centered.OfText("باندا وايت، أونكس، وود فين، وإمبرادور يناسبون الطاولات والكونسول والقطع الديكورية الخاصة.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</HzStack>
-
-			</VrStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="اختيار الرخام المستورد حسب اللون"
-			pDesc="اللون والعروق يوجهان الاستخدام، وسعر اللوح يتأثر بالفرز والمنشأ والسمك ودرجة التطابق"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<EmoList
-					pWidth={new RespString("550px", "100%")}
-					pTitle={Text.H3.Centered.OfText("درجات فاتحة")}
-					pDesc={Text.Body.Centered.OfText("للمساحات الهادئة والحوائط والأرضيات الفاخرة")}
-					pHeadBg={new ElemBg(Colors.GreenLite)}
-					pItemsBg={new ElemBg(Colors.WhiteOff)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						{ Title: "أنواع مناسبة", Items: ["ستتواريو.", "أربسكاتو.", "أبيض بيانكو.", "أبيض مقدوني.", "كلكتا عند التوفر.", "كريما مارفيل."] },
-						{ Title: "استخدامات", Items: ["حوائط استقبال.", "أرضيات داخلية.", "حمامات فاخرة.", "كونسول وطاولات.", "مدافئ بيضاء."] }
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("550px", "100%")}
-					pTitle={Text.H3.Centered.OfText("درجات قوية")}
-					pDesc={Text.Body.Centered.OfText("للتطعيمات والديكورات التي تحتاج حضورًا واضحًا")}
-					pHeadBg={new ElemBg(Colors.OrangeLite)}
-					pItemsBg={new ElemBg(Colors.WhiteOff)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						{ Title: "أنواع مناسبة", Items: ["أسود إسباني.", "باندا وايت.", "إمبرادور إسباني.", "إمبرادور تركي.", "أحمر أليكانتي.", "أحمر فرنساوي.", "أخضر هندي."] },
-						{ Title: "استخدامات", Items: ["فواصل أرضيات.", "حوائط ديكورية.", "مدافئ ودفايات.", "عتبات أبواب.", "مداخل وفواصل كلاسيكية."] }
-					]}
-				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.SkyLite};`}
-			pTitle="الفرز والتركيب في الرخام المستورد"
-			pDesc="قيمة الرخام المستورد تظهر عندما يتم ترتيب العروق والقصات والفواصل قبل بدء التركيب"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<EmoList
-					pWidth={new RespString("650px", "100%")}
-					pTitle={Text.H3.Centered.OfText("قبل القص")}
-					pDesc={Text.Body.Centered.OfText("مراجعة الألواح قبل دخول المصنع")}
-					pHeadBg={new ElemBg(Colors.Creamy)}
-					pItemsBg={new ElemBg(Colors.SkyLite)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						{ Title: "مطابقة العينة", Items: ["مراجعة اللوح الحقيقي مع العينة أو الصورة.", "التأكد من أن لون الدفعة مناسب للمساحة المطلوبة."] },
-						{ Title: "اتجاه العروق", Items: ["تحديد اتجاه العرق في الأرضيات والحوائط.", "اختيار لوحات متقابلة عند تنفيذ بوكماتش أو بانوهات."] },
-						{ Title: "الشروخ والمعجون", Items: ["مراجعة الشروخ الطبيعية والمعالجة.", "تحديد القطع التي يمكن استخدامها في أماكن أقل ظهورًا."] },
-						{ Title: "السمك والتشطيب", Items: ["مراجعة السمك الفعلي.", "اختيار مصقول أو مطفي أو معالج حسب الاستخدام."] }
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("650px", "100%")}
-					pTitle={Text.H3.Centered.OfText("أثناء التركيب")}
-					pDesc={Text.Body.Centered.OfText("تنفيذ يحافظ على قيمة الخامة")}
-					pHeadBg={new ElemBg(Colors.Creamy)}
-					pItemsBg={new ElemBg(Colors.GreenLite)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						{ Title: "الفواصل", Items: ["تحديد عرض الفاصل قبل التركيب.", "استخدام مواد تعبئة مناسبة للون الخامة."] },
-						{ Title: "الحواف", Items: ["معالجة حواف العتبات والسلالم والطاولات.", "تنفيذ نوزنج أو شطف حسب التصميم."] },
-						{ Title: "الميول والمناسيب", Items: ["ضبط مناسيب الأرضيات والحمامات.", "مراعاة فتحات الصرف والعتبات."] },
-						{ Title: "الحماية بعد التركيب", Items: ["تغطية السطح أثناء باقي أعمال التشطيب.", "تنظيف بمواد مناسبة قبل التسليم."] }
-					]}
-				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
-			pTitle="العناية بالرخام المستورد"
-			pDesc="العناية الجيدة تحافظ على اللمعان وتقلل البقع وتطيل عمر الخامة"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<VrStack
-					pWidth={new Pixel(400, 340)}
-					pGap={new Pixel(15, 15)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.WhiteOff)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("تنظيف يومي")}
-						pText={Text.Body.Centered.OfText("استخدم منظفًا متعادلًا وقطعة ناعمة، ثم جفف السطح بعد التنظيف لتقليل آثار المياه والبقع.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-				<VrStack
-					pWidth={new Pixel(400, 340)}
-					pGap={new Pixel(15, 15)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.OrangeLite)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("حماية من الأحماض")}
-						pText={Text.Body.Centered.OfText("الخل والليمون والمنظفات الحمضية والمواد الكاشطة تؤثر على لمعان الرخام الطبيعي وتزيد احتمالات الخدش.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-				<VrStack
-					pWidth={new Pixel(400, 340)}
-					pGap={new Pixel(15, 15)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.SkyLite)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("صيانة دورية")}
-						pText={Text.Body.Centered.OfText("الجلي والتلميع والمعالجة الدورية تساعد في الحفاظ على السطح، خاصة في المداخل والسلالم والأماكن كثيرة الحركة.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
-		id="cta"
-		pBg={new ElemBg(Colors.BlackOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="اطلب ترشيح رخام مستورد مناسب"
-			pDesc="أرسل صور المكان واللون المطلوب والاستخدام والمقاسات التقريبية، وسنرشح لك خامات مستوردة مناسبة للتصميم والميزانية"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<Emograph
-					pTitle={Text.H3.WithAlign("right").White.OfText("بيانات تساعدنا في الاختيار")}
-					pText={Text.Body.WithAlign("right").White.OfText("نوع المساحة، درجة الحركة، وجود رطوبة، لون الديكور، شكل العروق المطلوب، المقاسات التقريبية، وهل المطلوب ألواح كبيرة أو بوكماتش أو قصات سلالم أو مدفأة أو عتبات. بعد مراجعة هذه البيانات يتم ترشيح خامات مثل ستتواريو أو أربسكاتو أو نيرو ماركينا أو إمبرادور أو أونكس أو وود فين حسب الحالة.")}
-					pSize={new Size(new NumPer(750, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<VrStack
-					pWidth={new Pixel(350, 340)}
-					pGap={new Pixel(20, 15)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.WhiteOff)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("01014490054")}
-						pText={Text.Body.Centered.OfText("اتصل أو ارسل صور المكان على واتساب لبدء الترشيح والمعاينة.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<EmoCall BlackSky pText="اطلب الخدمة" />
-
-				</VrStack>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
 	<EmoFaq>
 
 		<FaqItem
 			pQuestion="ما أشهر أنواع الرخام المستورد؟"
 			pAnswer="من الأنواع المتداولة: باندا وايت، بيانكو، أبيض مقدوني، كلكتا، أربسكاتو، ستتواريو، أسود إسباني، أحمر أليكانتي، أحمر فرنساوي، إمبرادور إسباني، إمبرادور تركي، أونكس، وود فين، وأخضر هندي."
-		/>
-
-		<FaqItem
-			pQuestion="هل كرارا وكلكتا وستتواريو كلها رخام أبيض؟"
-			pAnswer="نعم، كلها من عائلة الرخام الأبيض الفاخر، لكن كل نوع له درجة بياض وشكل عروق مختلف. اختيار النوع يعتمد على التصميم والميزانية وحجم اللوح المطلوب."
-		/>
-
-		<FaqItem
-			pQuestion="ما أفضل استخدام للأسود الإسباني؟"
-			pAnswer="الأسود الإسباني أو نيرو ماركينا مناسب للمدافئ والحوائط والعتبات والفواصل والأرضيات الديكورية، ويعطي تباينًا قويًا مع الأبيض والبيج."
-		/>
-
-		<FaqItem
-			pQuestion="هل الأونكس مناسب لكل الأرضيات؟"
-			pAnswer="الأونكس يستخدم غالبًا في الحوائط المضيئة والديكور والحمامات الفاخرة والطاولات، ويتطلب عناية وفرزًا عاليًا. اختيار استخدامه كأرضية يحتاج دراسة للحركة والصيانة."
-		/>
-
-		<FaqItem
-			pQuestion="هل الرخام المستورد مناسب للمطابخ؟"
-			pAnswer="الرخام الطبيعي يحتاج عناية في المطابخ لأنه يتأثر بالأحماض والبقع. في المطابخ كثيرة الاستخدام يتم ترشيح الجرانيت أو الكوارتز غالبًا، ويمكن استخدام الرخام في مطابخ عرض أو استخدام هادئ مع حماية وصيانة مناسبة."
 		/>
 
 		<FaqItem
@@ -958,48 +577,8 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 
 
 
-	<ReadAlso
-		pTitle={Text.H2.Centered.OfText("صفحات رخام قريبة")}
-		pDesc={Text.Body.Centered.OfText("انتقل للصفحات المرتبطة داخل قسم الرخام")}
-		pHeadBg={new ElemBg(Colors.GreenLite)}
-		pBodyBg={new ElemBg(Colors.WhiteOff)}
-		pCardBg={new ElemBg(Colors.SkyLite)}
-		pWidth={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
-		pGap={new Pixel(20, 15)}
-	>
-
-		<ReadAlsoItem
-			pTitle="توريد وتركيب رخام"
-			pDesc="الصفحة الرئيسية لخدمات الرخام وتشمل المصري والمستورد والاستخدامات العامة."
-			pHref="/emostone/marble"
-			pImg="https://nasar-stone.com/wp-content/uploads/2023/01/%D8%A8%D9%86%D8%AF%D8%A7-%D9%88%D8%A7%D9%8A%D8%AA.png"
-		/>
-
-		<ReadAlsoItem
-			pTitle="رخام مصري"
-			pDesc="معرض الرخام المصري الطبيعي مثل جلالة وصني وسيلفيا وسماحة وتريستا وملي جراي."
-			pHref="/emostone/marble/eg"
-			pImg="https://static.wixstatic.com/media/9289d4_44b1d60cf5f3434e83aac2def80703a3~mv2.jpg/v1/fill/w_958%2Ch_709%2Cal_c%2Cq_85%2Cenc_avif%2Cquality_auto/9289d4_44b1d60cf5f3434e83aac2def80703a3~mv2.jpg"
-		/>
-
-		<ReadAlsoItem
-			pTitle="توريد وتركيب كوارتز"
-			pDesc="كوارتز للمطابخ والحمامات والجزيرات والأسطح الحديثة."
-			pHref="/emostone/quartz"
-			pImg="https://static.wixstatic.com/media/498793_9670278a55b54bffaa91e740ea0c613d~mv2.jpg/v1/crop/x_93%2Cy_0%2Cw_614%2Ch_600/fill/w_220%2Ch_215%2Cal_c%2Cq_90%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/%D9%83%D9%84%D9%83%D8%AA%D8%A7%20%D8%AC%D9%88%D9%84%D8%AF.jpg"
-		/>
-
-	</ReadAlso>
-
-
-
-
-
-
-
 	<RelServices
-		pTitle={Text.H2.Centered.White.OfText("خدمات مرتبطة بالرخام المستورد")}
-		pDesc={Text.Body.Centered.White.OfText("اختيار الرخام المستورد يتصل بالتشطيب والتصميم والإشراف على التنفيذ")}
+		pTitle={Text.H2.Centered.White.OfText("خدمات أخرى")}
 		pHeadBg={new ElemBg(Colors.Gray5)}
 		pBodyBg={new ElemBg(Colors.Gray1)}
 		pCardBg={new ElemBg(Colors.WhiteOff)}
@@ -1011,24 +590,12 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 			pTitle="توريد وتركيب رخام وجرانيت"
 			pDesc="الخدمة العامة لتوريد وتركيب الرخام والجرانيت والكوارتز والحجر الطبيعي."
 			pHref="/emostone"
-			pImg="https://static.wixstatic.com/media/308dfd_a5f737ad08a046e3be8c0cf47e983ddb~mv2.webp/v1/fill/w_1896,h_800,al_c,q_85,enc_avif,quality_auto/308dfd_a5f737ad08a046e3be8c0cf47e983ddb~mv2.webp"
-			pBtnText="افتح الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="تشطيب شقق وفلل"
 			pDesc="تنسيق الرخام المستورد مع الأرضيات والحوائط والسلالم والمداخل ضمن خطة التشطيب."
 			pHref="/emocrete/finishing"
-			pImg="https://nasar-stone.com/wp-content/uploads/2023/01/%D8%A7%D8%B1%D8%A8%D8%B3%D9%83%D8%A7%D8%AA%D9%88.png"
-			pBtnText="افتح الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="إشراف على التشطيب"
-			pDesc="مراجعة المقاسات والفرز والتركيب والاستلام النهائي لأعمال الرخام."
-			pHref="/emocrete/supervision/finishing"
-			pImg="https://nasar-stone.com/wp-content/uploads/2023/01/%D8%A7%D8%B3%D9%88%D8%AF-%D8%A7%D8%B3%D8%A8%D8%A7%D9%86%D9%8A.png"
-			pBtnText="افتح الخدمة"
 		/>
 
 	</RelServices>

@@ -209,3 +209,14 @@ export { default as ThemedPriceCardHz } from "./Prices/ThemedPriceCardHz.astro";
 export { default as EmoWhats } from "./Comp/EmoWhats.astro";
 export { default as EmoDet } from "./Comp/EmoDet.astro";
 export { default as PharmacyWorkCard } from "./Pharmacy/PharmacyWorkCard.astro";
+export { default as IconCardsStrip } from "./Strips/IconCardsStrip.astro";
+export { default as IconInfoCard } from "./Strips/IconInfoCard.astro";
+export { default as IconInfoCard1 } from "./Strips/IconInfoCard1.astro";
+export { default as IconInfoCard2 } from "./Strips/IconInfoCard2.astro";
+export { default as IconInfoCard3 } from "./Strips/IconInfoCard3.astro";
+export { default as IconInfoCard4 } from "./Strips/IconInfoCard4.astro";
+export { default as IconInfoCard5 } from "./Strips/IconInfoCard5.astro";
+
+export { default as StoneProductStrip } from "./Stone/StoneProductStrip.astro";
+
+

@@ -1,7 +1,8 @@
 ---
-import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
 import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
+import { Badge, StoneProductStrip } from "../../../site/Widgets";
 ---
 
 
@@ -35,22 +36,32 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 
 
 
-	<Hero
-		pImgL="https://marblestoneegypt.com/wp-content/uploads/2024/09/Star-Galaxy-Marble-Stone-Egypt-05-300x300.jpg"
-		pImgP="https://marblestoneegypt.com/wp-content/uploads/2024/09/blue-pearl-Marble-Stone-Egypt-01-600x600.jpg"
-		pTitle="توريد وتركيب جرانيت مستورد"
-		pDesc="خامات جرانيت عالمية للمطابخ والكونترات والسلالم والأرضيات والواجهات والحوائط المميزة"
-		pTitleClr={Colors.WhiteOff}
-		pDescClr={Colors.WhiteOff}
-		pHzAlign="center"
-		pVrAlign="center"
-		pBlurL="on"
-		pBlurP="on"
-		pPosL="44% 42% 10% 8%"
-		pPosP="15% 6% 18% 6%"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="اطلب ترشيح خامة" />
+		<VrStack
+			pSize={new Size(new NumPer("40%","95%"))}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("20%","20%"))}
+			pHzAlign={"Center"}
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("توريد وتركيب جرانيت مستورد")}
+				pText={Text.Body.Centered.OfText("خامات جرانيت عالمية للمطابخ والكونترات والسلالم والأرضيات والواجهات والحوائط المميزة")}
+			/>
+
+			<Badge
+				pLandOnly
+				pYears={15}
+				pYearsText="سنوات الخبرة"
+				pQualityText="فرز أول"
+				pWorks={7}
+				pWorksText="سابقة الأعمال"
+				pMobMaxCols={2}
+			/>
+
+			<EmoCall BlackSky pText="اطلب عرض سعر" />
+
+		</VrStack>
 
 	</Hero>
 
@@ -60,70 +71,16 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
-			pTitle="معرض الجرانيت المستورد"
-			pDesc="اختيارات عالمية قوية للأعمال التي تحتاج سطحًا صلبًا، لونًا واضحًا، وحضورًا بصريًا أعلى من الخامات المحلية المتداولة"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<VrStack
-					pWidth={new Pixel(400, 340)}
-					pGap={new Pixel(15, 10)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.WhiteOff)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("ألوان عالمية")}
-						pText={Text.Body.Centered.OfText("أسود لامع، أزرق معدني، بني دافئ، أبيض كشمير، ذهبي، أحمر، ورمادي فضي حسب التصميم.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-				<VrStack
-					pWidth={new Pixel(400, 340)}
-					pGap={new Pixel(15, 10)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.SkyLite)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("مطابخ وكونترات")}
-						pText={Text.Body.Centered.OfText("Blue Pearl و Star Galaxy و Tan Brown و Double Black من الاختيارات المناسبة للكونترات والجزر والمطابخ عالية الاستخدام.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-				<VrStack
-					pWidth={new Pixel(400, 340)}
-					pGap={new Pixel(15, 10)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.OrangeLite)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("أرضيات وواجهات")}
-						pText={Text.Body.Centered.OfText("الجرانيت المستورد يعطي قيمة أعلى في أرضيات الفنادق والمداخل والواجهات التجارية والحوائط المميزة.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
+	<StoneProductStrip
+		pFolder="/Media/Emostone/ProductStripSample"
+		pStoneType="Marble"
+		pName="جلالة روزا"
+		pKind="رخام مصري طبيعي"
+		pColor="وردي مائل للبيج"
+		pCountry="مصر"
+		pUses={["أرضيات", "حوائط", "درج", "سلالم"]}
+		pSizes={["40", "60", "80", "ترابيع"]}
+	/>
 
 
 
@@ -131,8 +88,12 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		hidden
+		pBg={new ElemBg(Colors.Gray1)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -140,8 +101,11 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 			pDesc="كل صورة مرتبطة باسم نوع مستورد محدد من صفحة مورد تعرضه ضمن Imported Granite"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg(Colors.Gray1)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack
 				pWidth={new Pixel(1300, 340)}
@@ -584,419 +548,6 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.OrangeLite};`}
-			pTitle="اختيار الجرانيت المستورد حسب اللون"
-			pDesc="اللون يحدد الطابع العام للمكان، والحبيبات تحدد درجة الهدوء أو الحركة في السطح"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<HzStack pGap={new Pixel(25, 15)} pPad={new Pixel(30, 15)}>
-
-				<EmoList
-					pWidth={new RespString("400px", "100%")}
-					pTitle={Text.H3.Centered.OfText("درجات داكنة")}
-					pDesc={Text.Body.Centered.OfText("للمطابخ والكونترات والتفاصيل القوية")}
-					pHeadBg={new ElemBg(Colors.Creamy)}
-					pItemsBg={new ElemBg(Colors.SkyLite)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						"Star Galaxy.",
-						"Double Black.",
-						"Emerald Pearl.",
-						"Blue Pearl.",
-						"Tan Brown.",
-						"Baltic Brown."
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("400px", "100%")}
-					pTitle={Text.H3.Centered.OfText("درجات فاتحة")}
-					pDesc={Text.Body.Centered.OfText("للمساحات الهادئة والحمامات والمطابخ الفاتحة")}
-					pHeadBg={new ElemBg(Colors.Creamy)}
-					pItemsBg={new ElemBg(Colors.GreenLite)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						"Kashmir White.",
-						"Moon White.",
-						"Kashmir Gold.",
-						"Prada Gold.",
-						"Silver Pearl.",
-						"أبيض ورمادي حسب التوفر."
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("400px", "100%")}
-					pTitle={Text.H3.Centered.OfText("درجات حركية")}
-					pDesc={Text.Body.Centered.OfText("للمداخل والحوائط والأرضيات ذات الحضور")}
-					pHeadBg={new ElemBg(Colors.Creamy)}
-					pItemsBg={new ElemBg(Colors.OrangeLite)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						"Paradiso.",
-						"Himalaya Blue.",
-						"Brown Brazil.",
-						"Multi Red.",
-						"Prada Gold.",
-						"أنواع ذات حركة موجية أو نقط قوية."
-					]}
-				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="استخدامات الجرانيت المستورد"
-			pDesc="الجرانيت المستورد مناسب للأماكن التي تحتاج سطحًا صلبًا وشكلًا مميزًا مع تحمل قوي للحركة والتنظيف"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<VrStack
-				pWidth={new Pixel(1300, 340)}
-				pGap={new Pixel(20, 15)}
-				pPad={new Pixel(30, 15)}
-			>
-
-				<HzStack pGap={new Pixel(20, 15)} pPad={new Pixel(0, 0)}>
-
-					<Emograph
-						style = {`background:${Colors.WhiteOff}; padding:25px;`}
-						pTitle={Text.H4.Centered.OfText("المطابخ")}
-						pText={Text.Body.Centered.OfText("Star Galaxy و Blue Pearl و Tan Brown و Double Black اختيارات قوية لأسطح المطابخ والجزر والكونترات.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						style = {`background:${Colors.SkyLite}; padding:25px;`}
-						pTitle={Text.H4.Centered.OfText("السلالم الداخلية")}
-						pText={Text.Body.Centered.OfText("Baltic Brown و Paradiso و Tan Brown و Kashmir Gold تناسب السلالم ذات الطابع الدافئ.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						style = {`background:${Colors.Creamy}; padding:25px;`}
-						pTitle={Text.H4.Centered.OfText("الأرضيات")}
-						pText={Text.Body.Centered.OfText("الأرضيات الواسعة تستفيد من درجات Paradiso و Silver Pearl و Kashmir White و Moon White حسب لون التصميم.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						style = {`background:${Colors.GreenLite}; padding:25px;`}
-						pTitle={Text.H4.Centered.OfText("الواجهات")}
-						pText={Text.Body.Centered.OfText("الواجهات التجارية والمداخل الخارجية تحتاج سمكًا وتثبيتًا وتشطيبًا مناسبًا لطبيعة الجو والارتفاع.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</HzStack>
-
-				<HzStack pGap={new Pixel(20, 15)} pPad={new Pixel(0, 0)}>
-
-					<Emograph
-						style = {`background:${Colors.OrangeLite}; padding:25px;`}
-						pTitle={Text.H4.Centered.OfText("الحمامات والكونترات")}
-						pText={Text.Body.Centered.OfText("Blue Pearl و Kashmir White و Silver Pearl تناسب الحمامات الحديثة والأسطح التي تحتاج تنظيفًا سهلًا.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						style = {`background:${Colors.WhiteOff}; padding:25px;`}
-						pTitle={Text.H4.Centered.OfText("عتبات الأبواب")}
-						pText={Text.Body.Centered.OfText("Double Black و Star Galaxy و Tan Brown تعطي عتبات واضحة وحواف قوية وسطحًا يتحمل الحركة.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						style = {`background:${Colors.SkyLite}; padding:25px;`}
-						pTitle={Text.H4.Centered.OfText("البار والريسبشن")}
-						pText={Text.Body.Centered.OfText("الأنواع الداكنة أو المعدنية تعطي حضورًا واضحًا في البار والريسبشن وخلفيات الاستقبال.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						style = {`background:${Colors.Creamy}; padding:25px;`}
-						pTitle={Text.H4.Centered.OfText("المشايات الخارجية")}
-						pText={Text.Body.Centered.OfText("التشطيب الخشن أو الفليم يناسب المشايات، مع اختيار نوع يتحمل الاتساخ والتنظيف والرطوبة.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</HzStack>
-
-			</VrStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.SkyLite};`}
-			pTitle="تشطيبات الجرانيت المستورد"
-			pDesc="التشطيب يحدد درجة اللمعان، مقاومة الانزلاق، وسهولة التنظيف في كل مساحة"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<HzStack pGap={new Pixel(25, 15)} pPad={new Pixel(30, 15)}>
-
-				<EmoList
-					pWidth={new RespString("400px", "100%")}
-					pTitle={Text.H3.Centered.OfText("مصقول")}
-					pDesc={Text.Body.Centered.OfText("للمطابخ والحمامات والداخل اللامع")}
-					pHeadBg={new ElemBg(Colors.Creamy)}
-					pItemsBg={new ElemBg(Colors.SkyLite)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						"يعطي لمعانًا واضحًا.",
-						"يبرز الحبيبات المعدنية في Blue Pearl و Emerald Pearl.",
-						"مناسب للكونترات والجزر والحوائط الداخلية.",
-						"يحتاج حماية أثناء باقي أعمال التشطيب."
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("400px", "100%")}
-					pTitle={Text.H3.Centered.OfText("فليم أو خشن")}
-					pDesc={Text.Body.Centered.OfText("للمداخل والمشايات الخارجية")}
-					pHeadBg={new ElemBg(Colors.Creamy)}
-					pItemsBg={new ElemBg(Colors.GreenLite)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						"سطح أقل انزلاقًا.",
-						"مناسب للمداخل الخارجية.",
-						"يتحمل الغبار والحركة.",
-						"يحتاج تنظيفًا بفرشاة ومنظف مناسب."
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("400px", "100%")}
-					pTitle={Text.H3.Centered.OfText("مطفي أو Leather")}
-					pDesc={Text.Body.Centered.OfText("للتصميمات الحديثة والكونترات الهادئة")}
-					pHeadBg={new ElemBg(Colors.Creamy)}
-					pItemsBg={new ElemBg(Colors.OrangeLite)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						"ملمس أهدأ من المصقول.",
-						"مناسب للكونترات الحديثة.",
-						"يقلل انعكاس الإضاءة القوية.",
-						"اختياره يعتمد على توفر الخامة والتشطيب في المصنع."
-					]}
-				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="اختيار النوع حسب البند"
-			pDesc="كل بند يحتاج خامة مختلفة في اللون والحركة والسمك وطريقة معالجة الحواف"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<EmoList
-					pWidth={new RespString("550px", "100%")}
-					pTitle={Text.H3.Centered.OfText("بند داخلي")}
-					pDesc={Text.Body.Centered.OfText("مطابخ وكونترات وسلالم داخلية")}
-					pHeadBg={new ElemBg(Colors.GreenLite)}
-					pItemsBg={new ElemBg(Colors.WhiteOff)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						{ Title: "أنواع مناسبة", Items: ["Star Galaxy.", "Blue Pearl.", "Tan Brown.", "Double Black.", "Kashmir White.", "Emerald Pearl."] },
-						{ Title: "مراجعة التنفيذ", Items: ["سمك 3 سم للكونترات عند الحاجة.", "قص فتحات الحوض والبوتاجاز بدقة.", "معالجة الحواف حسب التصميم.", "اختيار لون الفواصل بما يناسب الخامة."] }
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("550px", "100%")}
-					pTitle={Text.H3.Centered.OfText("بند خارجي")}
-					pDesc={Text.Body.Centered.OfText("واجهات ومداخل ومشايات")}
-					pHeadBg={new ElemBg(Colors.OrangeLite)}
-					pItemsBg={new ElemBg(Colors.WhiteOff)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						{ Title: "أنواع مناسبة", Items: ["Baltic Brown.", "Paradiso.", "Silver Pearl.", "Brown Brazil.", "Himalaya Blue.", "Multi Red حسب التصميم."] },
-						{ Title: "مراجعة التنفيذ", Items: ["تشطيب مناسب للانزلاق.", "فواصل تمدد واضحة.", "تثبيت ميكانيكي للواجهات عند الحاجة.", "ميول صرف في المشايات والمداخل."] }
-					]}
-				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
-			pTitle="خدمة توريد وتركيب الجرانيت المستورد"
-			pDesc="الخدمة تشمل ترشيح النوع، مراجعة المتاح، فرز الألواح، رفع المقاسات، التقطيع، التركيب، والتسليم النهائي"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<EmoList
-					pWidth={new RespString("650px", "100%")}
-					pTitle={Text.H3.Centered.OfText("مرحلة الاختيار")}
-					pDesc={Text.Body.Centered.OfText("نحدد الخام قبل أي قص أو سعر نهائي")}
-					pHeadBg={new ElemBg(Colors.WhiteOff)}
-					pItemsBg={new ElemBg(Colors.SkyLite)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						{ Title: "تحديد الاستخدام", Items: ["مطبخ، سلم، واجهة، أرضية، حائط، حمام، بار، مشاية، أو عتبة.", "الاستخدام يحدد السمك والتشطيب وطريقة الحواف."] },
-						{ Title: "اختيار اللون", Items: ["داكن، فاتح، ذهبي، بني، أحمر، أزرق، أو رمادي.", "اختيار اللون يرتبط بالإضاءة والخشب والمعادن والدهانات."] },
-						{ Title: "مراجعة التوفر", Items: ["التأكد من وجود كمية كافية من نفس النوع.", "مراجعة الدفعة والفرز وحجم الألواح المتاح."] },
-						{ Title: "حساب الهالك", Items: ["فتحات المطابخ والقصات الخاصة تزيد الهالك.", "الواجهات والسلالم تحتاج حسابًا منفصلًا للفواصل والحواف."] }
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("650px", "100%")}
-					pTitle={Text.H3.Centered.OfText("مرحلة التنفيذ")}
-					pDesc={Text.Body.Centered.OfText("تنفيذ يحافظ على قيمة الخامة")}
-					pHeadBg={new ElemBg(Colors.WhiteOff)}
-					pItemsBg={new ElemBg(Colors.GreenLite)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						{ Title: "رفع المقاسات", Items: ["رفع الموقع بعد ثبات المقاسات النهائية.", "مراجعة الفتحات والزوايا والمناسيب."] },
-						{ Title: "التقطيع", Items: ["قص الألواح حسب التصميم.", "تجهيز فتحات المطابخ والأحواض والبوتاجازات.", "تجهيز السلالم والعتبات والوزرات."] },
-						{ Title: "التركيب", Items: ["ضبط الفواصل والميول والحواف.", "تثبيت الواجهات بطريقة مناسبة.", "حماية السطح بعد التركيب."] },
-						{ Title: "التسليم", Items: ["تنظيف السطح.", "مراجعة الخدوش والكسور.", "تسليم تعليمات تنظيف وصيانة مناسبة."] }
-					]}
-				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
-		id="cta"
-		pBg={new ElemBg(Colors.BlackOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="اطلب ترشيح جرانيت مستورد مناسب"
-			pDesc="أرسل صور المكان ونوع الاستخدام والمقاسات التقريبية واللون المطلوب، وسنراجع لك النوع الأنسب والمتاح في السوق"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<Emograph
-					pTitle={Text.H3.WithAlign("right").White.OfText("بيانات تساعد في الاختيار")}
-					pText={Text.Body.WithAlign("right").White.OfText("نوع البند، درجة الحركة، موقع التنفيذ داخلي أو خارجي، اللون المطلوب، المقاسات التقريبية، صور المكان، وهل المطلوب سطح مطبخ أو سلم أو واجهة أو أرضية أو عتبات. بعد مراجعة هذه البيانات يتم ترشيح نوع مناسب مثل Star Galaxy أو Blue Pearl أو Baltic Brown أو Tan Brown أو Kashmir White أو Emerald Pearl حسب التصميم والميزانية.")}
-					pSize={new Size(new NumPer(750, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<VrStack
-					pWidth={new Pixel(350, 340)}
-					pGap={new Pixel(20, 15)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.WhiteOff)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("01014490054")}
-						pText={Text.Body.Centered.OfText("اتصل أو ارسل صور المكان على واتساب لبدء الترشيح والمعاينة.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<EmoCall BlackSky pText="اطلب الخدمة" />
-
-				</VrStack>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
 	<EmoFaq>
 
 		<FaqItem
@@ -1010,65 +561,11 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 		/>
 
 		<FaqItem
-			pQuestion="هل Star Galaxy جرانيت مستورد؟"
-			pAnswer="نعم، Star Galaxy من الجرانيت المستورد المعروف، ويتميز باللون الأسود مع نقاط لامعة ذهبية أو فضية، ويستخدم كثيرًا في المطابخ والكونترات."
-		/>
-
-		<FaqItem
-			pQuestion="هل Blue Pearl مناسب للمطابخ؟"
-			pAnswer="Blue Pearl مناسب للمطابخ والحمامات والكونترات ذات التصميم الحديث، خصوصًا مع الإضاءة القوية والأسطح المعدنية أو الرمادية."
-		/>
-
-		<FaqItem
 			pQuestion="ما الفرق بين الجرانيت المصري والمستورد؟"
 			pAnswer="الجرانيت المصري عملي ومتوفر وسعره غالبًا أهدأ، أما المستورد فيقدم ألوانًا وحركات خاصة مثل الأزرق المعدني والأسود اللامع والبني الدافئ والأبيض الكشمير."
 		/>
 
-		<FaqItem
-			pQuestion="ما البيانات المطلوبة لعرض السعر؟"
-			pAnswer="نحتاج نوع البند، صور المكان، المقاسات التقريبية، اللون المطلوب، نوع الجرانيت المفضل، التشطيب المطلوب، وهل الخدمة توريد فقط أم توريد وتركيب وتشطيب."
-		/>
-
 	</EmoFaq>
-
-
-
-
-
-
-
-	<ReadAlso
-		pTitle={Text.H2.Centered.OfText("صفحات جرانيت قريبة")}
-		pDesc={Text.Body.Centered.OfText("انتقل للصفحات المرتبطة داخل قسم الجرانيت")}
-		pHeadBg={new ElemBg(Colors.GreenLite)}
-		pBodyBg={new ElemBg(Colors.WhiteOff)}
-		pCardBg={new ElemBg(Colors.SkyLite)}
-		pWidth={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
-		pGap={new Pixel(20, 15)}
-	>
-
-		<ReadAlsoItem
-			pTitle="توريد وتركيب جرانيت"
-			pDesc="الصفحة الرئيسية لخدمات الجرانيت وتشمل المصري والمستورد والاستخدامات العامة."
-			pHref="/emostone/granit"
-			pImg="https://marblestoneegypt.com/wp-content/uploads/2024/09/Star-Galaxy-Marble-Stone-Egypt-05-300x300.jpg"
-		/>
-
-		<ReadAlsoItem
-			pTitle="جرانيت مصري"
-			pDesc="معرض الجرانيت المصري مثل نيو حلايب وحلايب وبلاك أسوان وجندولا وروزا هودي."
-			pHref="/emostone/granit/eg"
-			pImg="https://static.wixstatic.com/media/498793_d08a28f9a39647a380851767047153fe~mv2.png/v1/fill/w_1000%2Ch_800%2Cal_c%2Cq_90%2Cenc_avif%2Cquality_auto/498793_d08a28f9a39647a380851767047153fe~mv2.png"
-		/>
-
-		<ReadAlsoItem
-			pTitle="توريد وتركيب رخام مستورد"
-			pDesc="رخام مستورد للحوائط والمداخل والمدافئ والديكورات الفاخرة."
-			pHref="/emostone/marble/imp"
-			pImg="https://nasar-stone.com/wp-content/uploads/2023/01/%D8%A8%D9%86%D8%AF%D8%A7-%D9%88%D8%A7%D9%8A%D8%AA.png"
-		/>
-
-	</ReadAlso>
 
 
 
@@ -1090,24 +587,12 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 			pTitle="توريد وتركيب رخام وجرانيت"
 			pDesc="الخدمة العامة لتوريد وتركيب الرخام والجرانيت والكوارتز والحجر الطبيعي."
 			pHref="/emostone"
-			pImg="https://static.wixstatic.com/media/308dfd_a5f737ad08a046e3be8c0cf47e983ddb~mv2.webp/v1/fill/w_1896,h_800,al_c,q_85,enc_avif,quality_auto/308dfd_a5f737ad08a046e3be8c0cf47e983ddb~mv2.webp"
-			pBtnText="افتح الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="تشطيب شقق وفلل"
 			pDesc="تنسيق الجرانيت المستورد مع المطابخ والسلالم والمداخل والأرضيات ضمن خطة التشطيب."
 			pHref="/emocrete/finishing"
-			pImg="https://marblestoneegypt.com/wp-content/uploads/2024/09/blue-pearl-Marble-Stone-Egypt-01-600x600.jpg"
-			pBtnText="افتح الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="إشراف على التشطيب"
-			pDesc="مراجعة المقاسات والفرز والتركيب والاستلام النهائي لأعمال الجرانيت."
-			pHref="/emocrete/supervision/finishing"
-			pImg="https://marblestoneegypt.com/wp-content/uploads/2024/09/Tan-Brown-Marble-Stone-Egypt-06-600x600.jpg"
-			pBtnText="افتح الخدمة"
 		/>
 
 	</RelServices>

@@ -1,0 +1,317 @@
+---
+import { Colors, Pixel, Place, type PlaceProps } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends DebugOutlineProps, HTMLAttributes<"article">, PlaceProps {
+	pTitle: string;
+	pIcon?: string;
+	pIconAlt?: string;
+	pDesc?: string;
+	pTitleLevel?: number | string;
+	pColor?: string;
+	pHoverColor?: string;
+	pBg?: string;
+	pHoverBg?: string;
+	pTextColor?: string;
+	pHoverTextColor?: string;
+	pBodyColor?: string;
+	pRadius?: Pixel;
+	pPad?: Pixel;
+	pIconSize?: Pixel;
+	pIconPad?: Pixel;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+
+const {
+	pTitle,
+	pIcon = "",
+	pIconAlt,
+	pDesc,
+	pTitleLevel = 4,
+	pColor = Colors.SkyDark,
+	pHoverColor = Colors.BistageDark,
+	pBg = "#ffffff",
+	pHoverBg = "#ffffff",
+	pTextColor,
+	pHoverTextColor,
+	pBodyColor,
+	pRadius = new Pixel(22, 18),
+	pPad = new Pixel(28, 20),
+	pIconSize = new Pixel(74, 62),
+	pIconPad = new Pixel(14, 12),
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+
+	id: pGivenID = GetWidgetId("IconInfoCard"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = cProps;
+
+const cHeadingLevel = NormalizeHeadingLevel(pTitleLevel);
+const TitleTag = `h${cHeadingLevel}` as keyof astroHTML.JSX.DefinedIntrinsicElements;
+const cIconAlt = pIconAlt ?? pTitle;
+const cHasSlot = Astro.slots.has("default");
+const cGivenStyle = GetStyleText(pGivenStyle);
+
+const cStyle = [
+	`--IconInfoCardColor:${pColor};`,
+	`--IconInfoCardHoverColor:${pHoverColor};`,
+	`--IconInfoCardBg:${pBg};`,
+	`--IconInfoCardHoverBg:${pHoverBg};`,
+	pTextColor ? `--IconInfoCardTitleColor:${pTextColor};` : "",
+	pHoverTextColor ? `--IconInfoCardHoverTextColor:${pHoverTextColor};` : "",
+	pBodyColor ? `--IconInfoCardBodyColor:${pBodyColor};` : "",
+	`--IconInfoCardRadiusL:${pRadius.Landscape};`,
+	`--IconInfoCardRadiusP:${pRadius.Portrait};`,
+	`--IconInfoCardPadL:${pPad.Landscape};`,
+	`--IconInfoCardPadP:${pPad.Portrait};`,
+	`--IconInfoCardIconSizeL:${pIconSize.Landscape};`,
+	`--IconInfoCardIconSizeP:${pIconSize.Portrait};`,
+	`--IconInfoCardIconPadL:${pIconPad.Landscape};`,
+	`--IconInfoCardIconPadP:${pIconPad.Portrait};`,
+	cGivenStyle,
+].filter(Boolean).join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cStyle);
+const cClass = ["IconInfoCard", cPlace.Class, pGivenClass].filter(Boolean).join(" ");
+
+function NormalizeHeadingLevel(pValue: unknown) {
+	const cValue = typeof pValue === "number" ? pValue : Number.parseInt(`${pValue}`, 10);
+	if (!Number.isFinite(cValue)) return 4;
+	return Math.min(6, Math.max(2, Math.floor(cValue)));
+}
+
+function GetStyleText(pStyle: unknown) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+	if (typeof pStyle !== "object") return "";
+
+	return Object.entries(pStyle as Record<string, string | number | null | undefined>)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+<article
+	class={cClass}
+	style={cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+	{pIcon && (
+		<div class="IconInfoCardIconBox" aria-hidden={cIconAlt ? undefined : "true"}>
+			<img
+				class="IconInfoCardIcon"
+				src={pIcon}
+				alt={cIconAlt}
+				loading="lazy"
+				decoding="async"
+			/>
+		</div>
+	)}
+
+	<TitleTag class="IconInfoCardTitle">
+		{pTitle}
+	</TitleTag>
+
+	{(pDesc || cHasSlot) && (
+		<div class="IconInfoCardBody">
+			{pDesc && <p>{pDesc}</p>}
+			<slot />
+		</div>
+	)}
+</article>
+
+<style>
+	.IconInfoCard {
+		position: relative;
+		direction: rtl;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		box-sizing: border-box;
+		min-width: 0;
+		min-height: 100%;
+		padding: var(--IconInfoCardPadL);
+		border: 1px solid color-mix(in srgb, var(--IconInfoCardColor) 28%, transparent);
+		border-radius: var(--IconInfoCardRadiusL);
+		background: var(--IconInfoCardBg);
+		box-shadow: 0 18px 45px rgb(0 0 0 / 10%);
+		overflow: hidden;
+		isolation: isolate;
+		transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+	}
+
+	.IconInfoCard::before {
+		content: "";
+		position: absolute;
+		inset-block: 0;
+		inset-inline-start: 0;
+		width: 8px;
+		background: var(--IconInfoCardColor);
+		box-shadow: 0 0 24px color-mix(in srgb, var(--IconInfoCardColor) 56%, transparent);
+		transition: background 0.2s ease, box-shadow 0.2s ease, width 0.2s ease;
+		z-index: -1;
+	}
+
+	.IconInfoCard::after {
+		content: "";
+		position: absolute;
+		inset-inline-end: -44px;
+		inset-block-start: -44px;
+		width: 132px;
+		height: 132px;
+		border-radius: 50%;
+		background: color-mix(in srgb, var(--IconInfoCardColor) 12%, transparent);
+		transition: background 0.2s ease, transform 0.2s ease;
+		z-index: -1;
+	}
+
+	.IconInfoCard:hover {
+		background: var(--IconInfoCardHoverBg);
+		border-color: color-mix(in srgb, var(--IconInfoCardHoverColor) 58%, transparent);
+		box-shadow: 0 22px 55px rgb(0 0 0 / 14%), 0 0 28px color-mix(in srgb, var(--IconInfoCardHoverColor) 18%, transparent);
+		transform: translateY(-4px);
+	}
+
+	.IconInfoCard:hover::before {
+		width: 12px;
+		background: var(--IconInfoCardHoverColor);
+		box-shadow: 0 0 30px color-mix(in srgb, var(--IconInfoCardHoverColor) 70%, transparent);
+	}
+
+	.IconInfoCard:hover::after {
+		background: color-mix(in srgb, var(--IconInfoCardHoverColor) 18%, transparent);
+		transform: scale(1.08);
+	}
+
+	.IconInfoCardIconBox {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-sizing: border-box;
+		width: var(--IconInfoCardIconSizeL);
+		height: var(--IconInfoCardIconSizeL);
+		padding: var(--IconInfoCardIconPadL);
+		border-radius: 50%;
+		background: color-mix(in srgb, var(--IconInfoCardColor) 14%, #ffffff);
+		box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--IconInfoCardColor) 24%, transparent), 0 12px 26px rgb(0 0 0 / 10%);
+		transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+	}
+
+	.IconInfoCard:hover .IconInfoCardIconBox {
+		background: color-mix(in srgb, var(--IconInfoCardHoverColor) 18%, #ffffff);
+		box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--IconInfoCardHoverColor) 36%, transparent), 0 14px 32px rgb(0 0 0 / 13%);
+		transform: translateY(-2px) scale(1.03);
+	}
+
+	.IconInfoCardIcon {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+
+	.IconInfoCardTitle {
+		margin: 18px 0 0;
+		color: var(--IconInfoCardTitleColor, #333333);
+		font-size: var(--IconInfoCardTitleSizeL, 25px);
+		font-weight: var(--IconInfoCardTitleWeight, 800);
+		font-family: var(--IconInfoCardTitleFamily, inherit);
+		line-height: 1.8;
+		text-align: var(--IconInfoCardTitleAlign, center);
+		transition: color 0.2s ease;
+	}
+
+	.IconInfoCard:hover .IconInfoCardTitle {
+		color: var(--IconInfoCardHoverTextColor, var(--IconInfoCardHoverColor));
+	}
+
+	.IconInfoCardBody {
+		margin-block-start: 10px;
+		color: var(--IconInfoCardBodyColor, #555555);
+		font-size: var(--IconInfoCardBodySizeL, 18px);
+		font-weight: var(--IconInfoCardBodyWeight, 400);
+		font-family: var(--IconInfoCardBodyFamily, inherit);
+		line-height: 2.05;
+		text-align: var(--IconInfoCardBodyAlign, center);
+	}
+
+	.IconInfoCardBody :global(*) {
+		margin-block-start: 0;
+	}
+
+	.IconInfoCardBody :global(*:last-child) {
+		margin-block-end: 0;
+	}
+
+	.IconInfoCard.IsPlaced {
+		position: absolute;
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+	@media (orientation: portrait), (max-width: 920px) {
+		.IconInfoCard {
+			padding: var(--IconInfoCardPadP, var(--IconInfoCardPadL));
+			border-radius: var(--IconInfoCardRadiusP, var(--IconInfoCardRadiusL));
+		}
+
+		.IconInfoCardIconBox {
+			width: var(--IconInfoCardIconSizeP, var(--IconInfoCardIconSizeL));
+			height: var(--IconInfoCardIconSizeP, var(--IconInfoCardIconSizeL));
+			padding: var(--IconInfoCardIconPadP, var(--IconInfoCardIconPadL));
+		}
+
+		.IconInfoCardTitle {
+			font-size: var(--IconInfoCardTitleSizeP, var(--IconInfoCardTitleSizeL, 18px));
+		}
+
+		.IconInfoCardBody {
+			font-size: var(--IconInfoCardBodySizeP, var(--IconInfoCardBodySizeL, 14px));
+		}
+
+		.IconInfoCard.IsPlaced {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+	}
+</style>

@@ -1,9 +1,10 @@
 ---
 import BLayout from "@/Layout.astro";
 import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
-import { Badge, CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
+import { Badge, CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, IconCardsStrip, IconInfoCard, IconInfoCard1, IconInfoCard2, IconInfoCard3, IconInfoCard4, IconInfoCard5, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
 import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 import { DuoCol, DuoStr } from "../../site/Widgets";
+import { StoneProductStrip } from "../../site/Widgets/Stone";
 ---
 
 
@@ -308,6 +309,7 @@ import { DuoCol, DuoStr } from "../../site/Widgets";
 
 
 	<ESec
+		hidden
 		id="secGraniteTypes"
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
@@ -315,7 +317,7 @@ import { DuoCol, DuoStr } from "../../site/Widgets";
 	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
+			Gray2
 			pTitle="أنواع الجرانيت وأفضل استخداماتها"
 			pDesc="الجرانيت اختيار مناسب للأرضيات والواجهات الخارجية والمطابخ بسبب مقاومة الحرارة والصدمات وسهولة الصيانة"
 		/>
@@ -327,8 +329,8 @@ import { DuoCol, DuoStr } from "../../site/Widgets";
 				<RespImg
 					pImg={new EmoMediaData(
 						"Img",
-						"https://static.wixstatic.com/media/498793_2891cf9afb27469eb388cd04da704e30~mv2.webp/v1/fill/w_220%2Ch_215%2Cal_c%2Cq_90%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/",
-						"new%20halayeb.webp",
+						"/Media/Emostone",
+						"GranitCompare.webp",
 						false,
 						"جرانيت نيو حلايب",
 						new Size(new NumPer(360, "100%"), new NumPer("auto", "auto"))
@@ -365,195 +367,14 @@ import { DuoCol, DuoStr } from "../../site/Widgets";
 
 
 	<ESec
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.OrangeLite};`}
-			pTitle="خدمات توريد وتركيب الرخام والجرانيت"
-			pDesc="الخدمة تشمل التوريد والتركيب والتشطيب والتلميع والتقطيع حسب المقاسات والتصاميم المطلوبة"
-		/>
-
-		<EmoStrip
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<EmoList
-					pWidth={new RespString("650px", "100%")}
-					pTitle={Text.H3.Centered.OfText("خدمات التوريد")}
-					pDesc={Text.Body.Centered.OfText("نوفر النوع المطلوب مع مراجعة الجودة ومطابقة المقاسات")}
-					pHeadBg={new ElemBg(Colors.Creamy)}
-					pItemsBg={new ElemBg(Colors.SkyLite)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						{ Title: "توريد الرخام والجرانيت", Items: ["توفير النوع المختار حسب الاستخدام والميزانية.", "مراجعة جودة الخامة وفرز الألواح قبل التوريد.", "مطابقة المقاسات المطلوبة قدر الإمكان."] },
-						{ Title: "استشارات اختيار الخامة", Items: ["تحديد النوع المناسب للمكان.", "اختيار اللون والنقشة بما يتناسب مع التصميم.", "مراعاة الميزانية والاستخدام النهائي."] },
-						{ Title: "خدمات التقطيع والتشكيل", Items: ["تقطيع الرخام والجرانيت حسب المقاسات.", "تجهيز القطع المنحنية والزخرفية.", "قص فتحات المطابخ والحمامات والمصاعد والسلالم."] }
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("650px", "100%")}
-					pTitle={Text.H3.Centered.OfText("خدمات التركيب")}
-					pDesc={Text.Body.Centered.OfText("تنفيذ أعمال التركيب بدقة في الأرضيات والواجهات والمطابخ والحمامات")}
-					pHeadBg={new ElemBg(Colors.Creamy)}
-					pItemsBg={new ElemBg(Colors.GreenLite)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						{ Title: "تركيب الأرضيات", Items: ["أرضيات داخلية وخارجية.", "ضبط المناسيب والفواصل.", "تجهيز السطح قبل التركيب."] },
-						{ Title: "تركيب الواجهات", Items: ["واجهات خارجية للمنازل والفيلات والمباني التجارية.", "تنفيذ بمقاسات دقيقة.", "مراعاة مقاومة الماء والعوامل الجوية."] },
-						{ Title: "تركيب المطابخ والحمامات", Items: ["تركيب أسطح مطابخ.", "تجهيز فتحات الأحواض والبوتاجازات.", "مراعاة مقاومة الماء والبقع."] },
-						{ Title: "تركيب المصاعد والسلالم", Items: ["تنفيذ الدرج والوزرات والعتب.", "كسوة المصاعد.", "تفاصيل دقيقة تعطي مظهرًا متناسقًا."] }
-					]}
-				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
-		pBg={new ElemBg(Colors.BlackOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="تشطيبات الرخام والجرانيت"
-			pDesc="التشطيب الجيد يبرز اللون واللمعان ويؤثر على عمر الخامة ومقاومتها للبقع والخدوش"
-		/>
-
-		<EmoStrip
-			pBg={new ElemBg(Colors.BlackOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<Emograph
-					pTitle={Text.H3.WithAlign("right").White.OfText("التشطيب النهائي والتلميع")}
-					pText={Text.Body.WithAlign("right").White.OfText("بعد التركيب، يتم تلميع السطح وإزالة الشوائب وبقايا التنفيذ لإظهار ألوان الرخام أو الجرانيت بأفضل صورة. تلميع الرخام يكشف اللون الطبيعي ويزيد اللمعان، وتشطيب الجرانيت يعزز مقاومته للخدوش والحرارة، خاصة في المطابخ والأرضيات الخارجية.")}
-					pSize={new Size(new NumPer(650, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<EmoList
-					pWidth={new RespString("500px", "100%")}
-					pTitle={Text.H3.Centered.OfText("بنود التشطيب")}
-					pDesc={Text.Body.Centered.OfText("مرحلة تسليم السطح بالشكل النهائي")}
-					pHeadBg={new ElemBg(Colors.OrangeLite)}
-					pItemsBg={new ElemBg(Colors.WhiteOff)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						"تلميع الرخام لإبراز اللون واللمعان الطبيعي.",
-						"قص الرخام بأشكال مخصصة للتصميم الداخلي والخارجي.",
-						"تشطيب الواجهات الرخامية والجرانيتية.",
-						"إعادة تلميع الأسطح بشكل دوري للحفاظ على اللمعان.",
-						"تنظيف الأرضيات باستخدام منظفات مناسبة للرخام أو الجرانيت."
-					]}
-				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.SkyLite};`}
-			pTitle="الفرق بين الرخام الطبيعي والصناعي"
-			pDesc="معرفة الفرق تساعد في اختيار المادة المناسبة للتصميم والميزانية والاستخدام"
-		/>
-
-		<EmoStrip
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<EmoList
-					pWidth={new RespString("600px", "100%")}
-					pTitle={Text.H3.Centered.OfText("الرخام الطبيعي")}
-					pDesc={Text.Body.Centered.OfText("خامة أصلية بعروق طبيعية وعمر افتراضي طويل")}
-					pHeadBg={new ElemBg(Colors.Creamy)}
-					pItemsBg={new ElemBg(Colors.SkyLite)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						"متين وأصلي ومناسب للمشروعات التي تحتاج فخامة وملمسًا طبيعيًا.",
-						"يعطي مظهرًا طبيعيًا وفخمًا في الأرضيات والحوائط والمداخل.",
-						"يحتاج صيانة دورية وتلميعًا للحفاظ على لمعانه.",
-						"سعره أعلى نسبيًا من الصناعي حسب النوع والمنشأ والفرز."
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("600px", "100%")}
-					pTitle={Text.H3.Centered.OfText("الرخام الصناعي")}
-					pDesc={Text.Body.Centered.OfText("خامة اقتصادية بألوان وتصميمات متعددة")}
-					pHeadBg={new ElemBg(Colors.Creamy)}
-					pItemsBg={new ElemBg(Colors.GreenLite)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						"أقل تكلفة من الطبيعي في كثير من الاستخدامات.",
-						"ألوانه قابلة للتخصيص وتصميماته متعددة.",
-						"مناسب للتصميمات الداخلية وبعض المطابخ والحمامات حسب النوع.",
-						"متانته أقل من الطبيعي في بعض الاستخدامات الثقيلة."
-					]}
-				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
+		hidden
 		pBg={new ElemBg(Colors.Creamy)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
+			GreenLite
 			pTitle="استخدامات الرخام والجرانيت"
 			pDesc="كل استخدام يحتاج خامة وتشطيب وطريقة تركيب مناسبة لطبيعة الحركة والرطوبة والشمس والتنظيف"
 		/>
@@ -596,7 +417,7 @@ import { DuoCol, DuoStr } from "../../site/Widgets";
 	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
+			Gray2
 			pTitle="اختيار الرخام المناسب"
 			pDesc="الاختيار يعتمد على المساحة والاستخدام واللون والتصميم والميزانية والفرز"
 		/>
@@ -649,145 +470,14 @@ import { DuoCol, DuoStr } from "../../site/Widgets";
 
 
 	<ESec
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.OrangeLite};`}
-			pTitle="خدمات التركيب المتخصصة"
-			pDesc="تركيب الرخام والجرانيت يحتاج خبرة هندسية ومعرفة بالمواد وطريقة التحضير والتثبيت والتشطيب"
-		/>
-
-		<EmoStrip
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<EmoList
-				pWidth={new RespString("1100px", "100%")}
-				pTitle={Text.H3.Centered.OfText("خطوات تركيب الرخام والجرانيت")}
-				pDesc={Text.Body.Centered.OfText("تنفيذ منظم من فحص الموقع حتى التلميع النهائي")}
-				pHeadBg={new ElemBg(Colors.Creamy)}
-				pItemsBg={new ElemBg(Colors.SkyLite)}
-				pItemFnt={Text.Body}
-				pNumbered={true}
-				pItems={[
-					{ Title: "فحص الموقع وتجهيز السطح", Items: ["فحص الأرضيات أو الواجهات قبل التركيب.", "التأكد من استواء السطح وخلوه من الشوائب والعيوب التي تؤثر على جودة التركيب."] },
-					{ Title: "اختيار الخامة لكل مساحة", Items: ["اختيار الرخام أو الجرانيت بناءً على مكان التركيب.", "مراجعة الألوان والأبعاد لضمان التناسق بين التصميم والمساحة."] },
-					{ Title: "قص الرخام والجرانيت بدقة", Items: ["قص البلاطات بالمقاسات المطلوبة.", "تجهيز ألواح الأرضيات والواجهات والمصاعد والفتحات الخاصة."] },
-					{ Title: "التركيب الدقيق", Items: ["استخدام مواد تثبيت مناسبة.", "ضبط الفواصل بين البلاطات.", "تركيب الواجهات بأنظمة تثبيت قوية عند الحاجة.", "تنفيذ المطابخ والحمامات مع مراعاة مقاومة الماء والبقع."] },
-					{ Title: "التشطيب والتلميع", Items: ["تلميع السطح بعد التركيب.", "إزالة الشوائب وبقايا التنفيذ.", "إظهار ألوان الرخام أو الجرانيت بأفضل صورة."] }
-				]}
-			/>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
-		pBg={new ElemBg(Colors.BlackOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="أحدث أنواع الرخام والجرانيت في مصر"
-			pDesc="نوفر أنواعًا حديثة ومطلوبة لتلبية أذواق العملاء المختلفة في الأرضيات والواجهات والمطابخ"
-		/>
-
-		<EmoStrip
-			pBg={new ElemBg(Colors.BlackOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<CardsGr
-				pWidth={new RespString("1300px", "100%")}
-				pCardBg={new ElemBg(Colors.WhiteOff)}
-				pGrTitle={Text.H3.Centered.White.OfText("أنواع واتجاهات مطلوبة")}
-				pCardTitleFnt={Text.H4}
-				pCardBodyFnt={Text.Body}
-				pSpacing={20}
-				pTopic1={new Topic("رخام جالاكسي", "تصميم عصري ولون داكن متداخل مع لمسات بيضاء أو ذهبية.")}
-				pTopic2={new Topic("رخام براون وبينك", "مناسب للواجهات والمطابخ ويضيف لمسة فخامة ودفء للمساحة.")}
-				pTopic3={new Topic("جرانيت براون وجلاكسي", "مقاوم للصدمات والحرارة، ويستخدم في الأرضيات والواجهات الخارجية.")}
-				pTopic4={new Topic("رخام إيطالي أصلي", "اختيار مناسب للمشروعات التي تحتاج لمسة أوروبية في الواجهات الداخلية والخارجية.")}
-				pTopic5={new Topic("الألواح الكبيرة", "استخدام الألواح الكبيرة يعطي مظهرًا حديثًا ويقلل الفواصل.")}
-				pTopic6={new Topic("دمج الألوان والنقوش", "تصميمات تجمع بين الأبيض والجلاكسي أو البني والأسود لإحساس بالفخامة والتميز.")}
-			/>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.SkyLite};`}
-			pTitle="الفرق بين الرخام والجرانيت"
-			pDesc="معرفة الفرق تساعد في اختيار المادة الأنسب للأرضيات والواجهات والمطابخ والسلالم"
-		/>
-
-		<EmoStrip
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<Emograph
-					pTitle={Text.H3.Centered.OfText("الرخام")}
-					pText={Text.Body.Centered.OfText("أكثر نعومة ولمعانًا، سهل الصقل، ويعطي إحساسًا بالفخامة والاتساع. مقاومته للصدمات والخدوش أقل من الجرانيت في الاستخدامات الشاقة، لذلك يحتاج اختيارًا مناسبًا وصيانة دورية.")}
-					pSize={new Size(new NumPer(500, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.Centered.OfText("الجرانيت")}
-					pText={Text.Body.Centered.OfText("متين للغاية، مقاوم للحرارة والخدوش، مناسب للأرضيات والواجهات الخارجية والمطابخ والسلالم كثيرة الحركة. لمعانه مختلف عن الرخام الطبيعي لكنه يقدم أداءً عمليًا قويًا.")}
-					pSize={new Size(new NumPer(500, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
+		hidden
 		pBg={new ElemBg(Colors.Creamy)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
+			GreenLite
 			pTitle="الأرضيات والواجهات والتصميم"
 			pDesc="الرخام والجرانيت يرفعان القيمة الجمالية والوظيفية للمكان عند اختيار الخامة المناسبة"
 		/>
@@ -823,343 +513,6 @@ import { DuoCol, DuoStr } from "../../site/Widgets";
 				/>
 
 			</VrStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
-		pBg={new ElemBg(Colors.BlackOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="الأسعار والتكلفة"
-			pDesc="سعر التوريد والتركيب يتغير حسب نوع الخامة والمساحة وطريقة التركيب والتشطيب النهائي"
-		/>
-
-		<EmoStrip
-			pBg={new ElemBg(Colors.BlackOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<EmoList
-					pWidth={new RespString("650px", "100%")}
-					pTitle={Text.H3.Centered.OfText("عوامل السعر")}
-					pDesc={Text.Body.Centered.OfText("كل عامل يؤثر على السعر النهائي للمشروع")}
-					pHeadBg={new ElemBg(Colors.OrangeLite)}
-					pItemsBg={new ElemBg(Colors.WhiteOff)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						{ Title: "نوع الرخام أو الجرانيت", Items: ["الرخام المصري أقل تكلفة من المستورد.", "الرخام المستورد مثل الإيطالي أو التركي أعلى سعرًا بسبب الجودة والفخامة.", "الجرانيت يختلف سعره حسب المنشأ واللون والفرز."] },
-						{ Title: "المساحة المطلوبة", Items: ["زيادة المساحة ترفع التكلفة الإجمالية.", "الكميات الكبيرة تسمح بتفاوض أفضل على السعر."] },
-						{ Title: "نوع التركيب", Items: ["تركيب أرضيات يختلف عن الواجهات والمصاعد والمطابخ.", "كل نوع يحتاج أدوات وطريقة تنفيذ مختلفة."] },
-						{ Title: "التشطيب النهائي", Items: ["التلميع والقص بأشكال مخصصة والرسومات الهندسية تزيد تكلفة المشروع."] }
-					]}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.WithAlign("right").White.OfText("الرخام المصري مقابل المستورد")}
-					pText={Text.Body.WithAlign("right").White.OfText("الرخام المصري متوفر بسهولة، وأسعاره مناسبة، وله ألوان طبيعية جميلة، ويخدم المشاريع الداخلية والأرضيات بدرجة جيدة. الرخام المستورد يأتي بألوان ونقشات فريدة، ويضيف لمسة فخمة وعصرية، ويناسب المشاريع الكبيرة والواجهات الفاخرة. الاختيار العملي يعتمد على نوع المشروع ومساحة المكان والميزانية وجودة التركيب والتشطيب.")}
-					pSize={new Size(new NumPer(550, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.SkyLite};`}
-			pTitle="نصائح اختيار الرخام والجرانيت"
-			pDesc="اختيار المورد والخامة وطريقة التركيب يحدد نتيجة المشروع قبل بداية التنفيذ"
-		/>
-
-		<EmoStrip
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<EmoList
-					pWidth={new RespString("650px", "100%")}
-					pTitle={Text.H3.Centered.OfText("نصائح قبل الشراء")}
-					pDesc={Text.Body.Centered.OfText("مراجعة مبكرة توفر وقتًا وتكلفة أثناء التنفيذ")}
-					pHeadBg={new ElemBg(Colors.Creamy)}
-					pItemsBg={new ElemBg(Colors.SkyLite)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						{ Title: "المطابقة مع الديكور", Items: ["الألوان الفاتحة تزيد إشراق المساحة الداخلية.", "الألوان الداكنة تعطي إحساسًا بالفخامة."] },
-						{ Title: "المتانة والاستخدام", Items: ["الأماكن عالية الحركة تحتاج جرانيتًا مقاومًا للخدوش والصدمات.", "الأماكن الهادئة تسمح بخيارات رخامية أكثر تنوعًا."] },
-						{ Title: "الفحص قبل الشراء", Items: ["مراجعة الكسور والشقوق.", "مراجعة اختلاف اللون بين الألواح.", "مراجعة السمك والفرز واللمعة."] },
-						{ Title: "التحقق من المورد", Items: ["التعامل مع متخصصين موثوقين يضمن جودة المواد وسهولة التركيب.", "التأكد من القدرة على توفير خامات مصرية ومستوردة بجودة مناسبة."] }
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("650px", "100%")}
-					pTitle={Text.H3.Centered.OfText("اختيار المورد المناسب")}
-					pDesc={Text.Body.Centered.OfText("المورد الجيد يحافظ على جودة الخامة وموعد التنفيذ وخدمة ما بعد التركيب")}
-					pHeadBg={new ElemBg(Colors.Creamy)}
-					pItemsBg={new ElemBg(Colors.GreenLite)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						{ Title: "خبرة مثبتة", Items: ["قدرة على التعامل مع مشاريع صغيرة وكبيرة.", "معرفة بالرخام المصري والمستورد والجرانيت."] },
-						{ Title: "مرونة في الاختيار", Items: ["توفير أنواع متعددة.", "ترشيح خامة مناسبة للاستخدام والميزانية."] },
-						{ Title: "التزام بالمواعيد", Items: ["توريد وتركيب في الوقت المحدد.", "تنسيق واضح بين التقطيع والموقع."] },
-						{ Title: "خدمة بعد التركيب", Items: ["دعم وصيانة بسيطة عند الحاجة.", "إرشادات تنظيف وحماية للخامة."] }
-					]}
-				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
-		pBg={new ElemBg(Colors.Creamy)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
-			pTitle="صيانة الرخام والجرانيت"
-			pDesc="العناية الجيدة تحافظ على اللمعان وتقلل البقع والخدوش وتطيل عمر الخامة"
-		/>
-
-		<EmoStrip
-			pBg={new ElemBg(Colors.Creamy)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<VrStack
-					pWidth={new Pixel(400, 340)}
-					pGap={new Pixel(15, 15)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.WhiteOff)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("تنظيف دوري")}
-						pText={Text.Body.Centered.OfText("تنظيف الأرضيات بشكل دوري باستخدام منظفات خاصة بالرخام أو الجرانيت، مع تجفيف السطح بعد التنظيف.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-				<VrStack
-					pWidth={new Pixel(400, 340)}
-					pGap={new Pixel(15, 15)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.OrangeLite)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("تجنب المواد الحمضية")}
-						pText={Text.Body.Centered.OfText("المواد الحمضية تؤثر على لمعان الرخام، لذلك يفضل استخدام منظفات متعادلة ومناسبة للحجر الطبيعي.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-				<VrStack
-					pWidth={new Pixel(400, 340)}
-					pGap={new Pixel(15, 15)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.SkyLite)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("إعادة التلميع")}
-						pText={Text.Body.Centered.OfText("إعادة تلميع الأسطح بشكل دوري يحافظ على اللمعان الطبيعي، خصوصًا في المداخل والسلالم والأماكن كثيرة الحركة.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
-		pBg={new ElemBg(Colors.BlackOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="بناء الثقة مع العملاء"
-			pDesc="الثقة في توريد وتركيب الرخام والجرانيت تقوم على جودة الخامة ودقة التركيب والاستشارة قبل الشراء"
-		/>
-
-		<EmoStrip
-			pBg={new ElemBg(Colors.BlackOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<CardsGr
-				pWidth={new RespString("1300px", "100%")}
-				pCardBg={new ElemBg(Colors.WhiteOff)}
-				pGrTitle={Text.H3.Centered.White.OfText("عناصر الثقة")}
-				pCardTitleFnt={Text.H4}
-				pCardBodyFnt={Text.Body}
-				pSpacing={20}
-				pTopic1={new Topic("ضمان الجودة", "كل قطعة رخام أو جرانيت يتم توريدها من موردين موثوقين بعد فحص الخامة وخلوها من العيوب الظاهرة.")}
-				pTopic2={new Topic("التركيب المتقن", "فريق التركيب ينفذ الأعمال بدقة لضبط التوازن والاستواء وطول العمر الافتراضي.")}
-				pTopic3={new Topic("الاستشارة قبل الشراء", "نقدم ترشيحات هندسية لتحديد النوع المناسب لكل مشروع حسب المساحة والتصميم والاستخدام النهائي.")}
-				pTopic4={new Topic("القيمة الجمالية للعقار", "استخدام رخام وجرانيت جيد يزيد قيمة المبنى ويعطي انطباعًا راقيًا للزائرين والمشترين المحتملين.")}
-			/>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.OrangeLite};`}
-			pTitle="خدمة متكاملة لكل مشروع"
-			pDesc="نوفر استشارة تصميمية، توريد مواد، تركيب محترف، وتشطيب نهائي وتلميع"
-		/>
-
-		<EmoStrip
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<EmoList
-				pWidth={new RespString("1100px", "100%")}
-				pTitle={Text.H3.Centered.OfText("خدماتنا")}
-				pDesc={Text.Body.Centered.OfText("بنود الخدمة كما كانت في الصفحة الأصلية مع تنظيم أوضح")}
-				pHeadBg={new ElemBg(Colors.Creamy)}
-				pItemsBg={new ElemBg(Colors.SkyLite)}
-				pItemFnt={Text.Body}
-				pNumbered={false}
-				pItems={[
-					{ Title: "توريد الرخام", Items: ["تشكيلة واسعة من الرخام المحلي والمستورد.", "رخام مصري: صني، تريستا، جولدن سيناء، فليتو، وغيره.", "رخام مستورد: كرارا الإيطالي، كلكتا، كريما مارفيل الإسباني، وغيره."] },
-					{ Title: "توريد الجرانيت", Items: ["جرانيت أحمر أسواني.", "جرانيت روزي بينك.", "جرانيت جندولا.", "جرانيت نجران براون.", "جرانيت مستورد مثل جالاكسي الهندي وغيره."] },
-					{ Title: "خدمات التقطيع والتشكيل", Items: ["تقطيع الرخام والجرانيت حسب المقاسات والتصاميم المطلوبة.", "تشكيل الألواح والقطع المنحنية والزخرفية.", "استخدام ماكينات مناسبة لدقة القص والتشطيب."] },
-					{ Title: "خدمات التركيب", Items: ["الأرضيات الداخلية والخارجية.", "المطابخ.", "الحمامات.", "السلالم والدرج.", "الواجهات الخارجية.", "الديكورات الداخلية."] },
-					{ Title: "التشطيب والصيانة", Items: ["تشطيب يضمن لمعان الرخام والجرانيت وحمايته من العوامل الجوية والتلف.", "صيانة دورية وإعادة تلميع الأسطح عند الحاجة."] }
-				]}
-			/>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
-		id="cta"
-		pBg={new ElemBg(Colors.BlackOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="اطلب معاينة أو عرض سعر"
-			pDesc="اتصل بالرقم 01014490054 أو اضغط زر واتساب لبدء محادثة"
-		/>
-
-		<EmoStrip
-			pBg={new ElemBg(Colors.BlackOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<Emograph
-					pTitle={Text.H3.WithAlign("right").White.OfText("للمساعدة والتفاصيل اتصل بنا")}
-					pText={Text.Body.WithAlign("right").White.OfText("أرسل صور المكان والمقاسات التقريبية ونوع الاستخدام المطلوب، وسنرشح الخامة الأنسب ونوضح بنود التوريد والتركيب والتشطيب في عرض سعر واضح.")}
-					pSize={new Size(new NumPer(700, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<VrStack
-					pWidth={new Pixel(350, 340)}
-					pGap={new Pixel(20, 15)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.WhiteOff)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("01014490054")}
-						pText={Text.Body.Centered.OfText("أرسل رسالة أو راسلنا على واتس أب لطلب الخدمة.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<EmoCall BlackSky pText="اطلب الخدمة" />
-
-				</VrStack>
-
-			</HzStack>
 
 		</EmoStrip>
 

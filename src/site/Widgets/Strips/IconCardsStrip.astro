@@ -1,0 +1,237 @@
+---
+import { Colors, ElemBg, NumPer, Pixel, Place, type PlaceProps, Size, Text } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
+	pBg?: ElemBg | string;
+	pWidth?: Size;
+	pGap?: Pixel;
+	pPad?: Pixel;
+	pMax?: number | string;
+	pMaxP?: number | string;
+	pCardTitleFnt?: Text;
+	pCardBodyFnt?: Text;
+	pCentered?: boolean;
+	Centered?: boolean | string;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+
+if ("pItems" in cProps) {
+	throw new Error("IconCardsStrip يستخدم slot: ضع <IconInfoCard ... /> كأبناء مباشرة، ولا تستخدم pItems.");
+}
+
+const {
+	pBg = "transparent",
+	pWidth = new Size(new NumPer(1180, "calc(100% - 24px)"), new NumPer("auto", "auto")),
+	pGap = new Pixel(24, 14),
+	pPad = new Pixel(36, 18),
+	pMax = 3,
+	pMaxP = 1,
+	pCardTitleFnt = Text.H4.Centered.WithColor(Colors.BlackOff),
+	pCardBodyFnt = Text.Body.Centered.WithColor("#555555"),
+	pCentered = true,
+	Centered = false,
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+
+	id: pGivenID = GetWidgetId("IconCardsStrip"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = cProps;
+
+const cMaxL = NormalizeMax(pMax, 3);
+const cMaxP = NormalizeMax(pMaxP, 1);
+const cCentered = pCentered || GetBoolAttr(Centered);
+const cBgColor = typeof pBg === "string" ? pBg : pBg.Color;
+const cItemBasisL = GetItemBasis(cMaxL, pGap.Landscape);
+const cItemBasisP = GetItemBasis(cMaxP, pGap.Portrait);
+const cGivenStyle = GetStyleText(pGivenStyle);
+
+const cStyle = [
+	`--IconCardsStripBg:${cBgColor};`,
+	`--IconCardsStripWidthL:${pWidth.WidthL};`,
+	`--IconCardsStripWidthP:${pWidth.WidthP};`,
+	`--IconCardsStripGapL:${pGap.Landscape};`,
+	`--IconCardsStripGapP:${pGap.Portrait};`,
+	`--IconCardsStripPadL:${pPad.Landscape};`,
+	`--IconCardsStripPadP:${pPad.Portrait};`,
+	`--IconCardsStripItemBasisL:${cItemBasisL};`,
+	`--IconCardsStripItemBasisP:${cItemBasisP};`,
+	GetTextVars("IconInfoCardTitle", pCardTitleFnt, Text.H4.Centered.WithColor(Colors.BlackOff)),
+	GetTextVars("IconInfoCardBody", pCardBodyFnt, Text.Body.Centered.WithColor("#555555")),
+	cGivenStyle,
+].filter(Boolean).join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cStyle);
+const cClass = [
+	"IconCardsStrip",
+	cCentered ? "Centered" : "",
+	cPlace.Class,
+	pGivenClass,
+].filter(Boolean).join(" ");
+
+function NormalizeMax(pValue: unknown, pDefault: number) {
+	const cValue = typeof pValue === "number" ? pValue : Number.parseInt(`${pValue}`, 10);
+	if (!Number.isFinite(cValue) || cValue < 1) return Math.max(1, pDefault);
+	return Math.floor(cValue);
+}
+
+function GetBoolAttr(pValue: unknown) {
+	return pValue === true || pValue === "" || pValue === "true";
+}
+
+function GetItemBasis(pMax: number, pGap: string) {
+	const cGapNum = ParsePx(pGap);
+	const cPercent = 100 / pMax;
+	const cGapShare = cGapNum * ((pMax - 1) / pMax);
+
+	if (cGapShare === 0) return `${RoundCss(cPercent)}%`;
+	return `calc(${RoundCss(cPercent)}% - ${RoundCss(cGapShare)}px)`;
+}
+
+function ParsePx(pValue: string) {
+	const cMatch = `${pValue}`.trim().match(/^(-?\d+(?:\.\d+)?)px$/i);
+	return cMatch ? Number.parseFloat(cMatch[1]) : 0;
+}
+
+function RoundCss(pValue: number) {
+	return Number.parseFloat(pValue.toFixed(4));
+}
+
+function GetTextVars(pName: string, pText: Text, pFallback: Text) {
+	const cColor = pText.color ?? pFallback.color;
+	const cSize = pText.size ?? pFallback.size;
+	const cBold = pText.bold ?? pFallback.bold;
+	const cAlign = pText.align ?? pFallback.align;
+	const cFamily = pText.family ?? pFallback.family;
+
+	return [
+		cColor ? `--${pName}Color:${cColor};` : "",
+		cSize ? `--${pName}SizeL:${cSize.Landscape};` : "",
+		cSize ? `--${pName}SizeP:${cSize.Portrait};` : "",
+		`--${pName}Weight:${cBold ? 700 : 400};`,
+		`--${pName}Align:${cAlign};`,
+		`--${pName}Family:${cFamily};`,
+	].filter(Boolean).join(" ");
+}
+
+function GetStyleText(pStyle: unknown) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+	if (typeof pStyle !== "object") return "";
+
+	return Object.entries(pStyle as Record<string, string | number | null | undefined>)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+<div
+	class={cClass}
+	style={cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+	<slot />
+</div>
+
+<style>
+	.IconCardsStrip {
+		direction: rtl;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: stretch;
+		align-content: flex-start;
+		justify-content: flex-start;
+		box-sizing: border-box;
+		width: 100%;
+		min-width: 0;
+		max-width: 100%;
+		padding-block: var(--IconCardsStripPadL);
+		padding-inline: max(12px, calc((100% - var(--IconCardsStripWidthL)) / 2));
+		gap: var(--IconCardsStripGapL);
+		background: var(--IconCardsStripBg);
+		overflow: visible;
+	}
+
+	.IconCardsStrip.Centered {
+		justify-content: center;
+	}
+
+	.IconCardsStrip > :global(.IconInfoCard:not(.IsPlaced):not(.PlaceSized)) {
+		box-sizing: border-box;
+		flex-grow: 1;
+		flex-shrink: 1;
+		flex-basis: var(--IconCardsStripItemBasisL);
+		min-width: min(100%, var(--IconCardsStripItemBasisL));
+		margin: 0;
+	}
+
+	.IconCardsStrip > :global(* > *) {
+		max-width: 100%;
+		box-sizing: border-box;
+	}
+
+	.IconCardsStrip.IsPlaced {
+		position: absolute;
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+	@media (orientation: portrait), (max-width: 920px) {
+		.IconCardsStrip {
+			padding-block: var(--IconCardsStripPadP, var(--IconCardsStripPadL));
+			padding-inline: max(12px, calc((100% - var(--IconCardsStripWidthP)) / 2));
+			gap: var(--IconCardsStripGapP, var(--IconCardsStripGapL));
+		}
+
+		.IconCardsStrip > :global(.IconInfoCard:not(.IsPlaced):not(.PlaceSized)) {
+			flex-basis: var(--IconCardsStripItemBasisP);
+			min-width: min(100%, var(--IconCardsStripItemBasisP));
+		}
+
+		.IconCardsStrip.IsPlaced {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+	}
+</style>
