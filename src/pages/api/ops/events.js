@@ -27,6 +27,11 @@ function Bool(pValue) {
 	return Value === "true" || Value === "1" || Value === "yes" || Value === "on" || Value === "important";
 }
 
+function IsConfirmedClarityStatus(pValue) {
+	const Status = Str(pValue).toLowerCase();
+	return Status === "ready" || Status === "confirmed" || Status === "imported";
+}
+
 const cSyntheticUserAgentPattern = /(bot|crawl|spider|slurp|googlebot|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb)/i;
 
 function SyntheticReasonFromRow(pRow, pPayload) {
@@ -36,7 +41,6 @@ function SyntheticReasonFromRow(pRow, pPayload) {
 	const StoredSynthetic = Bool(Pick(pPayload, "isSynthetic", "is_synthetic", "synthetic"));
 	const Reasons = [];
 
-	if (!UserAgent) Reasons.push("empty_ua");
 	if (cSyntheticUserAgentPattern.test(UserAgent)) Reasons.push("ua_bot");
 	if (BodySignal) Reasons.push(`client_${BodySignal}`);
 	if (TrafficKind === "bot" || TrafficKind === "crawler" || TrafficKind === "synthetic") Reasons.push(`kind_${TrafficKind}`);
@@ -83,7 +87,10 @@ function MapEvent(pRow) {
 	const ClaritySessionId = Str(Pick(Payload, "claritySessionId", "clarity_session_id"));
 	const ClarityAvailableAfter = Str(Pick(Payload, "clarityAvailableAfter", "clarity_available_after"));
 	const ClarityStatus = Str(Pick(Payload, "clarityStatus", "clarity_status"));
-	const VideoUrl = ReplayUrl || ClarityUrl || Str(Pick(Payload, "videoUrl", "video_url", "sessionVideoUrl", "session_video_url", "sessionRecordingUrl", "session_recording_url", "recordingUrl", "recording_url", "recordUrl", "record_url"));
+	const ClarityConfirmed = IsConfirmedClarityStatus(ClarityStatus);
+	const RawVideoUrl = Str(Pick(Payload, "videoUrl", "video_url", "sessionVideoUrl", "session_video_url", "sessionRecordingUrl", "session_recording_url", "recordingUrl", "recording_url", "recordUrl", "record_url"));
+	const ExplicitVideoUrl = RawVideoUrl.toLowerCase().includes("clarity") && !ClarityConfirmed ? "" : RawVideoUrl;
+	const VideoUrl = ReplayUrl || (ClarityConfirmed ? ClarityUrl : "") || ExplicitVideoUrl;
 	const ControlCommand = Str(Pick(Payload, "controlCommand", "control_command", "opsCommand", "ops_command"));
 	const TargetVisitorId = Str(Pick(Payload, "targetVisitorId", "target_visitor_id", "deletedVisitorId", "deleted_visitor_id"));
 	const LocationCountryCode = Str(Pick(Payload, "locationCountryCode", "location_country_code"));
@@ -210,13 +217,15 @@ export async function GET({ request }) {
 
 		const ReqUrl = new URL(request.url);
 		const AfterId = Math.max(0, Number.parseInt(ReqUrl.searchParams.get("after_id") ?? ReqUrl.searchParams.get("afterId") ?? "0", 10) || 0);
-		const Limit = Math.min(200, Math.max(1, Number.parseInt(ReqUrl.searchParams.get("limit") ?? "50", 10) || 50));
+			const Limit = Math.min(1500, Math.max(1, Number.parseInt(ReqUrl.searchParams.get("limit") ?? "50", 10) || 50));
+			const Mode = Str(ReqUrl.searchParams.get("mode") ?? ReqUrl.searchParams.get("snapshot") ?? "").toLowerCase();
+			const Latest = Mode === "latest" || ["1", "true", "yes"].includes(Str(ReqUrl.searchParams.get("latest")).toLowerCase());
 
-		const Query = new URL(`${SupabaseUrl}/rest/v1/ops_events`);
-		Query.searchParams.set("select", "*");
-		Query.searchParams.set("id", `gt.${AfterId}`);
-		Query.searchParams.set("order", "id.asc");
-		Query.searchParams.set("limit", String(Limit));
+			const Query = new URL(`${SupabaseUrl}/rest/v1/ops_events`);
+			Query.searchParams.set("select", "*");
+			if (!Latest) Query.searchParams.set("id", `gt.${AfterId}`);
+			Query.searchParams.set("order", Latest ? "id.desc" : "id.asc");
+			Query.searchParams.set("limit", String(Limit));
 
 		const Res = await fetch(Query, {
 			headers: {
@@ -234,9 +243,9 @@ export async function GET({ request }) {
 		} catch {
 			Rows = [];
 		}
-
-		const Events = Array.isArray(Rows) ? Rows.map(MapEvent) : [];
-		return Json({ ok: true, events: Events });
+			const OrderedRows = Latest && Array.isArray(Rows) ? [...Rows].reverse() : Rows;
+			const Events = Array.isArray(OrderedRows) ? OrderedRows.map(MapEvent) : [];
+			return Json({ ok: true, mode: Latest ? "latest" : "after_id", latest: Latest, after_id: AfterId, limit: Limit, events: Events });
 	} catch (Ex) {
 		const Msg = Ex instanceof Error ? Ex.message : String(Ex);
 		return Json({ ok: false, error: "Function crashed", message: Msg }, 500);

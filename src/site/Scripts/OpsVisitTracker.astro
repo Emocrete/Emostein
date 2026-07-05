@@ -101,8 +101,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	function BotSignal() {
 	const UserAgent = String(navigator.userAgent || "");
 	const Reasons = [];
-	if (!UserAgent) Reasons.push("empty_ua");
-	if (cBotUserAgentPattern.test(UserAgent)) Reasons.push("ua_bot");
+		if (cBotUserAgentPattern.test(UserAgent)) Reasons.push("ua_bot");
 	if (navigator.webdriver) Reasons.push("webdriver");
 	if (window.callPhantom || window._phantom || window.__nightmare) Reasons.push("headless_marker");
 	if (document.visibilityState === "prerender") Reasons.push("prerender");
@@ -173,7 +172,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	clarityUserId: State.UserId,
 	claritySessionId: State.SessionId,
 	clarityAvailableAfter: State.AvailableAfter,
-	clarityStatus: State.Status,
+	clarityStatus: "candidate",
 	notifyMobile: false,
 	sound: false
 	});
@@ -762,13 +761,13 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	focusState: String(pOptions.focusState || (IsHiddenNow ? "hidden" : "visible")).trim(),
 	isPageHidden: IsHiddenNow,
 	replayUrl: String(pOptions.replayUrl || BuildReplayPath()).trim(),
-	clarityUrl: String(pOptions.clarityUrl || pOptions.clarityRecordingUrl || GetClarityRecordingUrl()).trim(),
-	clarityRecordingUrl: String(pOptions.clarityRecordingUrl || pOptions.clarityUrl || GetClarityRecordingUrl()).trim(),
-	clarityProjectId: String(pOptions.clarityProjectId || GetClarityState().ProjectId).trim(),
-	clarityUserId: String(pOptions.clarityUserId || GetClarityState().UserId).trim(),
-	claritySessionId: String(pOptions.claritySessionId || GetClarityState().SessionId).trim(),
-	clarityAvailableAfter: String(pOptions.clarityAvailableAfter || GetClarityState().AvailableAfter).trim(),
-	clarityStatus: String(pOptions.clarityStatus || GetClarityState().Status).trim(),
+	clarityUrl: String(pOptions.clarityUrl || pOptions.clarityRecordingUrl || "").trim(),
+	clarityRecordingUrl: String(pOptions.clarityRecordingUrl || pOptions.clarityUrl || "").trim(),
+	clarityProjectId: String(pOptions.clarityProjectId || "").trim(),
+	clarityUserId: String(pOptions.clarityUserId || "").trim(),
+	claritySessionId: String(pOptions.claritySessionId || "").trim(),
+	clarityAvailableAfter: String(pOptions.clarityAvailableAfter || "").trim(),
+	clarityStatus: String(pOptions.clarityStatus || "").trim(),
 	videoUrl: String(pOptions.videoUrl || pOptions.replayUrl || BuildReplayPath()).trim(),
 	recordingProvider: "emo_replay",
 	trafficKind: "human",
@@ -1210,7 +1209,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	function MarkPageAway(pReason) {
-	if (!fPageOpenSent) return;
+	if (!fPageOpenSent || fPageExitSent) return;
 	if (fAwayStartedAt) return;
 	fAwayStartedAt = Date.now();
 	fAwayReason = String(pReason || "blur");
@@ -1231,7 +1230,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	function TrackPageReturn(pReason) {
-	if (!fPageOpenSent) {
+	if (fPageExitSent) return;
+		if (!fPageOpenSent) {
 	TrackPageOpen();
 	return;
 	}
@@ -1272,7 +1272,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	function TrackPagePing() {
-	if (!fPageOpenSent) return;
+	if (!fPageOpenSent || fPageExitSent) return;
 	const Hidden = document.hidden || document.visibilityState !== "visible";
 	if (Hidden && !fAwayStartedAt) MarkPageAway("hidden_ping");
 	TrackOpsEvent("page_ping", {
@@ -1294,6 +1294,12 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	if (fPageExitSent) return;
 	FlushPendingReadEvents();
 	fPageExitSent = true;
+		fAwayStartedAt = 0;
+		fAwayReason = "";
+		if (fPagePingTimer) {
+		clearInterval(fPagePingTimer);
+		fPagePingTimer = 0;
+		}
 	TrackOpsEvent("page_exit", {
 	eventOn: String(pReason || "pagehide"),
 	widget: "Page",

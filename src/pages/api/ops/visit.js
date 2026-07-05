@@ -36,7 +36,6 @@ function SyntheticTrafficReason(pRequest, pBody = {}) {
 	const TrafficKind = Str(pBody.trafficKind ?? pBody.traffic_kind).toLowerCase();
 	const Reasons = [];
 
-	if (!UserAgent) Reasons.push("empty_ua");
 	if (cSyntheticUserAgentPattern.test(UserAgent)) Reasons.push("ua_bot");
 	if (Purpose.includes("prefetch") || Purpose.includes("preview")) Reasons.push("prefetch");
 	if (Mode === "navigate" && Dest === "document" && Bool(pBody.synthetic)) Reasons.push("client_synthetic");
