@@ -218,5 +218,6 @@ export { default as IconInfoCard4 } from "./Strips/IconInfoCard4.astro";
 export { default as IconInfoCard5 } from "./Strips/IconInfoCard5.astro";
 
 export { default as StoneProductStrip } from "./Stone/StoneProductStrip.astro";
+export { default as StonePricingCalc } from "./Calc/StonePricingCalc.astro";
 
 

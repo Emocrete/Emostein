@@ -87,7 +87,7 @@ export class Schema {
 	private static readonly cOrgId = "https://www.emocrete.com#org";
 	private static readonly cWebsiteId = "https://www.emocrete.com#website";
 	private static readonly cFounderId = "https://www.emocrete.com#founder";
-	private static readonly cTelephone = "01014490054";
+	private static readonly cTelephone = "+201014490054";
 	private static readonly cPriceRange = "$$";
 	private static readonly cDefaultOrgName = "Emostein";
 	private static readonly cLogoPath = "/Media/EmoLogo.svg";
@@ -449,12 +449,17 @@ export class Schema {
 
 			return [
 				{
-					"@type": "Organization",
+					"@type": "GeneralContractor",
 					"@id": Schema.cOrgId,
 					"name": cOrgName,
 					"url": cSiteUrl,
 					"logo": cLogo,
 					"telephone": cTelephone,
+					"priceRange": Schema.cPriceRange,
+					"areaServed": "EG",
+					"address": Schema.GetAddress(),
+					"geo": Schema.GetGeo(),
+					"openingHoursSpecification": Schema.GetOpeningHours(),
 					"sameAs": cSameAs,
 					"founder": {
 						"@id": Schema.cFounderId
