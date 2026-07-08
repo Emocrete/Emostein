@@ -179,9 +179,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	function ScheduleClarityLinkCapture() {
-	[1500, 5000, 15000, 30000, 60000].forEach((pDelay) => {
-	window.setTimeout(TrackClarityLink, pDelay);
-	});
+	// لا نسجل روابط كلاريتي المرشحة تلقائياً؛ أغلبها يفتح صفحة بيضاء قبل اعتماد التسجيل داخل Clarity.
+	// روابط كلاريتي المؤكدة فقط تدخل من استيراد CSV أو حدث clarityStatus=ready/confirmed/imported.
 	}
 
 	function InitClarityIdentifiers() {
@@ -722,6 +721,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	if (EventType !== "page_open" && !fPageOpenSent) return Promise.resolve({ ok: true, skipped: true, reason: "page_not_visible_yet" });
 
 	const IsHiddenNow = document.hidden || document.visibilityState !== "visible";
+	const ClientEventSeq = ++fSeq;
+	const ClientEventUid = `${GetPageInstanceId()}:${EventType}:${ClientEventSeq}`;
 	const Body = {
 	eventType: EventType,
 	eventOn: String(pOptions.eventOn || "").trim(),
@@ -773,7 +774,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	trafficKind: "human",
 	botSignal: "",
 	userAgentClient: navigator.userAgent || "",
-	clientEventSeq: ++fSeq,
+	clientEventSeq: ClientEventSeq,
+	clientEventUid: ClientEventUid,
 	createdAtClient: new Date().toISOString()
 	};
 

@@ -138,6 +138,41 @@ function NormalizeEventType(pBody) {
 	return EventType || "page_open";
 }
 
+function IsValidClientId(pValue, pPrefix) {
+	const Value = Str(pValue);
+	return !!Value && Value.startsWith(pPrefix) && /^[a-z]_[a-z0-9]+_[a-z0-9]+$/i.test(Value);
+}
+
+function IsLifecycleNoise(pEventType) {
+	const Type = Str(pEventType).toLowerCase();
+	return Type === "page_ping" || Type === "page_focus_away" || Type === "page_focus_return" || Type === "page_exit";
+}
+
+async function HasDuplicateEvent(pSupabaseUrl, pServiceKey, pClientEventUid) {
+	const Uid = Str(pClientEventUid);
+	if (!Uid) return false;
+
+	try {
+		const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
+		Query.searchParams.set("select", "id");
+		Query.searchParams.set("payload->>clientEventUid", `eq.${Uid}`);
+		Query.searchParams.set("limit", "1");
+
+		const Res = await fetch(Query, {
+			headers: {
+				"apikey": pServiceKey,
+				"authorization": `Bearer ${pServiceKey}`
+			}
+		});
+
+		if (!Res.ok) return false;
+		const Rows = await Res.json().catch(() => []);
+		return Array.isArray(Rows) && Rows.length > 0;
+	} catch {
+		return false;
+	}
+}
+
 async function ReadBody(pRequest) {
 	try {
 		const Text = await pRequest.text();
@@ -169,9 +204,24 @@ export async function POST({ request }) {
 		const Body = await ReadBody(request);
 		if (!Body || typeof Body !== "object") return Json({ ok: false, error: "Invalid JSON body" }, 400);
 
+		const EventType = NormalizeEventType(Body);
+		const VisitorId = Str(Body.visitorId ?? Body.visitor_id);
+		const SessionId = Str(Body.sessionId ?? Body.session_id);
+		const PageInstanceId = Str(Body.pageInstanceId ?? Body.page_instance_id);
+		const PagePath = Str(Body.pagePath ?? Body.page_path);
+		const ClientEventUid = Str(Body.clientEventUid ?? Body.client_event_uid ?? Body.eventUid ?? Body.event_uid) || `${PageInstanceId}:${EventType}:${Str(Body.clientEventSeq ?? Body.client_event_seq)}`;
+
+		if (!IsValidClientId(VisitorId, "v_") || !IsValidClientId(SessionId, "s_") || !IsValidClientId(PageInstanceId, "p_") || !PagePath) {
+			return Json({ ok: true, skipped: true, reason: "invalid_client_tracking_ids" });
+		}
+
 		const SyntheticReason = SyntheticTrafficReason(request, Body);
 		if (SyntheticReason) {
 			return Json({ ok: true, skipped: true, reason: "synthetic_traffic", syntheticReason: SyntheticReason });
+		}
+
+		if (!IsLifecycleNoise(EventType) && await HasDuplicateEvent(SupabaseUrl, ServiceKey, ClientEventUid)) {
+			return Json({ ok: true, skipped: true, reason: "duplicate_event", clientEventUid: ClientEventUid });
 		}
 
 		const Geo = BuildGeo(request, Body);
@@ -181,9 +231,10 @@ export async function POST({ request }) {
 
 		const Payload = {
 			...Body,
-			eventType: NormalizeEventType(Body),
+			eventType: EventType,
 			eventOn: Str(Body.eventOn ?? Body.event_on),
-			pageInstanceId: Str(Body.pageInstanceId ?? Body.page_instance_id),
+			pageInstanceId: PageInstanceId,
+			clientEventUid: ClientEventUid,
 			widget: Str(Body.widget),
 			label: Str(Body.label),
 			value: Body.value ?? "",
@@ -209,9 +260,9 @@ export async function POST({ request }) {
 
 		const Row = {
 			event_type: Payload.eventType,
-			visitor_id: Str(Body.visitorId ?? Body.visitor_id),
-			session_id: Str(Body.sessionId ?? Body.session_id),
-			page_path: Str(Body.pagePath ?? Body.page_path),
+			visitor_id: VisitorId,
+			session_id: SessionId,
+			page_path: PagePath,
 			page_title: Str(Body.pageTitle ?? Body.page_title),
 			referrer: Str(Body.referrer),
 			screen: Str(Body.screen),
