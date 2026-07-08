@@ -148,6 +148,70 @@ function IsLifecycleNoise(pEventType) {
 	return Type === "page_ping" || Type === "page_focus_away" || Type === "page_focus_return" || Type === "page_exit";
 }
 
+const cDuplicatePageOpenWindowMs = 5 * 60 * 1000;
+
+function IsPageOpenType(pEventType) {
+	const Type = Str(pEventType).toLowerCase();
+	return !Type
+		|| Type === "page_view"
+		|| Type === "pageview"
+		|| Type === "view"
+		|| Type === "page_open"
+		|| Type === "open"
+		|| Type === "page_load"
+		|| Type === "load";
+}
+
+function PayloadOfRow(pRow) {
+	if (!pRow || pRow.payload === null || pRow.payload === undefined) return {};
+	if (typeof pRow.payload === "object") return pRow.payload;
+	if (typeof pRow.payload === "string" && pRow.payload.trim()) {
+		try {
+			return JSON.parse(pRow.payload);
+		} catch {
+			return {};
+		}
+	}
+	return {};
+}
+
+async function HasRecentDuplicatePageOpen(pSupabaseUrl, pServiceKey, pEventType, pVisitorId, pSessionId, pPagePath) {
+	if (!IsPageOpenType(pEventType)) return false;
+	const VisitorId = Str(pVisitorId);
+	const SessionId = Str(pSessionId);
+	const PagePath = Str(pPagePath);
+	if (!VisitorId || !SessionId || !PagePath) return false;
+
+	try {
+		const SinceIso = new Date(Date.now() - cDuplicatePageOpenWindowMs).toISOString();
+		const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
+		Query.searchParams.set("select", "id,event_type,created_at,payload");
+		Query.searchParams.set("visitor_id", `eq.${VisitorId}`);
+		Query.searchParams.set("session_id", `eq.${SessionId}`);
+		Query.searchParams.set("page_path", `eq.${PagePath}`);
+		Query.searchParams.set("created_at", `gte.${SinceIso}`);
+		Query.searchParams.set("order", "id.desc");
+		Query.searchParams.set("limit", "20");
+
+		const Res = await fetch(Query, {
+			headers: {
+				"apikey": pServiceKey,
+				"authorization": `Bearer ${pServiceKey}`
+			}
+		});
+
+		if (!Res.ok) return false;
+		const Rows = await Res.json().catch(() => []);
+		if (!Array.isArray(Rows)) return false;
+		return Rows.some((Row) => {
+			const Payload = PayloadOfRow(Row);
+			return IsPageOpenType(Str(Row.event_type) || Str(Payload.eventType ?? Payload.event_type));
+		});
+	} catch {
+		return false;
+	}
+}
+
 async function HasDuplicateEvent(pSupabaseUrl, pServiceKey, pClientEventUid) {
 	const Uid = Str(pClientEventUid);
 	if (!Uid) return false;
@@ -222,6 +286,10 @@ export async function POST({ request }) {
 
 		if (!IsLifecycleNoise(EventType) && await HasDuplicateEvent(SupabaseUrl, ServiceKey, ClientEventUid)) {
 			return Json({ ok: true, skipped: true, reason: "duplicate_event", clientEventUid: ClientEventUid });
+		}
+
+		if (await HasRecentDuplicatePageOpen(SupabaseUrl, ServiceKey, EventType, VisitorId, SessionId, PagePath)) {
+			return Json({ ok: true, skipped: true, reason: "duplicate_page_open", visitorId: VisitorId, sessionId: SessionId, pagePath: PagePath });
 		}
 
 		const Geo = BuildGeo(request, Body);

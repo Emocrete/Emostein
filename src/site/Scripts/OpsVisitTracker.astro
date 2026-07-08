@@ -29,6 +29,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	(() => {
 	const cReplayParams = new URLSearchParams(location.search);
 	if (window.__EMO_REPLAY__ || cReplayParams.has("emoReplay") || cReplayParams.has("emo_replay") || cReplayParams.has("emoNoAnalytics")) return;
+	if (window.__EMO_OPS_TRACKER_ACTIVE__) return;
+	window.__EMO_OPS_TRACKER_ACTIVE__ = true;
 	const cVisitorKey = "emo_ops_visitor_id";
 	const cSessionKey = "emo_ops_session_id";
 	const cOncePrefix = "emo_ops_once_";
