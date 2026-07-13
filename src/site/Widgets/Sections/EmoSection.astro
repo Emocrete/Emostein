@@ -17,6 +17,7 @@ interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps
 	pImgF?: string;
 	pImgL?: string;
 	pImgP?: string;
+	Service?: boolean | string;
 /** وصف صورة خلفية السكشن لمحركات البحث وقارئات الشاشة. */
 pImgAlt?: string;
 }
@@ -32,6 +33,7 @@ const {
 	pImgF = "",
 	pImgL = "",
 	pImgP = "",
+	Service = false,
 pImgAlt = "",
 
 	pLoc,
@@ -71,6 +73,7 @@ pImgAlt = "",
 } = Astro.props as Props;
 
 const cGivenStyle = GetStyleText(pGivenStyle);
+const cIsService = GetBoolAttr(Service);
 const cIsHero = GetBoolAttr((Astro.props as Record<string, unknown>)["data-hero"]);
 const cLoading: "eager" | "lazy" = cIsHero ? "eager" : "lazy";
 const cFetchPriority: "high" | undefined = cIsHero ? "high" : undefined;
@@ -210,6 +213,8 @@ function HasExplicitCssSize(pValue?: string) {
 	class = {`EmoSection ${cPlace.Class} ${pGivenClass}`.trim()}
 	style = {cPlace.Style}
 	id={pGivenID}
+	data-ga-service={cIsService ? "true" : undefined}
+	data-ga-item-id={pGivenID || undefined}
 	data-emo-auto-container="true"
 	data-emo-explicit-height={cHasExplicitHeight ? "true" : "false"}
 	data-emo-empty-height="200"

@@ -520,7 +520,25 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	.sort(CompareDomOrder);
 	}
 
+	function TrackAnalyticsReadEvent(pState, pEventType) {
+	const Analytics = window.EmoAnalytics;
+	if (!Analytics || typeof Analytics.GetItemName !== "function" || typeof Analytics.TrackTemplate !== "function") return;
+
+	const ItemName = Analytics.GetItemName(pState.Elem);
+	if (!ItemName) return;
+
+	const IsFullRead = pEventType === "read_full";
+	const IsServiceSection = pState.Elem?.matches?.('.EmoSection[data-ga-service="true"]') === true;
+	const Prefix = IsServiceSection
+		? (IsFullRead ? "Srv" : "SrvQ")
+		: (IsFullRead ? "R" : "RQ");
+
+	Analytics.TrackTemplate(Prefix, ItemName);
+	}
+
 	function TrackReadEvent(pState, pEventType, pTime, pMode) {
+	TrackAnalyticsReadEvent(pState, pEventType);
+
 	const WidgetName = pState.Widget || GetWidgetName(pState.Elem);
 	const BodyText = Shorten(pState.Text || "", 420);
 

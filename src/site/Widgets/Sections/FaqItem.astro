@@ -16,6 +16,9 @@ const {
 	...RemAttr
 } = Astro.props as Props;
 
+const cHasExplicitId = Object.prototype.hasOwnProperty.call(Astro.props, "id")
+	&& String((Astro.props as Record<string, unknown>).id ?? "").trim() !== "";
+const cAnalyticsId = cHasExplicitId ? pGivenID : undefined;
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
 ---
 
@@ -51,7 +54,11 @@ const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
 
 
 
-	<summary class = " FaqQuestion ">
+	<summary
+		class = " FaqQuestion "
+		data-ga-event-prefix="Faq"
+		data-ga-item-id={cAnalyticsId}
+	>
 
 		<span class = " FaqQuestionText ">
 			{pQuestion}

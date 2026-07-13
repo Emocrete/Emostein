@@ -1,28 +1,129 @@
 <script is:inline>
 	(function InitGA() {
-	const cAllowedHosts = new Set([
-	"emocrete.com",
-	"www.emocrete.com"
-	]);
+		const cAllowedHosts = new Set([
+			"emocrete.com",
+			"www.emocrete.com"
+		]);
 
-	if (!cAllowedHosts.has(window.location.hostname)) return;
+		if (!cAllowedHosts.has(window.location.hostname)) return;
 
-	const cGAId = "G-ZGW6SNPV2X";
+		const cGAId = "G-ZGW6SNPV2X";
+		const cMaxEventNameLength = 40;
+		const cMobileQuery = window.matchMedia("(hover: none), (pointer: coarse), (max-width: 700px)");
+		const cGeneratedWidgetIdPattern = /^[A-Za-z][A-Za-z0-9]*-\d{6}-\d{6}-\d{3}-\d{3}$/;
 
-	window.dataLayer = window.dataLayer || [];
+		window.dataLayer = window.dataLayer || [];
 
-	function gtag() {
-	window.dataLayer.push(arguments);
-	}
+		function gtag() {
+			window.dataLayer.push(arguments);
+		}
 
-	window.gtag = gtag;
+		function ToPascal(pValue) {
+			const cText = String(pValue ?? "")
+				.replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+				.replace(/[^A-Za-z0-9]+/g, " ")
+				.trim();
 
-	const cScript = document.createElement("script");
-	cScript.async = true;
-	cScript.src = `https://www.googletagmanager.com/gtag/js?id=${cGAId}`;
-	document.head.appendChild(cScript);
+			if (!cText) return "";
 
-	gtag("js", new Date());
-	gtag("config", cGAId);
+			return cText
+				.split(/\s+/)
+				.filter(Boolean)
+				.map((pPart) => pPart.charAt(0).toUpperCase() + pPart.slice(1))
+				.join("");
+		}
+
+		function GetPageName(pPathname = window.location.pathname) {
+			const cSegments = String(pPathname ?? "")
+				.split("/")
+				.map((pPart) => {
+					try {
+						return decodeURIComponent(pPart);
+					} catch {
+						return pPart;
+					}
+				})
+				.filter(Boolean);
+
+			if (!cSegments.length) return "Home";
+
+			const cPageSegments = cSegments.length > 1 ? cSegments.slice(1) : cSegments;
+			return cPageSegments.map(ToPascal).join("") || "Home";
+		}
+
+		function GetItemName(pElement) {
+			if (!(pElement instanceof Element)) return "";
+
+			const cAnalyticsId = pElement.getAttribute("data-ga-item-id")?.trim() || "";
+			if (cAnalyticsId) return ToPascal(cAnalyticsId);
+
+			const cElementId = pElement.id?.trim() || "";
+			if (!cElementId || cGeneratedWidgetIdPattern.test(cElementId)) return "";
+
+			return ToPascal(cElementId);
+		}
+
+		function BuildEventName(pPrefix, pItemId = "") {
+			const cPrefix = String(pPrefix ?? "").replace(/[^A-Za-z0-9]/g, "");
+			const cPageName = GetPageName();
+			const cItemName = ToPascal(pItemId);
+			const cBaseName = [cPrefix, cPageName].filter(Boolean).join("_");
+
+			if (!cItemName) return cBaseName.slice(0, cMaxEventNameLength);
+
+			const cAvailableItemLength = cMaxEventNameLength - cBaseName.length - 1;
+			if (cAvailableItemLength <= 0) return cBaseName.slice(0, cMaxEventNameLength);
+
+			return `${cBaseName}_${cItemName.slice(0, cAvailableItemLength)}`;
+		}
+
+		function TrackTemplate(pPrefix, pItemId = "") {
+			const cEventName = BuildEventName(pPrefix, pItemId);
+			if (!cEventName) return;
+			gtag("event", cEventName);
+		}
+
+		window.gtag = gtag;
+		window.EmoAnalytics = {
+			ToPascal,
+			GetPageName,
+			GetItemName,
+			BuildEventName,
+			TrackTemplate
+		};
+
+		document.addEventListener("click", (pEvent) => {
+			const cEventTarget = pEvent.target;
+			if (!(cEventTarget instanceof Element)) return;
+
+			const cContactLink = cEventTarget.closest("[data-ga-contact]");
+			if (cContactLink) {
+				const cContactType = cContactLink.getAttribute("data-ga-contact");
+				const cIsMobile = cMobileQuery.matches;
+
+				if (cContactType === "call") TrackTemplate(cIsMobile ? "CallQM" : "CallQD");
+				if (cContactType === "msg") TrackTemplate(cIsMobile ? "MsgQM" : "MsgQD");
+				return;
+			}
+
+			const cWidgetTarget = cEventTarget.closest("[data-ga-event-prefix]");
+			if (!cWidgetTarget) return;
+
+			const cPrefix = cWidgetTarget.getAttribute("data-ga-event-prefix")?.trim() || "";
+			const cItemName = GetItemName(cWidgetTarget);
+			if (!cPrefix || !cItemName) return;
+			if (cPrefix === "Ind" && !cWidgetTarget.closest(".IndexSecBox")) return;
+
+			TrackTemplate(cPrefix, cItemName);
+		});
+
+		const cScript = document.createElement("script");
+		cScript.async = true;
+		cScript.src = `https://www.googletagmanager.com/gtag/js?id=${cGAId}`;
+		document.head.appendChild(cScript);
+
+		gtag("js", new Date());
+		gtag("config", cGAId);
+		TrackTemplate("V");
 	})();
 </script>

@@ -23,6 +23,9 @@ const {
 	...RemAttr
 } = Astro.props as Props;
 
+const cHasExplicitId = Object.prototype.hasOwnProperty.call(Astro.props, "id")
+	&& String((Astro.props as Record<string, unknown>).id ?? "").trim() !== "";
+const cAnalyticsId = cHasExplicitId ? pGivenID : undefined;
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
 const cTarget = pExternal ? "_blank" : undefined;
 const cRel = pExternal ? "noopener noreferrer" : undefined;
@@ -84,6 +87,8 @@ function IsSiteUrl(pHref: string) {
 
 		<a
 			class = " ReadAlsoImgLink "
+			data-ga-event-prefix="Also"
+			data-ga-item-id={cAnalyticsId}
 			href={pHref}
 			target={cTarget}
 			rel={cRel}
@@ -119,6 +124,8 @@ function IsSiteUrl(pHref: string) {
 
 	<a
 		class = " ReadAlsoBtn "
+		data-ga-event-prefix="Also"
+		data-ga-item-id={cAnalyticsId}
 		href={pHref}
 		target={cTarget}
 		rel={cRel}
