@@ -3,7 +3,10 @@ export const prerender = false;
 function Json(pBody, pStatus = 200) {
 	return new Response(JSON.stringify(pBody), {
 		status: pStatus,
-		headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" }
+		headers: {
+			"content-type": "application/json; charset=utf-8",
+			"cache-control": "no-store"
+		}
 	});
 }
 
@@ -46,7 +49,8 @@ function Header(pRequest, ...pNames) {
 function DecodeHeaderText(pValue) {
 	const Value = Str(pValue);
 	if (!Value) return "";
-	try { return decodeURIComponent(Value.replace(/\+/g, "%20")).trim(); } catch { return Value; }
+	try { return decodeURIComponent(Value.replace(/\+/g, "%20")).trim(); }
+	catch { return Value; }
 }
 
 function GeoNorm(pValue) {
@@ -91,8 +95,16 @@ function IsValidClientId(pValue, pPrefix) {
 	return !!Value && Value.startsWith(pPrefix) && /^[a-z]_[a-z0-9]+_[a-z0-9]+$/i.test(Value);
 }
 
-function NormalizeEventType(pBody) { return Str(pBody.eventType ?? pBody.event_type ?? pBody.type ?? pBody.event) || "page_open"; }
-function IsPresenceOnly(pType) { return ["page_ping", "page_focus_away", "page_focus_return", "focus_away", "focus_return", "page_blur", "visibility_hidden", "visibility_visible"].includes(Str(pType).toLowerCase()); }
+function NormalizeEventType(pBody) {
+	return Str(pBody.eventType ?? pBody.event_type ?? pBody.type ?? pBody.event) || "page_open";
+}
+
+function IsPresenceOnly(pType) {
+	return [
+		"page_ping", "page_focus_away", "page_focus_return", "focus_away", "focus_return",
+		"page_blur", "visibility_hidden", "visibility_visible"
+	].includes(Str(pType).toLowerCase());
+}
 
 async function ReadBody(pRequest) {
 	try {
@@ -105,7 +117,11 @@ async function ReadBody(pRequest) {
 async function SupabaseRequest(pUrl, pServiceKey, pOptions = {}) {
 	const Res = await fetch(pUrl, {
 		...pOptions,
-		headers: { "apikey": pServiceKey, "authorization": `Bearer ${pServiceKey}`, ...(pOptions.headers || {}) }
+		headers: {
+			apikey: pServiceKey,
+			authorization: `Bearer ${pServiceKey}`,
+			...(pOptions.headers || {})
+		}
 	});
 	const Text = await Res.text();
 	return { ok: Res.ok, status: Res.status, text: Text };
@@ -130,18 +146,82 @@ async function UpsertPresence(pSupabaseUrl, pServiceKey, pData) {
 		location_label: pData.locationLabel,
 		location_border_color: pData.locationBorderColor,
 		user_agent: pData.userAgentClient,
-		meta: { eventType: pData.eventType, createdAtClient: pData.createdAtClient, viewport: pData.viewport, screen: pData.screen }
+		meta: {
+			eventType: pData.eventType,
+			createdAtClient: pData.createdAtClient,
+			viewport: pData.viewport,
+			screen: pData.screen
+		}
 	};
 	return SupabaseRequest(`${pSupabaseUrl}/rest/v1/ops_presence?on_conflict=page_instance_id`, pServiceKey, {
 		method: "POST",
-		headers: { "content-type": "application/json", "prefer": "resolution=merge-duplicates,return=minimal" },
+		headers: {
+			"content-type": "application/json",
+			"prefer": "resolution=merge-duplicates,return=minimal"
+		},
 		body: JSON.stringify(Row)
 	});
 }
 
+async function HasDuplicateEvent(pSupabaseUrl, pServiceKey, pClientEventUid) {
+	const Uid = Str(pClientEventUid);
+	if (!Uid) return false;
+	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
+	Query.searchParams.set("select", "id");
+	Query.searchParams.set("payload->>clientEventUid", `eq.${Uid}`);
+	Query.searchParams.set("limit", "1");
+	const Res = await SupabaseRequest(Query, pServiceKey);
+	if (!Res.ok) return false;
+	try {
+		const Rows = JSON.parse(Res.text);
+		return Array.isArray(Rows) && Rows.length > 0;
+	} catch { return false; }
+}
+
+async function HasStoredPageOpen(pSupabaseUrl, pServiceKey, pPageInstanceId) {
+	const PageInstanceId = Str(pPageInstanceId);
+	if (!PageInstanceId) return true;
+	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
+	Query.searchParams.set("select", "id,event_type,payload");
+	Query.searchParams.set("payload->>pageInstanceId", `eq.${PageInstanceId}`);
+	Query.searchParams.set("limit", "20");
+	const Res = await SupabaseRequest(Query, pServiceKey);
+	if (!Res.ok) return true;
+	try {
+		const Rows = JSON.parse(Res.text);
+		return Array.isArray(Rows) && Rows.some((Row) => {
+			const Payload = Row && typeof Row.payload === "object" ? Row.payload : {};
+			const Type = Str(Row?.event_type || Payload.eventType || Payload.event_type).toLowerCase();
+			return Type === "page_open" || Type === "page_view" || Type === "page_load";
+		});
+	} catch { return true; }
+}
+
+async function RecoverPageOpenFromPing(pSupabaseUrl, pServiceKey, pData) {
+	if (Str(pData.eventType).toLowerCase() !== "page_ping") return null;
+	if (await HasStoredPageOpen(pSupabaseUrl, pServiceKey, pData.pageInstanceId)) return null;
+	const RecoveryData = {
+		...pData,
+		eventType: "page_open",
+		eventOn: "recovered_from_live_ping",
+		clientEventUid: `${pData.pageInstanceId}:page_open:recovered`,
+		label: pData.pageTitle || pData.pagePath,
+		important: true,
+		notifyMobile: true,
+		sound: true,
+		focusState: "visible"
+	};
+	return InsertEvent(pSupabaseUrl, pServiceKey, RecoveryData);
+}
+
 async function InsertEvent(pSupabaseUrl, pServiceKey, pData) {
+	if (await HasDuplicateEvent(pSupabaseUrl, pServiceKey, pData.clientEventUid)) {
+		return { ok: true, status: 200, text: "[]", duplicate: true };
+	}
+
+	// Do not require a client_event_uid database column. The UID remains inside
+	// payload, so this works against both the original and migrated ops_events table.
 	const Row = {
-		client_event_uid: pData.clientEventUid,
 		event_type: pData.eventType,
 		visitor_id: pData.visitorId,
 		session_id: pData.sessionId,
@@ -154,20 +234,26 @@ async function InsertEvent(pSupabaseUrl, pServiceKey, pData) {
 		user_agent: pData.userAgentClient,
 		payload: pData
 	};
-	return SupabaseRequest(`${pSupabaseUrl}/rest/v1/ops_events?on_conflict=client_event_uid`, pServiceKey, {
+	return SupabaseRequest(`${pSupabaseUrl}/rest/v1/ops_events`, pServiceKey, {
 		method: "POST",
-		headers: { "content-type": "application/json", "prefer": "resolution=ignore-duplicates,return=representation" },
+		headers: {
+			"content-type": "application/json",
+			"prefer": "return=representation"
+		},
 		body: JSON.stringify(Row)
 	});
 }
 
-export async function OPTIONS() { return Json({ ok: true }); }
+export async function OPTIONS() {
+	return Json({ ok: true });
+}
 
 export async function POST({ request }) {
 	try {
 		const SupabaseUrl = Env("SUPABASE_URL");
 		const ServiceKey = Env("SUPABASE_SERVICE_ROLE_KEY");
 		if (!SupabaseUrl || !ServiceKey) return Json({ ok: false, error: "Missing Supabase env vars" }, 500);
+
 		const Body = await ReadBody(request);
 		if (!Body || typeof Body !== "object") return Json({ ok: false, error: "Invalid JSON body" }, 400);
 
@@ -176,8 +262,13 @@ export async function POST({ request }) {
 		const SessionId = Str(Body.sessionId ?? Body.session_id);
 		const PageInstanceId = Str(Body.pageInstanceId ?? Body.page_instance_id);
 		const PagePath = Str(Body.pagePath ?? Body.page_path);
-		const ClientEventUid = Str(Body.clientEventUid ?? Body.client_event_uid ?? Body.eventUid ?? Body.event_uid) || `${PageInstanceId}:${EventType}:${Str(Body.clientEventSeq ?? Body.client_event_seq)}`;
-		if (!IsValidClientId(VisitorId, "v_") || !IsValidClientId(SessionId, "s_") || !IsValidClientId(PageInstanceId, "p_") || !PagePath || !ClientEventUid) return Json({ ok: true, skipped: true, reason: "invalid_client_tracking_ids" });
+		const ClientEventUid = Str(Body.clientEventUid ?? Body.client_event_uid ?? Body.eventUid ?? Body.event_uid)
+			|| `${PageInstanceId}:${EventType}:${Str(Body.clientEventSeq ?? Body.client_event_seq)}`;
+
+		if (!IsValidClientId(VisitorId, "v_") || !IsValidClientId(SessionId, "s_") || !IsValidClientId(PageInstanceId, "p_") || !PagePath || !ClientEventUid) {
+			return Json({ ok: true, skipped: true, reason: "invalid_client_tracking_ids" });
+		}
+
 		const SyntheticReason = SyntheticTrafficReason(request, Body);
 		if (SyntheticReason) return Json({ ok: true, skipped: true, reason: "synthetic_traffic", syntheticReason: SyntheticReason });
 
@@ -216,15 +307,59 @@ export async function POST({ request }) {
 		};
 
 		const PresenceRes = await UpsertPresence(SupabaseUrl, ServiceKey, Data);
-		if (!PresenceRes.ok) return Json({ ok: false, error: "Presence write failed", details: PresenceRes.text }, PresenceRes.status || 500);
-		if (IsPresenceOnly(EventType)) return Json({ ok: true, presence: true, eventStored: false });
+		if (!PresenceRes.ok) {
+			return Json({
+				ok: false,
+				error: "Presence write failed",
+				details: PresenceRes.text || `HTTP ${PresenceRes.status}`
+			}, PresenceRes.status || 500);
+		}
+
+		if (IsPresenceOnly(EventType)) {
+			const Recovery = await RecoverPageOpenFromPing(SupabaseUrl, ServiceKey, Data);
+			if (Recovery && !Recovery.ok) {
+				return Json({
+					ok: false,
+					presence: true,
+					eventStored: false,
+					error: "Recovered page_open write failed",
+					details: Recovery.text || `HTTP ${Recovery.status}`
+				}, Recovery.status || 500);
+			}
+			return Json({
+				ok: true,
+				presence: true,
+				eventStored: !!Recovery,
+				recoveredPageOpen: !!Recovery
+			});
+		}
 
 		const EventRes = await InsertEvent(SupabaseUrl, ServiceKey, Data);
-		if (!EventRes.ok) return Json({ ok: false, error: EventRes.text }, EventRes.status || 500);
+		if (!EventRes.ok) {
+			return Json({
+				ok: false,
+				presence: true,
+				eventStored: false,
+				error: "Event write failed",
+				details: EventRes.text || `HTTP ${EventRes.status}`
+			}, EventRes.status || 500);
+		}
+
 		let Rows = [];
-		try { Rows = JSON.parse(EventRes.text); } catch {}
-		return Json({ ok: true, presence: true, eventStored: true, duplicate: !Array.isArray(Rows) || Rows.length === 0, data: Rows });
+		try { Rows = JSON.parse(EventRes.text); }
+		catch {}
+		return Json({
+			ok: true,
+			presence: true,
+			eventStored: true,
+			duplicate: EventRes.duplicate === true || !Array.isArray(Rows) || Rows.length === 0,
+			data: Rows
+		});
 	} catch (Ex) {
-		return Json({ ok: false, error: "Function crashed", message: Ex instanceof Error ? Ex.message : String(Ex) }, 500);
+		return Json({
+			ok: false,
+			error: "Function crashed",
+			message: Ex instanceof Error ? Ex.message : String(Ex)
+		}, 500);
 	}
 }

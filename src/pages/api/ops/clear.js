@@ -17,9 +17,7 @@ function Env(pName) {
 	return typeof Value === "string" ? Value.trim() : "";
 }
 
-function Str(pValue) {
-	return String(pValue ?? "").trim();
-}
+function Str(pValue) { return String(pValue ?? "").trim(); }
 
 function CheckOpsKey(pRequest) {
 	const Url = new URL(pRequest.url);
@@ -27,13 +25,9 @@ function CheckOpsKey(pRequest) {
 	return Given && Given === (Env("OPS_API_KEY") || cDefaultOpsKey);
 }
 
-function IsMissingRelation(pStatus, pText) {
-	return pStatus === 404 || /42P01|PGRST205|Could not find the table/i.test(Str(pText));
-}
-
-async function DeleteAllRows(pSupabaseUrl, pServiceKey, pTable, pIdentityColumn, pOptional = false) {
+async function DeleteAttempt(pSupabaseUrl, pServiceKey, pTable, pColumn, pFilter) {
 	const Url = new URL(`${pSupabaseUrl}/rest/v1/${pTable}`);
-	Url.searchParams.set(pIdentityColumn, "not.is.null");
+	Url.searchParams.set(pColumn, pFilter);
 	const Res = await fetch(Url, {
 		method: "DELETE",
 		headers: {
@@ -43,11 +37,34 @@ async function DeleteAllRows(pSupabaseUrl, pServiceKey, pTable, pIdentityColumn,
 		}
 	});
 	const Text = await Res.text();
-	if (!Res.ok) {
-		if (pOptional && IsMissingRelation(Res.status, Text)) return { table: pTable, skipped: true };
-		throw new Error(`${pTable}: ${Text || `HTTP ${Res.status}`}`);
+	return {
+		ok: Res.ok,
+		status: Res.status,
+		table: pTable,
+		filter: `${pColumn}=${pFilter}`,
+		details: Text || (Res.ok ? "" : `HTTP ${Res.status}`)
+	};
+}
+
+async function DeleteAllRows(pSupabaseUrl, pServiceKey, pTable, pCandidates, pRequired) {
+	const Attempts = [];
+	for (const Candidate of pCandidates) {
+		const Result = await DeleteAttempt(
+			pSupabaseUrl,
+			pServiceKey,
+			pTable,
+			Candidate.column,
+			Candidate.filter
+		);
+		Attempts.push(Result);
+		if (Result.ok) return { table: pTable, deleted: true, filter: Result.filter };
 	}
-	return { table: pTable, deleted: true };
+
+	const Detail = Attempts
+		.map((Item) => `${Item.filter}: ${Item.details || `HTTP ${Item.status}`}`)
+		.join(" | ");
+	if (!pRequired) return { table: pTable, deleted: false, warning: Detail };
+	throw new Error(`${pTable}: ${Detail || "تعذر حذف الصفوف"}`);
 }
 
 export async function OPTIONS() {
@@ -60,24 +77,39 @@ export async function POST({ request }) {
 
 		const SupabaseUrl = Env("SUPABASE_URL");
 		const ServiceKey = Env("SUPABASE_SERVICE_ROLE_KEY");
-		if (!SupabaseUrl || !ServiceKey) {
-			return Json({ ok: false, error: "Missing Supabase env vars" }, 500);
-		}
+		if (!SupabaseUrl || !ServiceKey) return Json({ ok: false, error: "Missing Supabase env vars" }, 500);
 
-		// لا نستخدم RPC هنا. النسخة السابقة كانت تدخل سجل تحكم بعد الحذف،
-		// واستعلام RETURNING داخل الدالة سبب خطأ PostgreSQL 21000 في بعض المخططات.
 		const Results = [];
-		Results.push(await DeleteAllRows(SupabaseUrl, ServiceKey, "replay_chunks", "session_id", true));
-		Results.push(await DeleteAllRows(SupabaseUrl, ServiceKey, "replay_sessions", "id", true));
-		Results.push(await DeleteAllRows(SupabaseUrl, ServiceKey, "ops_presence", "page_instance_id", true));
-		Results.push(await DeleteAllRows(SupabaseUrl, ServiceKey, "ops_events", "id", false));
+		Results.push(await DeleteAllRows(SupabaseUrl, ServiceKey, "replay_chunks", [
+			{ column: "session_id", filter: "not.is.null" },
+			{ column: "created_at", filter: "not.is.null" }
+		], false));
+		Results.push(await DeleteAllRows(SupabaseUrl, ServiceKey, "replay_sessions", [
+			{ column: "id", filter: "not.is.null" },
+			{ column: "created_at", filter: "not.is.null" }
+		], false));
+		Results.push(await DeleteAllRows(SupabaseUrl, ServiceKey, "ops_presence", [
+			{ column: "page_instance_id", filter: "not.is.null" },
+			{ column: "visitor_id", filter: "not.is.null" },
+			{ column: "last_seen_at", filter: "not.is.null" }
+		], true));
+		Results.push(await DeleteAllRows(SupabaseUrl, ServiceKey, "ops_events", [
+			{ column: "id", filter: "not.is.null" },
+			{ column: "created_at", filter: "not.is.null" },
+			{ column: "visitor_id", filter: "not.is.null" }
+		], true));
 
-		return Json({ ok: true, deleted: true, results: Results });
+		return Json({
+			ok: true,
+			deleted: true,
+			warnings: Results.filter((Item) => Item.warning).map((Item) => `${Item.table}: ${Item.warning}`),
+			results: Results
+		});
 	} catch (Ex) {
 		return Json({
 			ok: false,
 			error: "Clear failed",
-			message: Ex instanceof Error ? Ex.message : String(Ex)
+			message: Ex instanceof Error ? Ex.message : Str(Ex) || "تعذر مسح البيانات"
 		}, 500);
 	}
 }

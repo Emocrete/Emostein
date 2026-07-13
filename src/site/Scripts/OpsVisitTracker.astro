@@ -766,7 +766,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	const EventType = String(pEventType || "").trim();
 	if (!EventType) return Promise.resolve({ ok: false, error: "Missing event type" });
 	if (IsSyntheticTraffic()) return Promise.resolve({ ok: true, skipped: true, reason: "synthetic_traffic", signal: BotSignal() });
-	if (EventType !== "page_open" && !fPageOpenSent) return Promise.resolve({ ok: true, skipped: true, reason: "page_not_visible_yet" });
+	if (EventType !== "page_open" && !fPageOpenSent && !BoolValue(pOptions.allowBeforeOpen)) return Promise.resolve({ ok: true, skipped: true, reason: "page_not_visible_yet" });
 
 	const IsHiddenNow = document.hidden || document.visibilityState !== "visible";
 	const ClientEventSeq = ++fSeq;
@@ -833,7 +833,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 
 	async function TrackOpsEventOnce(pEventType, pOnceKey, pOptions = {}) {
 	const EventType = String(pEventType || "").trim();
-	if (EventType !== "page_open" && !fPageOpenSent) return { ok: true, skipped: true, reason: "page_not_visible_yet" };
+	if (EventType !== "page_open" && !fPageOpenSent && !BoolValue(pOptions.allowBeforeOpen)) return { ok: true, skipped: true, reason: "page_not_visible_yet" };
 	const Store = GetOnceStore();
 	const Key = `${pEventType}:${pOnceKey}`;
 	if (Store.Values.has(Key)) return { ok: true, skipped: true };
@@ -1288,6 +1288,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	durationMs: Math.round(GetPageElapsedMs()),
 	awayReason: Hidden ? (fAwayReason || "hidden") : "",
 	focusState: Hidden ? "away" : "visible",
+	allowBeforeOpen: true,
 	useBeacon: Hidden,
 	notifyMobile: false,
 	sound: false
@@ -1312,7 +1313,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	value: GetScrollPercent(),
 	durationMs: Math.round(GetPageElapsedMs()),
 	awayReason: String(pReason || "pagehide"),
-	focusState: document.hidden ? "hidden" : "visible",
+	focusState: "closed",
+	allowBeforeOpen: true,
 	useBeacon: true
 	});
 	}
@@ -1342,7 +1344,9 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	notifyMobile: true,
 	sound: true
 	}).then((Result) => {
-	if (Result && Result.ok) fPageOpenSent = true;
+	// Presence is already live even if an older ops_events schema rejects the event row.
+	// Allow lifecycle updates to continue while the failed page_open stays in the retry queue.
+	if (Result && (Result.ok || Result.presence)) fPageOpenSent = true;
 	return Result;
 	}).finally(() => { fPageOpenPromise = null; });
 	return fPageOpenPromise;
