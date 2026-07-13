@@ -1,253 +1,81 @@
 export const prerender = false;
-
 const cDefaultOpsKey = "Emocrete20015161";
-
-function Json(pBody, pStatus = 200) {
-	return new Response(JSON.stringify(pBody), {
-		status: pStatus,
-		headers: {
-			"content-type": "application/json; charset=utf-8",
-			"cache-control": "no-store"
-		}
-	});
-}
-
-function Env(pName) {
-	const Value = process.env[pName];
-	return typeof Value === "string" ? Value.trim() : "";
-}
-
-function Str(pValue) {
-	return String(pValue ?? "").trim();
-}
-
-function Bool(pValue) {
-	if (pValue === true) return true;
-	const Value = Str(pValue).toLowerCase();
-	return Value === "true" || Value === "1" || Value === "yes" || Value === "on" || Value === "important";
-}
-
-function IsConfirmedClarityStatus(pValue) {
-	const Status = Str(pValue).toLowerCase();
-	return Status === "ready" || Status === "confirmed" || Status === "imported";
-}
-
-const cSyntheticUserAgentPattern = /(bot|crawl|spider|slurp|googlebot|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb)/i;
-
-function SyntheticReasonFromRow(pRow, pPayload) {
-	const UserAgent = Str(Pick(pRow, "user_agent") || Pick(pPayload, "userAgent", "user_agent", "userAgentClient", "user_agent_client"));
-	const BodySignal = Str(Pick(pPayload, "botSignal", "bot_signal"));
-	const TrafficKind = Str(Pick(pPayload, "trafficKind", "traffic_kind")).toLowerCase();
-	const StoredSynthetic = Bool(Pick(pPayload, "isSynthetic", "is_synthetic", "synthetic"));
-	const Reasons = [];
-
-	if (cSyntheticUserAgentPattern.test(UserAgent)) Reasons.push("ua_bot");
-	if (BodySignal) Reasons.push(`client_${BodySignal}`);
-	if (TrafficKind === "bot" || TrafficKind === "crawler" || TrafficKind === "synthetic") Reasons.push(`kind_${TrafficKind}`);
-	if (StoredSynthetic) Reasons.push("stored_synthetic");
-
-	return Reasons.join(",");
-}
-
-function PayloadOf(pRow) {
-	if (!pRow || pRow.payload === null || pRow.payload === undefined) return {};
-	if (typeof pRow.payload === "object") return pRow.payload;
-	if (typeof pRow.payload === "string" && pRow.payload.trim()) {
-		try {
-			return JSON.parse(pRow.payload);
-		} catch {
-			return {};
-		}
-	}
-	return {};
-}
-
-function Pick(pObj, ...pNames) {
-	for (const Name of pNames) {
-		if (pObj && pObj[Name] !== undefined && pObj[Name] !== null && pObj[Name] !== "") return pObj[Name];
-	}
-	return "";
-}
-
+function Json(pBody, pStatus = 200) { return new Response(JSON.stringify(pBody), { status: pStatus, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } }); }
+function Env(pName) { const Value = process.env[pName]; return typeof Value === "string" ? Value.trim() : ""; }
+function Str(pValue) { return String(pValue ?? "").trim(); }
+function Bool(pValue) { return pValue === true || ["true","1","yes","on","important"].includes(Str(pValue).toLowerCase()); }
+function CheckOpsKey(pRequest) { const OpsKey = Env("OPS_API_KEY") || cDefaultOpsKey; const Url = new URL(pRequest.url); const Given = Str(pRequest.headers.get("x-ops-key") || Url.searchParams.get("key")); return Given && Given === OpsKey; }
+function Payload(pRow) { if (pRow?.payload && typeof pRow.payload === "object") return pRow.payload; try { return JSON.parse(pRow?.payload || "{}"); } catch { return {}; } }
+function Pick(pObject, ...pNames) { for (const Name of pNames) { const Value = pObject?.[Name]; if (Value !== undefined && Value !== null && Str(Value) !== "") return Value; } return ""; }
 function MapEvent(pRow) {
-	const Payload = PayloadOf(pRow);
-	const EventType = Str(Pick(pRow, "event_type") || Pick(Payload, "eventType", "event_type", "type", "event"));
-	const VisitorId = Str(Pick(pRow, "visitor_id") || Pick(Payload, "visitorId", "visitor_id"));
-	const SessionId = Str(Pick(pRow, "session_id") || Pick(Payload, "sessionId", "session_id"));
-	const PagePath = Str(Pick(pRow, "page_path") || Pick(Payload, "pagePath", "page_path"));
-	const PageTitle = Str(Pick(pRow, "page_title") || Pick(Payload, "pageTitle", "page_title"));
-	const PageInstanceId = Str(Pick(pRow, "page_instance_id") || Pick(Payload, "pageInstanceId", "page_instance_id"));
-
-	const DurationMs = Pick(Payload, "durationMs", "duration_ms");
-	const AwayReason = Str(Pick(Payload, "awayReason", "away_reason"));
-	const ReplayUrl = Str(Pick(Payload, "replayUrl", "replay_url", "sessionReplayUrl", "session_replay_url"));
-	const ClarityUrl = Str(Pick(Payload, "clarityRecordingUrl", "clarity_recording_url", "clarityPlaybackUrl", "clarity_playback_url", "clarityUrl", "clarity_url"));
-	const ClarityProjectId = Str(Pick(Payload, "clarityProjectId", "clarity_project_id"));
-	const ClarityUserId = Str(Pick(Payload, "clarityUserId", "clarity_user_id"));
-	const ClaritySessionId = Str(Pick(Payload, "claritySessionId", "clarity_session_id"));
-	const ClarityAvailableAfter = Str(Pick(Payload, "clarityAvailableAfter", "clarity_available_after"));
-	const ClarityStatus = Str(Pick(Payload, "clarityStatus", "clarity_status"));
-	const ClarityConfirmed = IsConfirmedClarityStatus(ClarityStatus);
-	const RawVideoUrl = Str(Pick(Payload, "videoUrl", "video_url", "sessionVideoUrl", "session_video_url", "sessionRecordingUrl", "session_recording_url", "recordingUrl", "recording_url", "recordUrl", "record_url"));
-	const ExplicitVideoUrl = RawVideoUrl.toLowerCase().includes("clarity") && !ClarityConfirmed ? "" : RawVideoUrl;
-	const VideoUrl = ReplayUrl || (ClarityConfirmed ? ClarityUrl : "") || ExplicitVideoUrl;
-	const ControlCommand = Str(Pick(Payload, "controlCommand", "control_command", "opsCommand", "ops_command"));
-	const TargetVisitorId = Str(Pick(Payload, "targetVisitorId", "target_visitor_id", "deletedVisitorId", "deleted_visitor_id"));
-	const LocationCountryCode = Str(Pick(Payload, "locationCountryCode", "location_country_code"));
-	const LocationRegion = Str(Pick(Payload, "locationRegion", "location_region"));
-	const LocationCity = Str(Pick(Payload, "locationCity", "location_city"));
-	const LocationBand = Str(Pick(Payload, "locationBand", "location_band"));
-	const LocationLabel = Str(Pick(Payload, "locationLabel", "location_label"));
-	const LocationBorderColor = Str(Pick(Payload, "locationBorderColor", "location_border_color"));
-	const UserAgent = Str(Pick(pRow, "user_agent") || Pick(Payload, "userAgent", "user_agent", "userAgentClient", "user_agent_client"));
-	const SyntheticReason = SyntheticReasonFromRow(pRow, Payload);
-	const IsSynthetic = SyntheticReason !== "";
-	const TrafficKind = IsSynthetic ? "synthetic" : Str(Pick(Payload, "trafficKind", "traffic_kind") || "human");
-
+	const P = Payload(pRow);
 	return {
-		...pRow,
-		event_type: EventType,
-		eventType: EventType,
-		visitor_id: VisitorId,
-		visitorId: VisitorId,
-		session_id: SessionId,
-		sessionId: SessionId,
-		page_instance_id: PageInstanceId,
-		pageInstanceId: PageInstanceId,
-		page_path: PagePath,
-		pagePath: PagePath,
-		page_title: PageTitle,
-		pageTitle: PageTitle,
-		page_title_short: Str(Pick(Payload, "pageTitleShort", "page_title_short")),
-		event_on: Str(Pick(Payload, "eventOn", "event_on")),
-		eventOn: Str(Pick(Payload, "eventOn", "event_on")),
-		widget: Str(Pick(Payload, "widget")),
-		label: Str(Pick(Payload, "label")),
-		value: Pick(Payload, "value"),
-		elapsed_ms: Pick(Payload, "elapsedMs", "elapsed_ms"),
-		elapsedMs: Pick(Payload, "elapsedMs", "elapsed_ms"),
-		elapsed_sec: Pick(Payload, "elapsedSec", "elapsed_sec"),
-		elapsedSec: Pick(Payload, "elapsedSec", "elapsed_sec"),
-		href: Str(Pick(Payload, "href")),
-		duration_ms: DurationMs,
-		durationMs: DurationMs,
-		away_reason: AwayReason,
-		awayReason: AwayReason,
-		replay_url: ReplayUrl,
-		replayUrl: ReplayUrl,
-		clarity_url: ClarityUrl,
-		clarityUrl: ClarityUrl,
-		clarity_recording_url: ClarityUrl,
-		clarityRecordingUrl: ClarityUrl,
-		clarity_playback_url: ClarityUrl,
-		clarityPlaybackUrl: ClarityUrl,
-		clarity_project_id: ClarityProjectId,
-		clarityProjectId: ClarityProjectId,
-		clarity_user_id: ClarityUserId,
-		clarityUserId: ClarityUserId,
-		clarity_session_id: ClaritySessionId,
-		claritySessionId: ClaritySessionId,
-		clarity_available_after: ClarityAvailableAfter,
-		clarityAvailableAfter: ClarityAvailableAfter,
-		clarity_status: ClarityStatus,
-		clarityStatus: ClarityStatus,
-		video_url: VideoUrl,
-		videoUrl: VideoUrl,
-		control_command: ControlCommand,
-		controlCommand: ControlCommand,
-		target_visitor_id: TargetVisitorId,
-		targetVisitorId: TargetVisitorId,
-		location_country_code: LocationCountryCode,
-		locationCountryCode: LocationCountryCode,
-		location_region: LocationRegion,
-		locationRegion: LocationRegion,
-		location_city: LocationCity,
-		locationCity: LocationCity,
-		location_band: LocationBand,
-		locationBand: LocationBand,
-		location_label: LocationLabel,
-		locationLabel: LocationLabel,
-		location_border_color: LocationBorderColor,
-		locationBorderColor: LocationBorderColor,
-		user_agent: UserAgent,
-		userAgent: UserAgent,
-		is_synthetic: IsSynthetic,
-		isSynthetic: IsSynthetic,
-		traffic_kind: TrafficKind,
-		trafficKind: TrafficKind,
-		synthetic_reason: SyntheticReason,
-		syntheticReason: SyntheticReason,
-		important: Bool(Pick(Payload, "important")),
-		notify_mobile: Bool(Pick(Payload, "notifyMobile", "notify_mobile", "notify")),
-		notifyMobile: Bool(Pick(Payload, "notifyMobile", "notify_mobile", "notify")),
-		sound: Bool(Pick(Payload, "sound")),
-		client_event_seq: Pick(Payload, "clientEventSeq", "client_event_seq"),
-		clientEventSeq: Pick(Payload, "clientEventSeq", "client_event_seq"),
-		created_at_client: Str(Pick(Payload, "createdAtClient", "created_at_client")),
-		createdAtClient: Str(Pick(Payload, "createdAtClient", "created_at_client")),
-		payload: Payload
+		id: Number(pRow.id || 0),
+		clientEventUid: Str(pRow.client_event_uid || Pick(P,"clientEventUid","client_event_uid")),
+		eventType: Str(pRow.event_type || Pick(P,"eventType","event_type")),
+		visitorId: Str(pRow.visitor_id || Pick(P,"visitorId","visitor_id")),
+		sessionId: Str(pRow.session_id || Pick(P,"sessionId","session_id")),
+		pagePath: Str(pRow.page_path || Pick(P,"pagePath","page_path")),
+		pageTitle: Str(pRow.page_title || Pick(P,"pageTitle","page_title")),
+		pageInstanceId: Str(Pick(P,"pageInstanceId","page_instance_id")),
+		createdAt: Str(pRow.created_at),
+		createdAtClient: Str(Pick(P,"createdAtClient","created_at_client")),
+		label: Str(Pick(P,"label","eventLabel","event_label")), widget: Str(Pick(P,"widget")),
+		locationBand: Str(Pick(P,"locationBand","location_band")), locationLabel: Str(Pick(P,"locationLabel","location_label")),
+		locationBorderColor: Str(Pick(P,"locationBorderColor","location_border_color")), locationCity: Str(Pick(P,"locationCity","location_city")),
+		locationCountryCode: Str(Pick(P,"locationCountryCode","location_country_code")),
+		durationMs: Pick(P,"durationMs","duration_ms"), elapsedMs: Pick(P,"elapsedMs","elapsed_ms"), awayReason: Str(Pick(P,"awayReason","away_reason")),
+		replayUrl: Str(Pick(P,"replayUrl","replay_url")), clarityUrl: Str(Pick(P,"clarityUrl","clarity_url","clarityRecordingUrl","clarity_recording_url")),
+		clarityAvailableAfter: Str(Pick(P,"clarityAvailableAfter","clarity_available_after")), clarityStatus: Str(Pick(P,"clarityStatus","clarity_status")), videoUrl: Str(Pick(P,"videoUrl","video_url")),
+		controlCommand: Str(Pick(P,"controlCommand","control_command","opsCommand","ops_command")), targetVisitorId: Str(Pick(P,"targetVisitorId","target_visitor_id")),
+		userAgent: Str(pRow.user_agent || Pick(P,"userAgentClient","user_agent_client")), trafficKind: Str(Pick(P,"trafficKind","traffic_kind")),
+		syntheticReason: Str(Pick(P,"syntheticReason","synthetic_reason","botSignal","bot_signal")), isSynthetic: Bool(Pick(P,"isSynthetic","is_synthetic","synthetic")),
+		important: Bool(Pick(P,"important","notifyMobile","notify_mobile","notify","sound"))
 	};
 }
-
-function CheckOpsKey(pRequest) {
-	const OpsKey = Env("OPS_API_KEY") || cDefaultOpsKey;
-	const GivenKey = String(pRequest.headers.get("x-ops-key") ?? "").trim();
-	return GivenKey && GivenKey === OpsKey;
+function MapPresence(pRow) {
+	return {
+		visitorId: Str(pRow.visitor_id), sessionId: Str(pRow.session_id), pageInstanceId: Str(pRow.page_instance_id),
+		pagePath: Str(pRow.page_path), pageTitle: Str(pRow.page_title), focusState: Str(pRow.focus_state), awayReason: Str(pRow.away_reason),
+		lastSeenAt: Str(pRow.last_seen_at), elapsedMs: Number(pRow.elapsed_ms || 0), scrollPercent: Number(pRow.scroll_percent || 0),
+		locationBand: Str(pRow.location_band), locationLabel: Str(pRow.location_label), locationBorderColor: Str(pRow.location_border_color),
+		locationCity: Str(pRow.location_city), locationCountryCode: Str(pRow.location_country_code), userAgent: Str(pRow.user_agent)
+	};
 }
-
-export async function OPTIONS() {
-	return Json({ ok: true });
+async function FetchRows(pUrl, pServiceKey) {
+	const Res = await fetch(pUrl, { headers: { apikey: pServiceKey, authorization: `Bearer ${pServiceKey}` } });
+	const Text = await Res.text(); if (!Res.ok) throw new Error(Text); try { return JSON.parse(Text); } catch { return []; }
 }
-
+export async function OPTIONS() { return Json({ ok: true }); }
 export async function GET({ request }) {
 	try {
 		if (!CheckOpsKey(request)) return Json({ ok: false, error: "Unauthorized" }, 401);
-
-		const SupabaseUrl = Env("SUPABASE_URL");
-		const ServiceKey = Env("SUPABASE_SERVICE_ROLE_KEY");
-
-		if (!SupabaseUrl || !ServiceKey) {
-			return Json({
-				ok: false,
-				error: "Missing Supabase env vars",
-				hasSupabaseUrl: !!SupabaseUrl,
-				hasServiceKey: !!ServiceKey
-			}, 500);
+		const SupabaseUrl = Env("SUPABASE_URL"), ServiceKey = Env("SUPABASE_SERVICE_ROLE_KEY");
+		if (!SupabaseUrl || !ServiceKey) return Json({ ok: false, error: "Missing Supabase env vars" }, 500);
+		const Url = new URL(request.url);
+		const AfterId = Math.max(0, Number.parseInt(Url.searchParams.get("after_id") || "0", 10) || 0);
+		const Limit = Math.min(1500, Math.max(1, Number.parseInt(Url.searchParams.get("limit") || "50", 10) || 50));
+		const Latest = ["1","true","yes"].includes(Str(Url.searchParams.get("latest")).toLowerCase());
+		const IncludePresence = !["0","false","no"].includes(Str(Url.searchParams.get("include_presence")).toLowerCase());
+		const EventQuery = new URL(`${SupabaseUrl}/rest/v1/ops_events`);
+		EventQuery.searchParams.set("select", "id,client_event_uid,event_type,visitor_id,session_id,page_path,page_title,created_at,user_agent,payload");
+		if (!Latest) EventQuery.searchParams.set("id", `gt.${AfterId}`);
+		EventQuery.searchParams.set("order", Latest ? "id.desc" : "id.asc");
+		EventQuery.searchParams.set("limit", String(Latest ? Limit : Limit + 1));
+		let Rows = await FetchRows(EventQuery, ServiceKey);
+		const HasMore = !Latest && Array.isArray(Rows) && Rows.length > Limit;
+		if (HasMore) Rows = Rows.slice(0, Limit);
+		if (Latest && Array.isArray(Rows)) Rows = Rows.reverse();
+		let Presence = [];
+		if (IncludePresence) {
+			const PresenceQuery = new URL(`${SupabaseUrl}/rest/v1/ops_presence`);
+			PresenceQuery.searchParams.set("select", "page_instance_id,visitor_id,session_id,page_path,page_title,focus_state,away_reason,last_seen_at,elapsed_ms,scroll_percent,location_country_code,location_city,location_band,location_label,location_border_color,user_agent");
+			PresenceQuery.searchParams.set("last_seen_at", `gte.${new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()}`);
+			PresenceQuery.searchParams.set("order", "last_seen_at.desc"); PresenceQuery.searchParams.set("limit", "1000");
+			Presence = (await FetchRows(PresenceQuery, ServiceKey)).map(MapPresence);
 		}
-
-		const ReqUrl = new URL(request.url);
-		const AfterId = Math.max(0, Number.parseInt(ReqUrl.searchParams.get("after_id") ?? ReqUrl.searchParams.get("afterId") ?? "0", 10) || 0);
-			const Limit = Math.min(1500, Math.max(1, Number.parseInt(ReqUrl.searchParams.get("limit") ?? "50", 10) || 50));
-			const Mode = Str(ReqUrl.searchParams.get("mode") ?? ReqUrl.searchParams.get("snapshot") ?? "").toLowerCase();
-			const Latest = Mode === "latest" || ["1", "true", "yes"].includes(Str(ReqUrl.searchParams.get("latest")).toLowerCase());
-
-			const Query = new URL(`${SupabaseUrl}/rest/v1/ops_events`);
-			Query.searchParams.set("select", "*");
-			if (!Latest) Query.searchParams.set("id", `gt.${AfterId}`);
-			Query.searchParams.set("order", Latest ? "id.desc" : "id.asc");
-			Query.searchParams.set("limit", String(Limit));
-
-		const Res = await fetch(Query, {
-			headers: {
-				"apikey": ServiceKey,
-				"authorization": `Bearer ${ServiceKey}`
-			}
-		});
-
-		const Text = await Res.text();
-		if (!Res.ok) return Json({ ok: false, error: Text }, 500);
-
-		let Rows = [];
-		try {
-			Rows = JSON.parse(Text);
-		} catch {
-			Rows = [];
-		}
-			const OrderedRows = Latest && Array.isArray(Rows) ? [...Rows].reverse() : Rows;
-			const Events = Array.isArray(OrderedRows) ? OrderedRows.map(MapEvent) : [];
-			return Json({ ok: true, mode: Latest ? "latest" : "after_id", latest: Latest, after_id: AfterId, limit: Limit, events: Events });
-	} catch (Ex) {
-		const Msg = Ex instanceof Error ? Ex.message : String(Ex);
-		return Json({ ok: false, error: "Function crashed", message: Msg }, 500);
-	}
+		const Events = Array.isArray(Rows) ? Rows.map(MapEvent) : [];
+		const Cursor = Events.reduce((pMax, pEvent) => Math.max(pMax, Number(pEvent.id || 0)), AfterId);
+		return Json({ ok: true, latest: Latest, afterId: AfterId, cursor: Cursor, hasMore: HasMore, events: Events, presence: Presence });
+	} catch (Ex) { return Json({ ok: false, error: "Function crashed", message: Ex instanceof Error ? Ex.message : String(Ex) }, 500); }
 }

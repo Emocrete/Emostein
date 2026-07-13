@@ -35,6 +35,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	const cSessionKey = "emo_ops_session_id";
 	const cOncePrefix = "emo_ops_once_";
 	const cApiUrl = "/api/ops/visit";
+	const cRetryQueueKey = "emo_ops_retry_queue_v2";
+	const cRetryQueueMax = 120;
 	const cViewThreshold = [0, 0.01, 0.05];
 	const cViewRootMargin = "0px";
 	const cScrollMarks = [10, 20, 30, 40, 50, 60, 70, 80, 90];
@@ -59,6 +61,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	let fScrollIdleTimer = 0;
 	let fPageExitSent = false;
 	let fPageOpenSent = false;
+	let fPageOpenPromise = null;
+	let fQueueFlushRunning = false;
 	let fPagePingTimer = 0;
 	let fReadTimer = 0;
 	let fLastReadTickAt = Date.now();
@@ -699,21 +703,63 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	|| Type === "page_ping";
 	}
 
-	function SendOpsPayload(pBody, pPreferBeacon) {
+	function ReadRetryQueue() {
+	try {
+	const Value = JSON.parse(localStorage.getItem(cRetryQueueKey) || "[]");
+	return Array.isArray(Value) ? Value.slice(-cRetryQueueMax) : [];
+	} catch { return []; }
+	}
+
+	function SaveRetryQueue(pQueue) {
+	try { localStorage.setItem(cRetryQueueKey, JSON.stringify((pQueue || []).slice(-cRetryQueueMax))); } catch {}
+	}
+
+	function EnqueueRetry(pBody) {
+	if (!pBody || pBody.eventType === "page_ping") return;
+	const Queue = ReadRetryQueue();
+	if (!Queue.some((Item) => Item && Item.clientEventUid === pBody.clientEventUid)) Queue.push(pBody);
+	SaveRetryQueue(Queue);
+	}
+
+	async function SendFetchPayload(pBody) {
+	try {
+	const Res = await fetch(cApiUrl, {
+	method: "POST",
+	headers: { "content-type": "application/json" },
+	body: JSON.stringify(pBody),
+	keepalive: true
+	});
+	let Data = {};
+	try { Data = await Res.json(); } catch {}
+	return { ok: Res.ok && Data.ok !== false, status: Res.status, ...Data };
+	} catch { return { ok: false, networkError: true }; }
+	}
+
+	async function FlushRetryQueue() {
+	if (fQueueFlushRunning || !navigator.onLine) return;
+	fQueueFlushRunning = true;
+	try {
+	const Queue = ReadRetryQueue();
+	const Remaining = [];
+	for (const Body of Queue) {
+	const Result = await SendFetchPayload(Body);
+	if (!Result.ok) Remaining.push(Body);
+	}
+	SaveRetryQueue(Remaining);
+	} finally { fQueueFlushRunning = false; }
+	}
+
+	async function SendOpsPayload(pBody, pPreferBeacon) {
 	const JsonBody = JSON.stringify(pBody);
 	if (pPreferBeacon && navigator.sendBeacon) {
 	try {
 	const BlobBody = new Blob([JsonBody], { type: "application/json" });
-	if (navigator.sendBeacon(cApiUrl, BlobBody)) return Promise.resolve({ ok: true, beacon: true });
+	if (navigator.sendBeacon(cApiUrl, BlobBody)) return { ok: true, beacon: true };
 	} catch {}
 	}
-
-	return fetch(cApiUrl, {
-	method: "POST",
-	headers: { "content-type": "application/json" },
-	body: JsonBody,
-	keepalive: true
-	}).catch(() => ({ ok: false }));
+	const Result = await SendFetchPayload(pBody);
+	if (!Result.ok) EnqueueRetry(pBody);
+	return Result;
 	}
 
 	function TrackOpsEvent(pEventType, pOptions = {}) {
@@ -785,16 +831,15 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	return SendOpsPayload(Body, PreferBeacon);
 	}
 
-	function TrackOpsEventOnce(pEventType, pOnceKey, pOptions = {}) {
+	async function TrackOpsEventOnce(pEventType, pOnceKey, pOptions = {}) {
 	const EventType = String(pEventType || "").trim();
-	if (EventType !== "page_open" && !fPageOpenSent) return Promise.resolve({ ok: true, skipped: true, reason: "page_not_visible_yet" });
+	if (EventType !== "page_open" && !fPageOpenSent) return { ok: true, skipped: true, reason: "page_not_visible_yet" };
 	const Store = GetOnceStore();
 	const Key = `${pEventType}:${pOnceKey}`;
-	if (Store.Values.has(Key)) return Promise.resolve({ ok: true, skipped: true });
-
-	Store.Values.add(Key);
-	SaveOnceStore(Store);
-	return TrackOpsEvent(pEventType, pOptions);
+	if (Store.Values.has(Key)) return { ok: true, skipped: true };
+	const Result = await TrackOpsEvent(pEventType, pOptions);
+	if (Result && Result.ok) { Store.Values.add(Key); SaveOnceStore(Store); }
+	return Result;
 	}
 
 	function TrackFromElement(pElem, pEventType, pEventOn, pExtra = {}) {
@@ -1109,52 +1154,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	return CurrMark;
 	}
 
-	function TrackSmoothScrollPoint(pReason) {
-	if (!fPageOpenSent || document.hidden) return;
-	const Now = Date.now();
-	if (Now - fLastScrollSampleAt < 320) return;
-	fLastScrollSampleAt = Now;
-	TrackOpsEvent("scroll_move", {
-	eventOn: "scroll",
-	widget: "Page",
-	label: "حركة سكرول",
-	value: GetScrollPercent(),
-	scrollX: Math.round(window.scrollX || window.pageXOffset || 0),
-	scrollY: Math.round(window.scrollY || window.pageYOffset || 0),
-	scrollPercent: GetScrollPercent(),
-	awayReason: pReason || "move",
-	notifyMobile: false,
-	sound: false
-	});
-	}
-
-	function ScheduleScrollStopPoint() {
-	if (fScrollIdleTimer) clearTimeout(fScrollIdleTimer);
-	fScrollIdleTimer = window.setTimeout(() => TrackSmoothScrollPoint("idle"), 650);
-	}
-
-	function TrackPointerPoint(pEvent, pReason) {
-	if (!fPageOpenSent || document.hidden) return;
-	const Now = Date.now();
-	if (Now - fLastPointerSampleAt < 280) return;
-	fLastPointerSampleAt = Now;
-	TrackOpsEvent("pointer_move", {
-	eventOn: "pointer",
-	widget: "Page",
-	label: "حركة مؤشر",
-	...GetPointerExtra(pEvent),
-	awayReason: pReason || "move",
-	notifyMobile: false,
-	sound: false
-	});
-	}
-
 	function InitContinuousReplayEvents() {
-	window.addEventListener("scroll", () => {
-	TrackSmoothScrollPoint("move");
-	ScheduleScrollStopPoint();
-	}, { passive: true });
-	document.addEventListener("pointermove", (pEvent) => TrackPointerPoint(pEvent, "move"), { passive: true });
+	// الحركة التفصيلية يسجلها EmoReplayRecorder فقط لمنع ازدواج التسجيل.
 	}
 
 	function InitScrollMilestones() {
@@ -1330,18 +1331,21 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	function TrackPageOpen() {
-	if (fPageOpenSent) return;
-	if (IsSyntheticTraffic()) return;
-	if (document.hidden || document.visibilityState === "prerender") return;
-	fPageOpenSent = true;
-	TrackOpsEventOnce("page_open", "page_open", {
+	if (fPageOpenSent || fPageOpenPromise) return fPageOpenPromise;
+	if (IsSyntheticTraffic()) return Promise.resolve({ ok: true, skipped: true });
+	if (document.hidden || document.visibilityState === "prerender") return Promise.resolve({ ok: true, skipped: true });
+	fPageOpenPromise = TrackOpsEventOnce("page_open", "page_open", {
 	eventOn: "load",
 	widget: "Page",
 	label: CleanText(document.title),
 	important: true,
 	notifyMobile: true,
 	sound: true
-	});
+	}).then((Result) => {
+	if (Result && Result.ok) fPageOpenSent = true;
+	return Result;
+	}).finally(() => { fPageOpenPromise = null; });
+	return fPageOpenPromise;
 	}
 
 	function HasExplicitVideoTracking(pElem) {
@@ -1431,6 +1435,9 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	GetSessionId();
 	GetPageInstanceId();
 	InitClarityIdentifiers();
+
+	window.addEventListener("online", FlushRetryQueue);
+	setTimeout(FlushRetryQueue, 1500);
 
 	window.TrackOpsEvent = TrackOpsEvent;
 	window.TrackOpsEventOnce = TrackOpsEventOnce;

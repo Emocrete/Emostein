@@ -30,8 +30,11 @@ const cMaxEventsPerChunk = Number(import.meta.env.PUBLIC_EMO_REPLAY_MAX_EVENTS_P
 	const cVisitorKey = "emo_ops_visitor_id";
 	const cVisitSessionKey = "emo_ops_session_id";
 	const cReplayPageKey = "emo_replay_page_id";
-	const cApiSession = "/api/replay/session";
-	const cApiChunk = "/api/replay/chunk";
+	const cPendingChunksKey = "emo_replay_pending_chunks_v1";
+	const cPendingChunksMax = 40;
+	const cOpsKey = "Emocrete20015161";
+	const cApiSession = `/api/replay/session?key=${encodeURIComponent(cOpsKey)}`;
+	const cApiChunk = `/api/replay/chunk?key=${encodeURIComponent(cOpsKey)}`;
 	const cStartedAt = new Date().toISOString();
 	const cStartTick = performance.now();
 	const cOpsIds = window.__EmoOpsIds || {};
@@ -59,6 +62,8 @@ const cMaxEventsPerChunk = Number(import.meta.env.PUBLIC_EMO_REPLAY_MAX_EVENTS_P
 	let fSnapshotSending = false;
 	let fSnapshotAttempts = 0;
 	let fUnloading = false;
+	let fFlushRunning = false;
+	let fPendingFlushRunning = false;
 	let fLastKnownScrollX = window.scrollX || 0;
 	let fLastKnownScrollY = window.scrollY || 0;
 
@@ -84,6 +89,57 @@ const cMaxEventsPerChunk = Number(import.meta.env.PUBLIC_EMO_REPLAY_MAX_EVENTS_P
 
 	function Str(pValue) {
 		return String(pValue ?? "").trim();
+	}
+
+	function PendingChunkId(pBody) {
+		return `${Str(pBody?.sessionId)}:${Number(pBody?.chunkIndex || 0)}`;
+	}
+
+	function ReadPendingChunks() {
+		try {
+			const Value = JSON.parse(localStorage.getItem(cPendingChunksKey) || "[]");
+			return Array.isArray(Value) ? Value.slice(-cPendingChunksMax) : [];
+		} catch { return []; }
+	}
+
+	function SavePendingChunks(pItems) {
+		try {
+			localStorage.setItem(cPendingChunksKey, JSON.stringify((pItems || []).slice(-cPendingChunksMax)));
+			return true;
+		} catch { return false; }
+	}
+
+	function QueuePendingChunk(pBody) {
+		const Id = PendingChunkId(pBody);
+		if (!Id || Id.startsWith(":")) return false;
+		const Items = ReadPendingChunks().filter((Item) => Item?.id !== Id);
+		Items.push({ id: Id, body: pBody });
+		return SavePendingChunks(Items);
+	}
+
+	function RemovePendingChunk(pBody) {
+		const Id = PendingChunkId(pBody);
+		if (!Id) return;
+		const Items = ReadPendingChunks();
+		const Remaining = Items.filter((Item) => Item?.id !== Id);
+		if (Remaining.length !== Items.length) SavePendingChunks(Remaining);
+	}
+
+	async function FlushPendingChunks() {
+		if (fPendingFlushRunning || !navigator.onLine) return;
+		fPendingFlushRunning = true;
+		try {
+			const Items = ReadPendingChunks();
+			const Remaining = [];
+			for (const Item of Items) {
+				if (!Item?.body) continue;
+				const Sent = await SendJson(cApiChunk, Item.body, false);
+				if (!Sent) Remaining.push(Item);
+			}
+			SavePendingChunks(Remaining);
+		} finally {
+			fPendingFlushRunning = false;
+		}
 	}
 
 	function Shorten(pText, pMax = 180) {
@@ -172,30 +228,30 @@ const cMaxEventsPerChunk = Number(import.meta.env.PUBLIC_EMO_REPLAY_MAX_EVENTS_P
 	async function SendJson(pUrl, pBody, pBeacon = false) {
 		const Text = JSON.stringify(pBody);
 		if (pBeacon && navigator.sendBeacon) {
-			const BlobBody = new Blob([Text], { type: "application/json" });
-			if (navigator.sendBeacon(pUrl, BlobBody)) return true;
+			try {
+				const BlobBody = new Blob([Text], { type: "application/json" });
+				if (navigator.sendBeacon(pUrl, BlobBody)) return true;
+			} catch {}
 		}
-
 		try {
 			const Res = await fetch(pUrl, {
 				method: "POST",
-				headers: { "content-type": "application/json" },
+				headers: { "content-type": "application/json", "x-ops-key": cOpsKey },
 				body: Text,
 				keepalive: pBeacon
 			});
-			return Res.ok;
-		} catch {
-			return false;
-		}
+			if (!Res.ok) return false;
+			const Data = await Res.json().catch(() => ({}));
+			return Data.ok !== false;
+		} catch { return false; }
 	}
 
-	function SendStart() {
-		if (fStartSent) return;
-		fStartSent = true;
-		SendJson(cApiSession, {
-			...BasePayload(),
-			event: "start"
-		});
+	async function SendStart() {
+		if (fStartSent) return true;
+		const Sent = await SendJson(cApiSession, { ...BasePayload(), event: "start" });
+		fStartSent = Sent;
+		if (!Sent && !fUnloading) window.setTimeout(SendStart, 2500);
+		return Sent;
 	}
 
 	function CollectCssSnapshot() {
@@ -248,13 +304,13 @@ const cMaxEventsPerChunk = Number(import.meta.env.PUBLIC_EMO_REPLAY_MAX_EVENTS_P
 
 			const Style = document.createElement("style");
 			Style.textContent = `
-				html[data-emo-replay-snapshot="true"] { scroll-behavior: auto !important; }
+				html[data-emo-replay-snapshot="true"] { scroll-behavior: auto; }
 				html[data-emo-replay-snapshot="true"] *,
 				html[data-emo-replay-snapshot="true"] *::before,
 				html[data-emo-replay-snapshot="true"] *::after {
-					animation-play-state: paused !important;
-					transition: none !important;
-					caret-color: transparent !important;
+					animation-play-state: paused;
+					transition: none;
+					caret-color: transparent;
 				}
 				html[data-emo-replay-snapshot="true"] a,
 				html[data-emo-replay-snapshot="true"] button,
@@ -263,7 +319,7 @@ const cMaxEventsPerChunk = Number(import.meta.env.PUBLIC_EMO_REPLAY_MAX_EVENTS_P
 				html[data-emo-replay-snapshot="true"] select,
 				html[data-emo-replay-snapshot="true"] summary,
 				html[data-emo-replay-snapshot="true"] label {
-					pointer-events: none !important;
+					pointer-events: none;
 				}
 			`;
 			Head.appendChild(Style);
@@ -387,28 +443,51 @@ const cMaxEventsPerChunk = Number(import.meta.env.PUBLIC_EMO_REPLAY_MAX_EVENTS_P
 		}
 	}
 
-	function FlushEvents(pReason = "timer", pBeacon = false) {
-		if (!fEvents.length) return;
-		const Events = fEvents.splice(0, fEvents.length);
+	async function FlushEvents(pReason = "timer", pBeacon = false) {
+		if (fFlushRunning || !fEvents.length) return false;
+		fFlushRunning = true;
+		const Count = fEvents.length;
+		const Events = fEvents.slice(0, Count);
 		const FromMs = Events[0]?.t ?? 0;
 		const ToMs = Events[Events.length - 1]?.t ?? FromMs;
-
-		SendJson(cApiChunk, {
+		const ChunkIndex = fChunkIndex;
+		const Payload = {
 			sessionId: cReplayId,
 			visitorId: cVisitorId,
 			visitSessionId: cVisitSessionId,
 			pageId: cPageId,
-			chunkIndex: fChunkIndex++,
+			chunkIndex: ChunkIndex,
 			fromMs: FromMs,
 			toMs: ToMs,
 			reason: pReason,
 			events: Events
-		}, pBeacon);
+		};
+
+		let Sent = false;
+		let Stored = false;
+		if (pBeacon) Stored = QueuePendingChunk(Payload);
+		Sent = await SendJson(cApiChunk, Payload, pBeacon);
+
+		if (Sent && !pBeacon) RemovePendingChunk(Payload);
+		if (!Sent && !pBeacon) Stored = QueuePendingChunk(Payload);
+
+		if (Sent || Stored) {
+			fEvents.splice(0, Count);
+			fChunkIndex = ChunkIndex + 1;
+			if (Stored && !fUnloading) window.setTimeout(FlushPendingChunks, 2500);
+		} else if (!fUnloading) {
+			window.setTimeout(() => FlushEvents("retry", false), 2500);
+		}
+		fFlushRunning = false;
+		return Sent || Stored;
 	}
 
 	function StartFlushTimer() {
 		window.clearInterval(fFlushTimer);
-		fFlushTimer = window.setInterval(() => FlushEvents("timer", false), cFlushEveryMs);
+		fFlushTimer = window.setInterval(() => {
+			FlushPendingChunks();
+			FlushEvents("timer", false);
+		}, cFlushEveryMs);
 	}
 
 	function RecordScroll(pForced = false) {
@@ -538,6 +617,8 @@ const cMaxEventsPerChunk = Number(import.meta.env.PUBLIC_EMO_REPLAY_MAX_EVENTS_P
 	let visibilitychange = null;
 
 	function Start() {
+		window.addEventListener("online", FlushPendingChunks);
+		window.setTimeout(FlushPendingChunks, 1000);
 		SendStart();
 		WireEvents();
 		StartFlushTimer();
