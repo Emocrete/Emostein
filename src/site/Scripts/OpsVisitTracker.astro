@@ -789,6 +789,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	const IsHiddenNow = document.hidden || document.visibilityState !== "visible";
 	const ClientEventSeq = ++fSeq;
 	const ClientEventUid = `${GetPageInstanceId()}:${EventType}:${ClientEventSeq}`;
+	const IsContactEvent = EventType === "call_click" || EventType === "whatsapp_click";
 	const Body = {
 	eventType: EventType,
 	eventOn: String(pOptions.eventOn || "").trim(),
@@ -820,9 +821,9 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	elapsedMs: Math.round(GetPageElapsedMs()),
 	elapsedSec: Math.round(GetPageElapsedMs() / 1000),
 	href: String(pOptions.href || "").trim(),
-	important: BoolValue(pOptions.important),
-	notifyMobile: BoolValue(pOptions.notifyMobile),
-	sound: BoolValue(pOptions.sound),
+	important: IsContactEvent || BoolValue(pOptions.important),
+	notifyMobile: IsContactEvent || BoolValue(pOptions.notifyMobile),
+	sound: IsContactEvent || BoolValue(pOptions.sound),
 	durationMs: pOptions.durationMs ?? "",
 	awayReason: String(pOptions.awayReason || "").trim(),
 	focusState: String(pOptions.focusState || (IsHiddenNow ? "hidden" : "visible")).trim(),
@@ -840,6 +841,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	trafficKind: "human",
 	botSignal: "",
 	userAgentClient: navigator.userAgent || "",
+	clientFingerprint: [location.pathname, navigator.userAgent || "", window.screen.width, window.screen.height, window.innerWidth, window.innerHeight, navigator.language || "", Intl.DateTimeFormat().resolvedOptions().timeZone || ""].join("|"),
 	clientEventSeq: ClientEventSeq,
 	clientEventUid: ClientEventUid,
 	createdAtClient: new Date().toISOString()
@@ -1492,7 +1494,6 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 
 
 ) }
-
 
 
 

@@ -197,6 +197,26 @@ async function HasStoredPageOpen(pSupabaseUrl, pServiceKey, pPageInstanceId) {
 	} catch { return true; }
 }
 
+async function IsRepeatedSyntheticVisit(pSupabaseUrl, pServiceKey, pData) {
+	if (Str(pData.eventType).toLowerCase() !== "page_open") return false;
+	const Fingerprint = Str(pData.clientFingerprint);
+	if (!Fingerprint) return false;
+	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
+	Query.searchParams.set("select", "visitor_id,created_at");
+	Query.searchParams.set("event_type", "eq.page_open");
+	Query.searchParams.set("page_path", `eq.${pData.pagePath}`);
+	Query.searchParams.set("payload->>clientFingerprint", `eq.${Fingerprint}`);
+	Query.searchParams.set("created_at", `gte.${new Date(Date.now() - 15 * 60 * 1000).toISOString()}`);
+	Query.searchParams.set("order", "created_at.desc");
+	Query.searchParams.set("limit", "3");
+	const Res = await SupabaseRequest(Query, pServiceKey);
+	if (!Res.ok) return false;
+	try {
+		const Rows = JSON.parse(Res.text);
+		return Array.isArray(Rows) && Rows.some((Row) => Str(Row?.visitor_id) && Str(Row.visitor_id) !== pData.visitorId);
+	} catch { return false; }
+}
+
 async function RecoverPageOpenFromPing(pSupabaseUrl, pServiceKey, pData) {
 	if (Str(pData.eventType).toLowerCase() !== "page_ping") return null;
 	if (await HasStoredPageOpen(pSupabaseUrl, pServiceKey, pData.pageInstanceId)) return null;
@@ -305,6 +325,10 @@ export async function POST({ request }) {
 			trafficKind: "human",
 			botSignal: ""
 		};
+
+		if (await IsRepeatedSyntheticVisit(SupabaseUrl, ServiceKey, Data)) {
+			return Json({ ok: true, skipped: true, reason: "repeated_ephemeral_browser" });
+		}
 
 		const PresenceRes = await UpsertPresence(SupabaseUrl, ServiceKey, Data);
 		if (!PresenceRes.ok) {
