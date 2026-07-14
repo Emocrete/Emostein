@@ -26,7 +26,7 @@ export async function POST({ request }) {
 		const Row = { session_id: SessionId, visitor_id: Str(Body.visitorId || Body.visitor_id), visit_session_id: Str(Body.visitSessionId || Body.visit_session_id), page_id: Str(Body.pageId || Body.page_id),
 			chunk_index: Math.max(0, Math.round(Num(Body.chunkIndex ?? Body.chunk_index))), from_ms: Math.max(0,Math.round(Num(Body.fromMs ?? Body.from_ms))), to_ms: Math.max(0,Math.round(Num(Body.toMs ?? Body.to_ms))),
 			reason: Str(Body.reason).slice(0,100), events_count: Events.length, events_json: Events };
-		const Res = await SupabaseFetch("/rest/v1/replay_chunks?on_conflict=session_id,chunk_index", { method: "POST", headers: { "content-type": "application/json", prefer: "resolution=merge-duplicates,return=representation" }, body: JSON.stringify(Row) });
+		const Res = await SupabaseFetch("/rest/v1/ops_events", { method: "POST", headers: { "content-type": "application/json", prefer: "return=representation" }, body: JSON.stringify({ event_type: "replay_chunk", visitor_id: Row.visitor_id, session_id: Row.visit_session_id, page_path: "", page_title: "", payload: { ...Row, replay_record_type: "chunk" } }) });
 		if (!Res.ok) return Json({ ok: false, error: Res.text }, Res.status || 500);
 		let Data = null; try { Data = JSON.parse(Res.text); } catch { Data = Res.text; }
 		return Json({ ok: true, data: Data });
@@ -37,9 +37,9 @@ export async function GET({ request }) {
 		if (!CheckOpsKey(request)) return Json({ ok: false, error: "Unauthorized" }, 401);
 		const Url = new URL(request.url), SessionId = Str(Url.searchParams.get("session_id") || Url.searchParams.get("sessionId"));
 		if (!ValidReplayId(SessionId)) return Json({ ok: false, error: "Invalid session_id" }, 400);
-		const Query = new URL("http://x/rest/v1/replay_chunks"); Query.searchParams.set("select", "session_id,chunk_index,from_ms,to_ms,events_count,events_json"); Query.searchParams.set("session_id", `eq.${SessionId}`); Query.searchParams.set("order", "chunk_index.asc"); Query.searchParams.set("limit", "1000");
+		const Query = new URL("http://x/rest/v1/ops_events"); Query.searchParams.set("select", "payload"); Query.searchParams.set("event_type", "eq.replay_chunk"); Query.searchParams.set("payload->>session_id", `eq.${SessionId}`); Query.searchParams.set("order", "created_at.asc"); Query.searchParams.set("limit", "2000");
 		const Res = await SupabaseFetch(`${Query.pathname}${Query.search}`); if (!Res.ok) return Json({ ok: false, error: Res.text }, Res.status || 500);
-		let Rows = []; try { Rows = JSON.parse(Res.text); } catch {}
+		let Rows = []; try { Rows = JSON.parse(Res.text).map((Item) => Item.payload || {}); } catch {}
 		return Json({ ok: true, chunks: Array.isArray(Rows) ? Rows : [] });
 	} catch (Ex) { return Json({ ok: false, error: "Function crashed", message: Ex instanceof Error ? Ex.message : String(Ex) }, 500); }
 }

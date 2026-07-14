@@ -141,6 +141,7 @@ export async function GET({ request }) {
 		// client_event_uid is intentionally read from payload. This keeps the endpoint
 		// compatible with both the original table and the newer migrated table.
 		EventQuery.searchParams.set("select", "id,event_type,visitor_id,session_id,page_path,page_title,created_at,user_agent,payload");
+		EventQuery.searchParams.set("event_type", "not.like.replay_%");
 		if (!Latest) EventQuery.searchParams.set("id", `gt.${AfterId}`);
 		EventQuery.searchParams.set("order", Latest ? "id.desc" : "id.asc");
 		EventQuery.searchParams.set("limit", String(Latest ? Limit : Limit + 1));

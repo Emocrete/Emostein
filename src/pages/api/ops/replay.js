@@ -93,18 +93,34 @@ export async function GET({ request }) {
 		const PageId = Str(Url.searchParams.get("page_instance_id") || Url.searchParams.get("pageInstanceId") || Url.searchParams.get("page_id"));
 		const VisitorId = Str(Url.searchParams.get("visitor_id") || Url.searchParams.get("visitorId"));
 		if (!VisitSessionId) return Html(ErrorPage("معرف الجلسة غير موجود"), 400);
-		const SessionQuery = new URL(`${SupabaseUrl}/rest/v1/replay_sessions`);
-		SessionQuery.searchParams.set("select", "*"); SessionQuery.searchParams.set("visit_session_id", `eq.${VisitSessionId}`);
-		if (PageId) SessionQuery.searchParams.set("page_id", `eq.${PageId}`);
-		SessionQuery.searchParams.set("order", "started_at.asc"); SessionQuery.searchParams.set("limit", "200");
-		const Sessions = await FetchRows(SessionQuery, ServiceKey);
+		const SessionQuery = new URL(`${SupabaseUrl}/rest/v1/ops_events`);
+		SessionQuery.searchParams.set("select", "payload"); SessionQuery.searchParams.set("event_type", "eq.replay_session");
+		SessionQuery.searchParams.set("session_id", `eq.${VisitSessionId}`);
+		if (PageId) SessionQuery.searchParams.set("payload->>page_id", `eq.${PageId}`);
+		SessionQuery.searchParams.set("order", "created_at.asc"); SessionQuery.searchParams.set("limit", "400");
+		const SessionRows = await FetchRows(SessionQuery, ServiceKey);
+		const SessionMap = new Map();
+		for (const Row of (Array.isArray(SessionRows) ? SessionRows : [])) {
+			const Item = Row?.payload || {};
+			const Id = Str(Item.id);
+			if (!Id) continue;
+			const Previous = SessionMap.get(Id) || {};
+			SessionMap.set(Id, { ...Previous, ...Item, snapshot_html: Item.snapshot_html || Previous.snapshot_html || "" });
+		}
+		const Sessions = Array.from(SessionMap.values()).sort((A, B) => Str(A.started_at).localeCompare(Str(B.started_at)));
 		if (!Array.isArray(Sessions) || !Sessions.length) return Html(ErrorPage("لا توجد تسجيلات محفوظة لهذه الجلسة بعد"), 404);
 		const SessionIds = Sessions.map((Item) => Item.id).filter(Boolean);
-		const ChunkQuery = new URL(`${SupabaseUrl}/rest/v1/replay_chunks`);
-		ChunkQuery.searchParams.set("select", "session_id,chunk_index,from_ms,to_ms,events_count,events_json");
-		ChunkQuery.searchParams.set("session_id", `in.(${SessionIds.map((Id)=>`\"${Id.replace(/\"/g,"")}\"`).join(",")})`);
-		ChunkQuery.searchParams.set("order", "session_id.asc,chunk_index.asc"); ChunkQuery.searchParams.set("limit", "5000");
-		const Chunks = await FetchRows(ChunkQuery, ServiceKey);
+		const ChunkQuery = new URL(`${SupabaseUrl}/rest/v1/ops_events`);
+		ChunkQuery.searchParams.set("select", "payload"); ChunkQuery.searchParams.set("event_type", "eq.replay_chunk");
+		ChunkQuery.searchParams.set("payload->>session_id", `in.(${SessionIds.map((Id)=>`\"${Id.replace(/\"/g,"")}\"`).join(",")})`);
+		ChunkQuery.searchParams.set("order", "created_at.asc"); ChunkQuery.searchParams.set("limit", "5000");
+		const ChunkRows = await FetchRows(ChunkQuery, ServiceKey);
+		const ChunkMap = new Map();
+		for (const Row of (Array.isArray(ChunkRows) ? ChunkRows : [])) {
+			const Item = Row?.payload || {};
+			ChunkMap.set(`${Item.session_id}:${Item.chunk_index}`, Item);
+		}
+		const Chunks = Array.from(ChunkMap.values());
 		return Html(BuildViewer(Sessions, Array.isArray(Chunks) ? Chunks : [], { title: Sessions[0]?.page_title || "جلسة", visitSessionId: VisitSessionId, visitorId: VisitorId }));
 	} catch (Ex) { return Html(ErrorPage(Ex instanceof Error ? Ex.message : String(Ex)), 500); }
 }

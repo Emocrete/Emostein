@@ -67,6 +67,20 @@ async function DeleteAllRows(pSupabaseUrl, pServiceKey, pTable, pCandidates, pRe
 	throw new Error(`${pTable}: ${Detail || "تعذر حذف الصفوف"}`);
 }
 
+async function InsertResetMarker(pSupabaseUrl, pServiceKey) {
+	const At = new Date().toISOString();
+	const Res = await fetch(`${pSupabaseUrl}/rest/v1/ops_events`, {
+		method: "POST",
+		headers: { apikey: pServiceKey, authorization: `Bearer ${pServiceKey}`, "content-type": "application/json", prefer: "return=minimal" },
+		body: JSON.stringify({
+			event_type: "ops_clear_all", visitor_id: "system_reset", session_id: `reset_${Date.now()}`,
+			page_path: "", page_title: "", payload: { controlCommand: "ops_clear_all", createdAtClient: At, resetAt: At }
+		})
+	});
+	if (!Res.ok) throw new Error(`تعذر تثبيت علامة إعادة الضبط: ${await Res.text()}`);
+	return At;
+}
+
 export async function OPTIONS() {
 	return Json({ ok: true });
 }
@@ -98,12 +112,14 @@ export async function POST({ request }) {
 			{ column: "created_at", filter: "not.is.null" },
 			{ column: "visitor_id", filter: "not.is.null" }
 		], true));
+		const ResetAt = await InsertResetMarker(SupabaseUrl, ServiceKey);
 
 		return Json({
 			ok: true,
 			deleted: true,
 			warnings: Results.filter((Item) => Item.warning).map((Item) => `${Item.table}: ${Item.warning}`),
-			results: Results
+			results: Results,
+			resetAt: ResetAt
 		});
 	} catch (Ex) {
 		return Json({

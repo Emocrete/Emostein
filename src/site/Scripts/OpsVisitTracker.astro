@@ -768,13 +768,6 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	async function SendOpsPayload(pBody, pPreferBeacon) {
-	const JsonBody = JSON.stringify(pBody);
-	if (pPreferBeacon && navigator.sendBeacon) {
-	try {
-	const BlobBody = new Blob([JsonBody], { type: "application/json" });
-	if (navigator.sendBeacon(cApiUrl, BlobBody)) return { ok: true, beacon: true };
-	} catch {}
-	}
 	const Result = await SendFetchPayload(pBody);
 	if (!Result.ok) EnqueueRetry(pBody);
 	return Result;
@@ -844,7 +837,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	clientFingerprint: [location.pathname, navigator.userAgent || "", window.screen.width, window.screen.height, window.innerWidth, window.innerHeight, navigator.language || "", Intl.DateTimeFormat().resolvedOptions().timeZone || ""].join("|"),
 	clientEventSeq: ClientEventSeq,
 	clientEventUid: ClientEventUid,
-	createdAtClient: new Date().toISOString()
+	createdAtClient: new Date().toISOString(),
+	pageStartedAt: new Date(cPageStartedAt).toISOString()
 	};
 
 	const PreferBeacon = BoolValue(pOptions.useBeacon) || (IsHiddenNow && IsLifecycleEvent(EventType)) || EventType === "page_exit";
@@ -1494,7 +1488,6 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 
 
 ) }
-
 
 
 

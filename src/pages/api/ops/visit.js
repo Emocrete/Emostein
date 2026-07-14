@@ -217,6 +217,18 @@ async function IsRepeatedSyntheticVisit(pSupabaseUrl, pServiceKey, pData) {
 	} catch { return false; }
 }
 
+async function LatestResetAt(pSupabaseUrl, pServiceKey) {
+	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
+	Query.searchParams.set("select", "created_at");
+	Query.searchParams.set("event_type", "eq.ops_clear_all");
+	Query.searchParams.set("order", "created_at.desc");
+	Query.searchParams.set("limit", "1");
+	const Res = await SupabaseRequest(Query, pServiceKey);
+	if (!Res.ok) return 0;
+	try { return Date.parse(JSON.parse(Res.text)?.[0]?.created_at || "") || 0; }
+	catch { return 0; }
+}
+
 async function RecoverPageOpenFromPing(pSupabaseUrl, pServiceKey, pData) {
 	if (Str(pData.eventType).toLowerCase() !== "page_ping") return null;
 	if (await HasStoredPageOpen(pSupabaseUrl, pServiceKey, pData.pageInstanceId)) return null;
@@ -325,6 +337,11 @@ export async function POST({ request }) {
 			trafficKind: "human",
 			botSignal: ""
 		};
+		const ResetAt = await LatestResetAt(SupabaseUrl, ServiceKey);
+		const PageStartedAt = Date.parse(Str(Body.pageStartedAt ?? Body.page_started_at)) || 0;
+		if (ResetAt > 0 && PageStartedAt > 0 && PageStartedAt < ResetAt) {
+			return Json({ ok: true, skipped: true, reason: "page_started_before_full_reset" });
+		}
 
 		if (await IsRepeatedSyntheticVisit(SupabaseUrl, ServiceKey, Data)) {
 			return Json({ ok: true, skipped: true, reason: "repeated_ephemeral_browser" });
