@@ -279,14 +279,24 @@ async function DeleteVisitorsAndBlockProfile(pSupabaseUrl, pServiceKey, pVisitor
 			await SupabaseRequest(Url, pServiceKey, { method: "DELETE", headers: { prefer: "return=minimal" } });
 		}
 	}
+	const ControlRows = Visitors.map((VisitorId) => ({
+		event_type: "ops_delete_visitor", visitor_id: "system_delete", session_id: `synthetic_delete_${Date.now()}`,
+		page_path: "", page_title: "",
+		payload: { targetVisitorId: VisitorId, deletedAt: new Date().toISOString(), controlCommand: "ops_delete_visitor", reason: "synthetic_profile" }
+	}));
+	ControlRows.push({
+		event_type: "ops_synthetic_profile", visitor_id: "system_synthetic", session_id: `synthetic_${Date.now()}`,
+		page_path: "", page_title: "", user_agent: pData.userAgentClient,
+		payload: {
+			clientProfile: pData.clientProfile, blockedVisitorIds: Visitors, blockedAt: new Date().toISOString(),
+			trafficKind: "synthetic", syntheticReason: "repeated_ephemeral_profile",
+			detectedPagePath: pData.pagePath, detectedPageTitle: pData.pageTitle
+		}
+	});
 	await SupabaseRequest(`${pSupabaseUrl}/rest/v1/ops_events`, pServiceKey, {
 		method: "POST",
 		headers: { "content-type": "application/json", prefer: "return=minimal" },
-		body: JSON.stringify({
-			event_type: "ops_synthetic_profile", visitor_id: "system_synthetic", session_id: `synthetic_${Date.now()}`,
-			page_path: pData.pagePath, page_title: pData.pageTitle, user_agent: pData.userAgentClient,
-			payload: { clientProfile: pData.clientProfile, blockedVisitorIds: Visitors, blockedAt: new Date().toISOString(), trafficKind: "synthetic", syntheticReason: "repeated_ephemeral_profile" }
-		})
+		body: JSON.stringify(ControlRows)
 	});
 }
 

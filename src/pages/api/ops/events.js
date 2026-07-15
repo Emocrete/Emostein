@@ -106,6 +106,16 @@ function MapPresence(pRow) {
 	};
 }
 
+function IsQuarantinedWorldPageOpen(pRow, pNowMs) {
+	const P = Payload(pRow);
+	const Type = Str(pRow?.event_type || Pick(P, "eventType", "event_type")).toLowerCase();
+	if (!["page_open", "page_view", "page_load", "open", "view", "load"].includes(Type)) return false;
+	const Band = Str(Pick(P, "locationBand", "location_band")).toLowerCase();
+	if (Band !== "world") return false;
+	const CreatedMs = Date.parse(Str(pRow?.created_at)) || 0;
+	return CreatedMs > 0 && pNowMs - CreatedMs < 120000;
+}
+
 async function FetchRows(pUrl, pServiceKey) {
 	const Res = await fetch(pUrl, {
 		headers: {
@@ -147,6 +157,13 @@ export async function GET({ request }) {
 		EventQuery.searchParams.set("limit", String(Latest ? Limit : Limit + 1));
 
 		let Rows = await FetchRows(EventQuery, ServiceKey);
+		// Hold new worldwide page opens briefly. This gives the repeated-profile
+		// detector time to delete rotating-proxy visits before EmoLive can cache a
+		// card or publish a notification. Never advance the cursor past a held row.
+		if (Array.isArray(Rows)) {
+			const QuarantineIndex = Rows.findIndex((Row) => IsQuarantinedWorldPageOpen(Row, Date.now()));
+			if (QuarantineIndex >= 0) Rows = Rows.slice(0, QuarantineIndex);
+		}
 		const HasMore = !Latest && Array.isArray(Rows) && Rows.length > Limit;
 		if (HasMore) Rows = Rows.slice(0, Limit);
 		if (Latest && Array.isArray(Rows)) Rows = Rows.reverse();
