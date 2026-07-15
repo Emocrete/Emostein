@@ -98,7 +98,14 @@ export async function GET({ request }) {
 		SessionQuery.searchParams.set("session_id", `eq.${VisitSessionId}`);
 		if (PageId) SessionQuery.searchParams.set("payload->>page_id", `eq.${PageId}`);
 		SessionQuery.searchParams.set("order", "created_at.asc"); SessionQuery.searchParams.set("limit", "400");
-		const SessionRows = await FetchRows(SessionQuery, ServiceKey);
+		let SessionRows = await FetchRows(SessionQuery, ServiceKey);
+		// Older recorder builds generated rp_* independently from the p_* page id
+		// carried by the visitor card. Retry by visit session so those recordings
+		// remain playable after deploying the shared-id fix.
+		if ((!Array.isArray(SessionRows) || !SessionRows.length) && PageId) {
+			SessionQuery.searchParams.delete("payload->>page_id");
+			SessionRows = await FetchRows(SessionQuery, ServiceKey);
+		}
 		const SessionMap = new Map();
 		for (const Row of (Array.isArray(SessionRows) ? SessionRows : [])) {
 			const Item = Row?.payload || {};

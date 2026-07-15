@@ -94,14 +94,6 @@ export async function POST({ request }) {
 		if (!SupabaseUrl || !ServiceKey) return Json({ ok: false, error: "Missing Supabase env vars" }, 500);
 
 		const Results = [];
-		Results.push(await DeleteAllRows(SupabaseUrl, ServiceKey, "replay_chunks", [
-			{ column: "session_id", filter: "not.is.null" },
-			{ column: "created_at", filter: "not.is.null" }
-		], false));
-		Results.push(await DeleteAllRows(SupabaseUrl, ServiceKey, "replay_sessions", [
-			{ column: "id", filter: "not.is.null" },
-			{ column: "created_at", filter: "not.is.null" }
-		], false));
 		Results.push(await DeleteAllRows(SupabaseUrl, ServiceKey, "ops_presence", [
 			{ column: "page_instance_id", filter: "not.is.null" },
 			{ column: "visitor_id", filter: "not.is.null" },

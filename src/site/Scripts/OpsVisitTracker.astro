@@ -117,6 +117,14 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	return cPageInstanceId;
 	}
 
+	// Share the exact visit identifiers with EmoReplayRecorder. Without this,
+	// the recorder creates a separate rp_* page id while EmoLive opens p_*.
+	window.__EmoOpsIds = {
+	visitorId: GetVisitorId(),
+	sessionId: GetSessionId(),
+	pageInstanceId: GetPageInstanceId()
+	};
+
 	function GetPageElapsedMs() {
 	return Math.max(0, Date.now() - cPageStartedAt);
 	}
@@ -1506,7 +1514,6 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 
 
 ) }
-
 
 
 

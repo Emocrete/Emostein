@@ -63,8 +63,6 @@ async function DeleteVisitor(pRequest) {
 	if (!VisitorId) return Json({ ok: false, error: "Missing visitorId" }, 400);
 
 	const Results = [];
-	Results.push(await DeleteRows(SupabaseUrl, ServiceKey, "replay_chunks", "visitor_id", VisitorId, false));
-	Results.push(await DeleteRows(SupabaseUrl, ServiceKey, "replay_sessions", "visitor_id", VisitorId, false));
 	Results.push(await DeleteRows(SupabaseUrl, ServiceKey, "ops_presence", "visitor_id", VisitorId, true));
 	Results.push(await DeleteRows(SupabaseUrl, ServiceKey, "ops_events", "visitor_id", VisitorId, true));
 
