@@ -108,7 +108,14 @@ export async function GET({ request }) {
 			SessionMap.set(Id, { ...Previous, ...Item, snapshot_html: Item.snapshot_html || Previous.snapshot_html || "" });
 		}
 		const Sessions = Array.from(SessionMap.values()).sort((A, B) => Str(A.started_at).localeCompare(Str(B.started_at)));
-		if (!Array.isArray(Sessions) || !Sessions.length) return Html(ErrorPage("لا توجد تسجيلات محفوظة لهذه الجلسة بعد"), 404);
+		if (!Array.isArray(Sessions) || !Sessions.length) {
+			const ErrorQuery = new URL(`${SupabaseUrl}/rest/v1/ops_events`);
+			ErrorQuery.searchParams.set("select", "payload"); ErrorQuery.searchParams.set("event_type", "eq.replay_error");
+			ErrorQuery.searchParams.set("session_id", `eq.${VisitSessionId}`); ErrorQuery.searchParams.set("order", "created_at.desc"); ErrorQuery.searchParams.set("limit", "1");
+			const Errors = await FetchRows(ErrorQuery, ServiceKey);
+			const Detail = Str(Errors?.[0]?.payload?.label);
+			return Html(ErrorPage(Detail ? `فشل حفظ التسجيل: ${Detail}` : "لا توجد تسجيلات محفوظة لهذه الجلسة ولم يسجل المتصفح سبب فشل"), 404);
+		}
 		const SessionIds = Sessions.map((Item) => Item.id).filter(Boolean);
 		const ChunkQuery = new URL(`${SupabaseUrl}/rest/v1/ops_events`);
 		ChunkQuery.searchParams.set("select", "payload"); ChunkQuery.searchParams.set("event_type", "eq.replay_chunk");

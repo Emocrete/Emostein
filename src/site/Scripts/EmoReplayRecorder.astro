@@ -66,6 +66,7 @@ const cMaxEventsPerChunk = Number(import.meta.env.PUBLIC_EMO_REPLAY_MAX_EVENTS_P
 	let fPendingFlushRunning = false;
 	let fLastKnownScrollX = window.scrollX || 0;
 	let fLastKnownScrollY = window.scrollY || 0;
+	let fLastReplayError = "";
 
 	function NewId(pPrefix) {
 		const Rand = Math.random().toString(36).slice(2, 10);
@@ -240,10 +241,28 @@ const cMaxEventsPerChunk = Number(import.meta.env.PUBLIC_EMO_REPLAY_MAX_EVENTS_P
 				body: Text,
 				keepalive: pBeacon
 			});
-			if (!Res.ok) return false;
 			const Data = await Res.json().catch(() => ({}));
-			return Data.ok !== false;
-		} catch { return false; }
+			if (!Res.ok || Data.ok === false) {
+				ReportReplayError(pUrl, Data.details || Data.message || Data.error || `HTTP ${Res.status}`);
+				return false;
+			}
+			return true;
+		} catch (Ex) {
+			ReportReplayError(pUrl, String(Ex?.message || Ex || "network_error"));
+			return false;
+		}
+	}
+
+	function ReportReplayError(pUrl, pMessage) {
+		const Message = `${String(pUrl || "").split("?")[0]} — ${Str(pMessage)}`.slice(0, 380);
+		if (!Message || Message === fLastReplayError) return;
+		fLastReplayError = Message;
+		if (typeof window.TrackOpsEvent === "function") {
+			window.TrackOpsEvent("replay_error", {
+				eventOn: "emo_replay", widget: "EmoReplay", label: Message,
+				important: false, notifyMobile: false, sound: false, allowBeforeOpen: true
+			});
+		}
 	}
 
 	async function SendStart() {
@@ -452,6 +471,7 @@ const cMaxEventsPerChunk = Number(import.meta.env.PUBLIC_EMO_REPLAY_MAX_EVENTS_P
 		const ToMs = Events[Events.length - 1]?.t ?? FromMs;
 		const ChunkIndex = fChunkIndex;
 		const Payload = {
+			...BasePayload(),
 			sessionId: cReplayId,
 			visitorId: cVisitorId,
 			visitSessionId: cVisitSessionId,

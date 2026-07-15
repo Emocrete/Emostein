@@ -79,6 +79,23 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	return `${pPrefix}_${Time}_${Rand}`;
 	}
 
+	function StableProfile() {
+	const Parts = [
+	navigator.userAgent || "", navigator.platform || "", navigator.language || "",
+	Array.from(navigator.languages || []).join(","), navigator.hardwareConcurrency || 0,
+	navigator.deviceMemory || 0, screen.width || 0, screen.height || 0,
+	screen.colorDepth || 0, screen.pixelDepth || 0,
+	Intl.DateTimeFormat().resolvedOptions().timeZone || ""
+	];
+	let Hash = 2166136261;
+	const Text = Parts.join("|");
+	for (let Index = 0; Index < Text.length; Index++) {
+	Hash ^= Text.charCodeAt(Index);
+	Hash = Math.imul(Hash, 16777619);
+	}
+	return `bp_${(Hash >>> 0).toString(36)}`;
+	}
+
 	function GetStoredId(pStorage, pKey, pPrefix) {
 	let Id = pStorage.getItem(pKey);
 	if (!Id) {
@@ -835,6 +852,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	botSignal: "",
 	userAgentClient: navigator.userAgent || "",
 	clientFingerprint: [location.pathname, navigator.userAgent || "", window.screen.width, window.screen.height, window.innerWidth, window.innerHeight, navigator.language || "", Intl.DateTimeFormat().resolvedOptions().timeZone || ""].join("|"),
+	clientProfile: StableProfile(),
 	clientEventSeq: ClientEventSeq,
 	clientEventUid: ClientEventUid,
 	createdAtClient: new Date().toISOString(),
@@ -1488,7 +1506,6 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 
 
 ) }
-
 
 
 

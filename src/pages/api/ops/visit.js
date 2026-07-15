@@ -229,6 +229,57 @@ async function LatestResetAt(pSupabaseUrl, pServiceKey) {
 	catch { return 0; }
 }
 
+async function FetchJsonRows(pSupabaseUrl, pServiceKey, pQuery) {
+	const Res = await SupabaseRequest(pQuery, pServiceKey);
+	if (!Res.ok) return [];
+	try { const Rows = JSON.parse(Res.text); return Array.isArray(Rows) ? Rows : []; }
+	catch { return []; }
+}
+
+async function IsBlockedProfile(pSupabaseUrl, pServiceKey, pProfile) {
+	if (!pProfile) return false;
+	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
+	Query.searchParams.set("select", "id");
+	Query.searchParams.set("event_type", "eq.ops_synthetic_profile");
+	Query.searchParams.set("payload->>clientProfile", `eq.${pProfile}`);
+	Query.searchParams.set("limit", "1");
+	return (await FetchJsonRows(pSupabaseUrl, pServiceKey, Query)).length > 0;
+}
+
+async function FindRepeatedProfileVisitors(pSupabaseUrl, pServiceKey, pData) {
+	if (Str(pData.eventType).toLowerCase() !== "page_open" || !Str(pData.clientProfile)) return [];
+	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
+	Query.searchParams.set("select", "visitor_id");
+	Query.searchParams.set("event_type", "eq.page_open");
+	Query.searchParams.set("payload->>clientProfile", `eq.${pData.clientProfile}`);
+	Query.searchParams.set("created_at", `gte.${new Date(Date.now() - 45 * 60 * 1000).toISOString()}`);
+	Query.searchParams.set("order", "created_at.desc");
+	Query.searchParams.set("limit", "20");
+	const Values = new Set((await FetchJsonRows(pSupabaseUrl, pServiceKey, Query)).map((Row) => Str(Row?.visitor_id)).filter(Boolean));
+	Values.delete(pData.visitorId);
+	return Array.from(Values);
+}
+
+async function DeleteVisitorsAndBlockProfile(pSupabaseUrl, pServiceKey, pVisitorIds, pData) {
+	const Visitors = Array.from(new Set([...(pVisitorIds || []), pData.visitorId].map(Str).filter(Boolean)));
+	for (const VisitorId of Visitors) {
+		for (const Table of ["ops_presence", "ops_events"]) {
+			const Url = new URL(`${pSupabaseUrl}/rest/v1/${Table}`);
+			Url.searchParams.set("visitor_id", `eq.${VisitorId}`);
+			await SupabaseRequest(Url, pServiceKey, { method: "DELETE", headers: { prefer: "return=minimal" } });
+		}
+	}
+	await SupabaseRequest(`${pSupabaseUrl}/rest/v1/ops_events`, pServiceKey, {
+		method: "POST",
+		headers: { "content-type": "application/json", prefer: "return=minimal" },
+		body: JSON.stringify({
+			event_type: "ops_synthetic_profile", visitor_id: "system_synthetic", session_id: `synthetic_${Date.now()}`,
+			page_path: pData.pagePath, page_title: pData.pageTitle, user_agent: pData.userAgentClient,
+			payload: { clientProfile: pData.clientProfile, blockedVisitorIds: Visitors, blockedAt: new Date().toISOString(), trafficKind: "synthetic", syntheticReason: "repeated_ephemeral_profile" }
+		})
+	});
+}
+
 async function RecoverPageOpenFromPing(pSupabaseUrl, pServiceKey, pData) {
 	if (Str(pData.eventType).toLowerCase() !== "page_ping") return null;
 	if (await HasStoredPageOpen(pSupabaseUrl, pServiceKey, pData.pageInstanceId)) return null;
@@ -341,6 +392,14 @@ export async function POST({ request }) {
 		const PageStartedAt = Date.parse(Str(Body.pageStartedAt ?? Body.page_started_at)) || 0;
 		if (ResetAt > 0 && PageStartedAt > 0 && PageStartedAt < ResetAt) {
 			return Json({ ok: true, skipped: true, reason: "page_started_before_full_reset" });
+		}
+		if (await IsBlockedProfile(SupabaseUrl, ServiceKey, Str(Data.clientProfile))) {
+			return Json({ ok: true, skipped: true, reason: "blocked_synthetic_profile" });
+		}
+		const RepeatedVisitors = await FindRepeatedProfileVisitors(SupabaseUrl, ServiceKey, Data);
+		if (RepeatedVisitors.length) {
+			await DeleteVisitorsAndBlockProfile(SupabaseUrl, ServiceKey, RepeatedVisitors, Data);
+			return Json({ ok: true, skipped: true, reason: "repeated_ephemeral_profile_removed" });
 		}
 
 		if (await IsRepeatedSyntheticVisit(SupabaseUrl, ServiceKey, Data)) {

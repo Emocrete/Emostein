@@ -36,6 +36,10 @@ function BuildOpsEvent(pBody, pRequest) {
 		session_id: Replay.visit_session_id,
 		page_path: Replay.page_path,
 		page_title: Replay.page_title,
+		referrer: Str(pBody.referrer),
+		screen: Replay.screen,
+		language: Replay.language,
+		timezone: Replay.timezone,
 		user_agent: Replay.user_agent,
 		payload: { ...Replay, replay_record_type: "session" }
 	};
@@ -49,7 +53,7 @@ export async function POST({ request }) {
 		if (!ValidId(Row.id, "r") || !ValidId(Row.visitor_id, "v") || !ValidId(Row.visit_session_id, "s") || !Row.page_id) return Json({ ok: false, error: "Invalid replay identifiers" }, 400);
 		if ((Row.snapshot_html || "").length > cMaxSnapshotChars) return Json({ ok: false, error: "Snapshot is too large" }, 413);
 		const Res = await SupabaseFetch("/rest/v1/ops_events", { method: "POST", headers: { "content-type": "application/json", prefer: "return=representation" }, body: JSON.stringify(BuildOpsEvent(Body, request)) });
-		if (!Res.ok) return Json({ ok: false, error: Res.text }, Res.status || 500);
+		if (!Res.ok) return Json({ ok: false, error: "Replay session write failed", details: Res.text, status: Res.status }, Res.status || 500);
 		let Data = null; try { Data = JSON.parse(Res.text); } catch { Data = Res.text; }
 		return Json({ ok: true, data: Data });
 	} catch (Ex) { return Json({ ok: false, error: "Function crashed", message: Ex instanceof Error ? Ex.message : String(Ex) }, 500); }

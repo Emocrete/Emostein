@@ -26,8 +26,8 @@ export async function POST({ request }) {
 		const Row = { session_id: SessionId, visitor_id: Str(Body.visitorId || Body.visitor_id), visit_session_id: Str(Body.visitSessionId || Body.visit_session_id), page_id: Str(Body.pageId || Body.page_id),
 			chunk_index: Math.max(0, Math.round(Num(Body.chunkIndex ?? Body.chunk_index))), from_ms: Math.max(0,Math.round(Num(Body.fromMs ?? Body.from_ms))), to_ms: Math.max(0,Math.round(Num(Body.toMs ?? Body.to_ms))),
 			reason: Str(Body.reason).slice(0,100), events_count: Events.length, events_json: Events };
-		const Res = await SupabaseFetch("/rest/v1/ops_events", { method: "POST", headers: { "content-type": "application/json", prefer: "return=representation" }, body: JSON.stringify({ event_type: "replay_chunk", visitor_id: Row.visitor_id, session_id: Row.visit_session_id, page_path: "", page_title: "", payload: { ...Row, replay_record_type: "chunk" } }) });
-		if (!Res.ok) return Json({ ok: false, error: Res.text }, Res.status || 500);
+		const Res = await SupabaseFetch("/rest/v1/ops_events", { method: "POST", headers: { "content-type": "application/json", prefer: "return=representation" }, body: JSON.stringify({ event_type: "replay_chunk", visitor_id: Row.visitor_id, session_id: Row.visit_session_id, page_path: Str(Body.pagePath), page_title: Str(Body.pageTitle), referrer: "", screen: Str(Body.screen), language: Str(Body.language), timezone: Str(Body.timezone), user_agent: Str(request.headers.get("user-agent") || Body.userAgentClient), payload: { ...Row, replay_record_type: "chunk" } }) });
+		if (!Res.ok) return Json({ ok: false, error: "Replay chunk write failed", details: Res.text, status: Res.status }, Res.status || 500);
 		let Data = null; try { Data = JSON.parse(Res.text); } catch { Data = Res.text; }
 		return Json({ ok: true, data: Data });
 	} catch (Ex) { return Json({ ok: false, error: "Function crashed", message: Ex instanceof Error ? Ex.message : String(Ex) }, 500); }
