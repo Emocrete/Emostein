@@ -38,11 +38,23 @@ async function DeleteRows(pSupabaseUrl, pServiceKey, pTable, pColumn, pValue, pR
 		headers: {
 			apikey: pServiceKey,
 			authorization: `Bearer ${pServiceKey}`,
-			prefer: "return=minimal"
+			prefer: "return=representation"
 		}
 	});
 	const Text = await Res.text();
-	if (Res.ok) return { table: pTable, deleted: true };
+	if (Res.ok) {
+		let DeletedCount = 0;
+		try { const Rows = JSON.parse(Text); DeletedCount = Array.isArray(Rows) ? Rows.length : 0; } catch {}
+		const VerifyUrl = new URL(`${pSupabaseUrl}/rest/v1/${pTable}`);
+		VerifyUrl.searchParams.set("select", pColumn);
+		VerifyUrl.searchParams.set(pColumn, `eq.${pValue}`);
+		VerifyUrl.searchParams.set("limit", "1");
+		const Verify = await fetch(VerifyUrl, { headers: { apikey: pServiceKey, authorization: `Bearer ${pServiceKey}` } });
+		let Remaining = [];
+		try { Remaining = JSON.parse(await Verify.text()); } catch {}
+		if (!Verify.ok || (Array.isArray(Remaining) && Remaining.length)) throw new Error(`${pTable}: بقيت صفوف للزائر بعد الحذف`);
+		return { table: pTable, deleted: true, deletedCount: DeletedCount, verifiedEmpty: true };
+	}
 	const Detail = Text || `HTTP ${Res.status}`;
 	if (!pRequired) return { table: pTable, deleted: false, warning: Detail };
 	throw new Error(`${pTable}: ${Detail}`);
@@ -65,11 +77,22 @@ async function DeleteVisitor(pRequest) {
 	const Results = [];
 	Results.push(await DeleteRows(SupabaseUrl, ServiceKey, "ops_presence", "visitor_id", VisitorId, true));
 	Results.push(await DeleteRows(SupabaseUrl, ServiceKey, "ops_events", "visitor_id", VisitorId, true));
+	const DeletedAt = new Date().toISOString();
+	const MarkerRes = await fetch(`${SupabaseUrl}/rest/v1/ops_events`, {
+		method: "POST",
+		headers: { apikey: ServiceKey, authorization: `Bearer ${ServiceKey}`, "content-type": "application/json", prefer: "return=minimal" },
+		body: JSON.stringify({
+			event_type: "ops_delete_visitor", visitor_id: "system_delete", session_id: `delete_${Date.now()}`,
+			page_path: "", page_title: "", payload: { targetVisitorId: VisitorId, deletedAt: DeletedAt, controlCommand: "ops_delete_visitor" }
+		})
+	});
+	if (!MarkerRes.ok) throw new Error(`تعذر تثبيت منع الزائر المحذوف: ${await MarkerRes.text()}`);
 
 	return Json({
 		ok: true,
 		visitorId: VisitorId,
 		deleted: true,
+		deletedAt: DeletedAt,
 		warnings: Results.filter((Item) => Item.warning).map((Item) => `${Item.table}: ${Item.warning}`),
 		results: Results
 	});

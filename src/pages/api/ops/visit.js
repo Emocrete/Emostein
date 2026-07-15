@@ -246,6 +246,16 @@ async function IsBlockedProfile(pSupabaseUrl, pServiceKey, pProfile) {
 	return (await FetchJsonRows(pSupabaseUrl, pServiceKey, Query)).length > 0;
 }
 
+async function IsDeletedVisitor(pSupabaseUrl, pServiceKey, pVisitorId) {
+	if (!pVisitorId) return false;
+	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
+	Query.searchParams.set("select", "id");
+	Query.searchParams.set("event_type", "eq.ops_delete_visitor");
+	Query.searchParams.set("payload->>targetVisitorId", `eq.${pVisitorId}`);
+	Query.searchParams.set("limit", "1");
+	return (await FetchJsonRows(pSupabaseUrl, pServiceKey, Query)).length > 0;
+}
+
 async function FindRepeatedProfileVisitors(pSupabaseUrl, pServiceKey, pData) {
 	if (Str(pData.eventType).toLowerCase() !== "page_open" || !Str(pData.clientProfile)) return [];
 	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
@@ -395,6 +405,9 @@ export async function POST({ request }) {
 		}
 		if (await IsBlockedProfile(SupabaseUrl, ServiceKey, Str(Data.clientProfile))) {
 			return Json({ ok: true, skipped: true, reason: "blocked_synthetic_profile" });
+		}
+		if (await IsDeletedVisitor(SupabaseUrl, ServiceKey, VisitorId)) {
+			return Json({ ok: true, skipped: true, reason: "deleted_visitor_tombstone" });
 		}
 		const RepeatedVisitors = await FindRepeatedProfileVisitors(SupabaseUrl, ServiceKey, Data);
 		if (RepeatedVisitors.length) {

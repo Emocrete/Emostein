@@ -15,6 +15,39 @@ async function SupabaseFetch(pPath, pOptions = {}) {
 	const Res = await fetch(`${SupabaseUrl}${pPath}`, { ...pOptions, headers: { apikey: ServiceKey, authorization: `Bearer ${ServiceKey}`, ...(pOptions.headers || {}) } });
 	return { ok: Res.ok, status: Res.status, text: await Res.text() };
 }
+async function ReplayAdmission(pBody) {
+	const VisitorId = Str(pBody.visitorId || pBody.visitor_id);
+	const VisitSessionId = Str(pBody.visitSessionId || pBody.visit_session_id);
+	const PageId = Str(pBody.pageId || pBody.page_id);
+	const ClientProfile = Str(pBody.clientProfile || pBody.client_profile);
+	const Deleted = new URL("http://x/rest/v1/ops_events");
+	Deleted.searchParams.set("select", "id"); Deleted.searchParams.set("event_type", "eq.ops_delete_visitor");
+	Deleted.searchParams.set("payload->>targetVisitorId", `eq.${VisitorId}`); Deleted.searchParams.set("limit", "1");
+	const DeletedRes = await SupabaseFetch(`${Deleted.pathname}${Deleted.search}`);
+	if (DeletedRes.ok) { try { if (JSON.parse(DeletedRes.text)?.length) return { allowed: false, reason: "deleted_visitor_tombstone" }; } catch {} }
+	if (ClientProfile) {
+		const Blocked = new URL("http://x/rest/v1/ops_events");
+		Blocked.searchParams.set("select", "id");
+		Blocked.searchParams.set("event_type", "eq.ops_synthetic_profile");
+		Blocked.searchParams.set("payload->>clientProfile", `eq.${ClientProfile}`);
+		Blocked.searchParams.set("limit", "1");
+		const BlockedRes = await SupabaseFetch(`${Blocked.pathname}${Blocked.search}`);
+		if (BlockedRes.ok) {
+			try { if (JSON.parse(BlockedRes.text)?.length) return { allowed: false, reason: "blocked_synthetic_profile" }; } catch {}
+		}
+	}
+	const Open = new URL("http://x/rest/v1/ops_events");
+	Open.searchParams.set("select", "id");
+	Open.searchParams.set("event_type", "eq.page_open");
+	Open.searchParams.set("visitor_id", `eq.${VisitorId}`);
+	Open.searchParams.set("session_id", `eq.${VisitSessionId}`);
+	Open.searchParams.set("payload->>pageInstanceId", `eq.${PageId}`);
+	Open.searchParams.set("limit", "1");
+	const OpenRes = await SupabaseFetch(`${Open.pathname}${Open.search}`);
+	if (!OpenRes.ok) return { allowed: false, reason: "page_open_check_failed" };
+	try { return { allowed: JSON.parse(OpenRes.text)?.length > 0, reason: "missing_valid_page_open" }; }
+	catch { return { allowed: false, reason: "page_open_check_failed" }; }
+}
 function BuildRow(pBody, pRequest) {
 	const Viewport = pBody.viewport || {}, Doc = pBody.document || {};
 	const Snapshot = typeof pBody.snapshotHtml === "string" ? pBody.snapshotHtml : "";
@@ -51,6 +84,8 @@ export async function POST({ request }) {
 		const Body = await ReadBody(request); if (!Body || typeof Body !== "object") return Json({ ok: false, error: "Invalid or oversized JSON body" }, 400);
 		const Row = BuildRow(Body, request);
 		if (!ValidId(Row.id, "r") || !ValidId(Row.visitor_id, "v") || !ValidId(Row.visit_session_id, "s") || !Row.page_id) return Json({ ok: false, error: "Invalid replay identifiers" }, 400);
+		const Admission = await ReplayAdmission(Body);
+		if (!Admission.allowed) return Json({ ok: true, skipped: true, reason: Admission.reason });
 		if ((Row.snapshot_html || "").length > cMaxSnapshotChars) return Json({ ok: false, error: "Snapshot is too large" }, 413);
 		const Res = await SupabaseFetch("/rest/v1/ops_events", { method: "POST", headers: { "content-type": "application/json", prefer: "return=representation" }, body: JSON.stringify(BuildOpsEvent(Body, request)) });
 		if (!Res.ok) return Json({ ok: false, error: "Replay session write failed", details: Res.text, status: Res.status }, Res.status || 500);

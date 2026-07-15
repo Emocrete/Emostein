@@ -42,6 +42,7 @@ const cMaxEventsPerChunk = Number(import.meta.env.PUBLIC_EMO_REPLAY_MAX_EVENTS_P
 	const cVisitorId = Str(cOpsIds.visitorId) || GetStoredId(localStorage, cVisitorKey, "v");
 	const cVisitSessionId = Str(cOpsIds.sessionId) || GetStoredId(sessionStorage, cVisitSessionKey, "s");
 	const cPageId = Str(cOpsIds.pageInstanceId) || NewId("rp");
+	const cClientProfile = Str(cOpsIds.clientProfile);
 
 	try { sessionStorage.setItem(cReplayPageKey, cPageId); } catch {}
 	window.__EmoReplayIds = {
@@ -202,7 +203,8 @@ const cMaxEventsPerChunk = Number(import.meta.env.PUBLIC_EMO_REPLAY_MAX_EVENTS_P
 			screen: `${screen.width}x${screen.height}`,
 			language: navigator.language || "",
 			timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
-			userAgentClient: navigator.userAgent || ""
+			userAgentClient: navigator.userAgent || "",
+			clientProfile: cClientProfile
 		};
 	}
 
