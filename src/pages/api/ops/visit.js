@@ -1,12 +1,16 @@
 export const prerender = false;
 
+const cDefaultOpsKey = "Emocrete20015161";
+const cMaxEventsPerRequest = 500;
+const cMaxBodyBytes = 32 * 1024 * 1024;
+const cHeartbeatTimeoutMs = 7000;
+const cSyntheticUserAgentPattern = /(bot|crawl|spider|slurp|googlebot|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb)/i;
+const cArabCountryCodes = new Set(["EG", "SA", "AE", "KW", "QA", "BH", "OM", "YE", "JO", "LB", "SY", "IQ", "PS", "MA", "DZ", "TN", "LY", "SD", "SO", "DJ", "KM", "MR"]);
+
 function Json(pBody, pStatus = 200) {
 	return new Response(JSON.stringify(pBody), {
 		status: pStatus,
-		headers: {
-			"content-type": "application/json; charset=utf-8",
-			"cache-control": "no-store"
-		}
+		headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" }
 	});
 }
 
@@ -16,26 +20,18 @@ function Env(pName) {
 }
 
 function Str(pValue) { return String(pValue ?? "").trim(); }
+function Num(pValue, pFallback = 0) {
+	const Value = Number(pValue);
+	return Number.isFinite(Value) ? Value : pFallback;
+}
 function Bool(pValue) {
-	if (pValue === true) return true;
-	return ["true", "1", "yes", "on", "important"].includes(Str(pValue).toLowerCase());
+	return pValue === true || ["true", "1", "yes", "on", "important"].includes(Str(pValue).toLowerCase());
 }
 
-const cSyntheticUserAgentPattern = /(bot|crawl|spider|slurp|googlebot|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb)/i;
-const cArabCountryCodes = new Set(["EG", "SA", "AE", "KW", "QA", "BH", "OM", "YE", "JO", "LB", "SY", "IQ", "PS", "MA", "DZ", "TN", "LY", "SD", "SO", "DJ", "KM", "MR"]);
-
-function SyntheticTrafficReason(pRequest, pBody = {}) {
-	const UserAgent = Str(pRequest.headers.get("user-agent"));
-	const Purpose = Str(pRequest.headers.get("purpose") || pRequest.headers.get("sec-purpose") || pRequest.headers.get("x-purpose")).toLowerCase();
-	const BodySignal = Str(pBody.botSignal ?? pBody.bot_signal);
-	const TrafficKind = Str(pBody.trafficKind ?? pBody.traffic_kind).toLowerCase();
-	const Reasons = [];
-	if (cSyntheticUserAgentPattern.test(UserAgent)) Reasons.push("ua_bot");
-	if (Purpose.includes("prefetch") || Purpose.includes("preview")) Reasons.push("prefetch");
-	if (Bool(pBody.synthetic)) Reasons.push("client_synthetic");
-	if (BodySignal) Reasons.push(`client_${BodySignal}`);
-	if (["bot", "crawler", "synthetic"].includes(TrafficKind)) Reasons.push(`kind_${TrafficKind}`);
-	return Reasons.join(",");
+function CheckOpsKey(pRequest) {
+	const Url = new URL(pRequest.url);
+	const Given = Str(pRequest.headers.get("x-ops-key") || Url.searchParams.get("key"));
+	return !!Given && Given === (Env("OPS_API_KEY") || cDefaultOpsKey);
 }
 
 function Header(pRequest, ...pNames) {
@@ -81,37 +77,40 @@ function ClassifyGeo(pCountryCode, pRegion, pCity) {
 	return { band: "world", label: City || CountryCode || "Outside Arab region", borderColor: "#FF3B30" };
 }
 
-function BuildGeo(pRequest, pBody = {}) {
+function BuildGeo(pRequest, pEvent = {}) {
 	let CountryCode = Header(pRequest, "x-vercel-ip-country", "cf-ipcountry", "x-country-code").toUpperCase();
 	const Region = Header(pRequest, "x-vercel-ip-country-region", "x-vercel-ip-region", "x-region", "x-country-region");
 	const City = Header(pRequest, "x-vercel-ip-city", "x-city");
-	if (!CountryCode && Str(pBody.timezone ?? pBody.timeZone).toLowerCase() === "africa/cairo") CountryCode = "EG";
+	if (!CountryCode && Str(pEvent.timezone ?? pEvent.timeZone).toLowerCase() === "africa/cairo") CountryCode = "EG";
 	const Classified = ClassifyGeo(CountryCode, Region, City);
 	return { countryCode: CountryCode, region: DecodeHeaderText(Region), city: DecodeHeaderText(City), ...Classified };
 }
 
+function SyntheticTrafficReason(pRequest, pEvent = {}) {
+	const UserAgent = Str(pRequest.headers.get("user-agent") || pEvent.userAgentClient || pEvent.userAgent);
+	const Purpose = Str(pRequest.headers.get("purpose") || pRequest.headers.get("sec-purpose") || pRequest.headers.get("x-purpose")).toLowerCase();
+	const BodySignal = Str(pEvent.botSignal ?? pEvent.bot_signal);
+	const TrafficKind = Str(pEvent.trafficKind ?? pEvent.traffic_kind).toLowerCase();
+	const Reasons = [];
+	if (cSyntheticUserAgentPattern.test(UserAgent)) Reasons.push("ua_bot");
+	if (Purpose.includes("prefetch") || Purpose.includes("preview")) Reasons.push("prefetch");
+	if (Bool(pEvent.synthetic ?? pEvent.isSynthetic)) Reasons.push("client_synthetic");
+	if (BodySignal) Reasons.push(`client_${BodySignal}`);
+	if (["bot", "crawler", "synthetic"].includes(TrafficKind)) Reasons.push(`kind_${TrafficKind}`);
+	return Reasons.join(",");
+}
+
 function IsValidClientId(pValue, pPrefix) {
 	const Value = Str(pValue);
-	return !!Value && Value.startsWith(pPrefix) && /^[a-z]_[a-z0-9]+_[a-z0-9]+$/i.test(Value);
-}
-
-function NormalizeEventType(pBody) {
-	return Str(pBody.eventType ?? pBody.event_type ?? pBody.type ?? pBody.event) || "page_open";
-}
-
-function IsPresenceOnly(pType) {
-	return [
-		"page_ping", "page_focus_away", "page_focus_return", "focus_away", "focus_return",
-		"page_blur", "visibility_hidden", "visibility_visible"
-	].includes(Str(pType).toLowerCase());
+	return !!Value && Value.startsWith(`${pPrefix}_`) && /^[a-z]_[a-z0-9]+_[a-z0-9]+$/i.test(Value);
 }
 
 async function ReadBody(pRequest) {
-	try {
-		const Text = await pRequest.text();
-		if (!Text || Text.length > 512000) return null;
-		return JSON.parse(Text);
-	} catch { return null; }
+	const Text = await pRequest.text();
+	if (!Text) return null;
+	if (Text.length > cMaxBodyBytes) throw new Error("Request body is too large");
+	try { return JSON.parse(Text); }
+	catch { throw new Error("Invalid JSON body"); }
 }
 
 async function SupabaseRequest(pUrl, pServiceKey, pOptions = {}) {
@@ -127,229 +126,113 @@ async function SupabaseRequest(pUrl, pServiceKey, pOptions = {}) {
 	return { ok: Res.ok, status: Res.status, text: Text };
 }
 
-async function UpsertPresence(pSupabaseUrl, pServiceKey, pData) {
-	const Row = {
-		page_instance_id: pData.pageInstanceId,
-		visitor_id: pData.visitorId,
-		session_id: pData.sessionId,
-		page_path: pData.pagePath,
-		page_title: pData.pageTitle,
-		focus_state: pData.focusState,
-		away_reason: pData.awayReason,
-		last_seen_at: new Date().toISOString(),
-		elapsed_ms: pData.elapsedMs,
-		scroll_percent: pData.scrollPercent,
-		location_country_code: pData.locationCountryCode,
-		location_region: pData.locationRegion,
-		location_city: pData.locationCity,
-		location_band: pData.locationBand,
-		location_label: pData.locationLabel,
-		location_border_color: pData.locationBorderColor,
-		user_agent: pData.userAgentClient,
-		meta: {
-			eventType: pData.eventType,
-			createdAtClient: pData.createdAtClient,
-			viewport: pData.viewport,
-			screen: pData.screen
-		}
+function NormalizeEvent(pInput, pRequest) {
+	const Input = pInput && typeof pInput === "object" ? pInput : {};
+	const Nested = Input.payload && typeof Input.payload === "object" ? Input.payload : {};
+	const Event = { ...Nested, ...Input };
+	delete Event.payload;
+
+	const EventType = Str(Event.eventType ?? Event.event_type ?? Event.type ?? Event.event).toLowerCase();
+	const VisitorId = Str(Event.visitorId ?? Event.visitor_id);
+	const SessionId = Str(Event.sessionId ?? Event.session_id ?? Event.visitSessionId);
+	const PageInstanceId = Str(Event.pageInstanceId ?? Event.page_instance_id ?? Event.pageId);
+	const ClientEventUid = Str(Event.clientEventUid ?? Event.client_event_uid);
+	const EventSource = Str(Event.eventSource ?? Event.event_source) || "site";
+	if (!EventType) throw new Error("Missing eventType");
+	if (!IsValidClientId(VisitorId, "v")) throw new Error("Invalid visitorId");
+	if (!IsValidClientId(SessionId, "s")) throw new Error("Invalid sessionId");
+	if (!IsValidClientId(PageInstanceId, "p")) throw new Error("Invalid pageInstanceId");
+	if (!ClientEventUid || ClientEventUid.length > 240) throw new Error("Invalid clientEventUid");
+
+	const EventData = Event.eventData && typeof Event.eventData === "object" ? Event.eventData : {};
+	const Geo = BuildGeo(pRequest, Event);
+	const OccurredAt = Str(Event.createdAtClient ?? Event.occurredAt ?? Event.occurred_at) || new Date().toISOString();
+	const UserAgent = Str(pRequest.headers.get("user-agent") || Event.userAgentClient || Event.userAgent);
+	const FullPayload = {
+		...Event,
+		clientEventUid: ClientEventUid,
+		eventType: EventType,
+		eventSource: EventSource,
+		visitorId: VisitorId,
+		sessionId: SessionId,
+		pageInstanceId: PageInstanceId,
+		pagePath: Str(Event.pagePath ?? Event.page_path) || "/",
+		pageTitle: Str(Event.pageTitle ?? Event.page_title),
+		sessionSeq: Math.max(0, Math.trunc(Num(Event.sessionSeq ?? Event.session_seq))),
+		pageElapsedMs: Math.max(0, Math.trunc(Num(Event.pageElapsedMs ?? Event.page_elapsed_ms ?? Event.elapsedMs))),
+		sessionElapsedMs: Math.max(0, Math.trunc(Num(Event.sessionElapsedMs ?? Event.session_elapsed_ms))),
+		createdAtClient: OccurredAt,
+		focusState: Str(Event.focusState ?? Event.focus_state),
+		eventData: EventData,
+		locationCountryCode: Str(Event.locationCountryCode) || Geo.countryCode,
+		locationRegion: Str(Event.locationRegion) || Geo.region,
+		locationCity: Str(Event.locationCity) || Geo.city,
+		locationBand: Str(Event.locationBand) || Geo.band,
+		locationLabel: Str(Event.locationLabel) || Geo.label,
+		locationBorderColor: Str(Event.locationBorderColor) || Geo.borderColor,
+		userAgentClient: UserAgent
 	};
-	return SupabaseRequest(`${pSupabaseUrl}/rest/v1/ops_presence?on_conflict=page_instance_id`, pServiceKey, {
+
+	return {
+		client_event_uid: ClientEventUid,
+		event_type: EventType,
+		event_source: EventSource,
+		visitor_id: VisitorId,
+		session_id: SessionId,
+		page_instance_id: PageInstanceId,
+		session_seq: FullPayload.sessionSeq,
+		page_elapsed_ms: FullPayload.pageElapsedMs,
+		session_elapsed_ms: FullPayload.sessionElapsedMs,
+		occurred_at: OccurredAt,
+		page_path: FullPayload.pagePath,
+		page_title: FullPayload.pageTitle,
+		referrer: Str(Event.referrer),
+		screen: Str(Event.screen),
+		language: Str(Event.language),
+		timezone: Str(Event.timezone),
+		user_agent: UserAgent,
+		payload: FullPayload
+	};
+}
+
+async function LatestPageEvent(pSupabaseUrl, pServiceKey, pPageInstanceId) {
+	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
+	Query.searchParams.set("select", "id,event_type,created_at,client_event_uid");
+	Query.searchParams.set("page_instance_id", `eq.${pPageInstanceId}`);
+	Query.searchParams.set("order", "id.desc");
+	Query.searchParams.set("limit", "1");
+	const Res = await SupabaseRequest(Query, pServiceKey);
+	if (!Res.ok) throw new Error(Res.text || `Latest page event HTTP ${Res.status}`);
+	try {
+		const Rows = JSON.parse(Res.text);
+		return Array.isArray(Rows) ? Rows[0] || null : null;
+	} catch { return null; }
+}
+
+async function AllowInferredExit(pSupabaseUrl, pServiceKey, pRow) {
+	if (pRow.event_source !== "emolive" || pRow.event_type !== "page_exit" || !Bool(pRow.payload?.eventData?.inferred)) return { ok: true };
+	const Latest = await LatestPageEvent(pSupabaseUrl, pServiceKey, pRow.page_instance_id);
+	if (!Latest) return { ok: false, reason: "page_has_no_events" };
+	if (Str(Latest.event_type).toLowerCase() === "page_exit") return { ok: false, reason: "already_closed" };
+	const LastObservedId = Math.max(0, Math.trunc(Num(pRow.payload?.eventData?.lastObservedEventId)));
+	if (LastObservedId && Num(Latest.id) > LastObservedId) return { ok: false, reason: "page_received_newer_event" };
+	const LatestAt = Date.parse(Str(Latest.created_at));
+	if (!LatestAt || Date.now() - LatestAt < cHeartbeatTimeoutMs) return { ok: false, reason: "page_not_silent_long_enough" };
+	return { ok: true };
+}
+
+async function InsertRows(pSupabaseUrl, pServiceKey, pRows) {
+	const Res = await SupabaseRequest(`${pSupabaseUrl}/rest/v1/ops_events?on_conflict=client_event_uid`, pServiceKey, {
 		method: "POST",
-		headers: {
-			"content-type": "application/json",
-			"prefer": "resolution=merge-duplicates,return=minimal"
-		},
-		body: JSON.stringify(Row)
+		headers: { "content-type": "application/json", prefer: "resolution=ignore-duplicates,return=representation" },
+		body: JSON.stringify(pRows)
 	});
-}
-
-async function HasDuplicateEvent(pSupabaseUrl, pServiceKey, pClientEventUid) {
-	const Uid = Str(pClientEventUid);
-	if (!Uid) return false;
-	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
-	Query.searchParams.set("select", "id");
-	Query.searchParams.set("payload->>clientEventUid", `eq.${Uid}`);
-	Query.searchParams.set("limit", "1");
-	const Res = await SupabaseRequest(Query, pServiceKey);
-	if (!Res.ok) return false;
-	try {
-		const Rows = JSON.parse(Res.text);
-		return Array.isArray(Rows) && Rows.length > 0;
-	} catch { return false; }
-}
-
-async function HasStoredPageOpen(pSupabaseUrl, pServiceKey, pPageInstanceId) {
-	const PageInstanceId = Str(pPageInstanceId);
-	if (!PageInstanceId) return true;
-	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
-	Query.searchParams.set("select", "id,event_type,payload");
-	Query.searchParams.set("payload->>pageInstanceId", `eq.${PageInstanceId}`);
-	Query.searchParams.set("limit", "20");
-	const Res = await SupabaseRequest(Query, pServiceKey);
-	if (!Res.ok) return true;
-	try {
-		const Rows = JSON.parse(Res.text);
-		return Array.isArray(Rows) && Rows.some((Row) => {
-			const Payload = Row && typeof Row.payload === "object" ? Row.payload : {};
-			const Type = Str(Row?.event_type || Payload.eventType || Payload.event_type).toLowerCase();
-			return Type === "page_open" || Type === "page_view" || Type === "page_load";
-		});
-	} catch { return true; }
-}
-
-async function IsRepeatedSyntheticVisit(pSupabaseUrl, pServiceKey, pData) {
-	if (Str(pData.eventType).toLowerCase() !== "page_open") return false;
-	const Fingerprint = Str(pData.clientFingerprint);
-	if (!Fingerprint) return false;
-	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
-	Query.searchParams.set("select", "visitor_id,created_at");
-	Query.searchParams.set("event_type", "eq.page_open");
-	Query.searchParams.set("page_path", `eq.${pData.pagePath}`);
-	Query.searchParams.set("payload->>clientFingerprint", `eq.${Fingerprint}`);
-	Query.searchParams.set("created_at", `gte.${new Date(Date.now() - 15 * 60 * 1000).toISOString()}`);
-	Query.searchParams.set("order", "created_at.desc");
-	Query.searchParams.set("limit", "3");
-	const Res = await SupabaseRequest(Query, pServiceKey);
-	if (!Res.ok) return false;
-	try {
-		const Rows = JSON.parse(Res.text);
-		return Array.isArray(Rows) && Rows.some((Row) => Str(Row?.visitor_id) && Str(Row.visitor_id) !== pData.visitorId);
-	} catch { return false; }
-}
-
-async function LatestResetAt(pSupabaseUrl, pServiceKey) {
-	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
-	Query.searchParams.set("select", "created_at");
-	Query.searchParams.set("event_type", "eq.ops_clear_all");
-	Query.searchParams.set("order", "created_at.desc");
-	Query.searchParams.set("limit", "1");
-	const Res = await SupabaseRequest(Query, pServiceKey);
-	if (!Res.ok) return 0;
-	try { return Date.parse(JSON.parse(Res.text)?.[0]?.created_at || "") || 0; }
-	catch { return 0; }
-}
-
-async function FetchJsonRows(pSupabaseUrl, pServiceKey, pQuery) {
-	const Res = await SupabaseRequest(pQuery, pServiceKey);
-	if (!Res.ok) return [];
-	try { const Rows = JSON.parse(Res.text); return Array.isArray(Rows) ? Rows : []; }
+	if (!Res.ok) throw new Error(Res.text || `Insert HTTP ${Res.status}`);
+	try { return JSON.parse(Res.text); }
 	catch { return []; }
 }
 
-async function IsBlockedProfile(pSupabaseUrl, pServiceKey, pProfile) {
-	if (!pProfile) return false;
-	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
-	Query.searchParams.set("select", "id");
-	Query.searchParams.set("event_type", "eq.ops_synthetic_profile");
-	Query.searchParams.set("payload->>clientProfile", `eq.${pProfile}`);
-	Query.searchParams.set("limit", "1");
-	return (await FetchJsonRows(pSupabaseUrl, pServiceKey, Query)).length > 0;
-}
-
-async function IsDeletedVisitor(pSupabaseUrl, pServiceKey, pVisitorId) {
-	if (!pVisitorId) return false;
-	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
-	Query.searchParams.set("select", "id");
-	Query.searchParams.set("event_type", "eq.ops_delete_visitor");
-	Query.searchParams.set("payload->>targetVisitorId", `eq.${pVisitorId}`);
-	Query.searchParams.set("limit", "1");
-	return (await FetchJsonRows(pSupabaseUrl, pServiceKey, Query)).length > 0;
-}
-
-async function FindRepeatedProfileVisitors(pSupabaseUrl, pServiceKey, pData) {
-	if (Str(pData.eventType).toLowerCase() !== "page_open" || !Str(pData.clientProfile)) return [];
-	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
-	Query.searchParams.set("select", "visitor_id");
-	Query.searchParams.set("event_type", "eq.page_open");
-	Query.searchParams.set("payload->>clientProfile", `eq.${pData.clientProfile}`);
-	Query.searchParams.set("created_at", `gte.${new Date(Date.now() - 45 * 60 * 1000).toISOString()}`);
-	Query.searchParams.set("order", "created_at.desc");
-	Query.searchParams.set("limit", "20");
-	const Values = new Set((await FetchJsonRows(pSupabaseUrl, pServiceKey, Query)).map((Row) => Str(Row?.visitor_id)).filter(Boolean));
-	Values.delete(pData.visitorId);
-	return Array.from(Values);
-}
-
-async function DeleteVisitorsAndBlockProfile(pSupabaseUrl, pServiceKey, pVisitorIds, pData) {
-	const Visitors = Array.from(new Set([...(pVisitorIds || []), pData.visitorId].map(Str).filter(Boolean)));
-	for (const VisitorId of Visitors) {
-		for (const Table of ["ops_presence", "ops_events"]) {
-			const Url = new URL(`${pSupabaseUrl}/rest/v1/${Table}`);
-			Url.searchParams.set("visitor_id", `eq.${VisitorId}`);
-			await SupabaseRequest(Url, pServiceKey, { method: "DELETE", headers: { prefer: "return=minimal" } });
-		}
-	}
-	const ControlRows = Visitors.map((VisitorId) => ({
-		event_type: "ops_delete_visitor", visitor_id: "system_delete", session_id: `synthetic_delete_${Date.now()}`,
-		page_path: "", page_title: "",
-		payload: { targetVisitorId: VisitorId, deletedAt: new Date().toISOString(), controlCommand: "ops_delete_visitor", reason: "synthetic_profile" }
-	}));
-	ControlRows.push({
-		event_type: "ops_synthetic_profile", visitor_id: "system_synthetic", session_id: `synthetic_${Date.now()}`,
-		page_path: "", page_title: "", user_agent: pData.userAgentClient,
-		payload: {
-			clientProfile: pData.clientProfile, blockedVisitorIds: Visitors, blockedAt: new Date().toISOString(),
-			trafficKind: "synthetic", syntheticReason: "repeated_ephemeral_profile",
-			detectedPagePath: pData.pagePath, detectedPageTitle: pData.pageTitle
-		}
-	});
-	await SupabaseRequest(`${pSupabaseUrl}/rest/v1/ops_events`, pServiceKey, {
-		method: "POST",
-		headers: { "content-type": "application/json", prefer: "return=minimal" },
-		body: JSON.stringify(ControlRows)
-	});
-}
-
-async function RecoverPageOpenFromPing(pSupabaseUrl, pServiceKey, pData) {
-	if (Str(pData.eventType).toLowerCase() !== "page_ping") return null;
-	if (await HasStoredPageOpen(pSupabaseUrl, pServiceKey, pData.pageInstanceId)) return null;
-	const RecoveryData = {
-		...pData,
-		eventType: "page_open",
-		eventOn: "recovered_from_live_ping",
-		clientEventUid: `${pData.pageInstanceId}:page_open:recovered`,
-		label: pData.pageTitle || pData.pagePath,
-		important: true,
-		notifyMobile: true,
-		sound: true,
-		focusState: "visible"
-	};
-	return InsertEvent(pSupabaseUrl, pServiceKey, RecoveryData);
-}
-
-async function InsertEvent(pSupabaseUrl, pServiceKey, pData) {
-	if (await HasDuplicateEvent(pSupabaseUrl, pServiceKey, pData.clientEventUid)) {
-		return { ok: true, status: 200, text: "[]", duplicate: true };
-	}
-
-	// Do not require a client_event_uid database column. The UID remains inside
-	// payload, so this works against both the original and migrated ops_events table.
-	const Row = {
-		event_type: pData.eventType,
-		visitor_id: pData.visitorId,
-		session_id: pData.sessionId,
-		page_path: pData.pagePath,
-		page_title: pData.pageTitle,
-		referrer: pData.referrer,
-		screen: pData.screen,
-		language: pData.language,
-		timezone: pData.timezone,
-		user_agent: pData.userAgentClient,
-		payload: pData
-	};
-	return SupabaseRequest(`${pSupabaseUrl}/rest/v1/ops_events`, pServiceKey, {
-		method: "POST",
-		headers: {
-			"content-type": "application/json",
-			"prefer": "return=representation"
-		},
-		body: JSON.stringify(Row)
-	});
-}
-
-export async function OPTIONS() {
-	return Json({ ok: true });
-}
+export async function OPTIONS() { return Json({ ok: true }); }
 
 export async function POST({ request }) {
 	try {
@@ -358,131 +241,24 @@ export async function POST({ request }) {
 		if (!SupabaseUrl || !ServiceKey) return Json({ ok: false, error: "Missing Supabase env vars" }, 500);
 
 		const Body = await ReadBody(request);
-		if (!Body || typeof Body !== "object") return Json({ ok: false, error: "Invalid JSON body" }, 400);
+		if (!Body) return Json({ ok: false, error: "Missing body" }, 400);
+		const Inputs = Array.isArray(Body.events) ? Body.events : [Body];
+		if (!Inputs.length || Inputs.length > cMaxEventsPerRequest) return Json({ ok: false, error: `events must contain 1-${cMaxEventsPerRequest} items` }, 400);
+		const SyntheticReason = Inputs.map((Item) => SyntheticTrafficReason(request, Item)).find(Boolean) || SyntheticTrafficReason(request, Body);
+		if (SyntheticReason) return Json({ ok: true, stored: 0, ignored: true, reason: SyntheticReason });
 
-		const EventType = NormalizeEventType(Body);
-		const VisitorId = Str(Body.visitorId ?? Body.visitor_id);
-		const SessionId = Str(Body.sessionId ?? Body.session_id);
-		const PageInstanceId = Str(Body.pageInstanceId ?? Body.page_instance_id);
-		const PagePath = Str(Body.pagePath ?? Body.page_path);
-		const ClientEventUid = Str(Body.clientEventUid ?? Body.client_event_uid ?? Body.eventUid ?? Body.event_uid)
-			|| `${PageInstanceId}:${EventType}:${Str(Body.clientEventSeq ?? Body.client_event_seq)}`;
-
-		if (!IsValidClientId(VisitorId, "v_") || !IsValidClientId(SessionId, "s_") || !IsValidClientId(PageInstanceId, "p_") || !PagePath || !ClientEventUid) {
-			return Json({ ok: true, skipped: true, reason: "invalid_client_tracking_ids" });
+		const Rows = Inputs.map((Item) => NormalizeEvent(Item, request));
+		for (const Row of Rows) {
+			if (Row.event_source === "emolive" && !CheckOpsKey(request)) return Json({ ok: false, error: "Unauthorized" }, 401);
+			const Allowed = await AllowInferredExit(SupabaseUrl, ServiceKey, Row);
+			if (!Allowed.ok) return Json({ ok: true, stored: 0, ignored: true, reason: Allowed.reason });
 		}
 
-		const SyntheticReason = SyntheticTrafficReason(request, Body);
-		if (SyntheticReason) return Json({ ok: true, skipped: true, reason: "synthetic_traffic", syntheticReason: SyntheticReason });
-
-		const Geo = BuildGeo(request, Body);
-		const ReplayUrl = Str(Body.replayUrl ?? Body.replay_url);
-		const ClarityUrl = Str(Body.clarityRecordingUrl ?? Body.clarity_recording_url ?? Body.clarityUrl ?? Body.clarity_url);
-		const Data = {
-			...Body,
-			eventType: EventType,
-			visitorId: VisitorId,
-			sessionId: SessionId,
-			pageInstanceId: PageInstanceId,
-			pagePath: PagePath,
-			pageTitle: Str(Body.pageTitle ?? Body.page_title),
-			clientEventUid: ClientEventUid,
-			createdAtClient: Str(Body.createdAtClient ?? Body.created_at_client) || new Date().toISOString(),
-			focusState: Str(Body.focusState ?? Body.focus_state) || (EventType === "page_exit" ? "closed" : "visible"),
-			awayReason: Str(Body.awayReason ?? Body.away_reason),
-			elapsedMs: Math.max(0, Math.round(Number(Body.elapsedMs ?? Body.elapsed_ms) || 0)),
-			scrollPercent: Math.max(0, Math.min(100, Math.round(Number(Body.scrollPercent ?? Body.scroll_percent) || 0))),
-			locationCountryCode: Geo.countryCode,
-			locationRegion: Geo.region,
-			locationCity: Geo.city,
-			locationBand: Geo.band,
-			locationLabel: Geo.label,
-			locationBorderColor: Geo.borderColor,
-			userAgentClient: Str(request.headers.get("user-agent") || Body.userAgentClient),
-			replayUrl: ReplayUrl,
-			clarityUrl: ClarityUrl,
-			videoUrl: ReplayUrl || ClarityUrl || Str(Body.videoUrl ?? Body.video_url),
-			important: Bool(Body.important),
-			notifyMobile: Bool(Body.notifyMobile ?? Body.notify_mobile ?? Body.notify),
-			sound: Bool(Body.sound),
-			trafficKind: "human",
-			botSignal: ""
-		};
-		const ResetAt = await LatestResetAt(SupabaseUrl, ServiceKey);
-		const PageStartedAt = Date.parse(Str(Body.pageStartedAt ?? Body.page_started_at)) || 0;
-		if (ResetAt > 0 && PageStartedAt > 0 && PageStartedAt < ResetAt) {
-			return Json({ ok: true, skipped: true, reason: "page_started_before_full_reset" });
-		}
-		if (await IsBlockedProfile(SupabaseUrl, ServiceKey, Str(Data.clientProfile))) {
-			return Json({ ok: true, skipped: true, reason: "blocked_synthetic_profile" });
-		}
-		if (await IsDeletedVisitor(SupabaseUrl, ServiceKey, VisitorId)) {
-			return Json({ ok: true, skipped: true, reason: "deleted_visitor_tombstone" });
-		}
-		const RepeatedVisitors = await FindRepeatedProfileVisitors(SupabaseUrl, ServiceKey, Data);
-		if (RepeatedVisitors.length) {
-			await DeleteVisitorsAndBlockProfile(SupabaseUrl, ServiceKey, RepeatedVisitors, Data);
-			return Json({ ok: true, skipped: true, reason: "repeated_ephemeral_profile_removed" });
-		}
-
-		if (await IsRepeatedSyntheticVisit(SupabaseUrl, ServiceKey, Data)) {
-			return Json({ ok: true, skipped: true, reason: "repeated_ephemeral_browser" });
-		}
-
-		const PresenceRes = await UpsertPresence(SupabaseUrl, ServiceKey, Data);
-		if (!PresenceRes.ok) {
-			return Json({
-				ok: false,
-				error: "Presence write failed",
-				details: PresenceRes.text || `HTTP ${PresenceRes.status}`
-			}, PresenceRes.status || 500);
-		}
-
-		if (IsPresenceOnly(EventType)) {
-			const Recovery = await RecoverPageOpenFromPing(SupabaseUrl, ServiceKey, Data);
-			if (Recovery && !Recovery.ok) {
-				return Json({
-					ok: false,
-					presence: true,
-					eventStored: false,
-					error: "Recovered page_open write failed",
-					details: Recovery.text || `HTTP ${Recovery.status}`
-				}, Recovery.status || 500);
-			}
-			return Json({
-				ok: true,
-				presence: true,
-				eventStored: !!Recovery,
-				recoveredPageOpen: !!Recovery
-			});
-		}
-
-		const EventRes = await InsertEvent(SupabaseUrl, ServiceKey, Data);
-		if (!EventRes.ok) {
-			return Json({
-				ok: false,
-				presence: true,
-				eventStored: false,
-				error: "Event write failed",
-				details: EventRes.text || `HTTP ${EventRes.status}`
-			}, EventRes.status || 500);
-		}
-
-		let Rows = [];
-		try { Rows = JSON.parse(EventRes.text); }
-		catch {}
-		return Json({
-			ok: true,
-			presence: true,
-			eventStored: true,
-			duplicate: EventRes.duplicate === true || !Array.isArray(Rows) || Rows.length === 0,
-			data: Rows
-		});
+		const Inserted = await InsertRows(SupabaseUrl, ServiceKey, Rows);
+		return Json({ ok: true, stored: Array.isArray(Inserted) ? Inserted.length : Rows.length, accepted: Rows.length });
 	} catch (Ex) {
-		return Json({
-			ok: false,
-			error: "Function crashed",
-			message: Ex instanceof Error ? Ex.message : String(Ex)
-		}, 500);
+		const Message = Ex instanceof Error ? Ex.message : String(Ex);
+		const IsClientError = /Missing|Invalid|events must|too large|JSON/.test(Message);
+		return Json({ ok: false, error: Message }, IsClientError ? 400 : 500);
 	}
 }

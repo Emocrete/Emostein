@@ -28,15 +28,21 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 <script is:inline>
 	(() => {
 	const cReplayParams = new URLSearchParams(location.search);
-	if (window.__EMO_REPLAY__ || cReplayParams.has("emoReplay") || cReplayParams.has("emo_replay") || cReplayParams.has("emoNoAnalytics")) return;
+	if (cReplayParams.has("emoNoAnalytics")) {
+		try { sessionStorage.setItem("emo_no_analytics_v1", "1"); } catch {}
+	}
+	let fNoAnalytics = false;
+	try { fNoAnalytics = sessionStorage.getItem("emo_no_analytics_v1") === "1"; } catch {}
+	if (window.__EMO_REPLAY__ || fNoAnalytics || cReplayParams.has("emoReplay") || cReplayParams.has("emo_replay")) return;
 	if (window.__EMO_OPS_TRACKER_ACTIVE__) return;
 	window.__EMO_OPS_TRACKER_ACTIVE__ = true;
 	const cVisitorKey = "emo_ops_visitor_id";
 	const cSessionKey = "emo_ops_session_id";
 	const cOncePrefix = "emo_ops_once_";
 	const cApiUrl = "/api/ops/visit";
-	const cRetryQueueKey = "emo_ops_retry_queue_v2";
-	const cRetryQueueMax = 120;
+	const cRetryQueueKey = "emo_ops_retry_queue_v3";
+	const cSessionSeqKey = "emo_ops_session_seq_v1";
+	const cSessionStartedKey = "emo_ops_session_started_at_v1";
 	const cViewThreshold = [0, 0.01, 0.05];
 	const cViewRootMargin = "0px";
 	const cScrollMarks = [10, 20, 30, 40, 50, 60, 70, 80, 90];
@@ -63,6 +69,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	let fPageOpenSent = false;
 	let fPageOpenPromise = null;
 	let fQueueFlushRunning = false;
+	let fRetryDuringFlush = [];
 	let fPagePingTimer = 0;
 	let fReadTimer = 0;
 	let fLastReadTickAt = Date.now();
@@ -130,6 +137,29 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	return Math.max(0, Date.now() - cPageStartedAt);
 	}
 
+	function GetSessionStartedAt() {
+		let Value = 0;
+		try { Value = Number(sessionStorage.getItem(cSessionStartedKey) || 0); } catch {}
+		if (!Number.isFinite(Value) || Value <= 0 || Value > Date.now()) {
+			Value = Date.now();
+			try { sessionStorage.setItem(cSessionStartedKey, String(Value)); } catch {}
+		}
+		return Value;
+	}
+
+	function GetSessionElapsedMs() {
+		return Math.max(0, Date.now() - GetSessionStartedAt());
+	}
+
+	function NextSessionSeq() {
+		let Value = 0;
+		try { Value = Number(sessionStorage.getItem(cSessionSeqKey) || 0); } catch {}
+		if (!Number.isFinite(Value) || Value < 0) Value = 0;
+		Value = Math.floor(Value) + 1;
+		try { sessionStorage.setItem(cSessionSeqKey, String(Value)); } catch { Value = ++fSeq; }
+		return Value;
+	}
+
 	function BotSignal() {
 	const UserAgent = String(navigator.userAgent || "");
 	const Reasons = [];
@@ -142,13 +172,6 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 
 	function IsSyntheticTraffic() {
 	return BotSignal() !== "";
-	}
-
-	function BuildReplayPath() {
-	const VisitorId = encodeURIComponent(GetVisitorId());
-	const SessionId = encodeURIComponent(GetSessionId());
-	const PageInstanceId = encodeURIComponent(GetPageInstanceId());
-	return `/api/ops/replay?visitor_id=${VisitorId}&session_id=${SessionId}&page_instance_id=${PageInstanceId}`;
 	}
 
 	function GetCookieValue(pName) {
@@ -744,34 +767,42 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	|| Type === "page_exit"
 	|| Type === "page_close"
 	|| Type === "session_end"
-	|| Type === "page_ping";
+	|| Type === "page_alive";
 	}
 
 	function ReadRetryQueue() {
 	try {
 	const Value = JSON.parse(localStorage.getItem(cRetryQueueKey) || "[]");
-	return Array.isArray(Value) ? Value.slice(-cRetryQueueMax) : [];
+	return Array.isArray(Value) ? Value : [];
 	} catch { return []; }
 	}
 
 	function SaveRetryQueue(pQueue) {
-	try { localStorage.setItem(cRetryQueueKey, JSON.stringify((pQueue || []).slice(-cRetryQueueMax))); } catch {}
+	try {
+	localStorage.setItem(cRetryQueueKey, JSON.stringify(pQueue || []));
+	return true;
+	} catch { return false; }
 	}
 
 	function EnqueueRetry(pBody) {
-	if (!pBody || pBody.eventType === "page_ping") return;
+	if (!pBody || pBody.eventType === "page_alive") return false;
+	if (fQueueFlushRunning) {
+	if (!fRetryDuringFlush.some((Item) => Item?.clientEventUid === pBody.clientEventUid)) fRetryDuringFlush.push(pBody);
+	return true;
+	}
 	const Queue = ReadRetryQueue();
 	if (!Queue.some((Item) => Item && Item.clientEventUid === pBody.clientEventUid)) Queue.push(pBody);
-	SaveRetryQueue(Queue);
+	return SaveRetryQueue(Queue);
 	}
 
 	async function SendFetchPayload(pBody) {
 	try {
+	const JsonBody = JSON.stringify(pBody);
 	const Res = await fetch(cApiUrl, {
 	method: "POST",
 	headers: { "content-type": "application/json" },
-	body: JSON.stringify(pBody),
-	keepalive: true
+	body: JsonBody,
+	keepalive: JsonBody.length < 60000
 	});
 	let Data = {};
 	try { Data = await Res.json(); } catch {}
@@ -785,36 +816,51 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	try {
 	const Queue = ReadRetryQueue();
 	const Remaining = [];
-	for (const Body of Queue) {
-	const Result = await SendFetchPayload(Body);
-	if (!Result.ok) Remaining.push(Body);
+	for (let Index = 0; Index < Queue.length; Index += 500) {
+	const Batch = Queue.slice(Index, Index + 500);
+	const Result = await SendFetchPayload({ events: Batch });
+	if (!Result.ok) Remaining.push(...Batch);
 	}
+	for (const Body of fRetryDuringFlush) {
+	if (!Remaining.some((Item) => Item?.clientEventUid === Body?.clientEventUid)) Remaining.push(Body);
+	}
+	fRetryDuringFlush = [];
 	SaveRetryQueue(Remaining);
 	} finally { fQueueFlushRunning = false; }
 	}
 
 	async function SendOpsPayload(pBody, pPreferBeacon) {
+	if (pPreferBeacon && navigator.sendBeacon) {
+	try {
+	const Accepted = navigator.sendBeacon(cApiUrl, new Blob([JSON.stringify(pBody)], { type: "application/json" }));
+	if (Accepted) return { ok: true, beacon: true };
+	} catch {}
+	}
 	const Result = await SendFetchPayload(pBody);
-	if (!Result.ok) EnqueueRetry(pBody);
-	return Result;
+	if (Result.ok) return Result;
+	const Queued = EnqueueRetry(pBody);
+	return Queued ? { ...Result, ok: true, queued: true } : Result;
 	}
 
-	function TrackOpsEvent(pEventType, pOptions = {}) {
+	function BuildOpsPayload(pEventType, pOptions = {}) {
 	const EventType = String(pEventType || "").trim();
-	if (!EventType) return Promise.resolve({ ok: false, error: "Missing event type" });
-	if (IsSyntheticTraffic()) return Promise.resolve({ ok: true, skipped: true, reason: "synthetic_traffic", signal: BotSignal() });
-	if (EventType !== "page_open" && !fPageOpenSent && !BoolValue(pOptions.allowBeforeOpen)) return Promise.resolve({ ok: true, skipped: true, reason: "page_not_visible_yet" });
-
 	const IsHiddenNow = document.hidden || document.visibilityState !== "visible";
 	const ClientEventSeq = ++fSeq;
-	const ClientEventUid = `${GetPageInstanceId()}:${EventType}:${ClientEventSeq}`;
+	const SessionSeq = NextSessionSeq();
+	const ClientEventUid = `${GetSessionId()}:${SessionSeq}:${GetPageInstanceId()}:${ClientEventSeq}`;
 	const IsContactEvent = EventType === "call_click" || EventType === "whatsapp_click";
-	const Body = {
+	const PageElapsedMs = Number.isFinite(Number(pOptions.pageElapsedMs)) ? Math.max(0, Math.round(Number(pOptions.pageElapsedMs))) : Math.round(GetPageElapsedMs());
+	const SessionElapsedMs = Number.isFinite(Number(pOptions.sessionElapsedMs)) ? Math.max(0, Math.round(Number(pOptions.sessionElapsedMs))) : Math.round(GetSessionElapsedMs());
+	return {
 	eventType: EventType,
+	eventSource: String(pOptions.eventSource || "site").trim() || "site",
 	eventOn: String(pOptions.eventOn || "").trim(),
 	visitorId: GetVisitorId(),
 	sessionId: GetSessionId(),
 	pageInstanceId: GetPageInstanceId(),
+	sessionSeq: SessionSeq,
+	pageElapsedMs: PageElapsedMs,
+	sessionElapsedMs: SessionElapsedMs,
 	pagePath: location.pathname,
 	pageTitle: document.title,
 	pageTitleShort: CleanText(document.title),
@@ -837,8 +883,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	widget: String(pOptions.widget || "").trim(),
 	label: Shorten(pOptions.label || "", pOptions.labelMax || 190),
 	value: pOptions.value ?? "",
-	elapsedMs: Math.round(GetPageElapsedMs()),
-	elapsedSec: Math.round(GetPageElapsedMs() / 1000),
+	elapsedMs: PageElapsedMs,
+	elapsedSec: Math.round(PageElapsedMs / 1000),
 	href: String(pOptions.href || "").trim(),
 	important: IsContactEvent || BoolValue(pOptions.important),
 	notifyMobile: IsContactEvent || BoolValue(pOptions.notifyMobile),
@@ -847,7 +893,6 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	awayReason: String(pOptions.awayReason || "").trim(),
 	focusState: String(pOptions.focusState || (IsHiddenNow ? "hidden" : "visible")).trim(),
 	isPageHidden: IsHiddenNow,
-	replayUrl: String(pOptions.replayUrl || BuildReplayPath()).trim(),
 	clarityUrl: String(pOptions.clarityUrl || pOptions.clarityRecordingUrl || "").trim(),
 	clarityRecordingUrl: String(pOptions.clarityRecordingUrl || pOptions.clarityUrl || "").trim(),
 	clarityProjectId: String(pOptions.clarityProjectId || "").trim(),
@@ -855,8 +900,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	claritySessionId: String(pOptions.claritySessionId || "").trim(),
 	clarityAvailableAfter: String(pOptions.clarityAvailableAfter || "").trim(),
 	clarityStatus: String(pOptions.clarityStatus || "").trim(),
-	videoUrl: String(pOptions.videoUrl || pOptions.replayUrl || BuildReplayPath()).trim(),
-	recordingProvider: "emo_replay",
+	videoUrl: String(pOptions.videoUrl || "").trim(),
 	trafficKind: "human",
 	botSignal: "",
 	userAgentClient: navigator.userAgent || "",
@@ -864,12 +908,38 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	clientProfile: StableProfile(),
 	clientEventSeq: ClientEventSeq,
 	clientEventUid: ClientEventUid,
-	createdAtClient: new Date().toISOString(),
-	pageStartedAt: new Date(cPageStartedAt).toISOString()
+	createdAtClient: String(pOptions.createdAtClient || new Date().toISOString()),
+	pageStartedAt: new Date(cPageStartedAt).toISOString(),
+	eventData: pOptions.eventData && typeof pOptions.eventData === "object" ? pOptions.eventData : {}
 	};
+	}
 
+	function TrackOpsEvent(pEventType, pOptions = {}) {
+	const EventType = String(pEventType || "").trim();
+	if (!EventType) return Promise.resolve({ ok: false, error: "Missing event type" });
+	if (IsSyntheticTraffic()) return Promise.resolve({ ok: true, skipped: true, reason: "synthetic_traffic", signal: BotSignal() });
+	if (EventType !== "page_open" && !fPageOpenSent && !BoolValue(pOptions.allowBeforeOpen)) return Promise.resolve({ ok: true, skipped: true, reason: "page_not_visible_yet" });
+	const Body = BuildOpsPayload(EventType, pOptions);
+	const IsHiddenNow = document.hidden || document.visibilityState !== "visible";
 	const PreferBeacon = BoolValue(pOptions.useBeacon) || (IsHiddenNow && IsLifecycleEvent(EventType)) || EventType === "page_exit";
 	return SendOpsPayload(Body, PreferBeacon);
+	}
+
+	async function TrackOpsEventBatch(pEvents) {
+	if (!Array.isArray(pEvents) || !pEvents.length) return { ok: true, skipped: true };
+	if (IsSyntheticTraffic()) return { ok: true, skipped: true, reason: "synthetic_traffic" };
+	if (!fPageOpenSent) return { ok: true, skipped: true, reason: "page_not_visible_yet" };
+	let QueuedAny = false;
+	for (let Index = 0; Index < pEvents.length; Index += 500) {
+	const Bodies = pEvents.slice(Index, Index + 500).map((Item) => BuildOpsPayload(Item?.eventType || Item?.type || "system.event", Item || {}));
+	const Result = await SendFetchPayload({ events: Bodies });
+	if (Result.ok) continue;
+	let AllQueued = true;
+	for (const Body of Bodies) AllQueued = EnqueueRetry(Body) && AllQueued;
+	if (!AllQueued) return Result;
+	QueuedAny = true;
+	}
+	return { ok: true, queued: QueuedAny };
 	}
 
 	async function TrackOpsEventOnce(pEventType, pOnceKey, pOptions = {}) {
@@ -1317,11 +1387,11 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	window.addEventListener("focus", () => TrackPageReturn("focus"));
 	}
 
-	function TrackPagePing() {
+	function TrackPageAlive() {
 	if (!fPageOpenSent || fPageExitSent) return;
 	const Hidden = document.hidden || document.visibilityState !== "visible";
 	if (Hidden && !fAwayStartedAt) MarkPageAway("hidden_ping");
-	TrackOpsEvent("page_ping", {
+	TrackOpsEvent("page_alive", {
 	eventOn: Hidden ? "heartbeat_hidden" : "heartbeat",
 	widget: "Page",
 	label: Hidden ? "الصفحة ما زالت مفتوحة خارج التركيز" : "الصفحة ما زالت مفتوحة",
@@ -1362,15 +1432,15 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 
 	function InitPageLiveEvents() {
 	if (fPagePingTimer) clearInterval(fPagePingTimer);
-	fPagePingTimer = window.setInterval(TrackPagePing, cPagePingMs);
+	fPagePingTimer = window.setInterval(TrackPageAlive, cPagePingMs);
 
 	window.addEventListener("pagehide", () => TrackPageExit("pagehide"));
 	window.addEventListener("beforeunload", () => TrackPageExit("beforeunload"));
 	window.addEventListener("freeze", () => {
 	MarkPageAway("freeze");
-	TrackPagePing();
+	TrackPageAlive();
 	});
-	setTimeout(TrackPagePing, 1000);
+	setTimeout(TrackPageAlive, 1000);
 	}
 
 	function TrackPageOpen() {
@@ -1385,9 +1455,11 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	notifyMobile: true,
 	sound: true
 	}).then((Result) => {
-	// Presence is already live even if an older ops_events schema rejects the event row.
-	// Allow lifecycle updates to continue while the failed page_open stays in the retry queue.
-	if (Result && (Result.ok || Result.presence)) fPageOpenSent = true;
+	if (Result && Result.ok) {
+		fPageOpenSent = true;
+		window.__EMO_OPS_PAGE_OPENED__ = true;
+		window.dispatchEvent(new CustomEvent("emo:ops-page-open", { detail: window.__EmoOpsIds }));
+	}
 	return Result;
 	}).finally(() => { fPageOpenPromise = null; });
 	return fPageOpenPromise;
@@ -1485,6 +1557,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	setTimeout(FlushRetryQueue, 1500);
 
 	window.TrackOpsEvent = TrackOpsEvent;
+	window.TrackOpsEventBatch = TrackOpsEventBatch;
 	window.TrackOpsEventOnce = TrackOpsEventOnce;
 	window.EmoOpsTrackEvent = TrackOpsEvent;
 
@@ -1515,14 +1588,6 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 
 
 ) }
-
-
-
-
-
-
-
-
 
 
 

@@ -11,12 +11,12 @@ async function Handle(pRequest) {
 	const SupabaseUrl = Env("SUPABASE_URL"); const ServiceKey = Env("SUPABASE_SERVICE_ROLE_KEY");
 	if (!SupabaseUrl || !ServiceKey) return Json({ ok: false, error: "Missing Supabase env vars" }, 500);
 	const RequestUrl = new URL(pRequest.url); const Body = await ReadBody(pRequest);
-	const VisitorId = Str(Body.visitorId ?? Body.visitor_id ?? RequestUrl.searchParams.get("visitor_id") ?? RequestUrl.searchParams.get("visitorId"));
-	if (!VisitorId) return Json({ ok: false, error: "Missing visitorId" }, 400);
-	const Url = new URL(`${SupabaseUrl}/rest/v1/ops_events`); Url.searchParams.set("visitor_id", `eq.${VisitorId}`);
+	const SessionId = Str(Body.sessionId ?? Body.session_id ?? RequestUrl.searchParams.get("session_id") ?? RequestUrl.searchParams.get("sessionId"));
+	if (!SessionId) return Json({ ok: false, error: "Missing sessionId" }, 400);
+	const Url = new URL(`${SupabaseUrl}/rest/v1/ops_events`); Url.searchParams.set("session_id", `eq.${SessionId}`);
 	const Res = await fetch(Url, { method: "DELETE", headers: { apikey: ServiceKey, authorization: `Bearer ${ServiceKey}`, prefer: "return=minimal" } });
 	const Text = await Res.text(); if (!Res.ok) throw new Error(Text || `HTTP ${Res.status}`);
-	return Json({ ok: true, deleted: true, visitorId: VisitorId });
+	return Json({ ok: true, deleted: true, sessionId: SessionId });
 }
 export async function OPTIONS() { return Json({ ok: true }); }
 export async function POST({ request }) { try { return await Handle(request); } catch (Ex) { return Json({ ok: false, error: Ex instanceof Error ? Ex.message : String(Ex) }, 500); } }

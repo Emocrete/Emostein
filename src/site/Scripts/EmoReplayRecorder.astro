@@ -1,659 +1,239 @@
 ---
-const cEnabled = true;
-const cSampleRate = Number(import.meta.env.PUBLIC_EMO_REPLAY_SAMPLE_RATE ?? "1");
+const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 const cSnapshotDelayMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_SNAPSHOT_DELAY_MS ?? "1400");
 const cPointerEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_POINTER_EVERY_MS ?? "80");
 const cScrollEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_SCROLL_EVERY_MS ?? "120");
-const cFlushEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_FLUSH_EVERY_MS ?? "5000");
-const cMaxEventsPerChunk = Number(import.meta.env.PUBLIC_EMO_REPLAY_MAX_EVENTS_PER_CHUNK ?? "120");
+const cFlushEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_FLUSH_EVERY_MS ?? "1000");
+const cNetworkBatchSize = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH_SIZE ?? "120");
 ---
 
-{ cEnabled && (
+{cEnabled && (
 <script
 	is:inline
-	define:vars={{
-		cSampleRate,
-		cSnapshotDelayMs,
-		cPointerEveryMs,
-		cScrollEveryMs,
-		cFlushEveryMs,
-		cMaxEventsPerChunk
-	}}
+	define:vars={{ cSnapshotDelayMs, cPointerEveryMs, cScrollEveryMs, cFlushEveryMs, cNetworkBatchSize }}
 >
 (() => {
 	if (window.__EmoReplayRecorderStarted) return;
+	let NoAnalytics = !!window.__EMO_REPLAY__;
+	try { NoAnalytics = NoAnalytics || sessionStorage.getItem("emo_no_analytics_v1") === "1"; } catch {}
+	if (NoAnalytics || new URLSearchParams(location.search).has("emoNoAnalytics")) return;
 	window.__EmoReplayRecorderStarted = true;
 
-	if (Math.random() > Number(cSampleRate || 1)) return;
-	if (location.pathname.startsWith("/admin/replay")) return;
-
-	const cVisitorKey = "emo_ops_visitor_id";
-	const cVisitSessionKey = "emo_ops_session_id";
-	const cReplayPageKey = "emo_replay_page_id";
-	const cPendingChunksKey = "emo_replay_pending_chunks_v1";
-	const cPendingChunksMax = 40;
-	const cOpsKey = "Emocrete20015161";
-	const cApiSession = `/api/replay/session?key=${encodeURIComponent(cOpsKey)}`;
-	const cApiChunk = `/api/replay/chunk?key=${encodeURIComponent(cOpsKey)}`;
-	const cStartedAt = new Date().toISOString();
-	const cStartTick = performance.now();
-	const cOpsIds = window.__EmoOpsIds || {};
-	const cReplayId = NewId("r");
-	const cVisitorId = Str(cOpsIds.visitorId) || GetStoredId(localStorage, cVisitorKey, "v");
-	const cVisitSessionId = Str(cOpsIds.sessionId) || GetStoredId(sessionStorage, cVisitSessionKey, "s");
-	const cPageId = Str(cOpsIds.pageInstanceId) || NewId("rp");
-	const cClientProfile = Str(cOpsIds.clientProfile);
-
-	try { sessionStorage.setItem(cReplayPageKey, cPageId); } catch {}
-	window.__EmoReplayIds = {
-		replaySessionId: cReplayId,
-		visitorId: cVisitorId,
-		visitSessionId: cVisitSessionId,
-		pageId: cPageId
-	};
-
-	let fEvents = [];
-	let fSeq = 0;
-	let fChunkIndex = 0;
+	const cPageStartedAt = Date.now();
+	const cSessionStartedKey = "emo_ops_session_started_at_v1";
+	const cEvents = [];
+	let fCaptureSeq = 0;
+	let fFlushRunning = false;
 	let fFlushTimer = 0;
 	let fLastPointerAt = 0;
 	let fLastScrollAt = 0;
-	let fStartSent = false;
-	let fSnapshotSent = false;
-	let fSnapshotSending = false;
-	let fSnapshotAttempts = 0;
+	let fStarted = false;
 	let fUnloading = false;
-	let fFlushRunning = false;
-	let fPendingFlushRunning = false;
-	let fLastKnownScrollX = window.scrollX || 0;
-	let fLastKnownScrollY = window.scrollY || 0;
-	let fLastReplayError = "";
 
-	function NewId(pPrefix) {
-		const Rand = Math.random().toString(36).slice(2, 10);
-		const Time = Date.now().toString(36);
-		return `${pPrefix}_${Time}_${Rand}`;
+	function Str(pValue) { return String(pValue ?? "").trim(); }
+	function NowPage() { return Math.max(0, Date.now() - cPageStartedAt); }
+	function NowSession() {
+		let Started = cPageStartedAt;
+		try { Started = Number(sessionStorage.getItem(cSessionStartedKey) || cPageStartedAt); } catch {}
+		return Math.max(0, Date.now() - (Number.isFinite(Started) ? Started : cPageStartedAt));
 	}
-
-	function Now() {
-		return Math.max(0, Math.round(performance.now() - cStartTick));
-	}
-
-	function GetStoredId(pStorage, pKey, pPrefix) {
-		let Id = "";
-		try { Id = pStorage.getItem(pKey) || ""; } catch {}
-		if (!Id) {
-			Id = NewId(pPrefix);
-			try { pStorage.setItem(pKey, Id); } catch {}
-		}
-		return Id;
-	}
-
-	function Str(pValue) {
-		return String(pValue ?? "").trim();
-	}
-
-	function PendingChunkId(pBody) {
-		return `${Str(pBody?.sessionId)}:${Number(pBody?.chunkIndex || 0)}`;
-	}
-
-	function ReadPendingChunks() {
-		try {
-			const Value = JSON.parse(localStorage.getItem(cPendingChunksKey) || "[]");
-			return Array.isArray(Value) ? Value.slice(-cPendingChunksMax) : [];
-		} catch { return []; }
-	}
-
-	function SavePendingChunks(pItems) {
-		try {
-			localStorage.setItem(cPendingChunksKey, JSON.stringify((pItems || []).slice(-cPendingChunksMax)));
-			return true;
-		} catch { return false; }
-	}
-
-	function QueuePendingChunk(pBody) {
-		const Id = PendingChunkId(pBody);
-		if (!Id || Id.startsWith(":")) return false;
-		const Items = ReadPendingChunks().filter((Item) => Item?.id !== Id);
-		Items.push({ id: Id, body: pBody });
-		return SavePendingChunks(Items);
-	}
-
-	function RemovePendingChunk(pBody) {
-		const Id = PendingChunkId(pBody);
-		if (!Id) return;
-		const Items = ReadPendingChunks();
-		const Remaining = Items.filter((Item) => Item?.id !== Id);
-		if (Remaining.length !== Items.length) SavePendingChunks(Remaining);
-	}
-
-	async function FlushPendingChunks() {
-		if (fPendingFlushRunning || !navigator.onLine) return;
-		fPendingFlushRunning = true;
-		try {
-			const Items = ReadPendingChunks();
-			const Remaining = [];
-			for (const Item of Items) {
-				if (!Item?.body) continue;
-				const Sent = await SendJson(cApiChunk, Item.body, false);
-				if (!Sent) Remaining.push(Item);
-			}
-			SavePendingChunks(Remaining);
-		} finally {
-			fPendingFlushRunning = false;
-		}
-	}
-
 	function Shorten(pText, pMax = 180) {
 		const Text = Str(pText).replace(/\s+/g, " ");
 		return Text.length > pMax ? `${Text.slice(0, pMax).trim()}…` : Text;
 	}
-
 	function CssEscape(pValue) {
-		if (window.CSS && typeof window.CSS.escape === "function") return CSS.escape(String(pValue));
-		return String(pValue).replace(/["\\]/g, "\\$&");
+		if (window.CSS && typeof CSS.escape === "function") return CSS.escape(String(pValue));
+		return String(pValue).replace(/([ #;?%&,.+*~\\':"!^$[\]()=>|/@])/g, "\\$1");
 	}
-
-	function GetReplayId(pElem) {
-		const Elem = pElem?.closest?.("[data-replay-id], [data-ops-widget], [data-ops-scope], [id]");
-		if (!Elem) return "";
-		return Str(Elem.getAttribute("data-replay-id") || Elem.getAttribute("data-ops-widget") || Elem.getAttribute("data-ops-scope") || Elem.id || "");
+	function ExactSelector(pElem) {
+		if (!(pElem instanceof Element)) return "";
+		if (pElem.id) return `#${CssEscape(pElem.id)}`;
+		for (const Attr of ["data-replay-id", "data-ops-widget", "data-ops-scope", "data-ops-id"]) {
+			const Value = Str(pElem.getAttribute(Attr));
+			if (Value) return `[${Attr}="${CssEscape(Value)}"]`;
+		}
+		const Parts = [];
+		let Elem = pElem;
+		for (let Depth = 0; Elem && Elem !== document.documentElement && Depth < 7; Depth += 1) {
+			let Part = Elem.tagName.toLowerCase();
+			const Name = Str(Elem.getAttribute("name"));
+			if (Name) Part += `[name="${CssEscape(Name)}"]`;
+			const Parent = Elem.parentElement;
+			if (Parent) {
+				const Same = Array.from(Parent.children).filter((Item) => Item.tagName === Elem.tagName);
+				if (Same.length > 1) Part += `:nth-of-type(${Same.indexOf(Elem) + 1})`;
+			}
+			Parts.unshift(Part);
+			Elem = Parent;
+		}
+		return Parts.join(" > ");
 	}
-
-	function GetReplaySelector(pElem) {
-		const Id = GetReplayId(pElem);
-		if (!Id) return "";
-		const Elem = pElem?.closest?.("[data-replay-id], [data-ops-widget], [data-ops-scope], [id]");
-		if (Elem?.hasAttribute?.("data-replay-id")) return `[data-replay-id=\"${CssEscape(Id)}\"]`;
-		if (Elem?.hasAttribute?.("data-ops-widget")) return `[data-ops-widget=\"${CssEscape(Id)}\"]`;
-		if (Elem?.hasAttribute?.("data-ops-scope")) return `[data-ops-scope=\"${CssEscape(Id)}\"]`;
-		if (Elem?.id) return `#${CssEscape(Elem.id)}`;
-		return "";
-	}
-
-	function GetLabel(pElem) {
-		const Elem = pElem?.closest?.("[data-replay-label], [data-ops-label], [aria-label], [title], button, a, summary, label, input, textarea, select, [data-replay-id], [id]") || pElem;
-		if (!Elem) return "";
-		const Explicit = Elem.getAttribute?.("data-replay-label") || Elem.getAttribute?.("data-ops-label") || Elem.getAttribute?.("aria-label") || Elem.getAttribute?.("title") || Elem.getAttribute?.("placeholder") || "";
-		if (Explicit) return Shorten(Explicit);
-		if (Elem.matches?.("input, textarea, select")) return Shorten(Elem.name || Elem.id || Elem.getAttribute("data-replay-id") || "");
-		return Shorten(Elem.innerText || Elem.textContent || "");
-	}
-
-	function GetTargetInfo(pElem) {
+	function TargetData(pElem) {
+		const Elem = pElem instanceof Element ? pElem : null;
 		return {
-			target: GetReplayId(pElem),
-			selector: GetReplaySelector(pElem),
-			label: GetLabel(pElem)
+			selector: ExactSelector(Elem),
+			tag: Str(Elem?.tagName).toLowerCase(),
+			label: Shorten(Elem?.getAttribute?.("aria-label") || Elem?.getAttribute?.("title") || Elem?.getAttribute?.("placeholder") || Elem?.innerText || Elem?.textContent || ""),
+			name: Str(Elem?.getAttribute?.("name")),
+			id: Str(Elem?.id)
 		};
 	}
-
-	function BasePayload() {
+	function ViewportData() {
+		const Root = document.documentElement;
 		return {
-			id: cReplayId,
-			visitorId: cVisitorId,
-			visitSessionId: cVisitSessionId,
-			pageId: cPageId,
-			pageUrl: location.href,
-			pagePath: location.pathname,
-			pageTitle: document.title,
-			startedAt: cStartedAt,
-			viewport: GetViewportInfo(),
-			document: GetDocumentInfo(),
-			screen: `${screen.width}x${screen.height}`,
-			language: navigator.language || "",
-			timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
-			userAgentClient: navigator.userAgent || "",
-			clientProfile: cClientProfile
-		};
-	}
-
-	function GetViewportInfo() {
-		return {
-			width: Math.round(window.innerWidth || document.documentElement.clientWidth || 0),
-			height: Math.round(window.innerHeight || document.documentElement.clientHeight || 0),
+			viewportWidth: Math.round(window.innerWidth || Root.clientWidth || 0),
+			viewportHeight: Math.round(window.innerHeight || Root.clientHeight || 0),
+			documentWidth: Math.max(Root.scrollWidth, document.body?.scrollWidth || 0),
+			documentHeight: Math.max(Root.scrollHeight, document.body?.scrollHeight || 0),
 			dpr: Number(window.devicePixelRatio || 1),
 			scrollX: Math.round(window.scrollX || 0),
 			scrollY: Math.round(window.scrollY || 0)
 		};
 	}
-
-	function GetDocumentInfo() {
-		const Doc = document.documentElement;
-		const Body = document.body;
-		return {
-			width: Math.max(Doc.scrollWidth, Body?.scrollWidth || 0, Doc.clientWidth),
-			height: Math.max(Doc.scrollHeight, Body?.scrollHeight || 0, Doc.clientHeight),
-			direction: getComputedStyle(Doc).direction || document.dir || "rtl"
-		};
+	function Capture(pType, pData = {}, pImmediate = false) {
+		if (!fStarted || typeof window.TrackOpsEventBatch !== "function") return;
+		const PageElapsedMs = NowPage();
+		const SessionElapsedMs = NowSession();
+		cEvents.push({
+			eventType: `system.${pType}`,
+			eventSource: "site",
+			pageElapsedMs: PageElapsedMs,
+			sessionElapsedMs: SessionElapsedMs,
+			createdAtClient: new Date().toISOString(),
+			focusState: document.hidden ? "away" : "visible",
+			eventData: { captureSeq: ++fCaptureSeq, t: PageElapsedMs, sessionT: SessionElapsedMs, ...pData }
+		});
+		if (pImmediate) Flush();
 	}
 
-	async function SendJson(pUrl, pBody, pBeacon = false) {
-		const Text = JSON.stringify(pBody);
-		if (pBeacon && navigator.sendBeacon) {
+	async function Flush() {
+		if (fFlushRunning || !cEvents.length || typeof window.TrackOpsEventBatch !== "function") return;
+		fFlushRunning = true;
+		try {
+			const Size = Math.min(500, Math.max(1, Number(cNetworkBatchSize) || 120));
+			while (cEvents.length) {
+				const Batch = cEvents.splice(0, Size);
+				const Result = await window.TrackOpsEventBatch(Batch);
+				if (!Result?.ok) {
+					cEvents.unshift(...Batch);
+					break;
+				}
+				if (fUnloading) break;
+			}
+		} finally { fFlushRunning = false; }
+	}
+
+	function FreezeCss() {
+		const Rules = [];
+		for (const Sheet of Array.from(document.styleSheets || [])) {
 			try {
-				const BlobBody = new Blob([Text], { type: "application/json" });
-				if (navigator.sendBeacon(pUrl, BlobBody)) return true;
+				for (const Rule of Array.from(Sheet.cssRules || [])) Rules.push(Rule.cssText);
 			} catch {}
 		}
-		try {
-			const Res = await fetch(pUrl, {
-				method: "POST",
-				headers: { "content-type": "application/json", "x-ops-key": cOpsKey },
-				body: Text,
-				keepalive: pBeacon
-			});
-			const Data = await Res.json().catch(() => ({}));
-			if (!Res.ok || Data.ok === false) {
-				ReportReplayError(pUrl, Data.details || Data.message || Data.error || `HTTP ${Res.status}`);
-				return false;
-			}
-			return true;
-		} catch (Ex) {
-			ReportReplayError(pUrl, String(Ex?.message || Ex || "network_error"));
-			return false;
-		}
-	}
-
-	function ReportReplayError(pUrl, pMessage) {
-		const Message = `${String(pUrl || "").split("?")[0]} — ${Str(pMessage)}`.slice(0, 380);
-		if (!Message || Message === fLastReplayError) return;
-		fLastReplayError = Message;
-		if (typeof window.TrackOpsEvent === "function") {
-			window.TrackOpsEvent("replay_error", {
-				eventOn: "emo_replay", widget: "EmoReplay", label: Message,
-				important: false, notifyMobile: false, sound: false, allowBeforeOpen: true
-			});
-		}
-	}
-
-	async function SendStart() {
-		if (fStartSent) return true;
-		const Sent = await SendJson(cApiSession, { ...BasePayload(), event: "start" });
-		fStartSent = Sent;
-		if (!Sent && !fUnloading) window.setTimeout(SendStart, 2500);
-		return Sent;
-	}
-
-	function CollectCssSnapshot() {
-		const Parts = [];
-		const FailedLinks = [];
-
-		Array.from(document.styleSheets || []).forEach((Sheet) => {
-			try {
-				const Rules = Array.from(Sheet.cssRules || []).map((Rule) => Rule.cssText).join("\n");
-				if (Rules) Parts.push(`/* EmoReplay stylesheet: ${Sheet.href || "inline"} */\n${Rules}`);
-			} catch {
-				if (Sheet.href) FailedLinks.push(Sheet.href);
-			}
-		});
-
-		return { cssText: Parts.join("\n\n"), failedLinks: FailedLinks };
+		return Rules.join("\n");
 	}
 
 	function BuildSnapshotHtml() {
 		const Clone = document.documentElement.cloneNode(true);
-		const Head = Clone.querySelector("head");
-		const Body = Clone.querySelector("body");
-
-		Clone.setAttribute("data-emo-replay-snapshot", "true");
-		Body?.setAttribute("data-emo-replay-snapshot-body", "true");
-
-		if (Head) {
-			const CssSnapshot = CollectCssSnapshot();
-
-			const Base = document.createElement("base");
-			Base.setAttribute("href", `${location.origin}/`);
-			Head.prepend(Base);
-
-			if (CssSnapshot.cssText) {
-				Head.querySelectorAll("link[rel='stylesheet'], style").forEach((El) => El.remove());
-
-				const FrozenCss = document.createElement("style");
-				FrozenCss.setAttribute("data-emo-replay-frozen-css", "true");
-				FrozenCss.textContent = CssSnapshot.cssText;
-				Head.appendChild(FrozenCss);
-			}
-
-			CssSnapshot.failedLinks.forEach((Href) => {
-				const Link = document.createElement("link");
-				Link.rel = "stylesheet";
-				Link.href = Href;
-				Link.setAttribute("data-emo-replay-fallback-css", "true");
-				Head.appendChild(Link);
-			});
-
-			const Style = document.createElement("style");
-			Style.textContent = `
-				html[data-emo-replay-snapshot="true"] { scroll-behavior: auto; }
-				html[data-emo-replay-snapshot="true"] *,
-				html[data-emo-replay-snapshot="true"] *::before,
-				html[data-emo-replay-snapshot="true"] *::after {
-					animation-play-state: paused;
-					transition: none;
-					caret-color: transparent;
-				}
-				html[data-emo-replay-snapshot="true"] a,
-				html[data-emo-replay-snapshot="true"] button,
-				html[data-emo-replay-snapshot="true"] input,
-				html[data-emo-replay-snapshot="true"] textarea,
-				html[data-emo-replay-snapshot="true"] select,
-				html[data-emo-replay-snapshot="true"] summary,
-				html[data-emo-replay-snapshot="true"] label {
-					pointer-events: none;
-				}
-			`;
-			Head.appendChild(Style);
-		}
-
-		Clone.querySelectorAll("script, noscript, astro-dev-toolbar, link[rel='modulepreload']").forEach((El) => El.remove());
-
-		Clone.querySelectorAll("*").forEach((El) => {
-			for (const Attr of Array.from(El.attributes || [])) {
-				const Name = Attr.name.toLowerCase();
-				if (Name.startsWith("on")) El.removeAttribute(Attr.name);
-			}
-		});
-
-		const OriginalFields = Array.from(document.querySelectorAll("input, textarea, select"));
-		const CloneFields = Array.from(Clone.querySelectorAll("input, textarea, select"));
-
-		CloneFields.forEach((CloneEl, Index) => {
-			const OrigEl = OriginalFields[Index];
-			if (!OrigEl) return;
-
-			CloneEl.setAttribute("data-replay-field", "true");
-
-			if (CloneEl.tagName === "TEXTAREA") {
-				CloneEl.textContent = OrigEl.value || "";
-				CloneEl.setAttribute("value", OrigEl.value || "");
-				return;
-			}
-
-			if (CloneEl.tagName === "SELECT") {
-				Array.from(CloneEl.options).forEach((Opt, OptIndex) => {
-					const OrigOpt = OrigEl.options?.[OptIndex];
-					if (OrigOpt?.selected) Opt.setAttribute("selected", "");
-					else Opt.removeAttribute("selected");
-				});
-				return;
-			}
-
-			const Type = String(CloneEl.getAttribute("type") || "text").toLowerCase();
-			if (Type === "checkbox" || Type === "radio") {
-				if (OrigEl.checked) CloneEl.setAttribute("checked", "");
-				else CloneEl.removeAttribute("checked");
-			} else {
-				CloneEl.setAttribute("value", OrigEl.value || "");
-			}
-		});
-
-		const OriginalDetails = Array.from(document.querySelectorAll("details"));
-		const CloneDetails = Array.from(Clone.querySelectorAll("details"));
-		CloneDetails.forEach((CloneEl, Index) => {
-			if (OriginalDetails[Index]?.open) CloneEl.setAttribute("open", "");
-			else CloneEl.removeAttribute("open");
-		});
-
-		const OriginalCanvas = Array.from(document.querySelectorAll("canvas"));
-		const CloneCanvas = Array.from(Clone.querySelectorAll("canvas"));
-		CloneCanvas.forEach((CloneEl, Index) => {
-			const OrigEl = OriginalCanvas[Index];
-			if (!OrigEl) return;
+		const Originals = Array.from(document.querySelectorAll("canvas"));
+		const Clones = Array.from(Clone.querySelectorAll("canvas"));
+		Originals.forEach((Canvas, Index) => {
 			try {
 				const Img = document.createElement("img");
-				Img.src = OrigEl.toDataURL("image/png");
-				Img.width = OrigEl.width;
-				Img.height = OrigEl.height;
-				Img.setAttribute("data-replay-canvas-image", "true");
-				CloneEl.replaceWith(Img);
-			} catch {}
+				Img.src = Canvas.toDataURL("image/png");
+				Img.width = Canvas.width; Img.height = Canvas.height;
+				Clones[Index]?.replaceWith(Img);
+			} catch { Clones[Index]?.remove(); }
 		});
-
-		Clone.querySelectorAll("form").forEach((Form) => {
-			Form.setAttribute("data-replay-form", "true");
-			Form.removeAttribute("action");
-			Form.removeAttribute("method");
+		Clone.querySelectorAll("script, noscript, iframe").forEach((Elem) => Elem.remove());
+		Clone.querySelectorAll("*").forEach((Elem) => {
+			for (const Attr of Array.from(Elem.attributes || [])) {
+				if (Attr.name.toLowerCase().startsWith("on")) Elem.removeAttribute(Attr.name);
+			}
+			if (Elem.matches("input, textarea, select")) {
+				const CaptureValue = Elem.getAttribute("data-replay-capture") === "value" && Elem.getAttribute("data-replay-private") !== "true";
+				if (Elem.matches("input")) Elem.setAttribute("value", CaptureValue ? Str(Elem.value) : "");
+				if (Elem.matches("textarea")) Elem.textContent = CaptureValue ? Str(Elem.value) : "";
+				if (Elem.matches("select")) Array.from(Elem.options || []).forEach((Option) => { Option.selected = CaptureValue && Option.selected; });
+			}
 		});
-
-		return `<!doctype html>\n${Clone.outerHTML}`;
+		const FrozenStyle = document.createElement("style");
+		FrozenStyle.setAttribute("data-emo-replay-frozen", "true");
+		FrozenStyle.textContent = `${FreezeCss()}\nhtml{scroll-behavior:auto!important}*{animation-play-state:paused!important;caret-color:transparent!important}`;
+		(Clone.querySelector("head") || Clone).appendChild(FrozenStyle);
+		Clone.setAttribute("data-emo-replay-snapshot", "true");
+		return `<!doctype html>${Clone.outerHTML}`;
 	}
 
 	async function SendSnapshot() {
-		if (fSnapshotSent || fSnapshotSending) return;
-		if (fSnapshotAttempts >= 3) return;
-
-		fSnapshotSending = true;
-		fSnapshotAttempts += 1;
-
+		if (!fStarted || typeof window.TrackOpsEventOnce !== "function") return;
 		let SnapshotHtml = "";
-		try {
-			SnapshotHtml = BuildSnapshotHtml();
-		} catch (Ex) {
-			SnapshotHtml = `<!doctype html><html lang=\"ar\" dir=\"rtl\"><body><pre>Snapshot failed: ${String(Ex?.message || Ex)}</pre></body></html>`;
-		}
-
-		const Sent = await SendJson(cApiSession, {
-			...BasePayload(),
-			event: "snapshot",
-			snapshotHtml: SnapshotHtml,
-			snapshotLength: SnapshotHtml.length
-		});
-
-		fSnapshotSending = false;
-		fSnapshotSent = Sent;
-
-		if (!Sent && !fUnloading) {
-			window.setTimeout(() => SendSnapshot(), 2500);
-		}
-	}
-
-	function PushEvent(pEvent) {
-		const Event = {
-			...pEvent,
-			t: Now(),
-			seq: ++fSeq,
-			sx: Math.round(window.scrollX || 0),
-			sy: Math.round(window.scrollY || 0)
-		};
-
-		fEvents.push(Event);
-
-		if (fEvents.length >= cMaxEventsPerChunk) {
-			FlushEvents("max", false);
-		}
-	}
-
-	async function FlushEvents(pReason = "timer", pBeacon = false) {
-		if (fFlushRunning || !fEvents.length) return false;
-		fFlushRunning = true;
-		const Count = fEvents.length;
-		const Events = fEvents.slice(0, Count);
-		const FromMs = Events[0]?.t ?? 0;
-		const ToMs = Events[Events.length - 1]?.t ?? FromMs;
-		const ChunkIndex = fChunkIndex;
-		const Payload = {
-			...BasePayload(),
-			sessionId: cReplayId,
-			visitorId: cVisitorId,
-			visitSessionId: cVisitSessionId,
-			pageId: cPageId,
-			chunkIndex: ChunkIndex,
-			fromMs: FromMs,
-			toMs: ToMs,
-			reason: pReason,
-			events: Events
-		};
-
-		let Sent = false;
-		let Stored = false;
-		if (pBeacon) Stored = QueuePendingChunk(Payload);
-		Sent = await SendJson(cApiChunk, Payload, pBeacon);
-
-		if (Sent && !pBeacon) RemovePendingChunk(Payload);
-		if (!Sent && !pBeacon) Stored = QueuePendingChunk(Payload);
-
-		if (Sent || Stored) {
-			fEvents.splice(0, Count);
-			fChunkIndex = ChunkIndex + 1;
-			if (Stored && !fUnloading) window.setTimeout(FlushPendingChunks, 2500);
-		} else if (!fUnloading) {
-			window.setTimeout(() => FlushEvents("retry", false), 2500);
-		}
-		fFlushRunning = false;
-		return Sent || Stored;
-	}
-
-	function StartFlushTimer() {
-		window.clearInterval(fFlushTimer);
-		fFlushTimer = window.setInterval(() => {
-			FlushPendingChunks();
-			FlushEvents("timer", false);
-		}, cFlushEveryMs);
-	}
-
-	function RecordScroll(pForced = false) {
-		const At = performance.now();
-		if (!pForced && At - fLastScrollAt < cScrollEveryMs) return;
-		fLastScrollAt = At;
-
-		const Doc = GetDocumentInfo();
-		const Y = Math.round(window.scrollY || 0);
-		const X = Math.round(window.scrollX || 0);
-		const MaxY = Math.max(1, Doc.height - (window.innerHeight || 0));
-		fLastKnownScrollX = X;
-		fLastKnownScrollY = Y;
-
-		PushEvent({
-			type: "scroll",
-			x: X,
-			y: Y,
-			p: Math.max(0, Math.min(1, Y / MaxY)),
-			documentHeight: Doc.height,
-			viewportHeight: window.innerHeight || 0
+		try { SnapshotHtml = BuildSnapshotHtml(); }
+		catch (Ex) { SnapshotHtml = `<!doctype html><html><body>Snapshot unavailable: ${Shorten(Ex?.message || Ex)}</body></html>`; }
+		await window.TrackOpsEventOnce("system.page_snapshot", "page_snapshot", {
+			eventSource: "site",
+			label: "Replay page snapshot",
+			notifyMobile: false,
+			eventData: { snapshotHtml: SnapshotHtml, snapshotLength: SnapshotHtml.length, ...ViewportData() }
 		});
 	}
 
-	function RecordPointer(pType, pEvent, pForced = false) {
-		const At = performance.now();
-		if (!pForced && At - fLastPointerAt < cPointerEveryMs) return;
-		fLastPointerAt = At;
-
-		PushEvent({
-			type: pType,
-			x: Math.round(pEvent.clientX),
-			y: Math.round(pEvent.clientY),
-			nx: Number((pEvent.clientX / Math.max(1, window.innerWidth)).toFixed(5)),
-			ny: Number((pEvent.clientY / Math.max(1, window.innerHeight)).toFixed(5)),
-			pointerType: pEvent.pointerType || "mouse",
-			button: pEvent.button ?? 0,
-			...GetTargetInfo(pEvent.target)
-		});
-	}
-
-	function RecordInput(pType, pEvent) {
-		const El = pEvent.target;
-		if (!El?.matches?.("input, textarea, select")) return;
-
-		const TargetInfo = GetTargetInfo(El);
-		const CaptureValue = El.getAttribute("data-replay-capture") === "value" && El.getAttribute("data-replay-private") !== "true";
-		const FieldType = String(El.getAttribute("type") || El.tagName || "").toLowerCase();
-		const Payload = {
-			type: pType,
-			fieldType: FieldType,
-			length: typeof El.value === "string" ? El.value.length : 0,
-			checked: typeof El.checked === "boolean" ? El.checked : undefined,
-			...TargetInfo
-		};
-
-		if (CaptureValue) {
-			Payload.value = El.value;
-			Payload.selectionStart = El.selectionStart ?? null;
-			Payload.selectionEnd = El.selectionEnd ?? null;
-		} else {
-			Payload.masked = true;
-		}
-
-		PushEvent(Payload);
+	function InputValue(pElem) {
+		if (!(pElem instanceof Element)) return { value: "", private: true };
+		const Allowed = pElem.getAttribute("data-replay-capture") === "value" && pElem.getAttribute("data-replay-private") !== "true";
+		if (!Allowed) return { value: "", private: true };
+		if (pElem instanceof HTMLInputElement && ["checkbox", "radio"].includes(pElem.type)) return { value: "", checked: pElem.checked, private: false };
+		return { value: Str(pElem.value), private: false };
 	}
 
 	function WireEvents() {
-		window.addEventListener("scroll", () => RecordScroll(false), { passive: true });
-		window.addEventListener("resize", () => {
-			PushEvent({ type: "resize", viewport: GetViewportInfo(), document: GetDocumentInfo() });
+		window.addEventListener("scroll", () => {
+			const Now = performance.now(); if (Now - fLastScrollAt < Number(cScrollEveryMs || 120)) return; fLastScrollAt = Now;
+			Capture("scroll", ViewportData());
 		}, { passive: true });
-
-		document.addEventListener("pointermove", (e) => RecordPointer("pointer", e, false), true);
-		document.addEventListener("pointerdown", (e) => RecordPointer("pointer-down", e, true), true);
-		document.addEventListener("pointerup", (e) => RecordPointer("pointer-up", e, true), true);
-		document.addEventListener("click", (e) => {
-			RecordPointer("click", e, true);
+		window.addEventListener("resize", () => Capture("resize", ViewportData()), { passive: true });
+		document.addEventListener("pointermove", (Event) => {
+			const Now = performance.now(); if (Now - fLastPointerAt < Number(cPointerEveryMs || 80)) return; fLastPointerAt = Now;
+			Capture("pointer_move", { x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), pointerType: Event.pointerType || "mouse", ...TargetData(Event.target) });
 		}, true);
-
-		document.addEventListener("focusin", (e) => {
-			PushEvent({ type: "focus", ...GetTargetInfo(e.target) });
-		}, true);
-
-		document.addEventListener("focusout", (e) => {
-			PushEvent({ type: "blur", ...GetTargetInfo(e.target) });
-		}, true);
-
-		document.addEventListener("input", (e) => RecordInput("input", e), true);
-		document.addEventListener("change", (e) => RecordInput("change", e), true);
-
-		document.addEventListener("submit", (e) => {
-			PushEvent({ type: "submit", ...GetTargetInfo(e.target) });
-		}, true);
-
-		document.addEventListener("toggle", (e) => {
-			if (!e.target?.matches?.("details")) return;
-			PushEvent({
-				type: "widget-state",
-				widget: "details",
-				state: e.target.open ? "open" : "closed",
-				...GetTargetInfo(e.target)
-			});
-		}, true);
-
-		window.addEventListener("emo:replay-state", (e) => {
-			PushEvent({
-				type: "widget-state",
-				...(e.detail || {})
-			});
-		}, true);
-
+		for (const [DomType, ReplayType] of [["pointerdown", "pointer_down"], ["pointerup", "pointer_up"]]) {
+			document.addEventListener(DomType, (Event) => Capture(ReplayType, { x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button, pointerType: Event.pointerType || "mouse", ...TargetData(Event.target) }), true);
+		}
+		document.addEventListener("click", (Event) => Capture("click", { x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button, ...TargetData(Event.target) }), true);
+		for (const Type of ["input", "change"]) {
+			document.addEventListener(Type, (Event) => Capture(Type, { ...TargetData(Event.target), ...InputValue(Event.target) }), true);
+		}
+		document.addEventListener("submit", (Event) => Capture("submit", TargetData(Event.target), true), true);
+		document.addEventListener("toggle", (Event) => Capture("widget_state", { ...TargetData(Event.target), open: !!Event.target?.open }), true);
+		window.addEventListener("focus", () => Capture("focus", { state: "visible" }), true);
+		window.addEventListener("blur", () => Capture("blur", { state: "away" }), true);
+		document.addEventListener("visibilitychange", () => Capture("visibility", { state: document.visibilityState }, document.hidden));
 		window.addEventListener("pagehide", () => {
 			fUnloading = true;
-			RecordScroll(true);
-			PushEvent({ type: "page-hide", viewport: GetViewportInfo(), document: GetDocumentInfo() });
-			FlushEvents("pagehide", true);
-		}, { capture: true });
-
-		visibilitychange = () => {
-			PushEvent({ type: "visibility", state: document.visibilityState });
-			if (document.visibilityState === "hidden") FlushEvents("hidden", true);
-		};
-		document.addEventListener("visibilitychange", visibilitychange, true);
+			Capture("page_hide", { persisted: false, ...ViewportData() });
+			Flush();
+		});
 	}
-
-	let visibilitychange = null;
 
 	function Start() {
-		window.addEventListener("online", FlushPendingChunks);
-		window.setTimeout(FlushPendingChunks, 1000);
-		SendStart();
+		if (fStarted || typeof window.TrackOpsEventBatch !== "function") return;
+		fStarted = true;
 		WireEvents();
-		StartFlushTimer();
-		PushEvent({ type: "page-open", viewport: GetViewportInfo(), document: GetDocumentInfo() });
-		RecordScroll(true);
-
-		window.setTimeout(() => {
-			if (!fUnloading) SendSnapshot();
-		}, Math.max(200, cSnapshotDelayMs));
+		Capture("page_ready", { readyState: document.readyState, ...ViewportData() }, true);
+		fFlushTimer = window.setInterval(Flush, Math.max(250, Number(cFlushEveryMs) || 1000));
+		window.setTimeout(SendSnapshot, Math.max(200, Number(cSnapshotDelayMs) || 1400));
 	}
 
-	if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", Start, { once: true });
-	else Start();
+	window.addEventListener("emo:ops-page-open", Start, { once: true });
+	if (window.__EMO_OPS_PAGE_OPENED__) Start();
+	else {
+		let Attempts = 0;
+		const Wait = window.setInterval(() => {
+			Attempts += 1;
+			if (window.__EMO_OPS_PAGE_OPENED__) { window.clearInterval(Wait); Start(); }
+			else if (Attempts > 120) window.clearInterval(Wait);
+		}, 250);
+	}
 })();
 </script>
-) }
+)}
