@@ -145,9 +145,13 @@ function NormalizeEvent(pInput, pRequest) {
 	if (!ClientEventUid || ClientEventUid.length > 240) throw new Error("Invalid clientEventUid");
 
 	const EventData = Event.eventData && typeof Event.eventData === "object" ? Event.eventData : {};
-	const Geo = BuildGeo(pRequest, Event);
+	const Geo = EventSource === "emolive"
+		? { countryCode: "", region: "", city: "", band: "", label: "", borderColor: "" }
+		: BuildGeo(pRequest, Event);
 	const OccurredAt = Str(Event.createdAtClient ?? Event.occurredAt ?? Event.occurred_at) || new Date().toISOString();
-	const UserAgent = Str(pRequest.headers.get("user-agent") || Event.userAgentClient || Event.userAgent);
+	const UserAgent = EventSource === "emolive"
+		? Str(Event.userAgentClient || Event.userAgent)
+		: Str(pRequest.headers.get("user-agent") || Event.userAgentClient || Event.userAgent);
 	const FullPayload = {
 		...Event,
 		clientEventUid: ClientEventUid,
@@ -221,6 +225,40 @@ async function AllowInferredExit(pSupabaseUrl, pServiceKey, pRow) {
 	return { ok: true };
 }
 
+async function HasStoredPageOpen(pSupabaseUrl, pServiceKey, pPageInstanceId) {
+	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
+	Query.searchParams.set("select", "id");
+	Query.searchParams.set("page_instance_id", `eq.${pPageInstanceId}`);
+	Query.searchParams.set("event_type", "in.(page_open,page_view,page_load)");
+	Query.searchParams.set("limit", "1");
+	const Res = await SupabaseRequest(Query, pServiceKey);
+	if (!Res.ok) throw new Error(Res.text || `Page-open lookup HTTP ${Res.status}`);
+	try {
+	const Rows = JSON.parse(Res.text);
+	return Array.isArray(Rows) && Rows.length > 0;
+	} catch { return false; }
+}
+
+async function IsRepeatedClientProfile(pSupabaseUrl, pServiceKey, pRow) {
+	if (pRow.event_type !== "page_open") return false;
+	const Profile = Str(pRow.payload?.clientProfile);
+	if (!Profile) return false;
+	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
+	Query.searchParams.set("select", "id");
+	Query.searchParams.set("event_type", "eq.page_open");
+	Query.searchParams.set("page_path", `eq.${pRow.page_path}`);
+	Query.searchParams.set("payload->>clientProfile", `eq.${Profile}`);
+	Query.searchParams.set("visitor_id", `neq.${pRow.visitor_id}`);
+	Query.searchParams.set("created_at", `gte.${new Date(Date.now() - 30 * 60 * 1000).toISOString()}`);
+	Query.searchParams.set("limit", "1");
+	const Res = await SupabaseRequest(Query, pServiceKey);
+	if (!Res.ok) throw new Error(Res.text || `Client-profile lookup HTTP ${Res.status}`);
+	try {
+	const Rows = JSON.parse(Res.text);
+	return Array.isArray(Rows) && Rows.length > 0;
+	} catch { return false; }
+}
+
 async function InsertRows(pSupabaseUrl, pServiceKey, pRows) {
 	const Res = await SupabaseRequest(`${pSupabaseUrl}/rest/v1/ops_events?on_conflict=client_event_uid`, pServiceKey, {
 		method: "POST",
@@ -249,7 +287,20 @@ export async function POST({ request }) {
 
 		const Rows = Inputs.map((Item) => NormalizeEvent(Item, request));
 		for (const Row of Rows) {
+			if (await IsRepeatedClientProfile(SupabaseUrl, ServiceKey, Row)) {
+				return Json({ ok: true, stored: 0, ignored: true, reason: "repeated_client_profile" });
+			}
+		}
+		const BatchPageOpens = new Set(Rows
+			.filter((Row) => ["page_open", "page_view", "page_load"].includes(Row.event_type))
+			.map((Row) => Row.page_instance_id));
+		for (const Row of Rows) {
 			if (Row.event_source === "emolive" && !CheckOpsKey(request)) return Json({ ok: false, error: "Unauthorized" }, 401);
+			if (!["page_open", "page_view", "page_load"].includes(Row.event_type)
+				&& !BatchPageOpens.has(Row.page_instance_id)
+				&& !(await HasStoredPageOpen(SupabaseUrl, ServiceKey, Row.page_instance_id))) {
+				return Json({ ok: true, stored: 0, ignored: true, reason: "orphan_page_event" });
+			}
 			const Allowed = await AllowInferredExit(SupabaseUrl, ServiceKey, Row);
 			if (!Allowed.ok) return Json({ ok: true, stored: 0, ignored: true, reason: Allowed.reason });
 		}

@@ -66,6 +66,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	let fLastPointerSampleAt = 0;
 	let fScrollIdleTimer = 0;
 	let fPageExitSent = false;
+	let fExternalActionUntil = 0;
 	let fPageOpenSent = false;
 	let fPageOpenPromise = null;
 	let fQueueFlushRunning = false;
@@ -234,8 +235,11 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	function ScheduleClarityLinkCapture() {
-	// لا نسجل روابط كلاريتي المرشحة تلقائياً؛ أغلبها يفتح صفحة بيضاء قبل اعتماد التسجيل داخل Clarity.
-	// روابط كلاريتي المؤكدة فقط تدخل من استيراد CSV أو حدث clarityStatus=ready/confirmed/imported.
+	[1500, 4000, 8000, 15000, 30000].forEach((Delay) => {
+	window.setTimeout(() => {
+	if (!fPageExitSent) TrackClarityLink();
+	}, Delay);
+	});
 	}
 
 	function InitClarityIdentifiers() {
@@ -1133,6 +1137,9 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	if (Link) {
 	const EventType = GetLinkEvent(Link);
 	if (EventType) {
+	if (["call_click", "whatsapp_click", "map_click", "download_click"].includes(EventType)) {
+	fExternalActionUntil = Date.now() + 30000;
+	}
 	TrackFromElement(Link, EventType, "click", { href: Link.href, ...PointerExtra });
 	return;
 	}
@@ -1141,6 +1148,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	const ActionButton = Target.closest("button.Btn, [data-service-btn], [data-lead-btn], [data-action-btn], .EmoCall, .EmoWhats, [data-whatsapp], [data-call]");
 	if (ActionButton) {
 	const ActionEvent = GetActionEvent(ActionButton) || ActionButton.dataset.opsEvent || "button_click";
+	if (ActionEvent === "call_click" || ActionEvent === "whatsapp_click") fExternalActionUntil = Date.now() + 30000;
 	TrackFromElement(ActionButton, ActionEvent, "click", PointerExtra);
 	return;
 	}
@@ -1347,6 +1355,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 
 	function TrackPageReturn(pReason) {
 	if (fPageExitSent) return;
+	fExternalActionUntil = 0;
 		if (!fPageOpenSent) {
 	TrackPageOpen();
 	return;
@@ -1409,6 +1418,11 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	function TrackPageExit(pReason) {
 	if (!fPageOpenSent) return;
 	if (fPageExitSent) return;
+	const Reason = String(pReason || "pagehide");
+	if (Date.now() < fExternalActionUntil && (Reason === "pagehide" || Reason === "beforeunload")) {
+	MarkPageAway("external_action");
+	return;
+	}
 	FlushPendingReadEvents();
 	fPageExitSent = true;
 		fAwayStartedAt = 0;
@@ -1436,6 +1450,17 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 
 	window.addEventListener("pagehide", () => TrackPageExit("pagehide"));
 	window.addEventListener("beforeunload", () => TrackPageExit("beforeunload"));
+	window.addEventListener("pageshow", (pEvent) => {
+	fExternalActionUntil = 0;
+	if (!fPageExitSent || !pEvent.persisted) return;
+	fPageExitSent = false;
+	fAwayStartedAt = Date.now() - cFocusAwayMinMs;
+	fAwayReason = "pagehide";
+	TrackPageReturn("pageshow");
+	if (fPagePingTimer) clearInterval(fPagePingTimer);
+	fPagePingTimer = window.setInterval(TrackPageAlive, cPagePingMs);
+	TrackPageAlive();
+	});
 	window.addEventListener("freeze", () => {
 	MarkPageAway("freeze");
 	TrackPageAlive();
@@ -1588,7 +1613,6 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 
 
 ) }
-
 
 
 
