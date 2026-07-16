@@ -40,6 +40,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	const cSessionKey = "emo_ops_session_id";
 	const cOncePrefix = "emo_ops_once_";
 	const cApiUrl = "/api/ops/visit";
+	const cTrafficGateUrl = "/api/ops/traffic";
 	const cRetryQueueKey = "emo_ops_retry_queue_v3";
 	const cSessionSeqKey = "emo_ops_session_seq_v1";
 	const cSessionStartedKey = "emo_ops_session_started_at_v1";
@@ -51,7 +52,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	const cReadFocusBottomRatio = 0.75;
 	const cReadFocusMinRatio = 0.5;
 	const cReadTickMs = 250;
-	const cPageInstanceId = NewId("p");
+	let fPageInstanceId = "";
 	const cPageStartedAt = Date.now();
 	const cFocusAwayMinMs = 1500;
 	const cObservedViewElems = new Set();
@@ -122,17 +123,26 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	function GetPageInstanceId() {
-	return cPageInstanceId;
+	if (!fPageInstanceId) fPageInstanceId = NewId("p");
+	return fPageInstanceId;
 	}
 
-	// Share the exact visit identifiers with EmoReplayRecorder. Without this,
-	// the recorder creates a separate rp_* page id while EmoLive opens p_*.
+	function PublishVisitIds() {
 	window.__EmoOpsIds = {
 	visitorId: GetVisitorId(),
 	sessionId: GetSessionId(),
 	pageInstanceId: GetPageInstanceId(),
 	clientProfile: StableProfile()
 	};
+	}
+
+	async function TrafficAllowed() {
+	try {
+	const Res = await fetch(cTrafficGateUrl, { method: "GET", headers: { accept: "application/json" }, cache: "no-store" });
+	const Data = await Res.json();
+	return Res.ok && Data && Data.track === true;
+	} catch { return false; }
+	}
 
 	function GetPageElapsedMs() {
 	return Math.max(0, Date.now() - cPageStartedAt);
@@ -1571,8 +1581,10 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	});
 	}
 
-	function InitOps() {
+	async function InitOps() {
 	if (IsSyntheticTraffic()) return;
+	if (!(await TrafficAllowed())) return;
+	PublishVisitIds();
 	GetVisitorId();
 	GetSessionId();
 	GetPageInstanceId();
@@ -1613,7 +1625,6 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 
 
 ) }
-
 
 
 
