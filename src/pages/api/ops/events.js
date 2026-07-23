@@ -1,6 +1,8 @@
 export const prerender = false;
 
 const cDefaultOpsKey = "Emocrete20015161";
+const cMaxBatch = 500;
+const cDeleteChunk = 200;
 
 function Json(pBody, pStatus = 200) {
 	return new Response(JSON.stringify(pBody), { status: pStatus, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
@@ -56,12 +58,39 @@ function MapEvent(pRow) {
 		payload: P
 	};
 }
-async function FetchRows(pUrl, pServiceKey) {
-	const Res = await fetch(pUrl, { headers: { apikey: pServiceKey, authorization: `Bearer ${pServiceKey}` } });
+
+async function SupabaseRequest(pUrl, pServiceKey, pOptions = {}) {
+	const Res = await fetch(pUrl, {
+		...pOptions,
+		headers: {
+			apikey: pServiceKey,
+			authorization: `Bearer ${pServiceKey}`,
+			...(pOptions.headers || {})
+		}
+	});
 	const Text = await Res.text();
 	if (!Res.ok) throw new Error(Text || `HTTP ${Res.status}`);
+	return Text;
+}
+
+async function FetchRows(pUrl, pServiceKey) {
+	const Text = await SupabaseRequest(pUrl, pServiceKey);
 	try { const Rows = JSON.parse(Text); return Array.isArray(Rows) ? Rows : []; }
 	catch { return []; }
+}
+
+async function ReadJsonBody(pRequest) {
+	const Text = await pRequest.text();
+	if (!Text) return {};
+	try { return JSON.parse(Text); }
+	catch { throw new Error("Invalid JSON body"); }
+}
+
+function GetConfig() {
+	const SupabaseUrl = Env("SUPABASE_URL");
+	const ServiceKey = Env("SUPABASE_SERVICE_ROLE_KEY");
+	if (!SupabaseUrl || !ServiceKey) throw new Error("Missing Supabase env vars");
+	return { SupabaseUrl, ServiceKey };
 }
 
 export async function OPTIONS() { return Json({ ok: true }); }
@@ -69,25 +98,42 @@ export async function OPTIONS() { return Json({ ok: true }); }
 export async function GET({ request }) {
 	try {
 		if (!CheckOpsKey(request)) return Json({ ok: false, error: "Unauthorized" }, 401);
-		const SupabaseUrl = Env("SUPABASE_URL");
-		const ServiceKey = Env("SUPABASE_SERVICE_ROLE_KEY");
-		if (!SupabaseUrl || !ServiceKey) return Json({ ok: false, error: "Missing Supabase env vars" }, 500);
-
+		const { SupabaseUrl, ServiceKey } = GetConfig();
 		const Url = new URL(request.url);
-		const AfterId = Math.max(0, Number.parseInt(Url.searchParams.get("after_id") || "0", 10) || 0);
-		const Limit = Math.min(500, Math.max(1, Number.parseInt(Url.searchParams.get("limit") || "500", 10) || 500));
+		const Limit = Math.min(cMaxBatch, Math.max(1, Number.parseInt(Url.searchParams.get("limit") || String(cMaxBatch), 10) || cMaxBatch));
 		const Query = new URL(`${SupabaseUrl}/rest/v1/ops_events`);
 		Query.searchParams.set("select", "id,client_event_uid,event_type,event_source,visitor_id,session_id,page_instance_id,session_seq,page_elapsed_ms,session_elapsed_ms,occurred_at,page_path,page_title,created_at,user_agent,payload");
-		Query.searchParams.set("id", `gt.${AfterId}`);
 		Query.searchParams.set("order", "id.asc");
 		Query.searchParams.set("limit", String(Limit + 1));
 		let Rows = await FetchRows(Query, ServiceKey);
 		const HasMore = Rows.length > Limit;
 		if (HasMore) Rows = Rows.slice(0, Limit);
-		const Events = Rows.map(MapEvent);
-		const Cursor = Events.reduce((Max, Event) => Math.max(Max, Event.id), AfterId);
-		return Json({ ok: true, afterId: AfterId, cursor: Cursor, hasMore: HasMore, serverTime: new Date().toISOString(), events: Events });
+		return Json({ ok: true, hasMore: HasMore, serverTime: new Date().toISOString(), events: Rows.map(MapEvent) });
 	} catch (Ex) {
 		return Json({ ok: false, error: Ex instanceof Error ? Ex.message : String(Ex) }, 500);
+	}
+}
+
+export async function DELETE({ request }) {
+	try {
+		if (!CheckOpsKey(request)) return Json({ ok: false, error: "Unauthorized" }, 401);
+		const { SupabaseUrl, ServiceKey } = GetConfig();
+		const Body = await ReadJsonBody(request);
+		const Ids = Array.from(new Set((Array.isArray(Body.ids) ? Body.ids : [])
+			.map((Value) => Math.trunc(Number(Value)))
+			.filter((Value) => Number.isSafeInteger(Value) && Value > 0)));
+		if (!Ids.length) return Json({ ok: true, deleted: 0 });
+		if (Ids.length > cMaxBatch) return Json({ ok: false, error: `ids must contain at most ${cMaxBatch} items` }, 400);
+
+		for (let Index = 0; Index < Ids.length; Index += cDeleteChunk) {
+			const Chunk = Ids.slice(Index, Index + cDeleteChunk);
+			const Query = new URL(`${SupabaseUrl}/rest/v1/ops_events`);
+			Query.searchParams.set("id", `in.(${Chunk.join(",")})`);
+			await SupabaseRequest(Query, ServiceKey, { method: "DELETE", headers: { prefer: "return=minimal" } });
+		}
+		return Json({ ok: true, deleted: Ids.length });
+	} catch (Ex) {
+		const Message = Ex instanceof Error ? Ex.message : String(Ex);
+		return Json({ ok: false, error: Message }, /Invalid|ids must/.test(Message) ? 400 : 500);
 	}
 }

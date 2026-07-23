@@ -3,7 +3,6 @@ export const prerender = false;
 const cDefaultOpsKey = "Emocrete20015161";
 const cMaxEventsPerRequest = 500;
 const cMaxBodyBytes = 32 * 1024 * 1024;
-const cHeartbeatTimeoutMs = 7000;
 const cSyntheticUserAgentPattern = /(bot|crawl|spider|slurp|googlebot|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb)/i;
 const cArabCountryCodes = new Set(["EG", "SA", "AE", "KW", "QA", "BH", "OM", "YE", "JO", "LB", "SY", "IQ", "PS", "MA", "DZ", "TN", "LY", "SD", "SO", "DJ", "KM", "MR"]);
 
@@ -199,75 +198,13 @@ function NormalizeEvent(pInput, pRequest) {
 	};
 }
 
-async function LatestPageEvent(pSupabaseUrl, pServiceKey, pPageInstanceId) {
-	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
-	Query.searchParams.set("select", "id,event_type,created_at,client_event_uid");
-	Query.searchParams.set("page_instance_id", `eq.${pPageInstanceId}`);
-	Query.searchParams.set("order", "id.desc");
-	Query.searchParams.set("limit", "1");
-	const Res = await SupabaseRequest(Query, pServiceKey);
-	if (!Res.ok) throw new Error(Res.text || `Latest page event HTTP ${Res.status}`);
-	try {
-		const Rows = JSON.parse(Res.text);
-		return Array.isArray(Rows) ? Rows[0] || null : null;
-	} catch { return null; }
-}
-
-async function AllowInferredExit(pSupabaseUrl, pServiceKey, pRow) {
-	if (pRow.event_source !== "emolive" || pRow.event_type !== "page_exit" || !Bool(pRow.payload?.eventData?.inferred)) return { ok: true };
-	const Latest = await LatestPageEvent(pSupabaseUrl, pServiceKey, pRow.page_instance_id);
-	if (!Latest) return { ok: false, reason: "page_has_no_events" };
-	if (Str(Latest.event_type).toLowerCase() === "page_exit") return { ok: false, reason: "already_closed" };
-	const LastObservedId = Math.max(0, Math.trunc(Num(pRow.payload?.eventData?.lastObservedEventId)));
-	if (LastObservedId && Num(Latest.id) > LastObservedId) return { ok: false, reason: "page_received_newer_event" };
-	const LatestAt = Date.parse(Str(Latest.created_at));
-	if (!LatestAt || Date.now() - LatestAt < cHeartbeatTimeoutMs) return { ok: false, reason: "page_not_silent_long_enough" };
-	return { ok: true };
-}
-
-async function HasStoredPageOpen(pSupabaseUrl, pServiceKey, pPageInstanceId) {
-	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
-	Query.searchParams.set("select", "id");
-	Query.searchParams.set("page_instance_id", `eq.${pPageInstanceId}`);
-	Query.searchParams.set("event_type", "in.(page_open,page_view,page_load)");
-	Query.searchParams.set("limit", "1");
-	const Res = await SupabaseRequest(Query, pServiceKey);
-	if (!Res.ok) throw new Error(Res.text || `Page-open lookup HTTP ${Res.status}`);
-	try {
-	const Rows = JSON.parse(Res.text);
-	return Array.isArray(Rows) && Rows.length > 0;
-	} catch { return false; }
-}
-
-async function IsRepeatedClientProfile(pSupabaseUrl, pServiceKey, pRow) {
-	if (pRow.event_type !== "page_open") return false;
-	const Profile = Str(pRow.payload?.clientProfile);
-	if (!Profile) return false;
-	const Query = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
-	Query.searchParams.set("select", "id");
-	Query.searchParams.set("event_type", "eq.page_open");
-	Query.searchParams.set("page_path", `eq.${pRow.page_path}`);
-	Query.searchParams.set("payload->>clientProfile", `eq.${Profile}`);
-	Query.searchParams.set("visitor_id", `neq.${pRow.visitor_id}`);
-	Query.searchParams.set("created_at", `gte.${new Date(Date.now() - 30 * 60 * 1000).toISOString()}`);
-	Query.searchParams.set("limit", "1");
-	const Res = await SupabaseRequest(Query, pServiceKey);
-	if (!Res.ok) throw new Error(Res.text || `Client-profile lookup HTTP ${Res.status}`);
-	try {
-	const Rows = JSON.parse(Res.text);
-	return Array.isArray(Rows) && Rows.length > 0;
-	} catch { return false; }
-}
-
 async function InsertRows(pSupabaseUrl, pServiceKey, pRows) {
 	const Res = await SupabaseRequest(`${pSupabaseUrl}/rest/v1/ops_events?on_conflict=client_event_uid`, pServiceKey, {
 		method: "POST",
-		headers: { "content-type": "application/json", prefer: "resolution=ignore-duplicates,return=representation" },
+		headers: { "content-type": "application/json", prefer: "resolution=ignore-duplicates,return=minimal" },
 		body: JSON.stringify(pRows)
 	});
 	if (!Res.ok) throw new Error(Res.text || `Insert HTTP ${Res.status}`);
-	try { return JSON.parse(Res.text); }
-	catch { return []; }
 }
 
 export async function OPTIONS() { return Json({ ok: true }); }
@@ -287,26 +224,11 @@ export async function POST({ request }) {
 
 		const Rows = Inputs.map((Item) => NormalizeEvent(Item, request));
 		for (const Row of Rows) {
-			if (await IsRepeatedClientProfile(SupabaseUrl, ServiceKey, Row)) {
-				return Json({ ok: true, stored: 0, ignored: true, reason: "repeated_client_profile" });
-			}
-		}
-		const BatchPageOpens = new Set(Rows
-			.filter((Row) => ["page_open", "page_view", "page_load"].includes(Row.event_type))
-			.map((Row) => Row.page_instance_id));
-		for (const Row of Rows) {
 			if (Row.event_source === "emolive" && !CheckOpsKey(request)) return Json({ ok: false, error: "Unauthorized" }, 401);
-			if (!["page_open", "page_view", "page_load"].includes(Row.event_type)
-				&& !BatchPageOpens.has(Row.page_instance_id)
-				&& !(await HasStoredPageOpen(SupabaseUrl, ServiceKey, Row.page_instance_id))) {
-				return Json({ ok: true, stored: 0, ignored: true, reason: "orphan_page_event" });
-			}
-			const Allowed = await AllowInferredExit(SupabaseUrl, ServiceKey, Row);
-			if (!Allowed.ok) return Json({ ok: true, stored: 0, ignored: true, reason: Allowed.reason });
 		}
 
-		const Inserted = await InsertRows(SupabaseUrl, ServiceKey, Rows);
-		return Json({ ok: true, stored: Array.isArray(Inserted) ? Inserted.length : Rows.length, accepted: Rows.length });
+		await InsertRows(SupabaseUrl, ServiceKey, Rows);
+		return Json({ ok: true, accepted: Rows.length });
 	} catch (Ex) {
 		const Message = Ex instanceof Error ? Ex.message : String(Ex);
 		const IsClientError = /Missing|Invalid|events must|too large|JSON/.test(Message);
