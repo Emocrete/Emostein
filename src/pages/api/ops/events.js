@@ -1,7 +1,7 @@
 export const prerender = false;
 
 const cDefaultOpsKey = "Emocrete20015161";
-const cMaxBatch = 500;
+const cMaxBatch = 5000;
 const cDeleteChunk = 200;
 
 function Json(pBody, pStatus = 200) {
