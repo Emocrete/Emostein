@@ -12,6 +12,7 @@ import SpeedInsights from "@vercel/speed-insights/astro";
 import SiteIntro from "@/Widgets/Intro/SiteIntro.astro";
 import OpsVisitTracker from "@/Scripts/OpsVisitTracker.astro";
 import EmoReplayRecorder from "@/Scripts/EmoReplayRecorder.astro";
+import ClaritySessionIndexer from "@/Scripts/ClaritySessionIndexer.astro";
 import Moving from "@/Scripts/Moving.astro";
 import AutoContainerHeight from "@/Scripts/AutoContainerHeight.astro";
 
@@ -283,6 +284,8 @@ const cOgType = pSchemaType === "Article" ? "article" : "website";
 
 		<body style = " font-family : Cairo, system-ui, sans-serif ">
 
+			<EmoReplayRecorder />
+
 			{ pIntro &&
 
 				<SiteIntro
@@ -390,7 +393,7 @@ const cOgType = pSchemaType === "Article" ? "article" : "website";
 
 			<OpsVisitTracker />
 
-			<EmoReplayRecorder />
+			<ClaritySessionIndexer />
 
 			<SpeedInsights />
 

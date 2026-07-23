@@ -1,0 +1,81 @@
+---
+const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
+---
+
+{cEnabled && (
+<script is:inline>
+(() => {
+	if (window.__EmoClaritySessionIndexerStarted) return;
+	window.__EmoClaritySessionIndexerStarted = true;
+
+	const cEndpoint = "/api/ops/clarity";
+	let fLastKey = "";
+	let fRegistered = false;
+
+	function Str(pValue) { return String(pValue ?? "").trim(); }
+	function Ids() {
+		const Value = window.__EmoOpsIds || {};
+		return {
+			visitorId: Str(Value.visitorId),
+			sessionId: Str(Value.sessionId),
+			pageInstanceId: Str(Value.pageInstanceId)
+		};
+	}
+
+	async function Publish(pMetadata, pPlayback) {
+		const Visit = Ids();
+		const ProjectId = Str(pMetadata?.projectId);
+		const UserId = Str(pMetadata?.userId);
+		const ClaritySessionId = Str(pMetadata?.sessionId);
+		if (!Visit.sessionId || !ProjectId || !UserId || !ClaritySessionId) return;
+		if (pPlayback === false) return;
+		const Key = `${Visit.sessionId}|${ProjectId}|${UserId}|${ClaritySessionId}`;
+		if (Key === fLastKey) return;
+		fLastKey = Key;
+		const ClarityUrl = `https://clarity.microsoft.com/player/${encodeURIComponent(ProjectId)}/${encodeURIComponent(UserId)}/${encodeURIComponent(ClaritySessionId)}`;
+		try {
+			await fetch(cEndpoint, {
+				method: "POST",
+				headers: { "content-type": "application/json" },
+				body: JSON.stringify({
+					visitorId: Visit.visitorId,
+					sessionId: Visit.sessionId,
+					pageInstanceId: Visit.pageInstanceId,
+					clarityProjectId: ProjectId,
+					clarityUserId: UserId,
+					claritySessionId: ClaritySessionId,
+					clarityUrl: ClarityUrl,
+					indexedAt: new Date().toISOString()
+				}),
+				keepalive: true
+			});
+		} catch {}
+	}
+
+	function Register() {
+		if (fRegistered || typeof window.clarity !== "function") return;
+		const Visit = Ids();
+		if (!Visit.sessionId) return;
+		fRegistered = true;
+		try {
+			window.clarity("metadata", (Metadata, Playback) => Publish(Metadata, Playback), true, true);
+		} catch { fRegistered = false; }
+	}
+
+	function Start() {
+		Register();
+		if (fRegistered) return;
+		let Attempts = 0;
+		const Wait = window.setInterval(() => {
+			Attempts += 1;
+			Register();
+			if (fRegistered || Attempts >= 120) window.clearInterval(Wait);
+		}, 500);
+	}
+
+	window.addEventListener("emo:ops-page-open", Start, { once: true });
+	if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", Start, { once: true });
+	else Start();
+})();
+</script>
+)}

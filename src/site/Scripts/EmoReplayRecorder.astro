@@ -1,6 +1,5 @@
 ---
 const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
-const cSnapshotDelayMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_SNAPSHOT_DELAY_MS ?? "1400");
 const cPointerEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_POINTER_EVERY_MS ?? "80");
 const cScrollEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_SCROLL_EVERY_MS ?? "120");
 const cFlushEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_FLUSH_EVERY_MS ?? "1000");
@@ -10,7 +9,7 @@ const cNetworkBatchSize = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH
 {cEnabled && (
 <script
 	is:inline
-	define:vars={{ cSnapshotDelayMs, cPointerEveryMs, cScrollEveryMs, cFlushEveryMs, cNetworkBatchSize }}
+	define:vars={{ cPointerEveryMs, cScrollEveryMs, cFlushEveryMs, cNetworkBatchSize }}
 >
 (() => {
 	if (window.__EmoReplayRecorderStarted) return;
@@ -20,6 +19,7 @@ const cNetworkBatchSize = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH
 	window.__EmoReplayRecorderStarted = true;
 
 	const cPageStartedAt = Date.now();
+	const cPageStartedIso = new Date(cPageStartedAt).toISOString();
 	const cSessionStartedKey = "emo_ops_session_started_at_v1";
 	const cEvents = [];
 	let fCaptureSeq = 0;
@@ -27,16 +27,21 @@ const cNetworkBatchSize = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH
 	let fFlushTimer = 0;
 	let fLastPointerAt = 0;
 	let fLastScrollAt = 0;
-	let fStarted = false;
 	let fUnloading = false;
+	let fSnapshotHtml = "";
+	let fSnapshotQueued = false;
+	let fSnapshotSent = false;
 
 	function Str(pValue) { return String(pValue ?? "").trim(); }
 	function NowPage() { return Math.max(0, Date.now() - cPageStartedAt); }
-	function NowSession() {
+	function SessionStartedAt() {
 		let Started = cPageStartedAt;
 		try { Started = Number(sessionStorage.getItem(cSessionStartedKey) || cPageStartedAt); } catch {}
-		return Math.max(0, Date.now() - (Number.isFinite(Started) ? Started : cPageStartedAt));
+		return Number.isFinite(Started) && Started > 0 ? Started : cPageStartedAt;
 	}
+	function NowSession() { return Math.max(0, Date.now() - SessionStartedAt()); }
+	const cInitialSessionElapsedMs = Math.max(0, cPageStartedAt - SessionStartedAt());
+
 	function Shorten(pText, pMax = 180) {
 		const Text = Str(pText).replace(/\s+/g, " ");
 		return Text.length > pMax ? `${Text.slice(0, pMax).trim()}…` : Text;
@@ -48,7 +53,7 @@ const cNetworkBatchSize = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH
 	function ExactSelector(pElem) {
 		if (!(pElem instanceof Element)) return "";
 		if (pElem.id) return `#${CssEscape(pElem.id)}`;
-		for (const Attr of ["data-replay-id", "data-ops-widget", "data-ops-scope", "data-ops-id"]) {
+		for (const Attr of ["data-replay-id", "data-emo-id", "data-ops-widget", "data-ops-scope", "data-ops-id"]) {
 			const Value = Str(pElem.getAttribute(Attr));
 			if (Value) return `[${Attr}="${CssEscape(Value)}"]`;
 		}
@@ -90,31 +95,32 @@ const cNetworkBatchSize = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH
 			scrollY: Math.round(window.scrollY || 0)
 		};
 	}
-	function Capture(pType, pData = {}, pImmediate = false) {
-		if (!fStarted || typeof window.TrackOpsEventBatch !== "function") return;
-		const PageElapsedMs = NowPage();
-		const SessionElapsedMs = NowSession();
+
+	function QueueCapture(pType, pData = {}, pImmediate = false, pTiming = null) {
+		const PageElapsedMs = pTiming?.pageElapsedMs ?? NowPage();
+		const SessionElapsedMs = pTiming?.sessionElapsedMs ?? NowSession();
 		cEvents.push({
 			eventType: `system.${pType}`,
 			eventSource: "site",
-			pageElapsedMs: PageElapsedMs,
-			sessionElapsedMs: SessionElapsedMs,
-			createdAtClient: new Date().toISOString(),
+			pageElapsedMs: Math.max(0, Math.round(PageElapsedMs)),
+			sessionElapsedMs: Math.max(0, Math.round(SessionElapsedMs)),
+			createdAtClient: pTiming?.createdAtClient || new Date().toISOString(),
 			focusState: document.hidden ? "away" : "visible",
-			eventData: { captureSeq: ++fCaptureSeq, t: PageElapsedMs, sessionT: SessionElapsedMs, ...pData }
+			eventData: { captureSeq: ++fCaptureSeq, t: Math.max(0, Math.round(PageElapsedMs)), sessionT: Math.max(0, Math.round(SessionElapsedMs)), ...pData }
 		});
 		if (pImmediate) Flush();
 	}
+	function Capture(pType, pData = {}, pImmediate = false) { QueueCapture(pType, pData, pImmediate); }
 
 	async function Flush() {
-		if (fFlushRunning || !cEvents.length || typeof window.TrackOpsEventBatch !== "function") return;
+		if (fFlushRunning || !cEvents.length || typeof window.TrackOpsEventBatch !== "function" || !window.__EMO_OPS_PAGE_OPENED__) return;
 		fFlushRunning = true;
 		try {
 			const Size = Math.min(500, Math.max(1, Number(cNetworkBatchSize) || 120));
 			while (cEvents.length) {
 				const Batch = cEvents.splice(0, Size);
 				const Result = await window.TrackOpsEventBatch(Batch);
-				if (!Result?.ok) {
+				if (!Result?.ok || Result?.skipped) {
 					cEvents.unshift(...Batch);
 					break;
 				}
@@ -123,59 +129,186 @@ const cNetworkBatchSize = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH
 		} finally { fFlushRunning = false; }
 	}
 
+	function AbsoluteUrl(pValue, pBase = document.baseURI) {
+		const Value = Str(pValue);
+		if (!Value || Value.startsWith("data:") || Value.startsWith("blob:") || Value.startsWith("#")) return Value;
+		try { return new URL(Value, pBase || location.href).href; } catch { return Value; }
+	}
+	function RewriteSrcSet(pValue, pBase) {
+		return Str(pValue).split(",").map((Part) => {
+			const Match = Part.trim().match(/^(\S+)(\s+.+)?$/);
+			return Match ? `${AbsoluteUrl(Match[1], pBase)}${Match[2] || ""}` : Part.trim();
+		}).filter(Boolean).join(", ");
+	}
+	function RewriteCssUrls(pCss, pBase) {
+		return String(pCss || "").replace(/url\((['"]?)(.*?)\1\)/gi, (All, Quote, Raw) => {
+			const Value = Str(Raw);
+			if (!Value || Value.startsWith("data:") || Value.startsWith("blob:") || Value.startsWith("#")) return All;
+			return `url("${AbsoluteUrl(Value, pBase)}")`;
+		});
+	}
 	function FreezeCss() {
 		const Rules = [];
 		for (const Sheet of Array.from(document.styleSheets || [])) {
 			try {
-				for (const Rule of Array.from(Sheet.cssRules || [])) Rules.push(Rule.cssText);
+				const Base = Sheet.href || document.baseURI;
+				for (const Rule of Array.from(Sheet.cssRules || [])) Rules.push(RewriteCssUrls(Rule.cssText, Base));
 			} catch {}
 		}
 		return Rules.join("\n");
 	}
 
+	const cSnapshotStyleProperties = [
+		"display", "visibility", "position", "top", "right", "bottom", "left", "z-index",
+		"box-sizing", "width", "height", "min-width", "max-width", "min-height", "max-height",
+		"margin-top", "margin-right", "margin-bottom", "margin-left",
+		"padding-top", "padding-right", "padding-bottom", "padding-left",
+		"overflow", "overflow-x", "overflow-y",
+		"flex-basis", "flex-direction", "flex-grow", "flex-shrink", "flex-wrap",
+		"align-content", "align-items", "align-self", "justify-content", "justify-items", "justify-self", "gap", "row-gap", "column-gap",
+		"grid-area", "grid-template-areas", "grid-template-columns", "grid-template-rows", "grid-auto-columns", "grid-auto-rows", "grid-auto-flow",
+		"font-family", "font-size", "font-style", "font-weight", "line-height", "letter-spacing",
+		"color", "text-align", "text-decoration", "text-overflow", "white-space", "word-break", "overflow-wrap", "direction",
+		"background-color", "background-image", "background-position", "background-size", "background-repeat",
+		"border-top", "border-right", "border-bottom", "border-left", "border-radius",
+		"box-shadow", "opacity", "filter", "transform", "transform-origin",
+		"object-fit", "object-position", "aspect-ratio", "vertical-align"
+	];
+	function FreezeComputedStyle(pOriginal, pClone) {
+		try {
+			const Computed = getComputedStyle(pOriginal);
+			for (const Property of cSnapshotStyleProperties) {
+				const Value = Computed.getPropertyValue(Property);
+				if (Value) pClone.style.setProperty(Property, RewriteCssUrls(Value, document.baseURI));
+			}
+		} catch {}
+	}
+	function SyncElementState(pOriginal, pClone) {
+		if (!(pOriginal instanceof Element) || !(pClone instanceof Element)) return;
+		for (const Attr of Array.from(pClone.attributes || [])) {
+			if (Attr.name.toLowerCase().startsWith("on")) pClone.removeAttribute(Attr.name);
+		}
+		const Tag = pOriginal.tagName.toLowerCase();
+		if (Tag === "img") {
+			const Source = pOriginal.currentSrc || pOriginal.getAttribute("src") || pOriginal.getAttribute("data-src") || pOriginal.getAttribute("data-lazy-src") || pOriginal.getAttribute("data-original") || "";
+			if (Source) pClone.setAttribute("src", AbsoluteUrl(Source));
+			pClone.removeAttribute("srcset");
+			pClone.removeAttribute("data-src");
+			pClone.removeAttribute("data-lazy-src");
+			pClone.setAttribute("loading", "eager");
+			pClone.setAttribute("decoding", "sync");
+		}
+		if (Tag === "source") {
+			const Source = pOriginal.getAttribute("src");
+			const SrcSet = pOriginal.getAttribute("srcset");
+			if (Source) pClone.setAttribute("src", AbsoluteUrl(Source));
+			if (SrcSet) pClone.setAttribute("srcset", RewriteSrcSet(SrcSet, document.baseURI));
+		}
+		if (Tag === "link" && pOriginal.getAttribute("href")) pClone.setAttribute("href", AbsoluteUrl(pOriginal.getAttribute("href")));
+		if (Tag === "a" && pOriginal.getAttribute("href")) pClone.setAttribute("href", AbsoluteUrl(pOriginal.getAttribute("href")));
+		if (Tag === "iframe" && pOriginal.getAttribute("src")) {
+			pClone.setAttribute("src", AbsoluteUrl(pOriginal.getAttribute("src")));
+			pClone.setAttribute("loading", "eager");
+		}
+		if (Tag === "video" && pOriginal.getAttribute("poster")) pClone.setAttribute("poster", AbsoluteUrl(pOriginal.getAttribute("poster")));
+		if (Tag === "form" && pOriginal.getAttribute("action")) pClone.setAttribute("action", AbsoluteUrl(pOriginal.getAttribute("action")));
+		if (pOriginal.getAttribute("style")) pClone.setAttribute("style", RewriteCssUrls(pOriginal.getAttribute("style"), document.baseURI));
+
+		if (pOriginal instanceof HTMLInputElement) {
+			const CaptureValue = pOriginal.getAttribute("data-replay-capture") === "value" && pOriginal.getAttribute("data-replay-private") !== "true";
+			if (["checkbox", "radio"].includes(pOriginal.type)) {
+				if (pOriginal.checked) pClone.setAttribute("checked", "checked");
+				else pClone.removeAttribute("checked");
+			} else pClone.setAttribute("value", CaptureValue ? Str(pOriginal.value) : "");
+		}
+		if (pOriginal instanceof HTMLTextAreaElement) {
+			const CaptureValue = pOriginal.getAttribute("data-replay-capture") === "value" && pOriginal.getAttribute("data-replay-private") !== "true";
+			pClone.textContent = CaptureValue ? Str(pOriginal.value) : "";
+		}
+		if (pOriginal instanceof HTMLSelectElement && pClone instanceof HTMLSelectElement) {
+			Array.from(pClone.options || []).forEach((Option, Index) => { Option.selected = !!pOriginal.options?.[Index]?.selected; });
+		}
+		if (Tag === "details") {
+			if (pOriginal.open) pClone.setAttribute("open", "open");
+			else pClone.removeAttribute("open");
+		}
+		FreezeComputedStyle(pOriginal, pClone);
+	}
+	async function InlinePrimaryFont(pHtml) {
+		try {
+			const Response = await fetch(AbsoluteUrl("/Fonts/Cairo.ttf"), { cache: "force-cache" });
+			if (!Response.ok) return pHtml;
+			const BlobValue = await Response.blob();
+			const DataUrl = await new Promise((Resolve) => {
+				const Reader = new FileReader();
+				Reader.onload = () => Resolve(Str(Reader.result));
+				Reader.onerror = () => Resolve("");
+				Reader.readAsDataURL(BlobValue);
+			});
+			if (!DataUrl) return pHtml;
+			const FontStyle = `<style data-emo-replay-font="true">@font-face{font-family:"Cairo";src:url("${DataUrl}") format("truetype");font-display:swap}</style>`;
+			return String(pHtml || "").replace(/<\/head>/i, `${FontStyle}</head>`);
+		} catch { return pHtml; }
+	}
+
 	function BuildSnapshotHtml() {
 		const Clone = document.documentElement.cloneNode(true);
-		const Originals = Array.from(document.querySelectorAll("canvas"));
-		const Clones = Array.from(Clone.querySelectorAll("canvas"));
-		Originals.forEach((Canvas, Index) => {
+		const Originals = [document.documentElement, ...Array.from(document.documentElement.querySelectorAll("*"))];
+		const Clones = [Clone, ...Array.from(Clone.querySelectorAll("*"))];
+		const Count = Math.min(Originals.length, Clones.length);
+		for (let Index = 0; Index < Count; Index += 1) SyncElementState(Originals[Index], Clones[Index]);
+
+		const OriginalCanvas = Array.from(document.querySelectorAll("canvas"));
+		const CloneCanvas = Array.from(Clone.querySelectorAll("canvas"));
+		OriginalCanvas.forEach((Canvas, Index) => {
 			try {
 				const Img = document.createElement("img");
 				Img.src = Canvas.toDataURL("image/png");
-				Img.width = Canvas.width; Img.height = Canvas.height;
-				Clones[Index]?.replaceWith(Img);
-			} catch { Clones[Index]?.remove(); }
+				Img.width = Canvas.width;
+				Img.height = Canvas.height;
+				Img.setAttribute("style", CloneCanvas[Index]?.getAttribute("style") || "");
+				CloneCanvas[Index]?.replaceWith(Img);
+			} catch { CloneCanvas[Index]?.remove(); }
 		});
-		Clone.querySelectorAll("script, noscript, iframe").forEach((Elem) => Elem.remove());
-		Clone.querySelectorAll("*").forEach((Elem) => {
-			for (const Attr of Array.from(Elem.attributes || [])) {
-				if (Attr.name.toLowerCase().startsWith("on")) Elem.removeAttribute(Attr.name);
-			}
-			if (Elem.matches("input, textarea, select")) {
-				const CaptureValue = Elem.getAttribute("data-replay-capture") === "value" && Elem.getAttribute("data-replay-private") !== "true";
-				if (Elem.matches("input")) Elem.setAttribute("value", CaptureValue ? Str(Elem.value) : "");
-				if (Elem.matches("textarea")) Elem.textContent = CaptureValue ? Str(Elem.value) : "";
-				if (Elem.matches("select")) Array.from(Elem.options || []).forEach((Option) => { Option.selected = CaptureValue && Option.selected; });
-			}
-		});
+
+		Clone.querySelectorAll("script, noscript").forEach((Elem) => Elem.remove());
+		const Head = Clone.querySelector("head") || Clone;
+		Head.querySelectorAll("base[data-emo-replay-base]").forEach((Elem) => Elem.remove());
+		const Base = document.createElement("base");
+		Base.setAttribute("data-emo-replay-base", "true");
+		Base.setAttribute("href", document.baseURI || location.href);
+		Head.insertBefore(Base, Head.firstChild);
+
 		const FrozenStyle = document.createElement("style");
 		FrozenStyle.setAttribute("data-emo-replay-frozen", "true");
-		FrozenStyle.textContent = `${FreezeCss()}\nhtml{scroll-behavior:auto!important}*{animation-play-state:paused!important;caret-color:transparent!important}`;
-		(Clone.querySelector("head") || Clone).appendChild(FrozenStyle);
+		FrozenStyle.textContent = `${FreezeCss()}\nhtml{scroll-behavior:auto}*{animation-play-state:paused;transition:none;caret-color:transparent}`;
+		Head.appendChild(FrozenStyle);
 		Clone.setAttribute("data-emo-replay-snapshot", "true");
 		return `<!doctype html>${Clone.outerHTML}`;
 	}
 
-	async function SendSnapshot() {
-		if (!fStarted || typeof window.TrackOpsEventOnce !== "function") return;
-		let SnapshotHtml = "";
-		try { SnapshotHtml = BuildSnapshotHtml(); }
-		catch (Ex) { SnapshotHtml = `<!doctype html><html><body>Snapshot unavailable: ${Shorten(Ex?.message || Ex)}</body></html>`; }
-		await window.TrackOpsEventOnce("system.page_snapshot", "page_snapshot", {
+	async function TrySendSnapshot() {
+		if (fSnapshotSent || !fSnapshotQueued || !fSnapshotHtml || typeof window.TrackOpsEventOnce !== "function" || !window.__EMO_OPS_PAGE_OPENED__) return;
+		const Result = await window.TrackOpsEventOnce("system.page_snapshot", "page_snapshot", {
 			eventSource: "site",
 			label: "Replay page snapshot",
 			notifyMobile: false,
-			eventData: { snapshotHtml: SnapshotHtml, snapshotLength: SnapshotHtml.length, ...ViewportData() }
+			pageElapsedMs: 0,
+			sessionElapsedMs: cInitialSessionElapsedMs,
+			createdAtClient: cPageStartedIso,
+			eventData: { snapshotHtml: fSnapshotHtml, snapshotLength: fSnapshotHtml.length, ...ViewportData(), scrollX: 0, scrollY: 0 }
 		});
+		if (Result?.ok && !Result?.skipped) fSnapshotSent = true;
+	}
+	async function QueueInitialSnapshot() {
+		if (fSnapshotQueued) return;
+		fSnapshotQueued = true;
+		try {
+			fSnapshotHtml = BuildSnapshotHtml();
+			fSnapshotHtml = await InlinePrimaryFont(fSnapshotHtml);
+		}
+		catch (Ex) { fSnapshotHtml = `<!doctype html><html><body>Snapshot unavailable: ${Shorten(Ex?.message || Ex)}</body></html>`; }
+		TrySendSnapshot();
 	}
 
 	function InputValue(pElem) {
@@ -188,21 +321,23 @@ const cNetworkBatchSize = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH
 
 	function WireEvents() {
 		window.addEventListener("scroll", () => {
-			const Now = performance.now(); if (Now - fLastScrollAt < Number(cScrollEveryMs || 120)) return; fLastScrollAt = Now;
+			const Now = performance.now();
+			if (Now - fLastScrollAt < Number(cScrollEveryMs || 120)) return;
+			fLastScrollAt = Now;
 			Capture("scroll", ViewportData());
 		}, { passive: true });
 		window.addEventListener("resize", () => Capture("resize", ViewportData()), { passive: true });
 		document.addEventListener("pointermove", (Event) => {
-			const Now = performance.now(); if (Now - fLastPointerAt < Number(cPointerEveryMs || 80)) return; fLastPointerAt = Now;
+			const Now = performance.now();
+			if (Now - fLastPointerAt < Number(cPointerEveryMs || 80)) return;
+			fLastPointerAt = Now;
 			Capture("pointer_move", { x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), pointerType: Event.pointerType || "mouse", ...TargetData(Event.target) });
 		}, true);
 		for (const [DomType, ReplayType] of [["pointerdown", "pointer_down"], ["pointerup", "pointer_up"]]) {
 			document.addEventListener(DomType, (Event) => Capture(ReplayType, { x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button, pointerType: Event.pointerType || "mouse", ...TargetData(Event.target) }), true);
 		}
 		document.addEventListener("click", (Event) => Capture("click", { x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button, ...TargetData(Event.target) }), true);
-		for (const Type of ["input", "change"]) {
-			document.addEventListener(Type, (Event) => Capture(Type, { ...TargetData(Event.target), ...InputValue(Event.target) }), true);
-		}
+		for (const Type of ["input", "change"]) document.addEventListener(Type, (Event) => Capture(Type, { ...TargetData(Event.target), ...InputValue(Event.target) }), true);
 		document.addEventListener("submit", (Event) => Capture("submit", TargetData(Event.target), true), true);
 		document.addEventListener("toggle", (Event) => Capture("widget_state", { ...TargetData(Event.target), open: !!Event.target?.open }), true);
 		window.addEventListener("focus", () => Capture("focus", { state: "visible" }), true);
@@ -215,25 +350,29 @@ const cNetworkBatchSize = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH
 		});
 	}
 
-	function Start() {
-		if (fStarted || typeof window.TrackOpsEventBatch !== "function") return;
-		fStarted = true;
-		WireEvents();
-		Capture("page_ready", { readyState: document.readyState, ...ViewportData() }, true);
-		fFlushTimer = window.setInterval(Flush, Math.max(250, Number(cFlushEveryMs) || 1000));
-		window.setTimeout(SendSnapshot, Math.max(200, Number(cSnapshotDelayMs) || 1400));
+	function OnOpsReady() {
+		Flush();
+		TrySendSnapshot();
 	}
 
-	window.addEventListener("emo:ops-page-open", Start, { once: true });
-	if (window.__EMO_OPS_PAGE_OPENED__) Start();
-	else {
-		let Attempts = 0;
-		const Wait = window.setInterval(() => {
-			Attempts += 1;
-			if (window.__EMO_OPS_PAGE_OPENED__) { window.clearInterval(Wait); Start(); }
-			else if (Attempts > 120) window.clearInterval(Wait);
-		}, 250);
-	}
+	// Capture begins as soon as this script is parsed at the start of <body>.
+	WireEvents();
+	QueueCapture("page_ready", { readyState: document.readyState, ...ViewportData() }, false, {
+		pageElapsedMs: 0,
+		sessionElapsedMs: cInitialSessionElapsedMs,
+		createdAtClient: cPageStartedIso
+	});
+	QueueCapture("scroll", { ...ViewportData(), scrollX: 0, scrollY: 0 }, false, {
+		pageElapsedMs: 0,
+		sessionElapsedMs: cInitialSessionElapsedMs,
+		createdAtClient: cPageStartedIso
+	});
+	fFlushTimer = window.setInterval(() => { Flush(); TrySendSnapshot(); }, Math.max(250, Number(cFlushEveryMs) || 1000));
+	window.addEventListener("emo:ops-page-open", OnOpsReady);
+
+	if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", QueueInitialSnapshot, { once: true });
+	else QueueInitialSnapshot();
+	if (window.__EMO_OPS_PAGE_OPENED__) OnOpsReady();
 })();
 </script>
 )}
