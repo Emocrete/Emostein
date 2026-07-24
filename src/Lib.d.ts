@@ -33,12 +33,18 @@ interface TImageSpec {
 
 
 
+/** Shared behavioral attributes accepted by every Astro widget. */
+interface WidgetBehaviorProps {
+	/** Treat this widget root as one reading unit and suppress read events from its descendants. */
+	Readable?: boolean | string;
+}
+
 /** Debug-only outline attributes for Astro widgets.
  * Debug  = outline the widget root itself.
  * DebugF = parent-level/debug family outline.
  * DebugG = grand-parent-level/debug group outline.
  */
-interface DebugOutlineProps {
+interface DebugOutlineProps extends WidgetBehaviorProps {
 	Debug?: boolean | string;
 	DebugF?: boolean | string;
 	DebugG?: boolean | string;

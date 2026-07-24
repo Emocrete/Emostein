@@ -70,7 +70,7 @@ export type PlaceOrigin =
 	| "right bottom";
 
 
-export interface PlaceProps extends MovingProps {
+export interface PlaceProps extends MovingProps, WidgetBehaviorProps {
 	pLoc?: Loc;
 	pSize?: Size;
 	pRotate?: Angle | RespString;
