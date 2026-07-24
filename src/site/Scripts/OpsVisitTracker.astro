@@ -361,20 +361,40 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	function GetReadableBlocksText(pElem) {
 	if (!pElem?.querySelectorAll) return CleanText(pElem?.textContent || "");
 
-	const Blocks = Array.from(pElem.querySelectorAll("p, li"));
+	const Blocks = Array.from(pElem.querySelectorAll("h1, h2, h3, h4, h5, h6, p, li"));
 	const Parts = [];
+	let OrderedIndex = 0;
 
 	Blocks.forEach((pBlock) => {
 	if (FindReadTargetAncestor(pBlock) !== pElem) return;
 	if (pBlock.closest("script, style, nav, form, button, a, summary")) return;
 	const Text = CleanText(pBlock.textContent || "");
-	if (Text) Parts.push(Text);
+	if (!Text) return;
+
+	const Tag = String(pBlock.tagName || "").toLowerCase();
+	if (/^h[1-6]$/.test(Tag)) {
+	Parts.push(`## ${Text}`);
+	return;
+	}
+
+	if (Tag === "li") {
+	const List = pBlock.parentElement;
+	if (List?.tagName?.toLowerCase() === "ol") {
+	OrderedIndex = Array.from(List.children).indexOf(pBlock) + 1;
+	Parts.push(`${OrderedIndex}. ${Text}`);
+	} else {
+	Parts.push(`• ${Text}`);
+	}
+	return;
+	}
+
+	Parts.push(Text);
 	});
 
-	if (Parts.length) return Parts.join(" ");
+	if (Parts.length) return Parts.join("\n");
 
 	const Clone = pElem.cloneNode(true);
-	Clone.querySelectorAll?.("script, style, svg, img, nav, form, button, a, summary, h1, h2, h3, h4, h5, h6, .TitleBox, .SecTitle, .SectionTitle, .FaqTitle, .IndexSecTitle").forEach((pNode) => pNode.remove());
+	Clone.querySelectorAll?.("script, style, svg, img, nav, form, button, a, summary").forEach((pNode) => pNode.remove());
 	return CleanText(Clone.textContent || "");
 	}
 
@@ -428,9 +448,34 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	return State;
 	}
 
+	function IsReadableBoundary(pElem) {
+	return pElem instanceof Element && pElem.hasAttribute("readable");
+	}
+
+	function GetReadableBoundary(pElem) {
+	return pElem?.closest?.("[readable]") || null;
+	}
+
 	function RegisterReadElement(pElem, pWidgetName = "") {
 	if (!pElem || pElem.dataset?.opsAuto === "off") return;
+	const Boundary = GetReadableBoundary(pElem);
+	if (Boundary && Boundary !== pElem) return;
 	EnsureReadState(pElem, pWidgetName);
+	}
+
+	function ApplyReadableBoundaries() {
+	const Boundaries = Array.from(document.querySelectorAll("[readable]"));
+	Boundaries.forEach((pElem) => EnsureReadState(pElem, GetWidgetName(pElem)));
+
+	for (let Index = cReadTargets.length - 1; Index >= 0; Index--) {
+	const State = cReadTargets[Index];
+	const Boundary = GetReadableBoundary(State.Elem);
+	if (!Boundary || Boundary === State.Elem) continue;
+	fReadStates.delete(State.Elem);
+	cReadTargets.splice(Index, 1);
+	}
+
+	cReadTargets.forEach((pState, pIndex) => pState.Order = pIndex);
 	}
 
 	function PrepareReadStateText(pState) {
@@ -517,6 +562,8 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	const Analytics = window.EmoAnalytics;
 	if (!Analytics || typeof Analytics.GetItemName !== "function" || typeof Analytics.TrackTemplate !== "function") return;
 
+	const ElementId = String(pState.Elem?.id || "").trim();
+	if (!ElementId) return;
 	const ItemName = Analytics.GetItemName(pState.Elem);
 	if (!ItemName) return;
 
@@ -533,7 +580,14 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	TrackAnalyticsReadEvent(pState, pEventType);
 
 	const WidgetName = pState.Widget || GetWidgetName(pState.Elem);
-	const BodyText = Shorten(pState.Text || "", 420);
+	const ReadTitle = pState.Label || BuildViewLabel(pState.Elem);
+	const ReadableText = String(pState.Text || "");
+	const BodyText = Shorten(ReadableText, 420);
+	const ReadEventData = {
+	readTitle: ReadTitle,
+	readableText: ReadableText,
+	readable: IsReadableBoundary(pState.Elem)
+	};
 
 	if (BodyText) {
 	TrackOpsEvent(pEventType, {
@@ -543,17 +597,19 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	labelMax: 420,
 	value: pState.WordCount,
 	durationMs: Math.round(pState.AccumMs),
-	awayReason: `${pMode || ""}:body`
+	awayReason: `${pMode || ""}:body`,
+	eventData: ReadEventData
 	});
 	}
 
 	TrackOpsEvent(pEventType, {
 	eventOn: "read",
 	widget: WidgetName,
-	label: pState.Label || BuildViewLabel(pState.Elem),
+	label: ReadTitle,
 	value: pState.WordCount,
 	durationMs: Math.round(pState.AccumMs),
-	awayReason: pMode || ""
+	awayReason: pMode || "",
+	eventData: ReadEventData
 	});
 
 	if (pEventType === "read_full") {
@@ -972,6 +1028,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	}
 
 	function InitReadTracking() {
+	ApplyReadableBoundaries();
 	BuildReadHierarchy();
 	if (fReadTimer) clearInterval(fReadTimer);
 	fLastReadTickAt = Date.now();
