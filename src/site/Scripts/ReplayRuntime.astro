@@ -12,8 +12,12 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 	const cParams = new URLSearchParams(location.search);
 	const cRawWidth = Math.round(Number(cParams.get("emoReplayWidth")) || 0);
 	const cRawHeight = Math.round(Number(cParams.get("emoReplayHeight")) || 0);
+	const cRawInitialScale = Number(cParams.get("emoReplayInitialScale"));
 	const cWidth = cRawWidth > 0 ? Math.max(240, cRawWidth) : 0;
 	const cHeight = cRawHeight > 0 ? Math.max(320, cRawHeight) : 0;
+	const cInitialScale = Number.isFinite(cRawInitialScale) && cRawInitialScale > 0
+		? Math.max(0.05, Math.min(4, cRawInitialScale))
+		: 1 / Math.max(1, window.devicePixelRatio || 1);
 	const cGeneratedId = /^(.+?)-(\d{6})-(\d{6})-(\d{3})-(\d{3})$/;
 	const fBuildOffsets = [];
 
@@ -25,7 +29,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 			Viewport.name = "viewport";
 			document.head.appendChild(Viewport);
 		}
-		Viewport.content = `width=${cWidth}, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no`;
+		Viewport.content = `width=${cWidth}, initial-scale=${cInitialScale}, minimum-scale=${cInitialScale}, maximum-scale=${cInitialScale}, user-scalable=no`;
 	}
 
 	function Str(pValue) { return String(pValue ?? "").trim(); }
@@ -164,7 +168,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 			window.scrollTo(Num(Data.scrollX), Num(Data.scrollY));
 			return true;
 		}
-		if (["page_ready", "resize", "pointer_move", "pointer_down", "pointer_up", "focus", "blur", "visibility", "page_hide"].includes(Type)) return true;
+		if (["page_ready", "resize", "pointer_move", "pointer_down", "pointer_up", "pointer_cancel", "focus", "blur", "visibility", "page_hide"].includes(Type)) return true;
 		const Target = FindTarget(Data);
 		if (!Target) return false;
 		if (Type === "click") {
@@ -211,7 +215,10 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 			documentWidth: Math.max(document.documentElement.scrollWidth, document.body?.scrollWidth || 0),
 			documentHeight: Math.max(document.documentElement.scrollHeight, document.body?.scrollHeight || 0),
 			requestedWidth: cWidth,
-			requestedHeight: cHeight
+			requestedHeight: cHeight,
+			requestedInitialScale: cInitialScale,
+			devicePixelRatio: window.devicePixelRatio || 1,
+			visualViewportScale: window.visualViewport?.scale || 1
 		};
 	}
 	function NotifyReady() {

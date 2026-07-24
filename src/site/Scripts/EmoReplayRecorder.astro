@@ -18,6 +18,7 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 	const cGeneratedId = /^(.+?)-(\d{6})-(\d{6})-(\d{3})-(\d{3})$/;
 	let fLastPointerAt = 0;
 	let fLastScrollAt = 0;
+	let fTouchFallback = false;
 	let fUnloading = false;
 	let fFlushing = false;
 	let fFlushTimer = 0;
@@ -173,6 +174,27 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 		}, true);
 		for (const [DomType, ReplayType] of [["pointerdown", "pointer_down"], ["pointerup", "pointer_up"]]) {
 			document.addEventListener(DomType, (Event) => Capture(ReplayType, { x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button, pointerType: Event.pointerType || "mouse", ...TargetData(Event.target) }), true);
+		}
+		document.addEventListener("pointercancel", (Event) => {
+			if ((Event.pointerType || "") === "touch") fTouchFallback = true;
+			Capture("pointer_cancel", { x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button, pointerType: Event.pointerType || "mouse", ...TargetData(Event.target) });
+		}, true);
+		document.addEventListener("touchmove", (Event) => {
+			if (!fTouchFallback) return;
+			const Touch = Event.touches?.[0] || Event.changedTouches?.[0];
+			if (!Touch) return;
+			const Now = performance.now();
+			if (Now - fLastPointerAt < Math.max(100, Number(cPointerEveryMs) || 250)) return;
+			fLastPointerAt = Now;
+			Capture("pointer_move", { x: Math.round(Touch.clientX), y: Math.round(Touch.clientY), pageX: Math.round(Touch.pageX), pageY: Math.round(Touch.pageY), pointerType: "touch", touchFallback: true });
+		}, { passive: true, capture: true });
+		for (const TouchEndType of ["touchend", "touchcancel"]) {
+			document.addEventListener(TouchEndType, (Event) => {
+				if (!fTouchFallback) return;
+				const Touch = Event.changedTouches?.[0];
+				if (Touch) Capture("pointer_up", { x: Math.round(Touch.clientX), y: Math.round(Touch.clientY), pageX: Math.round(Touch.pageX), pageY: Math.round(Touch.pageY), pointerType: "touch", touchFallback: true });
+				fTouchFallback = false;
+			}, { passive: true, capture: true });
 		}
 		document.addEventListener("click", (Event) => Capture("click", { x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button, ...TargetData(Event.target) }), true);
 		for (const Type of ["input", "change"]) document.addEventListener(Type, (Event) => Capture(Type, { ...TargetData(Event.target), ...InputValue(Event.target) }), true);
