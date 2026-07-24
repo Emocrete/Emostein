@@ -76,7 +76,7 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	let fReadTimer = 0;
 	let fLastReadTickAt = Date.now();
 	let fActiveReadState = null;
-	const cPagePingMs = 2000;
+	const cPagePingMs = 30000;
 	const cBotUserAgentPattern = /(bot|crawl|spider|slurp|googlebot|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb)/i;
 
 	function NewId(pPrefix) {
@@ -849,8 +849,26 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	const SessionSeq = NextSessionSeq();
 	const ClientEventUid = `${GetSessionId()}:${SessionSeq}:${GetPageInstanceId()}:${ClientEventSeq}`;
 	const IsContactEvent = EventType === "call_click" || EventType === "whatsapp_click";
+	const IsReplayEvent = EventType.startsWith("system.") && EventType !== "system.clarity_session_index";
 	const PageElapsedMs = Number.isFinite(Number(pOptions.pageElapsedMs)) ? Math.max(0, Math.round(Number(pOptions.pageElapsedMs))) : Math.round(GetPageElapsedMs());
 	const SessionElapsedMs = Number.isFinite(Number(pOptions.sessionElapsedMs)) ? Math.max(0, Math.round(Number(pOptions.sessionElapsedMs))) : Math.round(GetSessionElapsedMs());
+	if (IsReplayEvent) return {
+		eventType: EventType,
+		eventSource: String(pOptions.eventSource || "site").trim() || "site",
+		visitorId: GetVisitorId(),
+		sessionId: GetSessionId(),
+		pageInstanceId: GetPageInstanceId(),
+		sessionSeq: SessionSeq,
+		pageElapsedMs: PageElapsedMs,
+		sessionElapsedMs: SessionElapsedMs,
+		pagePath: location.pathname,
+		pageTitle: document.title,
+		focusState: String(pOptions.focusState || (IsHiddenNow ? "hidden" : "visible")).trim(),
+		clientEventSeq: ClientEventSeq,
+		clientEventUid: ClientEventUid,
+		createdAtClient: String(pOptions.createdAtClient || new Date().toISOString()),
+		eventData: pOptions.eventData && typeof pOptions.eventData === "object" ? pOptions.eventData : {}
+	};
 	return {
 	eventType: EventType,
 	eventSource: String(pOptions.eventSource || "site").trim() || "site",
@@ -931,7 +949,15 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	if (!fPageOpenSent) return { ok: true, skipped: true, reason: "page_not_visible_yet" };
 	let QueuedAny = false;
 	for (let Index = 0; Index < pEvents.length; Index += 500) {
-	const Bodies = pEvents.slice(Index, Index + 500).map((Item) => BuildOpsPayload(Item?.eventType || Item?.type || "system.event", Item || {}));
+	const Items = pEvents.slice(Index, Index + 500);
+	const Bodies = Items.map((Item) => BuildOpsPayload(Item?.eventType || Item?.type || "system.event", Item || {}));
+	const PreferBeacon = Items.some((Item) => BoolValue(Item?.useBeacon));
+	if (PreferBeacon && navigator.sendBeacon) {
+		try {
+		const Accepted = navigator.sendBeacon(cApiUrl, new Blob([JSON.stringify({ events: Bodies })], { type: "application/json" }));
+		if (Accepted) continue;
+		} catch {}
+	}
 	const Result = await SendFetchPayload({ events: Bodies });
 	if (Result.ok) continue;
 	let AllQueued = true;
@@ -1396,7 +1422,10 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	function TrackPageAlive() {
 	if (!fPageOpenSent || fPageExitSent) return;
 	const Hidden = document.hidden || document.visibilityState !== "visible";
-	if (Hidden && !fAwayStartedAt) MarkPageAway("hidden_ping");
+	if (Hidden) {
+		if (!fAwayStartedAt) MarkPageAway("hidden_ping");
+		return;
+	}
 	TrackOpsEvent("page_alive", {
 	eventOn: Hidden ? "heartbeat_hidden" : "heartbeat",
 	widget: "Page",
@@ -1475,7 +1504,13 @@ const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 	label: CleanText(document.title),
 	important: true,
 	notifyMobile: true,
-	sound: true
+	sound: true,
+	eventData: {
+		replayAvailable: window.__EMO_REPLAY_CAPTURE_ENABLED__ === true,
+		viewportWidth: window.innerWidth || document.documentElement.clientWidth || 0,
+		viewportHeight: window.innerHeight || document.documentElement.clientHeight || 0,
+		pageUrl: `${location.pathname}${location.search}${location.hash}`
+	}
 	}).then((Result) => {
 	if (Result && Result.ok) {
 		fPageOpenSent = true;

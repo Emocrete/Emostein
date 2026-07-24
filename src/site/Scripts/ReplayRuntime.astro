@@ -1,0 +1,261 @@
+---
+const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
+---
+
+{cReplayMode && (
+<script is:inline>
+(() => {
+	if (window.__EMO_REPLAY_RUNTIME__) return;
+	window.__EMO_REPLAY_RUNTIME__ = true;
+	window.__EMO_REPLAY__ = true;
+
+	const cParams = new URLSearchParams(location.search);
+	const cRawWidth = Math.round(Number(cParams.get("emoReplayWidth")) || 0);
+	const cRawHeight = Math.round(Number(cParams.get("emoReplayHeight")) || 0);
+	const cWidth = cRawWidth > 0 ? Math.max(240, cRawWidth) : 0;
+	const cHeight = cRawHeight > 0 ? Math.max(320, cRawHeight) : 0;
+	const cGeneratedId = /^(.+?)-(\d{6})-(\d{6})-(\d{3})-(\d{3})$/;
+	const fBuildOffsets = [];
+
+	document.documentElement.dataset.emoReplayMode = "true";
+	if (cWidth > 0) {
+		let Viewport = document.querySelector('meta[name="viewport"]');
+		if (!Viewport) {
+			Viewport = document.createElement("meta");
+			Viewport.name = "viewport";
+			document.head.appendChild(Viewport);
+		}
+		Viewport.content = `width=${cWidth}, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no`;
+	}
+
+	function Str(pValue) { return String(pValue ?? "").trim(); }
+	function Num(pValue, pFallback = 0) {
+		const Value = Number(pValue);
+		return Number.isFinite(Value) ? Value : pFallback;
+	}
+	function CssEscape(pValue) {
+		if (window.CSS?.escape) return window.CSS.escape(Str(pValue));
+		return Str(pValue).replace(/[^a-zA-Z0-9_-]/g, (Char) => `\\${Char}`);
+	}
+	function ParseGeneratedId(pId) {
+		const Match = Str(pId).match(cGeneratedId);
+		if (!Match) return null;
+		const DatePart = Match[2];
+		const TimePart = Match[3];
+		const Ms = Match[4];
+		const Year = 2000 + Number(DatePart.slice(0, 2));
+		const Month = Number(DatePart.slice(2, 4)) - 1;
+		const Day = Number(DatePart.slice(4, 6));
+		const Hour = Number(TimePart.slice(0, 2));
+		const Minute = Number(TimePart.slice(2, 4));
+		const Second = Number(TimePart.slice(4, 6));
+		return {
+			prefix: Match[1],
+			stampMs: Date.UTC(Year, Month, Day, Hour, Minute, Second, Number(Ms)),
+			count: Number(Match[5])
+		};
+	}
+	function Median(pValues) {
+		if (!pValues.length) return 0;
+		const Values = [...pValues].sort((A, B) => A - B);
+		const Mid = Math.floor(Values.length / 2);
+		return Values.length % 2 ? Values[Mid] : Math.round((Values[Mid - 1] + Values[Mid]) / 2);
+	}
+	function EstimatedBuildOffset() { return Median(fBuildOffsets.slice(-40)); }
+	function AddBuildOffset(pOldId, pCurrentId) {
+		const Old = ParseGeneratedId(pOldId);
+		const Current = ParseGeneratedId(pCurrentId);
+		if (!Old || !Current || Old.prefix !== Current.prefix) return;
+		const Offset = Current.stampMs - Old.stampMs;
+		if (Number.isFinite(Offset)) fBuildOffsets.push(Offset);
+	}
+	function CleanText(pValue) { return Str(pValue).replace(/\s+/g, " ").slice(0, 180); }
+	function StructuralPath(pElem) {
+		if (!(pElem instanceof Element)) return "";
+		const Parts = [];
+		let Current = pElem;
+		while (Current && Current !== document.documentElement && Parts.length < 14) {
+			let Part = Current.tagName.toLowerCase();
+			const Parent = Current.parentElement;
+			if (Parent) {
+				const Same = Array.from(Parent.children).filter((Elem) => Elem.tagName === Current.tagName);
+				if (Same.length > 1) Part += `:nth-of-type(${Same.indexOf(Current) + 1})`;
+			}
+			Parts.unshift(Part);
+			Current = Parent;
+		}
+		return Parts.join(" > ");
+	}
+	function CandidateText(pElem) {
+		return CleanText(pElem.getAttribute("aria-label") || pElem.getAttribute("title") || pElem.textContent || "");
+	}
+	function CurrentSamePrefixIndex(pElem, pPrefix) {
+		if (!(pElem instanceof Element) || !pPrefix) return -1;
+		const Matches = Array.from(document.querySelectorAll("[id]")).filter((Elem) => ParseGeneratedId(Elem.id)?.prefix === pPrefix);
+		return Matches.indexOf(pElem);
+	}
+	function ScoreCandidate(pElem, pData, pGenerated) {
+		let Score = 0;
+		if (!(pElem instanceof Element)) return -Infinity;
+		if (Str(pData.tag) && pElem.tagName.toLowerCase() === Str(pData.tag).toLowerCase()) Score += 25;
+		if (Str(pData.name) && pElem.getAttribute("name") === Str(pData.name)) Score += 20;
+		if (Str(pData.label) && CandidateText(pElem) === CleanText(pData.label)) Score += 25;
+		if (Str(pData.structuralPath) && StructuralPath(pElem) === Str(pData.structuralPath)) Score += 50;
+		if (Number.isFinite(Number(pData.samePrefixIndex)) && CurrentSamePrefixIndex(pElem, pGenerated?.prefix) === Number(pData.samePrefixIndex)) Score += 45;
+		const Current = ParseGeneratedId(pElem.id);
+		if (Current && pGenerated) {
+			if (Current.prefix === pGenerated.prefix) Score += 60;
+			if (Current.count === Number(pData.autoIdCount ?? pGenerated.count)) Score += 18;
+			const Expected = Number(pData.autoIdStampMs ?? pGenerated.stampMs) + EstimatedBuildOffset();
+			const DiffSeconds = Math.abs(Current.stampMs - Expected) / 1000;
+			Score += Math.max(0, 40 - Math.min(40, DiffSeconds / 2));
+		}
+		return Score;
+	}
+	function FindTarget(pData) {
+		const Data = pData && typeof pData === "object" ? pData : {};
+		const Id = Str(Data.id);
+		if (Id) {
+			const Exact = document.getElementById(Id);
+			if (Exact) return Exact;
+		}
+		const Selector = Str(Data.selector);
+		if (Selector) {
+			try {
+				const ExactSelector = document.querySelector(Selector);
+				if (ExactSelector) {
+					if (Id) AddBuildOffset(Id, ExactSelector.id);
+					return ExactSelector;
+				}
+			} catch {}
+		}
+		const Generated = ParseGeneratedId(Id) || (Str(Data.idPrefix) ? {
+			prefix: Str(Data.idPrefix),
+			stampMs: Num(Data.autoIdStampMs),
+			count: Num(Data.autoIdCount)
+		} : null);
+		let Candidates = [];
+		if (Generated?.prefix) {
+			Candidates = Array.from(document.querySelectorAll("[id]")).filter((Elem) => ParseGeneratedId(Elem.id)?.prefix === Generated.prefix);
+		}
+		if (!Candidates.length && Str(Data.structuralPath)) {
+			try { Candidates = Array.from(document.querySelectorAll(Str(Data.structuralPath))); } catch {}
+		}
+		if (!Candidates.length && Str(Data.name)) {
+			try { Candidates = Array.from(document.querySelectorAll(`[name="${CssEscape(Data.name)}"]`)); } catch {}
+		}
+		let Best = null;
+		let BestScore = -Infinity;
+		for (const Candidate of Candidates) {
+			const Score = ScoreCandidate(Candidate, Data, Generated);
+			if (Score > BestScore) { Best = Candidate; BestScore = Score; }
+		}
+		if (Best && Id) AddBuildOffset(Id, Best.id);
+		return Best;
+	}
+	function Dispatch(pElem, pType) {
+		try { pElem.dispatchEvent(new Event(pType, { bubbles: true, cancelable: true })); } catch {}
+	}
+	function ApplyAction(pAction) {
+		const Action = pAction && typeof pAction === "object" ? pAction : {};
+		const Type = Str(Action.type).replace(/^system\./, "");
+		const Data = Action.data && typeof Action.data === "object" ? Action.data : {};
+		if (Type === "scroll") {
+			window.scrollTo(Num(Data.scrollX), Num(Data.scrollY));
+			return true;
+		}
+		if (["page_ready", "resize", "pointer_move", "pointer_down", "pointer_up", "focus", "blur", "visibility", "page_hide"].includes(Type)) return true;
+		const Target = FindTarget(Data);
+		if (!Target) return false;
+		if (Type === "click") {
+			try { Target.click(); } catch { Dispatch(Target, "click"); }
+			return true;
+		}
+		if (Type === "submit") {
+			Dispatch(Target, "submit");
+			return true;
+		}
+		if (Type === "input" || Type === "change") {
+			if ("checked" in Data && "checked" in Target) Target.checked = !!Data.checked;
+			if (!Data.private && "value" in Data && "value" in Target) Target.value = Str(Data.value);
+			Dispatch(Target, Type);
+			return true;
+		}
+		if (Type === "widget_state") {
+			if ("open" in Target) Target.open = !!Data.open;
+			if (Data.open) Target.setAttribute("open", ""); else Target.removeAttribute("open");
+			Dispatch(Target, "toggle");
+			return true;
+		}
+		return true;
+	}
+	function StartPage(pElapsedMs = 0) {
+		const ElapsedMs = Math.max(0, Math.round(Num(pElapsedMs)));
+		for (const Elem of document.querySelectorAll(".SiteIntro, .SiteIntroBase, .SiteIntroSweep, .SiteIntroLogoWrap")) {
+			Elem.style.animationDelay = `${-ElapsedMs}ms`;
+		}
+		document.documentElement.dataset.emoReplayStarted = "true";
+		window.dispatchEvent(new CustomEvent("emo:replay-start", { detail: { elapsedMs: ElapsedMs } }));
+		return true;
+	}
+	function StopPage() {
+		document.documentElement.dataset.emoReplayStarted = "false";
+		return true;
+	}
+	function PageInfo() {
+		return {
+			url: location.href,
+			path: `${location.pathname}${location.search}${location.hash}`,
+			innerWidth: window.innerWidth,
+			innerHeight: window.innerHeight,
+			documentWidth: Math.max(document.documentElement.scrollWidth, document.body?.scrollWidth || 0),
+			documentHeight: Math.max(document.documentElement.scrollHeight, document.body?.scrollHeight || 0),
+			requestedWidth: cWidth,
+			requestedHeight: cHeight
+		};
+	}
+	function NotifyReady() {
+		const Send = () => {
+			try { window.EmoReplayAndroid?.OnPageReady(JSON.stringify(PageInfo())); } catch {}
+			window.dispatchEvent(new CustomEvent("emo:replay-ready", { detail: PageInfo() }));
+		};
+		const Fonts = document.fonts?.ready || Promise.resolve();
+		Promise.resolve(Fonts).catch(() => {}).finally(() => requestAnimationFrame(() => requestAnimationFrame(Send)));
+	}
+
+	window.EmoReplayRuntime = { ApplyAction, StartPage, StopPage, PageInfo, FindTarget };
+	if (!window.EmoReplayAndroid?.OnPageReady) StartPage(0);
+
+	window.open = function(pUrl) {
+		try { window.EmoReplayAndroid?.OnBlockedNavigation(Str(pUrl)); } catch {}
+		return null;
+	};
+	document.addEventListener("submit", (Event) => Event.preventDefault(), true);
+	document.addEventListener("click", (Event) => {
+		const Link = Event.target instanceof Element ? Event.target.closest("a[href]") : null;
+		if (!Link) return;
+		Event.preventDefault();
+	}, true);
+	if (navigator.sendBeacon) navigator.sendBeacon = () => false;
+	const OriginalFetch = window.fetch.bind(window);
+	window.fetch = (pInput, pInit = {}) => {
+		const Method = Str(pInit?.method || "GET").toUpperCase();
+		const Url = Str(typeof pInput === "string" ? pInput : pInput?.url);
+		if (Method !== "GET" && Method !== "HEAD") return Promise.resolve(new Response("", { status: 204 }));
+		if (/google-analytics|googletagmanager|clarity\.ms|\/api\/ops\//i.test(Url)) return Promise.resolve(new Response("", { status: 204 }));
+		return OriginalFetch(pInput, pInit);
+	};
+	const OriginalXhrOpen = XMLHttpRequest.prototype.open;
+	const OriginalXhrSend = XMLHttpRequest.prototype.send;
+	XMLHttpRequest.prototype.open = function(pMethod, pUrl, ...pRest) {
+		this.__emoReplayBlocked = !["GET", "HEAD"].includes(Str(pMethod).toUpperCase()) || /google-analytics|googletagmanager|clarity\.ms|\/api\/ops\//i.test(Str(pUrl));
+		if (this.__emoReplayBlocked) return OriginalXhrOpen.call(this, "GET", "data:text/plain,", ...pRest);
+		return OriginalXhrOpen.call(this, pMethod, pUrl, ...pRest);
+	};
+	XMLHttpRequest.prototype.send = function(pBody) { return OriginalXhrSend.call(this, this.__emoReplayBlocked ? null : pBody); };
+
+	if (document.readyState === "complete") NotifyReady();
+	else window.addEventListener("load", NotifyReady, { once: true });
+})();
+</script>
+)}

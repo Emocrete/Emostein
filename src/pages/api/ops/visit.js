@@ -2,7 +2,7 @@ export const prerender = false;
 
 const cDefaultOpsKey = "Emocrete20015161";
 const cMaxEventsPerRequest = 500;
-const cMaxBodyBytes = 32 * 1024 * 1024;
+const cMaxBodyBytes = 4 * 1024 * 1024;
 const cSyntheticUserAgentPattern = /(bot|crawl|spider|slurp|googlebot|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb)/i;
 const cArabCountryCodes = new Set(["EG", "SA", "AE", "KW", "QA", "BH", "OM", "YE", "JO", "LB", "SY", "IQ", "PS", "MA", "DZ", "TN", "LY", "SD", "SO", "DJ", "KM", "MR"]);
 
@@ -25,6 +25,16 @@ function Num(pValue, pFallback = 0) {
 }
 function Bool(pValue) {
 	return pValue === true || ["true", "1", "yes", "on", "important"].includes(Str(pValue).toLowerCase());
+}
+
+function EventTypeOf(pInput) {
+	const Input = pInput && typeof pInput === "object" ? pInput : {};
+	const Nested = Input.payload && typeof Input.payload === "object" ? Input.payload : {};
+	return Str(Input.eventType ?? Input.event_type ?? Input.type ?? Input.event ?? Nested.eventType ?? Nested.event_type ?? Nested.type ?? Nested.event).toLowerCase();
+}
+function EventStreamOf(pEventType) {
+	const Type = Str(pEventType).toLowerCase();
+	return Type.startsWith("system.") && Type !== "system.clarity_session_index" ? "replay" : "normal";
 }
 
 function CheckOpsKey(pRequest) {
@@ -132,6 +142,7 @@ function NormalizeEvent(pInput, pRequest) {
 	delete Event.payload;
 
 	const EventType = Str(Event.eventType ?? Event.event_type ?? Event.type ?? Event.event).toLowerCase();
+	const EventStream = EventStreamOf(EventType);
 	const VisitorId = Str(Event.visitorId ?? Event.visitor_id);
 	const SessionId = Str(Event.sessionId ?? Event.session_id ?? Event.visitSessionId);
 	const PageInstanceId = Str(Event.pageInstanceId ?? Event.page_instance_id ?? Event.pageId);
@@ -144,55 +155,84 @@ function NormalizeEvent(pInput, pRequest) {
 	if (!ClientEventUid || ClientEventUid.length > 240) throw new Error("Invalid clientEventUid");
 
 	const EventData = Event.eventData && typeof Event.eventData === "object" ? Event.eventData : {};
-	const Geo = EventSource === "emolive"
-		? { countryCode: "", region: "", city: "", band: "", label: "", borderColor: "" }
-		: BuildGeo(pRequest, Event);
 	const OccurredAt = Str(Event.createdAtClient ?? Event.occurredAt ?? Event.occurred_at) || new Date().toISOString();
-	const UserAgent = EventSource === "emolive"
-		? Str(Event.userAgentClient || Event.userAgent)
-		: Str(pRequest.headers.get("user-agent") || Event.userAgentClient || Event.userAgent);
-	const FullPayload = {
-		...Event,
-		clientEventUid: ClientEventUid,
-		eventType: EventType,
-		eventSource: EventSource,
-		visitorId: VisitorId,
-		sessionId: SessionId,
-		pageInstanceId: PageInstanceId,
-		pagePath: Str(Event.pagePath ?? Event.page_path) || "/",
-		pageTitle: Str(Event.pageTitle ?? Event.page_title),
-		sessionSeq: Math.max(0, Math.trunc(Num(Event.sessionSeq ?? Event.session_seq))),
-		pageElapsedMs: Math.max(0, Math.trunc(Num(Event.pageElapsedMs ?? Event.page_elapsed_ms ?? Event.elapsedMs))),
-		sessionElapsedMs: Math.max(0, Math.trunc(Num(Event.sessionElapsedMs ?? Event.session_elapsed_ms))),
-		createdAtClient: OccurredAt,
-		focusState: Str(Event.focusState ?? Event.focus_state),
-		eventData: EventData,
-		locationCountryCode: Str(Event.locationCountryCode) || Geo.countryCode,
-		locationRegion: Str(Event.locationRegion) || Geo.region,
-		locationCity: Str(Event.locationCity) || Geo.city,
-		locationBand: Str(Event.locationBand) || Geo.band,
-		locationLabel: Str(Event.locationLabel) || Geo.label,
-		locationBorderColor: Str(Event.locationBorderColor) || Geo.borderColor,
-		userAgentClient: UserAgent
-	};
+	const SessionSeq = Math.max(0, Math.trunc(Num(Event.sessionSeq ?? Event.session_seq)));
+	const PageElapsedMs = Math.max(0, Math.trunc(Num(Event.pageElapsedMs ?? Event.page_elapsed_ms ?? Event.elapsedMs)));
+	const SessionElapsedMs = Math.max(0, Math.trunc(Num(Event.sessionElapsedMs ?? Event.session_elapsed_ms)));
+	const PagePath = Str(Event.pagePath ?? Event.page_path) || "/";
+	const PageTitle = Str(Event.pageTitle ?? Event.page_title);
+	const FocusState = Str(Event.focusState ?? Event.focus_state);
+
+	let FullPayload;
+	let UserAgent = "";
+	if (EventStream === "replay") {
+		FullPayload = {
+			clientEventUid: ClientEventUid,
+			eventType: EventType,
+			eventSource: EventSource,
+			visitorId: VisitorId,
+			sessionId: SessionId,
+			pageInstanceId: PageInstanceId,
+			pagePath: PagePath,
+			pageTitle: PageTitle,
+			sessionSeq: SessionSeq,
+			pageElapsedMs: PageElapsedMs,
+			sessionElapsedMs: SessionElapsedMs,
+			createdAtClient: OccurredAt,
+			focusState: FocusState,
+			eventData: EventData
+		};
+	} else {
+		const Geo = EventSource === "emolive"
+			? { countryCode: "", region: "", city: "", band: "", label: "", borderColor: "" }
+			: BuildGeo(pRequest, Event);
+		UserAgent = EventSource === "emolive"
+			? Str(Event.userAgentClient || Event.userAgent)
+			: Str(pRequest.headers.get("user-agent") || Event.userAgentClient || Event.userAgent);
+		FullPayload = {
+			...Event,
+			clientEventUid: ClientEventUid,
+			eventType: EventType,
+			eventSource: EventSource,
+			visitorId: VisitorId,
+			sessionId: SessionId,
+			pageInstanceId: PageInstanceId,
+			pagePath: PagePath,
+			pageTitle: PageTitle,
+			sessionSeq: SessionSeq,
+			pageElapsedMs: PageElapsedMs,
+			sessionElapsedMs: SessionElapsedMs,
+			createdAtClient: OccurredAt,
+			focusState: FocusState,
+			eventData: EventData,
+			locationCountryCode: Str(Event.locationCountryCode) || Geo.countryCode,
+			locationRegion: Str(Event.locationRegion) || Geo.region,
+			locationCity: Str(Event.locationCity) || Geo.city,
+			locationBand: Str(Event.locationBand) || Geo.band,
+			locationLabel: Str(Event.locationLabel) || Geo.label,
+			locationBorderColor: Str(Event.locationBorderColor) || Geo.borderColor,
+			userAgentClient: UserAgent
+		};
+	}
 
 	return {
+		event_stream: EventStream,
 		client_event_uid: ClientEventUid,
 		event_type: EventType,
 		event_source: EventSource,
 		visitor_id: VisitorId,
 		session_id: SessionId,
 		page_instance_id: PageInstanceId,
-		session_seq: FullPayload.sessionSeq,
-		page_elapsed_ms: FullPayload.pageElapsedMs,
-		session_elapsed_ms: FullPayload.sessionElapsedMs,
+		session_seq: SessionSeq,
+		page_elapsed_ms: PageElapsedMs,
+		session_elapsed_ms: SessionElapsedMs,
 		occurred_at: OccurredAt,
-		page_path: FullPayload.pagePath,
-		page_title: FullPayload.pageTitle,
-		referrer: Str(Event.referrer),
-		screen: Str(Event.screen),
-		language: Str(Event.language),
-		timezone: Str(Event.timezone),
+		page_path: PagePath,
+		page_title: PageTitle,
+		referrer: EventStream === "replay" ? "" : Str(Event.referrer),
+		screen: EventStream === "replay" ? "" : Str(Event.screen),
+		language: EventStream === "replay" ? "" : Str(Event.language),
+		timezone: EventStream === "replay" ? "" : Str(Event.timezone),
 		user_agent: UserAgent,
 		payload: FullPayload
 	};
@@ -219,10 +259,12 @@ export async function POST({ request }) {
 		if (!Body) return Json({ ok: false, error: "Missing body" }, 400);
 		const Inputs = Array.isArray(Body.events) ? Body.events : [Body];
 		if (!Inputs.length || Inputs.length > cMaxEventsPerRequest) return Json({ ok: false, error: `events must contain 1-${cMaxEventsPerRequest} items` }, 400);
-		const SyntheticReason = Inputs.map((Item) => SyntheticTrafficReason(request, Item)).find(Boolean) || SyntheticTrafficReason(request, Body);
+		const ActiveInputs = Inputs.filter((Item) => EventTypeOf(Item) !== "system.page_snapshot");
+		if (!ActiveInputs.length) return Json({ ok: true, accepted: 0, ignored: true, reason: "legacy_snapshot_disabled" });
+		const SyntheticReason = ActiveInputs.map((Item) => SyntheticTrafficReason(request, Item)).find(Boolean) || SyntheticTrafficReason(request, Body);
 		if (SyntheticReason) return Json({ ok: true, stored: 0, ignored: true, reason: SyntheticReason });
 
-		const Rows = Inputs.map((Item) => NormalizeEvent(Item, request));
+		const Rows = ActiveInputs.map((Item) => NormalizeEvent(Item, request));
 		for (const Row of Rows) {
 			if (Row.event_source === "emolive" && !CheckOpsKey(request)) return Json({ ok: false, error: "Unauthorized" }, 401);
 		}

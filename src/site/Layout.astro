@@ -13,6 +13,7 @@ import SiteIntro from "@/Widgets/Intro/SiteIntro.astro";
 import OpsVisitTracker from "@/Scripts/OpsVisitTracker.astro";
 import EmoReplayRecorder from "@/Scripts/EmoReplayRecorder.astro";
 import ClaritySessionIndexer from "@/Scripts/ClaritySessionIndexer.astro";
+import ReplayRuntime from "@/Scripts/ReplayRuntime.astro";
 import Moving from "@/Scripts/Moving.astro";
 import AutoContainerHeight from "@/Scripts/AutoContainerHeight.astro";
 
@@ -137,6 +138,7 @@ const cPreviewImageMeta = Schema.GetPrimaryImageMeta(pTitle ?? "", pDescr ?? "",
 });
 const cPreviewImageUrl = cPreviewImageMeta.Url;
 const cOgType = pSchemaType === "Article" ? "article" : "website";
+const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 ---
 
 
@@ -184,9 +186,11 @@ const cOgType = pSchemaType === "Article" ? "article" : "website";
 
 			<meta name="viewport" content="width=device-width, initial-scale=1" />
 
+			<ReplayRuntime />
+
 			<meta name="description" content={pDescr} />
 
-			<meta name="robots" content="index, follow, max-image-preview:large" />
+			<meta name="robots" content={cReplayMode ? "noindex, nofollow, noarchive" : "index, follow, max-image-preview:large"} />
 
 			<meta property="og:locale" content="ar_EG" />
 
@@ -276,15 +280,15 @@ const cOgType = pSchemaType === "Article" ? "article" : "website";
 
 			<meta name="google-site-verification" content="5mv4GuAj1jxBUrKh0glnhAlWEouDCWg3nC51R_WqmzY" />
 
-			<GoogleAnalytics />
+			{!cReplayMode && <GoogleAnalytics />}
 
-			<Clarity />
+			{!cReplayMode && <Clarity />}
 
 		</head>
 
 		<body style = " font-family : Cairo, system-ui, sans-serif ">
 
-			<EmoReplayRecorder />
+			{!cReplayMode && <EmoReplayRecorder />}
 
 			{ pIntro &&
 
@@ -391,11 +395,11 @@ const cOgType = pSchemaType === "Article" ? "article" : "website";
 
 			<OrientationVisibility />
 
-			<OpsVisitTracker />
+			{!cReplayMode && <OpsVisitTracker />}
 
-			<ClaritySessionIndexer />
+			{!cReplayMode && <ClaritySessionIndexer />}
 
-			<SpeedInsights />
+			{!cReplayMode && <SpeedInsights />}
 
 		</body>
 

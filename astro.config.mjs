@@ -4,6 +4,8 @@ import vercel from "@astrojs/vercel";
 import { fileURLToPath } from "node:url";
 import "./src/WidgetID.global.mjs";
 
+const cReplayMode = process.env.EMO_DEPLOY_MODE === "replay";
+
 export default defineConfig({
 	site: "https://www.emocrete.com",
 	trailingSlash: "never",
@@ -13,7 +15,7 @@ export default defineConfig({
 	devToolbar: {
 		enabled: false
 	},
-	integrations: [
+	integrations: cReplayMode ? [] : [
 		sitemap(),
 	],
 	build: {

@@ -1,316 +1,155 @@
 ---
-const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
-const cPointerEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_POINTER_EVERY_MS ?? "80");
-const cScrollEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_SCROLL_EVERY_MS ?? "120");
-const cFlushEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_FLUSH_EVERY_MS ?? "1000");
-const cNetworkBatchSize = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH_SIZE ?? "120");
+const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false" && import.meta.env.EMO_DEPLOY_MODE !== "replay";
+const cPointerEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_POINTER_EVERY_MS ?? "250");
+const cScrollEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_SCROLL_EVERY_MS ?? "200");
+const cFlushEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_FLUSH_EVERY_MS ?? "1500");
+const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? "160");
 ---
 
 {cEnabled && (
-<script
-	is:inline
-	define:vars={{ cPointerEveryMs, cScrollEveryMs, cFlushEveryMs, cNetworkBatchSize }}
->
+<script is:inline define:vars={{ cPointerEveryMs, cScrollEveryMs, cFlushEveryMs, cNetworkBatch }}>
 (() => {
-	if (window.__EmoReplayRecorderStarted) return;
-	let NoAnalytics = !!window.__EMO_REPLAY__;
-	try { NoAnalytics = NoAnalytics || sessionStorage.getItem("emo_no_analytics_v1") === "1"; } catch {}
-	if (NoAnalytics || new URLSearchParams(location.search).has("emoNoAnalytics")) return;
-	window.__EmoReplayRecorderStarted = true;
+	if (window.__EMO_REPLAY_RECORDER__) return;
+	window.__EMO_REPLAY_RECORDER__ = true;
+	window.__EMO_REPLAY_CAPTURE_ENABLED__ = true;
 
 	const cPageStartedAt = Date.now();
 	const cPageStartedIso = new Date(cPageStartedAt).toISOString();
-	const cSessionStartedKey = "emo_ops_session_started_at_v1";
-	const cEvents = [];
-	let fCaptureSeq = 0;
-	let fFlushRunning = false;
-	let fFlushTimer = 0;
+	const cGeneratedId = /^(.+?)-(\d{6})-(\d{6})-(\d{3})-(\d{3})$/;
 	let fLastPointerAt = 0;
 	let fLastScrollAt = 0;
 	let fUnloading = false;
-	let fSnapshotHtml = "";
-	let fSnapshotQueued = false;
-	let fSnapshotSent = false;
+	let fFlushing = false;
+	let fFlushTimer = 0;
+	const fQueue = [];
 
 	function Str(pValue) { return String(pValue ?? "").trim(); }
-	function NowPage() { return Math.max(0, Date.now() - cPageStartedAt); }
-	function SessionStartedAt() {
-		let Started = cPageStartedAt;
-		try { Started = Number(sessionStorage.getItem(cSessionStartedKey) || cPageStartedAt); } catch {}
-		return Number.isFinite(Started) && Started > 0 ? Started : cPageStartedAt;
-	}
-	function NowSession() { return Math.max(0, Date.now() - SessionStartedAt()); }
-	const cInitialSessionElapsedMs = Math.max(0, cPageStartedAt - SessionStartedAt());
-
-	function Shorten(pText, pMax = 180) {
-		const Text = Str(pText).replace(/\s+/g, " ");
-		return Text.length > pMax ? `${Text.slice(0, pMax).trim()}…` : Text;
-	}
+	function Shorten(pValue, pMax = 160) { return Str(pValue).replace(/\s+/g, " ").slice(0, pMax); }
 	function CssEscape(pValue) {
-		if (window.CSS && typeof CSS.escape === "function") return CSS.escape(String(pValue));
-		return String(pValue).replace(/([ #;?%&,.+*~\\':"!^$[\]()=>|/@])/g, "\\$1");
+		if (window.CSS?.escape) return window.CSS.escape(Str(pValue));
+		return Str(pValue).replace(/[^a-zA-Z0-9_-]/g, (Char) => `\\${Char}`);
+	}
+	function SessionStartedAt() {
+		try {
+			const Value = Number(sessionStorage.getItem("emo_ops_session_started_at_v1") || 0);
+			return Number.isFinite(Value) && Value > 0 ? Value : cPageStartedAt;
+		} catch { return cPageStartedAt; }
+	}
+	function ParseGeneratedId(pId) {
+		const Match = Str(pId).match(cGeneratedId);
+		if (!Match) return null;
+		const DatePart = Match[2];
+		const TimePart = Match[3];
+		const Stamp = Date.UTC(
+			2000 + Number(DatePart.slice(0, 2)),
+			Number(DatePart.slice(2, 4)) - 1,
+			Number(DatePart.slice(4, 6)),
+			Number(TimePart.slice(0, 2)),
+			Number(TimePart.slice(2, 4)),
+			Number(TimePart.slice(4, 6)),
+			Number(Match[4])
+		);
+		return { prefix: Match[1], stampMs: Stamp, count: Number(Match[5]) };
+	}
+	function StructuralPath(pElem) {
+		if (!(pElem instanceof Element)) return "";
+		const Parts = [];
+		let Current = pElem;
+		while (Current && Current !== document.documentElement && Parts.length < 14) {
+			let Part = Current.tagName.toLowerCase();
+			const Parent = Current.parentElement;
+			if (Parent) {
+				const Same = Array.from(Parent.children).filter((Elem) => Elem.tagName === Current.tagName);
+				if (Same.length > 1) Part += `:nth-of-type(${Same.indexOf(Current) + 1})`;
+			}
+			Parts.unshift(Part);
+			Current = Parent;
+		}
+		return Parts.join(" > ");
+	}
+	function SamePrefixIndex(pElem, pPrefix) {
+		if (!(pElem instanceof Element) || !pPrefix) return -1;
+		const Matches = Array.from(document.querySelectorAll("[id]")).filter((Elem) => ParseGeneratedId(Elem.id)?.prefix === pPrefix);
+		return Matches.indexOf(pElem);
 	}
 	function ExactSelector(pElem) {
 		if (!(pElem instanceof Element)) return "";
 		if (pElem.id) return `#${CssEscape(pElem.id)}`;
-		for (const Attr of ["data-replay-id", "data-emo-id", "data-ops-widget", "data-ops-scope", "data-ops-id"]) {
-			const Value = Str(pElem.getAttribute(Attr));
-			if (Value) return `[${Attr}="${CssEscape(Value)}"]`;
-		}
-		const Parts = [];
-		let Elem = pElem;
-		for (let Depth = 0; Elem && Elem !== document.documentElement && Depth < 7; Depth += 1) {
-			let Part = Elem.tagName.toLowerCase();
-			const Name = Str(Elem.getAttribute("name"));
-			if (Name) Part += `[name="${CssEscape(Name)}"]`;
-			const Parent = Elem.parentElement;
-			if (Parent) {
-				const Same = Array.from(Parent.children).filter((Item) => Item.tagName === Elem.tagName);
-				if (Same.length > 1) Part += `:nth-of-type(${Same.indexOf(Elem) + 1})`;
-			}
-			Parts.unshift(Part);
-			Elem = Parent;
-		}
-		return Parts.join(" > ");
+		const ReplayId = pElem.getAttribute("data-replay-id");
+		if (ReplayId) return `[data-replay-id="${CssEscape(ReplayId)}"]`;
+		const OpsId = pElem.getAttribute("data-ops-id");
+		if (OpsId) return `[data-ops-id="${CssEscape(OpsId)}"]`;
+		return StructuralPath(pElem);
 	}
-	function TargetData(pElem) {
-		const Elem = pElem instanceof Element ? pElem : null;
+	function TargetData(pTarget) {
+		const Elem = pTarget instanceof Element ? pTarget : null;
+		if (!Elem) return { selector: "", structuralPath: "", tag: "", label: "", name: "", id: "" };
+		const Generated = ParseGeneratedId(Elem.id);
 		return {
 			selector: ExactSelector(Elem),
-			tag: Str(Elem?.tagName).toLowerCase(),
-			label: Shorten(Elem?.getAttribute?.("aria-label") || Elem?.getAttribute?.("title") || Elem?.getAttribute?.("placeholder") || Elem?.innerText || Elem?.textContent || ""),
-			name: Str(Elem?.getAttribute?.("name")),
-			id: Str(Elem?.id)
+			structuralPath: StructuralPath(Elem),
+			tag: Elem.tagName.toLowerCase(),
+			label: Shorten(Elem.getAttribute("aria-label") || Elem.getAttribute("title") || Elem.textContent || "", 180),
+			name: Str(Elem.getAttribute("name")),
+			id: Str(Elem.id),
+			idPrefix: Generated?.prefix || "",
+			autoIdStampMs: Generated?.stampMs || 0,
+			autoIdCount: Generated?.count || 0,
+			samePrefixIndex: Generated ? SamePrefixIndex(Elem, Generated.prefix) : -1
+		};
+	}
+	function ScrollData() {
+		return {
+			scrollX: Math.round(window.scrollX || window.pageXOffset || 0),
+			scrollY: Math.round(window.scrollY || window.pageYOffset || 0)
 		};
 	}
 	function ViewportData() {
-		const Root = document.documentElement;
 		return {
-			viewportWidth: Math.round(window.innerWidth || Root.clientWidth || 0),
-			viewportHeight: Math.round(window.innerHeight || Root.clientHeight || 0),
-			documentWidth: Math.max(Root.scrollWidth, document.body?.scrollWidth || 0),
-			documentHeight: Math.max(Root.scrollHeight, document.body?.scrollHeight || 0),
-			dpr: Number(window.devicePixelRatio || 1),
-			scrollX: Math.round(window.scrollX || 0),
-			scrollY: Math.round(window.scrollY || 0)
+			viewportWidth: window.innerWidth || document.documentElement.clientWidth || 0,
+			viewportHeight: window.innerHeight || document.documentElement.clientHeight || 0,
+			documentWidth: Math.max(document.documentElement.scrollWidth, document.body?.scrollWidth || 0),
+			documentHeight: Math.max(document.documentElement.scrollHeight, document.body?.scrollHeight || 0),
+			screenWidth: window.screen.width || 0,
+			screenHeight: window.screen.height || 0,
+			devicePixelRatio: window.devicePixelRatio || 1,
+			orientation: window.matchMedia("(orientation: portrait)").matches ? "portrait" : "landscape",
+			...ScrollData(),
+			pageUrl: `${location.pathname}${location.search}${location.hash}`
 		};
 	}
-
-	function QueueCapture(pType, pData = {}, pImmediate = false, pTiming = null) {
-		const PageElapsedMs = pTiming?.pageElapsedMs ?? NowPage();
-		const SessionElapsedMs = pTiming?.sessionElapsedMs ?? NowSession();
-		cEvents.push({
+	function QueueCapture(pType, pData = {}, pUseBeacon = false, pTiming = {}) {
+		const Now = Date.now();
+		fQueue.push({
 			eventType: `system.${pType}`,
 			eventSource: "site",
-			pageElapsedMs: Math.max(0, Math.round(PageElapsedMs)),
-			sessionElapsedMs: Math.max(0, Math.round(SessionElapsedMs)),
-			createdAtClient: pTiming?.createdAtClient || new Date().toISOString(),
-			focusState: document.hidden ? "away" : "visible",
-			eventData: { captureSeq: ++fCaptureSeq, t: Math.max(0, Math.round(PageElapsedMs)), sessionT: Math.max(0, Math.round(SessionElapsedMs)), ...pData }
-		});
-		if (pImmediate) Flush();
-	}
-	function Capture(pType, pData = {}, pImmediate = false) { QueueCapture(pType, pData, pImmediate); }
-
-	async function Flush() {
-		if (fFlushRunning || !cEvents.length || typeof window.TrackOpsEventBatch !== "function" || !window.__EMO_OPS_PAGE_OPENED__) return;
-		fFlushRunning = true;
-		try {
-			const Size = Math.min(500, Math.max(1, Number(cNetworkBatchSize) || 120));
-			while (cEvents.length) {
-				const Batch = cEvents.splice(0, Size);
-				const Result = await window.TrackOpsEventBatch(Batch);
-				if (!Result?.ok || Result?.skipped) {
-					cEvents.unshift(...Batch);
-					break;
-				}
-				if (fUnloading) break;
-			}
-		} finally { fFlushRunning = false; }
-	}
-
-	function AbsoluteUrl(pValue, pBase = document.baseURI) {
-		const Value = Str(pValue);
-		if (!Value || Value.startsWith("data:") || Value.startsWith("blob:") || Value.startsWith("#")) return Value;
-		try { return new URL(Value, pBase || location.href).href; } catch { return Value; }
-	}
-	function RewriteSrcSet(pValue, pBase) {
-		return Str(pValue).split(",").map((Part) => {
-			const Match = Part.trim().match(/^(\S+)(\s+.+)?$/);
-			return Match ? `${AbsoluteUrl(Match[1], pBase)}${Match[2] || ""}` : Part.trim();
-		}).filter(Boolean).join(", ");
-	}
-	function RewriteCssUrls(pCss, pBase) {
-		return String(pCss || "").replace(/url\((['"]?)(.*?)\1\)/gi, (All, Quote, Raw) => {
-			const Value = Str(Raw);
-			if (!Value || Value.startsWith("data:") || Value.startsWith("blob:") || Value.startsWith("#")) return All;
-			return `url("${AbsoluteUrl(Value, pBase)}")`;
-		});
-	}
-	function FreezeCss() {
-		const Rules = [];
-		for (const Sheet of Array.from(document.styleSheets || [])) {
-			try {
-				const Base = Sheet.href || document.baseURI;
-				for (const Rule of Array.from(Sheet.cssRules || [])) Rules.push(RewriteCssUrls(Rule.cssText, Base));
-			} catch {}
-		}
-		return Rules.join("\n");
-	}
-
-	const cSnapshotStyleProperties = [
-		"display", "visibility", "position", "top", "right", "bottom", "left", "z-index",
-		"box-sizing", "width", "height", "min-width", "max-width", "min-height", "max-height",
-		"margin-top", "margin-right", "margin-bottom", "margin-left",
-		"padding-top", "padding-right", "padding-bottom", "padding-left",
-		"overflow", "overflow-x", "overflow-y",
-		"flex-basis", "flex-direction", "flex-grow", "flex-shrink", "flex-wrap",
-		"align-content", "align-items", "align-self", "justify-content", "justify-items", "justify-self", "gap", "row-gap", "column-gap",
-		"grid-area", "grid-template-areas", "grid-template-columns", "grid-template-rows", "grid-auto-columns", "grid-auto-rows", "grid-auto-flow",
-		"font-family", "font-size", "font-style", "font-weight", "line-height", "letter-spacing",
-		"color", "text-align", "text-decoration", "text-overflow", "white-space", "word-break", "overflow-wrap", "direction",
-		"background-color", "background-image", "background-position", "background-size", "background-repeat",
-		"border-top", "border-right", "border-bottom", "border-left", "border-radius",
-		"box-shadow", "opacity", "filter", "transform", "transform-origin",
-		"object-fit", "object-position", "aspect-ratio", "vertical-align"
-	];
-	function FreezeComputedStyle(pOriginal, pClone) {
-		try {
-			const Computed = getComputedStyle(pOriginal);
-			for (const Property of cSnapshotStyleProperties) {
-				const Value = Computed.getPropertyValue(Property);
-				if (Value) pClone.style.setProperty(Property, RewriteCssUrls(Value, document.baseURI));
-			}
-		} catch {}
-	}
-	function SyncElementState(pOriginal, pClone) {
-		if (!(pOriginal instanceof Element) || !(pClone instanceof Element)) return;
-		for (const Attr of Array.from(pClone.attributes || [])) {
-			if (Attr.name.toLowerCase().startsWith("on")) pClone.removeAttribute(Attr.name);
-		}
-		const Tag = pOriginal.tagName.toLowerCase();
-		if (Tag === "img") {
-			const Source = pOriginal.currentSrc || pOriginal.getAttribute("src") || pOriginal.getAttribute("data-src") || pOriginal.getAttribute("data-lazy-src") || pOriginal.getAttribute("data-original") || "";
-			if (Source) pClone.setAttribute("src", AbsoluteUrl(Source));
-			pClone.removeAttribute("srcset");
-			pClone.removeAttribute("data-src");
-			pClone.removeAttribute("data-lazy-src");
-			pClone.setAttribute("loading", "eager");
-			pClone.setAttribute("decoding", "sync");
-		}
-		if (Tag === "source") {
-			const Source = pOriginal.getAttribute("src");
-			const SrcSet = pOriginal.getAttribute("srcset");
-			if (Source) pClone.setAttribute("src", AbsoluteUrl(Source));
-			if (SrcSet) pClone.setAttribute("srcset", RewriteSrcSet(SrcSet, document.baseURI));
-		}
-		if (Tag === "link" && pOriginal.getAttribute("href")) pClone.setAttribute("href", AbsoluteUrl(pOriginal.getAttribute("href")));
-		if (Tag === "a" && pOriginal.getAttribute("href")) pClone.setAttribute("href", AbsoluteUrl(pOriginal.getAttribute("href")));
-		if (Tag === "iframe" && pOriginal.getAttribute("src")) {
-			pClone.setAttribute("src", AbsoluteUrl(pOriginal.getAttribute("src")));
-			pClone.setAttribute("loading", "eager");
-		}
-		if (Tag === "video" && pOriginal.getAttribute("poster")) pClone.setAttribute("poster", AbsoluteUrl(pOriginal.getAttribute("poster")));
-		if (Tag === "form" && pOriginal.getAttribute("action")) pClone.setAttribute("action", AbsoluteUrl(pOriginal.getAttribute("action")));
-		if (pOriginal.getAttribute("style")) pClone.setAttribute("style", RewriteCssUrls(pOriginal.getAttribute("style"), document.baseURI));
-
-		if (pOriginal instanceof HTMLInputElement) {
-			const CaptureValue = pOriginal.getAttribute("data-replay-capture") === "value" && pOriginal.getAttribute("data-replay-private") !== "true";
-			if (["checkbox", "radio"].includes(pOriginal.type)) {
-				if (pOriginal.checked) pClone.setAttribute("checked", "checked");
-				else pClone.removeAttribute("checked");
-			} else pClone.setAttribute("value", CaptureValue ? Str(pOriginal.value) : "");
-		}
-		if (pOriginal instanceof HTMLTextAreaElement) {
-			const CaptureValue = pOriginal.getAttribute("data-replay-capture") === "value" && pOriginal.getAttribute("data-replay-private") !== "true";
-			pClone.textContent = CaptureValue ? Str(pOriginal.value) : "";
-		}
-		if (pOriginal instanceof HTMLSelectElement && pClone instanceof HTMLSelectElement) {
-			Array.from(pClone.options || []).forEach((Option, Index) => { Option.selected = !!pOriginal.options?.[Index]?.selected; });
-		}
-		if (Tag === "details") {
-			if (pOriginal.open) pClone.setAttribute("open", "open");
-			else pClone.removeAttribute("open");
-		}
-		FreezeComputedStyle(pOriginal, pClone);
-	}
-	async function InlinePrimaryFont(pHtml) {
-		try {
-			const Response = await fetch(AbsoluteUrl("/Fonts/Cairo.ttf"), { cache: "force-cache" });
-			if (!Response.ok) return pHtml;
-			const BlobValue = await Response.blob();
-			const DataUrl = await new Promise((Resolve) => {
-				const Reader = new FileReader();
-				Reader.onload = () => Resolve(Str(Reader.result));
-				Reader.onerror = () => Resolve("");
-				Reader.readAsDataURL(BlobValue);
-			});
-			if (!DataUrl) return pHtml;
-			const FontStyle = `<style data-emo-replay-font="true">@font-face{font-family:"Cairo";src:url("${DataUrl}") format("truetype");font-display:swap}</style>`;
-			return String(pHtml || "").replace(/<\/head>/i, `${FontStyle}</head>`);
-		} catch { return pHtml; }
-	}
-
-	function BuildSnapshotHtml() {
-		const Clone = document.documentElement.cloneNode(true);
-		const Originals = [document.documentElement, ...Array.from(document.documentElement.querySelectorAll("*"))];
-		const Clones = [Clone, ...Array.from(Clone.querySelectorAll("*"))];
-		const Count = Math.min(Originals.length, Clones.length);
-		for (let Index = 0; Index < Count; Index += 1) SyncElementState(Originals[Index], Clones[Index]);
-
-		const OriginalCanvas = Array.from(document.querySelectorAll("canvas"));
-		const CloneCanvas = Array.from(Clone.querySelectorAll("canvas"));
-		OriginalCanvas.forEach((Canvas, Index) => {
-			try {
-				const Img = document.createElement("img");
-				Img.src = Canvas.toDataURL("image/png");
-				Img.width = Canvas.width;
-				Img.height = Canvas.height;
-				Img.setAttribute("style", CloneCanvas[Index]?.getAttribute("style") || "");
-				CloneCanvas[Index]?.replaceWith(Img);
-			} catch { CloneCanvas[Index]?.remove(); }
-		});
-
-		Clone.querySelectorAll("script, noscript").forEach((Elem) => Elem.remove());
-		const Head = Clone.querySelector("head") || Clone;
-		Head.querySelectorAll("base[data-emo-replay-base]").forEach((Elem) => Elem.remove());
-		const Base = document.createElement("base");
-		Base.setAttribute("data-emo-replay-base", "true");
-		Base.setAttribute("href", document.baseURI || location.href);
-		Head.insertBefore(Base, Head.firstChild);
-
-		const FrozenStyle = document.createElement("style");
-		FrozenStyle.setAttribute("data-emo-replay-frozen", "true");
-		FrozenStyle.textContent = `${FreezeCss()}\nhtml{scroll-behavior:auto}*{animation-play-state:paused;transition:none;caret-color:transparent}`;
-		Head.appendChild(FrozenStyle);
-		Clone.setAttribute("data-emo-replay-snapshot", "true");
-		return `<!doctype html>${Clone.outerHTML}`;
-	}
-
-	async function TrySendSnapshot() {
-		if (fSnapshotSent || !fSnapshotQueued || !fSnapshotHtml || typeof window.TrackOpsEventOnce !== "function" || !window.__EMO_OPS_PAGE_OPENED__) return;
-		const Result = await window.TrackOpsEventOnce("system.page_snapshot", "page_snapshot", {
-			eventSource: "site",
-			label: "Replay page snapshot",
+			eventOn: "replay",
+			label: `Replay ${pType}`,
 			notifyMobile: false,
-			pageElapsedMs: 0,
-			sessionElapsedMs: cInitialSessionElapsedMs,
-			createdAtClient: cPageStartedIso,
-			eventData: { snapshotHtml: fSnapshotHtml, snapshotLength: fSnapshotHtml.length, ...ViewportData(), scrollX: 0, scrollY: 0 }
+			sound: false,
+			important: false,
+			useBeacon: pUseBeacon,
+			pageElapsedMs: Number.isFinite(Number(pTiming.pageElapsedMs)) ? Number(pTiming.pageElapsedMs) : Math.max(0, Now - cPageStartedAt),
+			sessionElapsedMs: Number.isFinite(Number(pTiming.sessionElapsedMs)) ? Number(pTiming.sessionElapsedMs) : Math.max(0, Now - SessionStartedAt()),
+			createdAtClient: Str(pTiming.createdAtClient || new Date(Now).toISOString()),
+			eventData: pData
 		});
-		if (Result?.ok && !Result?.skipped) fSnapshotSent = true;
+		if (pUseBeacon || fQueue.length >= Math.max(20, Number(cNetworkBatch) || 160)) Flush();
 	}
-	async function QueueInitialSnapshot() {
-		if (fSnapshotQueued) return;
-		fSnapshotQueued = true;
+	function Capture(pType, pData = {}, pUseBeacon = false) { QueueCapture(pType, pData, pUseBeacon); }
+	async function Flush() {
+		if (fFlushing || !fQueue.length || typeof window.TrackOpsEventBatch !== "function" || !window.__EMO_OPS_PAGE_OPENED__) return;
+		fFlushing = true;
+		const Batch = fQueue.splice(0, Math.max(20, Number(cNetworkBatch) || 160));
 		try {
-			fSnapshotHtml = BuildSnapshotHtml();
-			fSnapshotHtml = await InlinePrimaryFont(fSnapshotHtml);
+			const Result = await window.TrackOpsEventBatch(Batch);
+			if (!Result?.ok && !Result?.queued) fQueue.unshift(...Batch);
+		} catch { fQueue.unshift(...Batch); }
+		finally {
+			fFlushing = false;
+			if (fQueue.length && !fUnloading) setTimeout(Flush, 100);
 		}
-		catch (Ex) { fSnapshotHtml = `<!doctype html><html><body>Snapshot unavailable: ${Shorten(Ex?.message || Ex)}</body></html>`; }
-		TrySendSnapshot();
 	}
-
 	function InputValue(pElem) {
 		if (!(pElem instanceof Element)) return { value: "", private: true };
 		const Allowed = pElem.getAttribute("data-replay-capture") === "value" && pElem.getAttribute("data-replay-private") !== "true";
@@ -318,20 +157,19 @@ const cNetworkBatchSize = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH
 		if (pElem instanceof HTMLInputElement && ["checkbox", "radio"].includes(pElem.type)) return { value: "", checked: pElem.checked, private: false };
 		return { value: Str(pElem.value), private: false };
 	}
-
 	function WireEvents() {
 		window.addEventListener("scroll", () => {
 			const Now = performance.now();
-			if (Now - fLastScrollAt < Number(cScrollEveryMs || 120)) return;
+			if (Now - fLastScrollAt < Math.max(80, Number(cScrollEveryMs) || 200)) return;
 			fLastScrollAt = Now;
-			Capture("scroll", ViewportData());
+			Capture("scroll", ScrollData());
 		}, { passive: true });
 		window.addEventListener("resize", () => Capture("resize", ViewportData()), { passive: true });
 		document.addEventListener("pointermove", (Event) => {
 			const Now = performance.now();
-			if (Now - fLastPointerAt < Number(cPointerEveryMs || 80)) return;
+			if (Now - fLastPointerAt < Math.max(100, Number(cPointerEveryMs) || 250)) return;
 			fLastPointerAt = Now;
-			Capture("pointer_move", { x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), pointerType: Event.pointerType || "mouse", ...TargetData(Event.target) });
+			Capture("pointer_move", { x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), pointerType: Event.pointerType || "mouse" });
 		}, true);
 		for (const [DomType, ReplayType] of [["pointerdown", "pointer_down"], ["pointerup", "pointer_up"]]) {
 			document.addEventListener(DomType, (Event) => Capture(ReplayType, { x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button, pointerType: Event.pointerType || "mouse", ...TargetData(Event.target) }), true);
@@ -345,33 +183,25 @@ const cNetworkBatchSize = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH
 		document.addEventListener("visibilitychange", () => Capture("visibility", { state: document.visibilityState }, document.hidden));
 		window.addEventListener("pagehide", () => {
 			fUnloading = true;
-			Capture("page_hide", { persisted: false, ...ViewportData() });
+			Capture("page_hide", { persisted: false, ...ViewportData() }, true);
 			Flush();
 		});
 	}
+	function OnOpsReady() { Flush(); }
 
-	function OnOpsReady() {
-		Flush();
-		TrySendSnapshot();
-	}
-
-	// Capture begins as soon as this script is parsed at the start of <body>.
 	WireEvents();
 	QueueCapture("page_ready", { readyState: document.readyState, ...ViewportData() }, false, {
 		pageElapsedMs: 0,
-		sessionElapsedMs: cInitialSessionElapsedMs,
+		sessionElapsedMs: Math.max(0, cPageStartedAt - SessionStartedAt()),
 		createdAtClient: cPageStartedIso
 	});
-	QueueCapture("scroll", { ...ViewportData(), scrollX: 0, scrollY: 0 }, false, {
+	QueueCapture("scroll", { scrollX: 0, scrollY: 0 }, false, {
 		pageElapsedMs: 0,
-		sessionElapsedMs: cInitialSessionElapsedMs,
+		sessionElapsedMs: Math.max(0, cPageStartedAt - SessionStartedAt()),
 		createdAtClient: cPageStartedIso
 	});
-	fFlushTimer = window.setInterval(() => { Flush(); TrySendSnapshot(); }, Math.max(250, Number(cFlushEveryMs) || 1000));
+	fFlushTimer = window.setInterval(Flush, Math.max(500, Number(cFlushEveryMs) || 1500));
 	window.addEventListener("emo:ops-page-open", OnOpsReady);
-
-	if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", QueueInitialSnapshot, { once: true });
-	else QueueInitialSnapshot();
 	if (window.__EMO_OPS_PAGE_OPENED__) OnOpsReady();
 })();
 </script>
