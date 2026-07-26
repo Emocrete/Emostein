@@ -1051,6 +1051,11 @@ const cPlace = new Place(Astro.props as PlaceProps, cStyle);
 
 	try {
 	if (cSubmitUrl.trim()) {
+	if (IsGoogleAppsScriptUrl(cSubmitUrl) && !IsRealDomain()) {
+	SetStatus(pStatus, "المعاينة المحلية لا ترسل بيانات Google Apps Script.", "work");
+	return;
+	}
+
 	await fetch(cSubmitUrl, {
 	method: "POST",
 	mode: "no-cors",
@@ -1069,6 +1074,15 @@ const cPlace = new Place(Astro.props as PlaceProps, cStyle);
 	} finally {
 	SetBusy(pSubmitBtn, false);
 	}
+	}
+
+	function IsRealDomain() {
+	const cHostname = window.location.hostname.toLowerCase();
+	return cHostname === "emocrete.com" || cHostname === "www.emocrete.com";
+	}
+
+	function IsGoogleAppsScriptUrl(pUrl) {
+	return String(pUrl || "").trim().startsWith("https://script.google.com/macros/s/");
 	}
 
 	function BuildPayload(pForm) {

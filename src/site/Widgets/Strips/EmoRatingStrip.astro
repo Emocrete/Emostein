@@ -968,6 +968,8 @@ function GetStarTone(pValue: number): string {
 
 
 <script>
+	import { GetPageRating, type PageRatingData } from "@/PageRatings";
+
 	const cEmailJsSrc = "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
 
 	type EmailJsBrowser = {
@@ -985,16 +987,6 @@ function GetStarTone(pValue: number): string {
 	ratingValue: number;
 	pagePath: string;
 	createdAt: string;
-	};
-
-	type LiveRatingData = {
-	ok?: boolean;
-	hasRating?: boolean;
-	ratingValue?: number;
-	ratingCount?: number;
-	review?: {
-	ratingComment?: string;
-	} | null;
 	};
 
 	const cWindow = window as RatingWindow;
@@ -1071,7 +1063,7 @@ function GetStarTone(pValue: number): string {
 	void SendComment(pRoot);
 	});
 
-	void RefreshRatingFromSheet(pRoot);
+	ScheduleInitialRatingRefresh(pRoot);
 
 	if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
 	pRoot.addEventListener("dblclick", async function CopyRatingMessage(): Promise<void> {
@@ -1236,7 +1228,7 @@ function GetStarTone(pValue: number): string {
 	async function SavePayloadIfNeeded(pRoot: HTMLElement, pPayload: Record<string, string>): Promise<void> {
 	const cStorageUrl = pRoot.dataset.storageUrl || "";
 
-	if (!cStorageUrl) return;
+	if (!cStorageUrl || !IsRealDomain()) return;
 
 	await fetch(cStorageUrl, {
 	method: "POST",
@@ -1336,8 +1328,8 @@ function GetStarTone(pValue: number): string {
 	});
 	}
 
-	function RenderLiveRating(pRoot: HTMLElement, pData: LiveRatingData): void {
-	if (!pData?.ok || !pData.hasRating || !pData.ratingCount || !pData.ratingValue) {
+	function RenderLiveRating(pRoot: HTMLElement, pData: PageRatingData): void {
+	if (!pData.hasRating || !pData.ratingCount || !pData.ratingValue) {
 	SetAverageUi(pRoot, 0, 0);
 	if (!IsStarLocked(pRoot)) RestoreAverageStars(pRoot);
 	return;
@@ -1522,54 +1514,38 @@ function GetStarTone(pValue: number): string {
 	return cValue.toLowerCase();
 	}
 
+	function ScheduleInitialRatingRefresh(pRoot: HTMLElement): void {
+	if (!IsRealDomain()) return;
+
+	if (document.readyState !== "loading") {
+		queueMicrotask(function RefreshCompletedDomRating(): void {
+			void RefreshRatingFromSheet(pRoot);
+		});
+		return;
+	}
+
+	document.addEventListener("DOMContentLoaded", function RefreshCompletedDomRating(): void {
+		void RefreshRatingFromSheet(pRoot);
+	}, { once: true });
+	}
+
 	function RefreshRatingFromSheet(pRoot: HTMLElement): Promise<void> {
 	const cStorageUrl = pRoot.dataset.storageUrl || "";
 
-	if (!cStorageUrl) return Promise.resolve();
+	if (!cStorageUrl || !IsRealDomain()) return Promise.resolve();
 
-	return LoadRatingJsonp(cStorageUrl, NormalizePath(location.pathname))
+	return GetPageRating(cStorageUrl, location.href)
 	.then(function HandleRatingData(pData): void {
-	RenderLiveRating(pRoot, pData);
+	if (pData) RenderLiveRating(pRoot, pData);
 	})
 	.catch(function HandleRatingError(pError): void {
 	console.warn("Rating read warning:", pError);
 	});
 	}
 
-	function LoadRatingJsonp(pStorageUrl: string, pPagePath: string): Promise<LiveRatingData> {
-	return new Promise(function HandleJsonp(pResolve, pReject): void {
-	const cCallbackName = `EmoRatingCallback_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-	const cUrl = new URL(pStorageUrl);
-	const cScript = document.createElement("script");
-	let cDone = false;
-
-	cUrl.searchParams.set("mode", "page");
-	cUrl.searchParams.set("page_path", pPagePath);
-	cUrl.searchParams.set("callback", cCallbackName);
-
-	(window as unknown as Record<string, unknown>)[cCallbackName] = function HandleRatingCallback(pData: LiveRatingData): void {
-	cDone = true;
-	Cleanup();
-	pResolve(pData);
-	};
-
-	cScript.src = cUrl.href;
-	cScript.async = true;
-
-	cScript.addEventListener("error", function HandleError(): void {
-	if (cDone) return;
-
-	Cleanup();
-	pReject(new Error("Rating JSONP loading failed."));
-	});
-
-	document.head.appendChild(cScript);
-
-	function Cleanup(): void {
-	delete (window as unknown as Record<string, unknown>)[cCallbackName];
-	cScript.remove();
-	}
-	});
+	function IsRealDomain(): boolean {
+	const cHostname = location.hostname.toLowerCase();
+	return cHostname === "emocrete.com" || cHostname === "www.emocrete.com";
 	}
 
 	function SetSubmitBusy(pButton: HTMLButtonElement | null, pIsBusy: boolean): void {

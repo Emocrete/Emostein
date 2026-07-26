@@ -1079,6 +1079,8 @@ const cWidgetId = pGivenID;
 <script define:vars={{ cWidgetId, pForceShow }}>
 	const cApiUrl = "https://script.google.com/macros/s/AKfycbzeTnfUKH9Y3shjoCq9FUsYTxTf7FvUImLcwQZEx2ppnX1EHirIuOZTiLxnQB_HpVfNXQ/exec";
 	const cWhatsAppNumber = "201014490054";
+	const cAllowedHosts = new Set(["emocrete.com", "www.emocrete.com"]);
+	const cIsRealDomain = cAllowedHosts.has(window.location.hostname.toLowerCase());
 
 	const cRoot = document.getElementById(cWidgetId);
 	const cUrlParams = new URLSearchParams(window.location.search);
@@ -1215,6 +1217,13 @@ const cWidgetId = pGivenID;
 	}
 
 	async function LoadBookings() {
+	if (!cIsRealDomain) {
+	SetMessage("المعاينة المحلية لا تقرأ أو ترسل بيانات Google Apps Script.", "warning");
+	RenderSchedule();
+	UpdateCounters();
+	return;
+	}
+
 	if (!IsApiReady()) {
 	SetMessage("لم يتم ضبط رابط Google Apps Script الخاص بعرض رسم المحلات حتى الآن. الودجت تعمل للمعاينة فقط، ولن تحفظ الطلبات قبل ضبط الرابط.", "warning");
 	RenderSchedule();
@@ -1282,6 +1291,11 @@ const cWidgetId = pGivenID;
 	SetMessage("هذا الموعد تم طلبه بالفعل. اختر موعدًا آخر من المواعيد المتاحة.", "error");
 	RenderSlotOptions();
 	RenderSchedule();
+	return;
+	}
+
+	if (!cIsRealDomain) {
+	SetMessage("المعاينة المحلية لا ترسل بيانات Google Apps Script.", "warning");
 	return;
 	}
 
@@ -1866,6 +1880,8 @@ const cWidgetId = pGivenID;
 	}
 
 	async function CallApi(cPayload) {
+	if (!cIsRealDomain) throw new Error("Google Apps Script is disabled outside the real domain.");
+
 	console.log("RetailDwgMonthlyOffer request:", cPayload);
 
 	const cResponse = await fetch(cApiUrl, {
@@ -1894,6 +1910,7 @@ const cWidgetId = pGivenID;
 	}
 
 	function IsApiReady() {
+	if (!cIsRealDomain) return false;
 	const cUrl = String(cApiUrl || "").trim();
 
 	if (!cUrl) return false;

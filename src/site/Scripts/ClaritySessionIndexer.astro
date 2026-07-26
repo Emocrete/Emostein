@@ -1,5 +1,6 @@
 ---
-const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
+const cRealHosts = new Set(["emocrete.com", "www.emocrete.com"]);
+const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false";
 ---
 
 {cEnabled && (

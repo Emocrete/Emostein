@@ -7,7 +7,6 @@ import OrientationVisibility from "@/Scripts/OrientationVisibility.astro";
 import Clarity from "@/Scripts/Clarity.astro";
 import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoContactStrip, EmoCoverageMapStrip, EmoList, EmoPipelineStrip, EmoRatingStrip, EmoStatsStrip, EmoStrip, ESec, Hero, IncLineSep, IndexSec, Tree, YTPlayer } from "@/Widgets";
 import EmoFooter from "@/Widgets/EmoFooter.astro";
-import { GetPageRating } from "@/PageRatings";
 import SpeedInsights from "@vercel/speed-insights/astro";
 import SiteIntro from "@/Widgets/Intro/SiteIntro.astro";
 import OpsVisitTracker from "@/Scripts/OpsVisitTracker.astro";
@@ -76,8 +75,9 @@ const cPageUrl = cCanonical;
 const cSeoImageAlt = SeoText.GetImageAlt(pTitle ?? "", pDescr ?? "");
 SeoText.SetLocalsImageAlt(Astro.locals, cSeoImageAlt);
 
-const cPageRating = await GetPageRating(cPageUrl);
-const cRatingApiUrl = import.meta.env.PUBLIC_EMO_RATING_API_URL ?? "";
+const cRealHosts = new Set(["emocrete.com", "www.emocrete.com"]);
+const cIsRealDomain = cRealHosts.has(Astro.url.hostname.toLowerCase());
+const cRatingApiUrl = cIsRealDomain ? import.meta.env.PUBLIC_EMO_RATING_API_URL ?? "" : "";
 
 function GetLayoutSchema(): string {
 	if (pSchema !== undefined) {
@@ -288,7 +288,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 		<body style = " font-family : Cairo, system-ui, sans-serif ">
 
-			{!cReplayMode && <EmoReplayRecorder />}
+			{cIsRealDomain && !cReplayMode && <EmoReplayRecorder />}
 
 			{ pIntro &&
 
@@ -311,7 +311,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 			</main>
 
-			<EmoFooter pRatingData={cPageRating} pRatingStorageUrl={cRatingApiUrl} />
+			<EmoFooter pRatingStorageUrl={cRatingApiUrl} />
 
 			<nav class = " FloatContact " aria-label="وسائل التواصل السريعة">
 
@@ -395,11 +395,11 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 			<OrientationVisibility />
 
-			{!cReplayMode && <OpsVisitTracker />}
+			{cIsRealDomain && !cReplayMode && <OpsVisitTracker />}
 
-			{!cReplayMode && <ClaritySessionIndexer />}
+			{cIsRealDomain && !cReplayMode && <ClaritySessionIndexer />}
 
-			{!cReplayMode && <SpeedInsights />}
+			{cIsRealDomain && !cReplayMode && <SpeedInsights />}
 
 		</body>
 
