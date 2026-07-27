@@ -1,7 +1,10 @@
 ---
 import BLayout from "@/Layout.astro";
 import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
-import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, Hero, HzStack, RespImg, VrStack } from "@/Widgets";
+import { DuoCol, DuoStr, EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, Hero, HzStack, RelServices, RespImg, VrStack } from "@/Widgets";
+import SecTitle from "@/Widgets/Comp/SecTitle.astro";
+import Price from "@/Widgets/Prices/Price.astro";
+import RelServiceItem from "@/Widgets/Sections/RelServiceItem.astro";
 ---
 
 
@@ -41,10 +44,10 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, He
 
 			<Emograph
 				pTitle={Text.H1.White.OfText("شهادة صلاحية المبنى للإشغال")}
-				pText={Text.Body.White.OfSize(16).OfText("إصدار شهادة صلاحية مبنى للإشغال لتوصيل المرافق واعتماد جاهزية المبنى للاستخدام")}
+				pText={Text.Body.White.OfText("خدمات إصدار شهادة صلاحية المبنى للإشغال لتوصيل المرافق واعتماد جاهزية المبنى للاستخدام")}
 			/>
 
-			<EmoCall BlackSky pText="تواصل معنا" />
+			<EmoCall OrangeBlack pText="تواصل معنا" />
 
 		</VrStack>
 
@@ -57,20 +60,33 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, He
 
 
 	<ESec
+		id="secInfo"
 		pBg={new ElemBg(Colors.Creamy)}
 		pHzAlign={new Align("Center", "Center", "Center", "Center")}
 		pVrAlign={new Align("Center", "Center", "Center", "Center")}
 	>
 
-		<Emograph
-			pTitle={Text.H2.OfText("ما هي شهادة صلاحية المبنى للإشغال ؟").WithColor("#8b1e2d").Centered}
-			pText={Text.Body.OfText("شهادة صلاحية المبنى للإشغال هي مستند رسمي تصدره نقابة المهندسين المصرية باسم مهندس نقابي معتمد ويقدم إلى الجهات الإدارية المختصة، مثل رئاسة الحي أو الجهاز التابع لهيئة المجتمعات العمرانية، والغرض منه بيان أن المبنى تم إنشاؤه وفقًا للمواصفات الفنية والمعايير الإنشائية واشتراطات الترخيص الصادرة مسبقًا، وأنه آمن وصالح للاستخدام.")}
-		/>
+		<DuoStr>
 
-		<Emograph
-			pTitle={Text.H2.OfText("استخدامات شهادة صلاحية المبنى للإشغال").WithColor("#8b1e2d").Centered}
-			pText={Text.Body.OfText("تستخدم شهادة صلاحية مبنى للإشغال سواء إشغال كلي أو جزئي في الحصول على خطاب الجهة الإدارية المعنية لإرفاقه بطلب توصيل المرافق المقدم إلى الجهة ذات العلاقة، مثل الكهرباء والمياه والغاز والصرف الصحي.")}
-		/>
+			<DuoCol>
+
+				<Emograph
+					pTitle={Text.H2.OfText("ما هي شهادة صلاحية المبنى للإشغال ؟").WithColor("#8b1e2d").Centered}
+					pText={Text.Body.OfText("شهادة صلاحية المبنى للإشغال هي مستند رسمي تصدره نقابة المهندسين المصرية باسم مهندس نقابي معتمد ويقدم إلى الجهات الإدارية المختصة، مثل رئاسة الحي أو الجهاز التابع لهيئة المجتمعات العمرانية، والغرض منه بيان أن المبنى تم إنشاؤه وفقًا للمواصفات الفنية والمعايير الإنشائية واشتراطات الترخيص الصادرة مسبقًا، وأنه آمن وصالح للاستخدام.")}
+				/>
+
+			</DuoCol>
+
+			<DuoCol>
+
+				<Emograph
+					pTitle={Text.H2.OfText("استخدامات شهادة صلاحية المبنى للإشغال").WithColor("#8b1e2d").Centered}
+					pText={Text.Body.OfText("تستخدم شهادة صلاحية مبنى للإشغال سواء إشغال كلي أو جزئي في الحصول على خطاب الجهة الإدارية المعنية لإرفاقه بطلب توصيل المرافق المقدم إلى الجهة ذات العلاقة، مثل الكهرباء والمياه والغاز والصرف الصحي.")}
+				/>
+
+			</DuoCol>
+
+		</DuoStr>
 
 	</ESec>
 
@@ -80,28 +96,21 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, He
 
 
 
-	<ESec>
+	<ESec id="secDoc">
 
-		<EmoStrip>
+		<SecTitle OrangeDark pTitle="المستندات المطلوبة لاستخراج شهادة صلاحية مبنى للإشغال" />
 
-			<Emograph pTitle={Text.H2.Centered.OfText("المستندات المطلوبة لاستخراج شهادة صلاحية مبنى للإشغال").WithColor("#8b1e2d")} />
+		<DuoStr>
 
-		</EmoStrip>
-
-		<HzStack>
-
-			<VrStack>
+			<DuoCol>
 
 				<Emograph pTitle={Text.H3.Centered.OfText("في حال كانت رخصة البناء صادرة باسم مالك فردي").WithColor("#2f3340")} />
 
-				<EmoList pNumbered={false} pItems={[
-						"صورة رخصة البناء المعتمدة",
-						"صورة بطاقة المالك"
-					]} />
+				<EmoList pNumbered={false} pItems={["صورة رخصة البناء المعتمدة","صورة بطاقة المالك"]} />
 
-			</VrStack>
+			</DuoCol>
 
-			<VrStack>
+			<DuoCol>
 
 				<Emograph pTitle={Text.H3.Centered.OfText("في حال كانت رخصة البناء صادرة باسم شركة").WithColor("#2f3340")} />
 
@@ -114,9 +123,9 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, He
 					]}
 				/>
 
-			</VrStack>
+			</DuoCol>
 
-		</HzStack>
+		</DuoStr>
 
 	</ESec>
 
@@ -126,128 +135,141 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, He
 
 
 
-	<ESec>
+	<ESec id="secCost" Readable>
 
-		<EmoStrip>
+		<SecTitle OrangeDark pTitle="تكلفة استخراج شهادة صلاحية المبنى للإشغال" />
 
-			<Emograph pTitle={Text.H2.Centered.OfText("تكلفة استخراج شهادة صلاحية المبنى للإشغال").WithColor("#8b1e2d")} />
+		<HzStack
+			style = "
+					margin-top : 50px ;
+					margin-bottom : 50px ;
+					padding : 30px
+				"
+			id="stkCostEq"
+			pBg={new ElemBg(Colors.SkyLite)}
+			pSize={new Size(new NumPer(1200))}
+			Readable
+		>
 
-		</EmoStrip>
+			<Emograph
+				pTitle={Text.H3.Centered.OfText("التكلفة الإجمالية =")}
+				pSize={new Size(new NumPer(300))}
+				data-own-size
+			/>
 
-		<VrStack id="ServiceCostBox">
+			<Emograph pTitle={Text.Body.Centered.OfSize(30,20).OfText("قيمة الخدمة + الرسوم الأساسية + الدمغة الهندسية")} />
 
-			<HzStack id="ServiceCostTitle" pBg={new ElemBg(Colors.Sky)}>
+		</HzStack>
 
-				<Emograph pTitle={Text.H3.OfText("قيمة الخدمة")} />
+		<Emograph pTitle={Text.H3.OfText("أولا : أتعاب الخدمة")} />
 
-				<VrStack pWidth={new Pixel(1000,300)}>
+		<DuoStr id="strCost" Readable>
 
-					<HzStack pBg={new ElemBg(Colors.WhiteOff)}>
+			<DuoCol>
 
-						<Emograph pTitle={Text.Body.OfText("3000 جنيه")} />
+				<Price pTitle={Text.Body.OfText("للمباني السكنية")} pPrice={3000} />
 
-						<Emograph pTitle={Text.Body.OfText("للمباني السكنية العادية")} />
+			</DuoCol>
 
-					</HzStack>
+			<DuoCol>
 
-					<HzStack pBg={new ElemBg(Colors.WhiteOff)}>
+				<Price pTitle={Text.Body.OfText("للمباني التجارية والإدارية والصناعية")} pPrice={5000} />
 
-						<Emograph pTitle={Text.Body.OfText("5000 جنيه")} />
+			</DuoCol>
 
-						<Emograph pTitle={Text.Body.OfText("للمباني التجارية والإدارية والصناعية")} />
+		</DuoStr>
 
-					</HzStack>
+		<Emograph pTitle={Text.H3.OfText(" ثانيا : رسوم الخدمة المدفوعة لنقابة المهندسين")} />
 
-				</VrStack>
+		<VrStack pWidth={new Pixel(1000,320)} pBg={new ElemBg(Colors.SkyLite)}>
 
-			</HzStack>
+			<HzStack pBg={new ElemBg(Colors.WhiteOff)}>
 
-			<HzStack pBg={new ElemBg(Colors.SkyLite)}>
+				<Emograph pTitle={Text.Body.Centered.OfSize(30,25).OfText("الرسوم الأساسية لكل مبنى في المشروع")} />
 
-				<Emograph pTitle={Text.H3.OfText("رسوم الخدمة المدفوعة لنقابة المهندسين")} />
-
-				<VrStack pWidth={new Pixel(1000,320)}>
-
-					<HzStack pBg={new ElemBg(Colors.WhiteOff)}>
-
-						<Emograph pTitle={Text.Body.OfText("900 جنيه")} />
-
-						<Emograph pTitle={Text.Body.OfText("الرسوم الأساسية لكل مبنى في المشروع")} />
-
-					</HzStack>
-
-					<VrStack pBgColor={new ElemBg(Colors.WhiteOff)} pHeight={new Pixel(800,320)}>
-
-						<Emograph pTitle={Text.H4.OfText("مثال لحالة مشروع سكني أو تجاري أو إداري :").WithColor("#8b1e2d")} />
-
-						<EmoList
-							pWidth={new RespString("100%", "100%")}
-							pNumbered={false}
-							pItems={[
-								"منطوق الرخصة ( بدروم + أرضي + متكرر + غرف سطح + سور ) تحتسب جميعًا كمبنى واحد",
-								"منطوق الرخصة ( أرضي + متكرر + غرف سطح ) تحتسب جميعًا كمبنى واحد",
-								"منطوق الرخصة ( أرضي + متكرر + غرفة كهرباء ) تحتسب على أنها 2 مبنى"
-							]}
-						/>
-
-						<Emograph
-							pTitle={Text.H4.OfText("مثال لحالة مباني صناعية :").WithColor("#8b1e2d")}
-							pText={Text.Body.OfText("يتم اعتبار كلا من المبنى الإداري والجمالون وغرفة الكهرباء وغرفة الأمن والسور على أنها مبنى مستقل حسب العناصر المثبتة منها في منطوق رخصة البناء، ويحسب منها فقط العناصر المطلوب تضمينها في شهادة صلاحية الإشغال.")}
-						/>
-
-						<Emograph pTitle={Text.H4.DarkSky.OfText("الرسوم الأساسية الإجمالية للشهادة = 900 × عدد المباني")} />
-
-					</VrStack>
-
-					<HzStack pBg={new ElemBg(Colors.WhiteOff)}>
-
-						<Emograph pTitle={Text.Body.OfText("% 0.45")} pText={Text.Body.OfText("نسبة رسوم الدمغة الهندسية إلى تكلفة رخصة البناء")} />
-
-						<Emograph
-							pTitle={Text.Body.OfText("قيمة رسوم الدمغة الهندسية = 0.0045 × تكلفة الرخصة")}
-							pText={Text.Body.OfText("تتراوح عمليًا بين 4000 إلى 8000 حسب تكلفة الأعمال المسجلة بالرخصة").WithColor("red")}
-						/>
-
-					</HzStack>
-
-				</VrStack>
+				<Emograph pTitle={Text.Body.Centered.Bold.OfSize(80,50).OfText("900 جنيه")} />
 
 			</HzStack>
 
-			<HzStack pBg={new ElemBg(Colors.SkyLite)}>
+			<VrStack pBgColor={new ElemBg(Colors.WhiteOff)} pHeight={new Pixel(800,320)}>
 
-				<VrStack pWidth={new Pixel(400,320)} pBgColor={new ElemBg(Colors.SkyDark)}>
+				<Emograph pTitle={Text.H4.DarkSky.OfText("الرسوم الأساسية الإجمالية للشهادة = 900 × عدد المباني")} />
 
-					<Emograph pTitle={Text.H3.OfText("التكلفة الإجمالية")} />
-
-				</VrStack>
-
-				<VrStack pWidth={new Pixel(600,320)} pBgColor={new ElemBg(Colors.WhiteOff)}>
-
-					<Emograph pTitle={Text.Body.OfText("التكلفة = قيمة الخدمة + الرسوم الأساسية + الدمغة الهندسية")} />
-
-				</VrStack>
-
-			</HzStack>
-
-			<VrStack pWidth={new Pixel(1200,320)} pBgColor={new ElemBg(Colors.WhiteOff)}>
-
-				<Emograph pTitle={Text.H4.OfText("حالات الإعفاء من دفع الدمغة الهندسية :").WithColor("#302c3c")} pText={Text.Body.OfText("")} />
+				<Emograph pTitle={Text.H4.OfText("مثال لحالة مشروع سكني أو تجاري أو إداري :").WithColor("#8b1e2d")} />
 
 				<EmoList
 					pWidth={new RespString("100%", "100%")}
 					pNumbered={false}
 					pItems={[
-						"إعفاء كامل إذا تم دفعها بالكامل أثناء ترخيص البناء ويكون الدفع مثبت في الرخصة، أو بإيصال دمغة مستقل",
-						"إعفاء جزئي إذا تم دفع جزء منها أثناء ترخيص البناء، ويكون الدفع مثبت في الرخصة، أو بإيصال دمغة مستقل، وفي هذه الحالة يتم دفع الجزء المتبقي فقط أثناء إصدار شهادة صلاحية الإشغال"
+						"منطوق الرخصة ( بدروم + أرضي + متكرر + غرف سطح + سور ) تحتسب جميعًا كمبنى واحد",
+						"منطوق الرخصة ( أرضي + متكرر + غرف سطح ) تحتسب جميعًا كمبنى واحد",
+						"منطوق الرخصة ( أرضي + متكرر + غرفة كهرباء ) تحتسب على أنها 2 مبنى"
 					]}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.OfText("مثال لحالة مباني صناعية :").WithColor("#8b1e2d")}
+					pText={Text.Body.OfText("يتم اعتبار كلا من المبنى الإداري والجمالون وغرفة الكهرباء وغرفة الأمن والسور على أنها مبنى مستقل حسب العناصر المثبتة منها في منطوق رخصة البناء، ويحسب منها فقط العناصر المطلوب تضمينها في شهادة صلاحية الإشغال.")}
 				/>
 
 			</VrStack>
 
+			<HzStack pBg={new ElemBg(Colors.WhiteOff)}>
+
+				<Emograph
+					pTitle={Text.Body.Bold.OfSize(80,30).OfText("% 0.45")}
+					pText={Text.Body.OfText("نسبة رسوم الدمغة الهندسية إلى تكلفة رخصة البناء")}
+				/>
+
+				<Emograph
+					pTitle={Text.Body.OfText("قيمة رسوم الدمغة الهندسية = 0.0045 × تكلفة الرخصة")}
+					pText={Text.Body.OfText("تتراوح عمليًا بين 4000 إلى 8000 حسب تكلفة الأعمال المسجلة بالرخصة").WithColor("red")}
+				/>
+
+			</HzStack>
+
+		</VrStack>
+
+		<VrStack pWidth={new Pixel(1200,320)} pBgColor={new ElemBg(Colors.WhiteOff)}>
+
+			<Emograph pTitle={Text.H4.OfText("حالات الإعفاء من دفع الدمغة الهندسية :").WithColor("#302c3c")} pText={Text.Body.OfText("")} />
+
+			<EmoList
+				pWidth={new RespString("100%", "100%")}
+				pNumbered={false}
+				pItems={[
+					"إعفاء كامل إذا تم دفعها بالكامل أثناء ترخيص البناء ويكون الدفع مثبت في الرخصة، أو بإيصال دمغة مستقل",
+					"إعفاء جزئي إذا تم دفع جزء منها أثناء ترخيص البناء، ويكون الدفع مثبت في الرخصة، أو بإيصال دمغة مستقل، وفي هذه الحالة يتم دفع الجزء المتبقي فقط أثناء إصدار شهادة صلاحية الإشغال"
+				]}
+			/>
+
 		</VrStack>
 
 	</ESec>
+
+
+
+
+
+
+
+	<RelServices>
+
+		<RelServiceItem
+			pTitle="شهادة إشراف هندسي على البناء"
+			pDesc="استخراج شهادة الإشراف الهندسي الصادرة من نقابة المهندسين المصرية للحصول على ترخيص الحفر وبدء التنفيذ، مع توضيح المستندات المطلوبة والتكلفة والرسوم الهندسية."
+			pHref="/emonsult/certificate/con-supervision"
+			pImg="/Media/Emonsult/Certificate/ConSV/Building-Construction-Supervision-Certificate-HeroL.webp"
+		/>
+
+		<RelServiceItem
+			pTitle="شهادة إشراف هندسي على الهدم"
+			pDesc="شهادة معتمدة من نقابة المهندسين تفيد تولي مهندس نقابي مسؤولية الإشراف على تنفيذ أعمال الهدم طبقًا للترخيص، مع مراعاة السلامة الإنشائية وتأمين الجوار والمارة والمرافق قبل بدء التنفيذ."
+			pHref="/emonsult/certificate/con-supervision"
+			pImg="/Media/Emonsult/Certificate/ConSV/Building-Construction-Supervision-Certificate-HeroL.webp"
+		/>
+
+	</RelServices>
 
 
 
