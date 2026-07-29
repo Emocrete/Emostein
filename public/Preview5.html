@@ -142,6 +142,11 @@
 				stroke: currentColor;
 			}
 
+			.zoom-mode-btn svg circle {
+				fill: currentColor;
+				stroke: none;
+			}
+
 			.preview-area {
 				position: relative;
 				width: 100vw;
@@ -239,6 +244,14 @@
 						<rect x="3" y="4" width="18" height="12" rx="1.5"></rect>
 						<line x1="9" y1="20" x2="15" y2="20"></line>
 						<line x1="12" y1="16" x2="12" y2="20"></line>
+					</svg>
+				</button>
+
+
+				<button id="zoomAnchorModeBtn" class="frame-toggle-btn zoom-mode-btn" type="button" title="تفعيل زووم يحافظ على تركيب الصفحة ويرتكز عند مؤشر الماوس" aria-label="تبديل طريقة زووم محتوى الفريم" aria-pressed="false">
+					<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<rect x="3" y="5" width="18" height="14" rx="2"></rect>
+						<circle cx="12" cy="12" r="2.2" fill="currentColor"></circle>
 					</svg>
 				</button>
 
@@ -1196,7 +1209,357 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 
 
 		</script>
+<!-- EMO_PREVIEW_LOCAL_FRAME_ZOOM_START -->
+		<script>
+			(function () {
+				if (window.__emoPreviewLocalFrameZoomLoaded) {
+					return;
+				}
 
+				window.__emoPreviewLocalFrameZoomLoaded = true;
+
+				const cZoomLevels = [1, 1.1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4, 5];
+				const cWheelStepThreshold = 35;
+				const cFrameStates = {
+					land: CreateFrameZoomState("landFrame"),
+					port: CreateFrameZoomState("portFrame")
+				};
+				let fPreserveStructureZoom = false;
+
+				function CreateFrameZoomState(pFrameId) {
+					return {
+						FrameId: pFrameId,
+						LevelIndex: 0,
+						WheelDelta: 0,
+						Document: undefined,
+						Window: undefined,
+						BaseInlineZoom: "",
+						BaseInlineWidth: "",
+						BaseComputedZoom: 1,
+						LastPointerX: undefined,
+						LastPointerY: undefined,
+						ScrollRestoreToken: 0
+					};
+				}
+
+				function InitializeLocalFrameZoom() {
+					RegisterFrameLoad("land");
+					RegisterFrameLoad("port");
+					RegisterResetButton();
+					RegisterZoomModeButton();
+					RegisterAvailableFrames();
+					window.setInterval(RegisterAvailableFrames, 750);
+				}
+
+				function RegisterFrameLoad(pName) {
+					const cState = cFrameStates[pName];
+					const cFrame = document.getElementById(cState.FrameId);
+
+					if (!cFrame || cFrame.dataset.emoLocalZoomLoadRegistered === "1") {
+						return;
+					}
+
+					cFrame.dataset.emoLocalZoomLoadRegistered = "1";
+					cFrame.addEventListener("load", function () {
+						RegisterLocalZoomFrame(pName);
+					});
+				}
+
+				function RegisterResetButton() {
+					const cResetButton = document.getElementById("resetBtn");
+
+					if (!cResetButton || cResetButton.dataset.emoLocalZoomResetRegistered === "1") {
+						return;
+					}
+
+					cResetButton.dataset.emoLocalZoomResetRegistered = "1";
+					cResetButton.addEventListener("click", ResetAllFrameZoom);
+				}
+
+				function RegisterZoomModeButton() {
+					const cModeButton = document.getElementById("zoomAnchorModeBtn");
+
+					if (!cModeButton || cModeButton.dataset.emoZoomModeRegistered === "1") {
+						return;
+					}
+
+					cModeButton.dataset.emoZoomModeRegistered = "1";
+					cModeButton.addEventListener("click", ToggleZoomMode);
+					UpdateZoomModeButton();
+				}
+
+				function ToggleZoomMode() {
+					fPreserveStructureZoom = !fPreserveStructureZoom;
+					UpdateZoomModeButton();
+					ReapplyFrameZoomMode("land");
+					ReapplyFrameZoomMode("port");
+				}
+
+				function UpdateZoomModeButton() {
+					const cModeButton = document.getElementById("zoomAnchorModeBtn");
+
+					if (!cModeButton) {
+						return;
+					}
+
+					cModeButton.classList.toggle("is-active", fPreserveStructureZoom);
+					cModeButton.setAttribute("aria-pressed", String(fPreserveStructureZoom));
+					cModeButton.title = fPreserveStructureZoom
+						? "زووم بصري يحافظ على تركيب الصفحة ويرتكز عند مؤشر الماوس"
+						: "زووم إعادة تدفق بدون سكرول أفقي — اضغط لتفعيل الزووم البصري";
+				}
+
+				function ReapplyFrameZoomMode(pName) {
+					const cState = cFrameStates[pName];
+					const cFrameWindow = cState.Window || (cState.Document && cState.Document.defaultView);
+
+					if (!cState.Document || !cFrameWindow) {
+						return;
+					}
+
+					const cAnchor = CaptureFrameAnchor(
+						cState,
+						cFrameWindow,
+						GetFrameAnchorX(cState, cFrameWindow),
+						GetFrameAnchorY(cState, cFrameWindow)
+					);
+
+					ApplyFrameZoom(pName);
+					RestoreCapturedFrameAnchor(pName, cFrameWindow, cAnchor);
+				}
+
+				function RegisterAvailableFrames() {
+					RegisterLocalZoomFrame("land");
+					RegisterLocalZoomFrame("port");
+				}
+
+				function RegisterLocalZoomFrame(pName) {
+					const cState = cFrameStates[pName];
+					const cFrame = document.getElementById(cState.FrameId);
+
+					if (!cFrame) {
+						return;
+					}
+
+					let cFrameDocument;
+					let cFrameWindow;
+
+					try {
+						cFrameDocument = cFrame.contentDocument;
+						cFrameWindow = cFrame.contentWindow;
+						void cFrameDocument.documentElement;
+					}
+					catch {
+						return;
+					}
+
+					if (!cFrameDocument || !cFrameWindow || cState.Document === cFrameDocument) {
+						return;
+					}
+
+					cState.Document = cFrameDocument;
+					cState.Window = cFrameWindow;
+					cState.WheelDelta = 0;
+					cState.ScrollRestoreToken += 1;
+					cState.BaseInlineZoom = cFrameDocument.documentElement.style.zoom || "";
+					cState.BaseInlineWidth = cFrameDocument.documentElement.style.width || "";
+					cState.BaseComputedZoom = GetPositiveZoom(cFrameWindow.getComputedStyle(cFrameDocument.documentElement).zoom);
+
+					cFrameWindow.addEventListener("wheel", function (pEvent) {
+						HandleFrameZoomWheel(pEvent, pName);
+					}, {
+						capture: true,
+						passive: false
+					});
+
+					ApplyFrameZoom(pName);
+				}
+
+				function HandleFrameZoomWheel(pEvent, pName) {
+					if (!pEvent.ctrlKey) {
+						return;
+					}
+
+					pEvent.preventDefault();
+					pEvent.stopPropagation();
+					pEvent.stopImmediatePropagation();
+					pEvent.returnValue = false;
+
+					const cState = cFrameStates[pName];
+					const cFrameWindow = cState.Window || pEvent.view;
+					cState.LastPointerX = ClampNumber(Number(pEvent.clientX) || 0, 0, cFrameWindow ? cFrameWindow.innerWidth : Number.MAX_SAFE_INTEGER);
+					cState.LastPointerY = ClampNumber(Number(pEvent.clientY) || 0, 0, cFrameWindow ? cFrameWindow.innerHeight : Number.MAX_SAFE_INTEGER);
+					cState.WheelDelta += Number(pEvent.deltaY) || 0;
+
+					if (Math.abs(cState.WheelDelta) < cWheelStepThreshold) {
+						return;
+					}
+
+					const cDirection = cState.WheelDelta < 0 ? 1 : -1;
+					cState.WheelDelta = 0;
+
+					SetFrameZoomLevel(
+						pName,
+						ClampNumber(cState.LevelIndex + cDirection, 0, cZoomLevels.length - 1),
+						cState.LastPointerX,
+						cState.LastPointerY
+					);
+				}
+
+				function SetFrameZoomLevel(pName, pNextIndex, pAnchorX, pAnchorY) {
+					const cState = cFrameStates[pName];
+
+					if (pNextIndex === cState.LevelIndex) {
+						return;
+					}
+
+					const cFrameWindow = cState.Window || (cState.Document && cState.Document.defaultView);
+					const cResolvedAnchorX = Number.isFinite(pAnchorX) ? pAnchorX : GetFrameAnchorX(cState, cFrameWindow);
+					const cResolvedAnchorY = Number.isFinite(pAnchorY) ? pAnchorY : GetFrameAnchorY(cState, cFrameWindow);
+					const cAnchor = CaptureFrameAnchor(cState, cFrameWindow, cResolvedAnchorX, cResolvedAnchorY);
+
+					cState.LevelIndex = pNextIndex;
+					ApplyFrameZoom(pName);
+					RestoreCapturedFrameAnchor(pName, cFrameWindow, cAnchor);
+				}
+
+				function ApplyFrameZoom(pName) {
+					const cState = cFrameStates[pName];
+					const cFrameDocument = cState.Document;
+
+					if (!cFrameDocument || !cFrameDocument.documentElement) {
+						return;
+					}
+
+					const cRoot = cFrameDocument.documentElement;
+					const cLocalZoom = cZoomLevels[cState.LevelIndex];
+
+					if (cLocalZoom === 1) {
+						cRoot.style.zoom = cState.BaseInlineZoom;
+						cRoot.style.width = cState.BaseInlineWidth;
+						return;
+					}
+
+					cRoot.style.zoom = String(cState.BaseComputedZoom * cLocalZoom);
+
+					if (fPreserveStructureZoom) {
+						/* Keep the original responsive layout width, then expose the enlarged pixels by scrolling. */
+						cRoot.style.width = `${cLocalZoom * 100}%`;
+					}
+					else {
+						/* Default mode: let the page reflow into the reduced effective viewport without horizontal scrolling. */
+						cRoot.style.width = cState.BaseInlineWidth;
+					}
+				}
+
+				function CaptureFrameAnchor(pState, pFrameWindow, pAnchorX, pAnchorY) {
+					if (!pState.Document || !pFrameWindow) {
+						return undefined;
+					}
+
+					const cClientX = ClampNumber(Number(pAnchorX) || 0, 0, pFrameWindow.innerWidth);
+					const cClientY = ClampNumber(Number(pAnchorY) || 0, 0, pFrameWindow.innerHeight);
+					const cElement = pState.Document.elementFromPoint(cClientX, cClientY) || pState.Document.documentElement;
+					const cRect = cElement.getBoundingClientRect();
+
+					return {
+						Element: cElement,
+						ClientX: cClientX,
+						ClientY: cClientY,
+						RatioX: cRect.width > 0 ? ClampNumber((cClientX - cRect.left) / cRect.width, 0, 1) : 0.5,
+						RatioY: cRect.height > 0 ? ClampNumber((cClientY - cRect.top) / cRect.height, 0, 1) : 0.5
+					};
+				}
+
+				function RestoreCapturedFrameAnchor(pName, pFrameWindow, pAnchor) {
+					if (!pFrameWindow || !pAnchor || !pAnchor.Element) {
+						return;
+					}
+
+					const cState = cFrameStates[pName];
+					const cToken = ++cState.ScrollRestoreToken;
+
+					const Restore = function () {
+						if (cState.ScrollRestoreToken !== cToken || !pAnchor.Element.isConnected) {
+							return;
+						}
+
+						const cRect = pAnchor.Element.getBoundingClientRect();
+						const cCurrentAnchorX = cRect.left + cRect.width * pAnchor.RatioX;
+						const cCurrentAnchorY = cRect.top + cRect.height * pAnchor.RatioY;
+						const cDeltaX = fPreserveStructureZoom ? cCurrentAnchorX - pAnchor.ClientX : 0;
+						const cDeltaY = cCurrentAnchorY - pAnchor.ClientY;
+
+						if (fPreserveStructureZoom) {
+							pFrameWindow.scrollBy({
+								left: cDeltaX,
+								top: cDeltaY,
+								behavior: "auto"
+							});
+						}
+						else {
+							pFrameWindow.scrollTo({
+								left: 0,
+								top: Math.max(0, pFrameWindow.scrollY + cDeltaY),
+								behavior: "auto"
+							});
+						}
+					};
+
+					Restore();
+					pFrameWindow.requestAnimationFrame(function () {
+						Restore();
+						pFrameWindow.requestAnimationFrame(Restore);
+					});
+				}
+
+				function GetFrameAnchorX(pState, pFrameWindow) {
+					if (Number.isFinite(pState.LastPointerX)) {
+						return pState.LastPointerX;
+					}
+
+					return pFrameWindow ? pFrameWindow.innerWidth / 2 : 0;
+				}
+
+				function GetFrameAnchorY(pState, pFrameWindow) {
+					if (Number.isFinite(pState.LastPointerY)) {
+						return pState.LastPointerY;
+					}
+
+					return pFrameWindow ? pFrameWindow.innerHeight / 2 : 0;
+				}
+
+				function ResetAllFrameZoom() {
+					ResetFrameZoom("land");
+					ResetFrameZoom("port");
+				}
+
+				function ResetFrameZoom(pName) {
+					const cState = cFrameStates[pName];
+					cState.WheelDelta = 0;
+					SetFrameZoomLevel(pName, 0, GetFrameAnchorX(cState, cState.Window), GetFrameAnchorY(cState, cState.Window));
+				}
+
+				function GetPositiveZoom(pValue) {
+					const cValue = Number.parseFloat(String(pValue || ""));
+					return Number.isFinite(cValue) && cValue > 0 ? cValue : 1;
+				}
+
+				function ClampNumber(pValue, pMin, pMax) {
+					return Math.min(Math.max(pValue, pMin), pMax);
+				}
+
+				if (document.readyState === "loading") {
+					document.addEventListener("DOMContentLoaded", InitializeLocalFrameZoom);
+				}
+				else {
+					InitializeLocalFrameZoom();
+				}
+			})();
+		</script>
+		<!-- EMO_PREVIEW_LOCAL_FRAME_ZOOM_END -->
+
+	
 		<!-- EMO_PREVIEW_AUTO_FOLLOW_START -->
 		<style id="emoPreviewAutoFollowStyle">
 			#autoFollowBtn.follow-btn,
@@ -1275,10 +1638,8 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 				const cScrollSyncStorageKey = "EmoPreviewScrollSync";
 				const cActivePageFileName = "__emo_active_page.json";
 				const cDefaultLocateBridgePort = 38921;
-				const cTestLocateBridgeFirstPort = 38922;
-				const cTestLocateBridgeLastPort = 38932;
 				const cOpenChromePath = "/__emo_preview_open_chrome";
-				const cDefaultPublishedBaseUrl = "https://www.emocrete.com/";
+const cDefaultPublishedBaseUrl = "https://www.emocrete.com/";
 
 				let cAutoFollow = localStorage.getItem(cAutoFollowStorageKey) !== "0";
 				let cScrollSync = localStorage.getItem(cScrollSyncStorageKey) !== "0";
@@ -1286,17 +1647,9 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 				let cApplyingActivePath = false;
 				let cScrollSyncFrame = 0;
 				let cPendingScrollSource = "";
-				let cLastManualScrollSource = "land";
-				const cProgrammaticScrollLocked = { land: false, port: false };
-				const cUserScrollStates = {
-					land: CreateUserScrollState(),
-					port: CreateUserScrollState()
-				};
-				let cCursorScrollSuspendUntil = 0;
+				let cIgnoredScrollName = "";
+				let cIgnoredScrollUntil = 0;
 				let cLocateBridgePort = cDefaultLocateBridgePort;
-				let cTestLocateBridgePort = 0;
-				let cEmoFormatBridgePort = 0;
-				let cActiveWorkspaceRelativePath = "";
 				let cPublishedBaseUrl = cDefaultPublishedBaseUrl;
 				let cLastCursorStamp = 0;
 				let cPendingCursorTarget = undefined;
@@ -1446,39 +1799,19 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 						cLocateBridgePort = pData.bridgePort;
 					}
 
-					if (Number.isInteger(pData.testBridgePort) && pData.testBridgePort > 0) {
-						cTestLocateBridgePort = pData.testBridgePort;
-					}
-
-					if (Number.isInteger(pData.emoFormatBridgePort) && pData.emoFormatBridgePort > 0) {
-						cEmoFormatBridgePort = pData.emoFormatBridgePort;
-					}
-
-					cActiveWorkspaceRelativePath = String(pData.workspaceRelativePath || "").replace(/\\/g, "/");
-
 					if (pData.publishedBaseUrl) {
 						cPublishedBaseUrl = CleanPublishedBaseUrlForBridge(pData.publishedBaseUrl) || cPublishedBaseUrl;
 					}
 
 					ExposeChromeBridge();
 
-					const cPath = GetActivePreviewPath(pData);
+					const cPath = pData.route || pData.pagesRelativePath || pData.path || pData.workspaceRelativePath || "";
 
 					if (cAutoFollow) {
 						ApplyActivePagePath(cPath);
 					}
 
 					ApplyCursorPreviewTarget(pData.cursor, cPath);
-				}
-
-				function GetActivePreviewPath(pData) {
-					const cWorkspacePath = String(pData.workspaceRelativePath || "");
-
-					if (/(?:^|[\\/])src[\\/]site[\\/]tests[\\/]/i.test(cWorkspacePath)) {
-						return cWorkspacePath;
-					}
-
-					return pData.route || pData.pagesRelativePath || pData.path || cWorkspacePath || "";
 				}
 
 				function ApplyActivePagePath(pPath) {
@@ -1524,27 +1857,16 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 					cPath = cPath.replace(/^["']+|["']+$/g, "");
 					cPath = cPath.replace(/\\/g, "/");
 					cPath = cPath.replace(/\/+/g, "/");
-					const cTestMatch = cPath.match(/(?:^|\/)src\/site\/tests\/(.+)$/i);
-					const cIsTestPath = !!cTestMatch;
-
-					if (cTestMatch) {
-						cPath = "__emo_tests/" + cTestMatch[1];
-					}
-					else {
-						cPath = cPath.replace(/^.*?src\/pages\//i, "");
-						cPath = cPath.replace(/^\/+/, "");
-						cPath = cPath.replace(/^pages\//i, "");
-					}
-
+					cPath = cPath.replace(/^.*?src\/pages\//i, "");
+					cPath = cPath.replace(/^\/+/, "");
+					cPath = cPath.replace(/^pages\//i, "");
 					cPath = cPath.replace(/\.astro$/i, "");
 
-					if (!cIsTestPath) {
-						if (/^index$/i.test(cPath)) {
-							cPath = "";
-						}
-						else {
-							cPath = cPath.replace(/\/index$/i, "");
-						}
+					if (/^index$/i.test(cPath)) {
+						cPath = "";
+					}
+					else {
+						cPath = cPath.replace(/\/index$/i, "");
 					}
 
 					cPath = cPath.replace(/^\/+/, "");
@@ -1647,7 +1969,7 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 
 					if (cScrollSync) {
 						RegisterScrollSyncFrames();
-						QueueScrollSync(cLastManualScrollSource);
+						QueueScrollSync("land");
 					}
 				}
 
@@ -1673,19 +1995,23 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 
 					if (cLandFrame) {
 						cLandFrame.addEventListener("load", function () {
-							ResetFrameScrollRegistration("land");
-							RegisterScrollSyncFrame("land");
+							RegisterScrollSyncFrames();
 							ApplyPendingCursorToFrame("land");
+							QueueScrollSync("port");
 						});
 					}
 
 					if (cPortFrame) {
 						cPortFrame.addEventListener("load", function () {
-							ResetFrameScrollRegistration("port");
-							RegisterScrollSyncFrame("port");
+							RegisterScrollSyncFrames();
 							ApplyPendingCursorToFrame("port");
+							QueueScrollSync("land");
 						});
 					}
+
+					window.addEventListener("resize", function () {
+						QueueScrollSync(cPendingScrollSource || "land");
+					});
 
 					window.addEventListener("click", HideLocateMenu, true);
 					window.setInterval(RegisterScrollSyncFrames, 1000);
@@ -1696,19 +2022,8 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 					RegisterScrollSyncFrame("port");
 				}
 
-				function ResetFrameScrollRegistration(pName) {
-					const cWin = GetFrameWindow(pName);
-
-					if (cWin) {
-						cWin.__emoPreviewScrollSyncRegistered = false;
-					}
-
-					cProgrammaticScrollLocked[pName === "port" ? "port" : "land"] = false;
-				}
-
 				function RegisterScrollSyncFrame(pName) {
-					const cName = pName === "port" ? "port" : "land";
-					const cWin = GetFrameWindow(cName);
+					const cWin = GetFrameWindow(pName);
 
 					if (!cWin || cWin.__emoPreviewScrollSyncRegistered) {
 						return;
@@ -1724,74 +2039,39 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 					cWin.__emoPreviewScrollSyncRegistered = true;
 
 					cWin.addEventListener("scroll", function () {
-						HandleFrameScroll(cName);
-					}, { passive: true });
+						HandleFrameScroll(pName);
+					}, {
+						passive: true
+					});
 
-					cWin.addEventListener("wheel", function () {
-						MarkFrameUserScrollIntent(cName, 280);
-					}, { passive: true });
-
-					cWin.addEventListener("touchstart", function () {
-						const cState = cUserScrollStates[cName];
-						cState.PointerDown = true;
-						MarkFrameUserScrollIntent(cName, 1500);
-					}, { passive: true });
-
-					cWin.addEventListener("touchend", function () {
-						EndFramePointerScroll(cName);
-					}, { passive: true });
-
-					for (const cEventName of ["pointerdown", "mousedown"]) {
-						cWin.addEventListener(cEventName, function () {
-							const cState = cUserScrollStates[cName];
-							cState.PointerDown = true;
-							MarkFrameUserScrollIntent(cName, 1800);
-						}, { passive: true, capture: true });
-					}
-
-					for (const cEventName of ["pointerup", "pointercancel", "mouseup"]) {
-						cWin.addEventListener(cEventName, function () {
-							EndFramePointerScroll(cName);
-						}, { passive: true, capture: true });
-					}
-
-					cWin.document.addEventListener("keydown", function (pEvent) {
-						if (IsScrollNavigationKey(pEvent)) {
-							MarkFrameUserScrollIntent(cName, 650);
-						}
-					}, true);
+					cWin.addEventListener("resize", function () {
+						QueueScrollSync(pName);
+					}, {
+						passive: true
+					});
 
 					cWin.document.addEventListener("contextmenu", function (pEvent) {
-						HandleFrameContextMenu(pEvent, cName);
+						HandleFrameContextMenu(pEvent, pName);
 					}, true);
+
+					InstallFrameResizeObserver(cWin, pName);
 				}
 
-				function CreateUserScrollState() {
-					return { IntentUntil: 0, PointerDown: false };
-				}
+				function InstallFrameResizeObserver(pWin, pName) {
+					try {
+						if (!pWin.ResizeObserver || !pWin.document || pWin.__emoPreviewScrollSyncResizeObserver) {
+							return;
+						}
 
-				function IsScrollNavigationKey(pEvent) {
-					return !!pEvent && ["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(pEvent.key);
-				}
+						const cObserver = new pWin.ResizeObserver(function () {
+							QueueScrollSync(pName);
+						});
 
-				function MarkFrameUserScrollIntent(pName, pDuration) {
-					const cName = pName === "port" ? "port" : "land";
-					const cState = cUserScrollStates[cName];
-					cLastManualScrollSource = cName;
-					cProgrammaticScrollLocked[cName] = false;
-					cState.IntentUntil = Date.now() + Math.max(180, Number(pDuration) || 400);
-				}
-
-				function EndFramePointerScroll(pName) {
-					const cName = pName === "port" ? "port" : "land";
-					const cState = cUserScrollStates[cName];
-					cState.PointerDown = false;
-					cState.IntentUntil = Math.max(cState.IntentUntil, Date.now() + 240);
-				}
-
-				function HasFrameUserScrollIntent(pName) {
-					const cState = cUserScrollStates[pName === "port" ? "port" : "land"];
-					return cState.PointerDown || Date.now() <= cState.IntentUntil;
+						cObserver.observe(pWin.document.body);
+						pWin.__emoPreviewScrollSyncResizeObserver = cObserver;
+					}
+					catch {
+					}
 				}
 
 				function HandleFrameScroll(pName) {
@@ -1799,30 +2079,25 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 						return;
 					}
 
-					const cName = pName === "port" ? "port" : "land";
-
-					if (cProgrammaticScrollLocked[cName]) {
+					if (pName === cIgnoredScrollName && Date.now() < cIgnoredScrollUntil) {
 						return;
 					}
 
-					if (!HasFrameUserScrollIntent(cName)) {
-						return;
-					}
-
-					cLastManualScrollSource = cName;
-					QueueScrollSync(cName);
+					QueueScrollSync(pName);
 				}
 
 				function QueueScrollSync(pSourceName) {
-					if (!cScrollSync || !IsBothFramesVisible() || Date.now() < cCursorScrollSuspendUntil) {
+					if (!cScrollSync || !IsBothFramesVisible()) {
 						return;
 					}
 
-					cPendingScrollSource = pSourceName === "port" ? "port" : "land";
+					cPendingScrollSource = pSourceName;
 
-					if (!cScrollSyncFrame) {
-						cScrollSyncFrame = window.requestAnimationFrame(ApplyQueuedScrollSync);
+					if (cScrollSyncFrame) {
+						return;
 					}
+
+					cScrollSyncFrame = window.requestAnimationFrame(ApplyQueuedScrollSync);
 				}
 
 				function ApplyQueuedScrollSync() {
@@ -1830,6 +2105,7 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 
 					const cSourceName = cPendingScrollSource === "port" ? "port" : "land";
 					const cTargetName = cSourceName === "land" ? "port" : "land";
+
 					const cSourceWin = GetFrameWindow(cSourceName);
 					const cTargetWin = GetFrameWindow(cTargetName);
 
@@ -1840,24 +2116,13 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 					const cState = GetFrameScrollState(cSourceWin);
 					const cTargetTop = GetTargetScrollTop(cTargetWin, cState);
 
-					if (Number.isFinite(cTargetTop)) {
-						ScrollFrameProgrammatically(cTargetName, cTargetWin, cTargetTop);
-					}
-				}
-
-				function ScrollFrameProgrammatically(pName, pWin, pTop) {
-					const cName = pName === "port" ? "port" : "land";
-					const cScrollElement = GetFrameScrollElement(pWin.document);
-					const cCurrentTop = pWin.scrollY || cScrollElement.scrollTop || 0;
-					const cTargetTop = Math.max(0, Number(pTop) || 0);
-
-					if (Math.abs(cCurrentTop - cTargetTop) <= 0.75) {
+					if (!Number.isFinite(cTargetTop)) {
 						return;
 					}
 
-					cProgrammaticScrollLocked[cName] = true;
-					cUserScrollStates[cName].IntentUntil = 0;
-					pWin.scrollTo({ top: cTargetTop, left: 0, behavior: "auto" });
+					cIgnoredScrollName = cTargetName;
+					cIgnoredScrollUntil = Date.now() + 140;
+					cTargetWin.scrollTo(0, cTargetTop);
 				}
 
 				function GetFrameWindow(pName) {
@@ -1969,31 +2234,29 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 					const cOffsetRatio = ClampNumber((cFocusY - cCurrent.Top) / cRange, 0, 1);
 
 					return {
+						Id: cCurrent.Id,
 						Index: cIndex,
-						Count: cAnchors.length,
 						OffsetRatio: cOffsetRatio
 					};
 				}
 
 				function GetTargetAnchorScrollTop(pWin, pAnchorState) {
-					if (!pAnchorState || !Number.isInteger(pAnchorState.Index)) {
+					if (!pAnchorState || !pAnchorState.Id) {
 						return NaN;
 					}
 
 					const cAnchors = GetSyncAnchors(pWin.document);
+					let cIndex = cAnchors.findIndex(function (pAnchor) {
+						return pAnchor.Id === pAnchorState.Id;
+					});
 
-					if (cAnchors.length < 2) {
+					if (cIndex < 0) {
+						cIndex = Math.min(pAnchorState.Index, cAnchors.length - 1);
+					}
+
+					if (cIndex < 0) {
 						return NaN;
 					}
-
-					let cIndex = pAnchorState.Index;
-					const cSourceCount = Number(pAnchorState.Count) || 0;
-
-					if (cSourceCount > 1 && cSourceCount !== cAnchors.length) {
-						cIndex = Math.round((cIndex / (cSourceCount - 1)) * (cAnchors.length - 1));
-					}
-
-					cIndex = Math.max(0, Math.min(cAnchors.length - 1, cIndex));
 
 					const cScrollElement = GetFrameScrollElement(pWin.document);
 					const cViewportHeight = pWin.innerHeight || cScrollElement.clientHeight || 1;
@@ -2003,36 +2266,49 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 					const cNext = cAnchors[cIndex + 1];
 					const cEndTop = cNext ? cNext.Top : cScrollHeight;
 					const cRange = Math.max(1, cEndTop - cCurrent.Top);
-					const cFocusY = cCurrent.Top + cRange * ClampNumber(Number(pAnchorState.OffsetRatio) || 0, 0, 1);
+					const cFocusY = cCurrent.Top + cRange * pAnchorState.OffsetRatio;
 
 					return ClampNumber(cFocusY - cViewportHeight * 0.5, 0, cMaxScroll);
 				}
 
 				function GetSyncAnchors(pDoc) {
-					const cMain = pDoc.querySelector("main");
-					let cElements = cMain ? Array.from(cMain.children) : [];
+					let cElements = Array.from(pDoc.querySelectorAll("main > [id], body > [id], section[id], article[id], header[id], footer[id], [data-hero][id]"));
 
 					if (cElements.length < 2) {
-						cElements = Array.from(pDoc.querySelectorAll("body > section, body > article, body > main > *"));
+						cElements = Array.from(pDoc.querySelectorAll("main > *, body > *, section, article, header, footer, [data-hero]"));
 					}
 
+					const cUsed = new Set();
 					const cAnchors = [];
-					const cWin = pDoc.defaultView;
-					const cScrollTop = cWin ? cWin.scrollY : 0;
 
-					for (const cElement of cElements) {
-						const cRect = cElement.getBoundingClientRect();
-						const cStyle = cWin && cWin.getComputedStyle ? cWin.getComputedStyle(cElement) : undefined;
+					for (let i = 0; i < cElements.length; i++) {
+						const cElement = cElements[i];
+						let cId = String(cElement.id || "").trim();
 
-						if (cRect.width <= 0 || cRect.height <= 20 || (cStyle && (cStyle.display === "none" || cStyle.visibility === "hidden" || cStyle.position === "fixed"))) {
+						if (!cId) {
+							cId = "__auto_" + i;
+						}
+
+						if (cUsed.has(cId)) {
 							continue;
 						}
 
+						const cRect = cElement.getBoundingClientRect();
+
+						if (cRect.width <= 0 || cRect.height <= 10) {
+							continue;
+						}
+
+						cUsed.add(cId);
 						cAnchors.push({
-							Index: cAnchors.length,
-							Top: cRect.top + cScrollTop
+							Id: cId,
+							Top: cRect.top + (pDoc.defaultView ? pDoc.defaultView.scrollY : 0)
 						});
 					}
+
+					cAnchors.sort(function (pFirst, pSecond) {
+						return pFirst.Top - pSecond.Top;
+					});
 
 					return cAnchors;
 				}
@@ -2055,13 +2331,6 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 
 					cLastCursorStamp = pCursor.updatedAt;
 					cPendingCursorTarget = pCursor;
-					cCursorScrollSuspendUntil = Date.now() + 900;
-					cPendingScrollSource = "";
-
-					if (cScrollSyncFrame) {
-						window.cancelAnimationFrame(cScrollSyncFrame);
-						cScrollSyncFrame = 0;
-					}
 
 					window.setTimeout(function () {
 						ApplyPendingCursorToFrame("land");
@@ -2089,7 +2358,9 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 					const cTop = GetElementScrollTop(cWin, cElement, 0.32);
 
 					if (Number.isFinite(cTop)) {
-						ScrollFrameProgrammatically(pName, cWin, cTop);
+						cIgnoredScrollName = pName;
+						cIgnoredScrollUntil = Date.now() + 180;
+						cWin.scrollTo(0, cTop);
 					}
 				}
 
@@ -2295,7 +2566,6 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 						mode: pMode || "selItem",
 						frame: pFrameName || "land",
 						route: GetCurrentPreviewRoute(),
-						workspaceRelativePath: cActiveWorkspaceRelativePath,
 						tagName: cTarget && cTarget.tagName ? cTarget.tagName.toLowerCase() : "",
 						id: cTarget && cTarget.id ? cTarget.id : "",
 						classNames: cTarget && cTarget.classList ? Array.from(cTarget.classList).slice(0, 12) : [],
@@ -2313,27 +2583,7 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 					}
 
 					if (pMode === "ownerSection" || pMode === "visible") {
-						const cStructuralOwner = pElement.closest('[data-emo-auto-container="true"],[data-hero],section,article,header,footer');
-
-						if (cStructuralOwner) {
-							return cStructuralOwner;
-						}
-
-						const cMain = pElement.closest("main");
-
-						if (cMain) {
-							let cOwner = pElement;
-
-							while (cOwner.parentElement && cOwner.parentElement !== cMain) {
-								cOwner = cOwner.parentElement;
-							}
-
-							if (cOwner.parentElement === cMain) {
-								return cOwner;
-							}
-						}
-
-						return pElement.closest("div") || pElement;
+						return pElement.closest("[data-hero],section,article,header,footer,main") || pElement.closest("div") || pElement;
 					}
 
 					return pElement;
@@ -2388,127 +2638,28 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 				}
 
 				async function SendLocatePayload(pPayload) {
-					const cRoute = String(pPayload && pPayload.route ? pPayload.route : "");
-					const cIsTestRoute = /^__emo_tests(?:\/|$)/i.test(cRoute);
-					const cPorts = GetLocateBridgeCandidates(cIsTestRoute);
-					const cFinalPayload = { ...(pPayload || {}), bridgePorts: cPorts };
-					let cLastError = undefined;
-
 					try {
-						const cSameOriginResult = await PostLocatePayloadSameOrigin(cFinalPayload);
+						const cResponse = await fetch("http://127.0.0.1:" + cLocateBridgePort + "/__emo_preview_locate", {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json"
+							},
+							body: JSON.stringify(pPayload || {})
+						});
 
-						if (cSameOriginResult && cSameOriginResult.ok) {
-							return;
+						if (!cResponse.ok) {
+							throw new Error("HTTP " + cResponse.status);
 						}
 
-						cLastError = new Error(cSameOriginResult && cSameOriginResult.error ? cSameOriginResult.error : "Local preview bridge rejected the locate request");
+						const cResult = await cResponse.json();
+
+						if (!cResult || !cResult.ok) {
+							throw new Error(cResult && cResult.error ? cResult.error : "Locate failed");
+						}
 					}
 					catch (cError) {
-						cLastError = cError;
-					}
-
-					for (const cBridgePort of cPorts) {
-						try {
-							const cResult = await PostLocatePayload(cBridgePort, cFinalPayload);
-
-							if (cResult && cResult.ok) {
-								if (cIsTestRoute) {
-									cTestLocateBridgePort = cBridgePort;
-								}
-
-								return;
-							}
-
-							cLastError = new Error(cResult && cResult.error ? cResult.error : "Locate failed");
-						}
-						catch (cError) {
-							cLastError = cError;
-						}
-					}
-
-					console.error("Emo Preview locate request failed", cLastError);
-					const cErrorText = cLastError && cLastError.message ? "\n" + cLastError.message : "";
-					window.alert("Locate in code failed. تعذر الاتصال بجسر EmoFormat أو لم يتم العثور على العنصر المقابل." + cErrorText);
-				}
-
-				async function PostLocatePayloadSameOrigin(pPayload) {
-					const cAbortController = new AbortController();
-					const cTimeout = window.setTimeout(function () {
-						cAbortController.abort();
-					}, 2400);
-
-					try {
-						const cResponse = await fetch("/__emo_preview_locate", {
-							method: "POST",
-							headers: { "Content-Type": "application/json" },
-							body: JSON.stringify(pPayload || {}),
-							signal: cAbortController.signal
-						});
-						let cResult = undefined;
-
-						try {
-							cResult = await cResponse.json();
-						}
-						catch {
-						}
-
-						return cResponse.ok ? cResult : { ok: false, error: cResult && cResult.error ? cResult.error : "HTTP " + cResponse.status };
-					}
-					finally {
-						window.clearTimeout(cTimeout);
-					}
-				}
-
-				function GetLocateBridgeCandidates(pIsTestRoute) {
-					const cPorts = [];
-					const AddPort = function (pPort) {
-						if (Number.isInteger(pPort) && pPort > 0 && !cPorts.includes(pPort)) {
-							cPorts.push(pPort);
-						}
-					};
-
-					if (pIsTestRoute) {
-						AddPort(cEmoFormatBridgePort);
-						AddPort(cTestLocateBridgePort);
-					}
-					else {
-						AddPort(cLocateBridgePort);
-						AddPort(cEmoFormatBridgePort);
-					}
-
-					for (let cPort = cTestLocateBridgeFirstPort; cPort <= cTestLocateBridgeLastPort; cPort++) {
-						AddPort(cPort);
-					}
-
-					AddPort(cLocateBridgePort);
-					return cPorts;
-				}
-
-				async function PostLocatePayload(pBridgePort, pPayload) {
-					const cAbortController = new AbortController();
-					const cTimeout = window.setTimeout(function () {
-						cAbortController.abort();
-					}, 650);
-
-					try {
-						const cResponse = await fetch("http://127.0.0.1:" + pBridgePort + "/__emo_preview_locate", {
-							method: "POST",
-							headers: { "Content-Type": "application/json" },
-							body: JSON.stringify(pPayload || {}),
-							signal: cAbortController.signal
-						});
-						let cResult = undefined;
-
-						try {
-							cResult = await cResponse.json();
-						}
-						catch {
-						}
-
-						return cResponse.ok ? cResult : { ok: false, error: cResult && cResult.error ? cResult.error : "HTTP " + cResponse.status };
-					}
-					finally {
-						window.clearTimeout(cTimeout);
+						console.error("Emo Preview locate request failed", cError);
+						window.alert("Locate in code failed. تأكد أن إضافة VS Code مركبة وأن نفس المشروع مفتوح.");
 					}
 				}
 

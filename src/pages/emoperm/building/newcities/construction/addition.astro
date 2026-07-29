@@ -1,7 +1,11 @@
 ---
-import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
+import { CardsGr } from "@/Widgets/Cards";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { RespImg } from "@/Widgets/Media";
+import { EmoFaq, ESec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStrip } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
 
 
@@ -35,22 +39,24 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<Hero
-		pImgL="https://images.alborsaanews.com/2021/01/1541584472_108_5908246____.jpg"
-		pImgP="https://media.gemini.media/img/portrait/2024/11/26/2024_11_26_13_45_26_999.webp"
-		pTitle="ترخيص تعلية بالمدن الجديدة"
-		pDesc="التعلية داخل جهاز المدينة ليست قرارًا فوق السطح؛ هي مراجعة لكود الأرض والرخصة السابقة واشتراطات الجهاز وقدرة المبنى على تحمل الدور الجديد"
-		pTitleClr={Colors.WhiteOff}
-		pDescClr={Colors.WhiteOff}
-		pHzAlign="center"
-		pVrAlign="center"
-		pBlurL="on"
-		pBlurP="on"
-		pPosL="42% 42% 10% 8%"
-		pPosP="14% 6% 18% 6%"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="راجع إمكانية التعلية" />
+		<VrStack
+			pSize={new Size(new NumPer("40%","95%"))}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))}
+			pHzAlign={"Center"}
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("ترخيص تعلية بالمدن الجديدة")}
+				pText={Text.Body.Centered.OfText("التعلية داخل جهاز المدينة ليست قرارًا فوق السطح؛ هي مراجعة لكود الأرض والرخصة السابقة واشتراطات الجهاز وقدرة المبنى على تحمل الدور الجديد")}
+			/>
+
+			<Emograph pText={Text.Body.Bold.Centered.OfText("القاهرة الجديدة - التجمع - أكتوبر - الشيخ زايد - العبور - بدر")} />
+
+			<EmoCall BlackSky pText="تواصل معنا" />
+
+		</VrStack>
 
 	</Hero>
 
@@ -60,8 +66,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.Creamy)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -69,8 +78,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 			pDesc="في المدن الجديدة لا يكفي أن يكون السطح خاليًا أو أن المالك يريد دورًا إضافيًا؛ يجب أن يمر الطلب من بوابة الجهاز وبوابة الرخصة السابقة وبوابة السلامة الإنشائية"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg(Colors.Creamy)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -146,307 +158,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.SkyLite};`}
-			pTitle="لا تخلط بين التعلية وزيادة مسطح دور السطح"
-			pDesc="في منظومة المدن الجديدة تظهر طلبات متقاربة في الاسم لكنها مختلفة في المعنى: تعلية، تعديل، إضافة، استكمال، وزيادة مسطح مباني بدور السطح"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<RespImg
-					pImg={new EmoMediaData(
-						"Img",
-						"https://media.gemini.media/img/portrait/2024/11/26/",
-						"2024_11_26_13_45_26_999.webp",
-						false,
-						"مقر هيئة المجتمعات العمرانية الجديدة",
-						new Size(new NumPer(450, "100%"), new NumPer("auto", "auto"))
-					)}
-				/>
-
-				<VrStack
-					pWidth={new Pixel(750, 340)}
-					pGap={new Pixel(25, 15)}
-					pPad={new Pixel(0, 0)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.WithAlign("right").OfText("التعلية ليست دائمًا روف")}
-						pText={Text.Body.WithAlign("right").OfText(`بعض العملاء يقولون "عايز أعلّي" وهو يقصد استكمال غرف السطح أو زيادة مسطح الروف، وعميل آخر يقصد إضافة دور كامل، وثالث يقصد تعديل رخصة قائمة، ورابع لديه تنفيذ قائم ويريد تقنينه قبل استكماله. داخل جهاز المدينة، اختيار اسم الطلب ليس تفصيلًا لغويًا؛ لأنه يحدد المستندات والرسومات والموافقة المطلوبة والرسوم والمراجعات. لذلك يجب فصل ترخيص التعلية عن صفحة استكمال الروف: التعلية هنا تعني إضافة أو تعديل بنائي على مبنى قائم داخل مدينة جديدة، أما زيادة مسطح دور السطح لها صفحة مستقلة لأنها ترتبط بقرارات ونسب وسقف مسطح مخصوص.`)}
-						pSize={new Size(new NumPer(750, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<EmoCall BlackSky pText="حدد نوع طلبك قبل الرسم" />
-
-				</VrStack>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="شاشة البوابة قبل لوحة المعماري"
-			pDesc="التقديم الإلكتروني في المدن الجديدة جعل بيانات القطعة والمالك والمكتب جزءًا من صحة الملف وليس مجرد خطوة إدارية بعد التصميم"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<VrStack
-				pWidth={new Pixel(1200, 340)}
-				pGap={new Pixel(30, 15)}
-				pPad={new Pixel(30, 15)}
-			>
-
-				<Emograph
-					pTitle={Text.H3.Centered.OfText("ما الذي يجب أن يظهر صحيحًا قبل رفع ملف التعلية؟")}
-					pText={Text.Body.Centered.OfText("في جهاز المدينة، الملف الرقمي لا يسامح اختلاف الاسم أو كود الأرض أو نوع الخدمة. لذلك نراجع بيانات الطلب كما نراجع اللوحات: المدينة، رقم القطعة، المالك، التوكيل، المكتب، الرخص السابقة، نوع الطلب، وملفات الرسومات.")}
-					pSize={new Size(new NumPer(1100, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<HzStack pGap={new Pixel(25, 15)} pPad={new Pixel(0, 0)}>
-
-					<EmoList
-						pWidth={new RespString("600px", "100%")}
-						pTitle={Text.H3.Centered.OfText("بيانات لا تحتمل التخمين")}
-						pDesc={Text.Body.Centered.OfText("هذه البيانات تحدد هل الطلب سيُقبل للفحص أم يتوقف قبل المراجعة الفنية")}
-						pHeadBg={new ElemBg(Colors.WhiteOff)}
-						pItemsBg={new ElemBg(Colors.SkyLite)}
-						pItemFnt={Text.Body}
-						pNumbered={true}
-						pItems={[
-							{ Title: "كود الأرض", Items: ["ربط الطلب بالقطعة الصحيحة داخل جهاز المدينة.", "مطابقة رقم القطعة والمنطقة والحي والمجاورة مع مستندات الملكية."] },
-							{ Title: "صفة مقدم الطلب", Items: ["مالك فرد، شركة، وكيل، شريك، أو ممثل قانوني.", "التأكد من أن التوكيل يسمح بطلب التعلية أو تعديل الترخيص."] },
-							{ Title: "نوع الخدمة", Items: ["تعلية، تعديل، إضافة، استكمال، زيادة مسطح دور سطح، أو تحديد موقف تنفيذي.", "اختيار النوع الخطأ يغير المستندات والرسوم والمراجعة."] },
-							{ Title: "حساب المكتب", Items: ["بيانات المهندس أو المكتب الهندسي.", "الاعتمادات المطلوبة والتوقيع والختم ورفع الملفات بالصيغة المقبولة."] }
-						]}
-					/>
-
-					<EmoList
-						pWidth={new RespString("600px", "100%")}
-						pTitle={Text.H3.Centered.OfText("ملفات لا ترفع عشوائيًا")}
-						pDesc={Text.Body.Centered.OfText("الملف الإلكتروني السيئ قد يعطل الطلب حتى لو كان التصميم قابلًا للمراجعة")}
-						pHeadBg={new ElemBg(Colors.WhiteOff)}
-						pItemsBg={new ElemBg(Colors.Creamy)}
-						pItemFnt={Text.Body}
-						pNumbered={true}
-						pItems={[
-							{ Title: "رخصة ورسومات سابقة", Items: ["الرخصة القديمة إن وجدت.", "اللوحات المعتمدة القديمة أو ما يثبت الوضع المرخص."] },
-							{ Title: "بيان الصلاحية", Items: ["بيان حديث أو اشتراطات معتمدة.", "مطابقة الارتفاع والسطح والردود مع التعلية المقترحة."] },
-							{ Title: "ملفات PDF و CAD", Items: ["لوحات مقروءة ومختومة.", "تسمية واضحة لكل ملف لتقليل الاستيفاءات."] },
-							{ Title: "مستندات مالية وإدارية", Items: ["موقف الأقساط أو المستحقات أو المهلة.", "محضر الاستلام أو العقد أو إخطار التخصيص حسب الحالة."] }
-						]}
-					/>
-
-				</HzStack>
-
-			</VrStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
-			pTitle="اختبار الرخصة السابقة"
-			pDesc="لا يوجد ترخيص تعلية قوي فوق رخصة قديمة غير مفهومة أو تنفيذ قائم غير مطابق"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<VrStack
-					pWidth={new Pixel(500, 340)}
-					pGap={new Pixel(20, 15)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.SkyLite)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("نسأل الجهاز عن الماضي قبل أن نرسم المستقبل")}
-						pText={Text.Body.WithAlign("right").OfText("الرخصة السابقة تحدد المساحات المرخصة، عدد الأدوار، نظام السطح، استخدام البدروم أو الجراج، مواضع الأعمدة والمناور، وموقف أي تعديلات تمت. إذا كان المنفذ على الطبيعة مختلفًا عن الرخصة، فالتعلية قد لا تكون طلبًا مباشرًا، بل قد تحتاج تحديد موقف تنفيذي أو تعديل أو تصحيح قبل دخول مرحلة الدور الجديد.")}
-						pSize={new Size(new NumPer(450, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-				<EmoList
-					pWidth={new RespString("700px", "100%")}
-					pTitle={Text.H3.Centered.OfText("علامات خطر في الرخصة القديمة")}
-					pDesc={Text.Body.Centered.OfText("وجود واحدة من هذه العلامات لا يعني رفض التعلية تلقائيًا، لكنه يعني أن الملف يحتاج فحصًا قبل التصميم")}
-					pHeadBg={new ElemBg(Colors.Creamy)}
-					pItemsBg={new ElemBg(Colors.WhiteOff)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						{ Title: "الرخصة غير متاحة", Items: ["المالك لا يملك نسخة واضحة من الرخصة أو الرسومات السابقة.", "هنا قد نحتاج شهادة بيانات أو مستند بديل من الجهاز."] },
-						{ Title: "الواقع أعلى من المرخص", Items: ["وجود أدوار أو غرف أو تعديلات لم تكن ضمن الرخصة السابقة.", "هذا قد يحول الملف إلى تحديد موقف أو تصالح أو تعديل قبل التعلية."] },
-						{ Title: "تغيير في الاستخدام", Items: ["جراج تحول إلى محلات أو مخازن.", "بدروم مستخدم بطريقة غير التي ظهرت في الرخصة."] },
-						{ Title: "تعديلات في الهيكل", Items: ["تكسير حوائط أو تغيير فتحات أو تعديل أعمدة أو تحميل السطح بخزانات وغرف.", "هذه التعديلات تؤثر على تقرير التحمل الإنشائي."] }
-					]}
-				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.SkyLite};`}
-			pTitle="التعلية قرار إنشائي قبل أن تكون قرارًا تسويقيًا"
-			pDesc="فيلا أو عمارة داخل مدينة جديدة قد تبدو منتظمة من الخارج، لكن الحكم الحقيقي يكون من الأساسات والأعمدة والأحمال والرخصة السابقة"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<VrStack
-				pWidth={new Pixel(1200, 340)}
-				pGap={new Pixel(30, 15)}
-				pPad={new Pixel(30, 15)}
-			>
-
-				<Emograph
-					pTitle={Text.H3.Centered.OfText("السطح لا يقول الحقيقة كاملة")}
-					pText={Text.Body.WithAlign("right").OfText(`المالك يرى أن السطح واسع وأن إضافة دور ستزيد قيمة العقار، لكن المهندس يرى شيئًا آخر: هل الأساسات صممت أصلًا لهذا الحمل؟ هل الأعمدة القائمة كافية؟ هل تم تغيير الجراج أو فتح محلات أو إضافة خزانات مياه أو غرف خدمات؟ هل ظهرت شروخ أو هبوط أو صدأ تسليح؟ هل المبنى منفذ على نفس الرسومات المعتمدة؟ وهل التعلية المقترحة ستحتاج تدعيمًا؟ في المدن الجديدة، وجود رخصة أو كراسة لا يلغي هذا الفحص، لأن الجهاز لن يتحمل مسؤولية توقيع هندسي ضعيف فوق مبنى قائم. لذلك نبدأ بالتحمل الإنشائي، ثم نحدد هل ندخل ترخيص التعلية أم نرفضها أو نقترح تدعيمًا أو نقلل المسطح.`)}
-					pSize={new Size(new NumPer(1100, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<CardsGr
-					pWidth={new RespString("1200px", "100%")}
-					pCardBg={new ElemBg(Colors.WhiteOff)}
-					pGrTitle={Text.H3.Centered.OfText("أعلام حمراء قبل توقيع التعلية")}
-					pCardTitleFnt={Text.H4}
-					pCardBodyFnt={Text.Body}
-					pSpacing={20}
-					pTopic1={new Topic("شروخ مائلة أو هبوط", "لا يتم التعامل معها كملاحظة شكلية؛ قد تغير قرار التعلية بالكامل.")}
-					pTopic2={new Topic("تعديلات في الدور الأرضي", "فتح واجهات، إزالة حوائط، تغيير جراج، أو تعديل أعمدة يؤثر مباشرة على التحمل.")}
-					pTopic3={new Topic("غرف وخزانات فوق السطح", "الأحمال الموجودة قبل التعلية يجب حسابها، لا تجاهلها كأن السطح خالٍ.")}
-					pTopic4={new Topic("غياب رسومات إنشائية قديمة", "عند غياب الرسومات، يزيد احتياج المعاينة والرفع والاختبارات قبل أي قرار.")}
-				/>
-
-			</VrStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.BistageDark};`}
-			pTitle="متى تكون التعلية داخل مدينة جديدة مسارًا مختلفًا؟"
-			pDesc="اسم المدينة لا يكفي؛ نوع القطعة والمنطقة والطرح والرخصة السابقة يغيرون مسار التعامل"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<VrStack
-				pWidth={new Pixel(1300, 340)}
-				pGap={new Pixel(25, 15)}
-				pPad={new Pixel(30, 15)}
-			>
-
-				<HzStack pGap={new Pixel(25, 15)} pPad={new Pixel(0, 0)}>
-
-					<Emograph
-						style = {`background:${Colors.WhiteOff}; padding:25px; border-radius:18px;`}
-						pTitle={Text.H4.Centered.OfText("القاهرة الجديدة والتجمعات")}
-						pText={Text.Body.Centered.OfText("الأكثر حساسية في مطابقة كود الأرض وبيانات البوابة ونوع الخدمة، خصوصًا مع تعدد المناطق: بيت الوطن، الأندلس، شمال الرحاب، اللوتس، البنفسج، التجمع الأول والثالث والخامس.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						style = {`background:${Colors.SkyLite}; padding:25px; border-radius:18px;`}
-						pTitle={Text.H4.Centered.OfText("الشروق وبدر والعبور")}
-						pText={Text.Body.Centered.OfText("تختلف فيها مناطق الفيلات والعمارات والامتدادات الحديثة، وقد تتغير قراءة التعلية حسب الحي والمجاورة والنموذج المعماري والمهلة والموقف التنفيذي.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						style = {`background:${Colors.GreenLite}; padding:25px; border-radius:18px;`}
-						pTitle={Text.H4.Centered.OfText("أكتوبر وزايد وحدائق أكتوبر")}
-						pText={Text.Body.Centered.OfText("لا يصح جمعها في ملف واحد؛ فالحزام الأخضر والمناطق السياحية والاستثمارية والسكنية لها اشتراطات ومواقف جهاز مختلفة.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						style = {`background:${Colors.Creamy}; padding:25px; border-radius:18px;`}
-						pTitle={Text.H4.Centered.OfText("مدن حديثة أو مناطق قيود")}
-						pText={Text.Body.Centered.OfText("العاصمة، سفنكس، أكتوبر الجديدة، حدائق العاصمة، وبعض المناطق القريبة من مطارات أو محاور أو منشآت قد تحتاج مراجعة قيود ارتفاع أو جهات خاصة قبل اعتماد التعلية.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</HzStack>
-
-				<Emograph
-					pTitle={Text.H3.Centered.OfText("قاعدة العمل")}
-					pText={Text.Body.Centered.OfText("لا يتم وعد العميل بإمكانية التعلية بناءً على اسم المدينة فقط. يجب معرفة المدينة، رقم القطعة، المنطقة، الرخصة السابقة، نوع الطلب، حالة التنفيذ، وهل الطلب تعلية فعلية أم زيادة مسطح دور سطح أم تعديل رخصة.")}
-					pSize={new Size(new NumPer(1100, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</VrStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -454,8 +170,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 			pDesc="القائمة النهائية يحددها جهاز المدينة ونوع الخدمة، لكن هذا هو الملف الذي نراجعه قبل رفع الطلب"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -501,8 +220,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.Creamy)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -510,8 +232,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 			pDesc="أعمال التعلية تدخل في نطاق مراجعة أخطار البناء، لذلك يجب تجهيز الملف كملف مسؤولية لا كملف رسومات فقط"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg(Colors.Creamy)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -554,88 +279,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
-			pTitle="متى نرفض بدء صفحة التعلية كترخيص مباشر؟"
-			pDesc="أحيانًا يكون القرار المهني الصحيح أن نبدأ بتحديد موقف أو تقرير تحمل أو تصحيح رخصة، لا بطلب تعلية"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<VrStack
-				pWidth={new Pixel(1200, 340)}
-				pGap={new Pixel(25, 15)}
-				pPad={new Pixel(30, 15)}
-			>
-
-				<HzStack pGap={new Pixel(20, 15)} pPad={new Pixel(0, 0)}>
-
-					<Emograph
-						style = {`background:${Colors.SkyLite}; padding:25px; border-radius:18px;`}
-						pTitle={Text.H4.Centered.OfText("رخصة غائبة")}
-						pText={Text.Body.Centered.OfText("لو الرخصة القديمة غير موجودة أو غير واضحة، نحتاج استخراج بيانات أو مراجعة ملف الجهاز قبل أي رسومات تعلية.")}
-						pSize={new Size(new NumPer(380, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						style = {`background:${Colors.Creamy}; padding:25px; border-radius:18px;`}
-						pTitle={Text.H4.Centered.OfText("تنفيذ غير مطابق")}
-						pText={Text.Body.Centered.OfText("لو المنفذ على الطبيعة مختلف عن المرخص، قد يتحول المسار إلى تعديل أو تحديد موقف أو تصالح قبل التعلية.")}
-						pSize={new Size(new NumPer(380, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						style = {`background:${Colors.OrangeLite}; padding:25px; border-radius:18px;`}
-						pTitle={Text.H4.Centered.OfText("هيكل لا يتحمل")}
-						pText={Text.Body.Centered.OfText("لو التقرير الإنشائي لا يسمح، فالترخيص ليس حلًا؛ الحل إما تدعيم مدروس أو رفض التعلية.")}
-						pSize={new Size(new NumPer(380, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</HzStack>
-
-				<HzStack pGap={new Pixel(20, 15)} pPad={new Pixel(0, 0)}>
-
-					<Emograph
-						style = {`background:${Colors.GreenLite}; padding:25px; border-radius:18px;`}
-						pTitle={Text.H4.Centered.OfText("قيد ارتفاع")}
-						pText={Text.Body.Centered.OfText("لو جهاز المدينة أو قيود الطيران أو التخطيط لا يسمحون بالارتفاع، فالمشكلة تنظيمية حتى لو المبنى يتحمل.")}
-						pSize={new Size(new NumPer(380, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						style = {`background:${Colors.Sky}; padding:25px; border-radius:18px;`}
-						pTitle={Text.H4.Centered.OfText("سطح مستغل")}
-						pText={Text.Body.Centered.OfText("غرف، خزانات، مظلات، أو خدمات فوق السطح تغير الأحمال ونطاق الترخيص، ولا يجوز تجاهلها.")}
-						pSize={new Size(new NumPer(380, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						style = {`background:${Colors.WhiteOff}; padding:25px; border-radius:18px;`}
-						pTitle={Text.H4.Centered.OfText("مهلة أو مستحقات")}
-						pText={Text.Body.Centered.OfText("لو توجد مشكلة في المهلة أو الأقساط أو غرامات أو موقف مالي، قد يتوقف التعامل قبل الفحص الفني.")}
-						pSize={new Size(new NumPer(380, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</HzStack>
-
-			</VrStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Sky};`}
@@ -643,8 +291,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 			pDesc="نبدأ من صلاحية الحالة لا من إنتاج لوحات، لأن اللوحات الضعيفة فوق وضع غير محسوم لا تتحول إلى رخصة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 

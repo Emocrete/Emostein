@@ -1,7 +1,10 @@
 ---
 import BLayout from "@/Layout.astro";
-import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
-import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { RespImg } from "@/Widgets/Media";
+import { EmoFaq, ESec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStrip } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
 ---
 
 
@@ -35,179 +38,24 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 
 
 
-	<Hero
-		pImgL="https://www.planndesignpro.com/admin/uploads/images/Pharmaceutical-Factory-2D-CAD-Layout-30x60m-Floor-Plans.jpg"
-		pImgP="https://www.vaisala.com/sites/default/files/inline-images/LIFT-pharmaceuticals-warehouse-800x450.jpg"
-		pTitle="رسم هندسي لمخزن أدوية"
-		pDesc="لوحة هندسية معتمدة توضح أبعاد المخزن وارتفاعه وواجهته وفتحات التهوية وتجهيزاته قبل معاينة هيئة الدواء المصرية"
-		pTitleClr={Colors.WhiteOff}
-		pDescClr={Colors.WhiteOff}
-		pHzAlign="center"
-		pVrAlign="center"
-		pBlurL="on"
-		pBlurP="on"
-		pPosL="40% 38% 10% 8%"
-		pPosP="14% 6% 18% 6%"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="اطلب رفع المقاسات" />
-
-	</Hero>
-
-
-
-
-
-
-
-	<ESec
-		pBg={new ElemBg(Colors.Creamy)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
-			pTitle="الرسم الهندسي هو بداية ملف مخزن الأدوية"
-			pDesc="اللوحة المطلوبة للترخيص تربط بين المساحة الفعلية واشتراطات التخزين والتوزيع الجيد ومعاينة هيئة الدواء"
-		/>
-
-		<EmoStrip
-			pBg={new ElemBg(Colors.Creamy)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
+		<VrStack
+			pSize={new Size(new NumPer("40%","95%"))}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))}
+			pHzAlign={"Center"}
 		>
 
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("رسم هندسي لمخزن أدوية")}
+				pText={Text.Body.Centered.OfText("لوحة هندسية معتمدة توضح أبعاد المخزن وارتفاعه وواجهته وفتحات التهوية وتجهيزاته قبل معاينة هيئة الدواء المصرية")}
+			/>
 
-				<VrStack
-					pWidth={new Pixel(400, 340)}
-					pGap={new Pixel(15, 10)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.WhiteOff)}
-				>
+			<EmoCall BlackSky />
 
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("رفع مقاسات")}
-						pText={Text.Body.Centered.OfText("نقيس الأطوال والارتفاعات وفتحات التهوية والمدخل ودورة المياه ومواقع الأعمدة والصندرة إن وجدت.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
+		</VrStack>
 
-				</VrStack>
-
-				<VrStack
-					pWidth={new Pixel(400, 340)}
-					pGap={new Pixel(15, 10)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.SkyLite)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("لوحة 1:50")}
-						pText={Text.Body.Centered.OfText("نجهز الرسم بمقياس 1:50، مع مسقط أفقي ورأسي وواجهة وكروكي وحدود وجدول بيانات هندسية.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-				<VrStack
-					pWidth={new Pixel(400, 340)}
-					pGap={new Pixel(15, 10)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.OrangeLite)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("اعتماد نقابي")}
-						pText={Text.Body.Centered.OfText("تخرج اللوحة بصيغة تصلح للتقديم ضمن ملف الترخيص، مع بيانات صاحب الطلب والعنوان ونوع الترخيص.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="محتوى اللوحة المطلوبة لهيئة الدواء"
-			pDesc="الدليل التنظيمي يطلب بيانات هندسية محددة تظهر بوضوح على الرسم وتطابق الواقع أثناء المعاينة"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)}>
-
-			<EmoStrip pBg={new ElemBg(Colors.SkyLite)} pSize={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}>
-
-				<HzStack>
-
-					<Emograph
-						pTitle={Text.H3.WithAlign("right").OfText("اللوحة ليست رسمة مساحة فقط")}
-						pText={Text.Body.WithAlign("right").OfText("الرسم المطلوب لمخزن الأدوية يوضح المسقط الأفقي بالأطوال، والمسقط الرأسي للارتفاع، وواجهة العين، ورسمًا كروكيًا للحدود، ولوحة بيانات باسم طالب الترخيص ونوع الترخيص والعنوان، وجدولًا للأطوال والارتفاع وفتحات التهوية. لذلك نبدأ من رفع هندسي دقيق، ثم ننظم المعلومات على لوحة واحدة قابلة للمراجعة أثناء المعاينة.")}
-						pSize={new Size(new NumPer(720, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<RespImg
-						pImg={new EmoMediaData(
-					"Img",
-					"https://www.planndesignpro.com/admin/uploads/images/",
-					"Pharmaceutical-Factory-2D-CAD-Layout-30x60m-Floor-Plans.jpg",
-					false,
-					"مثال تخطيطي عام لمسقط منشأة دوائية",
-					new Size(new NumPer(430, "100%"), new NumPer("auto", "auto"))
-				)}
-					/>
-
-				</HzStack>
-
-			</EmoStrip>
-
-		</EmoStrip>
-
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)}>
-
-			<EmoStrip pBg={new ElemBg(Colors.Creamy)} pSize={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}>
-
-				<HzStack>
-
-					<RespImg
-						pImg={new EmoMediaData(
-					"Img",
-					"https://www.vaisala.com/sites/default/files/inline-images/",
-					"LIFT-pharmaceuticals-warehouse-800x450.jpg",
-					false,
-					"مخزن منتجات دوائية منظم",
-					new Size(new NumPer(430, "100%"), new NumPer("auto", "auto"))
-				)}
-					/>
-
-					<Emograph
-						pTitle={Text.H3.WithAlign("right").OfText("الرسم يقرأ التشغيل قبل الترخيص")}
-						pText={Text.Body.WithAlign("right").OfText("توزيع الفراغات داخل مخزن الأدوية يؤثر على الحركة والتخزين والتهوية والتبريد ونقاط الرقابة. نراجع من البداية مواضع الاستلام والصرف والتخزين والثلاجات والمنتجات منتهية الصلاحية ودورة المياه والصندرة إن وجدت، حتى تكون اللوحة قريبة من الواقع التشغيلي.")}
-						pSize={new Size(new NumPer(720, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</HzStack>
-
-			</EmoStrip>
-
-		</EmoStrip>
-
-	</ESec>
+	</Hero>
 
 
 
@@ -286,13 +134,13 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
+			Gray3
 			pTitle="مطابقة اشتراطات المخزن على الرسم"
 			pDesc="نضع الاشتراطات الحرجة أمامنا أثناء الرسم حتى لا تظهر المشكلة لأول مرة في لجنة المعاينة"
 		/>
 
 		<EmoStrip
-			pBg={new ElemBg(Colors.BlackOff)}
+			pBg={new ElemBg(Colors.Sky)}
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
 		>
@@ -419,11 +267,7 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 		pVrAlign={Align.Center}
 	>
 
-		<SecTitle
-			style = {`--StripBg:${Colors.SkyLite};`}
-			pTitle="طريقة العمل في خدمة الرسم"
-			pDesc="نسير في خطوات واضحة حتى تكون اللوحة قابلة للتقديم والمطابقة على الطبيعة"
-		/>
+		<SecTitle SkyDark pTitle="طريقة العمل في خدمة الرسم" />
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.WhiteOff)}
@@ -447,70 +291,6 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 					{ Title: "المراجعة قبل الطباعة", Items: ["مطابقة الرسم مع الواقع.", "مراجعة الاسم والعنوان ونوع الترخيص.", "إخراج اللوحة للطباعة والاعتماد النقابي."] }
 				]}
 			/>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
-		pBg={new ElemBg(Colors.Creamy)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
-			pTitle="تفاصيل هندسية تؤثر على قبول الرسم"
-			pDesc="أخطاء صغيرة في الرفع أو العرض قد تتحول إلى ملاحظة رسمية عند المعاينة"
-		/>
-
-		<EmoStrip
-			pBg={new ElemBg(Colors.Creamy)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<EmoList
-					pWidth={new RespString("650px", "100%")}
-					pTitle={Text.H3.Centered.OfText("أخطاء في المسقط")}
-					pDesc={Text.Body.Centered.OfText("هذه الأخطاء تجعل الرسم ضعيفًا أمام المعاينة")}
-					pHeadBg={new ElemBg(Colors.WhiteOff)}
-					pItemsBg={new ElemBg(Colors.OrangeLite)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						{ Title: "أطوال غير مغلقة", Items: ["مجموع الأبعاد لا يطابق حدود العين.", "وجود فراغات غير مسماة أو غير مقاسة."] },
-						{ Title: "ارتفاع غير واضح", Items: ["إظهار ارتفاع واحد رغم وجود كمرات أو مناسيب مختلفة.", "عدم تحديد بطنية السقف بدقة."] },
-						{ Title: "فتحات تهوية ناقصة", Items: ["عدم قياس الفتحات.", "عدم كتابة جدول الفتحات.", "خلط بين فتحات التهوية ومصادر التهوية الميكانيكية."] },
-						{ Title: "مرافق غير موضحة", Items: ["دورة مياه غير مرسومة.", "صرف غير محدد.", "غرفة تبريد أو ثلاجات غير ظاهرة في مخطط الحركة."] }
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("650px", "100%")}
-					pTitle={Text.H3.Centered.OfText("ما نضبطه في النسخة النهائية")}
-					pDesc={Text.Body.Centered.OfText("المراجعة النهائية تحول الرسم إلى مستند قابل للتقديم")}
-					pHeadBg={new ElemBg(Colors.WhiteOff)}
-					pItemsBg={new ElemBg(Colors.GreenLite)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						{ Title: "عنوان مطابق", Items: ["كتابة العنوان كما سيظهر في الطلب.", "مطابقة الوصف مع عقد الحيازة ومستند الكهرباء."] },
-						{ Title: "حدود واضحة", Items: ["إظهار حدود العين.", "إظهار العلاقة مع الجيران والشارع والمدخل."] },
-						{ Title: "بيانات منظمة", Items: ["اسم طالب الترخيص.", "نوع الترخيص.", "العنوان.", "مقياس الرسم.", "اسم المهندس واعتماده."] },
-						{ Title: "نسخ تقديم جاهزة", Items: ["إعداد 3 نسخ مطبوعة.", "تجهيز ملف رقمي للرجوع إليه.", "مراجعة النسخة قبل الختم والطباعة."] }
-					]}
-				/>
-
-			</HzStack>
 
 		</EmoStrip>
 
@@ -686,62 +466,6 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 
 
 
-	<ESec
-		id="cta"
-		pBg={new ElemBg(Colors.BlackOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="اطلب رسم هندسي لمخزن أدوية"
-			pDesc="أرسل العنوان وصور العين والمساحة التقريبية، وسنحدد المطلوب للرفع والرسم والتجهيز قبل التقديم"
-		/>
-
-		<EmoStrip
-			pBg={new ElemBg(Colors.BlackOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<Emograph
-					pTitle={Text.H3.WithAlign("right").White.OfText("بيانات نحتاجها قبل الزيارة")}
-					pText={Text.Body.WithAlign("right").White.OfText("العنوان التفصيلي، صور الواجهة والمدخل والداخل، المساحة التقريبية، الارتفاع إن كان معروفًا، موقف العين من الحي أو جهاز المدينة، وجود دورة مياه أو صندرة، وجود عداد كهرباء مستقل، وأي رسومات قديمة أو عقد حيازة متاح. بعدها نحدد موعد رفع المقاسات وإعداد اللوحة.")}
-					pSize={new Size(new NumPer(750, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<VrStack
-					pWidth={new Pixel(350, 340)}
-					pGap={new Pixel(20, 15)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.WhiteOff)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("01014490054")}
-						pText={Text.Body.Centered.OfText("اتصل أو ارسل بيانات الموقع على واتساب لبدء خدمة الرسم الهندسي.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<EmoCall BlackSky pText="اطلب الخدمة" />
-
-				</VrStack>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
 	<EmoFaq>
 
 		<FaqItem
@@ -783,8 +507,6 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 
 
 	<RelServices
-		pTitle={Text.H2.Centered.White.OfText("خدمات مرتبطة برسم مخزن الأدوية")}
-		pDesc={Text.Body.Centered.White.OfText("الرسم الهندسي جزء من ملف ترخيص كامل وتجهيز هندسي وتشغيلي")}
 		pHeadBg={new ElemBg(Colors.Gray5)}
 		pBodyBg={new ElemBg(Colors.Gray1)}
 		pCardBg={new ElemBg(Colors.WhiteOff)}
@@ -796,8 +518,6 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 			pTitle="ترخيص مخزن أدوية"
 			pDesc="متابعة ملف الترخيص كاملًا من مراجعة الموقع حتى استيفاء مستندات هيئة الدواء."
 			pHref="/emomed/pharmastore"
-			pImg="https://www.vaisala.com/sites/default/files/inline-images/LIFT-pharmaceuticals-warehouse-800x450.jpg"
-			pBtnText="افتح الخدمة"
 		/>
 
 	</RelServices>

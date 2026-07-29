@@ -1,7 +1,10 @@
 ---
-import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, SecTitle, VrStack } from "@/Widgets";
+import { CardsGr } from "@/Widgets/Cards";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { EmoFaq, ESec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStrip } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
 
 
@@ -38,17 +41,9 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	<Hero
 		pTitle="تراخيص البناء بالأحياء والمدن الجديدة"
 		pDesc="صفحة توزيعية لفهم المسارين المختلفين: ترخيص بناء داخل نطاق الأحياء، وترخيص بناء داخل المدن الجديدة التابعة لهيئة المجتمعات العمرانية"
-		pTitleClr={Colors.WhiteOff}
-		pDescClr={Colors.WhiteOff}
-		pHzAlign="center"
-		pVrAlign="center"
-		pBlurL="on"
-		pBlurP="on"
-		pPosL="44% 44% 10% 7%"
-		pPosP="18% 6% 18% 6%"
 	>
 
-		<EmoCall BlackSky pText="استفسر عن ترخيص البناء" />
+		<EmoCall BlackSky />
 
 	</Hero>
 
@@ -58,28 +53,25 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
+			GreenLite
 			pTitle="ترخيص البناء ليس إجراءً واحدًا في كل مكان"
 			pDesc="نفس كلمة ترخيص بناء قد تعني ملفًا مختلفًا تمامًا حسب تبعية الأرض: حي قائم داخل محافظة، أم قطعة أرض داخل مدينة جديدة لها جهاز واشتراطات وتخصيص وموقف مالي وتنفيذي"
 		/>
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.WhiteOff)}
-
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
->
+		>
 
-			<VrStack
-
-				pWidth={new Pixel(1220, 340)}
-				pGap={new Pixel(28, 16)}
-				pPad={new Pixel(32, 14)}
->
+			<VrStack pGap={new Pixel(28, 16)} pPad={new Pixel(32, 14)}>
 
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("قبل تجهيز الرسومات يجب تحديد الجهة صاحبة الولاية")}
@@ -111,28 +103,25 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.Gray1)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
+			Gray3
 			pTitle="أولًا: تراخيص البناء داخل الأحياء"
 			pDesc="مسار الأحياء هو المسار الأقرب للمباني داخل العمران القائم: شارع موجود، جيران ملاصقون، مرافق قائمة، اشتراطات تنظيم محلية، وإدارة هندسية تفحص تأثير البناء على النسيج العمراني المحيط"
 		/>
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.Gray1)}
-
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
->
+		>
 
-			<VrStack
-
-				pWidth={new Pixel(1220, 340)}
-				pGap={new Pixel(26, 16)}
-				pPad={new Pixel(34, 14)}
->
+			<VrStack pGap={new Pixel(26, 16)} pPad={new Pixel(34, 14)}>
 
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("طبيعة ترخيص البناء داخل الحي")}
@@ -147,7 +136,6 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 				/>
 
 				<CardsGr
-					pWidth={new RespString("1220px", "100%")}
 					pCardBg={new ElemBg(Colors.WhiteOff)}
 					pGrTitle={Text.H3.Centered.OfText("ما الذي يهم الحي عند فحص الترخيص؟")}
 					pCardTitleFnt={Text.H4}
@@ -172,8 +160,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -183,17 +174,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.WhiteOff)}
-
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
->
+		>
 
-			<HzStack
-
-
-				pGap={new Pixel(24, 14)}
-				pPad={new Pixel(32, 12)}
->
+			<HzStack pGap={new Pixel(24, 14)} pPad={new Pixel(32, 12)}>
 
 				<EmoList
 					pWidth={new RespString("590px", "100%")}
@@ -237,8 +222,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.BlackOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.BistageDark};`}
@@ -248,17 +236,15 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.BlackOff)}
-
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
->
+		>
 
 			<VrStack
-
 				pWidth={new Pixel(1180, 340)}
 				pGap={new Pixel(28, 16)}
 				pPad={new Pixel(34, 14)}
->
+			>
 
 				<Emograph
 					pTitle={Text.H3.Centered.White.OfText("المستند الإداري لا يغني عن سلامة الرسم")}
@@ -293,24 +279,25 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.OrangeLite};`}
+			OrangeLite
 			pTitle="الأخطاء الميدانية في تراخيص بناء الأحياء"
 			pDesc="المشكلة ليست في عدم معرفة الأوراق فقط، بل في البدء من فرضية خاطئة عن الأرض أو الشارع أو الملكية أو الارتفاع"
 		/>
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.WhiteOff)}
-
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
->
+		>
 
 			<CardsGr
-				pWidth={new RespString("1220px", "100%")}
 				pCardBg={new ElemBg(Colors.Creamy)}
 				pGrTitle={Text.H3.Centered.OfText("ملاحظات تظهر كثيرًا قبل أو أثناء الفحص")}
 				pCardTitleFnt={Text.H4}
@@ -333,12 +320,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<RelServices
-		pTitle={Text.H2.Centered.White.OfText("انتقل إلى صفحة ترخيص البناء داخل الأحياء")}
-		pDesc={Text.Body.Centered.White.OfText("هذه الصفحة الحالية تشرح الصورة العامة، أما التفاصيل التنفيذية والخدمة المباشرة الخاصة بالأحياء فهي في صفحة الخدمة المخصصة")}
-		pHeadBg={new ElemBg(Colors.Gray5)}
-		pBodyBg={new ElemBg(Colors.Gray1)}
-	>
+	<RelServices pHeadBg={new ElemBg(Colors.Gray5)} pBodyBg={new ElemBg(Colors.Gray1)}>
 
 		<RelServiceItem
 			pTitle="ترخيص بناء بالأحياء"
@@ -369,28 +351,25 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.BlackOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.BistageDark};`}
+			BistageDark
 			pTitle="ثانيًا: تراخيص البناء في المدن الجديدة"
 			pDesc="المدن الجديدة لها منطق مختلف: جهاز مدينة، قطعة مخصصة، كراسة أو اشتراطات عمرانية، موقف مالي وإداري، وكود أرض، مع اتجاه متزايد نحو تقديم ومراجعة إلكترونية"
 		/>
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.BlackOff)}
-
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
->
+		>
 
-			<VrStack
-
-				pWidth={new Pixel(1220, 340)}
-				pGap={new Pixel(28, 16)}
-				pPad={new Pixel(34, 14)}
->
+			<VrStack pGap={new Pixel(28, 16)} pPad={new Pixel(34, 14)}>
 
 				<Emograph
 					pTitle={Text.H3.Centered.White.OfText("ترخيص المدن الجديدة يبدأ من ملف الأرض قبل ملف المبنى")}
@@ -405,7 +384,6 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 				/>
 
 				<CardsGr
-					pWidth={new RespString("1220px", "100%")}
 					pCardBg={new ElemBg(Colors.WhiteOff)}
 					pGrTitle={Text.H3.Centered.White.OfText("محاور فحص ملف المدن الجديدة")}
 					pCardTitleFnt={Text.H4}
@@ -430,8 +408,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Sky};`}
@@ -441,17 +422,15 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.WhiteOff)}
-
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
->
+		>
 
 			<VrStack
-
 				pWidth={new Pixel(1180, 340)}
 				pGap={new Pixel(28, 16)}
 				pPad={new Pixel(34, 14)}
->
+			>
 
 				<EmoList
 					pWidth={new RespString("1080px", "100%")}
@@ -488,8 +467,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.Gray1)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -499,17 +481,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.Gray1)}
-
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
->
+		>
 
-			<HzStack
-
-
-				pGap={new Pixel(24, 14)}
-				pPad={new Pixel(32, 12)}
->
+			<HzStack pGap={new Pixel(24, 14)} pPad={new Pixel(32, 12)}>
 
 				<EmoList
 					pWidth={new RespString("590px", "100%")}
@@ -553,26 +529,22 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
-		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
-			pTitle="أخطاء المدن الجديدة التي تؤخر الترخيص"
-			pDesc="الخطأ هنا قد لا يكون في الرسم نفسه، بل في أن الرسم بني على وضع إداري غير صالح أو بيانات غير مفعلة أو كراسة لم تقرأ جيدًا"
-		/>
+		<SecTitle GreenLite pTitle="أخطاء المدن الجديدة التي تؤخر الترخيص" />
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.WhiteOff)}
-
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
->
+		>
 
 			<CardsGr
-				pWidth={new RespString("1220px", "100%")}
 				pCardBg={new ElemBg(Colors.SkyLite)}
-				pGrTitle={Text.H3.Centered.OfText("مخاطر يجب إغلاقها مبكرًا")}
 				pCardTitleFnt={Text.H4}
 				pCardBodyFnt={Text.Body}
 				pTopic1={new Topic("تجاهل كود الأرض", "في النظام الإلكتروني وداخل الجهاز يجب أن تتطابق بيانات القطعة مع ملف المالك، وأي تعارض في الكود أو المنطقة أو رقم القطعة قد يوقف الطلب.")}
@@ -629,33 +601,24 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.BlackOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="مقارنة مباشرة بين ترخيص الأحياء وترخيص المدن الجديدة"
-			pDesc="الفرق ليس في اسم الجهة فقط، بل في نقطة البداية وطريقة قراءة الأرض ونوع المستندات ومصادر المخاطر"
-		/>
+		<SecTitle Gray3 pTitle="مقارنة مباشرة بين ترخيص الأحياء وترخيص المدن الجديدة" />
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.BlackOff)}
-
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
->
+		>
 
-			<VrStack
-
-				pWidth={new Pixel(1180, 340)}
-				pGap={new Pixel(28, 16)}
-				pPad={new Pixel(34, 14)}
->
+			<VrStack pGap={new Pixel(28, 16)} pPad={new Pixel(34, 14)}>
 
 				<CardsGr
-					pWidth={new RespString("1180px", "100%")}
 					pCardBg={new ElemBg(Colors.WhiteOff)}
-					pGrTitle={Text.H3.Centered.White.OfText("كيف تختار المسار الصحيح؟")}
 					pCardTitleFnt={Text.H4}
 					pCardBodyFnt={Text.Body}
 					pTopic1={new Topic("الجهة", "في الأحياء: مركز تكنولوجي وإدارة هندسية محلية. في المدن الجديدة: جهاز مدينة وهيئة مجتمعات عمرانية وبوابة خدمات عند تفعيل المسار الإلكتروني.")}
@@ -664,12 +627,6 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 					pTopic4={new Topic("أكثر خطأ متكرر", "في الأحياء: الرسم قبل بيان الصلاحية. في المدن الجديدة: الرسم قبل قراءة الكراسة أو قبل تسوية موقف الأرض.")}
 					pTopic5={new Topic("دور المهندس", "في الأحياء: قراءة التنظيم والشارع والجيران وإعداد ملف مطابق. في المدن الجديدة: تحويل كراسة الجهاز إلى تصميم قابل للاعتماد وملف إلكتروني منظم.")}
 					pTopic6={new Topic("شكل الخدمة", "في الأحياء: متابعة إدارية وفنية مع جهة محلية. في المدن الجديدة: متابعة مع جهاز وملف أرض وبيانات رقمية وربما حسابات بوابة.")}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.Centered.White.OfText("الصفحة الحالية بوابة توزيع وليست بديلًا عن الصفحات المتخصصة")}
-					pText={Text.Body.WithAlign("right").White.OfText(`الغرض من هذه الصفحة أن يفهم العميل أن خدمة تراخيص البناء ليست صندوقًا واحدًا. من يريد بناء عقار داخل حي يحتاج قراءة مختلفة عن مالك قطعة في بيت الوطن أو الأندلس أو أكتوبر أو العبور أو الشروق أو أي مدينة جديدة. ومن يريد تعلية مبنى قائم لا يحتاج نفس مسار إنشاء مبنى من الصفر. ومن لديه رخصة سابقة أو تنفيذ قائم أو مخالفة أو مهلة منتهية لا يجب أن يبدأ بنفس أوراق مالك قطعة جديدة لم تبن بعد. لذلك تم تقسيم الصفحات الفرعية حسب نية العميل التجارية المباشرة: ترخيص بناء بالأحياء، ترخيص بناء بالمدن الجديدة، ترخيص تعلية، ترخيص هدم، ترخيص استكمال روف، والتصالح أو توفيق الأوضاع عند الحاجة. هذا التقسيم يمنع خلط العملاء، ويجعل كل صفحة لاحقة أكثر دقة في المستندات والخطوات والكلمات المفتاحية والمشكلات الميدانية.`)}
-					pSize={new Size(new NumPer(1080, "100%"), new NumPer("auto", "auto"))}
 				/>
 
 			</VrStack>
@@ -691,25 +648,19 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 		pVrAlign={Align.Center}
 	>
 
-		<SecTitle
-			style = {`--StripBg:${Colors.OrangeLite};`}
-			pTitle="كيف نراجع ملفك قبل التقديم؟"
-			pDesc="بدل البدء برسومات قد تحتاج تعديلًا، نبدأ بتحديد الجهة ونوع الطلب والمستندات الحرجة ثم نحدد مسار الترخيص الصحيح"
-		/>
+		<SecTitle OrangeLite pTitle="كيف نراجع ملفك قبل التقديم؟" />
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.WhiteOff)}
-
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
->
+		>
 
 			<VrStack
-
 				pWidth={new Pixel(1100, 340)}
 				pGap={new Pixel(28, 16)}
 				pPad={new Pixel(34, 14)}
->
+			>
 
 				<EmoList
 					pWidth={new RespString("1080px", "100%")}
@@ -797,60 +748,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ReadAlso
-		pTitle={Text.H2.Centered.OfText("صفحات تفصيلية داخل فرع تراخيص البناء")}
-		pDesc={Text.Body.Centered.OfText("اختر الصفحة الأقرب لحالتك بدل قراءة معلومات عامة لا تخص الجهة التي ستتعامل معها")}
-
->
-
-	<ReadAlsoItem
-		pTitle="ترخيص بناء بالأحياء"
-		pDesc="صفحة الخدمة المخصصة لاستخراج ترخيص بناء داخل الأحياء والوحدات المحلية."
-		pHref="/emoperm/building/districts/construction"
-	/>
-
-	<ReadAlsoItem
-		pTitle="تراخيص البناء بالمدن الجديدة"
-		pDesc="صفحة الخدمة المخصصة لقطع الأراضي التابعة لأجهزة المدن الجديدة وهيئة المجتمعات العمرانية."
-		pHref="/emoperm/building/newcities/construction"
-	/>
-
-	<ReadAlsoItem
-		pTitle="ترخيص تعلية بالأحياء"
-		pDesc="حالات تعلية المباني القائمة داخل نطاق الأحياء مع مراجعة الحالة الإنشائية والرخص السابقة."
-		pHref="/emoperm/building/districts/construction/addition"
-	/>
-
-	<ReadAlsoItem
-		pTitle="ترخيص تعلية بالمدن الجديدة"
-		pDesc="تعلية أو تعديل مبنى داخل مدينة جديدة طبقًا لاشتراطات جهاز المدينة والرخصة السابقة."
-		pHref="/emoperm/building/newcities/construction/addition"
-	/>
-
-	<ReadAlsoItem
-		pTitle="ترخيص استكمال روف"
-		pDesc="استكمال غرف السطح أو تعديلها داخل المدن الجديدة عند سماح الاشتراطات بذلك."
-		pHref="/emoperm/building/newcities/construction/increase"
-	/>
-
-	<ReadAlsoItem
-		pTitle="ترخيص هدم"
-		pDesc="إنهاء إجراءات هدم العقار قبل إعادة البناء أو التطوير داخل نطاق الأحياء."
-		pHref="/emoperm/building/districts/demolish"
-	/>
-
-</ReadAlso>
-
-
-
-
-
-
-
-	<RelServices
-		pTitle={Text.H2.Centered.White.OfText("خدمات هندسية مرتبطة بتراخيص البناء")}
-		pDesc={Text.Body.Centered.White.OfText("الرخصة لا تنفصل عن التصميم والإشراف والتقارير الفنية المطلوبة قبل وأثناء التنفيذ")}
-	>
+	<RelServices>
 
 		<RelServiceItem
 			pTitle="تصميم معماري وإنشائي"

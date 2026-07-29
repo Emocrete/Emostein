@@ -1,7 +1,10 @@
 ---
-import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { RespImg } from "@/Widgets/Media";
+import { EmoFaq, ESec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStrip } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
 ---
 
 
@@ -35,22 +38,22 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 
 
 
-	<Hero
-		pImgL="HeroD.webp"
-		pImgP="HeroM.webp"
-		pTitle="رسم هندسي لمعمل تحاليل"
-		pDesc="لوحة هندسية واضحة لموقع المعمل وغرفه وارتفاعه ومرافقه قبل تقديم ملف الترخيص والمعاينة"
-		pTitleClr={Colors.WhiteOff}
-		pDescClr={Colors.WhiteOff}
-		pHzAlign="center"
-		pVrAlign="center"
-		pBlurL="on"
-		pBlurP="on"
-		pPosL="40% 40% 10% 8%"
-		pPosP="14% 6% 18% 6%"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="اطلب رفع المقاسات" />
+		<VrStack
+			pSize={new Size(new NumPer("40%","95%"))}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))}
+			pHzAlign={"Center"}
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("رسم هندسي لمعمل تحاليل")}
+				pText={Text.Body.Centered.OfText("خدمة إعداد رسم هندسي لمعمل تحاليل طبية لترخيص وزارة الصحة، تشمل رفع المقاسات، المسقط الأفقي، القطاع الرأسي، كروكي الموقع، توزيع غرف المعمل، المياه والصرف، التهوية، دورة المياه، غرفة سحب العينات، وغرف التحليل والتخزين.")}
+			/>
+
+			<EmoCall BlackSky pText="تواصل معنا" />
+
+		</VrStack>
 
 	</Hero>
 
@@ -60,79 +63,11 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
-			pTitle="الرسم الهندسي هو ملف المعمل أمام لجنة المعاينة"
-			pDesc="اللوحة تترجم المكان إلى مستند ترخيص: عنوان واضح، مساحات محسوبة، غرف محددة، ارتفاعات مكتوبة، مياه وصرف وتهوية ظاهرة"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<VrStack
-					pWidth={new Pixel(400, 340)}
-					pGap={new Pixel(15, 10)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.WhiteOff)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("رفع هندسي")}
-						pText={Text.Body.Centered.OfText("نقيس حدود الوحدة، الغرف، الفتحات، الارتفاعات، دورة المياه، مصادر المياه، مخارج الصرف، ومسارات الحركة قبل رسم اللوحة.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-				<VrStack
-					pWidth={new Pixel(400, 340)}
-					pGap={new Pixel(15, 10)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.SkyLite)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("لوحة ترخيص")}
-						pText={Text.Body.Centered.OfText("نجهز المسقط الأفقي والقطاع الرأسي وكروكي الموقع وجداول الغرف والفتحات والمرافق في صيغة مفهومة للجنة الصحة.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-				<VrStack
-					pWidth={new Pixel(400, 340)}
-					pGap={new Pixel(15, 10)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.OrangeLite)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("مطابقة قبل المعاينة")}
-						pText={Text.Body.Centered.OfText("نراجع الرسم مع الواقع ومع العقد والعنوان قبل الطباعة، لأن أي اختلاف في اللوحة يظهر مباشرة في تقرير المعاينة.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -206,75 +141,19 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.Gray1)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
-		<SecTitle
-			style = {`--StripBg:${Colors.OrangeLite};`}
-			pTitle="مكونات الرسم المطلوبة للترخيص"
-			pDesc="الرسم الجيد يجمع بيانات قانونية وهندسية وتشغيلية في لوحة واحدة"
-		/>
+		<SecTitle Gray3 pTitle="تقسيم معمل التحاليل على الرسم" />
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<EmoList
-					pWidth={new RespString("650px", "100%")}
-					pTitle={Text.H3.Centered.OfText("الجزء الهندسي")}
-					pDesc={Text.Body.Centered.OfText("ما يظهر كرسومات وأبعاد")}
-					pHeadBg={new ElemBg(Colors.WhiteOff)}
-					pItemsBg={new ElemBg(Colors.SkyLite)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						{ Title: "رسم إرشادي للموقع", Items: ["يبين موقع المعمل بالنسبة للشارع أو الميدان أو العلامات المحيطة.", "يساعد لجنة المعاينة على الوصول للمقر ومطابقة العنوان."] },
-						{ Title: "مسقط أفقي", Items: ["يوضح حدود الوحدة، الأبعاد، الفتحات، الغرف، مصادر المياه، ونقط الصرف.", "يكتب على كل فراغ استخدامه الفعلي داخل المعمل."] },
-						{ Title: "قطاع رأسي", Items: ["يوضح ارتفاع المحل وأي صندرة أو سقوطات أو كمرات.", "يفصل بين الارتفاع الصافي والارتفاعات المتأثرة بعناصر إنشائية."] },
-						{ Title: "واجهة أو مدخل", Items: ["توضح مدخل المعمل واللافتة عند الحاجة.", "تساعد في مطابقة صور وفيديو المعمل مع الرسم."] }
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("650px", "100%")}
-					pTitle={Text.H3.Centered.OfText("الجزء التشغيلي")}
-					pDesc={Text.Body.Centered.OfText("ما يظهر كبيانات ومعاينة")}
-					pHeadBg={new ElemBg(Colors.WhiteOff)}
-					pItemsBg={new ElemBg(Colors.GreenLite)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						{ Title: "جدول الغرف", Items: ["اسم كل غرفة.", "مساحة كل غرفة.", "استخدام كل غرفة.", "ارتباطها بسحب العينات أو التحليل أو التخزين."] },
-						{ Title: "المياه والصرف", Items: ["موضع الأحواض.", "مصدر المياه.", "نقط الصرف.", "دورة المياه ومسارها بالنسبة لغرف العمل."] },
-						{ Title: "التهوية والإضاءة", Items: ["أماكن الشبابيك أو الشفاطات.", "غرف تحتاج تهوية خاصة.", "نقط الإضاءة الأساسية داخل مناطق العمل."] },
-						{ Title: "النفايات الطبية", Items: ["منطقة تجميع مؤقت للعبوات الحادة والنفايات.", "فصلها عن مناطق الاستقبال وسحب العينات والتحليل."] }
-					]}
-				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="تقسيم معمل التحاليل على الرسم"
-			pDesc="التقسيم الصحيح يوضح مسار المريض والعينة والنتيجة والنفايات"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg(Colors.Gray1)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack
 				pWidth={new Pixel(1300, 340)}
@@ -422,96 +301,22 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.BlackOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
-		<SecTitle
-			style = {`--StripBg:${Colors.SkyLite};`}
-			pTitle="الرسم حسب حالة الترخيص"
-			pDesc="شكل اللوحة يتغير حسب طلب العميل: ترخيص جديد، نقل، تعديل، فرع، أو معمل ملحق بمنشأة طبية"
-		/>
+		<SecTitle Gray3 pTitle="طريقة العمل في خدمة الرسم" />
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<HzStack pGap={new Pixel(25, 15)} pPad={new Pixel(30, 15)}>
-
-				<EmoList
-					pWidth={new RespString("400px", "100%")}
-					pTitle={Text.H3.Centered.OfText("ترخيص معمل جديد")}
-					pDesc={Text.Body.Centered.OfText("لوحة تأسيس من الصفر")}
-					pHeadBg={new ElemBg(Colors.GreenLite)}
-					pItemsBg={new ElemBg(Colors.WhiteOff)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						"رفع كامل للوحدة قبل التشطيب أو بعد التشطيب.",
-						"توزيع الغرف حسب نشاط المعمل المطلوب.",
-						"تحديد مسار المريض والعينة والنفايات.",
-						"مراجعة صلاحية العنوان والنشاط قبل الطباعة."
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("400px", "100%")}
-					pTitle={Text.H3.Centered.OfText("معمل ملحق بمنشأة")}
-					pDesc={Text.Body.Centered.OfText("داخل مستشفى أو مركز طبي")}
-					pHeadBg={new ElemBg(Colors.SkyLite)}
-					pItemsBg={new ElemBg(Colors.WhiteOff)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						"تحديد حدود المعمل داخل المنشأة.",
-						"إظهار علاقته بالاستقبال والعيادات والخدمات.",
-						"فصل مسارات العينات عن مسارات الجمهور قدر الإمكان.",
-						"ربط اللوحة بترخيص المنشأة الطبية الأم."
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("400px", "100%")}
-					pTitle={Text.H3.Centered.OfText("نقل أو تعديل")}
-					pDesc={Text.Body.Centered.OfText("مقر جديد أو توزيع جديد")}
-					pHeadBg={new ElemBg(Colors.OrangeLite)}
-					pItemsBg={new ElemBg(Colors.WhiteOff)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						"رسم جديد للمقر الجديد عند النقل.",
-						"إظهار التعديل المطلوب عند تغيير الغرف أو الأجهزة.",
-						"توضيح الفروق عن الرسم القديم عند الحاجة.",
-						"مراجعة العقد والعنوان والرخصة السابقة قبل الإخراج."
-					]}
-				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="طريقة العمل في خدمة الرسم"
-			pDesc="نرتب الخدمة بحيث يصل العميل إلى لوحة قابلة للتقديم بدل رسمة شكلية تحتاج تعديل بعد المعاينة"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg(Colors.BlackOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<EmoList
 				pWidth={new RespString("1100px", "100%")}
-				pTitle={Text.H3.Centered.OfText("من بيانات العميل إلى لوحة الترخيص")}
-				pDesc={Text.Body.Centered.OfText("خطوات منظمة قبل الطباعة والاعتماد")}
 				pHeadBg={new ElemBg(Colors.GreenLite)}
 				pItemsBg={new ElemBg(Colors.WhiteOff)}
 				pItemFnt={Text.Body}
@@ -536,8 +341,11 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.Creamy)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.GreenLite};`}
@@ -545,8 +353,11 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 			pDesc="هذه النقاط تمنع أشهر ملاحظات المعاينة على رسومات معامل التحاليل"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg(Colors.Creamy)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -581,182 +392,6 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 						{ Title: "نسخ تسليم منظمة", Items: ["PDF للطباعة.", "نسخة قابلة للتعديل عند طلب ملاحظة.", "ملف صور الرفع للرجوع إليه."] }
 					]}
 				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="الرسم والتجهيز قبل التشطيب"
-			pDesc="أفضل وقت للرسم هو قبل تنفيذ السيراميك والأحواض والقواطيع، لأن تعديل الرسم أسهل من تعديل الموقع بعد التشطيب"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)}>
-
-			<EmoStrip pBg={new ElemBg(Colors.SkyLite)} pSize={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}>
-
-				<HzStack>
-
-					<Emograph
-						pTitle={Text.H3.WithAlign("right").OfText("القاطع والحوض ومكان الجهاز قرارات ترخيصية")}
-						pText={Text.Body.WithAlign("right").OfText("توزيع القواطيع والأحواض والأجهزة داخل معمل التحاليل يؤثر على قبول الرسم وعلى سهولة التشغيل بعد الترخيص. نراجع مكان غرفة السحب، موضع أجهزة الطرد المركزي والثلاجات، مساحة الحركة حول طاولات العمل، ومكان النفايات قبل تنفيذ التشطيبات، حتى لا يضطر العميل لتكسير أو نقل تجهيزات بعد المعاينة.")}
-						pSize={new Size(new NumPer(820, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<RespImg
-						pImg={new EmoMediaData(
-					"Img",
-					"/Media/Emomed/Lab/",
-					"HeroD.webp",
-					false,
-					"تجهيز معمل تحاليل طبية",
-					new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))
-				)}
-					/>
-
-				</HzStack>
-
-			</EmoStrip>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.OrangeLite};`}
-			pTitle="مخرجات خدمة الرسم الهندسي"
-			pDesc="نسلم ملفًا هندسيًا واضحًا يصلح للمراجعة والتقديم والمتابعة"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<HzStack pGap={new Pixel(25, 15)} pPad={new Pixel(30, 15)}>
-
-				<EmoList
-					pWidth={new RespString("400px", "100%")}
-					pTitle={Text.H3.Centered.OfText("ملف الرسم")}
-					pDesc={Text.Body.Centered.OfText("لوحة قابلة للتقديم")}
-					pHeadBg={new ElemBg(Colors.WhiteOff)}
-					pItemsBg={new ElemBg(Colors.SkyLite)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						"مسقط أفقي بأسماء الغرف والأبعاد.",
-						"قطاع رأسي يوضح الارتفاعات.",
-						"كروكي للموقع عند الحاجة.",
-						"واجهة أو مدخل عند الحاجة.",
-						"جدول غرف وفتحات ومرافق."
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("400px", "100%")}
-					pTitle={Text.H3.Centered.OfText("ملف مراجعة")}
-					pDesc={Text.Body.Centered.OfText("لتقليل الملاحظات")}
-					pHeadBg={new ElemBg(Colors.WhiteOff)}
-					pItemsBg={new ElemBg(Colors.GreenLite)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						"صور الرفع الأساسية.",
-						"ملاحظات على صلاحية التقسيم.",
-						"تنبيه بمشاكل الصرف أو التهوية.",
-						"قائمة بيانات ناقصة من العميل.",
-						"تعديلات مقترحة قبل التقديم."
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("400px", "100%")}
-					pTitle={Text.H3.Centered.OfText("ملف متابعة")}
-					pDesc={Text.Body.Centered.OfText("بعد تقديم الرسم")}
-					pHeadBg={new ElemBg(Colors.WhiteOff)}
-					pItemsBg={new ElemBg(Colors.OrangeLite)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						"نسخة PDF للطباعة.",
-						"نسخة رقمية للتعديل عند الحاجة.",
-						"توضيح أي ملاحظة واردة من المعاينة.",
-						"إعادة إخراج الرسم بعد التعديل.",
-						"ربط الرسم بصفحة ترخيص المعمل."
-					]}
-				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
-		id="cta"
-		pBg={new ElemBg(Colors.BlackOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="اطلب رسم هندسي لمعمل تحاليل"
-			pDesc="أرسل عنوان المعمل وصور المكان والمساحة التقريبية ونوع الطلب، وسنحدد المطلوب للرفع والرسم والتقديم"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<Emograph
-					pTitle={Text.H3.WithAlign("right").White.OfText("بيانات نحتاجها قبل الزيارة")}
-					pText={Text.Body.WithAlign("right").White.OfText("العنوان التفصيلي، صور الواجهة والمدخل والغرف، المساحة التقريبية، نوع الطلب، حالة التشطيب، صورة عقد الحيازة إن وجدت، هل المعمل مستقل أم ملحق بمستشفى أو مركز، عدد الغرف المطلوب، وهل توجد أجهزة أو قواطيع منفذة بالفعل. بعدها نحدد موعد الرفع ونجهز اللوحة المناسبة للترخيص.")}
-					pSize={new Size(new NumPer(750, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<VrStack
-					pWidth={new Pixel(350, 340)}
-					pGap={new Pixel(20, 15)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.WhiteOff)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("01014490054")}
-						pText={Text.Body.Centered.OfText("اتصل أو ارسل بيانات المكان على واتساب لبدء خدمة الرسم الهندسي.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<EmoCall BlackSky pText="اطلب الخدمة" />
-
-				</VrStack>
 
 			</HzStack>
 
@@ -810,84 +445,24 @@ import { EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzSt
 
 
 
-	<ReadAlso
-		pTitle={Text.H2.Centered.OfText("صفحات قريبة")}
-		pDesc={Text.Body.Centered.OfText("راجع صفحة الترخيص والصفحات الطبية المرتبطة")}
-		pHeadBg={new ElemBg(Colors.SkyLite)}
-		pBodyBg={new ElemBg(Colors.WhiteOff)}
-		pCardBg={new ElemBg(Colors.SkyLite)}
-		pWidth={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
-		pGap={new Pixel(20, 15)}
-	>
-
-		<ReadAlsoItem
-			pTitle="ترخيص معمل تحاليل طبية"
-			pDesc="الصفحة الرئيسية لخدمة ترخيص معمل التحاليل، وتشمل المستندات والإجراءات والشروط الفنية."
-			pHref="/emomed/lab"
-			pImg="/Media/Emomed/Lab/HeroD.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="تراخيص المنشآت الطبية"
-			pDesc="القسم العام لخدمات تراخيص المنشآت الطبية والصيدلية والمعامل والمراكز."
-			pHref="/emomed"
-			pImg="/Media/Emomed/HeroD.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="رسم هندسي لصيدلية"
-			pDesc="رسم هندسي للصيدلية وتجهيز اللوحة المطلوبة للترخيص والمعاينة."
-			pHref="/emomed/pharmacy/dwg"
-			pImg="/Media/Emomed/Pharmacy/Dwg/HeroD.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="رسم هندسي لعيادة"
-			pDesc="تجهيز الرسم الهندسي المطلوب لترخيص العيادة ومراجعة التقسيم قبل التقديم."
-			pHref="/emomed/clinic/dwg"
-			pImg="/Media/Emomed/Clinic/Dwg/HeroL.webp"
-		/>
-
-	</ReadAlso>
-
-
-
-
-
-
-
-	<RelServices
-		pTitle={Text.H2.Centered.White.OfText("خدمات مرتبطة برسم معمل التحاليل")}
-		pDesc={Text.Body.Centered.White.OfText("الرسم جزء من ملف ترخيص وتجهيز ومراجعة فنية للمقر")}
-		pHeadBg={new ElemBg(Colors.Gray5)}
-		pBodyBg={new ElemBg(Colors.Gray1)}
-		pCardBg={new ElemBg(Colors.WhiteOff)}
-		pWidth={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
-		pGap={new Pixel(20, 15)}
-	>
+	<RelServices>
 
 		<RelServiceItem
 			pTitle="ترخيص معمل تحاليل طبية"
 			pDesc="متابعة ملف الترخيص كاملًا من مراجعة الموقع حتى تجهيز المستندات والمعاينة."
 			pHref="/emomed/lab"
-			pImg="/Media/Emomed/Lab/HeroD.webp"
-			pBtnText="افتح الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="تقارير وشهادات هندسية"
 			pDesc="تقارير فنية عند الحاجة لتوضيح حالة الموقع أو معالجة ملاحظات هندسية قبل الترخيص."
 			pHref="/emonsult/report"
-			pImg="/Media/Emomed/Lab/Dwg/HeroD.webp"
-			pBtnText="افتح الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="تشطيب وتجهيز منشآت طبية"
 			pDesc="تجهيز الأرضيات والحوائط والفواصل ومناطق العمل بما يناسب المعاينة والتشغيل."
 			pHref="/emocrete/finishing/pharmacy"
-			pImg="/Media/Emocrete/Finishing/Pharmacy/HeroL.webp"
-			pBtnText="افتح الخدمة"
 		/>
 
 	</RelServices>

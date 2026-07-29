@@ -1,6 +1,12 @@
 ---
 import BLayout from "@/Layout.astro";
-import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoContactStrip, EmoList, EmoStrip, ESec, Hero, IncLineSep, IndexSec, YTPlayer } from "@/Widgets";
+import { CardsGr, DataCard } from "@/Widgets/Cards";
+import { EmoBtn, EmoCall, Emograph, EmoList, VrStack } from "@/Widgets/Comp";
+import { YTPlayer } from "@/Widgets/Media";
+import { ESec, Hero, IndexSec } from "@/Widgets/Sections";
+import { BottTriSep, IncLineSep } from "@/Widgets/Separators";
+import { EmoContactStrip, EmoStrip } from "@/Widgets/Strips";
+import { Loc, NumPer, Size, Text } from "@/TypesLib";
 ---
 
 
@@ -22,19 +28,38 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoContactStrip, EmoList, EmoStr
 
 
 
-<BLayout pSchemaType="Service" pTitle="رسم هندسي لمستشفى" pDescr="رسم هندسي لمستشفى">
+<BLayout
+	pSchemaType="Service"
+	pTitle="رسم هندسي لمستشفى"
+	pDescr="رسم هندسي لمستشفى"
+>
 
-	<Hero
-		pTitle="رسم هندسي لمستشفى"
-		pDesc="رسم هندسي لمستشفى"
-		pPosL="40% 50% 10% 10%"
-		pPosP="10% 10% 50% 10%"
-	>
 
-		<a class = " cta " href="#cta">
-			اطلب
-		</a>
+
+
+
+
+
+	<Hero>
+
+		<VrStack
+			pSize={new Size(new NumPer("40%","95%"))}
+			pLoc={new Loc(new NumPer("50%","2.5%"),new NumPer("30%","45%"))}
+			pHzAlign={"Center"}
+		>
+
+			<Emograph pTitle={Text.H1.White.Centered.OfText("رسم هندسي لمستشفى")} pText={Text.Body.White.Centered.OfText("رسم هندسي لمستشفى")} />
+
+			<EmoCall OrangeBlack />
+
+		</VrStack>
 
 	</Hero>
+
+
+
+
+
+
 
 </BLayout>

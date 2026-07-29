@@ -1,7 +1,10 @@
 ---
-import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, SecTitle, VrStack } from "@/Widgets";
+import { CardsGr } from "@/Widgets/Cards";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { EmoFaq, ESec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStrip } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
 
 
@@ -35,21 +38,24 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<Hero
-		pImgF="/Media/Emoperm/Building/Newcities/Construction/"
-		pTitle="تراخيص البناء بالمدن الجديدة"
-		pDesc="ملف ترخيص البناء داخل جهاز المدينة لا يبدأ من الرسم فقط؛ يبدأ من كود الأرض، التخصيص، محضر الاستلام، الكراسة، الموقف المالي، واشتراطات كل مدينة"
-		pTitleClr={Colors.WhiteOff}
-		pDescClr={Colors.WhiteOff}
-		pHzAlign="center"
-		pVrAlign="center"
-		pBlurL="on"
-		pBlurP="on"
-		pPosL="44% 46% 10% 8%"
-		pPosP="18% 6% 18% 6%"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="راجع ترخيص قطعة الأرض" />
+		<VrStack
+			pSize={new Size(new NumPer("40%","95%"))}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))}
+			pHzAlign={"Center"}
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("تراخيص البناء بالمدن الجديدة")}
+				pText={Text.Body.Centered.OfText("التفاصيل الكاملة عن استخراج تراخيص البناء في المدن الجديدة التابعة لهيئة المجتمعات العمرانية ، الأوراق المطلوبة لاستخراج رخصة البناء ، إجراءات استخراج رخصة البناء ، تكلفة استخراج رخصة البناء")}
+			/>
+
+			<Emograph pText={Text.Body.Bold.Centered.OfText("القاهرة الجديدة - التجمع - أكتوبر - الشيخ زايد - العبور - بدر")} />
+
+			<EmoCall BlackSky pText="تواصل معنا" />
+
+		</VrStack>
 
 	</Hero>
 
@@ -59,113 +65,19 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
-		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
-			pTitle="ترخيص البناء في المدن الجديدة ملف أرض قبل أن يكون ملف مبنى"
-			pDesc="المدينة الجديدة ليست حيًا عاديًا، والقطعة لا تفحص بمعزل عن جهاز المدينة وهيئة المجتمعات العمرانية وكراسة الشروط ومحضر الاستلام والمهلة والموقف المالي"
-		/>
+		<SecTitle Bistage pTitle="أنواع طلبات تراخيص البناء في المدن الجديدة" />
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<VrStack
-				pWidth={new Pixel(1220, 340)}
-				pGap={new Pixel(28, 16)}
-				pPad={new Pixel(34, 14)}
-			>
-
-				<Emograph
-					pTitle={Text.H3.Centered.OfText("الخطأ الشائع: التعامل مع جهاز المدينة كأنه حي")}
-					pText={Text.Body.WithAlign("right").OfText(`ترخيص البناء في المدن الجديدة له منطق مختلف عن الترخيص داخل الأحياء القديمة. في الحي يكون السؤال الأكبر غالبًا عن خط التنظيم وعرض الشارع وبيان الصلاحية والملكية القديمة والمباني المجاورة. أما في المدن الجديدة فالسؤال الأول يكون: ما علاقة المالك بقطعة الأرض داخل جهاز المدينة؟ هل توجد قطعة مخصصة فعلًا؟ هل صدر محضر استلام؟ هل تم سداد المستحقات؟ هل انتهت مهلة استخراج الترخيص؟ هل توجد رخصة سابقة أو تنفيذ قائم؟ هل القطعة سكنية أم خدمية أم تجارية؟ هل التصميم ملتزم بالكراسة والنموذج المعماري والطابع المعتمد للمنطقة؟ وهل بيانات المالك والمكتب الهندسي مفعلة على منظومة الخدمات الإلكترونية؟ لذلك لا يصح أن تبدأ الخدمة برسومات معمارية مباشرة، لأن الرسم الصحيح على ورق غير صالح إداريًا لن يتحول إلى رخصة.`)}
-					pSize={new Size(new NumPer(1120, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<CardsGr
-					pWidth={new RespString("1220px", "100%")}
-					pCardBg={new ElemBg(Colors.SkyLite)}
-					pGrTitle={Text.H3.Centered.OfText("محاور ملف المدن الجديدة")}
-					pCardTitleFnt={Text.H4}
-					pCardBodyFnt={Text.Body}
-					pTopic1={new Topic("القطعة والجهاز", "رقم القطعة، المنطقة، الحي، كود الأرض، محضر الاستلام، إخطار التخصيص، عقد الملكية، والمدينة التابع لها الطلب.")}
-					pTopic2={new Topic("الموقف المالي والإداري", "الأقساط، المصروفات، مجلس الأمناء، المهلة، الغرامات، التنازل، الرخص السابقة، والموقف التنفيذي إن وجد.")}
-					pTopic3={new Topic("الاشتراطات البنائية", "النسبة البنائية، عدد الأدوار، الردود، البدروم، غرف السطح، أماكن الانتظار، الاستخدام المسموح، والطابع المعماري.")}
-					pTopic4={new Topic("التقديم الإلكتروني", "حساب المالك، حساب المكتب الهندسي، تفعيل المستندات، كود الأرض، رفع الرسومات والملفات، السداد، ومتابعة الاستيفاءات.")}
-				/>
-
-			</VrStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="ما الذي يميز المدن الجديدة عن الأحياء؟"
-			pDesc="نفس قانون البناء حاضر، لكن تطبيقه داخل المدن الجديدة يتداخل مع قانون هيئة المجتمعات العمرانية واللائحة العقارية والكراسات الخاصة بكل طرح"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<VrStack
-				pWidth={new Pixel(1180, 340)}
-				pGap={new Pixel(28, 16)}
-				pPad={new Pixel(34, 14)}
-			>
-
-				<Emograph
-					pTitle={Text.H3.Centered.White.OfText("مصدر الاشتراطات ليس مستندًا واحدًا")}
-					pText={Text.Body.WithAlign("right").White.OfText(`في المدن الجديدة لا يكفي أن تسأل عن قانون البناء فقط. قانون البناء رقم 119 لسنة 2008 ولائحته التنفيذية يمثلان القاعدة العامة، لكن قطعة الأرض التابعة لهيئة المجتمعات العمرانية تدخل معها مصادر أخرى: كراسة الشروط، قرارات مجلس إدارة الهيئة، اشتراطات جهاز المدينة، نموذج الطابع المعماري، مخططات المنطقة، تعليمات المرافق، وقرارات خاصة ببعض المناطق مثل بيت الوطن أو الحزام الأخضر أو مناطق المستثمرين أو قطع الخدمات أو القطع الصناعية والسياحية. معنى ذلك أن قطعتين بنفس المساحة قد تختلفان في الردود وعدد الأدوار والنسبة البنائية لمجرد اختلاف المدينة أو المنطقة أو نوع الطرح. ولهذا السبب يجب التعامل مع كل قطعة كحالة مستقلة، لا كنسخة من ملف جار أو ملف سابق في مدينة أخرى.`)}
-					pSize={new Size(new NumPer(1080, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<CardsGr
-					pWidth={new RespString("1180px", "100%")}
-					pCardBg={new ElemBg(Colors.WhiteOff)}
-					pGrTitle={Text.H3.Centered.White.OfText("أربع طبقات يجب قراءتها قبل التقديم")}
-					pCardTitleFnt={Text.H4}
-					pCardBodyFnt={Text.Body}
-					pTopic1={new Topic("طبقة القانون", "قانون البناء واللائحة التنفيذية والكود المصري ومتطلبات التأمين والحريق والجراجات وسلامة التنفيذ.")}
-					pTopic2={new Topic("طبقة الهيئة", "اللائحة العقارية لهيئة المجتمعات العمرانية، قرارات المجلس، قواعد التخصيص، المهل، السداد، ومخاطبات الجهاز.")}
-					pTopic3={new Topic("طبقة المدينة", "اشتراطات جهاز المدينة المختص، كود الأرض، موقف المرافق، الطابع المعماري، نماذج الفيلات أو العمارات أو الخدمات.")}
-					pTopic4={new Topic("طبقة الحالة", "هل الطلب إنشاء جديد أم تعلية أم تعديل أم استكمال غرف سطح أم تجديد رخصة أم تحديد موقف تنفيذي؟")}
-				/>
-
-			</VrStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.SkyLite};`}
-			pTitle="أنواع طلبات تراخيص البناء في المدن الجديدة"
-			pDesc="المنظومة لا تتعامل مع كل الحالات كطلب إنشاء جديد؛ اختيار نوع الطلب الخطأ قد يوقف الملف من بدايته"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<EmoList
 				pWidth={new RespString("1080px", "100%")}
@@ -194,24 +106,25 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.Gray1)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
-		<SecTitle
-			style = {`--StripBg:${Colors.BistageDark};`}
-			pTitle="خطوات العمل على ترخيص بناء في مدينة جديدة"
-			pDesc="الترتيب الصحيح يقلل الاستيفاءات: لا تبدأ بالرسم النهائي قبل تثبيت الأرض والاشتراطات وحساب المالك والمكتب"
-		/>
+		<SecTitle BistageDark pTitle="خطوات العمل على ترخيص بناء في مدينة جديدة" />
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg(Colors.Gray1)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(24, 14)} pPad={new Pixel(32, 12)}>
 
 				<EmoList
 					pWidth={new RespString("590px", "100%")}
-					pTitle={Text.H3.Centered.OfText("مرحلة ما قبل التصميم")}
-					pDesc={Text.Body.Centered.OfText("هدفها منع إنتاج تصميم غير قابل للترخيص")}
+					pTitle={Text.H3.Centered.OfText("مرحلة التصميم")}
 					pHeadBg={new ElemBg(Colors.WhiteOff)}
 					pItemsBg={new ElemBg(Colors.SkyLite)}
 					pNumbered={true}
@@ -250,8 +163,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -259,20 +175,17 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 			pDesc="المستندات تتغير حسب نوع الطلب، لكن الهيكل العملي يدور حول المالك والأرض والاشتراطات والرسومات والاعتمادات"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack
 				pWidth={new Pixel(1180, 340)}
 				pGap={new Pixel(28, 16)}
 				pPad={new Pixel(34, 14)}
 			>
-
-				<Emograph
-					pTitle={Text.H3.Centered.OfText("لا تعتمد على قائمة ثابتة منقولة")}
-					pText={Text.Body.WithAlign("right").OfText(`ملف المدن الجديدة يتغير بتغير الطلب. إنشاء جديد يختلف عن تعديل، والتعلية تختلف عن استكمال غرف السطح، وقطعة فردية في بيت الوطن تختلف عن قطعة شركة أو خدمة أو نشاط صناعي. لذلك فالقائمة التالية ليست وعدًا بأن كل بند سيطلب في كل مدينة، لكنها قائمة مراجعة عملية تمنع النقص المتكرر. عند الفحص الفعلي يجب الرجوع إلى جهاز المدينة والبوابة والكراسة وبيان الصلاحية والرخص السابقة، لأن الجهاز قد يطلب مستندًا إضافيًا بسبب طبيعة القطعة أو الموقف التنفيذي أو النشاط أو الارتفاع أو قرب الموقع من قيود طيران أو دفاع أو مرافق.`)}
-					pSize={new Size(new NumPer(1060, "100%"), new NumPer("auto", "auto"))}
-				/>
 
 				<EmoList
 					pWidth={new RespString("1080px", "100%")}
@@ -303,96 +216,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="اختلافات مهمة بين المدن والمناطق"
-			pDesc="الفرق لا يكون فقط بين مدينة وأخرى، بل أحيانًا بين منطقة ومنطقة داخل نفس المدينة"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<VrStack
-				pWidth={new Pixel(1220, 340)}
-				pGap={new Pixel(28, 16)}
-				pPad={new Pixel(34, 14)}
-			>
-
-				<Emograph
-					pTitle={Text.H3.Centered.White.OfText("لا توجد قاعدة واحدة تصلح لكل المدن الجديدة")}
-					pText={Text.Body.WithAlign("right").White.OfText(`عند مراجعة كراسات وشروط الطروحات تظهر حقيقة مهمة: كثير من القطع تشترك في نسبة بناء 50%، لكن هذا لا يعني أن كل المدن بنفس الاشتراطات. بعض مناطق 6 أكتوبر والحزام الأخضر تظهر بها نسب 40% أو 50% حسب الحوض والمنطقة. بعض مناطق الشروق وبدر والعبور الجديدة تسمح بأدوار أكثر من مناطق أخرى. بعض المناطق لها ردود أمامية وخلفية وجانبية مختلفة. بعض القطع تطل على طريق أو حديقة أو ناصية أو نيل أو بحر فتدخل في نسب تميز مختلفة عند التسعير. وبعض المناطق تخضع لقيود ارتفاع مفروضة من القوات المسلحة أو سلطة الطيران المدني إذا وجدت. لذلك يجب التعامل مع جدول الاشتراطات الخاص بالمدينة والمنطقة لا مع اسم المدينة فقط.`)}
-					pSize={new Size(new NumPer(1080, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<CardsGr
-					pWidth={new RespString("1220px", "100%")}
-					pCardBg={new ElemBg(Colors.WhiteOff)}
-					pGrTitle={Text.H3.Centered.White.OfText("تصنيف عملي لاختلافات المدن")}
-					pCardTitleFnt={Text.H4}
-					pCardBodyFnt={Text.Body}
-					pTopic1={new Topic("القاهرة الجديدة والتجمعات", "ملفاتها حساسة بسبب تعدد المناطق والكثافة والبوابة الإلكترونية ونماذج المدن، وقد شهد جهاز القاهرة الجديدة تفعيل رخصة إلكترونية بالكامل، لذلك يجب ضبط حساب المالك والمكتب وكود الأرض والملفات قبل التقديم.")}
-					pTopic2={new Topic("الشروق وبدر وشرق القاهرة", "تظهر في بعض الطروحات مناطق بردود ونسب وأدوار مختلفة، كما يجب الانتباه إلى أي قيود ارتفاع أو طابع معماري أو مواقع قريبة من محاور استراتيجية أو منشآت مؤثرة.")}
-					pTopic3={new Topic("6 أكتوبر وزايد وحدائق أكتوبر وسفنكس", "غرب القاهرة والجيزة يحتوي مناطق مختلفة مثل الحزام الأخضر والسياحية وغرب سوميد والمناطق الاستثمارية، وبعضها له نسب بناء وردود وأسعار تقدير مختلفة.")}
-					pTopic4={new Topic("العبور والعبور الجديدة", "تتأثر بنوع الطرح والمنطقة والحي، وقد تظهر أدوار ونسب مختلفة حسب المنطقة، فلا يكفي القول إن القطعة في العبور دون تحديد الحي والمجاورة.")}
-					pTopic5={new Topic("العاصمة والمدن الحديثة", "بعض المدن الحديثة تتعامل بحساسية أكبر مع الطابع العمراني والمخططات والمرافق والتنسيق مع جهات مختلفة، خصوصًا عند الأنشطة غير السكنية أو الواجهات أو المحاور الرئيسية.")}
-					pTopic6={new Topic("مدن الصعيد والساحل", "تصنيف تكلفة المتر المسطح والاشتراطات قد يختلف بسبب نطاق المحافظة وطبيعة المدينة، وبعض المدن الساحلية أو المطلة على البحر تدخل معها اعتبارات تميز أو طابع أو قيود ارتفاع.")}
-				/>
-
-			</VrStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Sky};`}
-			pTitle="أمثلة على اختلاف النسبة والردود وعدد الأدوار"
-			pDesc="الأرقام التالية لا تستخدم كبديل عن بيان الصلاحية، لكنها توضح لماذا لا يصح نسخ ملف مدينة إلى مدينة أخرى"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<EmoList
-				pWidth={new RespString("1080px", "100%")}
-				pTitle={Text.H3.Centered.OfText("قراءة منطق الاختلاف لا حفظ الأرقام")}
-				pDesc={Text.Body.Centered.OfText("بعض كراسات بيت الوطن مثلًا تعرض مناطق بنسبة 50% وأخرى بنسبة 40%، ومناطق بدروم وأرضي وثلاثة أدوار، وأخرى بدروم وأرضي ودورين أو خمسة أدوار، مع ردود مختلفة حسب المدينة والمنطقة")}
-				pHeadBg={new ElemBg(Colors.Creamy)}
-				pItemsBg={new ElemBg(Colors.SkyLite)}
-				pNumbered={false}
-				pItems={[
-					{ Title: "6 أكتوبر والحزام الأخضر", Items: ["قد تظهر مناطق بنسبة بنائية 50% وأخرى 40% حسب الحوض والمنطقة.", "بعض الطروحات تسمح ببدروم وأرضي وأول، وأخرى بدروم وأرضي ودورين أو أكثر حسب المنطقة.", "ردود 4م أمامي و6م خلفي و3م جانبي تظهر في بعض مناطق الحزام، لكن لا يجوز تعميمها على كل أكتوبر."] },
-					{ Title: "الشروق", Items: ["بعض مناطق الشروق تظهر بنسبة بنائية 50% مع بدروم وأرضي ودورين، بينما مناطق أخرى تسمح بعدد أدوار أكبر.", "مناطق مثل زهرة الشروق أو شرق المنطقة التاسعة لا يجب معاملتها ككتلة واحدة دون الرجوع للجدول الخاص بها.", "الطابع المعماري والنموذج المعتمد من الجهاز قد يكونان حاكمين قبل الواجهة النهائية."] },
-					{ Title: "بدر", Items: ["بعض مناطق الامتداد الشرقي ترد في كراسات بنسبة 50% وبدروم وأرضي وخمسة أدوار في مواضع محددة.", "هذا لا يعني أن كل قطع بدر بنفس العدد أو النسبة، لأن المنطقة ورقمها حاكمان.", "قرب بعض المناطق من محاور أو نطاقات تخطيطية يستدعي مراجعة ارتفاعات وقيود خاصة عند وجودها."] },
-					{ Title: "القاهرة الجديدة والتجمع", Items: ["تعدد المناطق داخل القاهرة الجديدة يجعل كود الأرض وبيان الصلاحية أهم من اسم المدينة.", "العمل الإلكتروني يزيد حساسية مطابقة بيانات المالك والمكتب والقطعة.", "بعض العملاء يخلطون بين التجمع الأول والخامس والثالث وبيت الوطن والأندلس وشمال الرحاب، مع أن لكل منطقة سياقها."] },
-					{ Title: "مدن الجيزة الجديدة", Items: ["الشيخ زايد و6 أكتوبر وحدائق أكتوبر وأكتوبر الجديدة وسفنكس ليست ملفًا واحدًا.", "المناطق الاستثمارية والسياحية والصناعية قد يكون لها تقدير تكلفة أو اشتراطات مختلفة عن القطع السكنية العادية.", "قرب بعض المواقع من مطارات أو محاور أو مناطق ذات طبيعة خاصة يستدعي مراجعة القيود قبل اعتماد الارتفاع."] }
-				]}
-			/>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.Gray1)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.BistageDark};`}
@@ -400,8 +228,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 			pDesc="تقدير تكلفة الرخصة يبدأ من المسطح المرخص وقيمة المتر المعتمدة، ثم تدخل الرسوم والتأمينات والمراجعات حسب الحالة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg(Colors.Gray1)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack
 				pWidth={new Pixel(1180, 340)}
@@ -423,7 +254,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 					pCardBodyFnt={Text.Body}
 					pTopic1={new Topic("المسطح لا الأرض", "الحساب يدور حول المسطحات البنائية المرخصة وليس مساحة قطعة الأرض فقط.")}
 					pTopic2={new Topic("قيمة متر معيارية", "تستخدم قيمة المتر المعلنة إداريًا لتقدير قيمة الأعمال، وقد تختلف حسب نطاق المدينة والمحافظة.")}
-					pTopic3={new Topic("التأمين له عتبات", "المباني ذات قيمة أعمال مليون جنيه فأكثر أو أربعة أدوار فأكثر أو التعليات تدخل غالبًا في نطاق وثيقة التأمين.")}
+					pTopic3={new Topic("وثيقة التأمين", "المباني ذات قيمة أعمال مليون جنيه فأكثر أو أربعة أدوار فأكثر أو التعليات تدخل غالبًا في نطاق وثيقة التأمين.")}
 					pTopic4={new Topic("السداد الإلكتروني", "في المسار الإلكتروني يتم تحديد الرسوم بعد فحص الطلب، ثم السداد من خلال الوسائل المتاحة على المنصة عند تفعيل الخدمة.")}
 				/>
 
@@ -455,20 +286,25 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.SkyLite};`}
+			SkyLite
 			pTitle="الجهات التي قد تظهر في ملف ترخيص المدن الجديدة"
 			pDesc="ليس كل ملف يحتاج كل الجهات، لكن تجاهل جهة واحدة عند وجودها قد يوقف الترخيص أو يخفض الارتفاع أو يغير التصميم"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
-				pWidth={new RespString("1220px", "100%")}
 				pCardBg={new ElemBg(Colors.Creamy)}
 				pGrTitle={Text.H3.Centered.OfText("جهات وموافقات لا يصح تجاهلها")}
 				pCardTitleFnt={Text.H4}
@@ -491,17 +327,19 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.BlackOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="القيود الخاصة: الدفاع والطيران والمرافق والحريق"
-			pDesc="هذه البنود لا تظهر في كل قطعة، لكنها هي التي تجعل بعض الملفات تتغير فجأة بعد أن يظن المالك أن التصميم انتهى"
-		/>
+		<SecTitle Gray3 pTitle="القيود الخاصة: الدفاع والطيران والمرافق والحريق" />
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg(Colors.BlackOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<EmoList
 				pWidth={new RespString("1080px", "100%")}
@@ -529,23 +367,21 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
-		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
-			pTitle="الرسومات الهندسية المطلوبة للمدن الجديدة"
-			pDesc="الرسم هنا لا يشرح المبنى فقط، بل يثبت أن المشروع ترجم اشتراطات الجهاز والكراسة إلى تصميم قابل للترخيص"
-		/>
+		<SecTitle GreenLite pTitle="الرسومات الهندسية المطلوبة للمدن الجديدة" />
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
-			<VrStack
-				pWidth={new Pixel(1180, 340)}
-				pGap={new Pixel(28, 16)}
-				pPad={new Pixel(34, 14)}
-			>
+			<VrStack pGap={new Pixel(28, 16)} pPad={new Pixel(34, 14)}>
 
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("اللوحات يجب أن تجيب على أسئلة الجهاز")}
@@ -554,7 +390,6 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 				/>
 
 				<CardsGr
-					pWidth={new RespString("1180px", "100%")}
 					pCardBg={new ElemBg(Colors.SkyLite)}
 					pGrTitle={Text.H3.Centered.OfText("مكونات الرسومات")}
 					pCardTitleFnt={Text.H4}
@@ -563,47 +398,9 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 					pTopic2={new Topic("المساقط المعمارية", "كل دور مرخص: بدروم، أرضي، متكرر، غرف سطح، خدمات، مناور، سلالم، ومداخل.")}
 					pTopic3={new Topic("الواجهات والقطاعات", "إثبات الارتفاع، المناسيب، الطابع المعماري، الفتحات، وخطوط البروز أو الارتداد.")}
 					pTopic4={new Topic("الإنشائي والجسات", "أساسات، أعمدة، كمرات، أسقف، تقرير تربة، ونوتة حسابية عند طلبها أو عندما تفرض الحالة ذلك.")}
-					pTopic5={new Topic("شهادات الترخيص", "شهادة صلاحية الأعمال، شهادة إشراف، نموذج حساب تكاليف، وتوقيعات واعتمادات المكتب الهندسي.")}
-					pTopic6={new Topic("ملفات البوابة", "PDF مختوم ومقروء، CAD منظم، ملفات مضغوطة، وتسميات واضحة تقلل أخطاء الرفع والفحص.")}
 				/>
 
 			</VrStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.BistageDark};`}
-			pTitle="أخطاء تؤخر تراخيص البناء في المدن الجديدة"
-			pDesc="أغلب التعطيل لا يحدث بسبب ورقة واحدة ناقصة، بل بسبب بدء الملف من فرضية غير صحيحة"
-		/>
-
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
-
-			<CardsGr
-				pWidth={new RespString("1220px", "100%")}
-				pCardBg={new ElemBg(Colors.WhiteOff)}
-				pGrTitle={Text.H3.Centered.White.OfText("أخطاء نغلقها قبل فتح الطلب")}
-				pCardTitleFnt={Text.H4}
-				pCardBodyFnt={Text.Body}
-				pTopic1={new Topic("التصميم قبل قراءة الكراسة", "ينتج رسومات مخالفة للنسبة أو الردود أو الطابع أو البدروم أو غرف السطح، فتضيع تكلفة التصميم في التعديل.")}
-				pTopic2={new Topic("تجاهل كود الأرض", "التقديم الإلكتروني يتعامل مع قطعة محددة، وأي تعارض بين الكود والمالك والمكتب يوقف الطلب أو يمنع تسكينه.")}
-				pTopic3={new Topic("موقف مالي غير مغلق", "وجود أقساط أو مستحقات أو غرامات أو مهلة منتهية قد يمنع التعامل حتى لو كانت الرسومات جاهزة.")}
-				pTopic4={new Topic("خلط الإنشاء بالتعديل", "قطعة عليها رخصة أو تنفيذ قائم لا تعامل مثل أرض فضاء، وقد تحتاج تحديد موقف تنفيذي وشهادة تحمل ومراجعة للرخصة السابقة.")}
-				pTopic5={new Topic("إهمال قيود الارتفاع", "القوات المسلحة أو الطيران المدني قد يكون لهما أثر في بعض المناطق، ولا يصح اكتشاف ذلك بعد تثبيت التصميم.")}
-				pTopic6={new Topic("ملفات إلكترونية غير صالحة", "ملفات PDF غير مختومة أو CAD غير منظم أو مستندات منتهية الصلاحية قد تسبب رفض التفعيل أو طلب استيفاء.")}
-			/>
 
 		</EmoStrip>
 
@@ -628,8 +425,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 			pDesc="نراجع قطعة الأرض كملف جهاز كامل، ثم نحدد مسار الترخيص الصحيح ونجهز الرسومات والمستندات والمتابعة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack
 				pWidth={new Pixel(1100, 340)}
@@ -652,14 +452,6 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 						{ Title: "التقديم والمتابعة", Items: ["رفع المستندات، متابعة الاستيفاءات، السداد، ومتابعة إصدار الرخصة حتى التسليم."] }
 					]}
 				/>
-
-				<Emograph
-					pTitle={Text.H3.Centered.OfText("أرسل مستندات الأرض قبل تنفيذ أي تصميم نهائي")}
-					pText={Text.Body.Centered.OfText(`أفضل توقيت لمراجعة الترخيص هو قبل اعتماد المساقط النهائية. بمجرد معرفة المدينة ورقم القطعة ونوع الطلب ومستند الاستلام والكراسة والرخص السابقة إن وجدت، يمكن تحديد هل المطلوب بيان صلاحية فقط أم إنشاء جديد أم تعديل أو تعلية أم استكمال غرف سطح، وهل الملف يحتاج تأمينًا أو تقرير تربة أو قيود ارتفاع أو موافقة خاصة. هذه القراءة المبكرة توفر وقتًا وتمنع إعادة رسم مشروع كامل بسبب بند كان واضحًا في مستندات الجهاز.`)}
-					pSize={new Size(new NumPer(980, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<EmoCall BlackSky pText="اتصل لمراجعة ترخيص البناء" />
 
 			</VrStack>
 
@@ -723,16 +515,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ReadAlso
-		pTitle={Text.H2.Centered.OfText("صفحات قريبة من خدمة تراخيص المدن الجديدة")}
-		pDesc={Text.Body.Centered.OfText("ابدأ من الصفحة الأقرب لنوع طلبك حتى لا تختلط إجراءات الإنشاء بالتعلية أو استكمال الروف")}
-	>
-
-		<ReadAlsoItem
-			pTitle="تراخيص البناء بالأحياء والمدن الجديدة"
-			pDesc="الصفحة التوزيعية التي تشرح الفرق بين مسار الأحياء ومسار المدن الجديدة."
-			pHref="/emoperm/building"
-		/>
+	<ReadAlso>
 
 		<ReadAlsoItem
 			pTitle="ترخيص تعلية بالمدن الجديدة"
@@ -746,18 +529,6 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 			pHref="/emoperm/building/newcities/construction/increase"
 		/>
 
-		<ReadAlsoItem
-			pTitle="ترخيص بناء بالأحياء"
-			pDesc="خدمة مستقلة للعقارات داخل الأحياء والوحدات المحلية خارج أجهزة المدن الجديدة."
-			pHref="/emoperm/building/districts/construction"
-		/>
-
-		<ReadAlsoItem
-			pTitle="التصالح على مخالفات البناء"
-			pDesc="خدمة للحالات التي لا تبدأ بترخيص جديد بل تحتاج تسوية أو تقنين موقف مخالفة قائمة."
-			pHref="/emoperm/building/reconcile"
-		/>
-
 	</ReadAlso>
 
 
@@ -766,30 +537,24 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<RelServices
-		pTitle={Text.H2.Centered.White.OfText("خدمات هندسية مرتبطة")}
-		pDesc={Text.Body.Centered.White.OfText("ترخيص البناء لا ينفصل عن التصميم والإشراف والتقارير الفنية")}
-	>
+	<RelServices>
 
 		<RelServiceItem
 			pTitle="تصميم معماري وإنشائي"
 			pDesc="إعداد الرسومات الهندسية المناسبة للترخيص والتنفيذ طبقًا لاشتراطات جهاز المدينة والكود المصري."
 			pHref="/emodsign"
-			pBtnText="افتح الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="إشراف هندسي على البناء"
 			pDesc="متابعة تنفيذ الأعمال بعد صدور الترخيص طبقًا للرسومات والاشتراطات والمواصفات."
 			pHref="/emocrete/supervision/construction"
-			pBtnText="افتح الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="تقارير وشهادات هندسية"
 			pDesc="تقارير فنية وشهادات قد يحتاجها ملف التعلية أو التحمل الإنشائي أو الموقف التنفيذي."
 			pHref="/emonsult/report"
-			pBtnText="افتح الخدمة"
 		/>
 
 	</RelServices>
