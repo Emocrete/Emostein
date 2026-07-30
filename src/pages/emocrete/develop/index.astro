@@ -1,7 +1,12 @@
 ---
-import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESec, Hero, HzStack, IncLineSep, IndexSec, SecTitle, Tree, VrStack, YTPlayer } from "@/Widgets";
+import { CardsGr } from "@/Widgets/Cards";
+import { EmoBtn, Emograph, EmoList, HzStack, SecTitle, Tree, VrStack } from "@/Widgets/Comp";
+import { YTPlayer } from "@/Widgets/Media";
+import { ESec, Hero, IndexSec } from "@/Widgets/Sections";
+import { BottTriSep, IncLineSep } from "@/Widgets/Separators";
+import { EmoStrip } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
 
 
@@ -29,6 +34,12 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESe
 	pDescr="نقدم حلولاً متكاملة في مجال التطوير العقاري، بداية من الفكرة والتخطيط وصولاً إلى التنفيذ والتسليم. نركز على الجودة، الجدوى الاقتصادية، والاستدامة في كل مشروع نتبناه"
 >
 
+
+
+
+
+
+
 	<Hero
 		pTitle="تطوير عقاري"
 		pDesc="نقدم حلولاً متكاملة في مجال التطوير العقاري، بداية من الفكرة والتخطيط وصولاً إلى التنفيذ والتسليم. نركز على الجودة، الجدوى الاقتصادية، والاستدامة في كل مشروع نتبناه"
@@ -42,19 +53,29 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESe
 
 	</Hero>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#FFFDF8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #F6F1E8 "
 			pTitle="ما المقصود بخدمات التطوير العقاري هنا؟"
 			pDesc="صفحة تعريفية عامة قبل الانتقال إلى الصفحات المتخصصة"
-			style="--StripBg:#F6F1E8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFDF8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFDF8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<Emograph
 				pTitle={Text.H3.WithColor("#17345C").OfText("التطوير العقاري هنا ليس مقاولة بناء فقط")}
@@ -66,55 +87,29 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESe
 
 	</ESec>
 
-	<ESec
-		pBg={new ElemBg("#F6F1E8")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-		<SecTitle
-			pTitle="نظامان مختلفان في التمويل والإدارة"
-			pDesc="اختيار النظام الصحيح من البداية يحدد طريقة الاتفاق، ومصدر التمويل، وتوزيع الحقوق، وآلية إدارة المشروع"
-			style="--StripBg:#17345C;"
-		/>
 
-		<EmoStrip pBg={new ElemBg("#F6F1E8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
 
-			<HzStack>
 
-				<DataCard
-					TitleTag="h3"
-					pTitle="البناء على أراضي المشاركات"
-					pBody="نظام مناسب لصاحب أرض يريد تعظيم قيمة الأرض بدون الدخول منفردا في عبء التمويل والإدارة والتنفيذ. يتم دراسة الأرض، وتقدير تكلفة المشروع، وتحديد نسب المشاركة، ثم إدارة التصميمات والتراخيص والتنفيذ طبقا لاتفاق واضح بين أطراف المشروع."
-					pLink="/emocrete/develop/share"
-				/>
 
-				<DataCard
-					TitleTag="h3"
-					pTitle="البناء لاتحاد ملاك"
-					pBody="نظام مناسب لمجموعة ملاك أو سكان اتفقوا على تمويل بناء عقارهم بأنفسهم بدلا من الاعتماد على مطور خارجي. يتم تنظيم التمويل الذاتي، وإدارة التصميمات والتعاقدات والتنفيذ، ومتابعة الحسابات حتى التسليم."
-					pLink="/emocrete/develop/owners"
-				/>
 
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
 
 	<ESec
 		pBg={new ElemBg("#FFFFFF")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #FFFDF8 "
 			pTitle="ما الفرق العملي بين النظامين؟"
 			pDesc="الاختلاف ليس في شكل المبنى فقط، بل في من يمول، ومن يقرر، ومن يتحمل المخاطر، وكيف يتم توزيع الحقوق"
-			style="--StripBg:#FFFDF8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFFFF")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -136,19 +131,29 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESe
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#F6F1E8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #B78A25 "
 			pTitle="دورنا في إدارة مشروع التطوير"
 			pDesc="نحول الفكرة من اتفاق شفهي أو رغبة عامة إلى مشروع قابل للحساب والتنفيذ والمتابعة"
-			style="--StripBg:#B78A25;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F6F1E8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#F6F1E8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -176,19 +181,29 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESe
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#FFFDF8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #17345C "
 			pTitle="مسار العمل قبل اختيار الصفحة المتخصصة"
 			pDesc="نبدأ بفهم الحالة، ثم نحدد هل الأنسب هو نظام مشاركات أم اتحاد ملاك"
-			style="--StripBg:#17345C;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFDF8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFDF8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack>
 
@@ -216,40 +231,10 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESe
 
 	</ESec>
 
-	<ESec
-		pBg={new ElemBg("#17345C")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-		<SecTitle
-			pTitle="انتقل إلى الصفحة المناسبة لحالتك"
-			pDesc="هذه الصفحة للتعريف والتوزيع، أما التفاصيل الكاملة فمقسمة حسب نظام التطوير"
-			style="--StripBg:#102744;"
-		/>
 
-		<EmoStrip pBg={new ElemBg("#17345C")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
 
-			<HzStack>
 
-				<DataCard
-					TitleTag="h3"
-					pTitle="لو أنت صاحب أرض"
-					pBody="ابدأ من صفحة البناء على أراضي المشاركات، لأنها تشرح فكرة دخول الأرض كحصة داخل المشروع، وطريقة دراسة الجدوى، وتقدير نسب الأطراف، وإدارة الاتفاق قبل التنفيذ."
-					pLink="/emocrete/develop/share"
-				/>
 
-				<DataCard
-					TitleTag="h3"
-					pTitle="لو أنتم مجموعة ملاك أو سكان"
-					pBody="ابدأ من صفحة البناء لاتحاد ملاك، لأنها تشرح كيفية تنظيم التمويل الذاتي، وتوزيع الالتزامات، وإدارة القرارات، ومتابعة التنفيذ بحسابات واضحة بين السكان."
-					pLink="/emocrete/develop/owners"
-				/>
 
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
 
 </BLayout>
