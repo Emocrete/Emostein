@@ -1,7 +1,10 @@
 ---
-import { Align, ElemBg, NumPer, Size, Text } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { DataCard, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } from "@/Widgets";
+import { FullCard } from "@/Widgets/Cards";
+import { EmoCall, Emograph, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { ESec, Hero } from "@/Widgets/Sections";
+import { EmoStrip } from "@/Widgets/Strips";
+import { Align, ElemBg, EmoMediaData, Loc, NumPer, Size, Text } from "@/TypesLib";
 ---
 
 
@@ -29,32 +32,54 @@ import { DataCard, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } 
 	pDescr="خدمات إدارة مشروعات البناء لاتحاد ملاك في مصر بتمويل من السكان أو الملاك أنفسهم، بداية من دراسة الأرض أو العقار وتنظيم الالتزامات، حتى التصميم والترخيص والتعاقد والتنفيذ والمتابعة والتسليم."
 >
 
-	<Hero
-		pTitle="البناء لاتحاد ملاك"
-		pDesc="نحول اتفاق الملاك أو السكان إلى مشروع بناء منظم بتمويل ذاتي، وحسابات واضحة، وإدارة هندسية تحفظ حقوق كل طرف"
-		pTitleClr="#17345C"
-		pDescClr="#17345C"
-		pHzAlign="center"
-		pVrAlign="center"
-		pPosL="12% 48% 18% 7%"
-		pPosP="7% 7% 48% 7%"
-		pBlurL="off"
-		pBlurP="off"
-	/>
+
+
+
+
+
+
+	<Hero>
+
+		<VrStack
+			pSize={new Size(new NumPer("40%","95%"))}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))}
+			pHzAlign={"Center"}
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("البناء لاتحاد ملاك")}
+				pText={Text.Body.Centered.OfText("نحول اتفاق الملاك أو السكان إلى مشروع بناء منظم بتمويل ذاتي، وحسابات واضحة، وإدارة هندسية تحفظ حقوق كل طرف")}
+			/>
+
+			<EmoCall BlackSky />
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
 
 	<ESec
 		pBg={new ElemBg("#FFFDF8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #F6F1E8 "
 			pTitle="ما المقصود بالبناء لاتحاد ملاك؟"
 			pDesc="نظام يعتمد على تمويل الملاك أو السكان للمشروع بأنفسهم بدل انتظار مطور خارجي أو الدخول في اتفاق مشاركة"
-			style="--StripBg:#F6F1E8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFDF8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFDF8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<Emograph
 				pTitle={Text.H3.WithColor("#17345C").OfText("الفكرة الأساسية")}
@@ -66,19 +91,29 @@ import { DataCard, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } 
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#F6F1E8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #17345C "
 			pTitle="متى يكون نظام اتحاد الملاك مناسبًا؟"
 			pDesc="النظام يناسب الحالات التي يملك فيها الأطراف الأرض أو الحق في البناء، لكنهم يحتاجون إلى تنظيم التمويل والإدارة والتنفيذ"
-			style="--StripBg:#17345C;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F6F1E8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#F6F1E8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -100,19 +135,29 @@ import { DataCard, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } 
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#FFFFFF")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #FFFDF8 "
 			pTitle="ما الفرق بين اتحاد الملاك والمشاركات؟"
 			pDesc="الاتحاد يعتمد على تمويل داخلي من الملاك، بينما المشاركة تعتمد غالبا على دخول طرف آخر بقيمة تمويل أو إدارة أو تطوير مقابل حصة"
-			style="--StripBg:#FFFDF8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFFFF")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -134,19 +179,29 @@ import { DataCard, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } 
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#F6F1E8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #B78A25 "
 			pTitle="ما الذي يجب ضبطه قبل جمع التمويل؟"
 			pDesc="أكبر خطأ في مشروعات اتحاد الملاك هو البدء في تحصيل الأموال قبل وجود تصور هندسي ومالي وإداري واضح"
-			style="--StripBg:#B78A25;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F6F1E8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#F6F1E8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -174,19 +229,29 @@ import { DataCard, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } 
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#FFFDF8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #17345C "
 			pTitle="مراحل إدارة مشروع اتحاد الملاك"
 			pDesc="نقسم المشروع إلى خطوات واضحة تربط القرار الهندسي بالتمويل والحسابات والتنفيذ"
-			style="--StripBg:#17345C;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFDF8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFDF8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack>
 
@@ -226,19 +291,29 @@ import { DataCard, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } 
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#FFFFFF")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #FFFDF8 "
 			pTitle="أخطاء شائعة في مشروعات اتحاد الملاك"
 			pDesc="هذه الأخطاء قد تجعل مشروعًا قابلًا للنجاح يتحول إلى خلاف طويل أو توقف في منتصف الطريق"
-			style="--StripBg:#FFFDF8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFFFF")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -266,41 +341,45 @@ import { DataCard, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } 
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#17345C")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #102744 "
 			pTitle="ما الذي نقدمه لاتحاد الملاك؟"
 			pDesc="يمكن أن نبدأ بدراسة أولية فقط، أو نتولى الإدارة الهندسية والتنفيذية الكاملة للمشروع حتى التسليم"
-			style="--StripBg:#102744;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#17345C")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#17345C")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
-				<DataCard
-					TitleTag="h3"
-					pTitle="دراسة مبدئية للمشروع"
-					pBody="فحص الأرض أو العقار، وتقدير المساحات والتكلفة والمخاطر، وتجهيز تصور يساعد الملاك على اتخاذ قرار واضح قبل جمع التمويل أو بدء التعاقد."
-					pLink="/emocrete/develop/owners"
+				<FullCard
+					pTitle={Text.H3.OfText("دراسة مبدئية للمشروع")}
+					pText={Text.Body.OfText("فحص الأرض أو العقار، وتقدير المساحات والتكلفة والمخاطر، وتجهيز تصور يساعد الملاك على اتخاذ قرار واضح قبل جمع التمويل أو بدء التعاقد.")}
 				/>
 
-				<DataCard
-					TitleTag="h3"
-					pTitle="إدارة هندسية لاتحاد الملاك"
-					pBody="تنظيم التصميمات والترخيص والمقايسات والتعاقدات ومتابعة التنفيذ والمستخلصات والتقارير، بحيث يعرف كل مالك موقف المشروع والتكلفة بوضوح."
-					pLink="/emocrete/develop/owners"
+				<FullCard
+					pTitle={Text.H3.OfText("إدارة هندسية لاتحاد الملاك")}
+					pText={Text.Body.OfText("تنظيم التصميمات والترخيص والمقايسات والتعاقدات ومتابعة التنفيذ والمستخلصات والتقارير، بحيث يعرف كل مالك موقف المشروع والتكلفة بوضوح.")}
 				/>
 
-				<DataCard
-					TitleTag="h3"
-					pTitle="مقارنة مع نظام المشاركات"
-					pBody="إذا كان المشروع مبنيا على دخول صاحب الأرض بحصة ودخول طرف آخر بالتمويل أو الإدارة مقابل نسبة، فالأقرب لحالتك هو نظام البناء على أراضي المشاركات."
-					pLink="/emocrete/develop/share"
+				<FullCard
+					pTitle={Text.H3.OfText("مقارنة مع نظام المشاركات")}
+					pText={Text.Body.OfText("إذا كان المشروع مبنيا على دخول صاحب الأرض بحصة ودخول طرف آخر بالتمويل أو الإدارة مقابل نسبة، فالأقرب لحالتك هو نظام البناء على أراضي المشاركات.")}
 				/>
 
 			</HzStack>
@@ -308,5 +387,11 @@ import { DataCard, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } 
 		</EmoStrip>
 
 	</ESec>
+
+
+
+
+
+
 
 </BLayout>

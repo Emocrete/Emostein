@@ -1,7 +1,10 @@
 ---
-import { Align, ElemBg, NumPer, Size, Text } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { DataCard, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } from "@/Widgets";
+import { FullCard } from "@/Widgets/Cards";
+import { EmoCall, Emograph, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { ESec, Hero } from "@/Widgets/Sections";
+import { EmoStrip } from "@/Widgets/Strips";
+import { Align, ElemBg, Loc, NumPer, Size, Text } from "@/TypesLib";
 ---
 
 
@@ -29,32 +32,54 @@ import { DataCard, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } 
 	pDescr="خدمات إدارة مشروعات البناء على أراضي المشاركات في مصر، بداية من دراسة الأرض وتقدير الجدوى ونسب المشاركة، حتى التصميم والترخيص والتعاقد والتنفيذ والمتابعة والتسليم."
 >
 
-	<Hero
-		pTitle="البناء على أراضي المشاركات"
-		pDesc="نحول الأرض إلى مشروع عقاري قابل للتنفيذ من خلال دراسة هندسية ومالية واضحة تحفظ حقوق صاحب الأرض وباقي أطراف المشاركة"
-		pTitleClr="#17345C"
-		pDescClr="#17345C"
-		pHzAlign="center"
-		pVrAlign="center"
-		pPosL="12% 48% 18% 7%"
-		pPosP="7% 7% 48% 7%"
-		pBlurL="off"
-		pBlurP="off"
-	/>
+
+
+
+
+
+
+	<Hero>
+
+		<VrStack
+			pSize={new Size(new NumPer("40%","95%"))}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))}
+			pHzAlign={"Center"}
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("البناء على أراضي المشاركات")}
+				pText={Text.Body.Centered.OfText("نحول الأرض إلى مشروع عقاري قابل للتنفيذ من خلال دراسة هندسية ومالية واضحة تحفظ حقوق صاحب الأرض وباقي أطراف المشاركة")}
+			/>
+
+			<EmoCall BlackSky />
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
 
 	<ESec
 		pBg={new ElemBg("#FFFDF8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #F6F1E8 "
 			pTitle="ما هي مشاركات البناء؟"
 			pDesc="نظام تطوير عقاري تكون فيه الأرض هي نقطة البداية، ويتم تحويلها إلى مشروع بناء منظم بدل بيعها أو تركها بدون استغلال"
-			style="--StripBg:#F6F1E8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFDF8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFDF8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<Emograph
 				pTitle={Text.H3.WithColor("#17345C").OfText("الفكرة الأساسية")}
@@ -66,19 +91,29 @@ import { DataCard, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } 
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#F6F1E8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #17345C "
 			pTitle="لمن يناسب نظام المشاركات؟"
 			pDesc="النظام لا يناسب كل أرض ولا كل مالك، لكنه يكون فعالا عندما تكون قيمة الأرض كبيرة والتطوير أفضل من البيع المباشر"
-			style="--StripBg:#17345C;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F6F1E8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#F6F1E8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -100,19 +135,29 @@ import { DataCard, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } 
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#FFFFFF")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #FFFDF8 "
 			pTitle="ما الذي ندرسه قبل قبول مشروع مشاركة؟"
 			pDesc="القرار لا يبدأ من نسبة المشاركة، بل من صلاحية الأرض وقدرة المشروع على تغطية تكلفته وتحقيق قيمة عادلة للأطراف"
-			style="--StripBg:#FFFDF8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFFFF")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -140,19 +185,29 @@ import { DataCard, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } 
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#F6F1E8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #B78A25 "
 			pTitle="نماذج شائعة لاتفاق المشاركة"
 			pDesc="صيغة الاتفاق تختلف حسب قيمة الأرض وحجم التمويل ودور كل طرف، ولا توجد نسبة عادلة قبل دراسة المشروع"
-			style="--StripBg:#B78A25;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F6F1E8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#F6F1E8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack>
 
@@ -180,19 +235,29 @@ import { DataCard, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } 
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#FFFDF8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #17345C "
 			pTitle="مراحل خدمة إدارة المشاركة"
 			pDesc="نقسم المشروع إلى مراحل واضحة حتى لا يتحول الاتفاق إلى وعود عامة غير قابلة للقياس"
-			style="--StripBg:#17345C;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFDF8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFDF8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack>
 
@@ -232,19 +297,29 @@ import { DataCard, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } 
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#FFFFFF")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #FFFDF8 "
 			pTitle="متى تكون المشاركة خطرة؟"
 			pDesc="ليست كل أرض مناسبة للمشاركة، وليست كل نسبة مرتفعة لصاحب الأرض تعني اتفاقا أفضل"
-			style="--StripBg:#FFFDF8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFFFF")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -272,41 +347,45 @@ import { DataCard, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } 
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#17345C")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #102744 "
 			pTitle="ما الذي نقدمه في مشروع المشاركة؟"
 			pDesc="الخدمة يمكن أن تبدأ بدراسة أولية فقط، أو تمتد إلى إدارة المشروع بالكامل حتى التسليم"
-			style="--StripBg:#102744;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#17345C")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#17345C")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
-				<DataCard
-					TitleTag="h3"
-					pTitle="دراسة مشاركة أرض"
-					pBody="فحص الأرض والمستندات والاشتراطات وتقدير أولي للتكلفة وقيمة المشروع ونسبة المشاركة الممكنة قبل الدخول في تفاوض تفصيلي."
-					pLink="/emocrete/develop"
+				<FullCard
+					pTitle={Text.H3.OfText("دراسة مشاركة أرض")}
+					pText={Text.Body.OfText("فحص الأرض والمستندات والاشتراطات وتقدير أولي للتكلفة وقيمة المشروع ونسبة المشاركة الممكنة قبل الدخول في تفاوض تفصيلي.")}
 				/>
 
-				<DataCard
-					TitleTag="h3"
-					pTitle="إدارة مشروع المشاركة"
-					pBody="إدارة التصميم والترخيص والتعاقدات والمقايسات ومتابعة التنفيذ والحسابات والتقارير حتى يتحول الاتفاق إلى مشروع قابل للتسليم."
-					pLink="/emocrete/develop/share"
+				<FullCard
+					pTitle={Text.H3.OfText("إدارة مشروع المشاركة")}
+					pText={Text.Body.OfText("إدارة التصميم والترخيص والتعاقدات والمقايسات ومتابعة التنفيذ والحسابات والتقارير حتى يتحول الاتفاق إلى مشروع قابل للتسليم.")}
 				/>
 
-				<DataCard
-					TitleTag="h3"
-					pTitle="بديل اتحاد الملاك"
-					pBody="إذا كان المشروع ممولا من السكان أو الملاك أنفسهم وليس من خلال صاحب أرض وممول، فالأقرب لحالتك هو نظام البناء لاتحاد ملاك."
-					pLink="/emocrete/develop/owners"
+				<FullCard
+					pTitle={Text.H3.OfText("بديل اتحاد الملاك")}
+					pText={Text.Body.OfText("إذا كان المشروع ممولا من السكان أو الملاك أنفسهم وليس من خلال صاحب أرض وممول، فالأقرب لحالتك هو نظام البناء لاتحاد ملاك.")}
 				/>
 
 			</HzStack>
@@ -314,5 +393,11 @@ import { DataCard, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } 
 		</EmoStrip>
 
 	</ESec>
+
+
+
+
+
+
 
 </BLayout>
