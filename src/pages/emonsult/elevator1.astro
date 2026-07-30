@@ -1,0 +1,782 @@
+---
+import BLayout from "@/Layout.astro";
+import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import {
+	BadgeFrame,
+	CardsGr,
+	CircleGlow,
+	DuoCol,
+	DuoStr,
+	EmoCall,
+	EmoContactStrip,
+	EmoDet,
+	EmoFaq,
+	Emograph,
+	ESec,
+	FaqItem,
+	FloatingIcon,
+	Grid,
+	Hero,
+	HzStack,
+	IconCardsStrip,
+	IconInfoCard,
+	RelServiceItem,
+	RelServices,
+	SecTitle,
+	SvgDots,
+	VrStack,
+} from "@/Widgets";
+---
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="استشارات وتركيب وترخيص المصاعد"
+	pDescr="صفحة معلومات وخدمة عن أنواع المصاعد، اختيار النظام المناسب، تجهيز بئر المصعد، استلام أعمال التركيب، اختبارات التشغيل والسلامة، الصيانة، والترخيص الهندسي للمصاعد."
+	pSchemaHeroFolder="/Media/Emonsult/Report/Elevator"
+>
+
+	<Hero
+		pImgF="/Media/Emonsult/Report/Elevator"
+		pImgAlt="استشارات هندسية وفنية لاختيار وتركيب واستلام وترخيص المصاعد"
+	>
+
+		<CircleGlow
+			pLoc={new Loc(new NumPer("5%", "-18%"), new NumPer("8%", "4%"))}
+			pSize={new Size(new NumPer(430, 260), new NumPer(430, 260))}
+			pOpacity={new Percent(34, 42)}
+			pColor="rgba(104,188,255,.76)"
+			pColor2="rgba(255,255,255,.22)"
+		/>
+
+		<VrStack
+			pHzAlign="Right"
+			pVrAlign="Center"
+			pSize={new Size(new NumPer("45%", "94%"), new NumPer("auto", "auto"))}
+			pLoc={new Loc(new NumPer("6%", "3%"), new NumPer("18%", "12%"))}
+			pGap={new Pixel(24, 14)}
+			pPad={new Pixel(34, 18)}
+			pBg={new ElemBg("rgba(12, 24, 36, .78)")}
+			pBgOpacity={new Percent(100, 94)}
+			pBlur={new Pixel(12, 8)}
+			pRadius={new Pixel(30, 20)}
+		>
+
+			<Emograph
+				pTitle={Text.H1.AtRight.White.OfText("دليل وخدمات المصاعد")}
+				pText={Text.Body.AtRight.White.OfSize(21, 14).OfText("اختيار نوع المصعد، تجهيز البئر، متابعة التركيب، استلام الاختبارات، وتجهيز ملف الترخيص أو التشغيل ضمن رؤية هندسية تربط قرار المصعد بتجهيزات المبنى وتشغيله واعتماده.")}
+			/>
+
+			<HzStack
+				pGap={new Pixel(14, 10)}
+				pPad={new Pixel(0)}
+				pHzAlign="Right"
+				pVrAlign="Center"
+			>
+
+				<EmoCall
+					data-own-size
+					BlackSky
+					pText="استشارة مصعد"
+				/>
+
+				<EmoDet
+					WhiteBlack
+					pHref="/emonsult/report/elevator/"
+					pText="تقرير ترخيص مصعد"
+					pWidth="210px"
+				/>
+
+			</HzStack>
+
+		</VrStack>
+
+		<FloatingIcon
+			pLandOnly
+			pIcon="check"
+			pLoc={new Loc(new NumPer("calc(100% - 150px)"), new NumPer("calc(100% - 145px)"))}
+			pSize={new Size(new NumPer(82), new NumPer(56))}
+			pBg="#68BCFF"
+			pFill="#101722"
+			pZ={4}
+		/>
+
+	</Hero>
+
+	<ESec
+		id="elevator-scope"
+		pBg={new ElemBg("#101722")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+		pPad={new Pixel(64, 28)}
+	>
+
+		<SvgDots
+			pLoc={new Loc(new NumPer("calc(100% - 360px)", "calc(100% - 185px)"), new NumPer(56, 70))}
+			pSize={new Size(new NumPer(270, 170), new NumPer(170, 140))}
+			pOpacity={new Percent(30, 28)}
+			pColor="rgba(255,255,255,.34)"
+			pGap={24}
+			pDot={2}
+		/>
+
+		<VrStack
+			pSize={new Size(new NumPer(1120, "calc(100% - 24px)"), new NumPer("auto"))}
+			pHzAlign="Center"
+			pVrAlign="Center"
+			pGap={new Pixel(26, 18)}
+			pPad={new Pixel(40, 20)}
+			pBg={new ElemBg("rgba(255,255,255,.92)")}
+			pBgOpacity={new Percent(100)}
+			pBlur={new Pixel(12, 8)}
+			pRadius={new Pixel(34, 24)}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor("#101722").OfText("مواصفات المصعد تتحدد من حركة المبنى اليومية")}
+				pText={Text.Body.Centered.WithColor("#1D2A3B").OfSize(20, 14).OfText("قبل توريد أو تركيب المصعد يتم تحديد الحمولة، عدد الأدوار، كثافة التشغيل، مساحة البئر، متطلبات الكهرباء، شروط السلامة، وطريقة الاستلام؛ لضبط النظام المناسب وتقليل الأعطال وتكاليف التعديل بعد التشغيل.")}
+			/>
+
+			<Grid
+				pMax={4}
+				pMaxP={1}
+				pGap={new Pixel(18, 14)}
+				pSize={new Size(new NumPer("100%"), new NumPer("auto"))}
+			>
+
+				<BadgeFrame pBadge="01" pBg="#EAF6FF" pBadgeBg="#101722">
+					<Emograph
+						pTitle={Text.H4.Centered.OfText("اختيار النظام")}
+						pText={Text.Body.Centered.OfText("جراري، هيدروليكي، MRL، هوائي، بانورامي، بضائع، سيارات أو مستشفيات حسب استخدام المبنى وحركته اليومية.")}
+					/>
+				</BadgeFrame>
+
+				<BadgeFrame pBadge="02" pBg="#FFF5F0" pBadgeBg="#328FE8">
+					<Emograph
+						pTitle={Text.H4.Centered.OfText("تجهيز الموقع")}
+						pText={Text.Body.Centered.OfText("مراجعة البئر، القاعدة، الرأس العلوي، مسارات القضبان، الكهرباء، التهوية، وفتحات الأبواب قبل وصول المعدات.")}
+					/>
+				</BadgeFrame>
+
+				<BadgeFrame pBadge="03" pBg="#F3E8D2" pBadgeBg="#F2C14E">
+					<Emograph
+						pTitle={Text.H4.Centered.OfText("استلام التركيب")}
+						pText={Text.Body.Centered.OfText("فحص القضبان، الماكينة، الكابينة، الأبواب، الحبال، الفرامل، الحساسات، ومطابقة التنفيذ قبل التسليم.")}
+					/>
+				</BadgeFrame>
+
+				<BadgeFrame pBadge="04" pBg="#E9F6EF" pBadgeBg="#1C7C54">
+					<Emograph
+						pTitle={Text.H4.Centered.OfText("ترخيص وتشغيل")}
+						pText={Text.Body.Centered.OfText("تحديد المطلوب فنيًا للترخيص، تقرير تركيب، تقرير تشغيل، أو توصيات استكمال قبل اعتماد المصعد.")}
+					/>
+				</BadgeFrame>
+
+			</Grid>
+
+		</VrStack>
+
+	</ESec>
+
+	<ESec
+		id="elevator-types"
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+		pPad={new Pixel(62, 24)}
+	>
+
+		<SecTitle
+			SkyLite
+			pTitle="أنواع المصاعد الرئيسية"
+			pDesc="التصنيف العملي للمصعد يوضح أثر كل نظام على المساحة، السرعة، الأحمال، الصيانة، والكهرباء"
+		/>
+
+		<IconCardsStrip
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pMax={3}
+			pMaxP={1}
+			pGap={new Pixel(22, 14)}
+			pPad={new Pixel(34, 16)}
+		>
+
+			<IconInfoCard
+				pTitle="مصاعد جرارية Traction"
+				pDesc="تعتمد على محرك وبكرة وحبال وثقل موازن. مناسبة للمباني المتوسطة والعالية، وتوفر سرعات وكفاءة أفضل عند اختيار النظام الصحيح."
+				pColor="#328FE8"
+			/>
+
+			<IconInfoCard
+				pTitle="جراري بلا تروس Gearless"
+				pDesc="اختيار شائع للمباني العالية والسرعات الكبيرة. تكلفته أعلى، لكنه أفضل في الكفاءة والنعومة عند التصميم والتنفيذ الجيد."
+				pColor="#17345C"
+			/>
+
+			<IconInfoCard
+				pTitle="بدون غرفة ماكينة MRL"
+				pDesc="يوفر مساحة غرفة الماكينة، لكنه يحتاج مراجعة دقيقة لمساحة البئر والرأس العلوي وإمكانية الصيانة بعد التشغيل."
+				pColor="#1C7C54"
+			/>
+
+			<IconInfoCard
+				pTitle="مصاعد هيدروليكية"
+				pDesc="مناسبة غالبًا للمباني المنخفضة وحركة التشغيل الخفيفة. تحتاج متابعة للزيت، الخراطيم، الأسطوانة، ومصدر القدرة الكهربائية."
+				pColor="#B46B23"
+			/>
+
+			<IconInfoCard
+				pTitle="هيدروليكي بدون بئر Holeless"
+				pDesc="حل يقلل احتياج الحفر العميق، لكنه يظل محدودًا في الارتفاع والسرعة مقارنة بالحلول الجرارية."
+				pColor="#7A5C2E"
+			/>
+
+			<IconInfoCard
+				pTitle="مصاعد هوائية أو فراغية"
+				pDesc="تصلح لبعض الفيلات والمنازل، مع احتياج محدود للبئر التقليدي، وسعة وسرعة مناسبة للاستخدام المنزلي الخفيف."
+				pColor="#7B61FF"
+			/>
+
+		</IconCardsStrip>
+
+	</ESec>
+
+	<DuoStr
+		id="elevator-decision"
+		pBg={new ElemBg("#F6F1E8")}
+		pContentSize={new Size(new NumPer("1180px", "calc(100% - 24px)"))}
+		pPad={new Pixel(54, 22)}
+		pGap={new Pixel(26, 16)}
+	>
+
+		<DuoCol
+			pBg={new ElemBg("#17345C")}
+			pBgOpacity={new Percent(100)}
+			pPad={new Pixel(42, 22)}
+			pGap={new Pixel(22, 16)}
+			pHzAlign="Right"
+		>
+
+			<Emograph
+				pTitle={Text.H2.AtRight.White.OfText("قرار المصعد يخرج من بيانات المبنى")}
+				pText={Text.Body.AtRight.White.OfSize(19, 14).OfText("نفس عدد الأدوار قد ينتج عنه قرار مختلف تمامًا إذا تغير عدد المستخدمين، مساحة البئر، نوع النشاط، مصدر الكهرباء، متطلبات الحريق، أو الحاجة إلى نقل بضائع وسيارات ونقالات. لذلك يتم تحويل المواصفات العامة إلى قرار هندسي قابل للتنفيذ والاستلام.")}
+			/>
+
+			<EmoDet
+				WhiteBlack
+				pHref="#elevator-contact"
+				pText="راجع حالة مشروعك"
+				pWidth="220px"
+			/>
+
+		</DuoCol>
+
+		<DuoCol
+			pBg={new ElemBg("#FFFFFF")}
+			pPad={new Pixel(36, 20)}
+			pGap={new Pixel(18, 12)}
+			pHzAlign="Right"
+		>
+
+			<CardsGr
+				pWidth={new RespString("100%", "100%")} 
+				pStackDir="Col"
+				pCardBg={new ElemBg("#F8FBFF")}
+				pCardTitleFnt={Text.H4.AtRight.WithColor("#17345C")}
+				pCardBodyFnt={Text.Body.AtRight.WithColor("#333333")}
+				pTopic1={new Topic("قبل التعاقد", "تحديد نوع المصعد والسعة والسرعة ومصدر الكهرباء ومتطلبات البئر قبل اعتماد العرض الفني والمالي.")}
+				pTopic2={new Topic("أثناء التنفيذ", "متابعة تجهيزات الموقع وربط أعمال شركة المصعد مع المدني والكهرباء والأبواب والتشطيبات المحيطة.")}
+				pTopic3={new Topic("قبل الاستلام", "إجراء فحص تشغيل وسلامة واختبارات تحميل وأبواب وفرامل وحساسات قبل توقيع الاستلام النهائي.")}
+			/>
+
+		</DuoCol>
+
+	</DuoStr>
+
+	<ESec
+		id="elevator-components"
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+		pPad={new Pixel(62, 24)}
+	>
+
+		<SecTitle
+			Creamy
+			pTitle="المكونات التي يتم فحصها في نظام المصعد"
+			pDesc="فحص المصعد يراجع منظومة الحركة والتحكم والسلامة كاملة، من التشغيل اليومي حتى حالات الطوارئ"
+		/>
+
+		<IconCardsStrip
+			pBg={new ElemBg("#FFFFFF")}
+			pMax={4}
+			pMaxP={1}
+			pGap={new Pixel(18, 12)}
+			pPad={new Pixel(32, 16)}
+		>
+
+			<IconInfoCard
+				pTitle="الكابينة والثقل"
+				pDesc="مراجعة اتزان الحركة، الحمولة، التشطيبات الداخلية، نقاط التعليق، ومطابقة الثقل الموازن لطبيعة النظام."
+				pColor="#328FE8"
+			/>
+
+			<IconInfoCard
+				pTitle="الماكينة والبكرة والحبال"
+				pDesc="فحص محرك الجر أو وحدة الهيدروليك، حالة البكرة، شد الحبال، مسارات الحركة، والاهتزاز أو الضوضاء غير الطبيعية."
+				pColor="#17345C"
+			/>
+
+			<IconInfoCard
+				pTitle="وحدة التحكم VFD"
+				pDesc="مراجعة بدء الحركة، التسارع، التباطؤ، الوقوف على مستوى الطابق، لوحات الطلب، والشاشات والتنبيهات."
+				pColor="#1C7C54"
+			/>
+
+			<IconInfoCard
+				pTitle="الأبواب والحساسات"
+				pDesc="مطابقة أبواب الكابينة والطوابق، أقفال الأمان، الستائر الضوئية، سرعة الفتح والإغلاق، ومنع الحركة مع باب غير مغلق."
+				pColor="#B46B23"
+			/>
+
+			<IconInfoCard
+				pTitle="محدد السرعة والفرامل"
+				pDesc="التأكد من عمل Governor ومكابح الطوارئ وموانع الانزلاق عند فرط السرعة أو الطوارئ."
+				pColor="#7B61FF"
+			/>
+
+			<IconInfoCard
+				pTitle="المصدات وقاع البئر"
+				pDesc="فحص Buffers، نظافة قاع البئر، الخلوص، الإضاءة، وإمكانية الوصول الآمن للصيانة."
+				pColor="#7A5C2E"
+			/>
+
+			<IconInfoCard
+				pTitle="الطوارئ والاتصالات"
+				pDesc="زر الطوارئ، الإنذار، الاتصال الداخلي، الإضاءة الاحتياطية، وتفاعل المصعد عند انقطاع الكهرباء."
+				pColor="#C13B3A"
+			/>
+
+			<IconInfoCard
+				pTitle="التشغيل الخاص"
+				pDesc="مصاعد المستشفيات والسيارات والبضائع والحريق تحتاج اشتراطات حمولة وتشغيل وأولوية مختلفة عن مصعد الركاب العادي."
+				pColor="#335C67"
+			/>
+
+		</IconCardsStrip>
+
+	</ESec>
+
+	<DuoStr
+		id="elevator-installation"
+		pBg={new ElemBg("#101722")}
+		pContentSize={new Size(new NumPer("1180px", "calc(100% - 24px)"))}
+		pPad={new Pixel(56, 22)}
+		pGap={new Pixel(26, 16)}
+	>
+
+		<DuoCol
+			pBg={new ElemBg("rgba(255,255,255,.08)")}
+			pBgOpacity={new Percent(100)}
+			pBlur={new Pixel(8, 4)}
+			pPad={new Pixel(40, 22)}
+			pGap={new Pixel(22, 14)}
+			pHzAlign="Right"
+		>
+
+			<Emograph
+				pTitle={Text.H2.AtRight.White.OfText("تجهيز الموقع قبل وصول معدات المصعد")}
+				pText={Text.Body.AtRight.White.OfSize(19, 14).OfText("المشكلة المعتادة أن شركة المصاعد تصل للموقع ثم تظهر فروق في البئر أو القاعدة أو الرأس العلوي أو فتحات الأبواب أو التغذية الكهربائية. لذلك يتم فصل مرحلة التجهيز عن مرحلة التركيب، وفحص كل بند قبل الاعتماد.")}
+			/>
+
+			<Emograph
+				pText={Text.Body.AtRight.White.OfSize(18, 13).OfText("الهدف من الاستشارة هنا هو تقليل التكسير والتأخير، وتثبيت نطاق الأعمال بين المالك وشركة المصاعد والمقاول المنفذ.")}
+			/>
+
+		</DuoCol>
+
+		<DuoCol
+			pBg={new ElemBg("#FFFFFF")}
+			pPad={new Pixel(34, 18)}
+			pGap={new Pixel(18, 12)}
+			pHzAlign="Right"
+		>
+
+			<CardsGr
+				pWidth={new RespString("100%", "100%")} 
+				pStackDir="Col"
+				pCardBg={new ElemBg("#F6F9FC")}
+				pCardTitleFnt={Text.H4.AtRight.WithColor("#101722")}
+				pCardBodyFnt={Text.Body.AtRight.WithColor("#333333")}
+				pTopic1={new Topic("البئر والقاعدة", "مراجعة الأبعاد، الاستقامة، القاع، القاعدة الخرسانية، الخلوص، ومواضع تثبيت القضبان.")}
+				pTopic2={new Topic("الرأس العلوي والتهوية", "مراجعة Headroom وفتحات التهوية ومسارات الكابلات ومتطلبات الصيانة الآمنة.")}
+				pTopic3={new Topic("الأبواب والكهرباء", "ضبط فتحات الطوابق، أبواب الكابينة، مسار التغذية الكهربائية، لوحة التحكم، والإضاءة والطوارئ.")}
+				pTopic4={new Topic("التنسيق مع المورد", "ربط الرسومات والمقاسات والأحمال بين شركة المصعد والأعمال المدنية والتشطيبات قبل التنفيذ.")}
+			/>
+
+		</DuoCol>
+
+	</DuoStr>
+
+	<ESec
+		id="elevator-testing"
+		pBg={new ElemBg("#FFFDF8")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+		pPad={new Pixel(62, 24)}
+	>
+
+		<SecTitle
+			SkyDark
+			pTitle="استلام المصعد يعتمد على اختبارات منظمة"
+			pDesc="الاختبار المنظم يربط بين الحمولة، الحركة، الفرامل، الأبواب، الحساسات، الطوارئ، والتوثيق النهائي"
+		/>
+
+		<Grid
+			pMax={3}
+			pMaxP={1}
+			pGap={new Pixel(20, 14)}
+			pSize={new Size(new NumPer(1180, "calc(100% - 24px)"), new NumPer("auto"))}
+		>
+
+			<BadgeFrame pBadge="A" pBg="#FFFFFF" pBadgeBg="#101722">
+				<Emograph
+					pTitle={Text.H4.Centered.OfText("اختبار التحميل")}
+					pText={Text.Body.Centered.OfText("تشغيل المصعد مع حمولة الاختبار، ومراجعة الوقوف، الحركة، التسارع، التباطؤ، وعدم الانزلاق أو الاهتزاز الزائد.")}
+				/>
+			</BadgeFrame>
+
+			<BadgeFrame pBadge="B" pBg="#FFFFFF" pBadgeBg="#328FE8">
+				<Emograph
+					pTitle={Text.H4.Centered.OfText("اختبار الفرامل والطوارئ")}
+					pText={Text.Body.Centered.OfText("مراجعة مكابح الطوارئ، محدد السرعة، إيقاف الطوارئ، الإنذار، الإضاءة الاحتياطية، وسلوك المصعد عند انقطاع الكهرباء.")}
+				/>
+			</BadgeFrame>
+
+			<BadgeFrame pBadge="C" pBg="#FFFFFF" pBadgeBg="#1C7C54">
+				<Emograph
+					pTitle={Text.H4.Centered.OfText("اختبارات الأبواب")}
+					pText={Text.Body.Centered.OfText("قياس كفاءة الفتح والإغلاق، عمل الأقفال والستائر الضوئية، منع الحركة مع باب مفتوح، وعدم وجود احتكاكات أو فروق مستوى.")}
+				/>
+			</BadgeFrame>
+
+			<BadgeFrame pBadge="D" pBg="#FFFFFF" pBadgeBg="#B46B23">
+				<Emograph
+					pTitle={Text.H4.Centered.OfText("التسوية عند الطوابق")}
+					pText={Text.Body.Centered.OfText("فحص وقوف أرضية الكابينة على مستوى الطابق بدقة، لأن فرق التسوية من أكثر أسباب التعثر والشكاوى اليومية.")}
+				/>
+			</BadgeFrame>
+
+			<BadgeFrame pBadge="E" pBg="#FFFFFF" pBadgeBg="#7B61FF">
+				<Emograph
+					pTitle={Text.H4.Centered.OfText("توثيق النتائج")}
+					pText={Text.Body.Centered.OfText("تسجيل نتائج الفحص والملاحظات والنواقص والتوصيات قبل توقيع الاستلام أو طلب اعتماد الترخيص.")}
+				/>
+			</BadgeFrame>
+
+			<BadgeFrame pBadge="F" pBg="#FFFFFF" pBadgeBg="#C13B3A">
+				<Emograph
+					pTitle={Text.H4.Centered.OfText("قرار القبول")}
+					pText={Text.Body.Centered.OfText("قبول، قبول مشروط باستكمال نواقص، أو رفض فني مؤقت لحين معالجة عيوب السلامة أو التشغيل.")}
+				/>
+			</BadgeFrame>
+
+		</Grid>
+
+	</ESec>
+
+	<ESec
+		id="elevator-safety-standards"
+		pBg={new ElemBg("#17345C")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+		pPad={new Pixel(62, 24)}
+	>
+
+		<SecTitle
+			Black
+			pTitle="السلامة والمعايير الفنية"
+			pDesc="تتحول معايير EN 81 وASME إلى بنود فحص عملية: خلوص، أبواب، فرامل، محدد سرعة، صيانة، وتشغيل آمن"
+		/>
+
+		<IconCardsStrip
+			pBg={new ElemBg("#17345C")}
+			pMax={3}
+			pMaxP={1}
+			pGap={new Pixel(22, 14)}
+			pPad={new Pixel(34, 16)}
+			pCardTitleFnt={Text.H4.Centered.White}
+			pCardBodyFnt={Text.Body.Centered.White}
+		>
+
+			<IconInfoCard
+				pTitle="EN 81-20 / EN 81-50"
+				pDesc="تستخدم كمرجعية لمتطلبات السلامة، أبعاد الخلوص، الأبواب، فراغات الصيانة، واختبارات مكونات الأمان."
+				pBg="rgba(255,255,255,.10)"
+				pHoverBg="rgba(255,255,255,.16)"
+				pColor="#68BCFF"
+				pTextColor="#FFFFFF"
+				pBodyColor="#FFFFFF"
+			/>
+
+			<IconInfoCard
+				pTitle="ASME A17.1"
+				pDesc="مرجعية أخرى لتصميم وتشغيل وصيانة المصاعد والسلالم المتحركة، وتفيد في منطق الاختبارات الدورية والطوارئ."
+				pBg="rgba(255,255,255,.10)"
+				pHoverBg="rgba(255,255,255,.16)"
+				pColor="#F2C14E"
+				pTextColor="#FFFFFF"
+				pBodyColor="#FFFFFF"
+			/>
+
+			<IconInfoCard
+				pTitle="متطلبات الترخيص المحلي"
+				pDesc="يتم ربط المعايير الفنية بما تطلبه الجهة الإدارية في مصر: تقرير تركيب، تقرير تشغيل، مستندات مهندس، أو اعتماد نقابة عند الحاجة."
+				pBg="rgba(255,255,255,.10)"
+				pHoverBg="rgba(255,255,255,.16)"
+				pColor="#9BE7C4"
+				pTextColor="#FFFFFF"
+				pBodyColor="#FFFFFF"
+			/>
+
+		</IconCardsStrip>
+
+	</ESec>
+
+	<DuoStr
+		id="elevator-maintenance"
+		pBg={new ElemBg("#F1F5F8")}
+		pContentSize={new Size(new NumPer("1180px", "calc(100% - 24px)"))}
+		pPad={new Pixel(56, 22)}
+		pGap={new Pixel(26, 16)}
+	>
+
+		<DuoCol
+			pBg={new ElemBg("#FFFFFF")}
+			pPad={new Pixel(36, 20)}
+			pGap={new Pixel(18, 12)}
+			pHzAlign="Right"
+		>
+
+			<Emograph
+				pTitle={Text.H2.AtRight.WithColor("#101722").OfText("الصيانة سجل تشغيل وسلامة")}
+				pText={Text.Body.AtRight.WithColor("#333333").OfSize(19, 14).OfText("الصيانة الجيدة تمنع تحول العطل الصغير إلى توقف كامل أو حادث. لذلك يتم التعامل مع سجل الصيانة كوثيقة تشغيل: متى ظهر العطل؟ هل تكرر؟ هل تم تغيير قطعة؟ هل هناك اهتزاز أو فرق مستوى أو مشكلة أبواب؟")}
+			/>
+
+			<Emograph
+				pText={Text.Body.AtRight.WithColor("#333333").OfSize(18, 13).OfText("في المصاعد القديمة، تشمل قيمة الفحص إصلاح العطل اللحظي وتحديد احتياج النظام إلى تحديث التحكم أو الأبواب أو الفرامل أو الحبال.")}
+			/>
+
+		</DuoCol>
+
+		<DuoCol
+			pBg={new ElemBg("#101722")}
+			pBgOpacity={new Percent(100)}
+			pPad={new Pixel(36, 20)}
+			pGap={new Pixel(18, 12)}
+			pHzAlign="Right"
+		>
+
+			<CardsGr
+				pWidth={new RespString("100%", "100%")} 
+				pStackDir="Col"
+				pCardBg={new ElemBg("rgba(255,255,255,.10)")}
+				pCardTitleFnt={Text.H4.AtRight.White}
+				pCardBodyFnt={Text.Body.AtRight.White}
+				pTopic1={new Topic("أعطال الأبواب", "حساسات متسخة، أقفال غير مضبوطة، احتكاك ميكانيكي، أو مشكلة في مشغل الباب.")}
+				pTopic2={new Topic("فرق التسوية", "الكابينة تقف أعلى أو أسفل منسوب الطابق بسبب ضبط حساس أو فرملة أو تحكم غير دقيق.")}
+				pTopic3={new Topic("اهتزاز وضوضاء", "قد يرتبط بشد الحبال، البكرة، القضبان، العربة، أو تآكل في مكونات الحركة.")}
+				pTopic4={new Topic("تسرب هيدروليك", "تسرب زيت من الأسطوانة أو الخراطيم يحتاج معالجة فنية وبيئية قبل تكرار التشغيل.")}
+			/>
+
+		</DuoCol>
+
+	</DuoStr>
+
+	<ESec
+		id="elevator-special-uses"
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+		pPad={new Pixel(62, 24)}
+	>
+
+		<SecTitle
+			Bistage
+			pTitle="الاستخدامات الخاصة للمصاعد"
+			pDesc="المصاعد الخاصة لها أحمال وطريقة تشغيل ومخاطر تعطل مختلفة عن مصاعد الركاب اليومية"
+		/>
+
+		<IconCardsStrip
+			pBg={new ElemBg("#FFFFFF")}
+			pMax={5}
+			pMaxP={1}
+			pGap={new Pixel(18, 12)}
+			pPad={new Pixel(32, 16)}
+		>
+
+			<IconInfoCard
+				pTitle="مصاعد بضائع"
+				pDesc="حمولات أكبر، أرضية أقوى، استخدام تجاري أو مخزني، وأولوية لمتانة التشغيل على الديكور."
+				pColor="#17345C"
+			/>
+
+			<IconInfoCard
+				pTitle="مصاعد مستشفيات"
+				pDesc="كابينة تستوعب نقالة، تشغيل أولوية، مصدر طاقة احتياطي، وسلاسة حركة مناسبة للمرضى."
+				pColor="#328FE8"
+			/>
+
+			<IconInfoCard
+				pTitle="مصاعد سيارات"
+				pDesc="أرضية وحمولة عالية، سرعة أقل، تأمين حركة السيارة، ومراجعة دقيقة للفرامل ومستويات التوقف."
+				pColor="#1C7C54"
+			/>
+
+			<IconInfoCard
+				pTitle="مصاعد بانورامية"
+				pDesc="قيمة معمارية أعلى، لكنها ما زالت تحتاج نفس منطق الحركة والسلامة والتثبيت والصيانة."
+				pColor="#B46B23"
+			/>
+
+			<IconInfoCard
+				pTitle="إتاحة وذوي احتياجات"
+				pDesc="أبعاد الكابينة والأبواب والأزرار وطريقة التشغيل تضبط لتسهيل الوصول الآمن وتكامل الاستخدام اليومي."
+				pColor="#7B61FF"
+			/>
+
+		</IconCardsStrip>
+
+	</ESec>
+
+	<ESec
+		id="elevator-service-routes"
+		pBg={new ElemBg("#FFF5F0")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+		pPad={new Pixel(62, 24)}
+	>
+
+		<SecTitle
+			Creamy
+			pTitle="حدد المطلوب هندسيًا قبل التعاقد"
+			pDesc="كل مرحلة لها قرار مختلف: اختيار النظام، مراجعة الموقع، متابعة التركيب، اختبار التشغيل، أو تجهيز مستندات الترخيص"
+		/>
+
+		<Grid
+			pMax={3}
+			pMaxP={1}
+			pGap={new Pixel(20, 14)}
+			pSize={new Size(new NumPer(1180, "calc(100% - 24px)"), new NumPer("auto"))}
+		>
+
+			<BadgeFrame pBadge="1" pBg="#FFFFFF" pBadgeBg="#17345C">
+				<Emograph
+					pTitle={Text.H4.Centered.OfText("استشارة قبل التوريد")}
+					pText={Text.Body.Centered.OfText("تحديد النوع والسعة والسرعة وملاحظات البئر ومتطلبات الكهرباء قبل طلب عروض من شركات المصاعد.")}
+				/>
+			</BadgeFrame>
+
+			<BadgeFrame pBadge="2" pBg="#FFFFFF" pBadgeBg="#328FE8">
+				<Emograph
+					pTitle={Text.H4.Centered.OfText("متابعة تركيب واستلام")}
+					pText={Text.Body.Centered.OfText("متابعة التهيئة المدنية والكهربائية وفحص أعمال شركة المصعد قبل توقيع الاستلام النهائي.")}
+				/>
+			</BadgeFrame>
+
+			<BadgeFrame pBadge="3" pBg="#FFFFFF" pBadgeBg="#1C7C54">
+				<Emograph
+					pTitle={Text.H4.Centered.OfText("تقرير ترخيص أو تشغيل")}
+					pText={Text.Body.Centered.OfText("عند احتياج مستند هندسي محدد للحي أو جهاز المدينة أو الجهة الإدارية المختصة.")}
+				/>
+			</BadgeFrame>
+
+		</Grid>
+
+	</ESec>
+
+	<ESec
+		id="elevator-faq"
+		pBg={new ElemBg("#101722")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
+
+		<SecTitle
+			Black
+			pTitle="أسئلة متكررة عن المصاعد"
+			pDesc="إجابات مختصرة تساعدك تفصل بين اختيار النظام، التركيب، الاستلام، والصيانة"
+		/>
+
+		<EmoFaq>
+
+			<FaqItem
+				pQuestion="كيف أختار نوع المصعد المناسب للمبنى؟"
+				pAnswer="الاختيار يعتمد على عدد الأدوار، عدد المستخدمين، الحمولة اليومية، مساحة البئر، مصدر الكهرباء، نوع النشاط، ومتطلبات الترخيص. المبنى القصير قد يناسبه نظام هيدروليكي، بينما المباني المتوسطة والعالية غالبًا تحتاج نظامًا جراريًا أو MRL حسب المساحة."
+			/>
+
+			<FaqItem
+				pQuestion="هل تركيب مصعد جديد يحتاج مراجعة إنشائية؟"
+				pAnswer="نعم عند وجود أحمال أو اهتزازات أو تعديلات في المبنى، خصوصًا إذا كان المصعد يضاف لمبنى قائم. يتم التحقق من قابلية المبنى والبئر ونقاط التثبيت وتحمل الأحمال قبل التنفيذ أو الترخيص."
+			/>
+
+			<FaqItem
+				pQuestion="هل أحتاج استشارة قبل طلب عرض سعر من شركة مصاعد؟"
+				pAnswer="نعم إذا كان المبنى قائمًا أو المساحة محدودة أو الاستخدام كثيفًا أو المطلوب ترخيصًا رسميًا. المراجعة المسبقة تساعد في ضبط السعة والسرعة ونوع النظام وملاحظات البئر والكهرباء قبل تثبيت العرض الفني والمالي."
+			/>
+
+			<FaqItem
+				pQuestion="ما أهم اختبارات الاستلام قبل التشغيل؟"
+				pAnswer="اختبارات التحميل، الفرامل، محدد السرعة، الأبواب، الحساسات، التسوية عند الطوابق، الطوارئ، الإضاءة، والاتصال الداخلي، مع توثيق الملاحظات قبل القبول النهائي."
+			/>
+
+			<FaqItem
+				pQuestion="هل الصيانة الدورية ضرورية إذا كان المصعد يعمل؟"
+				pAnswer="نعم. التشغيل اليومي مؤشر أولي، والصيانة الدورية هي التي تكشف حالة الحبال والفرامل والحساسات والأبواب، وتقلل الأعطال المفاجئة ومشاكل التسوية والضوضاء والتسرب."
+			/>
+
+		</EmoFaq>
+
+	</ESec>
+
+	<RelServices
+		pTitle={Text.H2.Centered.White.OfText("خدمات مرتبطة بالمصاعد")}
+		pDesc={Text.Body.Centered.White.OfText("مسارات قريبة من موضوع المصاعد والخدمات الفنية المرتبطة بها")}
+		pHeadBg={new ElemBg("#17345C")}
+		pBodyBg={new ElemBg("#F1F5F8")}
+		pMax={3}
+		pMaxP={1}
+	>
+
+		<RelServiceItem
+			pTitle="تقرير هندسي لترخيص مصعد"
+			pDesc="خدمة مخصصة لمن يحتاج تقرير تركيب أو تشغيل مصعد معتمد للجهة الإدارية."
+			pHref="/emonsult/report/elevator/"
+			pBtnText="صفحة التقرير"
+		/>
+
+		<RelServiceItem
+			pTitle="خدمات التقارير الهندسية"
+			pDesc="تقارير فنية لموضوعات السلامة والتشغيل والترخيص والمعاينة الفنية."
+			pHref="/emonsult/report/"
+			pBtnText="كل التقارير"
+		/>
+
+		<RelServiceItem
+			pTitle="خدمات استشارية هندسية"
+			pDesc="مدخل Emonsult للخدمات التي تعتمد على شهادة أو تقرير أو ختم هندسي."
+			pHref="/emonsult/"
+			pBtnText="قسم الاستشارات"
+		/>
+
+	</RelServices>
+
+	<EmoContactStrip
+		id="elevator-contact"
+		pTitle="تحتاج مراجعة فنية لمصعد؟"
+		pDesc="ارسل بيانات المبنى وعدد الأدوار ونوع الطلب: اختيار مصعد، مراجعة عرض شركة، استلام تركيب، أو تقرير ترخيص وتشغيل."
+		pCallText="اتصال مباشر"
+		pWhatsappText="واتساب"
+		pLeadTitle="بيانات طلب استشارة مصعد"
+		pSourceName="صفحة استشارات وتركيب وترخيص المصاعد"
+	/>
+
+</BLayout>

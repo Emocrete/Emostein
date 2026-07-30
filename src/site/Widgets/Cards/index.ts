@@ -150,6 +150,8 @@ export { default as CardsGr } from "./CardsGroup.astro";
  */
 export { default as CardsGroup } from "./CardsGroup.astro";
 
+export { default as DataCard } from "./DataCard.astro";
+
 export { default as FullCard } from "./FullCard.astro";
 
 export { default as SvgBlobCard } from "./SvgBlobCard.astro";

@@ -1,0 +1,201 @@
+---
+import { Place, type PlaceProps } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
+	TitleTag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+	pTitle?: string;
+	pBody?: string;
+	pImg?: string;
+	pLink?: string;
+}
+
+const {
+	TitleTag = "h3",
+	pTitle = "عنوان الكرت",
+	pBody = "محتوى الكرت",
+	pImg = "",
+	pLink = "",
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+
+	style: pGivenStyle = "",
+	class: pGivenClass = "",
+	id: pGivenID = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+
+const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div
+	class = {`Card ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+
+	{ pImg &&
+
+		<img
+			class = " CardMedia "
+			src={pImg}
+			alt=""
+			loading="lazy"
+		/>
+
+	}
+
+	<div class = " CardBody ">
+
+		<TitleTag class = " CardTitle ">
+
+			{pTitle}
+
+		</TitleTag>
+
+		{ pBody &&
+
+			<p class = " CardText ">
+				{pBody}
+			</p>
+
+		}
+
+		{ pLink && (
+
+			<a
+				class = " btn "
+				style = " margin-top : 12px "
+				href={pLink}
+			>
+				التفاصيل
+			</a>
+		) }
+
+	</div>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	.Card {
+		background: lightyellow;
+		border-radius: 25px;
+		overflow: hidden;
+		border: 1px solid black;
+		transition: transform 0.2s ease,
+			box-shadow 0.2s ease,
+			border-color 0.2s ease;
+		width: 400px;
+	}
+
+	.Card:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 5px 20px black;
+		border-color: rgb(156, 23, 23);
+	}
+
+
+	.CardMedia {
+		width: 100%;
+		object-fit: cover;
+		aspect-ratio: 1920/800;
+		background-color: brown;
+	}
+
+
+	.CardBody {
+		padding: 10px;
+	}
+
+
+	.CardTitle {
+		font-size: 18px;
+		font-weight: 700;
+	}
+
+
+	.CardText {
+		color: black;
+		line-height: 1;
+	}
+
+
+
+</style>
