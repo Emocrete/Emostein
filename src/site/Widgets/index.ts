@@ -6,7 +6,6 @@ export { default as IncLineSep } from "./Separators/IncLineSep.astro";
 export { default as BottTriSep } from "./Separators/BottomTriangleSep.astro";
 export { default as EmoBtn } from "./Comp/EmoButton.astro";
 export { default as YTPlayer } from "./Media/YouTube.astro";
-export { default as DataCard } from "./Cards/Card.astro";
 
 import CardsGroupBase from "./Cards/CardsGroup.astro";
 /**
@@ -90,7 +89,6 @@ export { default as EmoList } from "./Comp/EmoList.astro";
 export { default as BgMedia } from "./Media/BgMedia.astro";
 export { default as RespImg } from "./Media/RespImage.astro";
 export { default as Emograph } from "./Comp/Emograph.astro";
-export { default as Card } from "./Cards/Card.astro";
 export { default as FullCard } from "./Cards/FullCard.astro";
 export { default as Stack } from "./Comp/Stack.astro";
 export { default as Tree } from "./Comp/Tree.astro";

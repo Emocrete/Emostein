@@ -1,22 +1,24 @@
 ---
-import { Align, Colors, ElemBg, EmoMediaData, Place, type PlaceProps, RespString, Size, Text } from "@/TypesLib";
+import { EmoMediaData, Place, type PlaceProps, Text } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import { BgMedia, RespImg } from "@/Widgets";
+import BgMedia from "../Media/BgMedia.astro";
+import RespImg from "../Media/RespImage.astro";
 
 export interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
 	pTitle?: Text;
-	pText?:Text;
+	pText?: Text;
 	pMedia?: EmoMediaData;
 	pBgMedia?: EmoMediaData;
 	pBgClr?: string;
 }
 
-let {
-	pBgMedia ,
+const {
+	pBgMedia,
 	pBgClr = "rgb(247, 202, 52)",
-	pMedia ,
-	pTitle = Text.Body.OfText("عنوان الكرت") ,
-	pText = Text.Body.OfText("محتوى الكرت") ,
+	pMedia = new EmoMediaData("Img", "/Media/", "ErrorImg.webp"),
+	pTitle = Text.Body.OfText("عنوان الكرت"),
+	pText = Text.Body.OfText("محتوى الكرت"),
+
 	pLoc,
 	pSize,
 	pRotate,
@@ -46,25 +48,39 @@ let {
 	pMoveViewMargin,
 	pMoveViewTarget,
 
-
 	id: pGivenID = GetWidgetId("FullCard"),
 	class: pGivenClass = "",
 	style: pGivenStyle = "",
-	...RemAttr} = Astro.props as Props;
+	...RemAttr
+} = Astro.props as Props;
 
-const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cGivenStyle = GetStyleText(pGivenStyle);
+const TitleTag = pTitle.GetTag() as keyof astroHTML.JSX.DefinedIntrinsicElements;
 
-const TitleTag = pTitle?.GetTag() as keyof astroHTML.JSX.DefinedIntrinsicElements;
-
-pMedia = pMedia || new EmoMediaData("/Media/","ErrorImg.webp")
-
-const CardBoxCssVar = [
+const cCardStyle = [
 	`--BgColor:${pBgClr};`,
 	cGivenStyle,
 ].filter(Boolean).join(" ");
 
-const cPlace = new Place(Astro.props as PlaceProps, CardBoxCssVar);
+const cPlace = new Place(Astro.props as PlaceProps, cCardStyle);
 
+function GetStyleText(pStyle: Props["style"]) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+
+	return Object.entries(pStyle)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
 ---
 
 
@@ -93,31 +109,43 @@ const cPlace = new Place(Astro.props as PlaceProps, CardBoxCssVar);
 	{...RemAttr}
 >
 
+	{ pBgMedia?.Type === "Vid" && (
+
+		<BgMedia pVid={pBgMedia} />
+	) }
+
+	{ pBgMedia?.Type === "Img" && (
+
+		<BgMedia pImg={pBgMedia} />
+	) }
+
 	<div class = " FullCardContentBox ">
 
-		{ pMedia &&
+		{ pMedia && (
 
-			<RespImg pImg={pMedia}>
+			<RespImg class = " FullCardMedia " pImg={pMedia} />
+		) }
 
-			</RespImg>
-
-		}
-
-		<TitleTag style = {pTitle.GetStyle()}>
+		<TitleTag class = " FullCardTitle " style = {pTitle.GetStyle()}>
 
 			{pTitle.text}
 
 		</TitleTag>
 
-		{ pText &&
+		{ pText && (
 
-			<p style = {pText.GetStyle()}>
+			<p class = " FullCardText " style = {pText.GetStyle()}>
 				{pText.text}
 			</p>
-
-		}
+		) }
 
 	</div>
+
+
+
+
+
+
 
 </div>
 
@@ -146,47 +174,120 @@ const cPlace = new Place(Astro.props as PlaceProps, CardBoxCssVar);
 
 	.FullCard {
 		position: relative;
+		isolation: isolate;
 		display: flex;
-		flex: 1 1 0;
-		width: 50%;
+		flex: 0 1 auto;
+		flex-direction: column;
+		box-sizing: border-box;
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+		min-height: 600px;
 		padding: 10px;
-		background-size: cover;
-		background-position: center;
-		background-repeat: no-repeat;
 		overflow: hidden;
 		align-items: center;
-		outline: 1px solid red;
-		min-height: 600px;
+		justify-content: flex-end;
 		background-color: var(--BgColor);
 	}
 
 
 	.FullCardContentBox {
-		position: absolute;
-		width: 50%;
-		height: 30%;
+		position: relative;
+		z-index: 1;
+		display: flex;
+		flex-direction: column;
+		box-sizing: border-box;
+		width: min(50%, 720px);
+		max-width: calc(100% - 20px);
+		min-width: 0;
+		height: auto;
+		margin-block-end: 40px;
 		padding: 30px;
-		left: 50%;
-		bottom: 50px;
-		transform: translateX(-50%);
+		gap: 8px;
 		align-items: center;
+		justify-content: center;
+		overflow: hidden;
 		background: rgba(255, 255, 255, 0.8);
 		backdrop-filter: blur(2px);
+		-webkit-backdrop-filter: blur(2px);
+	}
+
+	.FullCardContentBox > :global(*) {
+		max-width: 100%;
+		min-width: 0;
+	}
+
+	.FullCardContentBox > :global(.FullCardMedia) {
+		flex: 0 1 auto;
+		width: auto;
+		height: auto;
 	}
 
 
 
-	@media (max-width: 768px) {
-		.FullCard {
-			width: 100%;
-			flex: none;
-			height: 600px;
+	.FullCardContentBox :global(.RespImgPicBox),
+	.FullCardContentBox :global(.RespImgImg)
+	{
+		max-width: 100%;
+	}
+
+
+	.FullCardTitle,
+	.FullCardText
+	{
+		box-sizing: border-box;
+		width: 100%;
+		overflow-wrap: anywhere;
+	}
+
+
+	.FullCard.PlaceSized,
+	.FullCard.IsPlaced
+	{
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+		min-height: 0;
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.FullCardContentBox {
+			width: min(80%, 640px);
+			max-width: calc(100% - 20px);
+			padding: 10px;
 		}
 
-		.FullCardContentBox {
-			width: 80%;
-			padding: 10px;
-			height: 40%;
+		.FullCard.PlaceSized,
+		.FullCard.IsPlaced
+		{
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
 		}
 	}
 

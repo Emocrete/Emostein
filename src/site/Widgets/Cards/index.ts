@@ -1,5 +1,3 @@
-export { default as Card } from "./Card.astro";
-
 /**
  * CardsGr
  *
@@ -152,11 +150,7 @@ export { default as CardsGr } from "./CardsGroup.astro";
  */
 export { default as CardsGroup } from "./CardsGroup.astro";
 
-export { default as DataCard } from "./Card.astro";
-
 export { default as FullCard } from "./FullCard.astro";
-
-export { default as OutlineCard } from "./OutlineCard.astro";
 
 export { default as SvgBlobCard } from "./SvgBlobCard.astro";
 

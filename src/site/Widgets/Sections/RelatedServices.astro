@@ -1,6 +1,7 @@
 ---
 import { Colors, ElemBg, NumPer, Pixel, Place, type PlaceProps, Size, Text } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
+
 interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps {
 	pTitle?: Text;
 	pDesc?: Text;
@@ -37,11 +38,11 @@ const {
 	pDescFnt,
 	pCardTitleFnt = Text.H4.WithColor(Colors.BlackOff),
 	pCardDescFnt = Text.Body.WithColor(Colors.BlackOff),
-	pWidth = new Size(new NumPer(1180, "calc(100% - 24px)"), new NumPer("auto", "auto")),
-	pGap = new Pixel(22, 14),
-	pMax = 3,
+	pWidth = new Size(new NumPer("90%", "calc(100% - 10px)"), new NumPer("auto", "auto")),
+	pGap = new Pixel(20, 15),
+	pMax = 5,
 	pMaxP = 1,
-	pCardRadius = new Pixel(20, 16),
+	pCardRadius = new Pixel(20, 15),
 	pImgHeight = new Pixel(200, 165),
 	pCentered = true,
 	Centered = false,
@@ -82,7 +83,7 @@ const {
 	...RemAttr
 } = cProps;
 
-const cMaxL = NormalizeMax(pMax, 3);
+const cMaxL = NormalizeMax(pMax, 5);
 const cMaxP = NormalizeMax(pMaxP, 1);
 const cCentered = pCentered || GetBoolAttr(Centered);
 const cGivenStyle = GetStyleText(pGivenStyle);

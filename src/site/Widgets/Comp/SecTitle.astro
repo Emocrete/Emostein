@@ -36,9 +36,44 @@ interface ColorFlagProps {
 	Yellow?: BoolAttr;
 }
 
-interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps, ColorFlagProps {
+interface ColorPairFlagProps {
+	cBlackOffWhiteOff?: BoolAttr;
+	cBlackWhiteOff?: BoolAttr;
+	cWhiteOffBlack?: BoolAttr;
+
+	cGray1Black?: BoolAttr;
+	cGray2Black?: BoolAttr;
+	cGray3Black?: BoolAttr;
+	cGray4WhiteOff?: BoolAttr;
+	cGray5WhiteOff?: BoolAttr;
+
+	cGreenLiteBlack?: BoolAttr;
+	cGreenDarkWhiteOff?: BoolAttr;
+
+	cOrangeLiteBlack?: BoolAttr;
+	cOrangeDarkBlack?: BoolAttr;
+	cRedBlack?: BoolAttr;
+
+	cSkyLiteBlack?: BoolAttr;
+	cSkyBlack?: BoolAttr;
+	cSkyDarkBlack?: BoolAttr;
+
+	cBistageLiteBlack?: BoolAttr;
+	cBistageBlack?: BoolAttr;
+	cBistageDarkBlack?: BoolAttr;
+
+	cCreamyBlack?: BoolAttr;
+	cYellowBlack?: BoolAttr;
+}
+
+interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps, ColorFlagProps, ColorPairFlagProps {
 	pTitle?: string;
 	pDesc?: string;
+}
+
+interface ColorPreset {
+	Bg: string;
+	Text?: string;
 }
 
 const cRawProps = Astro.props as Props & Record<string, unknown>;
@@ -105,47 +140,105 @@ const {
 	Creamy,
 	Yellow,
 
+	BlackOffWhiteOff,
+	BlackWhiteOff,
+	WhiteOffBlack,
+
+	Gray1Black,
+	Gray2Black,
+	Gray3Black,
+	Gray4WhiteOff,
+	Gray5WhiteOff,
+
+	GreenLiteBlack,
+	GreenDarkWhiteOff,
+
+	OrangeLiteBlack,
+	OrangeDarkBlack,
+	RedBlack,
+
+	SkyLiteBlack,
+	SkyBlack,
+	SkyDarkBlack,
+
+	BistageLiteBlack,
+	BistageBlack,
+	BistageDarkBlack,
+
+	CreamyBlack,
+	YellowBlack,
+
 	id: pGivenID = GetWidgetId("SecTitle"),
 	class: pGivenClass = "",
 	style: pGivenStyle = "",
 	...RemAttr
 } = cRawProps;
 
-const cColorMap: Array<[keyof ColorFlagProps, string]> = [
-	["BlackOff", Colors.BlackOff],
-	["Black", Colors.Black],
-	["WhiteOff", Colors.WhiteOff],
+const cColorPresets: Array<[keyof ColorPairFlagProps | keyof ColorFlagProps, ColorPreset]> = [
+	["cBlackOffWhiteOff", { Bg: Colors.BlackOff, Text: Colors.WhiteOff }],
+	["cBlackWhiteOff", { Bg: Colors.Black, Text: Colors.WhiteOff }],
+	["cWhiteOffBlack", { Bg: Colors.WhiteOff, Text: Colors.Black }],
 
-	["Gray1", Colors.Gray1],
-	["Gray2", Colors.Gray2],
-	["Gray3", Colors.Gray3],
-	["Gray4", Colors.Gray4],
-	["Gray5", Colors.Gray5],
+	["cGray1Black", { Bg: Colors.Gray1, Text: Colors.Black }],
+	["cGray2Black", { Bg: Colors.Gray2, Text: Colors.Black }],
+	["cGray3Black", { Bg: Colors.Gray3, Text: Colors.Black }],
+	["cGray4WhiteOff", { Bg: Colors.Gray4, Text: Colors.WhiteOff }],
+	["cGray5WhiteOff", { Bg: Colors.Gray5, Text: Colors.WhiteOff }],
 
-	["GreenLite", Colors.GreenLite],
-	["GreenDark", Colors.GreenDark],
+	["cGreenLiteBlack", { Bg: Colors.GreenLite, Text: Colors.Black }],
+	["cGreenDarkWhiteOff", { Bg: Colors.GreenDark, Text: Colors.WhiteOff }],
 
-	["OrangeLite", Colors.OrangeLite],
-	["OrangeDark", Colors.OrangeDark],
-	["Red", Colors.Red],
+	["cOrangeLiteBlack", { Bg: Colors.OrangeLite, Text: Colors.Black }],
+	["cOrangeDarkBlack", { Bg: Colors.OrangeDark, Text: Colors.Black }],
+	["cRedBlack", { Bg: Colors.Red, Text: Colors.Black }],
 
-	["SkyLite", Colors.SkyLite],
-	["Sky", Colors.Sky],
-	["SkyDark", Colors.SkyDark],
+	["cSkyLiteBlack", { Bg: Colors.SkyLite, Text: Colors.Black }],
+	["cSkyBlack", { Bg: Colors.Sky, Text: Colors.Black }],
+	["cSkyDarkBlack", { Bg: Colors.SkyDark, Text: Colors.Black }],
 
-	["BistageLite", Colors.BistageLite],
-	["Bistage", Colors.Bistage],
-	["BistageDark", Colors.BistageDark],
+	["cBistageLiteBlack", { Bg: Colors.BistageLite, Text: Colors.Black }],
+	["cBistageBlack", { Bg: Colors.Bistage, Text: Colors.Black }],
+	["cBistageDarkBlack", { Bg: Colors.BistageDark, Text: Colors.Black }],
 
-	["Creamy", Colors.Creamy],
-	["Yellow", Colors.Yellow],
+	["cCreamyBlack", { Bg: Colors.Creamy, Text: Colors.Black }],
+	["cYellowBlack", { Bg: Colors.Yellow, Text: Colors.Black }],
+
+	["BlackOff", { Bg: Colors.BlackOff }],
+	["Black", { Bg: Colors.Black }],
+	["WhiteOff", { Bg: Colors.WhiteOff }],
+
+	["Gray1", { Bg: Colors.Gray1 }],
+	["Gray2", { Bg: Colors.Gray2 }],
+	["Gray3", { Bg: Colors.Gray3 }],
+	["Gray4", { Bg: Colors.Gray4 }],
+	["Gray5", { Bg: Colors.Gray5 }],
+
+	["GreenLite", { Bg: Colors.GreenLite }],
+	["GreenDark", { Bg: Colors.GreenDark }],
+
+	["OrangeLite", { Bg: Colors.OrangeLite }],
+	["OrangeDark", { Bg: Colors.OrangeDark }],
+	["Red", { Bg: Colors.Red }],
+
+	["SkyLite", { Bg: Colors.SkyLite }],
+	["Sky", { Bg: Colors.Sky }],
+	["SkyDark", { Bg: Colors.SkyDark }],
+
+	["BistageLite", { Bg: Colors.BistageLite }],
+	["Bistage", { Bg: Colors.Bistage }],
+	["BistageDark", { Bg: Colors.BistageDark }],
+
+	["Creamy", { Bg: Colors.Creamy }],
+	["Yellow", { Bg: Colors.Yellow }],
 ];
 
-const cActiveColor = cColorMap.find(([pName]) => IsActiveAttr(cRawProps[pName]));
-const cBg = new ElemBg(cActiveColor?.[1] ?? Colors.WhiteOff);
+const cActivePreset = cColorPresets.find(([pName]) => IsActiveAttr(cRawProps[pName]))?.[1];
+const cBg = new ElemBg(cActivePreset?.Bg ?? Colors.WhiteOff);
 
-const cTitleText = Text.H2.Centered.OfText(pTitle);
-const cDescText = HasText(pDesc) ? Text.Body.Centered.OfText(pDesc as string) : undefined;
+const cTitleStyle = cActivePreset?.Text ? Text.H2.Centered.WithColor(cActivePreset.Text) : Text.H2.Centered;
+const cDescStyle = cActivePreset?.Text ? Text.Body.Centered.WithColor(cActivePreset.Text) : Text.Body.Centered;
+const cTitleText = cTitleStyle.OfText(pTitle);
+const cDescText = HasText(pDesc) ? cDescStyle.OfText(pDesc as string) : undefined;
 
 function IsActiveAttr(pValue: unknown) {
 	return pValue === true || pValue === "" || pValue === "true";
@@ -192,6 +285,18 @@ function HasText(pValue: unknown) {
 	id={pGivenID}
 >
 
+
+
+
+
+
+
 	<Emograph pTitle={cTitleText} pText={cDescText} />
+
+
+
+
+
+
 
 </EmoStrip>

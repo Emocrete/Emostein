@@ -1,7 +1,11 @@
 ---
-import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle } from "@/Widgets";
+import { CardsGr, FullCard, SvgBlobCard, SvgRadarCard } from "@/Widgets/Cards";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { RespImg } from "@/Widgets/Media";
+import { EmoFaq, ESec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStrip } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
 
 
@@ -27,11 +31,6 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	pSchemaType="Article"
 	pTitle="شروط ترخيص صيدلية"
 	pDescr="شرح شامل لشروط ترخيص صيدلية في مصر، يشمل شروط الصيدلي طالب الترخيص، شروط مقر الصيدلية، المسافة، المساحة، الارتفاع، حدود العين، المعاينة الأولى، المعاينة الثانية، المياه، الكهرباء، التهوية، الحمام، المعمل، وموقف العقار."
-	pSchemaImages={[
-		"/Media/Emomed/Pharmacy/Cond/HeroL.webp",
-		"/Media/Emomed/Pharmacy/Inspection.webp",
-		"/Media/Emomed/Pharmacy/PhRet.webp"
-	]}
 >
 
 
@@ -40,21 +39,22 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<Hero
-		pImgF="/Media/Emomed/Pharmacy/Cond/"
-		pTitle="شروط ترخيص صيدلية"
-		pDesc="قبل اختيار محل الصيدلية أو توقيع عقد الإيجار، يجب التأكد من شروط الترخيص الأساسية: أهلية الصيدلي، المسافة، المساحة، الارتفاع، حدود العين، صلاحية العقار، والتجهيزات المطلوبة للمعاينة الثانية."
-		pTitleClr={Colors.WhiteOff}
-		pDescClr={Colors.WhiteOff}
-		pHzAlign="right"
-		pVrAlign="right"
-		pPosL="18% 50% 12% 8%"
-		pPosP="12% 8% 42% 8%"
-		pBlurL="on"
-		pBlurP="on"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="افحص صلاحية الصيدلية" />
+		<VrStack
+			pSize={new Size(new NumPer("40%","95%"))}
+			pLoc={new Loc(new NumPer("50%","2.5%"),new NumPer("50%","65%"))}
+			pHzAlign={"Center"}
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("شروط ترخيص صيدلية")}
+				pText={Text.Body.Centered.OfText("قبل اختيار محل الصيدلية أو توقيع عقد الإيجار، يجب التأكد من شروط الترخيص الأساسية: أهلية الصيدلي، المسافة، المساحة، الارتفاع، حدود العين، صلاحية العقار، والتجهيزات المطلوبة للمعاينة الثانية.")}
+			/>
+
+			<EmoCall id="callHero" OrangeBlack />
+
+		</VrStack>
 
 	</Hero>
 
@@ -65,65 +65,21 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 	<ESec
-		id="intro"
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.SkyLite};`}
-			pTitle="شروط الصيدلية تبدأ قبل التعاقد على المحل"
-			pDesc="كثير من مشاكل ترخيص الصيدليات تظهر بعد دفع مقدم الإيجار أو تنفيذ التشطيبات. لذلك يجب فحص شروط الترخيص مبكرًا، لأن بعض العيوب لا تعالج باستكمال ورقة أو تعديل بسيط."
-		/>
-
-		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
-
-			<Emograph
-				pSize={new Size(new NumPer(620, 320), new NumPer("auto", "auto"))}
-				pTitle={Text.H3.OfText("لماذا يجب فحص الشروط قبل الملف؟")}
-				pText={Text.Body.OfText("ترخيص الصيدلية ليس موافقة إدارية على اسم النشاط فقط. الملف يمر بفحص الصيدلي، وفحص العين، ومعاينة أولى للشروط الجوهرية، ثم معاينة ثانية للتشطيب والتجهيز. إذا كان المكان غير مطابق في المسافة أو المساحة أو الارتفاع، فالمشكلة تكون في أصل اختيار المقر وليس في نقص مستند.")}
-			/>
-
-			<RespImg
-				pImg={new EmoMediaData(
-					"Img",
-					"/Media/Emomed/Pharmacy/",
-					"Inspection.webp",
-					false,
-					"معاينة شروط ترخيص صيدلية",
-					new Size(new NumPer(420, 300), new NumPer("auto", "auto"))
-				)}
-			/>
-
-		</HzStack>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
-		id="conditions-map"
+		id="secCondTypes"
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="خريطة شروط ترخيص الصيدلية"
+			Gray2
+			pTitle="تصنيف شروط ترخيص صيدلية"
 			pDesc="الشروط لا تقع كلها في مرحلة واحدة. بعضها يخص الصيدلي، وبعضها يخص المقر قبل التجهيز، وبعضها يظهر عند المعاينة الأولى، ثم تأتي اشتراطات التشغيل في المعاينة الثانية."
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "100%")}
-			pGrTitle={Text.H3.Centered.OfText("أربع مجموعات يجب مراجعتها")}
 			pCardBg={new ElemBg(Colors.WhiteOff)}
-			pCardTitleFnt={Text.H4}
+			pCardTitleFnt={Text.H3}
 			pCardBodyFnt={Text.Body}
 			pStackDir="Row"
 			pSpacing={20}
@@ -141,28 +97,15 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<EmoStrip
-		id="pharmacist-conditions"
+	<ESec
+		id="secPharmacistCond"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
-		<EmoStrip
-			pBg={new ElemBg(Colors.BistageLite)}
-			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<Emograph
-				pTitle={Text.H2.Centered.OfText("شروط الصيدلي طالب الترخيص")}
-				pText={Text.Body.Centered.OfText("صلاحية المكان وحدها لا تكفي. ترخيص الصيدلية يصدر لصيدلي مستوفٍ للشروط المهنية، لذلك يجب مراجعة موقف طالب الترخيص قبل بدء الملف.")}
-				pSize={new Size(new NumPer(980, 320), new NumPer("auto", "auto"))}
-			/>
-
-		</EmoStrip>
+		<SecTitle pTitle="شروط الصيدلي طالب الترخيص" BistageLite />
 
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
@@ -198,7 +141,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 		</HzStack>
 
-	</EmoStrip>
+	</ESec>
 
 
 
@@ -221,7 +164,6 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 		<CardsGr
 			pWidth={new RespString("1200px", "100%")}
-			pGrTitle={Text.H3.Centered.OfText("أسئلة المقر الحاسمة")}
 			pCardBg={new ElemBg(Colors.Gray1)}
 			pCardTitleFnt={Text.H4}
 			pCardBodyFnt={Text.Body}
@@ -412,20 +354,19 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 	<ESec
-		id="two-floors"
+		id="secTwoFloors"
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
+			Gray3
 			pTitle="ترخيص صيدلية على دورين أو بميزانين"
 			pDesc="وجود ميزانين أو صندرة أو دور علوي لا يعني قبوله تلقائيًا ضمن الصيدلية. يجب فحص المساحة والارتفاع والاتصال الداخلي والاستقلال."
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "100%")}
 			pGrTitle={Text.H3.Centered.OfText("نقاط فحص الصيدلية متعددة المستويات")}
 			pCardBg={new ElemBg(Colors.WhiteOff)}
 			pCardTitleFnt={Text.H4}
@@ -446,8 +387,8 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<EmoStrip
-		id="first-inspection"
+	<ESec
+		id="secInspection1"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
 		pHzAlign={Align.Center}
@@ -488,7 +429,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 			]}
 		/>
 
-	</EmoStrip>
+	</ESec>
 
 
 
@@ -497,14 +438,14 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 	<ESec
-		id="second-inspection"
+		id="secInspection2"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.SkyLite};`}
+			SkyLite
 			pTitle="شروط المعاينة الثانية للصيدلية"
 			pDesc="بعد قبول المكان مبدئيًا، يتم تجهيز الصيدلية للمعاينة الثانية. هنا يتم فحص الحالة النهائية للتشطيب والتشغيل وليس مجرد صلاحية الموقع."
 		/>
@@ -563,7 +504,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
+			Gray3
 			pTitle="موقف العقار من الترخيص أو التصالح"
 			pDesc="صلاحية الصيدلية من الداخل لا تكفي إذا كان العقار نفسه لديه مشكلة في الترخيص أو الاستخدام."
 		/>
@@ -585,118 +526,6 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 		/>
 
 	</ESec>
-
-
-
-
-
-
-
-	<ESec
-		id="rejection"
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.BistageLite};`}
-			pTitle="أسباب قد تؤدي إلى حفظ أو رفض طلب ترخيص الصيدلية"
-			pDesc="هذه الأسباب يجب التعامل معها قبل تقديم الطلب، لأنها لا تعالج غالبًا بمجرد استكمال مستند ناقص."
-		/>
-
-		<EmoList
-			pWidth={new RespString("1000px", "100%")}
-			pTitle={Text.H3.Centered.OfText("أخطاء جوهرية في شروط الصيدلية")}
-			pDesc={Text.Body.Centered.OfText("يفضل فحص هذه البنود قبل التعاقد، وقبل تجهيز ملف الترخيص.")}
-			pHeadBg={new ElemBg(Colors.SkyLite)}
-			pItemsBg={new ElemBg(Colors.Gray1)}
-			pItemFnt={Text.Body}
-			pNumbered={true}
-			pItems={[
-				"المسافة إلى أقرب صيدلية مرخصة أقل من 100 متر.",
-				"المساحة الصافية أقل من الحد الأدنى المطلوب.",
-				"الارتفاع الصافي أقل من 2.60 متر بعد التشطيب أو السقف المستعار.",
-				"عدم وضوح حدود العين أو اتصالها بنشاط آخر.",
-				"وجود فتحات مخالفة على وحدة سكنية أو محل آخر أو مدخل عقار.",
-				"عدم إمكانية توفير المياه أو الكهرباء أو الصرف أو التهوية المطلوبة.",
-				"عدم مطابقة الرسم الهندسي للحالة الفعلية.",
-				"وجود مشكلة جوهرية في موقف العقار من الترخيص أو التصالح."
-			]}
-		/>
-
-	</ESec>
-
-
-
-
-
-
-
-	<EmoStrip
-		id="checklist"
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<EmoStrip
-			pBg={new ElemBg(Colors.SkyLite)}
-			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<Emograph
-				pTitle={Text.H2.Centered.OfText("قائمة فحص قبل اختيار محل الصيدلية")}
-				pText={Text.Body.Centered.OfText("استخدم هذه القائمة قبل الإيجار أو الشراء أو تنفيذ التشطيب. أي إجابة غير واضحة تحتاج فحصًا قبل بدء الملف.")}
-				pSize={new Size(new NumPer(980, 320), new NumPer("auto", "auto"))}
-			/>
-
-		</EmoStrip>
-
-		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
-
-			<EmoList
-				pWidth={new RespString("560px", "100%")}
-				pTitle={Text.H3.OfText("قبل التعاقد")}
-				pDesc={Text.Body.OfText("بنود حاسمة في اختيار المكان.")}
-				pHeadBg={new ElemBg(Colors.BistageLite)}
-				pItemsBg={new ElemBg(Colors.Gray1)}
-				pItemFnt={Text.Body}
-				pNumbered={true}
-				pItems={[
-					"هل تم قياس المسافة فعليًا؟",
-					"هل توجد صيدلية قريبة في شارع جانبي أو موازٍ؟",
-					"هل المساحة الصافية لا تقل عن 25 مترًا مربعًا؟",
-					"هل الارتفاع الصافي لا يقل عن 2.60 متر بعد التشطيب؟",
-					"هل حدود العين واضحة ومستقلة؟",
-					"هل يمكن تنفيذ الحمام أو المعمل عند الحاجة دون مخالفة؟"
-				]}
-			/>
-
-			<EmoList
-				pWidth={new RespString("560px", "100%")}
-				pTitle={Text.H3.OfText("قبل المعاينة الثانية")}
-				pDesc={Text.Body.OfText("بنود التشغيل والتجهيز النهائي.")}
-				pHeadBg={new ElemBg(Colors.BistageLite)}
-				pItemsBg={new ElemBg(Colors.Gray1)}
-				pItemFnt={Text.Body}
-				pNumbered={true}
-				pItems={[
-					"هل مصدر المياه واضح ومقبول؟",
-					"هل مصدر الكهرباء دائم؟",
-					"هل التهوية أو التكييف مناسب؟",
-					"هل منسوب الأرضية آمن بالنسبة للطريق؟",
-					"هل الحمام مفصول بطريقة صحيحة؟",
-					"هل الرسم النهائي مطابق تمامًا لما تم تنفيذه؟"
-				]}
-			/>
-
-		</HzStack>
-
-	</EmoStrip>
 
 
 
@@ -763,27 +592,9 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	>
 
 		<ReadAlsoItem
-			pTitle="ترخيص صيدلية"
-			pDesc="الصفحة الرئيسية لخدمة ترخيص الصيدليات وتجهيز الملف."
-			pHref="/emomed/pharmacy"
-		/>
-
-		<ReadAlsoItem
 			pTitle="إجراءات ترخيص صيدلية"
 			pDesc="خطوات تقديم الطلب والمعاينات والاستكمال حتى إصدار الترخيص."
 			pHref="/emomed/pharmacy/proc"
-		/>
-
-		<ReadAlsoItem
-			pTitle="رسم هندسي لصيدلية"
-			pDesc="الرسم المطلوب للمعاينة الأولى والثانية وبيانات اللوحة الهندسية."
-			pHref="/emomed/pharmacy/dwg"
-		/>
-
-		<ReadAlsoItem
-			pTitle="قياس المسافة بين صيدليتين"
-			pDesc="فحص شرط المسافة قبل التعاقد على مقر الصيدلية."
-			pHref="/emomed/pharmacy/distance"
 		/>
 
 	</ReadAlso>
@@ -794,46 +605,36 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<RelServices
-		pTitle={Text.H2.Centered.WithColor(Colors.BistageLite).OfText("خدماتنا")}
-		pHeadBg={new ElemBg(Colors.Gray5)}
-		pBodyBg={new ElemBg(Colors.SkyLite)}
-		pCardBg={new ElemBg(Colors.WhiteOff)}
-	>
+	<RelServices>
 
 		<RelServiceItem
 			pTitle="استخراج ترخيص صيدلية"
 			pDesc="متابعة ملف ترخيص الصيدلية وتجهيز المستندات وملاحظات المعاينة."
 			pHref="/emomed/pharmacy"
-			pBtnText="التفاصيل"
 		/>
 
 		<RelServiceItem
 			pTitle="رسم هندسي لصيدلية"
 			pDesc="إعداد الرسم الهندسي المطلوب للمعاينة الأولى أو الرسم النهائي."
 			pHref="/emomed/pharmacy/dwg"
-			pBtnText="التفاصيل"
 		/>
 
 		<RelServiceItem
 			pTitle="قياس المسافة بين صيدليتين"
 			pDesc="فحص شرط المسافة قبل الإيجار أو الشراء أو بدء ملف الترخيص."
 			pHref="/emomed/pharmacy/distance"
-			pBtnText="التفاصيل"
-		/>
-
-		<RelServiceItem
-			pTitle="تقرير هندسي عن حالة مبنى"
-			pDesc="تقرير فني عند الحاجة لمراجعة حالة العقار أو موقفه الإنشائي."
-			pHref="/emonsult/report"
-			pBtnText="التفاصيل"
 		/>
 
 		<RelServiceItem
 			pTitle="دعبس .. بيع وشراء صيدليات"
 			pDesc="خدمات الربط بين أصحاب الصيدليات والمحلات المعروضة للبيع وبين الصيادلة الجادين الراغبين في الشراء"
 			pHref="/emomed/pharmacy/mining"
-			pBtnText="التفاصيل"
+		/>
+
+		<RelServiceItem
+			pTitle="تقرير هندسي عن حالة مبنى"
+			pDesc="تقرير فني عند الحاجة لمراجعة حالة العقار أو موقفه الإنشائي."
+			pHref="/emonsult/report/safety"
 		/>
 
 	</RelServices>
