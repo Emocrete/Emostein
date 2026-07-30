@@ -1,7 +1,7 @@
 ---
 import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
-import { EmoBtn, Emograph, EmoList, HzStack, SecTitle, Tree, VrStack } from "@/Widgets/Comp";
+import { EmoBtn, EmoCall, Emograph, EmoList, HzStack, SecTitle, Tree, VrStack } from "@/Widgets/Comp";
 import { YTPlayer } from "@/Widgets/Media";
 import { ESec, Hero, IndexSec } from "@/Widgets/Sections";
 import { BottTriSep, IncLineSep } from "@/Widgets/Separators";
@@ -40,16 +40,22 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, RespString, Size, Tex
 
 
 
-	<Hero
-		pTitle="تطوير عقاري"
-		pDesc="نقدم حلولاً متكاملة في مجال التطوير العقاري، بداية من الفكرة والتخطيط وصولاً إلى التنفيذ والتسليم. نركز على الجودة، الجدوى الاقتصادية، والاستدامة في كل مشروع نتبناه"
-		pPosL="40% 50% 10% 10%"
-		pPosP="10% 10% 50% 10%"
-	>
+	<Hero>
 
-		<a class = " cta " href="#cta">
-			اطلب
-		</a>
+		<VrStack
+			pSize={new Size(new NumPer("40%","95%"))}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))}
+			pHzAlign={"Center"}
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("تطوير عقاري")}
+				pText={Text.Body.Centered.OfText("نقدم حلولاً متكاملة في مجال التطوير العقاري، بداية من الفكرة والتخطيط وصولاً إلى التنفيذ والتسليم. نركز على الجودة، الجدوى الاقتصادية، والاستدامة في كل مشروع نتبناه")}
+			/>
+
+			<EmoCall BlackSky />
+
+		</VrStack>
 
 	</Hero>
 

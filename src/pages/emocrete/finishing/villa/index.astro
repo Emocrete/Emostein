@@ -1,7 +1,10 @@
 ---
-import { Align, ElemBg, NumPer, Size, Text } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { DataCard, EGall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } from "@/Widgets";
+import { EmoCall, Emograph, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { EGall } from "@/Widgets/Media";
+import { ESec, Hero } from "@/Widgets/Sections";
+import { EmoContactStrip, EmoStrip } from "@/Widgets/Strips";
+import { Align, ElemBg, Loc, NumPer, Size, Text } from "@/TypesLib";
 ---
 
 
@@ -29,32 +32,54 @@ import { DataCard, EGall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 	pDescr="خدمة تشطيب فلل وقصور تشمل التصميم والتنفيذ والإشراف الهندسي على جميع مراحل التشطيب، مع إعداد مقايسة مبدئية بعد المعاينة ورفع المقاسات، ونسبة إشراف تبدأ من 15% من إجمالي تكلفة المقايسة."
 >
 
-	<Hero
-		pTitle="تشطيب فيلا"
-		pTitleClr="#d8d8d8"
-		pDesc="تصميم وتنفيذ وتشطيب الفلل والقصور بجودة عالية وتكلفة متوازنة، مع إشراف هندسي خلال جميع مراحل التنفيذ حتى الاستلام النهائي"
-		pDescClr="#d8d8d8"
-		pHzAlign="center"
-		pVrAlign="center"
-		pPosL="40% 50% 15% 10%"
-		pPosP="15% 5% 20% 5%"
-		pBlurL="on"
-		pBlurP="off"
-	/>
+
+
+
+
+
+
+	<Hero>
+
+		<VrStack
+			pSize={new Size(new NumPer("40%","95%"))}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))}
+			pHzAlign={"Center"}
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.White.OfText("تشطيب فيلا")}
+				pText={Text.Body.Centered.White.OfText("تصميم وتنفيذ وتشطيب الفلل والقصور بجودة عالية وتكلفة متوازنة، مع إشراف هندسي خلال جميع مراحل التنفيذ حتى الاستلام النهائي")}
+			/>
+
+			<EmoCall BlackSky />
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
 
 	<ESec
 		pBg={new ElemBg("#FFFDF8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			Gray1
 			pTitle="تشطيب فلل وقصور بخطة واضحة من البداية"
 			pDesc="الخدمة لا تبدأ من اختيار خامة أو لون، بل من معاينة ورفع مقاسات وحصر بنود وتحويل الرؤية إلى مقايسة قابلة للتنفيذ"
-			style="--StripBg:#F6F1E8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFDF8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFDF8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<Emograph
 				pTitle={Text.H3.WithColor("#17345C").OfText("خدمة متكاملة للتصميم والتنفيذ")}
@@ -66,19 +91,29 @@ import { DataCard, EGall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#F6F1E8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			cSkyDarkBlack
 			pTitle="كيف نبدأ حساب تكلفة تشطيب الفيلا؟"
 			pDesc="بعد المعاينة أو استلام الرسومات الهندسية، يتم حصر أنواع وكميات وخامات البنود قبل إعداد التكلفة التقريبية"
-			style="--StripBg:#17345C;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F6F1E8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#F6F1E8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -100,19 +135,29 @@ import { DataCard, EGall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#FFFFFF")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #FFFDF8 "
 			pTitle="نسبة الإشراف وأتعاب إدارة التشطيب"
 			pDesc="الأتعاب لا يتم حسابها كرقم عشوائي، بل كنسبة من التكلفة الفعلية للأعمال حتى تبقى مرتبطة بحجم المشروع الحقيقي"
-			style="--StripBg:#FFFDF8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFFFF")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -140,19 +185,29 @@ import { DataCard, EGall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#F6F1E8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #B78A25 "
 			pTitle="تشطيبات متكاملة للفلل والقصور"
 			pDesc="ننفذ جميع أعمال التشطيبات الكلاسيكية والحديثة بجودة عالية وتكلفة متوازنة"
-			style="--StripBg:#B78A25;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F6F1E8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#F6F1E8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack>
 
@@ -174,19 +229,29 @@ import { DataCard, EGall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#FFFDF8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #17345C "
 			pTitle="خدمات التشطيبات للفيلات والقصور"
 			pDesc="الخدمة تغطي أعمال التأسيس والتشطيب النهائي، بداية من البنية الداخلية حتى الشكل الظاهر للفراغات"
-			style="--StripBg:#17345C;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFDF8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFDF8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -208,19 +273,29 @@ import { DataCard, EGall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#FFFFFF")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #FFFDF8 "
 			pTitle="أعمال التأسيس الأساسية"
 			pDesc="مرحلة التأسيس هي التي تحدد جودة التشغيل لاحقا، وأي ضعف فيها يظهر بعد السكن بتكلفة إصلاح أعلى"
-			style="--StripBg:#FFFDF8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFFFF")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -248,19 +323,29 @@ import { DataCard, EGall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#F6F1E8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #B78A25 "
 			pTitle="أعمال التشطيب النهائي"
 			pDesc="المرحلة التي يظهر فيها طابع الفيلا، لكنها تعتمد على دقة التأسيس وجودة الاختيارات السابقة"
-			style="--StripBg:#B78A25;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F6F1E8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#F6F1E8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -288,19 +373,29 @@ import { DataCard, EGall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#FFFFFF")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #FFFDF8 "
 			pTitle="لماذا تشطيب الفيلا يحتاج إدارة مختلفة عن الشقة؟"
 			pDesc="الفيلا مشروع أكبر في التفاصيل والمساحات والتداخل بين الأعمال، ولا يصلح التعامل معها كبنود صغيرة منفصلة"
-			style="--StripBg:#FFFDF8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFFFF")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -328,19 +423,29 @@ import { DataCard, EGall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#FFFDF8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #17345C "
 			pTitle="مراحل العمل في تشطيب الفيلا"
 			pDesc="نقسم المشروع إلى مراحل واضحة حتى لا يتحول التشطيب إلى قرارات عشوائية ومصاريف متفرقة"
-			style="--StripBg:#17345C;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFDF8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFDF8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack>
 
@@ -380,10 +485,15 @@ import { DataCard, EGall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec>
-		<SecTitle
-			pTitle="نماذج أعمال تشطيب فيلا"
-		/>
+
+		<SecTitle pTitle="نماذج أعمال تشطيب فيلا" />
 
 		<EGall
 			pFolder="/Media/Emocrete/Finishing/Villa/Samples"
@@ -400,47 +510,10 @@ import { DataCard, EGall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 
 	</ESec>
 
-	<ESec
-		pBg={new ElemBg("#17345C")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-		<SecTitle
-			pTitle="اطلب خدمة تشطيب فيلا"
-			pDesc="يمكنك البدء بمعاينة ورفع مقاسات، أو مراجعة الرسومات المتاحة، ثم تجهيز تصور ومقايسة مبدئية قبل التنفيذ"
-			style="--StripBg:#102744;"
-		/>
 
-		<EmoStrip pBg={new ElemBg("#17345C")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
 
-			<HzStack>
 
-				<DataCard
-					TitleTag="h3"
-					pTitle="معاينة وتشخيص الحالة"
-					pBody="نراجع حالة الفيلا، ونحدد البنود المطلوبة، ونفصل بين أعمال التأسيس وأعمال التشطيب النهائي قبل إعداد التكلفة."
-					pLink="/emocrete/finishing/villa"
-				/>
 
-				<DataCard
-					TitleTag="h3"
-					pTitle="مقايسة تشطيب مبدئية"
-					pBody="نجهز حصرًا مبدئيًا للكميات والخامات والمصنعيات حسب مستوى التشطيب المطلوب وأسعار السوق المتاحة وقت الدراسة."
-					pLink="/emocrete/finishing/villa/cost"
-				/>
 
-				<DataCard
-					TitleTag="h3"
-					pTitle="إشراف وتنفيذ حتى الاستلام"
-					pBody="نتابع مراحل التنفيذ والجودة والملاحظات حتى الوصول إلى استلام نهائي واضح ومناسب لمستوى الفيلا أو القصر."
-					pLink="/emocrete/supervision/finishing"
-				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
 
 </BLayout>
