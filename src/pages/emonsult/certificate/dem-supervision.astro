@@ -1,7 +1,10 @@
 ---
 import BLayout from "@/Layout.astro";
-import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
-import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle } from "@/Widgets";
+import { CardsGr } from "@/Widgets/Cards";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle } from "@/Widgets/Comp";
+import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStr } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import { VrStack } from "../../../site/Widgets";
 ---
 
@@ -57,7 +60,7 @@ import { VrStack } from "../../../site/Widgets";
 
 
 
-	<ESec
+	<EmoSec
 		id="Intro"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -86,7 +89,7 @@ import { VrStack } from "../../../site/Widgets";
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -94,7 +97,7 @@ import { VrStack } from "../../../site/Widgets";
 
 
 
-	<ESec
+	<EmoSec
 		id="Scope"
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
@@ -122,7 +125,7 @@ import { VrStack } from "../../../site/Widgets";
 			pTopic4={new Topic("استكمال الملف", "تطلب الشهادة غالبًا ضمن مستندات ما قبل الشروع في أعمال الهدم، مع التقرير الفني وعقد المقاولة أو ما يفيد التعاقد مع مقاول.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -130,7 +133,7 @@ import { VrStack } from "../../../site/Widgets";
 
 
 
-	<EmoStrip
+	<EmoStr
 		id="Difference"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
@@ -138,7 +141,7 @@ import { VrStack } from "../../../site/Widgets";
 		pVrAlign={Align.Center}
 	>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.BistageLite)}
 			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
 			pHzAlign={Align.Center}
@@ -151,7 +154,7 @@ import { VrStack } from "../../../site/Widgets";
 				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<CardsGr
 			pWidth={new RespString("1200px", "100%")}
@@ -166,7 +169,7 @@ import { VrStack } from "../../../site/Widgets";
 			pTopic3={new Topic("التقرير الهندسي", "يوضح الطريقة الفنية لتنفيذ الهدم، وخطوات التنفيذ، وأسلوب تأمين سلامة المباني المجاورة والمارة والمرافق.")}
 		/>
 
-	</EmoStrip>
+	</EmoStr>
 
 
 
@@ -174,7 +177,7 @@ import { VrStack } from "../../../site/Widgets";
 
 
 
-	<ESec
+	<EmoSec
 		id="WhenNeeded"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -204,7 +207,7 @@ import { VrStack } from "../../../site/Widgets";
 			]}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -212,7 +215,7 @@ import { VrStack } from "../../../site/Widgets";
 
 
 
-	<ESec
+	<EmoSec
 		id="BeforeStart"
 		pBg={new ElemBg(Colors.SkyLite)}
 		pHzAlign={Align.Center}
@@ -263,7 +266,7 @@ import { VrStack } from "../../../site/Widgets";
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -271,7 +274,7 @@ import { VrStack } from "../../../site/Widgets";
 
 
 
-	<EmoStrip
+	<EmoStr
 		id="Documents"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
@@ -279,7 +282,7 @@ import { VrStack } from "../../../site/Widgets";
 		pVrAlign={Align.Center}
 	>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.BistageLite)}
 			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
 			pHzAlign={Align.Center}
@@ -292,7 +295,7 @@ import { VrStack } from "../../../site/Widgets";
 				pSize={new Size(new NumPer(980, 320), new NumPer("auto", "auto"))}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
@@ -334,7 +337,7 @@ import { VrStack } from "../../../site/Widgets";
 
 		</HzStack>
 
-	</EmoStrip>
+	</EmoStr>
 
 
 
@@ -342,7 +345,7 @@ import { VrStack } from "../../../site/Widgets";
 
 
 
-	<ESec
+	<EmoSec
 		id="Process"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -371,7 +374,7 @@ import { VrStack } from "../../../site/Widgets";
 			pTopic5={new Topic("تقديمها للجهة", "تسلم الشهادة ضمن مستندات الجهة الإدارية، أو ضمن مستندات ما قبل الشروع في الهدم حسب حالة الترخيص.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -379,7 +382,7 @@ import { VrStack } from "../../../site/Widgets";
 
 
 
-	<ESec
+	<EmoSec
 		id="EngineerRole"
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
@@ -430,7 +433,7 @@ import { VrStack } from "../../../site/Widgets";
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -438,7 +441,7 @@ import { VrStack } from "../../../site/Widgets";
 
 
 
-	<EmoStrip
+	<EmoStr
 		id="Cases"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
@@ -446,7 +449,7 @@ import { VrStack } from "../../../site/Widgets";
 		pVrAlign={Align.Center}
 	>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.BistageLite)}
 			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
 			pHzAlign={Align.Center}
@@ -459,7 +462,7 @@ import { VrStack } from "../../../site/Widgets";
 				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<CardsGr
 			pWidth={new RespString("1200px", "100%")}
@@ -476,7 +479,7 @@ import { VrStack } from "../../../site/Widgets";
 			pTopic5={new Topic("هدم جزئي", "الهدم الجزئي أخطر من الهدم الكلي في بعض الحالات، لأنه يترك أجزاء قائمة يجب الحفاظ على اتزانها وسلامتها.")}
 		/>
 
-	</EmoStrip>
+	</EmoStr>
 
 
 
@@ -484,7 +487,7 @@ import { VrStack } from "../../../site/Widgets";
 
 
 
-	<ESec
+	<EmoSec
 		id="Report"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -525,7 +528,7 @@ import { VrStack } from "../../../site/Widgets";
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -533,7 +536,7 @@ import { VrStack } from "../../../site/Widgets";
 
 
 
-	<ESec
+	<EmoSec
 		id="WhatWeNeed"
 		pBg={new ElemBg(Colors.SkyLite)}
 		pHzAlign={Align.Center}
@@ -565,7 +568,7 @@ import { VrStack } from "../../../site/Widgets";
 			]}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -573,7 +576,7 @@ import { VrStack } from "../../../site/Widgets";
 
 
 
-	<EmoStrip
+	<EmoStr
 		id="CTA"
 		pBg={new ElemBg(Colors.BistageLite)}
 		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
@@ -581,7 +584,7 @@ import { VrStack } from "../../../site/Widgets";
 		pVrAlign={Align.Center}
 	>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.BistageLite)}
 			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
 			pHzAlign={Align.Center}
@@ -594,7 +597,7 @@ import { VrStack } from "../../../site/Widgets";
 				pSize={new Size(new NumPer(900, 320), new NumPer("auto", "auto"))}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<HzStack pGap={new Pixel(25, 15)} pPad={new Pixel(30, 20)}>
 
@@ -604,7 +607,7 @@ import { VrStack } from "../../../site/Widgets";
 
 		</HzStack>
 
-	</EmoStrip>
+	</EmoStr>
 
 
 

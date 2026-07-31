@@ -24,1629 +24,2348 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 { cEnabled && (
 
-
-
-<script is:inline>
-	(() => {
-	const cReplayParams = new URLSearchParams(location.search);
-	if (cReplayParams.has("emoNoAnalytics")) {
-		try { sessionStorage.setItem("emo_no_analytics_v1", "1"); } catch {}
-	}
-	let fNoAnalytics = false;
-	try { fNoAnalytics = sessionStorage.getItem("emo_no_analytics_v1") === "1"; } catch {}
-	if (window.__EMO_REPLAY__ || fNoAnalytics || cReplayParams.has("emoReplay") || cReplayParams.has("emo_replay")) return;
-	if (window.__EMO_OPS_TRACKER_ACTIVE__) return;
-	window.__EMO_OPS_TRACKER_ACTIVE__ = true;
-	const cVisitorKey = "emo_ops_visitor_id";
-	const cSessionKey = "emo_ops_session_id";
-	const cOncePrefix = "emo_ops_once_";
-	const cApiUrl = "/api/ops/visit";
-	const cTrafficGateUrl = "/api/ops/traffic";
-	const cRetryQueueKey = "emo_ops_retry_queue_v3";
-	const cSessionSeqKey = "emo_ops_session_seq_v1";
-	const cSessionStartedKey = "emo_ops_session_started_at_v1";
-	const cViewThreshold = [0, 0.01, 0.05];
-	const cViewRootMargin = "0px";
-	const cScrollMarks = [10, 20, 30, 40, 50, 60, 70, 80, 90];
-	const cReadWordsPerMinute = 200;
-	const cReadFocusTopRatio = 0.25;
-	const cReadFocusBottomRatio = 0.75;
-	const cReadFocusMinRatio = 0.5;
-	const cReadTickMs = 250;
-	let fPageInstanceId = "";
-	const cPageStartedAt = Date.now();
-	const cFocusAwayMinMs = 1500;
-	const cObservedViewElems = new Set();
-	const cReadTargets = [];
-	const fReadStates = new WeakMap();
-	let fSeq = 0;
-	let fViewObserver = null;
-	let fAwayStartedAt = 0;
-	let fAwayReason = "";
-	let fLastScrollMark = null;
-	let fLastScrollSampleAt = 0;
-	let fLastPointerSampleAt = 0;
-	let fScrollIdleTimer = 0;
-	let fPageExitSent = false;
-	let fExternalActionUntil = 0;
-	let fPageOpenSent = false;
-	let fPageOpenPromise = null;
-	let fQueueFlushRunning = false;
-	let fRetryDuringFlush = [];
-	let fPagePingTimer = 0;
-	let fReadTimer = 0;
-	let fLastReadTickAt = Date.now();
-	let fActiveReadState = null;
-	const cPagePingMs = 30000;
-	const cBotUserAgentPattern = /(bot|crawl|spider|slurp|googlebot|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb)/i;
-
-	function NewId(pPrefix) {
-	const Rand = Math.random().toString(36).slice(2, 10);
-	const Time = Date.now().toString(36);
-	return `${pPrefix}_${Time}_${Rand}`;
-	}
-
-	function StableProfile() {
-	const Parts = [
-	navigator.userAgent || "", navigator.platform || "", navigator.language || "",
-	Array.from(navigator.languages || []).join(","), navigator.hardwareConcurrency || 0,
-	navigator.deviceMemory || 0, screen.width || 0, screen.height || 0,
-	screen.colorDepth || 0, screen.pixelDepth || 0,
-	Intl.DateTimeFormat().resolvedOptions().timeZone || ""
-	];
-	let Hash = 2166136261;
-	const Text = Parts.join("|");
-	for (let Index = 0; Index < Text.length; Index++) {
-	Hash ^= Text.charCodeAt(Index);
-	Hash = Math.imul(Hash, 16777619);
-	}
-	return `bp_${(Hash >>> 0).toString(36)}`;
-	}
-
-	function GetStoredId(pStorage, pKey, pPrefix) {
-	let Id = pStorage.getItem(pKey);
-	if (!Id) {
-	Id = NewId(pPrefix);
-	pStorage.setItem(pKey, Id);
-	}
-	return Id;
-	}
-
-	function GetVisitorId() {
-	return GetStoredId(localStorage, cVisitorKey, "v");
-	}
-
-	function GetSessionId() {
-	return GetStoredId(sessionStorage, cSessionKey, "s");
-	}
-
-	function GetPageInstanceId() {
-	if (!fPageInstanceId) fPageInstanceId = NewId("p");
-	return fPageInstanceId;
-	}
-
-	function PublishVisitIds() {
-	window.__EmoOpsIds = {
-	visitorId: GetVisitorId(),
-	sessionId: GetSessionId(),
-	pageInstanceId: GetPageInstanceId(),
-	clientProfile: StableProfile()
-	};
-	}
-
-	async function TrafficAllowed() {
-	try {
-	const Res = await fetch(cTrafficGateUrl, { method: "GET", headers: { accept: "application/json" }, cache: "no-store" });
-	const Data = await Res.json();
-	return Res.ok && Data && Data.track === true;
-	} catch { return false; }
-	}
-
-	function GetPageElapsedMs() {
-	return Math.max(0, Date.now() - cPageStartedAt);
-	}
-
-	function GetSessionStartedAt() {
-		let Value = 0;
-		try { Value = Number(sessionStorage.getItem(cSessionStartedKey) || 0); } catch {}
-		if (!Number.isFinite(Value) || Value <= 0 || Value > Date.now()) {
-			Value = Date.now();
-			try { sessionStorage.setItem(cSessionStartedKey, String(Value)); } catch {}
-		}
-		return Value;
-	}
-
-	function GetSessionElapsedMs() {
-		return Math.max(0, Date.now() - GetSessionStartedAt());
-	}
-
-	function NextSessionSeq() {
-		let Value = 0;
-		try { Value = Number(sessionStorage.getItem(cSessionSeqKey) || 0); } catch {}
-		if (!Number.isFinite(Value) || Value < 0) Value = 0;
-		Value = Math.floor(Value) + 1;
-		try { sessionStorage.setItem(cSessionSeqKey, String(Value)); } catch { Value = ++fSeq; }
-		return Value;
-	}
-
-	function BotSignal() {
-	const UserAgent = String(navigator.userAgent || "");
-	const Reasons = [];
-		if (cBotUserAgentPattern.test(UserAgent)) Reasons.push("ua_bot");
-	if (navigator.webdriver) Reasons.push("webdriver");
-	if (window.callPhantom || window._phantom || window.__nightmare) Reasons.push("headless_marker");
-	if (document.visibilityState === "prerender") Reasons.push("prerender");
-	return Reasons.join(",");
-	}
-
-	function IsSyntheticTraffic() {
-	return BotSignal() !== "";
-	}
-
-	function InitClarityIdentifiers() {
-	try {
-	if (typeof window.clarity !== "function") return;
-	const VisitorId = GetVisitorId();
-	const SessionId = GetSessionId();
-	const PageInstanceId = GetPageInstanceId();
-	window.clarity("identify", VisitorId, SessionId, PageInstanceId, `EmoLive ${VisitorId}`);
-	window.clarity("set", "emo_visitor_id", VisitorId);
-	window.clarity("set", "emo_session_id", SessionId);
-	window.clarity("set", "emo_page_instance_id", PageInstanceId);
-	window.clarity("set", "emo_page_path", location.pathname);
-	} catch {}
-	}
-
-	function CleanText(pText) {
-	return String(pText || "")
-	.replace(/\s*\|\s*/g, " ")
-	.replace(/م\.?\s*أيمن\s*عاشور/gi, "")
-	.replace(/أيمن\s*عاشور/gi, "")
-	.replace(/Ayman\s*Ashour/gi, "")
-	.replace(/Emostein|Emodsign|Emocrete|Emostone|Emochain|Emoperm|Emomed|Emonsult|Emostate/gi, "")
-	.replace(/إيموستين|إيموديزاين|إيموكريت|إيموستون|إيموتشين|إيموبيرم|إيموميد|إيمونسلت|إيموستيت/g, "")
-	.replace(/\b20\d{2}\b/g, "")
-	.replace(/\s+/g, " ")
-	.trim();
-	}
-
-	function BoolValue(pValue) {
-	if (pValue === true) return true;
-	const Value = String(pValue ?? "").trim().toLowerCase();
-	return Value === "true" || Value === "1" || Value === "yes" || Value === "on" || Value === "important";
-	}
-
-	function Shorten(pText, pMax = 140) {
-	const Text = CleanText(pText);
-	if (Text.length <= pMax) return Text;
-	return `${Text.slice(0, pMax).trim()}…`;
-	}
-
-	function GetText(pElem, pSelector) {
-	const Elem = pSelector ? pElem?.querySelector?.(pSelector) : pElem;
-	return Shorten(Elem ? Elem.textContent : "");
-	}
-
-	function GetDirectActionText(pElem) {
-	if (!pElem) return "";
-	const Explicit = pElem.dataset?.opsLabel || pElem.getAttribute?.("aria-label") || pElem.getAttribute?.("title") || pElem.getAttribute?.("alt") || "";
-	if (Explicit) return Shorten(Explicit);
-
-	const ImgAlt = pElem.querySelector?.("img[alt]")?.getAttribute("alt") || "";
-	const Value = pElem.value || pElem.getAttribute?.("value") || "";
-	const Direct = GetText(pElem, ".FaqQuestionText, .BtnText, .BtnTextNormal, .PriceCardHead, .RatingTitle, .TitleBox, strong, summary, button, a");
-	return Shorten(Direct || Value || pElem.textContent || ImgAlt || "");
-	}
-
-	function IsSameText(pA, pB) {
-	return CleanText(pA).toLowerCase() === CleanText(pB).toLowerCase();
-	}
-
-	function GetHeadingSelectors() {
-	return "h1, h2, h3, h4, h5, h6, .TitleBox, .SecTitle, .SectionTitle, .FaqTitle, .IndexSecTitle, [data-title], [data-ops-title]";
-	}
-
-	function GetExplicitTitle(pElem) {
-	return Shorten(pElem?.dataset?.opsTitle || pElem?.getAttribute?.("data-ops-title") || pElem?.dataset?.title || pElem?.getAttribute?.("data-title") || "");
-	}
-
-	function GetExplicitLabel(pElem) {
-	return Shorten(pElem?.dataset?.opsLabel || pElem?.getAttribute?.("data-ops-label") || "");
-	}
-
-	function FindHeadingIn(pElem) {
-	if (!pElem) return "";
-
-	const Explicit = GetExplicitTitle(pElem);
-	if (Explicit) return Explicit;
-
-	if (!pElem.querySelector) return "";
-	const Heading = pElem.querySelector(GetHeadingSelectors());
-	if (!Heading) return "";
-	return Shorten(GetExplicitTitle(Heading) || Heading.textContent || "");
-	}
-
-	function GetScopeElement(pElem) {
-	return pElem?.closest?.("[data-ops-scope], [data-ops-widget], .Hero, .FreeHero, .EmoSection, .EmoStrip, .IndexSecBox, .EmoFaq, .FaqItem, .PriceCard, .Price, .EmoGallery, .galleryGrid, .EmoRatingStrip, .EmoContactStrip, .EmoPartnerStrip, .EmoCoverageMapStrip, .EmoPipelineStrip, .EmoStatsStrip, .ReadAlso, .RelatedServices, .ReadAlsoItem, .RelServiceItem, .EmoList, .Emograph, .FullCard, .CardsGrCard, .Card, .RespImg") || null;
-	}
-
-	function GetHeadingBefore(pElem) {
-	if (!pElem) return "";
-	const All = Array.from(document.querySelectorAll("h1, h2, h3, h4, h5, h6, .TitleBox, .SecTitle, .SectionTitle, .FaqTitle, .IndexSecTitle, [data-title], [data-ops-title]"));
-	let Last = "";
-	for (const Heading of All) {
-	if (Heading === pElem || pElem.contains?.(Heading)) continue;
-	const Pos = Heading.compareDocumentPosition(pElem);
-	if (Pos & 4) Last = Shorten(GetExplicitTitle(Heading) || Heading.textContent || "");
-	}
-	return Last;
-	}
-
-	function GetNearestHeadingText(pElem) {
-	if (!pElem) return "";
-
-	const Scope = GetScopeElement(pElem);
-	const ScopeHeading = FindHeadingIn(Scope);
-	if (ScopeHeading) return ScopeHeading;
-
-	let Node = pElem.parentElement;
-	let Guard = 0;
-
-	while (Node && Node !== document.body && Guard++ < 12) {
-	const Text = FindHeadingIn(Node);
-	if (Text) return Text;
-	Node = Node.parentElement;
-	}
-
-	return GetHeadingBefore(pElem);
-	}
-
-	function BuildActionLabel(pElem, pFallbackElem, pExplicitAction = "") {
-	const Action = Shorten(pExplicitAction || GetDirectActionText(pElem));
-	const Heading = GetNearestHeadingText(pElem) || (pFallbackElem && pFallbackElem !== pElem ? GetNearestHeadingText(pFallbackElem) : "");
-	if (Action && Heading && !IsSameText(Action, Heading)) return Shorten(`${Action} / ${Heading}`, 190);
-	return Shorten(Action || Heading || GetDirectActionText(pFallbackElem), 190);
-	}
-
-	function BuildEventLabel(pElem, pFallbackElem) {
-	return BuildActionLabel(pElem, pFallbackElem);
-	}
-
-	function BuildViewLabel(pElem) {
-	const Explicit = GetExplicitLabel(pElem) || GetExplicitTitle(pElem);
-	if (Explicit) return Shorten(Explicit, 190);
-
-	const Heading = FindHeadingIn(pElem) || GetHeadingBefore(pElem) || GetNearestHeadingText(pElem);
-	if (Heading) return Shorten(Heading, 190);
-
-	const Direct = GetText(pElem, ".FaqQuestionText, .TitleBox, .SecTitle, .SectionTitle, .FaqTitle, .IndexSecTitle, h1, h2, h3, h4, h5, h6, strong, p");
-	return Shorten(Direct || GetDirectActionText(pElem), 190);
-	}
-
-	function BuildFaqLabel(pDetails, pSummary) {
-	const Question = GetText(pSummary || pDetails, ".FaqQuestionText") || GetText(pSummary || pDetails);
-	const ParentFaq = pDetails?.closest?.(".EmoFaq") || pDetails;
-	const Heading = GetNearestHeadingText(ParentFaq) || BuildViewLabel(ParentFaq);
-	if (Question && Heading && !IsSameText(Question, Heading)) return Shorten(`${Question} / ${Heading}`, 190);
-	return Shorten(Question || Heading, 190);
-	}
-
-	function GetVisibleInfo(pElem, pUseFocusZone = false) {
-	const Rect = pElem?.getBoundingClientRect?.();
-	if (!Rect || Rect.width <= 0 || Rect.height <= 0) return null;
-
-	const Vw = window.innerWidth || document.documentElement.clientWidth || 0;
-	const Vh = window.innerHeight || document.documentElement.clientHeight || 0;
-	const TopLimit = pUseFocusZone ? Vh * cReadFocusTopRatio : 0;
-	const BottomLimit = pUseFocusZone ? Vh * cReadFocusBottomRatio : Vh;
-	const VisibleW = Math.max(0, Math.min(Rect.right, Vw) - Math.max(Rect.left, 0));
-	const VisibleH = Math.max(0, Math.min(Rect.bottom, BottomLimit) - Math.max(Rect.top, TopLimit));
-	const VisibleArea = VisibleW * VisibleH;
-	const ElemArea = Math.max(1, Rect.width * Rect.height);
-
-	return { Rect, Vw, Vh, VisibleW, VisibleH, VisibleArea, Ratio: VisibleArea / ElemArea };
-	}
-
-	function IsReadableVisible(pElem) {
-	const Info = GetVisibleInfo(pElem, true);
-	if (!Info) return false;
-	return Info.Ratio >= cReadFocusMinRatio;
-	}
-
-	function CountWords(pText) {
-	const Text = CleanText(pText);
-	const Words = Text.match(/[\p{L}\p{N}]+/gu);
-	return Words ? Words.length : 0;
-	}
-
-	function GetReadableBlocksText(pElem) {
-	if (!pElem?.querySelectorAll) return CleanText(pElem?.textContent || "");
-
-	const Blocks = Array.from(pElem.querySelectorAll("h1, h2, h3, h4, h5, h6, p, li"));
-	const Parts = [];
-	let OrderedIndex = 0;
-
-	Blocks.forEach((pBlock) => {
-	if (FindReadTargetAncestor(pBlock) !== pElem) return;
-	if (pBlock.closest("script, style, nav, form, button, a, summary")) return;
-	const Text = CleanText(pBlock.textContent || "");
-	if (!Text) return;
-
-	const Tag = String(pBlock.tagName || "").toLowerCase();
-	if (/^h[1-6]$/.test(Tag)) {
-	Parts.push(`## ${Text}`);
-	return;
-	}
-
-	if (Tag === "li") {
-	const List = pBlock.parentElement;
-	if (List?.tagName?.toLowerCase() === "ol") {
-	OrderedIndex = Array.from(List.children).indexOf(pBlock) + 1;
-	Parts.push(`${OrderedIndex}. ${Text}`);
-	} else {
-	Parts.push(`• ${Text}`);
-	}
-	return;
-	}
-
-	Parts.push(Text);
-	});
-
-	if (Parts.length) return Parts.join("\n");
-
-	const Clone = pElem.cloneNode(true);
-	Clone.querySelectorAll?.("script, style, svg, img, nav, form, button, a, summary").forEach((pNode) => pNode.remove());
-	return CleanText(Clone.textContent || "");
-	}
-
-	function FindReadTargetAncestor(pElem) {
-	let Node = pElem;
-	while (Node && Node !== document.body) {
-	if (fReadStates.has(Node)) return Node;
-	Node = Node.parentElement;
-	}
-	return null;
-	}
-
-	function GetReadFullMs(pElem, pWordCount) {
-	const Manual = Number.parseFloat(pElem?.dataset?.opsReadMs || pElem?.dataset?.readMs || "");
-	if (Number.isFinite(Manual) && Manual > 0) return Manual;
-	return (Math.max(0, pWordCount) / cReadWordsPerMinute) * 60000;
-	}
-
-	function EnsureReadState(pElem, pWidgetName = "") {
-	let State = fReadStates.get(pElem);
-	if (State) {
-	if (pWidgetName && !State.Widget) State.Widget = pWidgetName;
-	return State;
-	}
-
-	State = {
-	Elem: pElem,
-	Widget: pWidgetName || GetWidgetName(pElem),
-	Label: "",
-	Text: "",
-	WordCount: 0,
-	FullMs: 0,
-	QuickMs: 0,
-	Parent: null,
-	Children: [],
-	InFocus: false,
-	Active: false,
-	Done: false,
-	QuickCandidate: false,
-	QuickDone: false,
-	FullDone: false,
-	AccumMs: 0,
-	Cycle: 0,
-	FullAt: 0,
-	ResetAt: 0,
-	Order: cReadTargets.length
-	};
-
-	fReadStates.set(pElem, State);
-	cReadTargets.push(State);
-	return State;
-	}
-
-	function IsReadableBoundary(pElem) {
-	return pElem instanceof Element && pElem.hasAttribute("readable");
-	}
-
-	function GetReadableBoundary(pElem) {
-	return pElem?.closest?.("[readable]") || null;
-	}
-
-	function RegisterReadElement(pElem, pWidgetName = "") {
-	if (!pElem || pElem.dataset?.opsAuto === "off") return;
-	const Boundary = GetReadableBoundary(pElem);
-	if (Boundary && Boundary !== pElem) return;
-	EnsureReadState(pElem, pWidgetName);
-	}
-
-	function ApplyReadableBoundaries() {
-	const Boundaries = Array.from(document.querySelectorAll("[readable]"));
-	Boundaries.forEach((pElem) => EnsureReadState(pElem, GetWidgetName(pElem)));
-
-	for (let Index = cReadTargets.length - 1; Index >= 0; Index--) {
-	const State = cReadTargets[Index];
-	const Boundary = GetReadableBoundary(State.Elem);
-	if (!Boundary || Boundary === State.Elem) continue;
-	fReadStates.delete(State.Elem);
-	cReadTargets.splice(Index, 1);
-	}
-
-	cReadTargets.forEach((pState, pIndex) => pState.Order = pIndex);
-	}
-
-	function PrepareReadStateText(pState) {
-	pState.Label = BuildViewLabel(pState.Elem);
-	pState.Text = GetReadableBlocksText(pState.Elem);
-	pState.WordCount = CountWords(pState.Text);
-	pState.FullMs = GetReadFullMs(pState.Elem, pState.WordCount);
-	pState.QuickMs = pState.FullMs / 2;
-	}
-
-	function BuildReadHierarchy() {
-	cReadTargets.forEach((pState) => {
-	pState.Parent = null;
-	pState.Children = [];
-	PrepareReadStateText(pState);
-	});
-
-	cReadTargets.forEach((pState) => {
-	let Node = pState.Elem.parentElement;
-	while (Node && Node !== document.body) {
-	const ParentState = fReadStates.get(Node);
-	if (ParentState) {
-	pState.Parent = ParentState;
-	ParentState.Children.push(pState);
-	break;
-	}
-	Node = Node.parentElement;
-	}
-	});
-	}
-
-	function ResetAncestorsForNewCycle(pState, pTime) {
-	let Parent = pState.Parent;
-	while (Parent) {
-	Parent.ResetAt = pTime;
-	Parent.FullDone = false;
-	Parent.Done = false;
-	Parent.FullAt = 0;
-	Parent = Parent.Parent;
-	}
-	}
-
-	function StartReadCycle(pState, pTime) {
-	pState.Cycle += 1;
-	pState.AccumMs = 0;
-	pState.Active = false;
-	pState.Done = false;
-	pState.QuickCandidate = false;
-	pState.QuickDone = false;
-	pState.FullDone = false;
-	pState.FullAt = 0;
-	ResetAncestorsForNewCycle(pState, pTime);
-	}
-
-	function FinishReadCycleOnExit(pState, pTime) {
-	if (fActiveReadState === pState) fActiveReadState = null;
-	pState.Active = false;
-
-	if (!pState.FullDone && pState.QuickCandidate && !pState.QuickDone) {
-	TrackReadEvent(pState, "read_quick", pTime, "quick");
-	pState.QuickDone = true;
-	pState.Done = true;
-	}
-
-	pState.AccumMs = 0;
-	pState.QuickCandidate = false;
-	}
-
-	function CompareDomOrder(pA, pB) {
-	if (pA.Elem === pB.Elem) return 0;
-	const Pos = pA.Elem.compareDocumentPosition(pB.Elem);
-	if (Pos & Node.DOCUMENT_POSITION_PRECEDING) return 1;
-	if (Pos & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
-	return pA.Order - pB.Order;
-	}
-
-	function GetReadableLeavesInFocus() {
-	return cReadTargets
-	.filter((pState) => pState.InFocus && !pState.Done && pState.Children.length === 0 && pState.FullMs > 0 && pState.WordCount > 0)
-	.sort(CompareDomOrder);
-	}
-
-	function TrackAnalyticsReadEvent(pState, pEventType) {
-	const Analytics = window.EmoAnalytics;
-	if (!Analytics || typeof Analytics.GetItemName !== "function" || typeof Analytics.TrackTemplate !== "function") return;
-
-	const ElementId = String(pState.Elem?.id || "").trim();
-	if (!ElementId) return;
-	const ItemName = Analytics.GetItemName(pState.Elem);
-	if (!ItemName) return;
-
-	const IsFullRead = pEventType === "read_full";
-	const IsServiceSection = pState.Elem?.matches?.('.EmoSection[data-ga-service="true"]') === true;
-	const Prefix = IsServiceSection
-		? (IsFullRead ? "Srv" : "SrvQ")
-		: (IsFullRead ? "R" : "RQ");
-
-	Analytics.TrackTemplate(Prefix, ItemName);
-	}
-
-	function TrackReadEvent(pState, pEventType, pTime, pMode) {
-	TrackAnalyticsReadEvent(pState, pEventType);
-
-	const WidgetName = pState.Widget || GetWidgetName(pState.Elem);
-	const ReadTitle = pState.Label || BuildViewLabel(pState.Elem);
-	const ReadableText = String(pState.Text || "");
-	const BodyText = Shorten(ReadableText, 420);
-	const ReadEventData = {
-	readTitle: ReadTitle,
-	readableText: ReadableText,
-	readable: IsReadableBoundary(pState.Elem)
-	};
-
-	if (BodyText) {
-	TrackOpsEvent(pEventType, {
-	eventOn: "read_body",
-	widget: WidgetName,
-	label: BodyText,
-	labelMax: 420,
-	value: pState.WordCount,
-	durationMs: Math.round(pState.AccumMs),
-	awayReason: `${pMode || ""}:body`,
-	eventData: ReadEventData
-	});
-	}
-
-	TrackOpsEvent(pEventType, {
-	eventOn: "read",
-	widget: WidgetName,
-	label: ReadTitle,
-	value: pState.WordCount,
-	durationMs: Math.round(pState.AccumMs),
-	awayReason: pMode || "",
-	eventData: ReadEventData
-	});
-
-	if (pEventType === "read_full") {
-	pState.FullDone = true;
-	pState.Done = true;
-	pState.FullAt = pTime;
-	pState.QuickCandidate = false;
-	CheckParentReadCompletion(pState.Parent, pTime);
-	}
-	}
-
-	function IsReadRelevantState(pState) {
-	if (!pState) return false;
-	if (pState.WordCount > 0) return true;
-	return pState.Children.some((pChild) => IsReadRelevantState(pChild));
-	}
-
-	function CheckParentReadCompletion(pParent, pTime) {
-	if (!pParent || pParent.FullDone || !pParent.Children.length) return;
-	const RequiredChildren = pParent.Children.filter((pChild) => IsReadRelevantState(pChild));
-	if (!RequiredChildren.length) return;
-	const AllChildrenFull = RequiredChildren.every((pChild) => pChild.FullAt > pParent.ResetAt);
-	if (!AllChildrenFull) return;
-
-	pParent.AccumMs = RequiredChildren.reduce((pSum, pChild) => pSum + (pChild.FullMs || pChild.AccumMs || 0), 0);
-	pParent.WordCount = RequiredChildren.reduce((pSum, pChild) => pSum + (pChild.WordCount || 0), 0) || pParent.WordCount;
-	TrackReadEvent(pParent, "read_full", pTime, "children_complete");
-	}
-
-	function UpdateReadFocusStates(pTime) {
-	cReadTargets.forEach((pState) => {
-	const WasInFocus = pState.InFocus;
-	const NowInFocus = IsReadableVisible(pState.Elem);
-
-	if (NowInFocus && !WasInFocus) StartReadCycle(pState, pTime);
-	if (!NowInFocus && WasInFocus) FinishReadCycleOnExit(pState, pTime);
-
-	pState.InFocus = NowInFocus;
-	});
-	}
-
-	function SelectActiveReadState() {
-	if (fActiveReadState && fActiveReadState.InFocus && !fActiveReadState.Done) return fActiveReadState;
-	const Leaves = GetReadableLeavesInFocus();
-	fActiveReadState = Leaves.length ? Leaves[0] : null;
-	if (fActiveReadState) fActiveReadState.Active = true;
-	return fActiveReadState;
-	}
-
-	function CheckReading() {
-	const Now = Date.now();
-	const DeltaMs = Math.min(1000, Math.max(0, Now - fLastReadTickAt));
-	fLastReadTickAt = Now;
-
-	UpdateReadFocusStates(Now);
-
-	const State = SelectActiveReadState();
-	if (!State) return;
-
-	State.AccumMs += DeltaMs;
-	if (State.AccumMs >= State.QuickMs) State.QuickCandidate = true;
-
-	if (State.AccumMs >= State.FullMs) {
-	State.Active = false;
-	TrackReadEvent(State, "read_full", Now, "full");
-	fActiveReadState = null;
-	SelectActiveReadState();
-	}
-	}
-
-	function CheckVisibleViews() {
-	CheckReading();
-	}
-
-	function CheckViewElement(pElem) {
-	if (pElem) RegisterReadElement(pElem, GetWidgetName(pElem));
-	BuildReadHierarchy();
-	CheckReading();
-	}
-
-	function FlushPendingReadEvents() {
-	const Now = Date.now();
-	cReadTargets.forEach((pState) => {
-	if (pState.InFocus) FinishReadCycleOnExit(pState, Now);
-	});
-	}
-	function GetWidgetName(pElem) {
-	if (!pElem) return "";
-	if (pElem.dataset?.opsWidget) return pElem.dataset.opsWidget;
-	const Classes = Array.from(pElem.classList || []);
-	return Classes.find((pClass) => /^(Emo|Price|Faq|Hero|FreeHero|ReadAlso|Related|RelService|Gallery|Card|Rating|Contact|Partner|Pipeline|Coverage|Stats)/.test(pClass)) || pElem.tagName.toLowerCase();
-	}
-
-	function GetClosestWidget(pElem) {
-	return GetScopeElement(pElem) || pElem;
-	}
-
-	function GetOnceStore() {
-	const Key = `${cOncePrefix}${GetPageInstanceId()}`;
-	try {
-	return {
-	Key,
-	Values: new Set(JSON.parse(sessionStorage.getItem(Key) || "[]"))
-	};
-	} catch {
-	return { Key, Values: new Set() };
-	}
-	}
-
-	function SaveOnceStore(pStore) {
-	try {
-	sessionStorage.setItem(pStore.Key, JSON.stringify(Array.from(pStore.Values)));
-	} catch {}
-	}
-
-	function GetReplaySelector(pElem) {
-	if (!pElem || !(pElem instanceof Element)) return "";
-	if (pElem.id) return "#" + CSS.escape(pElem.id);
-	const Parts = [];
-	let Elem = pElem;
-	let Depth = 0;
-	while (Elem && Elem.nodeType === 1 && Elem !== document.body && Depth < 5) {
-	let Name = Elem.tagName.toLowerCase();
-	if (Elem.classList && Elem.classList.length) {
-	Name += "." + Array.from(Elem.classList).slice(0, 2).map((Item) => CSS.escape(Item)).join(".");
-	}
-	const Parent = Elem.parentElement;
-	if (Parent) {
-	const Siblings = Array.from(Parent.children).filter((Item) => Item.tagName === Elem.tagName);
-	if (Siblings.length > 1) Name += ":nth-of-type(" + (Siblings.indexOf(Elem) + 1) + ")";
-	}
-	Parts.unshift(Name);
-	Elem = Parent;
-	Depth += 1;
-	}
-	return Parts.join(" > ");
-	}
-
-	function GetPointerExtra(pEvent) {
-	if (!pEvent) return {};
-	return {
-	pointerClientX: Number.isFinite(pEvent.clientX) ? Math.round(pEvent.clientX) : "",
-	pointerClientY: Number.isFinite(pEvent.clientY) ? Math.round(pEvent.clientY) : "",
-	pointerPageX: Number.isFinite(pEvent.pageX) ? Math.round(pEvent.pageX) : "",
-	pointerPageY: Number.isFinite(pEvent.pageY) ? Math.round(pEvent.pageY) : "",
-	targetSelector: GetReplaySelector(pEvent.target),
-	targetText: Shorten(pEvent.target && pEvent.target.textContent ? pEvent.target.textContent : "", 80)
-	};
-	}
-
-	function IsLifecycleEvent(pEventType) {
-	const Type = String(pEventType || "").trim().toLowerCase();
-	return Type === "page_focus_away"
-	|| Type === "page_focus_return"
-	|| Type === "page_exit"
-	|| Type === "page_close"
-	|| Type === "session_end"
-	|| Type === "page_alive";
-	}
-
-	function ReadRetryQueue() {
-	try {
-	const Value = JSON.parse(localStorage.getItem(cRetryQueueKey) || "[]");
-	return Array.isArray(Value) ? Value : [];
-	} catch { return []; }
-	}
-
-	function SaveRetryQueue(pQueue) {
-	try {
-	localStorage.setItem(cRetryQueueKey, JSON.stringify(pQueue || []));
-	return true;
-	} catch { return false; }
-	}
-
-	function EnqueueRetry(pBody) {
-	if (!pBody || pBody.eventType === "page_alive") return false;
-	if (fQueueFlushRunning) {
-	if (!fRetryDuringFlush.some((Item) => Item?.clientEventUid === pBody.clientEventUid)) fRetryDuringFlush.push(pBody);
-	return true;
-	}
-	const Queue = ReadRetryQueue();
-	if (!Queue.some((Item) => Item && Item.clientEventUid === pBody.clientEventUid)) Queue.push(pBody);
-	return SaveRetryQueue(Queue);
-	}
-
-	async function SendFetchPayload(pBody) {
-	try {
-	const JsonBody = JSON.stringify(pBody);
-	const Res = await fetch(cApiUrl, {
-	method: "POST",
-	headers: { "content-type": "application/json" },
-	body: JsonBody,
-	keepalive: JsonBody.length < 60000
-	});
-	let Data = {};
-	try { Data = await Res.json(); } catch {}
-	return { ok: Res.ok && Data.ok !== false, status: Res.status, ...Data };
-	} catch { return { ok: false, networkError: true }; }
-	}
-
-	async function FlushRetryQueue() {
-	if (fQueueFlushRunning || !navigator.onLine) return;
-	fQueueFlushRunning = true;
-	try {
-	const Queue = ReadRetryQueue();
-	const Remaining = [];
-	for (let Index = 0; Index < Queue.length; Index += 500) {
-	const Batch = Queue.slice(Index, Index + 500);
-	const Result = await SendFetchPayload({ events: Batch });
-	if (!Result.ok) Remaining.push(...Batch);
-	}
-	for (const Body of fRetryDuringFlush) {
-	if (!Remaining.some((Item) => Item?.clientEventUid === Body?.clientEventUid)) Remaining.push(Body);
-	}
-	fRetryDuringFlush = [];
-	SaveRetryQueue(Remaining);
-	} finally { fQueueFlushRunning = false; }
-	}
-
-	async function SendOpsPayload(pBody, pPreferBeacon) {
-	if (pPreferBeacon && navigator.sendBeacon) {
-	try {
-	const Accepted = navigator.sendBeacon(cApiUrl, new Blob([JSON.stringify(pBody)], { type: "application/json" }));
-	if (Accepted) return { ok: true, beacon: true };
-	} catch {}
-	}
-	const Result = await SendFetchPayload(pBody);
-	if (Result.ok) return Result;
-	const Queued = EnqueueRetry(pBody);
-	return Queued ? { ...Result, ok: true, queued: true } : Result;
-	}
-
-	function BuildOpsPayload(pEventType, pOptions = {}) {
-	const EventType = String(pEventType || "").trim();
-	const IsHiddenNow = document.hidden || document.visibilityState !== "visible";
-	const ClientEventSeq = ++fSeq;
-	const SessionSeq = NextSessionSeq();
-	const ClientEventUid = `${GetSessionId()}:${SessionSeq}:${GetPageInstanceId()}:${ClientEventSeq}`;
-	const IsContactEvent = EventType === "call_click" || EventType === "whatsapp_click";
-	const IsReplayEvent = EventType.startsWith("system.") && EventType !== "system.clarity_session_index";
-	const PageElapsedMs = Number.isFinite(Number(pOptions.pageElapsedMs)) ? Math.max(0, Math.round(Number(pOptions.pageElapsedMs))) : Math.round(GetPageElapsedMs());
-	const SessionElapsedMs = Number.isFinite(Number(pOptions.sessionElapsedMs)) ? Math.max(0, Math.round(Number(pOptions.sessionElapsedMs))) : Math.round(GetSessionElapsedMs());
-	if (IsReplayEvent) return {
-		eventType: EventType,
-		eventSource: String(pOptions.eventSource || "site").trim() || "site",
-		visitorId: GetVisitorId(),
-		sessionId: GetSessionId(),
-		pageInstanceId: GetPageInstanceId(),
-		sessionSeq: SessionSeq,
-		pageElapsedMs: PageElapsedMs,
-		sessionElapsedMs: SessionElapsedMs,
-		pagePath: location.pathname,
-		pageTitle: document.title,
-		focusState: String(pOptions.focusState || (IsHiddenNow ? "hidden" : "visible")).trim(),
-		clientEventSeq: ClientEventSeq,
-		clientEventUid: ClientEventUid,
-		createdAtClient: String(pOptions.createdAtClient || new Date().toISOString()),
-		eventData: pOptions.eventData && typeof pOptions.eventData === "object" ? pOptions.eventData : {}
-	};
-	return {
-	eventType: EventType,
-	eventSource: String(pOptions.eventSource || "site").trim() || "site",
-	eventOn: String(pOptions.eventOn || "").trim(),
-	visitorId: GetVisitorId(),
-	sessionId: GetSessionId(),
-	pageInstanceId: GetPageInstanceId(),
-	sessionSeq: SessionSeq,
-	pageElapsedMs: PageElapsedMs,
-	sessionElapsedMs: SessionElapsedMs,
-	pagePath: location.pathname,
-	pageTitle: document.title,
-	pageTitleShort: CleanText(document.title),
-	referrer: document.referrer || "",
-	screen: `${window.screen.width}x${window.screen.height}`,
-	viewport: `${window.innerWidth}x${window.innerHeight}`,
-	viewportWidth: window.innerWidth || document.documentElement.clientWidth || "",
-	viewportHeight: window.innerHeight || document.documentElement.clientHeight || "",
-	scrollX: Math.round(window.scrollX || window.pageXOffset || 0),
-	scrollY: Math.round(window.scrollY || window.pageYOffset || 0),
-	scrollPercent: GetScrollPercent(),
-	pointerClientX: pOptions.pointerClientX ?? "",
-	pointerClientY: pOptions.pointerClientY ?? "",
-	pointerPageX: pOptions.pointerPageX ?? "",
-	pointerPageY: pOptions.pointerPageY ?? "",
-	targetSelector: String(pOptions.targetSelector || "").trim(),
-	targetText: Shorten(pOptions.targetText || "", 80),
-	language: navigator.language || "",
-	timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
-	widget: String(pOptions.widget || "").trim(),
-	label: Shorten(pOptions.label || "", pOptions.labelMax || 190),
-	value: pOptions.value ?? "",
-	elapsedMs: PageElapsedMs,
-	elapsedSec: Math.round(PageElapsedMs / 1000),
-	href: String(pOptions.href || "").trim(),
-	important: IsContactEvent || BoolValue(pOptions.important),
-	notifyMobile: IsContactEvent || BoolValue(pOptions.notifyMobile),
-	sound: IsContactEvent || BoolValue(pOptions.sound),
-	durationMs: pOptions.durationMs ?? "",
-	awayReason: String(pOptions.awayReason || "").trim(),
-	focusState: String(pOptions.focusState || (IsHiddenNow ? "hidden" : "visible")).trim(),
-	isPageHidden: IsHiddenNow,
-	clarityUrl: String(pOptions.clarityUrl || pOptions.clarityRecordingUrl || "").trim(),
-	clarityRecordingUrl: String(pOptions.clarityRecordingUrl || pOptions.clarityUrl || "").trim(),
-	clarityProjectId: String(pOptions.clarityProjectId || "").trim(),
-	clarityUserId: String(pOptions.clarityUserId || "").trim(),
-	claritySessionId: String(pOptions.claritySessionId || "").trim(),
-	clarityAvailableAfter: String(pOptions.clarityAvailableAfter || "").trim(),
-	clarityStatus: String(pOptions.clarityStatus || "").trim(),
-	videoUrl: String(pOptions.videoUrl || "").trim(),
-	trafficKind: "human",
-	botSignal: "",
-	userAgentClient: navigator.userAgent || "",
-	clientFingerprint: [location.pathname, navigator.userAgent || "", window.screen.width, window.screen.height, window.innerWidth, window.innerHeight, navigator.language || "", Intl.DateTimeFormat().resolvedOptions().timeZone || ""].join("|"),
-	clientProfile: StableProfile(),
-	clientEventSeq: ClientEventSeq,
-	clientEventUid: ClientEventUid,
-	createdAtClient: String(pOptions.createdAtClient || new Date().toISOString()),
-	pageStartedAt: new Date(cPageStartedAt).toISOString(),
-	eventData: pOptions.eventData && typeof pOptions.eventData === "object" ? pOptions.eventData : {}
-	};
-	}
-
-	function TrackOpsEvent(pEventType, pOptions = {}) {
-	const EventType = String(pEventType || "").trim();
-	if (!EventType) return Promise.resolve({ ok: false, error: "Missing event type" });
-	if (IsSyntheticTraffic()) return Promise.resolve({ ok: true, skipped: true, reason: "synthetic_traffic", signal: BotSignal() });
-	if (EventType !== "page_open" && !fPageOpenSent && !BoolValue(pOptions.allowBeforeOpen)) return Promise.resolve({ ok: true, skipped: true, reason: "page_not_visible_yet" });
-	const Body = BuildOpsPayload(EventType, pOptions);
-	const IsHiddenNow = document.hidden || document.visibilityState !== "visible";
-	const PreferBeacon = BoolValue(pOptions.useBeacon) || (IsHiddenNow && IsLifecycleEvent(EventType)) || EventType === "page_exit";
-	return SendOpsPayload(Body, PreferBeacon);
-	}
-
-	async function TrackOpsEventBatch(pEvents) {
-	if (!Array.isArray(pEvents) || !pEvents.length) return { ok: true, skipped: true };
-	if (IsSyntheticTraffic()) return { ok: true, skipped: true, reason: "synthetic_traffic" };
-	if (!fPageOpenSent) return { ok: true, skipped: true, reason: "page_not_visible_yet" };
-	let QueuedAny = false;
-	for (let Index = 0; Index < pEvents.length; Index += 500) {
-	const Items = pEvents.slice(Index, Index + 500);
-	const Bodies = Items.map((Item) => BuildOpsPayload(Item?.eventType || Item?.type || "system.event", Item || {}));
-	const PreferBeacon = Items.some((Item) => BoolValue(Item?.useBeacon));
-	if (PreferBeacon && navigator.sendBeacon) {
-		try {
-		const Accepted = navigator.sendBeacon(cApiUrl, new Blob([JSON.stringify({ events: Bodies })], { type: "application/json" }));
-		if (Accepted) continue;
-		} catch {}
-	}
-	const Result = await SendFetchPayload({ events: Bodies });
-	if (Result.ok) continue;
-	let AllQueued = true;
-	for (const Body of Bodies) AllQueued = EnqueueRetry(Body) && AllQueued;
-	if (!AllQueued) return Result;
-	QueuedAny = true;
-	}
-	return { ok: true, queued: QueuedAny };
-	}
-
-	async function TrackOpsEventOnce(pEventType, pOnceKey, pOptions = {}) {
-	const EventType = String(pEventType || "").trim();
-	if (EventType !== "page_open" && !fPageOpenSent && !BoolValue(pOptions.allowBeforeOpen)) return { ok: true, skipped: true, reason: "page_not_visible_yet" };
-	const Store = GetOnceStore();
-	const Key = `${pEventType}:${pOnceKey}`;
-	if (Store.Values.has(Key)) return { ok: true, skipped: true };
-	const Result = await TrackOpsEvent(pEventType, pOptions);
-	if (Result && Result.ok) { Store.Values.add(Key); SaveOnceStore(Store); }
-	return Result;
-	}
-
-	function TrackFromElement(pElem, pEventType, pEventOn, pExtra = {}) {
-	if (!pElem || pElem.dataset?.opsAuto === "off") return;
-
-	const Widget = GetClosestWidget(pElem);
-	const Important = pExtra.important ?? pElem.dataset?.opsImportant;
-	const Notify = pExtra.notifyMobile ?? pElem.dataset?.opsNotify ?? pElem.dataset?.opsNotifyMobile;
-	const Sound = pExtra.sound ?? pElem.dataset?.opsSound;
-	const Href = pExtra.href ?? pElem.getAttribute?.("href") ?? "";
-	const Value = pExtra.value ?? pElem.value ?? pElem.dataset?.opsValue ?? "";
-	const Label = (pExtra.label ?? BuildActionLabel(pElem, Widget, GetExplicitLabel(pElem))) || BuildEventLabel(Widget, pElem);
-
-	return TrackOpsEvent(pEventType, {
-	eventOn: pEventOn,
-	widget: pExtra.widget || GetWidgetName(Widget),
-	label: Label,
-	value: Value,
-	href: Href,
-	pointerClientX: pExtra.pointerClientX ?? "",
-	pointerClientY: pExtra.pointerClientY ?? "",
-	pointerPageX: pExtra.pointerPageX ?? "",
-	pointerPageY: pExtra.pointerPageY ?? "",
-	important: Important,
-	notifyMobile: Notify,
-	sound: Sound
-	});
-	}
-
-	function TrackFromElementOnce(pElem, pEventType, pEventOn, pOnceKey, pExtra = {}) {
-	if (String(pEventType || "").endsWith("_seen")) return;
-	if (!pElem || pElem.dataset?.opsAuto === "off") return;
-	const Widget = GetClosestWidget(pElem);
-	const Label = (pExtra.label ?? BuildActionLabel(pElem, Widget, GetExplicitLabel(pElem))) || BuildEventLabel(Widget, pElem);
-
-	return TrackOpsEventOnce(pEventType, pOnceKey, {
-	eventOn: pEventOn,
-	widget: pExtra.widget || GetWidgetName(Widget),
-	label: Label,
-	value: pExtra.value ?? pElem.dataset?.opsValue ?? "",
-	href: pExtra.href ?? pElem.getAttribute?.("href") ?? "",
-	pointerClientX: pExtra.pointerClientX ?? "",
-	pointerClientY: pExtra.pointerClientY ?? "",
-	pointerPageX: pExtra.pointerPageX ?? "",
-	pointerPageY: pExtra.pointerPageY ?? "",
-	important: pExtra.important ?? pElem.dataset?.opsImportant,
-	notifyMobile: pExtra.notifyMobile ?? pElem.dataset?.opsNotify ?? pElem.dataset?.opsNotifyMobile,
-	sound: pExtra.sound ?? pElem.dataset?.opsSound
-	});
-	}
-
-	function ObserveView(pSelector, pEventType, pWidgetName) {
-	const Items = document.querySelectorAll(pSelector);
-	Items.forEach((pElem, pIndex) => {
-	if (pElem.dataset.opsAuto === "off") return;
-	const OnceKey = `${pSelector}:${pElem.id || pIndex}`;
-	pElem.dataset.opsViewEvent = pElem.dataset.opsViewEvent || pEventType;
-	pElem.dataset.opsWidget = pElem.dataset.opsWidget || pWidgetName;
-	pElem.dataset.opsOnceKey = pElem.dataset.opsOnceKey || OnceKey;
-	cObservedViewElems.add(pElem);
-	RegisterReadElement(pElem, pWidgetName);
-	if (fViewObserver) fViewObserver.observe(pElem);
-	});
-	}
-
-	function InitViewObserver() {
-	if (!("IntersectionObserver" in window)) return;
-
-	fViewObserver = new IntersectionObserver((pEntries) => {
-	pEntries.forEach(() => CheckReading());
-	}, {
-	threshold: cViewThreshold,
-	rootMargin: cViewRootMargin
-	});
-	}
-
-	function InitReadTracking() {
-	ApplyReadableBoundaries();
-	BuildReadHierarchy();
-	if (fReadTimer) clearInterval(fReadTimer);
-	fLastReadTickAt = Date.now();
-	fReadTimer = window.setInterval(CheckReading, cReadTickMs);
-	setTimeout(CheckReading, 300);
-	setTimeout(CheckReading, 900);
-	}
-	function InitDeclarativeEvents() {
-	document.querySelectorAll("[data-ops-event]").forEach((pElem, pIndex) => {
-	if (pElem.dataset.opsAuto === "off") return;
-	const EventOn = (pElem.dataset.opsOn || "").trim().toLowerCase();
-	const OnceKey = pElem.dataset.opsOnceKey || pElem.id || `manual_${pIndex}`;
-
-	if (EventOn === "view") {
-	if (fViewObserver) {
-	pElem.dataset.opsViewEvent = pElem.dataset.opsEvent;
-	pElem.dataset.opsOnceKey = OnceKey;
-	cObservedViewElems.add(pElem);
-	RegisterReadElement(pElem, GetWidgetName(pElem));
-	fViewObserver.observe(pElem);
-	setTimeout(() => CheckViewElement(pElem), 500);
-	}
-	return;
-	}
-
-	if (EventOn === "toggle" || EventOn === "open" || EventOn === "toggle-open") {
-	pElem.addEventListener("toggle", () => {
-	if (pElem.open) TrackFromElement(pElem, pElem.dataset.opsEvent, "toggle-open");
-	});
-	return;
-	}
-
-	if (EventOn === "submit") {
-	pElem.addEventListener("submit", () => TrackFromElement(pElem, pElem.dataset.opsEvent, "submit"));
-	return;
-	}
-
-	if (EventOn === "change" || EventOn === "input") {
-	pElem.addEventListener(EventOn, () => TrackFromElement(pElem, pElem.dataset.opsEvent, EventOn));
-	return;
-	}
-
-	if (EventOn === "scroll") return;
-	pElem.addEventListener("click", () => TrackFromElement(pElem, pElem.dataset.opsEvent, "click"));
-	});
-	}
-
-	function GetLinkEvent(pLink) {
-	const Href = String(pLink?.getAttribute?.("href") || pLink?.href || "").toLowerCase();
-	const Text = CleanText((pLink?.textContent || "") + " " + (pLink?.getAttribute?.("aria-label") || "") + " " + (pLink?.getAttribute?.("title") || "")).toLowerCase();
-	if (Href.startsWith("tel:") || Href.includes("tel:")) return "call_click";
-	if (Href.includes("wa.me") || Href.includes("whatsapp") || Href.includes("api.whatsapp.com") || Href.startsWith("whatsapp:") || Href.includes("wa.link") || Text.includes("واتساب") || Text.includes("whatsapp") || Text.includes("واتس")) return "whatsapp_click";
-	if (Href.includes("maps.google") || Href.includes("google.com/maps") || Href.startsWith("geo:")) return "map_click";
-	if (pLink?.hasAttribute?.("download") || /\.(pdf|doc|docx|xls|xlsx|zip|rar)(\?|#|$)/i.test(Href)) return "download_click";
-	return "";
-	}
-
-	function GetActionEvent(pElem) {
-	const Href = String(pElem?.getAttribute?.("href") || pElem?.dataset?.href || pElem?.dataset?.url || "").toLowerCase();
-	const Text = CleanText((pElem?.textContent || "") + " " + (pElem?.getAttribute?.("aria-label") || "") + " " + (pElem?.getAttribute?.("title") || "") + " " + (pElem?.className || "")).toLowerCase();
-	if (Href.startsWith("tel:") || Href.includes("tel:") || Text.includes("اتصال") || Text.includes("تليفون") || Text.includes("هاتف") || Text.includes("call")) return "call_click";
-	if (Href.includes("wa.me") || Href.includes("whatsapp") || Href.includes("api.whatsapp.com") || Href.startsWith("whatsapp:") || Href.includes("wa.link") || Text.includes("واتساب") || Text.includes("whatsapp") || Text.includes("واتس")) return "whatsapp_click";
-	return "";
-	}
-
-	function InitClickEvents() {
-	document.addEventListener("click", (pEvent) => {
-	const Target = pEvent.target;
-	if (!(Target instanceof Element)) return;
-	const PointerExtra = GetPointerExtra(pEvent);
-
-	const Manual = Target.closest("[data-ops-event]");
-	if (Manual && (!Manual.dataset.opsOn || Manual.dataset.opsOn === "click")) return;
-
-	const RatingStar = Target.closest("[data-star-value]");
-	if (RatingStar) {
-	TrackFromElement(RatingStar, "rating_click", "click", {
-	widget: "EmoRatingStrip",
-	label: BuildEventLabel(RatingStar, GetClosestWidget(RatingStar)),
-	value: RatingStar.dataset.starValue,
-	...PointerExtra
-	});
-	return;
-	}
-
-	const RatingSubmit = Target.closest("[data-rating-submit]");
-	if (RatingSubmit) {
-	TrackFromElement(RatingSubmit, "rating_submit", "click", {
-	widget: "EmoRatingStrip",
-	label: BuildEventLabel(RatingSubmit, GetClosestWidget(RatingSubmit)),
-	...PointerExtra
-	});
-	return;
-	}
-
-	const LeadSubmit = Target.closest("[data-lead-submit], [data-submit-btn]");
-	if (LeadSubmit) {
-	TrackFromElement(LeadSubmit, "lead_submit_click", "click", PointerExtra);
-	return;
-	}
-
-	const Link = Target.closest("a[href]");
-	if (Link) {
-	const EventType = GetLinkEvent(Link);
-	if (EventType) {
-	if (["call_click", "whatsapp_click", "map_click", "download_click"].includes(EventType)) {
-	fExternalActionUntil = Date.now() + 30000;
-	}
-	TrackFromElement(Link, EventType, "click", { href: Link.href, ...PointerExtra });
-	return;
-	}
-	}
-
-	const ActionButton = Target.closest("button.Btn, [data-service-btn], [data-lead-btn], [data-action-btn], .EmoCall, .EmoWhats, [data-whatsapp], [data-call]");
-	if (ActionButton) {
-	const ActionEvent = GetActionEvent(ActionButton) || ActionButton.dataset.opsEvent || "button_click";
-	if (ActionEvent === "call_click" || ActionEvent === "whatsapp_click") fExternalActionUntil = Date.now() + 30000;
-	TrackFromElement(ActionButton, ActionEvent, "click", PointerExtra);
-	return;
-	}
-
-	const GalleryItem = Target.closest(".EmoGallery button, .EmoGallery [data-gallery-item], .galleryGrid [data-gallery-item]");
-	if (GalleryItem) {
-	TrackFromElement(GalleryItem, "gallery_click", "click", {
-	widget: "EmoGallery",
-	value: GalleryItem.dataset.index || GalleryItem.dataset.galleryIndex || "",
-	...PointerExtra
-	});
-	return;
-	}
-
-	const FaqSummary = Target.closest("details.FaqItem summary, .FaqItem summary");
-	if (FaqSummary) {
-	const FaqItem = FaqSummary.closest("details.FaqItem") || FaqSummary.closest(".FaqItem");
-	const Key = `faq_${FaqItem?.id || BuildFaqLabel(FaqItem, FaqSummary)}`;
-
-	setTimeout(() => {
-	const IsOpen = !FaqItem || FaqItem.open !== false;
-	TrackFromElementOnce(FaqItem || FaqSummary, IsOpen ? "faq_open" : "faq_click", IsOpen ? "toggle-open" : "click", Key, {
-	widget: "FaqItem",
-	label: BuildFaqLabel(FaqItem, FaqSummary),
-	...PointerExtra
-	});
-	}, 0);
-	return;
-	}
-
-	if (Link) {
-	if (Link.closest(".ReadAlso, .ReadAlsoItem")) {
-	TrackFromElement(Link, "readalso_click", "click", { href: Link.href, widget: "ReadAlso", ...PointerExtra });
-	return;
-	}
-
-	if (Link.closest(".RelatedServices, .RelServiceItem")) {
-	TrackFromElement(Link, "related_service_click", "click", { href: Link.href, widget: "RelatedServices", ...PointerExtra });
-	return;
-	}
-	}
-	}, true);
-	}
-
-	function InitToggleEvents() {
-	document.querySelectorAll("details.FaqItem").forEach((pElem, pIndex) => {
-	if (pElem.dataset.opsAuto === "off") return;
-	pElem.addEventListener("toggle", () => {
-	if (!pElem.open) return;
-	TrackFromElementOnce(pElem, "faq_open", "toggle-open", `faq_open_${pElem.id || pIndex}`, {
-	widget: "FaqItem",
-	label: BuildFaqLabel(pElem, pElem.querySelector("summary"))
-	});
-	});
-	});
-	}
-
-	function InitFormEvents() {
-	document.querySelectorAll("form").forEach((pForm, pIndex) => {
-	if (pForm.dataset.opsAuto === "off") return;
-	const Widget = GetClosestWidget(pForm);
-	const WidgetName = GetWidgetName(Widget);
-	const BaseKey = pForm.id || Widget?.id || `form_${pIndex}`;
-
-	pForm.addEventListener("input", () => {
-	TrackFromElementOnce(pForm, "form_start", "input", `${BaseKey}_start`, { widget: WidgetName });
-	}, true);
-
-	pForm.addEventListener("change", () => {
-	TrackFromElementOnce(pForm, "form_start", "change", `${BaseKey}_start`, { widget: WidgetName });
-	}, true);
-
-	pForm.addEventListener("submit", () => {
-	const IsRating = !!pForm.closest(".EmoRatingStrip");
-	TrackFromElement(pForm, IsRating ? "rating_submit" : "form_submit", "submit", { widget: WidgetName });
-	}, true);
-	});
-	}
-
-	function InitAutoViews() {
-	if (!fViewObserver) return;
-
-	ObserveView(".Hero, .FreeHero", "hero_seen", "Hero");
-	ObserveView(".IndexSecBox", "index_section_seen", "IndexSec");
-	ObserveView(".EmoSection", "section_seen", "EmoSection");
-	ObserveView(".EmoStrip", "strip_seen", "EmoStrip");
-	ObserveView(".EmoFaq", "faq_seen", "EmoFaq");
-	ObserveView("details.FaqItem, .FaqItem", "faq_item_seen", "FaqItem");
-	ObserveView(".PriceCard, .Price", "price_seen", "Price");
-	ObserveView(".EmoGallery, .galleryGrid", "gallery_seen", "EmoGallery");
-	ObserveView(".EmoRatingStrip", "rating_seen", "EmoRatingStrip");
-	ObserveView(".EmoContactStrip", "contact_strip_seen", "EmoContactStrip");
-	ObserveView(".EmoPartnerStrip", "partner_strip_seen", "EmoPartnerStrip");
-	ObserveView(".EmoCoverageMapStrip", "coverage_map_seen", "EmoCoverageMapStrip");
-	ObserveView(".EmoPipelineStrip", "pipeline_seen", "EmoPipelineStrip");
-	ObserveView(".EmoStatsStrip", "stats_seen", "EmoStatsStrip");
-	ObserveView(".ReadAlso", "readalso_seen", "ReadAlso");
-	ObserveView(".RelatedServices", "related_services_seen", "RelatedServices");
-	ObserveView(".EmoList", "list_seen", "EmoList");
-	ObserveView(".Emograph", "emograph_seen", "Emograph");
-	ObserveView(".FullCard, .CardsGrCard, .Card", "card_seen", "Card");
-	ObserveView(".RespImg", "image_seen", "RespImg");
-	}
-
-	function GetScrollPercent() {
-	const Height = Math.max(
-	document.documentElement.scrollHeight,
-	document.body.scrollHeight
-	) - window.innerHeight;
-
-	return Height > 0 ? Math.max(0, Math.min(100, Math.round((window.scrollY / Height) * 100))) : 100;
-	}
-
-	function GetCurrScrollMark(pPercent) {
-	let CurrMark = null;
-
-	for (const Mark of cScrollMarks) {
-	if (pPercent >= Mark) CurrMark = Mark;
-	else break;
-	}
-
-	return CurrMark;
-	}
-
-	function InitContinuousReplayEvents() {
-	// الحركة التفصيلية يسجلها EmoReplayRecorder فقط لمنع ازدواج التسجيل.
-	}
-
-	function InitScrollMilestones() {
-	function CheckScroll() {
-	const Percent = GetScrollPercent();
-	const CurrMark = GetCurrScrollMark(Percent);
-
-	if (CurrMark === null) {
-	fLastScrollMark = null;
-	return;
-	}
-
-	if (CurrMark === fLastScrollMark) return;
-
-	const Direction = fLastScrollMark === null
-	? "start"
-	: CurrMark > fLastScrollMark
-	? "down"
-	: "up";
-
-	fLastScrollMark = CurrMark;
-
-	TrackOpsEvent(`scroll_${CurrMark}`, {
-	eventOn: "scroll",
-	widget: "Page",
-	label: `دخل نطاق ${CurrMark}% من الصفحة`,
-	value: CurrMark,
-	scrollX: Math.round(window.scrollX || window.pageXOffset || 0),
-	scrollY: Math.round(window.scrollY || window.pageYOffset || 0),
-	scrollPercent: Percent,
-	durationMs: "",
-	awayReason: Direction
-	});
-	}
-
-	window.addEventListener("scroll", () => {
-	CheckScroll();
-	CheckVisibleViews();
-	}, { passive: true });
-	window.addEventListener("resize", () => {
-	CheckScroll();
-	CheckVisibleViews();
-	}, { passive: true });
-	setTimeout(CheckScroll, 800);
-	setTimeout(CheckVisibleViews, 900);
-	}
-
-	function FormatDuration(pMs) {
-	const Seconds = Math.max(1, Math.round(pMs / 1000));
-	if (Seconds < 60) return `${Seconds} ثانية`;
-
-	const Minutes = Math.floor(Seconds / 60);
-	const Rest = Seconds % 60;
-	if (Rest === 0) return `${Minutes} دقيقة`;
-	return `${Minutes} دقيقة و ${Rest} ثانية`;
-	}
-
-	function MarkPageAway(pReason) {
-	if (!fPageOpenSent || fPageExitSent) return;
-	if (fAwayStartedAt) return;
-	fAwayStartedAt = Date.now();
-	fAwayReason = String(pReason || "blur");
-
-	TrackOpsEvent("page_focus_away", {
-	eventOn: fAwayReason,
-	widget: "Page",
-	label: "ترك تركيز الصفحة أو انتقل لتبويب آخر",
-	value: GetScrollPercent(),
-	durationMs: 0,
-	awayReason: fAwayReason,
-	focusState: "away",
-	useBeacon: true,
-	important: false,
-	notifyMobile: false,
-	sound: false
-	});
-	}
-
-	function TrackPageReturn(pReason) {
-	if (fPageExitSent) return;
-	fExternalActionUntil = 0;
-		if (!fPageOpenSent) {
-	TrackPageOpen();
-	return;
-	}
-	if (!fAwayStartedAt) return;
-
-	const StartedAt = fAwayStartedAt;
-	const AwayReason = fAwayReason;
-	fAwayStartedAt = 0;
-	fAwayReason = "";
-
-	const DurationMs = Date.now() - StartedAt;
-	if (DurationMs < cFocusAwayMinMs) return;
-
-	TrackOpsEvent("page_focus_return", {
-	eventOn: String(pReason || "focus"),
-	widget: "Page",
-	label: `رجع للصفحة بعد ${FormatDuration(DurationMs)}`,
-	value: Math.round(DurationMs / 1000),
-	durationMs: DurationMs,
-	awayReason: AwayReason,
-	focusState: "visible",
-	useBeacon: true,
-	important: false,
-	notifyMobile: false,
-	sound: false
-	});
-	}
-
-	function InitFocusAwayEvents() {
-	document.addEventListener("visibilitychange", () => {
-	if (document.hidden) MarkPageAway("hidden");
-	else if (!fPageOpenSent) TrackPageOpen();
-	else TrackPageReturn("visible");
-	});
-
-	window.addEventListener("blur", () => MarkPageAway("blur"));
-	window.addEventListener("focus", () => TrackPageReturn("focus"));
-	}
-
-	function TrackPageAlive() {
-	if (!fPageOpenSent || fPageExitSent) return;
-	const Hidden = document.hidden || document.visibilityState !== "visible";
-	if (Hidden) {
-		if (!fAwayStartedAt) MarkPageAway("hidden_ping");
-		return;
-	}
-	TrackOpsEvent("page_alive", {
-	eventOn: Hidden ? "heartbeat_hidden" : "heartbeat",
-	widget: "Page",
-	label: Hidden ? "الصفحة ما زالت مفتوحة خارج التركيز" : "الصفحة ما زالت مفتوحة",
-	value: GetScrollPercent(),
-	durationMs: Math.round(GetPageElapsedMs()),
-	awayReason: Hidden ? (fAwayReason || "hidden") : "",
-	focusState: Hidden ? "away" : "visible",
-	allowBeforeOpen: true,
-	useBeacon: Hidden,
-	notifyMobile: false,
-	sound: false
-	});
-	}
-
-	function TrackPageExit(pReason) {
-	if (!fPageOpenSent) return;
-	if (fPageExitSent) return;
-	const Reason = String(pReason || "pagehide");
-	if (Date.now() < fExternalActionUntil && (Reason === "pagehide" || Reason === "beforeunload")) {
-	MarkPageAway("external_action");
-	return;
-	}
-	FlushPendingReadEvents();
-	fPageExitSent = true;
-		fAwayStartedAt = 0;
-		fAwayReason = "";
-		if (fPagePingTimer) {
-		clearInterval(fPagePingTimer);
-		fPagePingTimer = 0;
-		}
-	TrackOpsEvent("page_exit", {
-	eventOn: String(pReason || "pagehide"),
-	widget: "Page",
-	label: "غادر الصفحة",
-	value: GetScrollPercent(),
-	durationMs: Math.round(GetPageElapsedMs()),
-	awayReason: String(pReason || "pagehide"),
-	focusState: "closed",
-	allowBeforeOpen: true,
-	useBeacon: true
-	});
-	}
-
-	function InitPageLiveEvents() {
-	if (fPagePingTimer) clearInterval(fPagePingTimer);
-	fPagePingTimer = window.setInterval(TrackPageAlive, cPagePingMs);
-
-	window.addEventListener("pagehide", () => TrackPageExit("pagehide"));
-	window.addEventListener("beforeunload", () => TrackPageExit("beforeunload"));
-	window.addEventListener("pageshow", (pEvent) => {
-	fExternalActionUntil = 0;
-	if (!fPageExitSent || !pEvent.persisted) return;
-	fPageExitSent = false;
-	fAwayStartedAt = Date.now() - cFocusAwayMinMs;
-	fAwayReason = "pagehide";
-	TrackPageReturn("pageshow");
-	if (fPagePingTimer) clearInterval(fPagePingTimer);
-	fPagePingTimer = window.setInterval(TrackPageAlive, cPagePingMs);
-	TrackPageAlive();
-	});
-	window.addEventListener("freeze", () => {
-	MarkPageAway("freeze");
-	TrackPageAlive();
-	});
-	setTimeout(TrackPageAlive, 1000);
-	}
-
-	function TrackPageOpen() {
-	if (fPageOpenSent || fPageOpenPromise) return fPageOpenPromise;
-	if (IsSyntheticTraffic()) return Promise.resolve({ ok: true, skipped: true });
-	if (document.hidden || document.visibilityState === "prerender") return Promise.resolve({ ok: true, skipped: true });
-	fPageOpenPromise = TrackOpsEventOnce("page_open", "page_open", {
-	eventOn: "load",
-	widget: "Page",
-	label: CleanText(document.title),
-	important: true,
-	notifyMobile: true,
-	sound: true,
-	eventData: {
-		replayAvailable: window.__EMO_REPLAY_CAPTURE_ENABLED__ === true,
-		viewportWidth: window.innerWidth || document.documentElement.clientWidth || 0,
-		viewportHeight: window.innerHeight || document.documentElement.clientHeight || 0,
-		pageUrl: `${location.pathname}${location.search}${location.hash}`
-	}
-	}).then((Result) => {
-	if (Result && Result.ok) {
-		fPageOpenSent = true;
-		window.__EMO_OPS_PAGE_OPENED__ = true;
-		window.dispatchEvent(new CustomEvent("emo:ops-page-open", { detail: window.__EmoOpsIds }));
-	}
-	return Result;
-	}).finally(() => { fPageOpenPromise = null; });
-	return fPageOpenPromise;
-	}
-
-	function HasExplicitVideoTracking(pElem) {
-	return !!(pElem && (pElem.dataset.opsTrackVideo === "1" || pElem.closest("[data-ops-track-video='1']")));
-	}
-
-	function HasExplicitVideoIgnore(pElem) {
-	return !!(pElem && (pElem.dataset.opsIgnoreVideo === "1" || pElem.closest("[data-ops-ignore-video='1'], [data-background-video], [data-bg-video], .background-video, .bg-video, .hero-video, .video-bg, .decorative-video, .decor-video")));
-	}
-
-	function IsTrackableContentVideo(pVideo) {
-	if (!pVideo) return false;
-	if (HasExplicitVideoTracking(pVideo)) return true;
-	if (HasExplicitVideoIgnore(pVideo)) return false;
-	if (!pVideo.controls) return false;
-	if (pVideo.autoplay || pVideo.loop) return false;
-	const Source = String(pVideo.currentSrc || pVideo.getAttribute("src") || "").toLowerCase();
-	if (/([?&](autoplay|loop|background|muted?)=1)|(^|[?&])playlist=/.test(Source)) return false;
-	if (pVideo.muted && !pVideo.controls) return false;
-	return true;
-	}
-
-	function IsTrackableVideoFrame(pFrame) {
-	if (!pFrame) return false;
-	if (HasExplicitVideoTracking(pFrame)) return true;
-	if (HasExplicitVideoIgnore(pFrame)) return false;
-	const Source = String(pFrame.getAttribute("src") || "").toLowerCase();
-	if (!/(youtube\.com|youtu\.be|youtube-nocookie\.com|vimeo\.com)/.test(Source)) return false;
-	if (/([?&]controls=0)|([?&](autoplay|loop|background|muted?)=1)/.test(Source)) return false;
-	return true;
-	}
-
-	function HasRecentUserVideoIntent(pElem) {
-	const IntentAt = Number(pElem?.dataset?.opsUserVideoIntentAt || "0");
-	return !!IntentAt && Date.now() - IntentAt <= 3500;
-	}
-
-	function InitVideoEvents() {
-	document.querySelectorAll("video").forEach((pVideo, pIndex) => {
-	if (pVideo.dataset.opsVideoBound === "1") return;
-	pVideo.dataset.opsVideoBound = "1";
-	pVideo.dataset.opsUserVideoIntentAt = "0";
-	const MarkVideoIntent = () => { pVideo.dataset.opsUserVideoIntentAt = String(Date.now()); };
-	pVideo.addEventListener("pointerdown", MarkVideoIntent, { passive: true });
-	pVideo.addEventListener("click", MarkVideoIntent, { passive: true });
-	pVideo.addEventListener("keydown", MarkVideoIntent, { passive: true });
-	pVideo.addEventListener("play", () => {
-	if (!IsTrackableContentVideo(pVideo)) return;
-	if (!HasExplicitVideoTracking(pVideo) && !HasRecentUserVideoIntent(pVideo)) return;
-	const Source = pVideo.currentSrc || pVideo.getAttribute("src") || "";
-	const Title = pVideo.getAttribute("title") || pVideo.getAttribute("aria-label") || pVideo.dataset.opsLabel || BuildViewLabel(GetClosestWidget(pVideo)) || Source || `Video ${pIndex + 1}`;
-	TrackOpsEvent("video_play", {
-	eventOn: "video_player",
-	widget: "VideoPlayer",
-	label: Title,
-	href: Source,
-	important: true,
-	notifyMobile: false,
-	sound: false
-	});
-	}, { passive: true });
-	});
-
-	document.querySelectorAll("iframe[src*='youtube'], iframe[src*='youtu.be'], iframe[src*='youtube-nocookie'], iframe[src*='vimeo']").forEach((pFrame, pIndex) => {
-	if (pFrame.dataset.opsVideoBound === "1") return;
-	pFrame.dataset.opsVideoBound = "1";
-	pFrame.addEventListener("pointerdown", () => {
-	if (!IsTrackableVideoFrame(pFrame)) return;
-	const Source = pFrame.getAttribute("src") || "";
-	const Title = pFrame.getAttribute("title") || pFrame.dataset.opsLabel || BuildViewLabel(GetClosestWidget(pFrame)) || Source || `Video ${pIndex + 1}`;
-	TrackOpsEvent("video_play", {
-	eventOn: "video_player",
-	widget: "VideoPlayer",
-	label: Title,
-	href: Source,
-	important: true,
-	notifyMobile: false,
-	sound: false
-	});
-	}, { passive: true });
-	});
-	}
-
-	async function InitOps() {
-	if (IsSyntheticTraffic()) return;
-	if (!(await TrafficAllowed())) return;
-	PublishVisitIds();
-	GetVisitorId();
-	GetSessionId();
-	GetPageInstanceId();
-	InitClarityIdentifiers();
-
-	window.addEventListener("online", FlushRetryQueue);
-	setTimeout(FlushRetryQueue, 1500);
-
-	window.TrackOpsEvent = TrackOpsEvent;
-	window.TrackOpsEventBatch = TrackOpsEventBatch;
-	window.TrackOpsEventOnce = TrackOpsEventOnce;
-	window.EmoOpsTrackEvent = TrackOpsEvent;
-
-	InitViewObserver();
-	InitDeclarativeEvents();
-	InitToggleEvents();
-	InitClickEvents();
-	InitFormEvents();
-	InitVideoEvents();
-	InitAutoViews();
-	InitReadTracking();
-	InitScrollMilestones();
-	InitContinuousReplayEvents();
-	InitFocusAwayEvents();
-	InitPageLiveEvents();
-	TrackPageOpen();
-	}
-
-	if (document.readyState === "loading") {
-	document.addEventListener("DOMContentLoaded", InitOps, { once: true });
-	} else {
-	InitOps();
-	}
-	})();
-</script>
-
-
-
+	<script is:inline NoMove>
+	
+	
+	
+		(() =>
+		{
+	
+			// ==================== Definitions: Variables & Methods ====================
+	
+	
+	
+	
+	
+			// ==================== Execution Logic ====================
+	
+			// باقي كود التتبع الموجود حاليًا
+		})();
+	</script>
 ) }
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script is:inline>
+
+
+
+	(() =>
+	{
+
+		// ==================== Definitions: Variables & Methods ====================
+
+		const cReplayParams = new URLSearchParams(location.search);
+
+		let fNoAnalytics = false;
+
+		const cVisitorKey = "emo_ops_visitor_id";
+
+		const cSessionKey = "emo_ops_session_id";
+
+		const cOncePrefix = "emo_ops_once_";
+
+		const cApiUrl = "/api/ops/visit";
+
+		const cTrafficGateUrl = "/api/ops/traffic";
+
+		const cRetryQueueKey = "emo_ops_retry_queue_v3";
+
+		const cSessionSeqKey = "emo_ops_session_seq_v1";
+
+		const cSessionStartedKey = "emo_ops_session_started_at_v1";
+
+		const cViewThreshold = [
+			0,
+			0.01,
+			0.05
+		];
+
+		const cViewRootMargin = "0px";
+
+		const cScrollMarks = [
+			10,
+			20,
+			30,
+			40,
+			50,
+			60,
+			70,
+			80,
+			90
+		];
+
+		const cReadWordsPerMinute = 200;
+
+		const cReadFocusTopRatio = 0.25;
+
+		const cReadFocusBottomRatio = 0.75;
+
+		const cReadFocusMinRatio = 0.5;
+
+		const cReadTickMs = 250;
+
+		let fPageInstanceId = "";
+
+		const cPageStartedAt = Date.now();
+
+		const cFocusAwayMinMs = 1500;
+
+		const cObservedViewElems = new Set();
+
+		const cReadTargets = [];
+
+		const fReadStates = new WeakMap();
+
+		let fSeq = 0;
+
+		let fViewObserver = null;
+
+		let fAwayStartedAt = 0;
+
+		let fAwayReason = "";
+
+		let fLastScrollMark = null;
+
+		let fLastScrollSampleAt = 0;
+
+		let fLastPointerSampleAt = 0;
+
+		let fScrollIdleTimer = 0;
+
+		let fPageExitSent = false;
+
+		let fExternalActionUntil = 0;
+
+		let fPageOpenSent = false;
+
+		let fPageOpenPromise = null;
+
+		let fQueueFlushRunning = false;
+
+		let fRetryDuringFlush = [];
+
+		let fPagePingTimer = 0;
+
+		let fReadTimer = 0;
+
+		let fLastReadTickAt = Date.now();
+
+		let fActiveReadState = null;
+
+		const cPagePingMs = 30000;
+
+		const cBotUserAgentPattern = /(bot|crawl|spider|slurp|googlebot|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb)/i;
+
+
+
+
+
+		function NewId(pPrefix)
+		{
+			const Rand = Math.random().toString(36).slice(2, 10);
+			const Time = Date.now().toString(36);
+			return `${pPrefix}_${Time}_${Rand}`;
+		}
+
+
+
+
+
+		function StableProfile()
+		{
+			const Parts = [
+				navigator.userAgent || "", navigator.platform || "", navigator.language || "",
+				Array.from(navigator.languages || []).join(","), navigator.hardwareConcurrency || 0,
+				navigator.deviceMemory || 0, screen.width || 0, screen.height || 0,
+				screen.colorDepth || 0, screen.pixelDepth || 0,
+				Intl.DateTimeFormat().resolvedOptions().timeZone || ""
+			];
+			let Hash = 2166136261;
+			const Text = Parts.join("|");
+			for (let Index = 0; Index < Text.length; Index++)
+			{
+				Hash ^= Text.charCodeAt(Index);
+				Hash = Math.imul(Hash, 16777619);
+			}
+			return `bp_${(Hash >>> 0).toString(36)}`;
+		}
+
+
+
+
+
+		function GetStoredId(pStorage, pKey, pPrefix)
+		{
+			let Id = pStorage.getItem(pKey);
+			if (!Id)
+			{
+				Id = NewId(pPrefix);
+				pStorage.setItem(pKey, Id);
+			}
+			return Id;
+		}
+
+
+
+
+
+		function GetVisitorId()
+		{
+			return GetStoredId(localStorage, cVisitorKey, "v");
+		}
+
+
+
+
+
+		function GetSessionId()
+		{
+			return GetStoredId(sessionStorage, cSessionKey, "s");
+		}
+
+
+
+
+
+		function GetPageInstanceId()
+		{
+			if (!fPageInstanceId) fPageInstanceId = NewId("p");
+			return fPageInstanceId;
+		}
+
+
+
+
+
+		function PublishVisitIds()
+		{
+			window.__EmoOpsIds = {
+				visitorId: GetVisitorId(),
+				sessionId: GetSessionId(),
+				pageInstanceId: GetPageInstanceId(),
+				clientProfile: StableProfile()
+			};
+		}
+
+
+
+
+
+		async function TrafficAllowed()
+		{
+			try
+			{
+				const Res = await fetch(cTrafficGateUrl, { method: "GET", headers: { accept: "application/json" }, cache: "no-store" });
+				const Data = await Res.json();
+				return Res.ok && Data && Data.track === true;
+			} catch { return false; }
+		}
+
+
+
+
+
+		function GetPageElapsedMs()
+		{
+			return Math.max(0, Date.now() - cPageStartedAt);
+		}
+
+
+
+
+
+		function GetSessionStartedAt()
+		{
+			let Value = 0;
+			try
+			{
+				Value = Number(sessionStorage.getItem(cSessionStartedKey) || 0);
+			}catch {}
+			if (!Number.isFinite(Value) || Value <= 0 || Value > Date.now())
+			{
+				Value = Date.now();
+				try
+				{
+					sessionStorage.setItem(cSessionStartedKey, String(Value));
+				}catch {}
+			}
+			return Value;
+		}
+
+
+
+
+
+		function GetSessionElapsedMs()
+		{
+			return Math.max(0, Date.now() - GetSessionStartedAt());
+		}
+
+
+
+
+
+		function NextSessionSeq()
+		{
+			let Value = 0;
+			try
+			{
+				Value = Number(sessionStorage.getItem(cSessionSeqKey) || 0);
+			}catch {}
+			if (!Number.isFinite(Value) || Value < 0) Value = 0;
+			Value = Math.floor(Value) + 1;
+			try
+			{
+				sessionStorage.setItem(cSessionSeqKey, String(Value));
+			}catch { Value = ++fSeq; }
+			return Value;
+		}
+
+
+
+
+
+		function BotSignal()
+		{
+			const UserAgent = String(navigator.userAgent || "");
+			const Reasons = [];
+			if (cBotUserAgentPattern.test(UserAgent)) Reasons.push("ua_bot");
+			if (navigator.webdriver) Reasons.push("webdriver");
+			if (window.callPhantom || window._phantom || window.__nightmare) Reasons.push("headless_marker");
+			if (document.visibilityState === "prerender") Reasons.push("prerender");
+			return Reasons.join(",");
+		}
+
+
+
+
+
+		function IsSyntheticTraffic()
+		{
+			return BotSignal() !== "";
+		}
+
+
+
+
+
+		function InitClarityIdentifiers()
+		{
+			try
+			{
+				if (typeof window.clarity !== "function") return;
+				const VisitorId = GetVisitorId();
+				const SessionId = GetSessionId();
+				const PageInstanceId = GetPageInstanceId();
+				window.clarity("identify", VisitorId, SessionId, PageInstanceId, `EmoLive ${VisitorId}`);
+				window.clarity("set", "emo_visitor_id", VisitorId);
+				window.clarity("set", "emo_session_id", SessionId);
+				window.clarity("set", "emo_page_instance_id", PageInstanceId);
+				window.clarity("set", "emo_page_path", location.pathname);
+			} catch {}
+		}
+
+
+
+
+
+		function CleanText(pText)
+		{
+			return String(pText || "")
+			.replace(/\s*\|\s*/g, " ")
+			.replace(/م\.?\s*أيمن\s*عاشور/gi, "")
+			.replace(/أيمن\s*عاشور/gi, "")
+			.replace(/Ayman\s*Ashour/gi, "")
+			.replace(/Emostein|Emodsign|Emocrete|Emostone|Emochain|Emoperm|Emomed|Emonsult|Emostate/gi, "")
+			.replace(/إيموستين|إيموديزاين|إيموكريت|إيموستون|إيموتشين|إيموبيرم|إيموميد|إيمونسلت|إيموستيت/g, "")
+			.replace(/\b20\d{2}\b/g, "")
+			.replace(/\s+/g, " ")
+			.trim();
+		}
+
+
+
+
+
+		function BoolValue(pValue)
+		{
+			if (pValue === true) return true;
+			const Value = String(pValue ?? "").trim().toLowerCase();
+			return Value === "true" || Value === "1" || Value === "yes" || Value === "on" || Value === "important";
+		}
+
+
+
+
+
+		function Shorten(pText, pMax = 140)
+		{
+			const Text = CleanText(pText);
+			if (Text.length <= pMax) return Text;
+			return `${Text.slice(0, pMax).trim()}…`;
+		}
+
+
+
+
+
+		function GetText(pElem, pSelector)
+		{
+			const Elem = pSelector ? pElem?.querySelector?.(pSelector) : pElem;
+			return Shorten(Elem ? Elem.textContent : "");
+		}
+
+
+
+
+
+		function GetDirectActionText(pElem)
+		{
+			if (!pElem) return "";
+			const Explicit = pElem.dataset?.opsLabel || pElem.getAttribute?.("aria-label") || pElem.getAttribute?.("title") || pElem.getAttribute?.("alt") || "";
+			if (Explicit) return Shorten(Explicit);
+			const ImgAlt = pElem.querySelector?.("img[alt]")?.getAttribute("alt") || "";
+			const Value = pElem.value || pElem.getAttribute?.("value") || "";
+			const Direct = GetText(
+				pElem,
+				".FaqQuestionText, .BtnText, .BtnTextNormal, .PriceCardHead, .RatingTitle, .TitleBox, strong, summary, button, a"
+			);
+			return Shorten(Direct || Value || pElem.textContent || ImgAlt || "");
+		}
+
+
+
+
+
+		function IsSameText(pA, pB)
+		{
+			return CleanText(pA).toLowerCase() === CleanText(pB).toLowerCase();
+		}
+
+
+
+
+
+		function GetHeadingSelectors()
+		{
+			return "h1, h2, h3, h4, h5, h6, .TitleBox, .SecTitle, .SectionTitle, .FaqTitle, .IndexSecTitle, [data-title], [data-ops-title]";
+		}
+
+
+
+
+
+		function GetExplicitTitle(pElem)
+		{
+			return Shorten(pElem?.dataset?.opsTitle || pElem?.getAttribute?.("data-ops-title") || pElem?.dataset?.title || pElem?.getAttribute?.("data-title") || "");
+		}
+
+
+
+
+
+		function GetExplicitLabel(pElem)
+		{
+			return Shorten(pElem?.dataset?.opsLabel || pElem?.getAttribute?.("data-ops-label") || "");
+		}
+
+
+
+
+
+		function FindHeadingIn(pElem)
+		{
+			if (!pElem) return "";
+			const Explicit = GetExplicitTitle(pElem);
+			if (Explicit) return Explicit;
+			if (!pElem.querySelector) return "";
+			const Heading = pElem.querySelector(GetHeadingSelectors());
+			if (!Heading) return "";
+			return Shorten(GetExplicitTitle(Heading) || Heading.textContent || "");
+		}
+
+
+
+
+
+		function GetScopeElement(pElem)
+		{
+			return pElem?.closest?.("[data-ops-scope], [data-ops-widget], .Hero, .FreeHero, .EmoSection, .EmoStr, .IndexSecBox, .EmoFaq, .FaqItem, .PriceCard, .Price, .EmoGallery, .galleryGrid, .EmoRatingStrip, .EmoContactStrip, .EmoPartnerStrip, .EmoCoverageMapStrip, .EmoPipelineStrip, .EmoStatsStrip, .ReadAlso, .RelatedServices, .ReadAlsoItem, .RelServiceItem, .EmoList, .Emograph, .FullCard, .CardsGrCard, .Card, .RespImg") || null;
+		}
+
+
+
+
+
+		function GetHeadingBefore(pElem)
+		{
+			if (!pElem) return "";
+			const All = Array.from(document.querySelectorAll("h1, h2, h3, h4, h5, h6, .TitleBox, .SecTitle, .SectionTitle, .FaqTitle, .IndexSecTitle, [data-title], [data-ops-title]"));
+			let Last = "";
+			for (const Heading of All)
+			{
+				if (Heading === pElem || pElem.contains?.(Heading)) continue;
+				const Pos = Heading.compareDocumentPosition(pElem);
+				if (Pos & 4) Last = Shorten(GetExplicitTitle(Heading) || Heading.textContent || "");
+			}
+			return Last;
+		}
+
+
+
+
+
+		function GetNearestHeadingText(pElem)
+		{
+			if (!pElem) return "";
+			const Scope = GetScopeElement(pElem);
+			const ScopeHeading = FindHeadingIn(Scope);
+			if (ScopeHeading) return ScopeHeading;
+			let Node = pElem.parentElement;
+			let Guard = 0;
+			while (Node && Node !== document.body && Guard++ < 12)
+			{
+				const Text = FindHeadingIn(Node);
+				if (Text) return Text;
+				Node = Node.parentElement;
+			}
+			return GetHeadingBefore(pElem);
+		}
+
+
+
+
+
+		function BuildActionLabel(pElem, pFallbackElem, pExplicitAction = "")
+		{
+			const Action = Shorten(pExplicitAction || GetDirectActionText(pElem));
+			const Heading = GetNearestHeadingText(pElem) || (pFallbackElem && pFallbackElem !== pElem ? GetNearestHeadingText(pFallbackElem) : "");
+			if (Action && Heading && !IsSameText(Action, Heading)) return Shorten(`${Action} / ${Heading}`, 190);
+			return Shorten(Action || Heading || GetDirectActionText(pFallbackElem), 190);
+		}
+
+
+
+
+
+		function BuildEventLabel(pElem, pFallbackElem)
+		{
+			return BuildActionLabel(pElem, pFallbackElem);
+		}
+
+
+
+
+
+		function BuildViewLabel(pElem)
+		{
+			const Explicit = GetExplicitLabel(pElem) || GetExplicitTitle(pElem);
+			if (Explicit) return Shorten(Explicit, 190);
+			const Heading = FindHeadingIn(pElem) || GetHeadingBefore(pElem) || GetNearestHeadingText(pElem);
+			if (Heading) return Shorten(Heading, 190);
+			const Direct = GetText(
+				pElem,
+				".FaqQuestionText, .TitleBox, .SecTitle, .SectionTitle, .FaqTitle, .IndexSecTitle, h1, h2, h3, h4, h5, h6, strong, p"
+			);
+			return Shorten(Direct || GetDirectActionText(pElem), 190);
+		}
+
+
+
+
+
+		function BuildFaqLabel(pDetails, pSummary)
+		{
+			const Question = GetText(pSummary || pDetails, ".FaqQuestionText") || GetText(pSummary || pDetails);
+			const ParentFaq = pDetails?.closest?.(".EmoFaq") || pDetails;
+			const Heading = GetNearestHeadingText(ParentFaq) || BuildViewLabel(ParentFaq);
+			if (Question && Heading && !IsSameText(Question, Heading)) return Shorten(`${Question} / ${Heading}`, 190);
+			return Shorten(Question || Heading, 190);
+		}
+
+
+
+
+
+		function GetVisibleInfo(pElem, pUseFocusZone = false)
+		{
+			const Rect = pElem?.getBoundingClientRect?.();
+			if (!Rect || Rect.width <= 0 || Rect.height <= 0) return null;
+			const Vw = window.innerWidth || document.documentElement.clientWidth || 0;
+			const Vh = window.innerHeight || document.documentElement.clientHeight || 0;
+			const TopLimit = pUseFocusZone ? Vh * cReadFocusTopRatio : 0;
+			const BottomLimit = pUseFocusZone ? Vh * cReadFocusBottomRatio : Vh;
+			const VisibleW = Math.max(0, Math.min(Rect.right, Vw) - Math.max(Rect.left, 0));
+			const VisibleH = Math.max(0, Math.min(Rect.bottom, BottomLimit) - Math.max(Rect.top, TopLimit));
+			const VisibleArea = VisibleW * VisibleH;
+			const ElemArea = Math.max(1, Rect.width * Rect.height);
+			return { Rect, Vw, Vh, VisibleW, VisibleH, VisibleArea, Ratio: VisibleArea / ElemArea };
+		}
+
+
+
+
+
+		function IsReadableVisible(pElem)
+		{
+			const Info = GetVisibleInfo(pElem, true);
+			if (!Info) return false;
+			return Info.Ratio >= cReadFocusMinRatio;
+		}
+
+
+
+
+
+		function CountWords(pText)
+		{
+			const Text = CleanText(pText);
+			const Words = Text.match(/[\p{L}\p{N}]+/gu);
+			return Words ? Words.length : 0;
+		}
+
+
+
+
+
+		function GetReadableBlocksText(pElem)
+		{
+			if (!pElem?.querySelectorAll) return CleanText(pElem?.textContent || "");
+			const Blocks = Array.from(pElem.querySelectorAll("h1, h2, h3, h4, h5, h6, p, li"));
+			const Parts = [];
+			let OrderedIndex = 0;
+			Blocks.forEach((pBlock) =>
+				{
+					if (FindReadTargetAncestor(pBlock) !== pElem) return;
+					if (pBlock.closest("script, style, nav, form, button, a, summary")) return;
+					const Text = CleanText(pBlock.textContent || "");
+					if (!Text) return;
+					const Tag = String(pBlock.tagName || "").toLowerCase();
+					if (/^h[1-6]$/.test(Tag))
+					{
+						Parts.push(`## ${Text}`);
+						return;
+					}
+					if (Tag === "li")
+					{
+						const List = pBlock.parentElement;
+						if (List?.tagName?.toLowerCase() === "ol")
+						{
+							OrderedIndex = Array.from(List.children).indexOf(pBlock) + 1;
+							Parts.push(`${OrderedIndex}. ${Text}`);
+						} else {
+							Parts.push(`• ${Text}`);
+						}
+						return;
+					}
+					Parts.push(Text);
+			});
+			if (Parts.length) return Parts.join("\n");
+			const Clone = pElem.cloneNode(true);
+			Clone.querySelectorAll?.("script, style, svg, img, nav, form, button, a, summary").forEach((pNode) => pNode.remove());
+			return CleanText(Clone.textContent || "");
+		}
+
+
+
+
+
+		function FindReadTargetAncestor(pElem)
+		{
+			let Node = pElem;
+			while (Node && Node !== document.body)
+			{
+				if (fReadStates.has(Node)) return Node;
+				Node = Node.parentElement;
+			}
+			return null;
+		}
+
+
+
+
+
+		function GetReadFullMs(pElem, pWordCount)
+		{
+			const Manual = Number.parseFloat(pElem?.dataset?.opsReadMs || pElem?.dataset?.readMs || "");
+			if (Number.isFinite(Manual) && Manual > 0) return Manual;
+			return (Math.max(0, pWordCount) / cReadWordsPerMinute) * 60000;
+		}
+
+
+
+
+
+		function EnsureReadState(pElem, pWidgetName = "")
+		{
+			let State = fReadStates.get(pElem);
+			if (State)
+			{
+				if (pWidgetName && !State.Widget) State.Widget = pWidgetName;
+				return State;
+			}
+			State = {
+				Elem: pElem,
+				Widget: pWidgetName || GetWidgetName(pElem),
+				Label: "",
+				Text: "",
+				WordCount: 0,
+				FullMs: 0,
+				QuickMs: 0,
+				Parent: null,
+				Children: [],
+				InFocus: false,
+				Active: false,
+				Done: false,
+				QuickCandidate: false,
+				QuickDone: false,
+				FullDone: false,
+				AccumMs: 0,
+				Cycle: 0,
+				FullAt: 0,
+				ResetAt: 0,
+				Order: cReadTargets.length
+			};
+			fReadStates.set(pElem, State);
+			cReadTargets.push(State);
+			return State;
+		}
+
+
+
+
+
+		function IsReadableBoundary(pElem)
+		{
+			return pElem instanceof Element && pElem.hasAttribute("readable");
+		}
+
+
+
+
+
+		function GetReadableBoundary(pElem)
+		{
+			return pElem?.closest?.("[readable]") || null;
+		}
+
+
+
+
+
+		function RegisterReadElement(pElem, pWidgetName = "")
+		{
+			if (!pElem || pElem.dataset?.opsAuto === "off") return;
+			const Boundary = GetReadableBoundary(pElem);
+			if (Boundary && Boundary !== pElem) return;
+			EnsureReadState(pElem, pWidgetName);
+		}
+
+
+
+
+
+		function ApplyReadableBoundaries()
+		{
+			const Boundaries = Array.from(document.querySelectorAll("[readable]"));
+			Boundaries.forEach((pElem) => EnsureReadState(pElem, GetWidgetName(pElem)));
+			for (let Index = cReadTargets.length - 1; Index >= 0; Index--)
+			{
+				const State = cReadTargets[Index];
+				const Boundary = GetReadableBoundary(State.Elem);
+				if (!Boundary || Boundary === State.Elem) continue;
+				fReadStates.delete(State.Elem);
+				cReadTargets.splice(Index, 1);
+			}
+			cReadTargets.forEach((pState, pIndex) => pState.Order = pIndex);
+		}
+
+
+
+
+
+		function PrepareReadStateText(pState)
+		{
+			pState.Label = BuildViewLabel(pState.Elem);
+			pState.Text = GetReadableBlocksText(pState.Elem);
+			pState.WordCount = CountWords(pState.Text);
+			pState.FullMs = GetReadFullMs(pState.Elem, pState.WordCount);
+			pState.QuickMs = pState.FullMs / 2;
+		}
+
+
+
+
+
+		function BuildReadHierarchy()
+		{
+			cReadTargets.forEach((pState) =>
+				{
+					pState.Parent = null;
+					pState.Children = [];
+					PrepareReadStateText(pState);
+			});
+			cReadTargets.forEach((pState) =>
+				{
+					let Node = pState.Elem.parentElement;
+					while (Node && Node !== document.body)
+					{
+						const ParentState = fReadStates.get(Node);
+						if (ParentState)
+						{
+							pState.Parent = ParentState;
+							ParentState.Children.push(pState);
+							break;
+						}
+						Node = Node.parentElement;
+					}
+			});
+		}
+
+
+
+
+
+		function ResetAncestorsForNewCycle(pState, pTime)
+		{
+			let Parent = pState.Parent;
+			while (Parent)
+			{
+				Parent.ResetAt = pTime;
+				Parent.FullDone = false;
+				Parent.Done = false;
+				Parent.FullAt = 0;
+				Parent = Parent.Parent;
+			}
+		}
+
+
+
+
+
+		function StartReadCycle(pState, pTime)
+		{
+			pState.Cycle += 1;
+			pState.AccumMs = 0;
+			pState.Active = false;
+			pState.Done = false;
+			pState.QuickCandidate = false;
+			pState.QuickDone = false;
+			pState.FullDone = false;
+			pState.FullAt = 0;
+			ResetAncestorsForNewCycle(pState, pTime);
+		}
+
+
+
+
+
+		function FinishReadCycleOnExit(pState, pTime)
+		{
+			if (fActiveReadState === pState) fActiveReadState = null;
+			pState.Active = false;
+			if (!pState.FullDone && pState.QuickCandidate && !pState.QuickDone)
+			{
+				TrackReadEvent(pState, "read_quick", pTime, "quick");
+				pState.QuickDone = true;
+				pState.Done = true;
+			}
+			pState.AccumMs = 0;
+			pState.QuickCandidate = false;
+		}
+
+
+
+
+
+		function CompareDomOrder(pA, pB)
+		{
+			if (pA.Elem === pB.Elem) return 0;
+			const Pos = pA.Elem.compareDocumentPosition(pB.Elem);
+			if (Pos & Node.DOCUMENT_POSITION_PRECEDING) return 1;
+			if (Pos & Node.DOCUMENT_POSITION_FOLLOWING) return - 1;
+			return pA.Order - pB.Order;
+		}
+
+
+
+
+
+		function GetReadableLeavesInFocus()
+		{
+			return cReadTargets
+			.filter((pState) => pState.InFocus && !pState.Done && pState.Children.length === 0 && pState.FullMs > 0 && pState.WordCount > 0)
+			.sort(CompareDomOrder);
+		}
+
+
+
+
+
+		function TrackAnalyticsReadEvent(pState, pEventType)
+		{
+			const Analytics = window.EmoAnalytics;
+			if (!Analytics || typeof Analytics.GetItemName !== "function" || typeof Analytics.TrackTemplate !== "function") return;
+			const ElementId = String(pState.Elem?.id || "").trim();
+			if (!ElementId) return;
+			const ItemName = Analytics.GetItemName(pState.Elem);
+			if (!ItemName) return;
+			const IsFullRead = pEventType === "read_full";
+			const IsServicEmoSection = pState.Elem?.matches?.('.EmoSection[data-ga-service="true"]') === true;
+			const Prefix = IsServicEmoSection
+			? (IsFullRead ? "Srv" : "SrvQ")
+			: (IsFullRead ? "R" : "RQ");
+			Analytics.TrackTemplate(Prefix, ItemName);
+		}
+
+
+
+
+
+		function TrackReadEvent(pState, pEventType, pTime, pMode)
+		{
+			TrackAnalyticsReadEvent(pState, pEventType);
+			const WidgetName = pState.Widget || GetWidgetName(pState.Elem);
+			const ReadTitle = pState.Label || BuildViewLabel(pState.Elem);
+			const ReadableText = String(pState.Text || "");
+			const BodyText = Shorten(ReadableText, 420);
+			const ReadEventData = {
+				readTitle: ReadTitle,
+				readableText: ReadableText,
+				readable: IsReadableBoundary(pState.Elem)
+			};
+			if (BodyText)
+			{
+				TrackOpsEvent(pEventType, {
+						eventOn: "read_body",
+						widget: WidgetName,
+						label: BodyText,
+						labelMax: 420,
+						value: pState.WordCount,
+						durationMs: Math.round(pState.AccumMs),
+						awayReason: `${pMode || ""}:body`,
+						eventData: ReadEventData
+				});
+			}
+			TrackOpsEvent(pEventType, {
+					eventOn: "read",
+					widget: WidgetName,
+					label: ReadTitle,
+					value: pState.WordCount,
+					durationMs: Math.round(pState.AccumMs),
+					awayReason: pMode || "",
+					eventData: ReadEventData
+			});
+			if (pEventType === "read_full")
+			{
+				pState.FullDone = true;
+				pState.Done = true;
+				pState.FullAt = pTime;
+				pState.QuickCandidate = false;
+				CheckParentReadCompletion(pState.Parent, pTime);
+			}
+		}
+
+
+
+
+
+		function IsReadRelevantState(pState)
+		{
+			if (!pState) return false;
+			if (pState.WordCount > 0) return true;
+			return pState.Children.some((pChild) => IsReadRelevantState(pChild));
+		}
+
+
+
+
+
+		function CheckParentReadCompletion(pParent, pTime)
+		{
+			if (!pParent || pParent.FullDone || !pParent.Children.length) return;
+			const RequiredChildren = pParent.Children.filter((pChild) => IsReadRelevantState(pChild));
+			if (!RequiredChildren.length) return;
+			const AllChildrenFull = RequiredChildren.every((pChild) => pChild.FullAt > pParent.ResetAt);
+			if (!AllChildrenFull) return;
+			pParent.AccumMs = RequiredChildren.reduce((pSum, pChild) => pSum + (pChild.FullMs || pChild.AccumMs || 0), 0);
+			pParent.WordCount = RequiredChildren.reduce((pSum, pChild) => pSum + (pChild.WordCount || 0), 0) || pParent.WordCount;
+			TrackReadEvent(pParent, "read_full", pTime, "children_complete");
+		}
+
+
+
+
+
+		function UpdateReadFocusStates(pTime)
+		{
+			cReadTargets.forEach((pState) =>
+				{
+					const WasInFocus = pState.InFocus;
+					const NowInFocus = IsReadableVisible(pState.Elem);
+					if (NowInFocus && !WasInFocus) StartReadCycle(pState, pTime);
+					if (!NowInFocus && WasInFocus) FinishReadCycleOnExit(pState, pTime);
+					pState.InFocus = NowInFocus;
+			});
+		}
+
+
+
+
+
+		function SelectActiveReadState()
+		{
+			if (fActiveReadState && fActiveReadState.InFocus && !fActiveReadState.Done) return fActiveReadState;
+			const Leaves = GetReadableLeavesInFocus();
+			fActiveReadState = Leaves.length ? Leaves[0] : null;
+			if (fActiveReadState) fActiveReadState.Active = true;
+			return fActiveReadState;
+		}
+
+
+
+
+
+		function CheckReading()
+		{
+			const Now = Date.now();
+			const DeltaMs = Math.min(1000, Math.max(0, Now - fLastReadTickAt));
+			fLastReadTickAt = Now;
+			UpdateReadFocusStates(Now);
+			const State = SelectActiveReadState();
+			if (!State) return;
+			State.AccumMs += DeltaMs;
+			if (State.AccumMs >= State.QuickMs) State.QuickCandidate = true;
+			if (State.AccumMs >= State.FullMs)
+			{
+				State.Active = false;
+				TrackReadEvent(State, "read_full", Now, "full");
+				fActiveReadState = null;
+				SelectActiveReadState();
+			}
+		}
+
+
+
+
+
+		function CheckVisibleViews()
+		{
+			CheckReading();
+		}
+
+
+
+
+
+		function CheckViewElement(pElem)
+		{
+			if (pElem) RegisterReadElement(pElem, GetWidgetName(pElem));
+			BuildReadHierarchy();
+			CheckReading();
+		}
+
+
+
+
+
+		function FlushPendingReadEvents()
+		{
+			const Now = Date.now();
+			cReadTargets.forEach((pState) =>
+				{
+					if (pState.InFocus) FinishReadCycleOnExit(pState, Now);
+			});
+		}
+
+
+
+
+
+		function GetWidgetName(pElem)
+		{
+			if (!pElem) return "";
+			if (pElem.dataset?.opsWidget) return pElem.dataset.opsWidget;
+			const Classes = Array.from(pElem.classList || []);
+			return Classes.find((pClass) => /^(Emo|Price|Faq|Hero|FreeHero|ReadAlso|Related|RelService|Gallery|Card|Rating|Contact|Partner|Pipeline|Coverage|Stats)/.test(pClass)) || pElem.tagName.toLowerCase();
+		}
+
+
+
+
+
+		function GetClosestWidget(pElem)
+		{
+			return GetScopeElement(pElem) || pElem;
+		}
+
+
+
+
+
+		function GetOnceStore()
+		{
+			const Key = `${cOncePrefix}${GetPageInstanceId()}`;
+			try
+			{
+				return {
+					Key,
+					Values: new Set(JSON.parse(sessionStorage.getItem(Key) || "[]"))
+				};
+			} catch {
+				return { Key, Values: new Set() };
+			}
+		}
+
+
+
+
+
+		function SaveOnceStore(pStore)
+		{
+			try
+			{
+				sessionStorage.setItem(pStore.Key, JSON.stringify(Array.from(pStore.Values)));
+			} catch {}
+		}
+
+
+
+
+
+		function GetReplaySelector(pElem)
+		{
+			if (!pElem || !(pElem instanceof Element)) return "";
+			if (pElem.id) return "#" + CSS.escape(pElem.id);
+			const Parts = [];
+			let Elem = pElem;
+			let Depth = 0;
+			while (Elem && Elem.nodeType === 1 && Elem !== document.body && Depth < 5)
+			{
+				let Name = Elem.tagName.toLowerCase();
+				if (Elem.classList && Elem.classList.length)
+				{
+					Name += "." + Array.from(Elem.classList).slice(0, 2).map((Item) => CSS.escape(Item)).join(".");
+				}
+				const Parent = Elem.parentElement;
+				if (Parent)
+				{
+					const Siblings = Array.from(Parent.children).filter((Item) => Item.tagName === Elem.tagName);
+					if (Siblings.length > 1) Name += ":nth-of-type(" + (Siblings.indexOf(Elem) + 1) + ")";
+				}
+				Parts.unshift(Name);
+				Elem = Parent;
+				Depth += 1;
+			}
+			return Parts.join(" > ");
+		}
+
+
+
+
+
+		function GetPointerExtra(pEvent)
+		{
+			if (!pEvent) return {};
+			return {
+				pointerClientX: Number.isFinite(pEvent.clientX) ? Math.round(pEvent.clientX) : "",
+				pointerClientY: Number.isFinite(pEvent.clientY) ? Math.round(pEvent.clientY) : "",
+				pointerPageX: Number.isFinite(pEvent.pageX) ? Math.round(pEvent.pageX) : "",
+				pointerPageY: Number.isFinite(pEvent.pageY) ? Math.round(pEvent.pageY) : "",
+				targetSelector: GetReplaySelector(pEvent.target),
+				targetText: Shorten(pEvent.target && pEvent.target.textContent ? pEvent.target.textContent : "", 80)
+			};
+		}
+
+
+
+
+
+		function IsLifecycleEvent(pEventType)
+		{
+			const Type = String(pEventType || "").trim().toLowerCase();
+			return Type === "page_focus_away"
+			|| Type === "page_focus_return"
+			|| Type === "page_exit"
+			|| Type === "page_close"
+			|| Type === "session_end"
+			|| Type === "page_alive";
+		}
+
+
+
+
+
+		function ReadRetryQueue()
+		{
+			try
+			{
+				const Value = JSON.parse(localStorage.getItem(cRetryQueueKey) || "[]");
+				return Array.isArray(Value) ? Value : [];
+			} catch { return []; }
+		}
+
+
+
+
+
+		function SaveRetryQueue(pQueue)
+		{
+			try
+			{
+				localStorage.setItem(cRetryQueueKey, JSON.stringify(pQueue || []));
+				return true;
+			} catch { return false; }
+		}
+
+
+
+
+
+		function EnqueueRetry(pBody)
+		{
+			if (!pBody || pBody.eventType === "page_alive") return false;
+			if (fQueueFlushRunning)
+			{
+				if (!fRetryDuringFlush.some((Item) => Item?.clientEventUid === pBody.clientEventUid)) fRetryDuringFlush.push(pBody);
+				return true;
+			}
+			const Queue = ReadRetryQueue();
+			if (!Queue.some((Item) => Item && Item.clientEventUid === pBody.clientEventUid)) Queue.push(pBody);
+			return SaveRetryQueue(Queue);
+		}
+
+
+
+
+
+		async function SendFetchPayload(pBody)
+		{
+			try
+			{
+				const JsonBody = JSON.stringify(pBody);
+				const Res = await fetch(cApiUrl, {
+						method: "POST",
+						headers: { "content-type": "application/json" },
+						body: JsonBody,
+						keepalive: JsonBody.length < 60000
+				});
+				let Data = {};
+				try
+				{
+					Data = await Res.json();
+				}catch {}
+				return { ok: Res.ok && Data.ok !== false, status: Res.status,...Data };
+			} catch { return { ok: false, networkError: true }; }
+		}
+
+
+
+
+
+		async function FlushRetryQueue()
+		{
+			if (fQueueFlushRunning || !navigator.onLine) return;
+			fQueueFlushRunning = true;
+			try
+			{
+				const Queue = ReadRetryQueue();
+				const Remaining = [];
+				for (let Index = 0; Index < Queue.length; Index += 500)
+				{
+					const Batch = Queue.slice(Index, Index + 500);
+					const Result = await SendFetchPayload({ events: Batch });
+					if (!Result.ok) Remaining.push(...Batch);
+				}
+				for (const Body of fRetryDuringFlush)
+				{
+					if (!Remaining.some((Item) => Item?.clientEventUid === Body?.clientEventUid)) Remaining.push(Body);
+				}
+				fRetryDuringFlush = [];
+				SaveRetryQueue(Remaining);
+			} finally { fQueueFlushRunning = false; }
+		}
+
+
+
+
+
+		async function SendOpsPayload(pBody, pPreferBeacon)
+		{
+			if (pPreferBeacon && navigator.sendBeacon)
+			{
+				try
+				{
+					const Accepted = navigator.sendBeacon(cApiUrl, new Blob([JSON.stringify(pBody)], { type: "application/json" }));
+					if (Accepted) return { ok: true, beacon: true };
+				} catch {}
+			}
+			const Result = await SendFetchPayload(pBody);
+			if (Result.ok) return Result;
+			const Queued = EnqueueRetry(pBody);
+			return Queued ? {...Result, ok: true, queued: true } : Result;
+		}
+
+
+
+
+
+		function BuildOpsPayload(pEventType, pOptions =
+			{
+		}) {
+			const EventType = String(pEventType || "").trim();
+			const IsHiddenNow = document.hidden || document.visibilityState !== "visible";
+			const ClientEventSeq = ++fSeq;
+			const SessionSeq = NextSessionSeq();
+			const ClientEventUid = `${GetSessionId()}:${SessionSeq}:${GetPageInstanceId()}:${ClientEventSeq}`;
+			const IsContactEvent = EventType === "call_click" || EventType === "whatsapp_click";
+			const IsReplayEvent = EventType.startsWith("system.") && EventType !== "system.clarity_session_index";
+			const PageElapsedMs = Number.isFinite(Number(pOptions.pageElapsedMs)) ? Math.max(
+				0,
+				Math.round(Number(pOptions.pageElapsedMs))
+			) : Math.round(GetPageElapsedMs());
+			const SessionElapsedMs = Number.isFinite(Number(pOptions.sessionElapsedMs)) ? Math.max(
+				0,
+				Math.round(Number(pOptions.sessionElapsedMs))
+			) : Math.round(GetSessionElapsedMs());
+			if (IsReplayEvent) return {
+				eventType: EventType,
+				eventSource: String(pOptions.eventSource || "site").trim() || "site",
+				visitorId: GetVisitorId(),
+				sessionId: GetSessionId(),
+				pageInstanceId: GetPageInstanceId(),
+				sessionSeq: SessionSeq,
+				pageElapsedMs: PageElapsedMs,
+				sessionElapsedMs: SessionElapsedMs,
+				pagePath: location.pathname,
+				pageTitle: document.title,
+				focusState: String(pOptions.focusState || (IsHiddenNow ? "hidden" : "visible")).trim(),
+				clientEventSeq: ClientEventSeq,
+				clientEventUid: ClientEventUid,
+				createdAtClient: String(pOptions.createdAtClient || new Date().toISOString()),
+				eventData: pOptions.eventData && typeof pOptions.eventData === "object" ? pOptions.eventData : {}
+			};
+			return {
+				eventType: EventType,
+				eventSource: String(pOptions.eventSource || "site").trim() || "site",
+				eventOn: String(pOptions.eventOn || "").trim(),
+				visitorId: GetVisitorId(),
+				sessionId: GetSessionId(),
+				pageInstanceId: GetPageInstanceId(),
+				sessionSeq: SessionSeq,
+				pageElapsedMs: PageElapsedMs,
+				sessionElapsedMs: SessionElapsedMs,
+				pagePath: location.pathname,
+				pageTitle: document.title,
+				pageTitleShort: CleanText(document.title),
+				referrer: document.referrer || "",
+				screen: `${window.screen.width}x${window.screen.height}`,
+				viewport: `${window.innerWidth}x${window.innerHeight}`,
+				viewportWidth: window.innerWidth || document.documentElement.clientWidth || "",
+				viewportHeight: window.innerHeight || document.documentElement.clientHeight || "",
+				scrollX: Math.round(window.scrollX || window.pageXOffset || 0),
+				scrollY: Math.round(window.scrollY || window.pageYOffset || 0),
+				scrollPercent: GetScrollPercent(),
+				pointerClientX: pOptions.pointerClientX ?? "",
+				pointerClientY: pOptions.pointerClientY ?? "",
+				pointerPageX: pOptions.pointerPageX ?? "",
+				pointerPageY: pOptions.pointerPageY ?? "",
+				targetSelector: String(pOptions.targetSelector || "").trim(),
+				targetText: Shorten(pOptions.targetText || "", 80),
+				language: navigator.language || "",
+				timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
+				widget: String(pOptions.widget || "").trim(),
+				label: Shorten(pOptions.label || "", pOptions.labelMax || 190),
+				value: pOptions.value ?? "",
+				elapsedMs: PageElapsedMs,
+				elapsedSec: Math.round(PageElapsedMs / 1000),
+				href: String(pOptions.href || "").trim(),
+				important: IsContactEvent || BoolValue(pOptions.important),
+				notifyMobile: IsContactEvent || BoolValue(pOptions.notifyMobile),
+				sound: IsContactEvent || BoolValue(pOptions.sound),
+				durationMs: pOptions.durationMs ?? "",
+				awayReason: String(pOptions.awayReason || "").trim(),
+				focusState: String(pOptions.focusState || (IsHiddenNow ? "hidden" : "visible")).trim(),
+				isPageHidden: IsHiddenNow,
+				clarityUrl: String(pOptions.clarityUrl || pOptions.clarityRecordingUrl || "").trim(),
+				clarityRecordingUrl: String(pOptions.clarityRecordingUrl || pOptions.clarityUrl || "").trim(),
+				clarityProjectId: String(pOptions.clarityProjectId || "").trim(),
+				clarityUserId: String(pOptions.clarityUserId || "").trim(),
+				claritySessionId: String(pOptions.claritySessionId || "").trim(),
+				clarityAvailableAfter: String(pOptions.clarityAvailableAfter || "").trim(),
+				clarityStatus: String(pOptions.clarityStatus || "").trim(),
+				videoUrl: String(pOptions.videoUrl || "").trim(),
+				trafficKind: "human",
+				botSignal: "",
+				userAgentClient: navigator.userAgent || "",
+				clientFingerprint: [
+					location.pathname,
+					navigator.userAgent || "",
+					window.screen.width,
+					window.screen.height,
+					window.innerWidth,
+					window.innerHeight,
+					navigator.language || "",
+					Intl.DateTimeFormat().resolvedOptions().timeZone || ""
+				].join("|"),
+				clientProfile: StableProfile(),
+				clientEventSeq: ClientEventSeq,
+				clientEventUid: ClientEventUid,
+				createdAtClient: String(pOptions.createdAtClient || new Date().toISOString()),
+				pageStartedAt: new Date(cPageStartedAt).toISOString(),
+				eventData: pOptions.eventData && typeof pOptions.eventData === "object" ? pOptions.eventData : {}
+			};
+		}
+
+
+
+
+
+		function TrackOpsEvent(pEventType, pOptions =
+			{
+		}) {
+			const EventType = String(pEventType || "").trim();
+			if (!EventType) return Promise.resolve({ ok: false, error: "Missing event type" });
+			if (IsSyntheticTraffic()) return Promise.resolve({ ok: true, skipped: true, reason: "synthetic_traffic", signal: BotSignal() });
+			if (EventType !== "page_open" && !fPageOpenSent && !BoolValue(pOptions.allowBeforeOpen)) return Promise.resolve({ ok: true, skipped: true, reason: "page_not_visible_yet" });
+			const Body = BuildOpsPayload(EventType, pOptions);
+			const IsHiddenNow = document.hidden || document.visibilityState !== "visible";
+			const PreferBeacon = BoolValue(pOptions.useBeacon) || (IsHiddenNow && IsLifecycleEvent(EventType)) || EventType === "page_exit";
+			return SendOpsPayload(Body, PreferBeacon);
+		}
+
+
+
+
+
+		async function TrackOpsEventBatch(pEvents)
+		{
+			if (!Array.isArray(pEvents) || !pEvents.length) return { ok: true, skipped: true };
+			if (IsSyntheticTraffic()) return { ok: true, skipped: true, reason: "synthetic_traffic" };
+			if (!fPageOpenSent) return { ok: true, skipped: true, reason: "page_not_visible_yet" };
+			let QueuedAny = false;
+			for (let Index = 0; Index < pEvents.length; Index += 500)
+			{
+				const Items = pEvents.slice(Index, Index + 500);
+				const Bodies = Items.map((Item) => BuildOpsPayload(Item?.eventType || Item?.type || "system.event", Item || {}));
+				const PreferBeacon = Items.some((Item) => BoolValue(Item?.useBeacon));
+				if (PreferBeacon && navigator.sendBeacon)
+				{
+					try
+					{
+						const Accepted = navigator.sendBeacon(cApiUrl, new Blob([JSON.stringify({ events: Bodies })], { type: "application/json" }));
+						if (Accepted) continue;
+					} catch {}
+				}
+				const Result = await SendFetchPayload({ events: Bodies });
+				if (Result.ok) continue;
+				let AllQueued = true;
+				for (const Body of Bodies) AllQueued = EnqueueRetry(Body) && AllQueued;
+				if (!AllQueued) return Result;
+				QueuedAny = true;
+			}
+			return { ok: true, queued: QueuedAny };
+		}
+
+
+
+
+
+		async function TrackOpsEventOnce(pEventType, pOnceKey, pOptions =
+			{
+		}) {
+			const EventType = String(pEventType || "").trim();
+			if (EventType !== "page_open" && !fPageOpenSent && !BoolValue(pOptions.allowBeforeOpen)) return { ok: true, skipped: true, reason: "page_not_visible_yet" };
+			const Store = GetOnceStore();
+			const Key = `${pEventType}:${pOnceKey}`;
+			if (Store.Values.has(Key)) return { ok: true, skipped: true };
+			const Result = await TrackOpsEvent(pEventType, pOptions);
+			if (Result && Result.ok)
+			{
+				Store.Values.add(Key);
+				SaveOnceStore(Store);
+			}
+			return Result;
+		}
+
+
+
+
+
+		function TrackFromElement(pElem, pEventType, pEventOn, pExtra =
+			{
+		}) {
+			if (!pElem || pElem.dataset?.opsAuto === "off") return;
+			const Widget = GetClosestWidget(pElem);
+			const Important = pExtra.important ?? pElem.dataset?.opsImportant;
+			const Notify = pExtra.notifyMobile ?? pElem.dataset?.opsNotify ?? pElem.dataset?.opsNotifyMobile;
+			const Sound = pExtra.sound ?? pElem.dataset?.opsSound;
+			const Href = pExtra.href ?? pElem.getAttribute?.("href") ?? "";
+			const Value = pExtra.value ?? pElem.value ?? pElem.dataset?.opsValue ?? "";
+			const Label = (pExtra.label ?? BuildActionLabel(pElem, Widget, GetExplicitLabel(pElem))) || BuildEventLabel(Widget, pElem);
+			return TrackOpsEvent(pEventType, {
+					eventOn: pEventOn,
+					widget: pExtra.widget || GetWidgetName(Widget),
+					label: Label,
+					value: Value,
+					href: Href,
+					pointerClientX: pExtra.pointerClientX ?? "",
+					pointerClientY: pExtra.pointerClientY ?? "",
+					pointerPageX: pExtra.pointerPageX ?? "",
+					pointerPageY: pExtra.pointerPageY ?? "",
+					important: Important,
+					notifyMobile: Notify,
+					sound: Sound
+			});
+		}
+
+
+
+
+
+		function TrackFromElementOnce(pElem, pEventType, pEventOn, pOnceKey, pExtra =
+			{
+		}) {
+			if (String(pEventType || "").endsWith("_seen")) return;
+			if (!pElem || pElem.dataset?.opsAuto === "off") return;
+			const Widget = GetClosestWidget(pElem);
+			const Label = (pExtra.label ?? BuildActionLabel(pElem, Widget, GetExplicitLabel(pElem))) || BuildEventLabel(Widget, pElem);
+			return TrackOpsEventOnce(pEventType, pOnceKey, {
+					eventOn: pEventOn,
+					widget: pExtra.widget || GetWidgetName(Widget),
+					label: Label,
+					value: pExtra.value ?? pElem.dataset?.opsValue ?? "",
+					href: pExtra.href ?? pElem.getAttribute?.("href") ?? "",
+					pointerClientX: pExtra.pointerClientX ?? "",
+					pointerClientY: pExtra.pointerClientY ?? "",
+					pointerPageX: pExtra.pointerPageX ?? "",
+					pointerPageY: pExtra.pointerPageY ?? "",
+					important: pExtra.important ?? pElem.dataset?.opsImportant,
+					notifyMobile: pExtra.notifyMobile ?? pElem.dataset?.opsNotify ?? pElem.dataset?.opsNotifyMobile,
+					sound: pExtra.sound ?? pElem.dataset?.opsSound
+			});
+		}
+
+
+
+
+
+		function ObserveView(pSelector, pEventType, pWidgetName)
+		{
+			const Items = document.querySelectorAll(pSelector);
+			Items.forEach((pElem, pIndex) =>
+				{
+					if (pElem.dataset.opsAuto === "off") return;
+					const OnceKey = `${pSelector}:${pElem.id || pIndex}`;
+					pElem.dataset.opsViewEvent = pElem.dataset.opsViewEvent || pEventType;
+					pElem.dataset.opsWidget = pElem.dataset.opsWidget || pWidgetName;
+					pElem.dataset.opsOnceKey = pElem.dataset.opsOnceKey || OnceKey;
+					cObservedViewElems.add(pElem);
+					RegisterReadElement(pElem, pWidgetName);
+					if (fViewObserver) fViewObserver.observe(pElem);
+			});
+		}
+
+
+
+
+
+		function InitViewObserver()
+		{
+			if (!("IntersectionObserver" in window)) return;
+			fViewObserver = new IntersectionObserver((pEntries) =>
+				{
+					pEntries.forEach(() => CheckReading());
+				}, {
+					threshold: cViewThreshold,
+					rootMargin: cViewRootMargin
+			});
+		}
+
+
+
+
+
+		function InitReadTracking()
+		{
+			ApplyReadableBoundaries();
+			BuildReadHierarchy();
+			if (fReadTimer) clearInterval(fReadTimer);
+			fLastReadTickAt = Date.now();
+			fReadTimer = window.setInterval(CheckReading, cReadTickMs);
+			setTimeout(CheckReading, 300);
+			setTimeout(CheckReading, 900);
+		}
+
+
+
+
+
+		function InitDeclarativeEvents()
+		{
+			document.querySelectorAll("[data-ops-event]").forEach((pElem, pIndex) =>
+				{
+					if (pElem.dataset.opsAuto === "off") return;
+					const EventOn = (pElem.dataset.opsOn || "").trim().toLowerCase();
+					const OnceKey = pElem.dataset.opsOnceKey || pElem.id || `manual_${pIndex}`;
+					if (EventOn === "view")
+					{
+						if (fViewObserver)
+						{
+							pElem.dataset.opsViewEvent = pElem.dataset.opsEvent;
+							pElem.dataset.opsOnceKey = OnceKey;
+							cObservedViewElems.add(pElem);
+							RegisterReadElement(pElem, GetWidgetName(pElem));
+							fViewObserver.observe(pElem);
+							setTimeout(() => CheckViewElement(pElem), 500);
+						}
+						return;
+					}
+					if (EventOn === "toggle" || EventOn === "open" || EventOn === "toggle-open")
+					{
+						pElem.addEventListener("toggle", () =>
+							{
+								if (pElem.open) TrackFromElement(pElem, pElem.dataset.opsEvent, "toggle-open");
+						});
+						return;
+					}
+					if (EventOn === "submit")
+					{
+						pElem.addEventListener("submit", () => TrackFromElement(pElem, pElem.dataset.opsEvent, "submit"));
+						return;
+					}
+					if (EventOn === "change" || EventOn === "input")
+					{
+						pElem.addEventListener(EventOn, () => TrackFromElement(pElem, pElem.dataset.opsEvent, EventOn));
+						return;
+					}
+					if (EventOn === "scroll") return;
+					pElem.addEventListener("click", () => TrackFromElement(pElem, pElem.dataset.opsEvent, "click"));
+			});
+		}
+
+
+
+
+
+		function GetLinkEvent(pLink)
+		{
+			const Href = String(pLink?.getAttribute?.("href") || pLink?.href || "").toLowerCase();
+			const Text = CleanText((pLink?.textContent || "") + " " + (pLink?.getAttribute?.("aria-label") || "") + " " + (pLink?.getAttribute?.("title") || "")).toLowerCase();
+			if (Href.startsWith("tel:") || Href.includes("tel:")) return "call_click";
+			if (Href.includes("wa.me") || Href.includes("whatsapp") || Href.includes("api.whatsapp.com") || Href.startsWith("whatsapp:") || Href.includes("wa.link") || Text.includes("واتساب") || Text.includes("whatsapp") || Text.includes("واتس")) return "whatsapp_click";
+			if (Href.includes("maps.google") || Href.includes("google.com/maps") || Href.startsWith("geo:")) return "map_click";
+			if (pLink?.hasAttribute?.("download") || /\.(pdf|doc|docx|xls|xlsx|zip|rar)(\?|#|$)/i.test(Href)) return "download_click";
+			return "";
+		}
+
+
+
+
+
+		function GetActionEvent(pElem)
+		{
+			const Href = String(pElem?.getAttribute?.("href") || pElem?.dataset?.href || pElem?.dataset?.url || "").toLowerCase();
+			const Text = CleanText((pElem?.textContent || "") + " " + (pElem?.getAttribute?.("aria-label") || "") + " " + (pElem?.getAttribute?.("title") || "") + " " + (pElem?.className || "")).toLowerCase();
+			if (Href.startsWith("tel:") || Href.includes("tel:") || Text.includes("اتصال") || Text.includes("تليفون") || Text.includes("هاتف") || Text.includes("call")) return "call_click";
+			if (Href.includes("wa.me") || Href.includes("whatsapp") || Href.includes("api.whatsapp.com") || Href.startsWith("whatsapp:") || Href.includes("wa.link") || Text.includes("واتساب") || Text.includes("whatsapp") || Text.includes("واتس")) return "whatsapp_click";
+			return "";
+		}
+
+
+
+
+
+		function InitClickEvents()
+		{
+			document.addEventListener("click", (pEvent) =>
+				{
+					const Target = pEvent.target;
+					if (!(Target instanceof Element)) return;
+					const PointerExtra = GetPointerExtra(pEvent);
+					const Manual = Target.closest("[data-ops-event]");
+					if (Manual && (!Manual.dataset.opsOn || Manual.dataset.opsOn === "click")) return;
+					const RatingStar = Target.closest("[data-star-value]");
+					if (RatingStar)
+					{
+						TrackFromElement(RatingStar, "rating_click", "click", {
+								widget: "EmoRatingStrip",
+								label: BuildEventLabel(RatingStar, GetClosestWidget(RatingStar)),
+								value: RatingStar.dataset.starValue,
+								...PointerExtra
+						});
+						return;
+					}
+					const RatingSubmit = Target.closest("[data-rating-submit]");
+					if (RatingSubmit)
+					{
+						TrackFromElement(RatingSubmit, "rating_submit", "click", {
+								widget: "EmoRatingStrip",
+								label: BuildEventLabel(RatingSubmit, GetClosestWidget(RatingSubmit)),
+								...PointerExtra
+						});
+						return;
+					}
+					const LeadSubmit = Target.closest("[data-lead-submit], [data-submit-btn]");
+					if (LeadSubmit)
+					{
+						TrackFromElement(LeadSubmit, "lead_submit_click", "click", PointerExtra);
+						return;
+					}
+					const Link = Target.closest("a[href]");
+					if (Link)
+					{
+						const EventType = GetLinkEvent(Link);
+						if (EventType)
+						{
+							if ([
+									"call_click",
+									"whatsapp_click",
+									"map_click",
+									"download_click"
+								].includes(EventType)) {
+								fExternalActionUntil = Date.now() + 30000;
+							}
+							TrackFromElement(Link, EventType, "click", { href: Link.href,...PointerExtra });
+							return;
+						}
+					}
+					const ActionButton = Target.closest("button.Btn, [data-service-btn], [data-lead-btn], [data-action-btn], .EmoCall, .EmoWhats, [data-whatsapp], [data-call]");
+					if (ActionButton)
+					{
+						const ActionEvent = GetActionEvent(ActionButton) || ActionButton.dataset.opsEvent || "button_click";
+						if (ActionEvent === "call_click" || ActionEvent === "whatsapp_click") fExternalActionUntil = Date.now() + 30000;
+						TrackFromElement(ActionButton, ActionEvent, "click", PointerExtra);
+						return;
+					}
+					const GalleryItem = Target.closest(".EmoGallery button, .EmoGallery [data-gallery-item], .galleryGrid [data-gallery-item]");
+					if (GalleryItem)
+					{
+						TrackFromElement(GalleryItem, "gallery_click", "click", {
+								widget: "EmoGallery",
+								value: GalleryItem.dataset.index || GalleryItem.dataset.galleryIndex || "",
+								...PointerExtra
+						});
+						return;
+					}
+					const FaqSummary = Target.closest("details.FaqItem summary, .FaqItem summary");
+					if (FaqSummary)
+					{
+						const FaqItem = FaqSummary.closest("details.FaqItem") || FaqSummary.closest(".FaqItem");
+						const Key = `faq_${FaqItem?.id || BuildFaqLabel(FaqItem, FaqSummary)}`;
+						setTimeout(() =>
+							{
+								const IsOpen = !FaqItem || FaqItem.open !== false;
+								TrackFromElementOnce(FaqItem || FaqSummary, IsOpen ? "faq_open" : "faq_click", IsOpen ? "toggle-open" : "click", Key, {
+										widget: "FaqItem",
+										label: BuildFaqLabel(FaqItem, FaqSummary),
+										...PointerExtra
+								});
+							}, 0);
+						return;
+					}
+					if (Link)
+					{
+						if (Link.closest(".ReadAlso, .ReadAlsoItem"))
+						{
+							TrackFromElement(Link, "readalso_click", "click", { href: Link.href, widget: "ReadAlso",...PointerExtra });
+							return;
+						}
+						if (Link.closest(".RelatedServices, .RelServiceItem"))
+						{
+							TrackFromElement(Link, "related_service_click", "click", { href: Link.href, widget: "RelatedServices",...PointerExtra });
+							return;
+						}
+					}
+				}, true);
+		}
+
+
+
+
+
+		function InitToggleEvents()
+		{
+			document.querySelectorAll("details.FaqItem").forEach((pElem, pIndex) =>
+				{
+					if (pElem.dataset.opsAuto === "off") return;
+					pElem.addEventListener("toggle", () =>
+						{
+							if (!pElem.open) return;
+							TrackFromElementOnce(pElem, "faq_open", "toggle-open", `faq_open_${pElem.id || pIndex}`, {
+									widget: "FaqItem",
+									label: BuildFaqLabel(pElem, pElem.querySelector("summary"))
+							});
+					});
+			});
+		}
+
+
+
+
+
+		function InitFormEvents()
+		{
+			document.querySelectorAll("form").forEach((pForm, pIndex) =>
+				{
+					if (pForm.dataset.opsAuto === "off") return;
+					const Widget = GetClosestWidget(pForm);
+					const WidgetName = GetWidgetName(Widget);
+					const BaseKey = pForm.id || Widget?.id || `form_${pIndex}`;
+					pForm.addEventListener("input", () =>
+						{
+							TrackFromElementOnce(pForm, "form_start", "input", `${BaseKey}_start`, { widget: WidgetName });
+						}, true);
+					pForm.addEventListener("change", () =>
+						{
+							TrackFromElementOnce(pForm, "form_start", "change", `${BaseKey}_start`, { widget: WidgetName });
+						}, true);
+					pForm.addEventListener("submit", () =>
+						{
+							const IsRating = !!pForm.closest(".EmoRatingStrip");
+							TrackFromElement(pForm, IsRating ? "rating_submit" : "form_submit", "submit", { widget: WidgetName });
+						}, true);
+			});
+		}
+
+
+
+
+
+		function InitAutoViews()
+		{
+			if (!fViewObserver) return;
+			ObserveView(".Hero, .FreeHero", "hero_seen", "Hero");
+			ObserveView(".IndexSecBox", "index_section_seen", "IndexSec");
+			ObserveView(".EmoSection", "section_seen", "EmoSection");
+			ObserveView(".EmoStr", "strip_seen", "EmoStr");
+			ObserveView(".EmoFaq", "faq_seen", "EmoFaq");
+			ObserveView("details.FaqItem, .FaqItem", "faq_item_seen", "FaqItem");
+			ObserveView(".PriceCard, .Price", "price_seen", "Price");
+			ObserveView(".EmoGallery, .galleryGrid", "gallery_seen", "EmoGallery");
+			ObserveView(".EmoRatingStrip", "rating_seen", "EmoRatingStrip");
+			ObserveView(".EmoContactStrip", "contact_strip_seen", "EmoContactStrip");
+			ObserveView(".EmoPartnerStrip", "partner_strip_seen", "EmoPartnerStrip");
+			ObserveView(".EmoCoverageMapStrip", "coverage_map_seen", "EmoCoverageMapStrip");
+			ObserveView(".EmoPipelineStrip", "pipeline_seen", "EmoPipelineStrip");
+			ObserveView(".EmoStatsStrip", "stats_seen", "EmoStatsStrip");
+			ObserveView(".ReadAlso", "readalso_seen", "ReadAlso");
+			ObserveView(".RelatedServices", "related_services_seen", "RelatedServices");
+			ObserveView(".EmoList", "list_seen", "EmoList");
+			ObserveView(".Emograph", "emograph_seen", "Emograph");
+			ObserveView(".FullCard, .CardsGrCard, .Card", "card_seen", "Card");
+			ObserveView(".RespImg", "image_seen", "RespImg");
+		}
+
+
+
+
+
+		function GetScrollPercent()
+		{
+			const Height = Math.max(
+				document.documentElement.scrollHeight,
+				document.body.scrollHeight
+			) - window.innerHeight;
+			return Height > 0 ? Math.max(0, Math.min(100, Math.round((window.scrollY / Height) * 100))) : 100;
+		}
+
+
+
+
+
+		function GetCurrScrollMark(pPercent)
+		{
+			let CurrMark = null;
+			for (const Mark of cScrollMarks)
+			{
+				if (pPercent >= Mark) CurrMark = Mark;
+				else break;
+			}
+			return CurrMark;
+		}
+
+
+
+
+
+		function InitContinuousReplayEvents()
+		{
+			// الحركة التفصيلية يسجلها EmoReplayRecorder فقط لمنع ازدواج التسجيل.
+		}
+
+
+
+
+
+		function InitScrollMilestones()
+		{
+			function CheckScroll()
+			{
+				const Percent = GetScrollPercent();
+				const CurrMark = GetCurrScrollMark(Percent);
+				if (CurrMark === null)
+				{
+					fLastScrollMark = null;
+					return;
+				}
+				if (CurrMark === fLastScrollMark) return;
+				const Direction = fLastScrollMark === null
+				? "start"
+				: CurrMark > fLastScrollMark
+				? "down"
+				: "up";
+				fLastScrollMark = CurrMark;
+				TrackOpsEvent(`scroll_${CurrMark}`, {
+						eventOn: "scroll",
+						widget: "Page",
+						label: `دخل نطاق ${CurrMark}% من الصفحة`,
+						value: CurrMark,
+						scrollX: Math.round(window.scrollX || window.pageXOffset || 0),
+						scrollY: Math.round(window.scrollY || window.pageYOffset || 0),
+						scrollPercent: Percent,
+						durationMs: "",
+						awayReason: Direction
+				});
+			}
+			window.addEventListener("scroll", () =>
+				{
+					CheckScroll();
+					CheckVisibleViews();
+				}, { passive: true });
+			window.addEventListener("resize", () =>
+				{
+					CheckScroll();
+					CheckVisibleViews();
+				}, { passive: true });
+			setTimeout(CheckScroll, 800);
+			setTimeout(CheckVisibleViews, 900);
+		}
+
+
+
+
+
+		function FormatDuration(pMs)
+		{
+			const Seconds = Math.max(1, Math.round(pMs / 1000));
+			if (Seconds < 60) return `${Seconds} ثانية`;
+			const Minutes = Math.floor(Seconds / 60);
+			const Rest = Seconds % 60;
+			if (Rest === 0) return `${Minutes} دقيقة`;
+			return `${Minutes} دقيقة و ${Rest} ثانية`;
+		}
+
+
+
+
+
+		function MarkPageAway(pReason)
+		{
+			if (!fPageOpenSent || fPageExitSent) return;
+			if (fAwayStartedAt) return;
+			fAwayStartedAt = Date.now();
+			fAwayReason = String(pReason || "blur");
+			TrackOpsEvent("page_focus_away", {
+					eventOn: fAwayReason,
+					widget: "Page",
+					label: "ترك تركيز الصفحة أو انتقل لتبويب آخر",
+					value: GetScrollPercent(),
+					durationMs: 0,
+					awayReason: fAwayReason,
+					focusState: "away",
+					useBeacon: true,
+					important: false,
+					notifyMobile: false,
+					sound: false
+			});
+		}
+
+
+
+
+
+		function TrackPageReturn(pReason)
+		{
+			if (fPageExitSent) return;
+			fExternalActionUntil = 0;
+			if (!fPageOpenSent)
+			{
+				TrackPageOpen();
+				return;
+			}
+			if (!fAwayStartedAt) return;
+			const StartedAt = fAwayStartedAt;
+			const AwayReason = fAwayReason;
+			fAwayStartedAt = 0;
+			fAwayReason = "";
+			const DurationMs = Date.now() - StartedAt;
+			if (DurationMs < cFocusAwayMinMs) return;
+			TrackOpsEvent("page_focus_return", {
+					eventOn: String(pReason || "focus"),
+					widget: "Page",
+					label: `رجع للصفحة بعد ${FormatDuration(DurationMs)}`,
+					value: Math.round(DurationMs / 1000),
+					durationMs: DurationMs,
+					awayReason: AwayReason,
+					focusState: "visible",
+					useBeacon: true,
+					important: false,
+					notifyMobile: false,
+					sound: false
+			});
+		}
+
+
+
+
+
+		function InitFocusAwayEvents()
+		{
+			document.addEventListener("visibilitychange", () =>
+				{
+					if (document.hidden) MarkPageAway("hidden");
+					else if (!fPageOpenSent) TrackPageOpen();
+					else TrackPageReturn("visible");
+			});
+			window.addEventListener("blur", () => MarkPageAway("blur"));
+			window.addEventListener("focus", () => TrackPageReturn("focus"));
+		}
+
+
+
+
+
+		function TrackPageAlive()
+		{
+			if (!fPageOpenSent || fPageExitSent) return;
+			const Hidden = document.hidden || document.visibilityState !== "visible";
+			if (Hidden)
+			{
+				if (!fAwayStartedAt) MarkPageAway("hidden_ping");
+				return;
+			}
+			TrackOpsEvent("page_alive", {
+					eventOn: Hidden ? "heartbeat_hidden" : "heartbeat",
+					widget: "Page",
+					label: Hidden ? "الصفحة ما زالت مفتوحة خارج التركيز" : "الصفحة ما زالت مفتوحة",
+					value: GetScrollPercent(),
+					durationMs: Math.round(GetPageElapsedMs()),
+					awayReason: Hidden ? (fAwayReason || "hidden") : "",
+					focusState: Hidden ? "away" : "visible",
+					allowBeforeOpen: true,
+					useBeacon: Hidden,
+					notifyMobile: false,
+					sound: false
+			});
+		}
+
+
+
+
+
+		function TrackPageExit(pReason)
+		{
+			if (!fPageOpenSent) return;
+			if (fPageExitSent) return;
+			const Reason = String(pReason || "pagehide");
+			if (Date.now() < fExternalActionUntil && (Reason === "pagehide" || Reason === "beforeunload"))
+			{
+				MarkPageAway("external_action");
+				return;
+			}
+			FlushPendingReadEvents();
+			fPageExitSent = true;
+			fAwayStartedAt = 0;
+			fAwayReason = "";
+			if (fPagePingTimer)
+			{
+				clearInterval(fPagePingTimer);
+				fPagePingTimer = 0;
+			}
+			TrackOpsEvent("page_exit", {
+					eventOn: String(pReason || "pagehide"),
+					widget: "Page",
+					label: "غادر الصفحة",
+					value: GetScrollPercent(),
+					durationMs: Math.round(GetPageElapsedMs()),
+					awayReason: String(pReason || "pagehide"),
+					focusState: "closed",
+					allowBeforeOpen: true,
+					useBeacon: true
+			});
+		}
+
+
+
+
+
+		function InitPageLiveEvents()
+		{
+			if (fPagePingTimer) clearInterval(fPagePingTimer);
+			fPagePingTimer = window.setInterval(TrackPageAlive, cPagePingMs);
+			window.addEventListener("pagehide", () => TrackPageExit("pagehide"));
+			window.addEventListener("beforeunload", () => TrackPageExit("beforeunload"));
+			window.addEventListener("pageshow", (pEvent) =>
+				{
+					fExternalActionUntil = 0;
+					if (!fPageExitSent || !pEvent.persisted) return;
+					fPageExitSent = false;
+					fAwayStartedAt = Date.now() - cFocusAwayMinMs;
+					fAwayReason = "pagehide";
+					TrackPageReturn("pageshow");
+					if (fPagePingTimer) clearInterval(fPagePingTimer);
+					fPagePingTimer = window.setInterval(TrackPageAlive, cPagePingMs);
+					TrackPageAlive();
+			});
+			window.addEventListener("freeze", () =>
+				{
+					MarkPageAway("freeze");
+					TrackPageAlive();
+			});
+			setTimeout(TrackPageAlive, 1000);
+		}
+
+
+
+
+
+		function TrackPageOpen()
+		{
+			if (fPageOpenSent || fPageOpenPromise) return fPageOpenPromise;
+			if (IsSyntheticTraffic()) return Promise.resolve({ ok: true, skipped: true });
+			if (document.hidden || document.visibilityState === "prerender") return Promise.resolve({ ok: true, skipped: true });
+			fPageOpenPromise = TrackOpsEventOnce("page_open", "page_open", {
+					eventOn: "load",
+					widget: "Page",
+					label: CleanText(document.title),
+					important: true,
+					notifyMobile: true,
+					sound: true,
+					eventData: {
+						replayAvailable: window.__EMO_REPLAY_CAPTURE_ENABLED__ === true,
+						viewportWidth: window.innerWidth || document.documentElement.clientWidth || 0,
+						viewportHeight: window.innerHeight || document.documentElement.clientHeight || 0,
+						pageUrl: `${location.pathname}${location.search}${location.hash}`
+					}
+			}).then((Result) =>
+				{
+					if (Result && Result.ok)
+					{
+						fPageOpenSent = true;
+						window.__EMO_OPS_PAGE_OPENED__ = true;
+						window.dispatchEvent(new CustomEvent("emo:ops-page-open", { detail: window.__EmoOpsIds }));
+					}
+					return Result;
+			}).finally(() =>
+				{
+					fPageOpenPromise = null;
+			});
+			return fPageOpenPromise;
+		}
+
+
+
+
+
+		function HasExplicitVideoTracking(pElem)
+		{
+			return !!(pElem && (pElem.dataset.opsTrackVideo === "1" || pElem.closest("[data-ops-track-video='1']")));
+		}
+
+
+
+
+
+		function HasExplicitVideoIgnore(pElem)
+		{
+			return !!(pElem && (pElem.dataset.opsIgnoreVideo === "1" || pElem.closest("[data-ops-ignore-video='1'], [data-background-video], [data-bg-video], .background-video, .bg-video, .hero-video, .video-bg, .decorative-video, .decor-video")));
+		}
+
+
+
+
+
+		function IsTrackableContentVideo(pVideo)
+		{
+			if (!pVideo) return false;
+			if (HasExplicitVideoTracking(pVideo)) return true;
+			if (HasExplicitVideoIgnore(pVideo)) return false;
+			if (!pVideo.controls) return false;
+			if (pVideo.autoplay || pVideo.loop) return false;
+			const Source = String(pVideo.currentSrc || pVideo.getAttribute("src") || "").toLowerCase();
+			if (/([?&](autoplay|loop|background|muted?)=1)|(^|[?&])playlist=/.test(Source)) return false;
+			if (pVideo.muted && !pVideo.controls) return false;
+			return true;
+		}
+
+
+
+
+
+		function IsTrackableVideoFrame(pFrame)
+		{
+			if (!pFrame) return false;
+			if (HasExplicitVideoTracking(pFrame)) return true;
+			if (HasExplicitVideoIgnore(pFrame)) return false;
+			const Source = String(pFrame.getAttribute("src") || "").toLowerCase();
+			if (!/(youtube\.com|youtu\.be|youtube-nocookie\.com|vimeo\.com)/.test(Source)) return false;
+			if (/([?&]controls=0)|([?&](autoplay|loop|background|muted?)=1)/.test(Source)) return false;
+			return true;
+		}
+
+
+
+
+
+		function HasRecentUserVideoIntent(pElem)
+		{
+			const IntentAt = Number(pElem?.dataset?.opsUserVideoIntentAt || "0");
+			return !!IntentAt && Date.now() - IntentAt <= 3500;
+		}
+
+
+
+
+
+		function InitVideoEvents()
+		{
+			document.querySelectorAll("video").forEach((pVideo, pIndex) =>
+				{
+					if (pVideo.dataset.opsVideoBound === "1") return;
+					pVideo.dataset.opsVideoBound = "1";
+					pVideo.dataset.opsUserVideoIntentAt = "0";
+					const MarkVideoIntent = () =>
+					{
+						pVideo.dataset.opsUserVideoIntentAt = String(Date.now());
+					};
+					pVideo.addEventListener("pointerdown", MarkVideoIntent, { passive: true });
+					pVideo.addEventListener("click", MarkVideoIntent, { passive: true });
+					pVideo.addEventListener("keydown", MarkVideoIntent, { passive: true });
+					pVideo.addEventListener("play", () =>
+						{
+							if (!IsTrackableContentVideo(pVideo)) return;
+							if (!HasExplicitVideoTracking(pVideo) && !HasRecentUserVideoIntent(pVideo)) return;
+							const Source = pVideo.currentSrc || pVideo.getAttribute("src") || "";
+							const Title = pVideo.getAttribute("title") || pVideo.getAttribute("aria-label") || pVideo.dataset.opsLabel || BuildViewLabel(GetClosestWidget(pVideo)) || Source || `Video ${pIndex + 1}`;
+							TrackOpsEvent("video_play", {
+									eventOn: "video_player",
+									widget: "VideoPlayer",
+									label: Title,
+									href: Source,
+									important: true,
+									notifyMobile: false,
+									sound: false
+							});
+						}, { passive: true });
+			});
+			document.querySelectorAll("iframe[src*='youtube'], iframe[src*='youtu.be'], iframe[src*='youtube-nocookie'], iframe[src*='vimeo']").forEach((
+					pFrame,
+					pIndex
+				) =>
+				{
+					if (pFrame.dataset.opsVideoBound === "1") return;
+					pFrame.dataset.opsVideoBound = "1";
+					pFrame.addEventListener("pointerdown", () =>
+						{
+							if (!IsTrackableVideoFrame(pFrame)) return;
+							const Source = pFrame.getAttribute("src") || "";
+							const Title = pFrame.getAttribute("title") || pFrame.dataset.opsLabel || BuildViewLabel(GetClosestWidget(pFrame)) || Source || `Video ${pIndex + 1}`;
+							TrackOpsEvent("video_play", {
+									eventOn: "video_player",
+									widget: "VideoPlayer",
+									label: Title,
+									href: Source,
+									important: true,
+									notifyMobile: false,
+									sound: false
+							});
+						}, { passive: true });
+			});
+		}
+
+
+
+
+
+		async function InitOps()
+		{
+			if (IsSyntheticTraffic()) return;
+			if (!(await TrafficAllowed())) return;
+			PublishVisitIds();
+			GetVisitorId();
+			GetSessionId();
+			GetPageInstanceId();
+			InitClarityIdentifiers();
+			window.addEventListener("online", FlushRetryQueue);
+			setTimeout(FlushRetryQueue, 1500);
+			window.TrackOpsEvent = TrackOpsEvent;
+			window.TrackOpsEventBatch = TrackOpsEventBatch;
+			window.TrackOpsEventOnce = TrackOpsEventOnce;
+			window.EmoOpsTrackEvent = TrackOpsEvent;
+			InitViewObserver();
+			InitDeclarativeEvents();
+			InitToggleEvents();
+			InitClickEvents();
+			InitFormEvents();
+			InitVideoEvents();
+			InitAutoViews();
+			InitReadTracking();
+			InitScrollMilestones();
+			InitContinuousReplayEvents();
+			InitFocusAwayEvents();
+			InitPageLiveEvents();
+			TrackPageOpen();
+		}
+
+
+
+
+
+		// ==================== Execution Logic ====================
+
+		if (cReplayParams.has("emoNoAnalytics"))
+		{
+			try
+			{
+				sessionStorage.setItem("emo_no_analytics_v1", "1");
+			}catch {}
+		}
+
+		try
+		{
+			fNoAnalytics = sessionStorage.getItem("emo_no_analytics_v1") === "1";
+		}catch {}
+
+		if (window.__EMO_REPLAY__ || fNoAnalytics || cReplayParams.has("emoReplay") || cReplayParams.has("emo_replay")) return;
+
+		if (window.__EMO_OPS_TRACKER_ACTIVE__) return;
+
+		window.__EMO_OPS_TRACKER_ACTIVE__ = true;
+
+		if (document.readyState === "loading")
+		{
+			document.addEventListener("DOMContentLoaded", InitOps, { once: true });
+		} else {
+			InitOps();
+		}
+	})();
+</script>

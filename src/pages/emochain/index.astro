@@ -1,7 +1,12 @@
 ---
-import { Align, Angle, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, FloatingPanel, GlassCard, Grid, Hero, HzStack, PriceCard, RelServiceItem, RelServices, Ribbon, SecTitle, SvgDots, TiltCard, VrStack } from "@/Widgets";
+import { CardsGr } from "@/Widgets/Cards";
+import { EmoCall, Emograph, EmoList, Grid, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { PriceCard } from "@/Widgets/Prices";
+import { DivCol, DivStr, EmoFaq, EmoSec, FaqItem, Hero } from "@/Widgets/Sections";
+import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, SvgDots, TiltCard } from "@/Widgets/Shapes";
+import { EmoStr } from "@/Widgets/Strips";
+import { Align, Angle, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
 
 
@@ -70,9 +75,9 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 
 
-	<ESec id="secOffser">
+	<EmoSec id="secOffser">
 
-		<DuoStr
+		<DivStr
 			id="strOffser"
 			pBg={new ElemBg("#101820")}
 			pGap={new Pixel(50, 20)}
@@ -108,7 +113,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 				pDot={2}
 			/>
 
-			<DuoCol
+			<DivCol
 				id="colOrderToDilever"
 				Readable
 				pBg={new ElemBg("transparent")}
@@ -183,9 +188,9 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 				</GlassCard>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol
+			<DivCol
 				id="colPricePercent"
 				pBg={new ElemBg("transparent")}
 				pPad={new Pixel(20,10)}
@@ -231,21 +236,21 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 				</TiltCard>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec id="secOrder">
 
-		<DuoStr
+
+	<EmoSec id="secOrder">
+
+		<DivStr
 			id="strOrder"
 			pBg={new ElemBg("#F3E8D2")}
 			pContentSize={new Size(new NumPer("80%","95%"), new NumPer("auto"))}
@@ -264,7 +269,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 				pBlur={18}
 			/>
 
-			<DuoCol
+			<DivCol
 				Readable
 				pBg={new ElemBg("#101820")}
 				pPad={new Pixel(44, 24)}
@@ -313,9 +318,9 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 				</Grid>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol
+			<DivCol
 				pBg={new ElemBg("transparent")}
 				pPad={new Pixel(0)}
 				pGap={new Pixel(20, 16)}
@@ -356,19 +361,19 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 				</GlassCard>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		hidden
 		pBg={new ElemBg(Colors.Creamy)}
 		pHzAlign={Align.Center}
@@ -407,7 +412,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -415,9 +420,9 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 
 
-	<ESec hidden>
+	<EmoSec hidden>
 
-		<EmoStrip
+		<EmoStr
 			hidden
 			pBg={new ElemBg("#111820")}
 			pHzAlign={Align.Center}
@@ -454,17 +459,17 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		hidden
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -533,7 +538,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -541,7 +546,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 
 
-	<ESec
+	<EmoSec
 		hidden
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
@@ -591,7 +596,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 		</VrStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -599,9 +604,9 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 
 
-	<ESec hidden>
+	<EmoSec hidden>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.Creamy)}
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
@@ -640,17 +645,17 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 			</VrStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		hidden
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -697,7 +702,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -705,7 +710,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 
 
-	<ESec
+	<EmoSec
 		hidden
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
@@ -752,7 +757,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -760,9 +765,9 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 
 
-	<ESec hidden>
+	<EmoSec hidden>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.WhiteOff)}
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
@@ -801,17 +806,17 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 			</VrStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		hidden
 		pBg={new ElemBg(Colors.Creamy)}
 		pHzAlign={Align.Center}
@@ -855,7 +860,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 		</VrStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -863,7 +868,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 
 
-	<ESec
+	<EmoSec
 		hidden
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -910,7 +915,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -918,9 +923,9 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 
 
-	<ESec hidden>
+	<EmoSec hidden>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg("#111820")}
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
@@ -953,17 +958,17 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		hidden
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -1008,7 +1013,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1016,7 +1021,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 
 
-	<ESec
+	<EmoSec
 		hidden
 		id="SupplyRequest"
 		pBg={new ElemBg("#111820")}
@@ -1061,7 +1066,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 		</VrStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1069,7 +1074,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 
 
-	<ESec
+	<EmoSec
 		hidden
 		pBg={new ElemBg(Colors.Creamy)}
 		pHzAlign={Align.Center}
@@ -1108,7 +1113,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1116,9 +1121,9 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 
 
-	<ESec hidden>
+	<EmoSec hidden>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.WhiteOff)}
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
@@ -1156,17 +1161,17 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		hidden
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
@@ -1210,7 +1215,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 		</VrStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1218,7 +1223,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 
 
-	<ESec
+	<EmoSec
 		hidden
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -1263,7 +1268,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1271,9 +1276,9 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 
 
-	<ESec hidden>
+	<EmoSec hidden>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.Creamy)}
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
@@ -1312,17 +1317,17 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		hidden
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -1366,7 +1371,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 		</VrStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1374,7 +1379,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 
 
-	<ESec
+	<EmoSec
 		hidden
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
@@ -1407,7 +1412,7 @@ import { BadgeFrame, BlurBlob, CardsGr, CircleGlow, DuoCol, DuoStr, EmoCall, Emo
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 

@@ -1,8 +1,8 @@
 export { default as Badge } from "./Badge.astro";
 
-export type { ButtonColorPreset } from "./ButtonPresets";
+export type { ButtonColorPreset } from "./Btn/ButtonPresets";
 
-export { ButtonColorPresets } from "./ButtonPresets";
+export { ButtonColorPresets } from "./Btn/ButtonPresets";
 
 /**
  * ButtonPresetProps
@@ -30,25 +30,17 @@ export { ButtonColorPresets } from "./ButtonPresets";
  * RedBlack: Preset: خلفية حمراء مع هوفر أسود.
  * WhiteBlack: Preset: خلفية بيضاء مع هوفر أسود.
  */
-export type { ButtonPresetProps } from "./ButtonPresets";
+export type { ButtonPresetProps } from "./Btn/ButtonPresets";
 
-export { CreateButtonPreset } from "./ButtonPresets";
+export { CreateButtonPreset } from "./Btn/ButtonPresets";
 
 /**
- * EmoButton
+ * EmoBtn
  *
  * Props:
  * data-own-size: Lets button keep its internal width inside Stack / Strip instead of being stretched.
  */
-export { default as EmoBtn } from "./EmoButton.astro";
-
-/**
- * EmoButton
- *
- * Props:
- * data-own-size: Lets button keep its internal width inside Stack / Strip instead of being stretched.
- */
-export { default as EmoButton } from "./EmoButton.astro";
+export { default as EmoBtn } from "./Btn/EmoBtn.astro";
 
 /**
  * EmoCall
@@ -62,7 +54,7 @@ export { default as EmoButton } from "./EmoButton.astro";
  * pTitleColors: ألوان عنوان الزر في الحالات الثلاث: Normal / Hover / Click.
  * data-own-size: Lets button keep its internal width inside Stack / Strip instead of being stretched.
  */
-export { default as EmoCall } from "./EmoCall.astro";
+export { default as EmoCall } from "./Btn/EmoCall.astro";
 
 export { default as EmoCountdown } from "./EmoCountdown.astro";
 
@@ -86,11 +78,11 @@ export { default as EmoCountdown } from "./EmoCountdown.astro";
  * pTitleColors: ألوان عنوان الزر في الحالات الثلاث: Normal / Hover / Click.
  * data-own-size: Lets button keep its internal width inside Stack / Strip instead of being stretched.
  */
-export { default as EmoDet } from "./EmoDet.astro";
+export { default as EmoDet } from "./Btn/EmoDet.astro";
 
-export { default as Emograph } from "./Emograph.astro";
+export { default as Emograph } from "./Content/Emograph.astro";
 
-export { default as EmoList } from "./EmoList.astro";
+export { default as EmoList } from "./Content/EmoList.astro";
 
 /**
  * EmoWhats
@@ -111,28 +103,26 @@ export { default as EmoList } from "./EmoList.astro";
  * pTitleColors: ألوان عنوان الزر في الحالات الثلاث: Normal / Hover / Click.
  * data-own-size: Lets button keep its internal width inside Stack / Strip instead of being stretched.
  */
-export { default as EmoWhats } from "./EmoWhats.astro";
+export { default as EmoWhats } from "./Btn/EmoWhats.astro";
 
-export { GetBoolAttr } from "./ButtonPresets";
+export { GetBoolAttr } from "./Btn/ButtonPresets";
 
-export { GetButtonPreset } from "./ButtonPresets";
+export { GetButtonPreset } from "./Btn/ButtonPresets";
 
-export { GetButtonTitleColors } from "./ButtonPresets";
+export { GetButtonTitleColors } from "./Btn/ButtonPresets";
 
-export { default as Grid } from "./Grid.astro";
+export { default as Grid } from "./Layout/Grid.astro";
 
-export { default as HzStack } from "./HzStack.astro";
+export { default as HzStack } from "./Layout/HzStack.astro";
 
-export { default as IndexBtn } from "./IndexLinkButton.astro";
-
-export { default as IndexLinkButton } from "./IndexLinkButton.astro";
+export { default as IndexBtn } from "./Btn/IndexBtn.astro";
 
 export { default as SecTitle } from "./SecTitle.astro";
 
 export { default as SiteSearch404 } from "./SiteSearch404.astro";
 
-export { default as Stack } from "./Stack.astro";
+export { default as Stack } from "./Layout/Stack.astro";
 
 export { default as Tree } from "./Tree.astro";
 
-export { default as VrStack } from "./VrStack.astro";
+export { default as VrStack } from "./Layout/VrStack.astro";

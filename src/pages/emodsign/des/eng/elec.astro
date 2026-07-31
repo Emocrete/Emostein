@@ -1,7 +1,11 @@
 ---
-import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle } from "@/Widgets";
+import { CardsGr } from "@/Widgets/Cards";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle } from "@/Widgets/Comp";
+import { RespImg } from "@/Widgets/Media";
+import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStr } from "@/Widgets/Strips";
+import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
 
 
@@ -59,7 +63,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg("#F6F1E8")}>
+	<EmoSec pBg={new ElemBg("#F6F1E8")}>
 
 		<SecTitle
 			style = " --StripBg : #0B1017 "
@@ -88,7 +92,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -96,7 +100,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg("#0B1017")}>
+	<EmoSec pBg={new ElemBg("#0B1017")}>
 
 		<SecTitle
 			style = " --StripBg : #E8D7AA "
@@ -120,7 +124,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 			pTopic6={new Topic("لوحات المنازل والفيلات", "تصميم لوحات منزلية منظمة للإنارة والبرايز والتكييف والسخانات والمطبخ والأجهزة الخاصة، مع تقسيم واضح يسهل الصيانة والفصل الآمن.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -128,9 +132,9 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<EmoStrip pBg={new ElemBg("#0B1017")} pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}>
+	<EmoStr pBg={new ElemBg("#0B1017")} pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg("#151B25")}
 			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
 			pHzAlign={Align.Center}
@@ -143,7 +147,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
@@ -177,7 +181,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 		</HzStack>
 
-	</EmoStrip>
+	</EmoStr>
 
 
 
@@ -185,7 +189,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg("#F6F1E8")}>
+	<EmoSec pBg={new ElemBg("#F6F1E8")}>
 
 		<SecTitle
 			style = " --StripBg : #E8D7AA "
@@ -252,7 +256,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 			]}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -260,7 +264,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")}>
+	<EmoSec pBg={new ElemBg("#FFFFFF")}>
 
 		<SecTitle
 			style = " --StripBg : #0B1017 "
@@ -296,7 +300,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -304,7 +308,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg("#F6F1E8")}>
+	<EmoSec pBg={new ElemBg("#F6F1E8")}>
 
 		<SecTitle
 			style = " --StripBg : #E8D7AA "
@@ -326,7 +330,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 			pTopic4={new Topic("قابلية التوسع", "ترك احتياطي محسوب لأجهزة مستقبلية مثل شاحن سيارة، تكييف إضافي، منظومة ذكية، أو تطوير لاحق.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -334,9 +338,9 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<EmoStrip pBg={new ElemBg("#0B1017")} pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}>
+	<EmoStr pBg={new ElemBg("#0B1017")} pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg("#151B25")}
 			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
 			pHzAlign={Align.Center}
@@ -349,7 +353,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<CardsGr
 			pWidth={new RespString("1200px", "340px")}
@@ -367,7 +371,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 			pTopic6={new Topic("مواصفات فنية", "تحديد مستوى المكونات ودرجة الحماية والبيانات الفنية اللازمة للتصنيع أو التوريد.")}
 		/>
 
-	</EmoStrip>
+	</EmoStr>
 
 
 
@@ -375,7 +379,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg("#F6F1E8")}>
+	<EmoSec pBg={new ElemBg("#F6F1E8")}>
 
 		<SecTitle
 			style = " --StripBg : #E8D7AA "
@@ -399,7 +403,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 			pTopic6={new Topic("المضخات والخدمات", "لوحات تحكم وتشغيل للمضخات والبوسترات والخزانات وأنظمة الخدمات الكهروميكانيكية.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -407,7 +411,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")}>
+	<EmoSec pBg={new ElemBg("#FFFFFF")}>
 
 		<SecTitle
 			style = " --StripBg : #0B1017 "
@@ -449,7 +453,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -457,9 +461,9 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<EmoStrip pBg={new ElemBg("#0B1017")} pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}>
+	<EmoStr pBg={new ElemBg("#0B1017")} pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg("#151B25")}
 			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
 			pHzAlign={Align.Center}
@@ -472,7 +476,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 				pSize={new Size(new NumPer(980, 320), new NumPer("auto", "auto"))}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<HzStack pGap={new Pixel(20, 15)} pPad={new Pixel(30, 20)}>
 
@@ -486,7 +490,7 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 		</HzStack>
 
-	</EmoStrip>
+	</EmoStr>
 
 
 

@@ -16,4 +16,4 @@
 - `src/pages/Tests/Shapes/ShapeDecorTest.astro`
 - `src/pages/Tests/Shapes/ShapeFramesTest.astro`
 
-الاستخدام المقصود: ضع ودجت الشكل كابن مباشر داخل `ESec` أو أي سكشن/مشهد positioned، ولا تغلفه بـ `div` خارجي.
+الاستخدام المقصود: ضع ودجت الشكل كابن مباشر داخل `EmoSec` أو أي سكشن/مشهد positioned، ولا تغلفه بـ `div` خارجي.

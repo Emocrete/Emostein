@@ -1,10 +1,9 @@
 ---
 import BLayout from "@/Layout.astro";
-import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
-import { DuoCol, DuoStr, EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, Hero, HzStack, RelServices, RespImg, VrStack } from "@/Widgets";
-import SecTitle from "@/Widgets/Comp/SecTitle.astro";
-import Price from "@/Widgets/Prices/Price.astro";
-import RelServiceItem from "@/Widgets/Sections/RelServiceItem.astro";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { Price } from "@/Widgets/Prices";
+import { DivCol, DivStr, EmoSec, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
 ---
 
 
@@ -59,58 +58,58 @@ import RelServiceItem from "@/Widgets/Sections/RelServiceItem.astro";
 
 
 
-	<ESec
+	<EmoSec
 		id="secInfo"
 		pBg={new ElemBg(Colors.Creamy)}
 		pHzAlign={new Align("Center", "Center", "Center", "Center")}
 		pVrAlign={new Align("Center", "Center", "Center", "Center")}
 	>
 
-		<DuoStr>
+		<DivStr>
 
-			<DuoCol>
+			<DivCol>
 
 				<Emograph
 					pTitle={Text.H2.OfText("ما هي شهادة صلاحية المبنى للإشغال ؟").WithColor("#8b1e2d").Centered}
 					pText={Text.Body.OfText("شهادة صلاحية المبنى للإشغال هي مستند رسمي تصدره نقابة المهندسين المصرية باسم مهندس نقابي معتمد ويقدم إلى الجهات الإدارية المختصة، مثل رئاسة الحي أو الجهاز التابع لهيئة المجتمعات العمرانية، والغرض منه بيان أن المبنى تم إنشاؤه وفقًا للمواصفات الفنية والمعايير الإنشائية واشتراطات الترخيص الصادرة مسبقًا، وأنه آمن وصالح للاستخدام.")}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol>
+			<DivCol>
 
 				<Emograph
 					pTitle={Text.H2.OfText("استخدامات شهادة صلاحية المبنى للإشغال").WithColor("#8b1e2d").Centered}
 					pText={Text.Body.OfText("تستخدم شهادة صلاحية مبنى للإشغال سواء إشغال كلي أو جزئي في الحصول على خطاب الجهة الإدارية المعنية لإرفاقه بطلب توصيل المرافق المقدم إلى الجهة ذات العلاقة، مثل الكهرباء والمياه والغاز والصرف الصحي.")}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec id="secDoc">
+
+
+	<EmoSec id="secDoc">
 
 		<SecTitle OrangeDark pTitle="المستندات المطلوبة لاستخراج شهادة صلاحية مبنى للإشغال" />
 
-		<DuoStr>
+		<DivStr>
 
-			<DuoCol>
+			<DivCol>
 
 				<Emograph pTitle={Text.H3.Centered.OfText("في حال كانت رخصة البناء صادرة باسم مالك فردي").WithColor("#2f3340")} />
 
 				<EmoList pNumbered={false} pItems={["صورة رخصة البناء المعتمدة","صورة بطاقة المالك"]} />
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol>
+			<DivCol>
 
 				<Emograph pTitle={Text.H3.Centered.OfText("في حال كانت رخصة البناء صادرة باسم شركة").WithColor("#2f3340")} />
 
@@ -123,19 +122,19 @@ import RelServiceItem from "@/Widgets/Sections/RelServiceItem.astro";
 					]}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec id="secCost" Readable>
+
+
+	<EmoSec id="secCost" Readable>
 
 		<SecTitle OrangeDark pTitle="تكلفة استخراج شهادة صلاحية المبنى للإشغال" />
 
@@ -163,21 +162,21 @@ import RelServiceItem from "@/Widgets/Sections/RelServiceItem.astro";
 
 		<Emograph pTitle={Text.H3.OfText("أولا : أتعاب الخدمة")} />
 
-		<DuoStr id="strCost" Readable>
+		<DivStr id="strCost" Readable>
 
-			<DuoCol>
+			<DivCol>
 
 				<Price pTitle={Text.Body.OfText("للمباني السكنية")} pPrice={3000} />
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol>
+			<DivCol>
 
 				<Price pTitle={Text.Body.OfText("للمباني التجارية والإدارية والصناعية")} pPrice={5000} />
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
 		<Emograph pTitle={Text.H3.OfText(" ثانيا : رسوم الخدمة المدفوعة لنقابة المهندسين")} />
 
@@ -245,7 +244,7 @@ import RelServiceItem from "@/Widgets/Sections/RelServiceItem.astro";
 
 		</VrStack>
 
-	</ESec>
+	</EmoSec>
 
 
 

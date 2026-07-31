@@ -1,7 +1,11 @@
 ---
-import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip, ESec, FaqItem, Hero, HzStack, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle } from "@/Widgets";
+import { CardsGr } from "@/Widgets/Cards";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle } from "@/Widgets/Comp";
+import { RespImg } from "@/Widgets/Media";
+import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStr } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import { VrStack } from "../../../site/Widgets";
 ---
 
@@ -67,7 +71,7 @@ import { VrStack } from "../../../site/Widgets";
 
 
 
-	<ESec
+	<EmoSec
 		id="station-nature"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -80,8 +84,11 @@ import { VrStack } from "../../../site/Widgets";
 			pDesc="المحطة ليست مبنى تجاريًا فقط؛ هي موقع حركة سيارات وتخزين وقود وبيع وتشغيل ومخاطر حريق ومسافات أمان ومداخل ومخارج، لذلك يتم تقييم الأرض قبل الدخول في تكلفة التصميم والتعاقدات."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
@@ -97,17 +104,17 @@ import { VrStack } from "../../../site/Widgets";
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="station-site"
 		pBg={new ElemBg(Colors.BlackOff)}
 		pHzAlign={Align.Center}
@@ -120,8 +127,11 @@ import { VrStack } from "../../../site/Widgets";
 			pDesc="الموقع الجيد في التسويق قد لا يكون موقعًا صالحًا للترخيص؛ لذلك يجب مراجعة القيود الهندسية والتنظيمية قبل اعتماد الفكرة الاستثمارية."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.BlackOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1200px", "100%")}
@@ -137,17 +147,17 @@ import { VrStack } from "../../../site/Widgets";
 				pTopic4={new Topic("الجهات ذات الولاية", "طريق عام، زراعة، ري، آثار، بيئة، مرور، حي أو مجلس مدينة، أو جهاز مدينة؛ كل جهة قد تغير مسار الملف حسب موقع الأرض.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="station-approvals"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -160,8 +170,11 @@ import { VrStack } from "../../../site/Widgets";
 			pDesc="الملف يتحرك بين شركة التسويق والهيئة المختصة والجهات المحلية والفنية، ولا يصح اختزال الترخيص في رخصة مباني أو رسم هندسي فقط."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<EmoList
 				pWidth={new RespString("1050px", "100%")}
@@ -182,17 +195,17 @@ import { VrStack } from "../../../site/Widgets";
 				]}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="station-fire"
 		pBg={new ElemBg(Colors.BlackOff)}
 		pHzAlign={Align.Center}
@@ -205,8 +218,11 @@ import { VrStack } from "../../../site/Widgets";
 			pDesc="موافقة الحماية المدنية في محطة الوقود مرتبطة بتصميم الموقع نفسه: الخزانات، نقاط التموين، مصادر الكهرباء، معدات الإطفاء، مسارات الحركة، وعدم وجود مصادر خطورة غير مسموح بها."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.BlackOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(24, 16)} pPad={new Pixel(30, 15)}>
 
@@ -242,18 +258,21 @@ import { VrStack } from "../../../site/Widgets";
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+
+
+	<EmoSec
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -261,8 +280,11 @@ import { VrStack } from "../../../site/Widgets";
 			pDesc="الملف النهائي يتغير حسب موقع الأرض وشركة التسويق والجهات المطلوبة، لكن هذه العناصر تمثل العمود الأساسي للتحضير قبل التقديم."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1200px", "100%")}
@@ -278,17 +300,17 @@ import { VrStack } from "../../../site/Widgets";
 				pTopic4={new Topic("موافقات الجهات", "الدفاع المدني، المرور، البيئة، الطرق، الزراعة، الآثار، الجهة المحلية أو جهاز المدينة، وأي جهة تظهر بسبب موقع الأرض أو طبيعة الطريق.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="station-service"
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
@@ -301,8 +323,11 @@ import { VrStack } from "../../../site/Widgets";
 			pDesc="الخدمة موجهة لمالك أرض أو مستثمر يريد تقييم موقعه وتجهيز ملفه الهندسي والإداري قبل التقديم أو أثناء الاستيفاءات."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Gray1)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(24, 16)} pPad={new Pixel(30, 15)}>
 
@@ -340,9 +365,9 @@ import { VrStack } from "../../../site/Widgets";
 
 			<EmoCall BlackSky pText="ابدأ مراجعة موقع المحطة" />
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
 
 

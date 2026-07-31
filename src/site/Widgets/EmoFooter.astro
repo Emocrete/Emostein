@@ -1,9 +1,8 @@
 ---
+import { EmoFooterPanel } from "@/Widgets/Footer";
+import { EmoRatingStrip, EmoStatsStrip } from "@/Widgets/Strips";
 import { Place, type PlaceProps } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import EmoRatingStrip from "@/Widgets/Strips/EmoRatingStrip.astro";
-import EmoStatsStrip from "@/Widgets/Strips/EmoStatsStrip.astro";
-import EmoFooterPanel from "@/Widgets/Footer/EmoFooterPanel.astro";
 
 interface PageReviewData {
 	ratingValue: number;
@@ -104,6 +103,22 @@ function BuildCssUrl(pValue?: string) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <footer
 	class = {`EmoFooter ${cPlace.Class} ${pGivenClass}`.trim()}
 	style = {cPlace.Style}
@@ -111,23 +126,41 @@ function BuildCssUrl(pValue?: string) {
 	{...RemAttr}
 >
 
+
+
+
+
+
+
 	<EmoRatingStrip
-		class="FooterRatingWidget"
+		class = " FooterRatingWidget "
 		id="page-rating"
 		pRatingData={pRatingData}
 		pStorageUrl={pRatingStorageUrl}
 		pFooterMode
 	/>
 
+
+
+
+
+
+
 	<EmoStatsStrip
-		class="FooterStatsWidget"
+		class = " FooterStatsWidget "
 		pShowOffer={false}
 		pFooterMode
-		pCycleSeconds={5}
+		pCyclEmoSeconds={5}
 	/>
 
+
+
+
+
+
+
 	<EmoFooterPanel
-		class="FooterPanelWidget"
+		class = " FooterPanelWidget "
 		pShareTitle={pShareTitle}
 		pFollowTitle={pFollowTitle}
 		pShareText={pShareText}
@@ -140,7 +173,29 @@ function BuildCssUrl(pValue?: string) {
 		pPartnerHref={pPartnerHref}
 	/>
 
+
+
+
+
+
+
 </footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -208,17 +263,47 @@ function BuildCssUrl(pValue?: string) {
 		min-height: 0;
 	}
 
+
+
 	:global(.FooterRatingWidget) {
 		grid-area: rating;
 	}
+
 
 	:global(.FooterStatsWidget) {
 		grid-area: stats;
 	}
 
+
 	:global(.FooterPanelWidget) {
 		grid-area: panel;
 	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
 
 
 	@media (max-width: 1050px), (orientation: portrait) {

@@ -1,7 +1,11 @@
 ---
-import { Align, Angle, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, VrStack } from "@/Widgets";
+import { CardsGr } from "@/Widgets/Cards";
+import { EmoCall, Emograph, EmoList, HzStack, VrStack } from "@/Widgets/Comp";
+import { RespImg } from "@/Widgets/Media";
+import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStr } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
 
 
@@ -65,19 +69,22 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 
 
-	<ESec id="secProc">
+	<EmoSec id="secProc">
 
-		<EmoStrip pBg={new ElemBg(Colors.GreenLite)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.GreenLite)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<Emograph
 				pTitle={Text.H2.Centered.OfText("اجراءات ترخيص محل تجاري أو صناعي أو محل عام")}
 				pText={Text.Body.Centered.OfText("الترتيب العملي يبدأ بتقديم الطلب وينتهي بسداد الرسوم المحددة واستلام الترخيص")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-		<EmoStrip>
+		<EmoStr>
 
 			<EmoList
 				pWidth={new RespString("1200px", "100%")}
@@ -98,29 +105,32 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 				]}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec>
 
-		<EmoStrip pBg={new ElemBg(Colors.SkyLite)}>
+
+	<EmoSec>
+
+		<EmoStr pBg={new ElemBg(Colors.SkyLite)}>
 
 			<Emograph
 				pTitle={Text.H2.Centered.OfText("مرحلة تقديم الطلب وفحص المستندات")}
 				pText={Text.Body.Centered.OfText("هذه المرحلة تحدد هل الملف قابل للدخول في مسار الترخيص أم سيعود لاستيفاء أوراق أساسية قبل أن يبدأ فعليًا")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -133,29 +143,32 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 				pTopic4={new Topic("الرد خلال المدة القانونية", "مرحلة الرد ليست مرحلة إصدار الترخيص، لكنها تحدد موقف الطلب: قبول مبدئي مع اشتراطات، أو رفض مسبب، أو اعتبار الطلب مقبولًا عند عدم الرد خلال المدة المحددة وفق القواعد المنظمة.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec>
 
-		<EmoStrip pBg={new ElemBg(Colors.Black)}>
+
+	<EmoSec>
+
+		<EmoStr pBg={new ElemBg(Colors.Black)}>
 
 			<Emograph
 				pTitle={Text.H2.Centered.White.OfText("مرحلة الاشتراطات والمعاينة")}
 				pText={Text.Body.Centered.White.OfText("بعد القبول المبدئي تبدأ المرحلة الفنية: هل المحل في حالته الفعلية يصلح للنشاط المطلوب أم يحتاج تعديلات قبل إصدار الرخصة؟")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Gray1)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<EmoList
 				pWidth={new RespString("980px", "100%")}
@@ -172,26 +185,29 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 				]}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec>
 
-		<EmoStrip pBg={new ElemBg(Colors.OrangeLite)}>
+
+	<EmoSec>
+
+		<EmoStr pBg={new ElemBg(Colors.OrangeLite)}>
 
 			<Emograph pTitle={Text.H2.Centered.OfText("الفرق بين الترخيص والإخطار")} />
 
-		</EmoStrip>
+		</EmoStr>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1200px", "100%")}
@@ -204,26 +220,29 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 				pTopic4={new Topic("إصدار الترخيص", "هو المرحلة النهائية التي تثبت أن المحل استوفى المطلوب وأن الجهة المختصة وافقت على تشغيل النشاط وفق البيانات والمساحة والنشاط المحدد في الرخصة.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray5)}>
+
+	<EmoSec>
+
+		<EmoStr pBg={new ElemBg(Colors.Gray5)}>
 
 			<Emograph pTitle={Text.H2.Centered.White.OfText("أين تتعطل إجراءات الترخيص غالبًا؟")} />
 
-		</EmoStrip>
+		</EmoStr>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Creamy)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(28, 16)} pPad={new Pixel(0, 0)}>
 
@@ -253,29 +272,32 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec>
 
-		<EmoStrip pBg={new ElemBg(Colors.BistageDark)}>
+
+	<EmoSec>
+
+		<EmoStr pBg={new ElemBg(Colors.BistageDark)}>
 
 			<Emograph
 				pTitle={Text.H2.Centered.White.OfText("ما الذي نقدمه في متابعة إجراءات الترخيص؟")}
 				pText={Text.Body.Centered.White.OfText("دورنا ليس نقل أوراق فقط، بل قراءة فنية وإدارية للملف حتى يتحرك في الطريق الصحيح بأقل تعطيل ممكن")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Gray1)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack pWidth={new Pixel(1050, 340)} pGap={new Pixel(22, 14)}>
 
@@ -294,9 +316,9 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 			</VrStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
 
 

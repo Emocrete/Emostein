@@ -1,21 +1,12 @@
 ---
-import { Align, Colors, ElemBg, EmoMediaData, HoverColors, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Badge, BottTriSep, CardsGr, DuoCol, DuoStr, EmoBtn, EmoCall, EmoContactStrip, EmoCoverageMapStrip, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoRatingStrip, EmoStatsStrip, EmoStrip, EmoWhats, ESec, FaqItem, FreeHero, Grid, HzStack, IncLineSep, IndexBtn, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack, YTPlayer } from "@/Widgets";
-import BlurBlob from "@/Widgets/Shapes/Decor/BlurBlob.astro";
-import CircleGlow from "@/Widgets/Shapes/Decor/CircleGlow.astro";
-import FloatingIcon from "@/Widgets/Shapes/Decor/FloatingIcon.astro";
-import LinePath from "@/Widgets/Shapes/Decor/LinePath.astro";
-import Ribbon from "@/Widgets/Shapes/Decor/Ribbon.astro";
-import Splash from "@/Widgets/Shapes/Decor/Splash.astro";
-import SvgDots from "@/Widgets/Shapes/Decor/SvgDots.astro";
-import DoubleWave from "@/Widgets/Shapes/Edges/DoubleWave.astro";
-import BadgeFrame from "@/Widgets/Shapes/Frames/BadgeFrame.astro";
-import FloatingPanel from "@/Widgets/Shapes/Frames/FloatingPanel.astro";
-import GlassCard from "@/Widgets/Shapes/Frames/GlassCard.astro";
-import TiltCard from "@/Widgets/Shapes/Frames/TiltCard.astro";
-import SvgBlobCard from "@/Widgets/Cards/SvgBlobCard.astro";
-import SvgRadarCard from "@/Widgets/Cards/SvgRadarCard.astro";
+import { CardsGr } from "@/Widgets/Cards";
+import { EmoCall, Emograph, EmoList, EmoWhats, Grid, HzStack, IndexBtn, SecTitle, VrStack } from "@/Widgets/Comp";
+import { RespImg, YTPlayer } from "@/Widgets/Media";
+import { DivCol, DivStr, EmoFaq, EmoSec, FaqItem, IndexSec, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { IncLineSep } from "@/Widgets/Separators";
+import { BadgeFrame, CircleGlow, FloatingIcon, FloatingPanel, GlassCard, LinePath, Splash, SvgDots, TiltCard } from "@/Widgets/Shapes";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPriceCardVr } from "../../../site/Widgets";
 ---
 
@@ -136,7 +127,7 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 
 
-	<ESec
+	<EmoSec
 		id="secCondVerification"
 		pMinH={new NumPer(800)}
 		pHzAlign={new Align("Center","Top","Center","Top")}
@@ -145,7 +136,7 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 		<SecTitle pTitle="تأكد من صلاحية المكان قبل البدء بترخيص الصيدلية" />
 
-		<DuoStr
+		<DivStr
 			pMinH={new NumPer(800)}
 			pHzAlign={new Align("Center","Top","Center","Top")}
 			pVrAlign={new Align("Center","Top","Center","Top")}
@@ -154,7 +145,7 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 			pGap={new Pixel(50,5)}
 		>
 
-			<DuoCol>
+			<DivCol>
 
 				<FloatingPanel
 					pMove="SlideInRight"
@@ -196,9 +187,9 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 				</FloatingPanel>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol>
+			<DivCol>
 
 				<FloatingPanel
 					pMove="SlideInLeft"
@@ -222,19 +213,19 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 				</FloatingPanel>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		Service
 		id="secServiceCost"
 		pBg={new ElemBg(Colors.Gray5)}
@@ -358,7 +349,7 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 		</GlassCard>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -366,7 +357,7 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 
 
-	<ESec
+	<EmoSec
 		hidden
 		id="pharmacy-current-works"
 		pBg={new ElemBg(Colors.WhiteOff)}
@@ -448,7 +439,7 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 		</Grid>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -456,7 +447,7 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 
 
-	<ESec
+	<EmoSec
 		hidden
 		id="overview"
 		pBg={new ElemBg(Colors.WhiteOff)}
@@ -478,13 +469,13 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 			pDesc="أكبر مخاطرة في ترخيص الصيدليات أن يتم اختيار محل غير مطابق ثم تظهر المشكلة عند المعاينة الأولى. لذلك يتم التعامل مع الترخيص كقرار فني وإجرائي يبدأ بفحص الموقع، وليس مجرد تجميع مستندات وإرسال طلب."
 		/>
 
-		<DuoStr
+		<DivStr
 			pContentSize={new Size(new NumPer("92%", "96%"))}
 			pGap={new Pixel(28, 16)}
 			pPad={new Pixel(28, 18)}
 		>
 
-			<DuoCol
+			<DivCol
 				pBgColor={new ElemBg(Colors.Gray5)}
 				pBgOpacity={new Percent(100)}
 				pBlur={new Pixel(0)}
@@ -519,9 +510,9 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 				</FloatingPanel>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol Centered pBgColor={new ElemBg(Colors.SkyLite)}>
+			<DivCol Centered pBgColor={new ElemBg(Colors.SkyLite)}>
 
 				<RespImg
 					pImg={new EmoMediaData(
@@ -542,19 +533,19 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 					pRadius="18px"
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec id="conditions" pBg={new ElemBg(Colors.Gray5)}>
+
+
+	<EmoSec id="conditions" pBg={new ElemBg(Colors.Gray5)}>
 
 		<CircleGlow
 			pColor="rgba(215,245,140,.52)"
@@ -585,14 +576,14 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 			pTopic4={new Topic("رابعا: بعد المعاينة الثانية", "يتم التحقق من استيفاء باقي المستندات المطلوبة قبل إصدار ترخيص الصيدلية.")}
 		/>
 
-		<DuoStr
+		<DivStr
 			id="inspection"
 			pContentSize={new Size(new NumPer("92%", "96%"))}
 			pGap={new Pixel(28, 18)}
 			pPad={new Pixel(36, 18)}
 		>
 
-			<DuoCol pBgColor={new ElemBg(Colors.BlackOff)}>
+			<DivCol pBgColor={new ElemBg(Colors.BlackOff)}>
 
 				<BadgeFrame
 					pBadge="طالب الترخيص"
@@ -617,9 +608,9 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 				</BadgeFrame>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol Centered pBgColor={new ElemBg(Colors.SkyLite)}>
+			<DivCol Centered pBgColor={new ElemBg(Colors.SkyLite)}>
 
 				<RespImg
 					pImg={new EmoMediaData(
@@ -637,18 +628,18 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 					pText={Text.Body.Centered.OfText("شروط المعاينة الأولى واجبة التحقق ولا بدائل لها غالبًا؛ فإذا لم تتحقق المسافة أو المساحة أو الارتفاع مع عدم وجود إمكانية علاج، قد يتم رفض الطلب مباشرة بعد المعاينة الأولى.")}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-		<DuoStr
+		<DivStr
 			pBg={new ElemBg(Colors.WhiteOff)}
 			pContentSize={new Size(new NumPer("92%", "96%"))}
 			pGap={new Pixel(28, 18)}
 			pPad={new Pixel(36, 18)}
 		>
 
-			<DuoCol pBgColor={new ElemBg(Colors.SkyLite)}>
+			<DivCol pBgColor={new ElemBg(Colors.SkyLite)}>
 
 				<EmoList
 					pWidth={new RespString("100%", "100%")}
@@ -664,9 +655,9 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 					]}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol pBgColor={new ElemBg(Colors.Gray1)}>
+			<DivCol pBgColor={new ElemBg(Colors.Gray1)}>
 
 				<EmoList
 					pWidth={new RespString("100%", "100%")}
@@ -685,11 +676,11 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 					]}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -717,7 +708,7 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 
 
-	<ESec id="documents" pBg={new ElemBg(Colors.SkyLite)}>
+	<EmoSec id="documents" pBg={new ElemBg(Colors.SkyLite)}>
 
 		<SecTitle
 			Gray2
@@ -725,13 +716,13 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 			pDesc="ينقسم ملف الترخيص إلى مستندات أساسية يتم تقديمها مع طلب الترخيص، ومستندات استكمال بعد المعاينة الثانية وقبل إصدار الترخيص النهائي."
 		/>
 
-		<DuoStr
+		<DivStr
 			pContentSize={new Size(new NumPer("92%", "96%"))}
 			pGap={new Pixel(28, 18)}
 			pPad={new Pixel(36, 18)}
 		>
 
-			<DuoCol pBgColor={new ElemBg(Colors.WhiteOff)}>
+			<DivCol pBgColor={new ElemBg(Colors.WhiteOff)}>
 
 				<TiltCard
 					pBg={Colors.WhiteOff}
@@ -759,9 +750,9 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 				</TiltCard>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol pBgColor={new ElemBg(Colors.WhiteOff)}>
+			<DivCol pBgColor={new ElemBg(Colors.WhiteOff)}>
 
 				<TiltCard
 					pBg={Colors.WhiteOff}
@@ -795,19 +786,19 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 				</TiltCard>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec id="procedures" pBg={new ElemBg(Colors.WhiteOff)}>
+
+
+	<EmoSec id="procedures" pBg={new ElemBg(Colors.WhiteOff)}>
 
 		<SvgDots
 			pColor="rgba(50,143,232,.12)"
@@ -930,7 +921,7 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -938,7 +929,7 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 
 
-	<ESec id="secValidity" pBg={new ElemBg(Colors.SkyLite)}>
+	<EmoSec id="secValidity" pBg={new ElemBg(Colors.SkyLite)}>
 
 		<SecTitle Gray1 pTitle="صلاحية ترخيص الصيدلية بعد إصداره" />
 
@@ -965,7 +956,7 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 		</GlassCard>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -973,7 +964,7 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 
 
-	<ESec id="faq" pBg={new ElemBg(Colors.Gray5)}>
+	<EmoSec id="faq" pBg={new ElemBg(Colors.Gray5)}>
 
 		<SecTitle
 			BistageLite
@@ -1033,7 +1024,7 @@ import { Hero, PharmacyWorkCard, Price, PriceCard, ThemedPriceCardHz, ThemedPric
 
 		</EmoFaq>
 
-	</ESec>
+	</EmoSec>
 
 
 

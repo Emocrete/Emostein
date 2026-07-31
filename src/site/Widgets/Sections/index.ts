@@ -2,17 +2,13 @@ export { AddCss } from "./FreeHeroMotion";
 
 export { BuildFreeHeroMotionPoints } from "./FreeHeroMotion";
 
-export { default as DuoCol } from "./DuoCol.astro";
+export { default as DivCol } from "./DivCol.astro";
 
-export { default as DuoStr } from "./DuoStrip.astro";
-
-export { default as DuoStrip } from "./DuoStrip.astro";
+export { default as DivStr } from "./DivStr.astro";
 
 export { default as EmoFaq } from "./EmoFaq.astro";
 
-export { default as EmoSection } from "./EmoSection.astro";
-
-export { default as ESec } from "./EmoSection.astro";
+export { default as EmoSec } from "./EmoSec.astro";
 
 export { default as FaqItem } from "./FaqItem.astro";
 
@@ -116,9 +112,7 @@ export { GetDistanceP } from "./FreeHeroMotion";
 
 export { default as Hero } from "./Hero.astro";
 
-export { default as IndexSec } from "./IndexSection.astro";
-
-export { default as IndexSection } from "./IndexSection.astro";
+export { default as IndexSec } from "./IndexSec.astro";
 
 export { MovingKeyPoint } from "./FreeHeroMotion";
 

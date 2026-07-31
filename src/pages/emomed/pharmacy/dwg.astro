@@ -1,8 +1,12 @@
 ---
-import { Align, Colors, ElemBg, EmoMediaData, HoverColors, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Badge, CardsGr, DuoCol, DuoStr, EmoBtn, EmoCall, EmoContactStrip, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, PhDwgMonthlyOffer, PriceCard, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, RetailDwgMonthlyOffer, SecTitle, ThemedPriceCardHz, ThemedPriceCardVr, VrStack } from "@/Widgets";
-import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
+import { Badge, EmoCall, Emograph, EmoList, SecTitle, VrStack } from "@/Widgets/Comp";
+import { EmoGallery, RespImg } from "@/Widgets/Media";
+import { PhDwgMonthlyOffer } from "@/Widgets/Offers";
+import { ThemedPriceCardHz } from "@/Widgets/Prices";
+import { DivCol, DivStr, EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStr } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
 ---
 
 
@@ -85,7 +89,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec data-port-only>
+	<EmoSec data-port-only>
 
 		<Badge
 			pYears={6}
@@ -94,7 +98,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDurationText="خلال يوم واحد"
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -110,7 +114,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec id="secDwgStages">
+	<EmoSec id="secDwgStages">
 
 		<SecTitle
 			SkyLite
@@ -118,13 +122,13 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="يتم تقديم الرسم الهندسي للصيدلية مرتين ، أحدهما يرسل كمرفق بطلب ترخيص الصيدلية عند التقديم ، والثاني يقدم كنسخة أخيرة مطابقة للواقع النهائي الذي سيتم تشغيل الصيدلية عليه"
 		/>
 
-		<DuoStr
+		<DivStr
 			pContentSize={new Size(new NumPer("90%", "95%"))}
 			pGap={new Pixel(40, 20)}
 			pPad={new Pixel(40,20)}
 		>
 
-			<DuoCol pBgColor={new ElemBg(Colors.Gray1)} pPad={new Pixel(30, 10)}>
+			<DivCol pBgColor={new ElemBg(Colors.Gray1)} pPad={new Pixel(30, 10)}>
 
 				<EmoList
 					pTitle={Text.H3.Centered.OfText("الرسم الهندسي للمعاينة الأولى")}
@@ -137,28 +141,28 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 					pWidth={new RespString("600px","auto")}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol pBgColor={new ElemBg(Colors.Gray1)} pPad={new Pixel(30, 10)}>
+			<DivCol pBgColor={new ElemBg(Colors.Gray1)} pPad={new Pixel(30, 10)}>
 
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("الرسم الهندسي للمعاينة الثانية")}
 					pText={Text.Body.OfText("يحتوي الرسم الهندسي للمعاينة الثانية للصيدلية على نفس عناصر الرسم الهندسي للمعاينة الأولى ، ولكن بما يطابق الوضع والأبعاد النهائية للصيدلية بعد اكتمال أعمال التشطيبات والتعديلات التي قد ينفذها الصيدلي صاحب الترخيص مثل إضافة حمام أو معمل أو كليهما .")}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec id="secDwgSpecs">
+
+
+	<EmoSec id="secDwgSpecs">
 
 		<SecTitle
 			Sky
@@ -166,13 +170,13 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDesc="يجب أن يتضمن الرسم الهندسي لترخيص الصيدلية عدة عناصر رئيسية لتوصيف مقر الصيدلية ، حيث يوضح الرسم الهندسي للمعاينة الأولى مدى استيفاء مقر الصيدلية للشروط القانونية المطلوبة لترخيص الصيدليات وهي ( المسافة - المساحة - الارتفاع ) ، وبناءا على محتوى الرسم الهندسي يتم عمل المعاينة الأولى للصيدلية وتحديد مدى صلاحية الموقع المبدئية لفتح صيدلية . ويوضح الرسم الهندسي للمعاينة الثانية مدى استيفاء المقر للشروط الصحية الخاصة بحوض المعمل والحمام إن وجد"
 		/>
 
-		<DuoStr
+		<DivStr
 			id="secDwgTypes"
 			pContentSize={new Size(new NumPer("90%", "95%"))}
 			pGap={new Pixel(40, 20)}
 		>
 
-			<DuoCol Centered pPad={new Pixel(40, 20)}>
+			<DivCol Centered pPad={new Pixel(40, 20)}>
 
 				<RespImg
 					pImg={new EmoMediaData(
@@ -185,9 +189,9 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 				)}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol Centered pPad={new Pixel(40, 20)}>
+			<DivCol Centered pPad={new Pixel(40, 20)}>
 
 				<EmoList
 					pWidth={new RespString("620px", "320px")}
@@ -203,17 +207,17 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 				]}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-		<DuoStr
+		<DivStr
 			id="secDwgTypes"
 			pContentSize={new Size(new NumPer("90%", "95%"))}
 			pGap={new Pixel(40, 20)}
 		>
 
-			<DuoCol Centered pPad={new Pixel(40, 20)}>
+			<DivCol Centered pPad={new Pixel(40, 20)}>
 
 				<EmoList
 					pWidth={new RespString("620px", "320px")}
@@ -229,9 +233,9 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 				]}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol Centered pPad={new Pixel(40, 20)}>
+			<DivCol Centered pPad={new Pixel(40, 20)}>
 
 				<RespImg
 					pImg={new EmoMediaData(
@@ -244,17 +248,17 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			)}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-		<DuoStr
+		<DivStr
 			id="secDwgTypes"
 			pContentSize={new Size(new NumPer("90%", "95%"))}
 			pGap={new Pixel(40, 20)}
 		>
 
-			<DuoCol Centered pPad={new Pixel(40, 20)}>
+			<DivCol Centered pPad={new Pixel(40, 20)}>
 
 				<RespImg
 					pImg={new EmoMediaData(
@@ -267,9 +271,9 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 				)}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol Centered pPad={new Pixel(40, 20)}>
+			<DivCol Centered pPad={new Pixel(40, 20)}>
 
 				<EmoList
 					pWidth={new RespString("620px", "320px")}
@@ -285,17 +289,17 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 				]}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-		<DuoStr
+		<DivStr
 			id="secDwgTypes"
 			pContentSize={new Size(new NumPer("90%", "95%"))}
 			pGap={new Pixel(40, 20)}
 		>
 
-			<DuoCol Centered pPad={new Pixel(40, 20)}>
+			<DivCol Centered pPad={new Pixel(40, 20)}>
 
 				<EmoList
 					pWidth={new RespString("620px", "320px")}
@@ -311,9 +315,9 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 				]}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol Centered pPad={new Pixel(40, 20)}>
+			<DivCol Centered pPad={new Pixel(40, 20)}>
 
 				<RespImg
 					pImg={new EmoMediaData(
@@ -326,25 +330,25 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 				)}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec id="secSamples">
+
+
+	<EmoSec id="secSamples">
 
 		<SecTitle BistageLite pTitle="نماذج رسم هندسي لصيدلية" />
 
 		<EmoGallery pFolder="/Media/Emomed/Pharmacy/Dwg/Samples" />
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -352,11 +356,11 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec Service>
+	<EmoSec Service>
 
 		<SecTitle BistageLite pTitle="خدمات الرسم الهندسي للصيدليات" />
 
-		<EmoStrip pHzAlign={Align.Center} pVrAlign={Align.Center}>
+		<EmoStr pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 			<VrStack
 				pPad={new Pixel(50,20)}
@@ -432,9 +436,9 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 			</VrStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
 
 

@@ -1,8 +1,10 @@
 ---
-import { Align, Colors, ElemBg, NumPer, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Hero, HzStack, IncLineSep, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, SecTitle, Tree, VrStack, YTPlayer } from "@/Widgets";
-
+import { CardsGr } from "@/Widgets/Cards";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { EmoSec, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStr } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, NumPer, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
 
 
@@ -30,6 +32,12 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph, EmoLi
 	pDescr="دليل تفصيلي لتكلفة ترخيص المحلات التجارية في مصر، يشمل رسوم المعاينة والترخيص والعوامل التي تغير التكلفة والمستندات والبنود الفنية التي تؤثر على إجمالي المصروفات."
 >
 
+
+
+
+
+
+
 	<Hero
 		pTitle="تكلفة ترخيص محل تجاري"
 		pDesc="دليل عملي لفهم الرسوم الرسمية والمصروفات الفنية والبنود التي تجعل تكلفة ترخيص محل تختلف من نشاط إلى آخر ومن موقع إلى آخر"
@@ -47,19 +55,29 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph, EmoLi
 
 	</Hero>
 
-	<ESec
+
+
+
+
+
+
+	<EmoSec
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = {`--StripBg:${Colors.GreenLite};`}
 			pTitle="تكلفة ترخيص المحل ليست رقمًا واحدًا"
 			pDesc="الرقم النهائي يتكون من رسوم حكومية، ومعاينات، ومستندات، وتجهيزات فنية، وأتعاب إعداد الملف، لذلك لا يصح تقدير التكلفة من مساحة المحل وحدها"
-			style={`--StripBg:${Colors.GreenLite};`}
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack>
 
@@ -83,23 +101,33 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph, EmoLi
 
 			</VrStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
-	<ESec
+
+
+
+
+
+
+	<EmoSec
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = {`--StripBg:${Colors.Gray5};`}
 			pTitle="ما الذي تقوله القواعد الرسمية عن الرسوم؟"
 			pDesc="القاعدة العامة أن الرسوم تتغير حسب الموقع والمساحة والنشاط، لذلك الصفحة لا تقدم رقمًا نهائيًا لكل محل، بل طريقة قراءة التكلفة"
-			style={`--StripBg:${Colors.Gray5};`}
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Gray1)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1180px", "100%")}
@@ -113,23 +141,33 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph, EmoLi
 				pTopic4={new Topic("رسوم مرتبطة بالحالة", "المحل القائم، أو غير المستوفي، أو طالب تعديل نشاط، أو طالب تجديد أو نقل ترخيص قد لا يتحرك بنفس تكلفة محل جديد كامل الاستيفاء.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
-	<ESec
+
+
+
+
+
+
+	<EmoSec
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = {`--StripBg:${Colors.Sky};`}
 			pTitle="العوامل التي تغيّر تكلفة الرخصة"
 			pDesc="نفس النشاط قد يدفع رقمًا مختلفًا تمامًا إذا تغيرت المساحة أو الموقع أو درجة الخطورة أو حالة المستندات"
-			style={`--StripBg:${Colors.Sky};`}
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<EmoList
 				pWidth={new RespString("980px", "100%")}
@@ -147,23 +185,33 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph, EmoLi
 				]}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
-	<ESec
+
+
+
+
+
+
+	<EmoSec
 		pBg={new ElemBg(Colors.Creamy)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = {`--StripBg:${Colors.BistageDark};`}
 			pTitle="طريقة عملية لتقدير التكلفة قبل التقديم"
 			pDesc="لا تبدأ بالسؤال عن رقم الرخصة فقط، بل ابنِ تقديرًا من خمس طبقات"
-			style={`--StripBg:${Colors.BistageDark};`}
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Creamy)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack>
 
@@ -188,23 +236,33 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph, EmoLi
 
 			</VrStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
-	<ESec
+
+
+
+
+
+
+	<EmoSec
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = {`--StripBg:${Colors.SkyLite};`}
 			pTitle="أمثلة تقريبية لقراءة التكلفة"
 			pDesc="الأرقام التالية ليست تسعيرة رسمية، لكنها طريقة تفكير تساعدك على تقدير اتجاه التكلفة قبل المعاينة"
-			style={`--StripBg:${Colors.SkyLite};`}
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -228,23 +286,33 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph, EmoLi
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
-	<ESec
+
+
+
+
+
+
+	<EmoSec
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = {`--StripBg:${Colors.Gray4};`}
 			pTitle="المستندات التي تؤثر على التكلفة"
 			pDesc="كل مستند ناقص قد يتحول إلى تكلفة وقت أو توكيل أو استخراج أو تعديل أو إعادة تقديم"
-			style={`--StripBg:${Colors.Gray4};`}
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Gray1)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<EmoList
 				pWidth={new RespString("980px", "100%")}
@@ -260,23 +328,33 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph, EmoLi
 				]}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
-	<ESec
+
+
+
+
+
+
+	<EmoSec
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = {`--StripBg:${Colors.OrangeLite};`}
 			pTitle="الأخطاء التي ترفع التكلفة"
 			pDesc="أغلب الزيادات لا تأتي من الرسم الرسمي فقط، بل من إعادة الشغل بسبب ملف غير محسوب"
-			style={`--StripBg:${Colors.OrangeLite};`}
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1180px", "100%")}
@@ -290,23 +368,33 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph, EmoLi
 				pTopic4={new Topic("عدم فصل الرسوم عن الأتعاب", "اطلب دائمًا تفصيلًا واضحًا بين رسوم حكومية، مستندات، رسومات، تجهيزات، وأتعاب متابعة حتى لا تختلط البنود.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
-	<ESec
+
+
+
+
+
+
+	<EmoSec
 		pBg={new ElemBg(Colors.SkyLite)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = {`--StripBg:${Colors.BlackOff};`}
 			pTitle="متى تحتاج مهندسًا قبل تقديم الطلب؟"
 			pDesc="وجود مهندس لا يعني زيادة غير لازمة، بل يمنع أحيانًا تكلفة إعادة التعديل بعد المعاينة"
-			style={`--StripBg:${Colors.BlackOff};`}
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.SkyLite)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.SkyLite)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack>
 
@@ -336,23 +424,33 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph, EmoLi
 
 			</VrStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
-	<ESec
+
+
+
+
+
+
+	<EmoSec
 		pBg={new ElemBg(Colors.BlackOff)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = {`--StripBg:${Colors.GreenLite};`}
 			pTitle="اطلب تقدير تكلفة ترخيص محلك قبل البداية"
 			pDesc="أرسل نوع النشاط، مساحة المحل، موقعه، وحالة المستندات، وسيتم تحديد البنود التي تحتاج مراجعة قبل فتح ملف الترخيص"
-			style={`--StripBg:${Colors.GreenLite};`}
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.BlackOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack>
 
@@ -366,39 +464,49 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph, EmoLi
 
 			</VrStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
-	<ReadAlso
 
->
 
-	<ReadAlsoItem
-		pTitle="استخراج ترخيص محل تجاري"
-		pDesc="خدمات استخراج ترخيص محل تجاري، الأوراق المطلوبة، إجراءات الترخيص، الرسومات الهندسية، وقيمة خدمة متابعة الترخيص."
-		pHref="/emoperm/retail/general"
-	/>
 
-	<ReadAlsoItem
-		pTitle="مستندات ترخيص محل تجاري"
-		pDesc="مستندات ترخيص محل تجاري"
-		pHref="/emoperm/retail/general/doc"
-	/>
 
-	<ReadAlsoItem
-		pTitle="إجراءات ترخيص محل تجاري"
-		pDesc="إجراءات ترخيص محل تجاري"
-		pHref="/emoperm/retail/general/proc"
-	/>
 
-	<ReadAlsoItem
-		pTitle="شروط ترخيص محل تجاري"
-		pDesc="شروط ترخيص محل تجاري"
-		pHref="/emoperm/retail/general/cond"
-	/>
 
-</ReadAlso>
+	<ReadAlso>
+
+		<ReadAlsoItem
+			pTitle="استخراج ترخيص محل تجاري"
+			pDesc="خدمات استخراج ترخيص محل تجاري، الأوراق المطلوبة، إجراءات الترخيص، الرسومات الهندسية، وقيمة خدمة متابعة الترخيص."
+			pHref="/emoperm/retail/general"
+		/>
+
+		<ReadAlsoItem
+			pTitle="مستندات ترخيص محل تجاري"
+			pDesc="مستندات ترخيص محل تجاري"
+			pHref="/emoperm/retail/general/doc"
+		/>
+
+		<ReadAlsoItem
+			pTitle="إجراءات ترخيص محل تجاري"
+			pDesc="إجراءات ترخيص محل تجاري"
+			pHref="/emoperm/retail/general/proc"
+		/>
+
+		<ReadAlsoItem
+			pTitle="شروط ترخيص محل تجاري"
+			pDesc="شروط ترخيص محل تجاري"
+			pHref="/emoperm/retail/general/cond"
+		/>
+
+	</ReadAlso>
+
+
+
+
+
+
 
 	<RelServices>
 
@@ -421,5 +529,11 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph, EmoLi
 		/>
 
 	</RelServices>
+
+
+
+
+
+
 
 </BLayout>

@@ -1,15 +1,15 @@
 ---
-import { Align, Angle, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Badge, CardsGr, DuoCol, DuoStr, EmoCall, EmoContactStrip, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStatsStrip, EmoStrip, ESec, FaqItem, FreeHero, Grid, Hero, HzStack, PriceCard, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
+import { CardsGr } from "@/Widgets/Cards";
+import { Badge, EmoCall, Emograph, EmoList, Grid, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { RespImg } from "@/Widgets/Media";
+import { PriceCard } from "@/Widgets/Prices";
+import { DivCol, DivStr, EmoFaq, EmoSec, FaqItem, FreeHero, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard, LinePath, Ribbon, SvgDots, TiltCard, WaveBottom } from "@/Widgets/Shapes";
+import { EmoStr } from "@/Widgets/Strips";
+import { Align, Angle, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 
-
-
-
-
-
-	const cMedia = "/Media/Emocrete/Supervision/Construction/";
+const cMedia = "/Media/Emocrete/Supervision/Construction/";
 	const cDark = "#172331";
 	const cInk = "#111820";
 	const cSteel = "#20384C";
@@ -72,7 +72,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 
 
-	<ESec
+	<EmoSec
 		id="Intro"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -85,8 +85,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDesc="الإشراف الهندسي على البناء ليس حضورًا شكليًا في الموقع، بل نظام استلام ومراجعة قبل وأثناء وبعد البنود الحساسة، حتى لا يتحول الخطأ الصغير في النجارة أو الحدادة أو الصب إلى تكلفة علاج كبيرة بعد التنفيذ."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(30, 16)} pPad={new Pixel(0, 0)}>
 
@@ -120,17 +123,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="Tasks"
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
@@ -143,8 +146,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDesc="صفحة الإشراف القديمة ركزت على ثلاث مهام أساسية في الهيكل الخرساني: النجارة المسلحة، الحدادة المسلحة، وصب الخرسانة والفرمجة. هنا يتم الحفاظ على نفس المحور مع توضيح قيمته التنفيذية للمالك."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Gray1)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(25, 16)} pPad={new Pixel(0, 0)}>
 
@@ -172,17 +178,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 				pTopic3={new Topic("صب الخرسانة والفرمجة", "مراقبة جودة الخرسانة المصنعة بالموقع أو الموردة للصب، والتحقق من الالتزام بالأصول الهندسية المتبعة أثناء عملية صب الخرسانة لضمان عدم وجود عيوب بعد فك الشدات.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="Why"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -195,8 +201,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDesc="القيمة الحقيقية للإشراف لا تظهر عندما يكون كل شيء يسير بصورة جيدة، بل تظهر عند أول تعارض بين الرسومات والموقع، أو عند محاولة تمرير بند غير مطابق، أو عند صب عنصر قبل استلامه هندسيًا."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -211,17 +220,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 				pTopic6={new Topic("متابعة المرحلة لا العمال فقط", "الإشراف لا يعني مراقبة عدد العمال، بل استلام كل مرحلة وفق هدفها الفني قبل دخول المرحلة التالية.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="Scope"
 		pBg={new ElemBg(Colors.Creamy)}
 		pHzAlign={Align.Center}
@@ -234,8 +243,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDesc="النطاق الأساسي هنا يركز على أعمال البناء والهيكل الخرساني، بداية من الحفر والمحاور، مرورًا بالأساسات والأعمدة والأسقف، وحتى متابعة الصب والاستلام الفني للبنود الحساسة."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Creamy)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(28, 16)} pPad={new Pixel(0, 0)}>
 
@@ -275,24 +287,24 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<EmoStrip
+
+
+	<EmoStr
 		id="Foundations"
 		pBg={new ElemBg(Colors.Gray5)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.Gray5)}
 			pSize={new Size(new NumPer(1200, "calc(100% - 24px)"), new NumPer("auto", "auto"))}
 			pHzAlign={Align.Center}
@@ -313,7 +325,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<EmoList
 			pWidth={new RespString("1120px", "100%")}
@@ -352,7 +364,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			]}
 		/>
 
-	</EmoStrip>
+	</EmoStr>
 
 
 
@@ -360,14 +372,14 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 
 
-	<EmoStrip
+	<EmoStr
 		id="Columns"
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.SkyLite)}
 			pSize={new Size(new NumPer(1200, "calc(100% - 24px)"), new NumPer("auto", "auto"))}
 			pHzAlign={Align.Center}
@@ -388,7 +400,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<EmoList
 			pWidth={new RespString("1120px", "100%")}
@@ -417,7 +429,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			]}
 		/>
 
-	</EmoStrip>
+	</EmoStr>
 
 
 
@@ -425,14 +437,14 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 
 
-	<EmoStrip
+	<EmoStr
 		id="Slabs"
 		pBg={new ElemBg(Colors.Gray5)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.Gray5)}
 			pSize={new Size(new NumPer(1200, "calc(100% - 24px)"), new NumPer("auto", "auto"))}
 			pHzAlign={Align.Center}
@@ -453,7 +465,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<EmoList
 			pWidth={new RespString("1120px", "100%")}
@@ -482,7 +494,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			]}
 		/>
 
-	</EmoStrip>
+	</EmoStr>
 
 
 
@@ -490,7 +502,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 
 
-	<ESec
+	<EmoSec
 		id="DecisionMatrix"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -503,8 +515,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDesc="نظام الزيارة يناسب مراحل استلام محددة، بينما المتابعة المستمرة أو النسبة تناسب المواقع التي تحتاج حضورًا متكررًا بسبب سرعة التنفيذ أو تعقيد البنود أو ضعف خبرة فريق التنفيذ."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -517,17 +532,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 				pTopic4={new Topic("مهندس مقيم", "يناسب المشروعات الكبيرة أو الحساسة التي تتطلب وجودًا يوميًا في الموقع، وهذا نطاق مختلف عن إشراف الزيارات على مبنى صغير أو متوسط.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="Pricing"
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
@@ -540,8 +555,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDesc="الأرقام التالية مأخوذة من محتوى الصفحة الأصلية وتعرض كنقطة بداية لفهم نظام التسعير، مع ضرورة تثبيت السعر النهائي بعد معرفة موقع المشروع ومساحته وعدد مراحل الاستلام المطلوبة."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Gray1)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -553,17 +571,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 				pTopic3={new Topic("ما الذي يغير السعر؟", "الموقع، مساحة المبنى، عدد الأدوار، سرعة التنفيذ، تداخل البنود، حالة الرسومات، خبرة المقاول، وعدد المرات التي يحتاج فيها البند إلى استلام أو إعادة مراجعة.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="BeforeStart"
 		pBg={new ElemBg(Colors.Creamy)}
 		pHzAlign={Align.Center}
@@ -576,8 +594,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDesc="حتى تكون الزيارة مؤثرة وليست مجرد مشاهدة للموقع، يجب توفير الحد الأدنى من المستندات والمعلومات التي تسمح بمراجعة الأعمال على أساس هندسي واضح."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Creamy)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(28, 16)} pPad={new Pixel(0, 0)}>
 
@@ -617,17 +638,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="Mistakes"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -640,8 +661,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDesc="هذه ليست قائمة نظرية، بل أمثلة عملية من طبيعة أعمال البناء التي تتكرر في مواقع كثيرة عندما يغيب الاستلام الفني أو يتم الاعتماد على خبرة الصنايعي وحدها."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -656,17 +680,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 				pTopic6={new Topic("تعديلات بدون رجوع للمصمم", "بعض قرارات الموقع تبدو بسيطة لكنها قد تؤثر على المسار الإنشائي للأحمال، ويجب تمييزها قبل اعتمادها. ")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="Reports"
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
@@ -679,8 +703,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDesc="الملاحظة الجيدة لا تقول إن هناك خطأ فقط، بل توضح موضع الخطأ، درجة تأثيره، وطريقة التصرف: قبول، تعديل، إعادة تنفيذ، أو الرجوع للمصمم قبل القرار."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Gray1)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -693,17 +720,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 				pTopic4={new Topic("توقيت المتابعة", "بعد علاج الملاحظة قد يحتاج البند إلى زيارة استلام ثانية أو صورة متابعة أو تأجيل الصب حتى التأكد من التنفيذ الصحيح.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="Limits"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -716,8 +743,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDesc="توضيح الحدود يحمي العميل والمهندس والمقاول. الزيارة لا تعني أن المهندس كان حاضرًا في كل دقيقة تنفيذ، لكنها تعني أنه استلم أو راجع مرحلة محددة في توقيت محدد بناءً على ما ظهر له بالموقع والرسومات المتاحة."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(28, 16)} pPad={new Pixel(0, 0)}>
 
@@ -755,17 +785,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="Compare"
 		pBg={new ElemBg(Colors.Creamy)}
 		pHzAlign={Align.Center}
@@ -778,8 +808,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDesc="الهيكل الخرساني أخطاؤه غالبًا مخفية ومكلفة، أما التشطيبات فأخطاؤها أكثر ظهورًا لكنها مؤثرة في الجودة النهائية والتكلفة. لذلك يتم فصل الخدمتين حتى يعرف العميل ما يطلبه بدقة."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Creamy)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -791,9 +824,9 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 				pTopic3={new Topic("نقطة الاختلاف", "في البناء، المشكلة قد تختفي داخل الخرسانة. في التشطيبات، المشكلة قد تظهر في الشكل أو التشغيل أو الصيانة. لذلك تختلف طريقة الاستلام ومواعيد الزيارات.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1032,7 +1065,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 
 
-	<ESec
+	<EmoSec
 		id="ControlIdea"
 		pBg={new ElemBg(cDark)}
 		pBox={new Size(new NumPer("100%"), new NumPer("auto"))}
@@ -1049,7 +1082,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pColor2="rgba(50,143,232,.25)"
 		/>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg("transparent")}
 			pSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
 			pHzAlign={Align.Center}
@@ -1114,7 +1147,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 			</Grid>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<DoubleWave
 			pLoc={new Loc(new NumPer(0), new NumPer("calc(100% - 120px)", "calc(100% - 85px)"))}
@@ -1125,7 +1158,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pStroke="rgba(255,255,255,.45)"
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1133,7 +1166,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 
 
-	<DuoStr
+	<DivStr
 		id="OwnerEye"
 		pBg={new ElemBg(Colors.Gray1)}
 		pContentSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
@@ -1141,7 +1174,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 		pPad={new Pixel(70, 34)}
 	>
 
-		<DuoCol
+		<DivCol
 			pBgColor={new ElemBg(Colors.WhiteOff)}
 			pPad={new Pixel(44, 22)}
 			pHzAlign="Start"
@@ -1163,9 +1196,9 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 				pTopic3={new Topic("قرار قابل للتنفيذ", "تحديد ما يقبل موقعيًا وما يحتاج تعديلًا أو رجوعًا للمصمم.")}
 			/>
 
-		</DuoCol>
+		</DivCol>
 
-		<DuoCol
+		<DivCol
 			Centered
 			pBgColor={new ElemBg(cSteel)}
 			pPad={new Pixel(36, 20)}
@@ -1189,17 +1222,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 			</GlassCard>
 
-		</DuoCol>
+		</DivCol>
 
-	</DuoStr>
-
-
+	</DivStr>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="CoreTasks"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -1212,7 +1245,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDesc="الصفحة الأصلية كانت مبنية حول ثلاث مهام: النجارة المسلحة، الحدادة المسلحة، والصب. هنا نفس المحتوى معروض كمسار رقابي سريع يفهمه العميل قبل النزول للموقع."
 		/>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.WhiteOff)}
 			pSize={new Size(new NumPer("min(1240px, calc(100% - 24px))"), new NumPer("auto"))}
 			pHzAlign={Align.Center}
@@ -1280,17 +1313,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 			</Grid>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<DuoStr
+
+
+	<DivStr
 		id="Scope"
 		pBg={new ElemBg(Colors.Creamy)}
 		pContentSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
@@ -1304,7 +1337,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDesc="الإشراف على البناء هنا يركز على الهيكل الخرساني. أي تصميم جديد أو حصر تفصيلي أو إدارة يومية كاملة يحتاج اتفاقًا منفصلًا حتى لا تختلط المسؤوليات."
 		/>
 
-		<DuoCol
+		<DivCol
 			pBgColor={new ElemBg(Colors.WhiteOff)}
 			pPad={new Pixel(34, 20)}
 			pHzAlign="Start"
@@ -1327,9 +1360,9 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 					]}
 			/>
 
-		</DuoCol>
+		</DivCol>
 
-		<DuoCol
+		<DivCol
 			pBgColor={new ElemBg(Colors.WhiteOff)}
 			pPad={new Pixel(34, 20)}
 			pHzAlign="Start"
@@ -1352,17 +1385,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 					]}
 			/>
 
-		</DuoCol>
+		</DivCol>
 
-	</DuoStr>
-
-
+	</DivStr>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="Foundations"
 		pBg={new ElemBg(cDark)}
 		pHzAlign={Align.Center}
@@ -1378,14 +1411,14 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDot="#FAFAFA"
 		/>
 
-		<DuoStr
+		<DivStr
 			pBg={new ElemBg("transparent")}
 			pContentSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
 			pGap={new Pixel(28, 16)}
 			pPad={new Pixel(72, 34)}
 		>
 
-			<DuoCol
+			<DivCol
 				pBgColor={new ElemBg("rgba(255,255,255,.08)")}
 				pPad={new Pixel(36, 20)}
 				pHzAlign="Start"
@@ -1402,9 +1435,9 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 					pImg={new EmoMediaData("Img", cMedia, "FoundationLevel.webp", false, "استلام أعمال الأساسات", new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto")))}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol
+			<DivCol
 				pBgColor={new ElemBg(Colors.WhiteOff)}
 				pPad={new Pixel(32, 18)}
 				pHzAlign="Start"
@@ -1444,33 +1477,33 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 						]}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="Columns"
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
-		<DuoStr
+		<DivStr
 			pBg={new ElemBg("transparent")}
 			pContentSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
 			pGap={new Pixel(28, 16)}
 			pPad={new Pixel(72, 34)}
 		>
 
-			<DuoCol
+			<DivCol
 				Centered
 				pBgColor={new ElemBg(cSky)}
 				pPad={new Pixel(36, 20)}
@@ -1489,9 +1522,9 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 				</GlassCard>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol
+			<DivCol
 				pBgColor={new ElemBg(Colors.WhiteOff)}
 				pPad={new Pixel(32, 18)}
 				pHzAlign="Start"
@@ -1524,19 +1557,19 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 						]}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="Slabs"
 		pBg={new ElemBg(cDark)}
 		pHzAlign={Align.Center}
@@ -1552,14 +1585,14 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pColor2="rgba(215,245,140,.32)"
 		/>
 
-		<DuoStr
+		<DivStr
 			pBg={new ElemBg("transparent")}
 			pContentSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
 			pGap={new Pixel(28, 16)}
 			pPad={new Pixel(72, 34)}
 		>
 
-			<DuoCol
+			<DivCol
 				pBgColor={new ElemBg("rgba(255,255,255,.08)")}
 				pPad={new Pixel(36, 20)}
 				pHzAlign="Start"
@@ -1576,9 +1609,9 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 					pImg={new EmoMediaData("Img", cMedia, "SlabLevel.webp", false, "استلام أعمال السقف", new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto")))}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol
+			<DivCol
 				pBgColor={new ElemBg(Colors.WhiteOff)}
 				pPad={new Pixel(32, 18)}
 				pHzAlign="Start"
@@ -1611,19 +1644,19 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 						]}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="DecisionMatrix"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -1636,7 +1669,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDesc="نظام الزيارة يناسب الاستلامات المحددة، أما المتابعة الدورية أو النسبة فتناسب المواقع الأسرع أو الأكثر تداخلًا. المهم أن يكون النظام مناسبًا لسرعة الموقع لا مجرد رقم زيارات ثابت."
 		/>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.WhiteOff)}
 			pSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
 			pHzAlign={Align.Center}
@@ -1709,17 +1742,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 			</Grid>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="Pricing"
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
@@ -1732,7 +1765,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDesc="الأرقام التالية نقطة بداية للتسعير، والسعر النهائي يتثبت بعد معرفة الموقع والمساحة وعدد مراحل الاستلام وسرعة التنفيذ وحالة الرسومات."
 		/>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.Gray1)}
 			pSize={new Size(new NumPer("min(1120px, calc(100% - 24px))"), new NumPer("auto"))}
 			pHzAlign={Align.Center}
@@ -1771,17 +1804,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 				pTopic3={new Topic("النسبة تحتاج تعريف نطاق", "قبل الاتفاق يجب تحديد هل تشمل تقارير، مراجعة مستخلصات، حضور صب، أو مهام إضافية.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<DuoStr
+
+
+	<DivStr
 		id="BeforeStart"
 		pBg={new ElemBg(Colors.Creamy)}
 		pContentSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
@@ -1795,7 +1828,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDesc="الزيارة المؤثرة لا تكون مشاهدة عامة للموقع، بل مراجعة على رسومات ومعلومات واضحة وفي توقيت يسمح بعلاج الملاحظة قبل الصب أو الإغلاق."
 		/>
 
-		<DuoCol
+		<DivCol
 			pBgColor={new ElemBg(Colors.WhiteOff)}
 			pPad={new Pixel(34, 20)}
 			pHzAlign="Start"
@@ -1818,9 +1851,9 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 					]}
 			/>
 
-		</DuoCol>
+		</DivCol>
 
-		<DuoCol
+		<DivCol
 			pBgColor={new ElemBg(Colors.WhiteOff)}
 			pPad={new Pixel(34, 20)}
 			pHzAlign="Start"
@@ -1843,17 +1876,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 					]}
 			/>
 
-		</DuoCol>
+		</DivCol>
 
-	</DuoStr>
-
-
+	</DivStr>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="Mistakes"
 		pBg={new ElemBg(cDark)}
 		pHzAlign={Align.Center}
@@ -1866,7 +1899,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDesc="القائمة دي عملية وليست نظرية: أخطاء تتكرر في مواقع البناء عندما يغيب الاستلام الفني أو يتم الاعتماد على خبرة الصنايعي وحدها."
 		/>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg("transparent")}
 			pSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
 			pHzAlign={Align.Center}
@@ -1937,7 +1970,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 			</Grid>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<WaveBottom
 			pLoc={new Loc(new NumPer(0), new NumPer("calc(100% - 95px)", "calc(100% - 70px)"))}
@@ -1947,7 +1980,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pFill2="rgba(215,245,140,.24)"
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1955,7 +1988,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 
 
 
-	<DuoStr
+	<DivStr
 		id="ReportsAndLimits"
 		pBg={new ElemBg(Colors.Gray1)}
 		pContentSize={new Size(new NumPer("min(1220px, calc(100% - 24px))"), new NumPer("auto"))}
@@ -1969,7 +2002,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDesc="الإشراف بنظام الزيارة لا يعني وجود المهندس في كل دقيقة تنفيذ، لكنه يعني استلام أو مراجعة مرحلة محددة في توقيت محدد بناءً على ما ظهر في الموقع والرسومات المتاحة."
 		/>
 
-		<DuoCol
+		<DivCol
 			pBgColor={new ElemBg(Colors.WhiteOff)}
 			pPad={new Pixel(34, 20)}
 			pHzAlign="Start"
@@ -1987,9 +2020,9 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 				pTopic4={new Topic("توقيت المتابعة", "بعد العلاج قد يحتاج البند إلى زيارة ثانية أو صورة متابعة أو تأجيل الصب.")}
 			/>
 
-		</DuoCol>
+		</DivCol>
 
-		<DuoCol
+		<DivCol
 			pBgColor={new ElemBg(Colors.WhiteOff)}
 			pPad={new Pixel(34, 20)}
 			pHzAlign="Start"
@@ -2011,17 +2044,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 					]}
 			/>
 
-		</DuoCol>
+		</DivCol>
 
-	</DuoStr>
-
-
+	</DivStr>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="Compare"
 		pBg={new ElemBg(Colors.Creamy)}
 		pHzAlign={Align.Center}
@@ -2034,7 +2067,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 			pDesc="فصل الخدمتين مقصود؛ لأن طريقة الخطر وطريقة الاستلام مختلفة. الهيكل الخرساني أخطاؤه غالبًا مخفية ومكلفة، أما التشطيبات فأخطاؤها أكثر ظهورًا لكنها مؤثرة في الجودة والتشغيل والصيانة."
 		/>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.Creamy)}
 			pSize={new Size(new NumPer("min(1120px, calc(100% - 24px))"), new NumPer("auto"))}
 			pHzAlign={Align.Center}
@@ -2051,9 +2084,9 @@ import { BadgeFrame, BlurBlob, CircleGlow, DoubleWave, FloatingPanel, GlassCard,
 				pTopic3={new Topic("نقطة الاختلاف", "في البناء قد تختفي المشكلة داخل الخرسانة. في التشطيبات تظهر المشكلة في الشكل أو التشغيل أو الصيانة.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
 
 

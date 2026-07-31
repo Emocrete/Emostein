@@ -1,21 +1,19 @@
 ---
 import Header from "@/Header/Header.astro";
 import GoogleAnalytics from "./GoogleAnalytics.astro";
+import EmoFooter from "./Widgets/EmoFooter.astro";
+import SiteIntro from "./Widgets/Intro/SiteIntro.astro";
 import { type LayoutSchemaType, Schema } from "@/Schema";
 import { SeoText } from "@/SeoText";
 import OrientationVisibility from "@/Scripts/OrientationVisibility.astro";
 import Clarity from "@/Scripts/Clarity.astro";
-import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoContactStrip, EmoCoverageMapStrip, EmoList, EmoPipelineStrip, EmoRatingStrip, EmoStatsStrip, EmoStrip, ESec, Hero, IncLineSep, IndexSec, Tree, YTPlayer } from "@/Widgets";
-import EmoFooter from "@/Widgets/EmoFooter.astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
-import SiteIntro from "@/Widgets/Intro/SiteIntro.astro";
 import OpsVisitTracker from "@/Scripts/OpsVisitTracker.astro";
 import EmoReplayRecorder from "@/Scripts/EmoReplayRecorder.astro";
 import ClaritySessionIndexer from "@/Scripts/ClaritySessionIndexer.astro";
 import ReplayRuntime from "@/Scripts/ReplayRuntime.astro";
 import Moving from "@/Scripts/Moving.astro";
 import AutoContainerHeight from "@/Scripts/AutoContainerHeight.astro";
-
 
 export interface Props {
 	pTitle?: string;
@@ -215,18 +213,26 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 				
 				
 					<meta property="og:image" content={cPreviewImageUrl} />
-
+				
+				
+				
+				
+				
+				
+				
 					<meta property="og:image:alt" content={cPreviewImageMeta.Alt} />
-
-					{ cPreviewImageMeta.Width && <meta property="og:image:width" content={String(cPreviewImageMeta.Width)} /> }
-
-					{ cPreviewImageMeta.Height && <meta property="og:image:height" content={String(cPreviewImageMeta.Height)} /> }
 				
+					{ cPreviewImageMeta.Width &&
 				
+						<meta property="og:image:width" content={String(cPreviewImageMeta.Width)} />
 				
+					}
 				
+					{ cPreviewImageMeta.Height &&
 				
+						<meta property="og:image:height" content={String(cPreviewImageMeta.Height)} />
 				
+					}
 				
 					<meta property="og:image:secure_url" content={cPreviewImageUrl} />
 				
@@ -261,7 +267,13 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 				
 				
 					<meta name="twitter:image" content={cPreviewImageUrl} />
-
+				
+				
+				
+				
+				
+				
+				
 					<meta name="twitter:image:alt" content={cPreviewImageMeta.Alt} />
 				
 				
@@ -280,15 +292,27 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 			<meta name="google-site-verification" content="5mv4GuAj1jxBUrKh0glnhAlWEouDCWg3nC51R_WqmzY" />
 
-			{!cReplayMode && <GoogleAnalytics />}
+			{ !cReplayMode &&
 
-			{!cReplayMode && <Clarity />}
+				<GoogleAnalytics />
+
+			}
+
+			{ !cReplayMode &&
+
+				<Clarity />
+
+			}
 
 		</head>
 
 		<body style = " font-family : Cairo, system-ui, sans-serif ">
 
-			{cIsRealDomain && !cReplayMode && <EmoReplayRecorder />}
+			{ cIsRealDomain && !cReplayMode &&
+
+				<EmoReplayRecorder />
+
+			}
 
 			{ pIntro &&
 
@@ -395,11 +419,23 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 			<OrientationVisibility />
 
-			{cIsRealDomain && !cReplayMode && <OpsVisitTracker />}
+			{ cIsRealDomain && !cReplayMode &&
 
-			{cIsRealDomain && !cReplayMode && <ClaritySessionIndexer />}
+				<OpsVisitTracker />
 
-			{cIsRealDomain && !cReplayMode && <SpeedInsights />}
+			}
+
+			{ cIsRealDomain && !cReplayMode &&
+
+				<ClaritySessionIndexer />
+
+			}
+
+			{ cIsRealDomain && !cReplayMode &&
+
+				<SpeedInsights />
+
+			}
 
 		</body>
 

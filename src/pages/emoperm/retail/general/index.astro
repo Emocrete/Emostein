@@ -1,8 +1,10 @@
 ---
-import { Align, Angle, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { BottTriSep, Card, CardsGr, DataCard, EmoBtn, EmoCall, Emograph, EmoList, EmoStrip, ESec, Hero, HzStack, IncLineSep, IndexBtn, IndexSec, RelServiceItem, RelServices, Tree, VrStack, YTPlayer } from "@/Widgets";
-import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
+import { EmoCall, Emograph, EmoList, HzStack, IndexBtn, VrStack } from "@/Widgets/Comp";
+import { EmoGallery } from "@/Widgets/Media";
+import { EmoSec, Hero, IndexSec, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStr } from "@/Widgets/Strips";
+import { Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, Size, Text } from "@/TypesLib";
 import { number } from "astro:schema";
 ---
 
@@ -95,17 +97,17 @@ import { number } from "astro:schema";
 
 
 
-	<ESec id="secDoc">
+	<EmoSec id="secDoc">
 
-		<EmoStrip pBg={new ElemBg(Colors.Bistage)}>
+		<EmoStr pBg={new ElemBg(Colors.Bistage)}>
 
 			<Emograph pTitle={Text.H2.Centered.OfText("الأوراق المطلوبة لاستخراج رخصة محل تجاري")} />
 
-		</EmoStrip>
+		</EmoStr>
 
 		<HzStack pSize={new Size(new NumPer("90%","95%"),new NumPer(500,"auto"))}>
 
-			<EmoStrip pBg={new ElemBg(Colors.Gray1)} pSize={new Size(new NumPer("80%"),new NumPer(500,"auto"))}>
+			<EmoStr pBg={new ElemBg(Colors.Gray1)} pSize={new Size(new NumPer("80%"),new NumPer(500,"auto"))}>
 
 				<EmoList
 					pTitle={Text.H3.OfText("أولا: مستندات أساسية لجميع المحلات العامة:")}
@@ -122,9 +124,9 @@ import { number } from "astro:schema";
 
 				</EmoList>
 
-			</EmoStrip>
+			</EmoStr>
 
-			<EmoStrip pBg={new ElemBg(Colors.Gray1)} pSize={new Size(new NumPer("80%"),new NumPer(500,"auto"))}>
+			<EmoStr pBg={new ElemBg(Colors.Gray1)} pSize={new Size(new NumPer("80%"),new NumPer(500,"auto"))}>
 
 				<EmoList
 					pTitle={Text.H3.OfText("ثانيا: مستندات خاصة بالمطاعم والأنشطة الخاصة بالمأكولات والمشروبات")}
@@ -135,9 +137,9 @@ import { number } from "astro:schema";
 
 				</EmoList>
 
-			</EmoStrip>
+			</EmoStr>
 
-			<EmoStrip pBg={new ElemBg(Colors.Gray1)} pSize={new Size(new NumPer("80%"),new NumPer(500,"auto"))}>
+			<EmoStr pBg={new ElemBg(Colors.Gray1)} pSize={new Size(new NumPer("80%"),new NumPer(500,"auto"))}>
 
 				<EmoList pTitle={Text.H3.OfText("ثالثا: مستندات خاصة بمحال الأنشطة العامة والترفيهية")} pItems={	[
 				"صحيفة الحالة الجنائية"
@@ -145,11 +147,11 @@ import { number } from "astro:schema";
 
 				</EmoList>
 
-			</EmoStrip>
+			</EmoStr>
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -157,13 +159,13 @@ import { number } from "astro:schema";
 
 
 
-	<ESec id="secProc">
+	<EmoSec id="secProc">
 
-		<EmoStrip pBg={new ElemBg(Colors.Bistage)}>
+		<EmoStr pBg={new ElemBg(Colors.Bistage)}>
 
 			<Emograph pTitle={Text.H2.Centered.OfText("إجراءات ترخيص محل تجاري")} />
 
-		</EmoStrip>
+		</EmoStr>
 
 		<div class = " StepsWrap ">
 
@@ -281,7 +283,7 @@ import { number } from "astro:schema";
 
 		</div>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -289,16 +291,16 @@ import { number } from "astro:schema";
 
 
 
-	<ESec id="secDwg">
+	<EmoSec id="secDwg">
 
-		<EmoStrip pBg={new ElemBg(Colors.Bistage)}>
+		<EmoStr pBg={new ElemBg(Colors.Bistage)}>
 
 			<Emograph
 				pTitle={Text.H2.Centered.OfText("الرسم الهندسي لـترخيص المحلات التجارية")}
 				pText={Text.Body.Centered.OfText("يجب أن يتضمن الرسم الهندسي للمحل التجاري عدة عناصر رئيسية لتوصيف المحل وتوضيح مدى ملاءمته للمواصفات المطلوبة للنشاط الذي سيتم له ترخيص المحل التجاري.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<div class = " DrawingBlock ">
 
@@ -340,7 +342,7 @@ import { number } from "astro:schema";
 
 		</div>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -348,17 +350,17 @@ import { number } from "astro:schema";
 
 
 
-	<ESec id="DrawingSamples">
+	<EmoSec id="DrawingSamples">
 
-		<EmoStrip pBg={new ElemBg(Colors.OrangeDark)}>
+		<EmoStr pBg={new ElemBg(Colors.OrangeDark)}>
 
 			<Emograph pTitle={Text.H2.Centered.OfText("نماذج رسم هندسي لمحل تجاري")} />
 
-		</EmoStrip>
+		</EmoStr>
 
 		<EmoGallery pFolder="/Media/Emoperm/Retail/General/Dwg/Samples" />
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -366,16 +368,16 @@ import { number } from "astro:schema";
 
 
 
-	<ESec id="MainService">
+	<EmoSec id="MainService">
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray3)}>
+		<EmoStr pBg={new ElemBg(Colors.Gray3)}>
 
 			<Emograph
 				pTitle={Text.H2.Centered.OfText("استخراج ترخيص محل تجاري")}
 				pText={Text.Body.Centered.OfText("خدمة متابعة إجراءات استخراج ترخيص محل تجاري كوكيل")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<div class = " OfferWrap ">
 
@@ -539,7 +541,7 @@ import { number } from "astro:schema";
 
 		</div>
 
-	</ESec>
+	</EmoSec>
 
 
 

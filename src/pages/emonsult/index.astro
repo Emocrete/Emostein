@@ -1,7 +1,9 @@
 ---
-import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { DuoCol, DuoStr, EmoCall, EmoDet, Emograph, EmoList, ESec, GlassCard, Hero, HzStack, SecTitle, VrStack } from "@/Widgets";
+import { EmoCall, EmoDet, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { DivCol, DivStr, EmoSec, Hero } from "@/Widgets/Sections";
+import { GlassCard } from "@/Widgets/Shapes";
+import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
 ---
 
 
@@ -93,7 +95,7 @@ import { DuoCol, DuoStr, EmoCall, EmoDet, Emograph, EmoList, ESec, GlassCard, He
 
 
 
-	<ESec
+	<EmoSec
 		id="Certificates"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -106,13 +108,13 @@ import { DuoCol, DuoStr, EmoCall, EmoDet, Emograph, EmoList, ESec, GlassCard, He
 			pDesc="مستندات اعتماد مختصرة تثبت موقفًا هندسيًا محددًا داخل ملف ترخيص أو مرافق أو تعامل رسمي."
 		/>
 
-		<DuoStr
+		<DivStr
 			pContentSize={new Size(new NumPer("1180px", "calc(100% - 24px)"))}
 			pGap={new Pixel(26, 16)}
 			pPad={new Pixel(42, 18)}
 		>
 
-			<DuoCol
+			<DivCol
 				pBgColor={new ElemBg(Colors.SkyLite)}
 				pBgOpacity={new Percent(100)}
 				pPad={new Pixel(36, 22)}
@@ -137,9 +139,9 @@ import { DuoCol, DuoStr, EmoCall, EmoDet, Emograph, EmoList, ESec, GlassCard, He
 					pWidth="285px"
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol
+			<DivCol
 				pBgColor={new ElemBg(Colors.Gray1)}
 				pPad={new Pixel(36, 22)}
 				pGap={new Pixel(18, 12)}
@@ -159,19 +161,19 @@ import { DuoCol, DuoStr, EmoCall, EmoDet, Emograph, EmoList, ESec, GlassCard, He
 					]}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="Reports"
 		pBg={new ElemBg(Colors.Gray5)}
 		pHzAlign={Align.Center}
@@ -184,13 +186,13 @@ import { DuoCol, DuoStr, EmoCall, EmoDet, Emograph, EmoList, ESec, GlassCard, He
 			pDesc="مستندات فنية تشرح الحالة وتعرض الملاحظات والنتيجة والتوصيات، بدل الاكتفاء بإثبات مختصر."
 		/>
 
-		<DuoStr
+		<DivStr
 			pContentSize={new Size(new NumPer("1180px", "calc(100% - 24px)"))}
 			pGap={new Pixel(26, 16)}
 			pPad={new Pixel(42, 18)}
 		>
 
-			<DuoCol
+			<DivCol
 				pBgColor={new ElemBg("rgba(255,255,255,.10)")}
 				pBgOpacity={new Percent(100)}
 				pBlur={new Pixel(8, 4)}
@@ -216,9 +218,9 @@ import { DuoCol, DuoStr, EmoCall, EmoDet, Emograph, EmoList, ESec, GlassCard, He
 					pWidth="285px"
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol
+			<DivCol
 				pBgColor={new ElemBg(Colors.WhiteOff)}
 				pPad={new Pixel(36, 22)}
 				pGap={new Pixel(18, 12)}
@@ -238,19 +240,19 @@ import { DuoCol, DuoStr, EmoCall, EmoDet, Emograph, EmoList, ESec, GlassCard, He
 					]}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="Stamps"
 		pBg={new ElemBg(Colors.Creamy)}
 		pHzAlign={Align.Center}
@@ -263,13 +265,13 @@ import { DuoCol, DuoStr, EmoCall, EmoDet, Emograph, EmoList, ESec, GlassCard, He
 			pDesc="اعتماد رسومات أو تقارير أو مستندات هندسية بختم مناسب لنوع الملف والجهة التي ستتسلمه."
 		/>
 
-		<DuoStr
+		<DivStr
 			pContentSize={new Size(new NumPer("1180px", "calc(100% - 24px)"))}
 			pGap={new Pixel(26, 16)}
 			pPad={new Pixel(42, 18)}
 		>
 
-			<DuoCol
+			<DivCol
 				pBgColor={new ElemBg(Colors.BlackOff)}
 				pBgOpacity={new Percent(100)}
 				pPad={new Pixel(36, 22)}
@@ -294,9 +296,9 @@ import { DuoCol, DuoStr, EmoCall, EmoDet, Emograph, EmoList, ESec, GlassCard, He
 					pWidth="285px"
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol
+			<DivCol
 				pBgColor={new ElemBg(Colors.WhiteOff)}
 				pPad={new Pixel(36, 22)}
 				pGap={new Pixel(18, 12)}
@@ -316,11 +318,11 @@ import { DuoCol, DuoStr, EmoCall, EmoDet, Emograph, EmoList, ESec, GlassCard, He
 					]}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-	</ESec>
+	</EmoSec>
 
 
 

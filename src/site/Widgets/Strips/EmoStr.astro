@@ -53,7 +53,7 @@ const {
 	pMoveViewTarget,
 
 
-	id: pGivenID = GetWidgetId("EmoStrip"),
+	id: pGivenID = GetWidgetId("EmoStr"),
 	class: pGivenClass = "",
 	style: pGivenStyle = "",
 	...RemAttr
@@ -156,7 +156,7 @@ function HasExplicitCssSize(pValue?: string) {
 
 
 <div
-	class = {`EmoStrip ${cPlace.Class} ${pGivenClass}`.trim()}
+	class = {`EmoStr ${cPlace.Class} ${pGivenClass}`.trim()}
 	style = {cFinalStyle}
 	id={pGivenID}
 	data-emo-auto-container="true"
@@ -167,12 +167,24 @@ function HasExplicitCssSize(pValue?: string) {
 
 	{ cHasBgImg && (
 
-		<picture class = " EmoStripBg " data-emo-container-bg="true">
+		<picture class = " EmoStrBg " data-emo-container-bg="true">
+		
+		
+		
+		
+		
+		
 		
 			<source media="(orientation: portrait)" srcset={cFinalBgImgP} />
 		
+		
+		
+		
+		
+		
+		
 			<img
-				class = " EmoStripBgImg "
+				class = " EmoStrBgImg "
 				src={cFinalBgImgL}
 				alt={cBgAlt}
 				loading={cLoading}
@@ -180,10 +192,22 @@ function HasExplicitCssSize(pValue?: string) {
 				fetchpriority={cFetchPriority}
 			/>
 		
+		
+		
+		
+		
+		
+		
 		</picture>
 	) }
 
 	<slot />
+
+
+
+
+
+
 
 </div>
 
@@ -210,7 +234,7 @@ function HasExplicitCssSize(pValue?: string) {
 
 
 
-	.EmoStrip {
+	.EmoStr {
 		position: relative;
 		isolation: isolate;
 		box-sizing: border-box;
@@ -228,7 +252,7 @@ function HasExplicitCssSize(pValue?: string) {
 	}
 
 
-	.EmoStripBg {
+	.EmoStrBg {
 		position: absolute;
 		inset: 0;
 		z-index: -1;
@@ -239,7 +263,7 @@ function HasExplicitCssSize(pValue?: string) {
 	}
 
 
-	.EmoStripBgImg {
+	.EmoStrBgImg {
 		display: block;
 		width: 100%;
 		height: 100%;
@@ -250,7 +274,7 @@ function HasExplicitCssSize(pValue?: string) {
 
 
 
-	.EmoStrip.IsPlaced {
+	.EmoStr.IsPlaced {
 		position: absolute;
 		width: var(--PlaceWidthL);
 		height: var(--PlaceHeightL);
@@ -258,8 +282,33 @@ function HasExplicitCssSize(pValue?: string) {
 
 
 
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
 	@media (orientation: portrait) {
-		.EmoStrip {
+		.EmoStr {
 			align-items: var(--StripAlignP, var(--StripAlignL, center));
 			align-content: var(--StripAlignP, var(--StripAlignL, center));
 			justify-content: var(--StripJustifyP, var(--StripJustifyL, center));
@@ -268,7 +317,7 @@ function HasExplicitCssSize(pValue?: string) {
 			min-height: var(--StripMinHeightP, var(--StripMinHeightL, auto));
 		}
 
-		.EmoStrip.IsPlaced {
+		.EmoStr.IsPlaced {
 			width: var(--PlaceWidthP);
 			height: var(--PlaceHeightP);
 		}

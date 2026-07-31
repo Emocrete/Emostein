@@ -1,6 +1,7 @@
 ---
 import { Place, type PlaceProps } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
+
 interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps {
 	pTitle?: string;
 	pDesc?: string;
@@ -9,7 +10,7 @@ interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps
 	pOfferButtonText?: string;
 	pShowOffer?: boolean;
 	pFooterMode?: boolean;
-	pCycleSeconds?: number;
+	pCyclEmoSeconds?: number;
 }
 
 const {
@@ -20,7 +21,7 @@ const {
 	pOfferButtonText = "سجّل اهتمامك",
 	pShowOffer = true,
 	pFooterMode = false,
-	pCycleSeconds = 5,
+	pCyclEmoSeconds = 5,
 	pLoc,
 	pSize,
 	pRotate,
@@ -122,7 +123,7 @@ function GetSubSectionName(pSectionKey: string, pSubSectionKey: string): string 
 
 const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
 const cFooterModeClass = pFooterMode ? "IsFooterMode" : "";
-const cCycleMs = Math.max(1000, Number(pCycleSeconds || 5) * 1000);
+const cCycleMs = Math.max(1000, Number(pCyclEmoSeconds || 5) * 1000);
 ---
 
 
@@ -155,6 +156,12 @@ const cCycleMs = Math.max(1000, Number(pCycleSeconds || 5) * 1000);
 	data-cycle-ms={String(cCycleMs)}
 	{...RemAttr}
 >
+
+
+
+
+
+
 
 	<svg class = " SvgDefs " aria-hidden="true">
 
@@ -220,7 +227,9 @@ const cCycleMs = Math.max(1000, Number(pCycleSeconds || 5) * 1000);
 
 		<symbol id="StatsIconShare" viewBox="0 0 24 24">
 
-			<path d="M18 16.2c-1.1 0-2 .6-2.6 1.4L8.8 14a3.4 3.4 0 0 0 0-4l6.6-3.6A3 3 0 1 0 14.5 5L8 8.6a3 3 0 1 0 0 6.8l6.5 3.6A3 3 0 1 0 18 16.2Z">
+			<path
+				d="M18 16.2c-1.1 0-2 .6-2.6 1.4L8.8 14a3.4 3.4 0 0 0 0-4l6.6-3.6A3 3 0 1 0 14.5 5L8 8.6a3 3 0 1 0 0 6.8l6.5 3.6A3 3 0 1 0 18 16.2Z"
+			>
 
 			</path>
 
@@ -268,6 +277,12 @@ const cCycleMs = Math.max(1000, Number(pCycleSeconds || 5) * 1000);
 
 	</svg>
 
+
+
+
+
+
+
 	<div class = " StatsShell ">
 
 		<div class = " StatsTop ">
@@ -302,7 +317,13 @@ const cCycleMs = Math.max(1000, Number(pCycleSeconds || 5) * 1000);
 
 		<div class = " StatsGroups ">
 
-			<section class = " StatsGroup PageGroup IsActive ">
+			<section
+				class = "
+						StatsGroup
+						PageGroup
+						IsActive
+					"
+			>
 
 				<div class = " GroupTitle ">
 
@@ -848,6 +869,12 @@ const cCycleMs = Math.max(1000, Number(pCycleSeconds || 5) * 1000);
 
 			<div class = " OfferPanel " data-emo-offer-panel="true">
 			
+			
+			
+			
+			
+			
+			
 				<div class = " OfferText ">
 			
 					<strong>
@@ -859,6 +886,12 @@ const cCycleMs = Math.max(1000, Number(pCycleSeconds || 5) * 1000);
 					</p>
 			
 				</div>
+			
+			
+			
+			
+			
+			
 			
 				<div class = " OfferStatus ">
 			
@@ -874,14 +907,36 @@ const cCycleMs = Math.max(1000, Number(pCycleSeconds || 5) * 1000);
 			
 				</div>
 			
-				<a class = " OfferButton " href="#EmoContactStrip" data-emo-offer-action="true">
+			
+			
+			
+			
+			
+			
+				<a
+					class = " OfferButton "
+					href="#EmoContactStrip"
+					data-emo-offer-action="true"
+				>
 					{pOfferButtonText}
 				</a>
+			
+			
+			
+			
+			
+			
 			
 			</div>
 		) }
 
 	</div>
+
+
+
+
+
+
 
 </section>
 
@@ -1282,6 +1337,136 @@ const cCycleMs = Math.max(1000, Number(pCycleSeconds || 5) * 1000);
 
 
 
+	.EmoStatsStrip.IsFooterMode {
+		width: 100%;
+		height: 100%;
+		min-height: 0;
+		border: 1px solid rgba(255, 255, 255, 0.10);
+		border-radius: 24px;
+		background: radial-gradient(circle at 12% 16%, rgba(255, 255, 255, 0.055), transparent 28%),
+			radial-gradient(circle at 88% 28%, rgba(255, 209, 92, 0.065), transparent 30%),
+			linear-gradient(135deg, #171a1f 0%, #101318 52%, #090b0f 100%);
+		border-block: 1px solid rgba(255, 255, 255, 0.10);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07),
+			0 18px 38px rgba(0, 0, 0, 0.28);
+	}
+
+	.EmoStatsStrip.IsFooterMode::before {
+		background: linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+			linear-gradient(0deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+			url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='92' height='92' viewBox='0 0 92 92'%3E%3Cpath d='M14 14h64v64H14z' fill='none' stroke='%23ffffff' stroke-opacity='.055' stroke-width='1'/%3E%3Cpath d='M0 46h92M46 0v92' stroke='%23ffffff' stroke-opacity='.035' stroke-width='1'/%3E%3Ccircle cx='46' cy='46' r='1.8' fill='%23ffffff' fill-opacity='.08'/%3E%3C/svg%3E");
+		background-size: 38px 38px, 38px 38px, 92px 92px;
+		opacity: 0.36;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsShell {
+		width: 100%;
+		height: 100%;
+		padding: 18px;
+		gap: 12px;
+		grid-template-rows: auto 1fr;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsTop {
+		grid-template-columns: 1fr auto;
+		min-height: 0;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsTitleBox {
+		grid-template-columns: 1fr;
+		gap: 5px;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsKicker {
+		width: fit-content;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsTitleBox h2 {
+		font-size: 19px;
+		white-space: normal;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsTitleBox p {
+		display: none;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsLive {
+		padding: 6px 9px;
+		font-size: 10px;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsGroups {
+		position: relative;
+		display: block;
+		min-height: 0;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsGroup {
+		position: absolute;
+		inset: 0;
+		display: grid;
+		grid-template-rows: auto 1fr;
+		gap: 9px;
+		padding: 12px;
+		opacity: 0;
+		pointer-events: none;
+		transform: translateY(8px) scale(0.99);
+		transition: opacity 0.45s ease, transform 0.45s ease;
+	}
+
+	.EmoStatsStrip.IsFooterMode .StatsGroup.IsActive {
+		opacity: 1;
+		pointer-events: auto;
+		transform: translateY(0) scale(1);
+	}
+
+	.EmoStatsStrip.IsFooterMode .GroupTitle {
+		padding: 8px;
+	}
+
+	.EmoStatsStrip.IsFooterMode .GroupTitle h3 {
+		font-size: 15px;
+	}
+
+	.EmoStatsStrip.IsFooterMode .GroupTitle p {
+		font-size: 10px;
+	}
+
+	.EmoStatsStrip.IsFooterMode .MetricsList {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		grid-auto-rows: minmax(46px, 1fr);
+		gap: 8px;
+	}
+
+	.EmoStatsStrip.IsFooterMode .MetricItem {
+		grid-template-columns: auto minmax(0, 1fr);
+		grid-template-areas: "Icon Label"
+			"Icon Value";
+		align-content: center;
+		padding: 8px;
+	}
+
+	.EmoStatsStrip.IsFooterMode .MetricIcon {
+		grid-area: Icon;
+	}
+
+	.EmoStatsStrip.IsFooterMode .MetricLabel {
+		grid-area: Label;
+		font-size: 10px;
+	}
+
+	.EmoStatsStrip.IsFooterMode .MetricValue {
+		grid-area: Value;
+		font-size: 16px;
+		text-align: right;
+	}
+
+	.EmoStatsStrip.IsFooterMode .OfferPanel {
+		display: none;
+	}
+
+
+
 	.GroupIcon svg,
 	.MetricIcon svg
 	{
@@ -1289,6 +1474,72 @@ const cCycleMs = Math.max(1000, Number(pCycleSeconds || 5) * 1000);
 		height: 18px;
 		fill: currentColor;
 	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
+	@media (max-width: 1050px), (orientation: portrait) {
+		.EmoStatsStrip.IsFooterMode {
+			height: 410px;
+			min-height: 410px;
+			border-radius: 22px;
+		}
+
+		.EmoStatsStrip.IsFooterMode .StatsShell {
+			height: 100%;
+			width: 100%;
+			padding: 16px;
+		}
+
+		.EmoStatsStrip.IsFooterMode .StatsTop {
+			grid-template-columns: 1fr;
+		}
+
+		.EmoStatsStrip.IsFooterMode .StatsGroups {
+			position: relative;
+			display: block;
+			min-height: 0;
+		}
+
+		.EmoStatsStrip.IsFooterMode .StatsGroup {
+			position: absolute;
+			inset: 0;
+			opacity: 0;
+			pointer-events: none;
+			transform: translateY(8px) scale(0.99);
+		}
+
+		.EmoStatsStrip.IsFooterMode .StatsGroup.IsActive {
+			opacity: 1;
+			pointer-events: auto;
+			transform: translateY(0) scale(1);
+		}
+	}
+
 
 
 	@media (hover: hover) and (pointer: fine) {
@@ -1441,180 +1692,17 @@ const cCycleMs = Math.max(1000, Number(pCycleSeconds || 5) * 1000);
 
 
 
-<style>
 
 
 
-	.EmoStatsStrip.IsFooterMode {
-		width: 100%;
-		height: 100%;
-		min-height: 0;
-		border: 1px solid rgba(255, 255, 255, 0.10);
-		border-radius: 24px;
-		background: radial-gradient(circle at 12% 16%, rgba(255, 255, 255, 0.055), transparent 28%),
-			radial-gradient(circle at 88% 28%, rgba(255, 209, 92, 0.065), transparent 30%),
-			linear-gradient(135deg, #171a1f 0%, #101318 52%, #090b0f 100%);
-		border-block: 1px solid rgba(255, 255, 255, 0.10);
-		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07),
-			0 18px 38px rgba(0, 0, 0, 0.28);
-	}
-
-	.EmoStatsStrip.IsFooterMode::before {
-		background: linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-			linear-gradient(0deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-			url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='92' height='92' viewBox='0 0 92 92'%3E%3Cpath d='M14 14h64v64H14z' fill='none' stroke='%23ffffff' stroke-opacity='.055' stroke-width='1'/%3E%3Cpath d='M0 46h92M46 0v92' stroke='%23ffffff' stroke-opacity='.035' stroke-width='1'/%3E%3Ccircle cx='46' cy='46' r='1.8' fill='%23ffffff' fill-opacity='.08'/%3E%3C/svg%3E");
-		background-size: 38px 38px, 38px 38px, 92px 92px;
-		opacity: 0.36;
-	}
-
-	.EmoStatsStrip.IsFooterMode .StatsShell {
-		width: 100%;
-		height: 100%;
-		padding: 18px;
-		gap: 12px;
-		grid-template-rows: auto 1fr;
-	}
-
-	.EmoStatsStrip.IsFooterMode .StatsTop {
-		grid-template-columns: 1fr auto;
-		min-height: 0;
-	}
-
-	.EmoStatsStrip.IsFooterMode .StatsTitleBox {
-		grid-template-columns: 1fr;
-		gap: 5px;
-	}
-
-	.EmoStatsStrip.IsFooterMode .StatsKicker {
-		width: fit-content;
-	}
-
-	.EmoStatsStrip.IsFooterMode .StatsTitleBox h2 {
-		font-size: 19px;
-		white-space: normal;
-	}
-
-	.EmoStatsStrip.IsFooterMode .StatsTitleBox p {
-		display: none;
-	}
-
-	.EmoStatsStrip.IsFooterMode .StatsLive {
-		padding: 6px 9px;
-		font-size: 10px;
-	}
-
-	.EmoStatsStrip.IsFooterMode .StatsGroups {
-		position: relative;
-		display: block;
-		min-height: 0;
-	}
-
-	.EmoStatsStrip.IsFooterMode .StatsGroup {
-		position: absolute;
-		inset: 0;
-		display: grid;
-		grid-template-rows: auto 1fr;
-		gap: 9px;
-		padding: 12px;
-		opacity: 0;
-		pointer-events: none;
-		transform: translateY(8px) scale(0.99);
-		transition: opacity 0.45s ease, transform 0.45s ease;
-	}
-
-	.EmoStatsStrip.IsFooterMode .StatsGroup.IsActive {
-		opacity: 1;
-		pointer-events: auto;
-		transform: translateY(0) scale(1);
-	}
-
-	.EmoStatsStrip.IsFooterMode .GroupTitle {
-		padding: 8px;
-	}
-
-	.EmoStatsStrip.IsFooterMode .GroupTitle h3 {
-		font-size: 15px;
-	}
-
-	.EmoStatsStrip.IsFooterMode .GroupTitle p {
-		font-size: 10px;
-	}
-
-	.EmoStatsStrip.IsFooterMode .MetricsList {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		grid-auto-rows: minmax(46px, 1fr);
-		gap: 8px;
-	}
-
-	.EmoStatsStrip.IsFooterMode .MetricItem {
-		grid-template-columns: auto minmax(0, 1fr);
-		grid-template-areas: "Icon Label"
-			"Icon Value";
-		align-content: center;
-		padding: 8px;
-	}
-
-	.EmoStatsStrip.IsFooterMode .MetricIcon {
-		grid-area: Icon;
-	}
-
-	.EmoStatsStrip.IsFooterMode .MetricLabel {
-		grid-area: Label;
-		font-size: 10px;
-	}
-
-	.EmoStatsStrip.IsFooterMode .MetricValue {
-		grid-area: Value;
-		font-size: 16px;
-		text-align: right;
-	}
-
-	.EmoStatsStrip.IsFooterMode .OfferPanel {
-		display: none;
-	}
-
-
-	@media (max-width: 1050px), (orientation: portrait) {
-		.EmoStatsStrip.IsFooterMode {
-			height: 410px;
-			min-height: 410px;
-			border-radius: 22px;
-		}
-
-		.EmoStatsStrip.IsFooterMode .StatsShell {
-			height: 100%;
-			width: 100%;
-			padding: 16px;
-		}
-
-		.EmoStatsStrip.IsFooterMode .StatsTop {
-			grid-template-columns: 1fr;
-		}
-
-		.EmoStatsStrip.IsFooterMode .StatsGroups {
-			position: relative;
-			display: block;
-			min-height: 0;
-		}
-
-		.EmoStatsStrip.IsFooterMode .StatsGroup {
-			position: absolute;
-			inset: 0;
-			opacity: 0;
-			pointer-events: none;
-			transform: translateY(8px) scale(0.99);
-		}
-
-		.EmoStatsStrip.IsFooterMode .StatsGroup.IsActive {
-			opacity: 1;
-			pointer-events: auto;
-			transform: translateY(0) scale(1);
-		}
-	}
 
 
 
-</style>
+
+
+
+
+
 
 
 

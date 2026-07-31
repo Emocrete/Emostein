@@ -1,7 +1,10 @@
 ---
-import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, Size, Text } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESec, Hero, IncLineSep, IndexSec, RespImg, Tree, YTPlayer } from "@/Widgets";
+import { EmoBtn, Emograph } from "@/Widgets/Comp";
+import { RespImg } from "@/Widgets/Media";
+import { EmoSec, Hero } from "@/Widgets/Sections";
+import { EmoStr } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, Size, Text } from "@/TypesLib";
 ---
 
 
@@ -23,7 +26,17 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESe
 
 
 
-<BLayout pSchemaType="Organization" pTitle="المجموعة الهندسية" pDescr="المجموعة الهندسية">
+<BLayout
+	pSchemaType="Organization"
+	pTitle="المجموعة الهندسية"
+	pDescr="المجموعة الهندسية"
+>
+
+
+
+
+
+
 
 	<Hero
 		pImgF="/Media/Home"
@@ -41,9 +54,15 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESe
 
 	</Hero>
 
-	<ESec id="Sections">
 
-		<EmoStrip pBg={new ElemBg(Colors.BistageLite)} pSize={new Size(new NumPer("100%", "100%"), new NumPer(300, 600))}>
+
+
+
+
+
+	<EmoSec id="Sections">
+
+		<EmoStr pBg={new ElemBg(Colors.BistageLite)} pSize={new Size(new NumPer("100%", "100%"), new NumPer(300, 600))}>
 
 			<Emograph
 				pTitle={Text.Body.WithSize(new Pixel(40)).Centered.OfText("تجد هنا ..")}
@@ -51,25 +70,21 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESe
 				pSize={new Size(new NumPer(1400, "95%"), new NumPer("auto", "auto"))}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-		<EmoStrip
-
+		<EmoStr
 			pBg={new ElemBg(Colors.BlackOff,new EmoMediaData("Img","/Media/Home/","Emodsign.webp",true))}
 			pSize={new Size(new NumPer(1920, "100%"), new NumPer(900, "680px"))}
->
+		>
 
-	<EmoStrip
-		pHzAlign={Align.LeftCenter}
-		pVrAlign={Align.LeftCenter}
-	>
+			<EmoStr pHzAlign={Align.LeftCenter} pVrAlign={Align.LeftCenter}>
 
-		<Emograph
-			pTitle={Text.H2.Centered.White.OfText("خدمات التصميم الهندسي لكافة التخصصات ، وخدمات المكتب الفني وإدارة المشروعات")}
-			pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))}
-		/>
+				<Emograph
+					pTitle={Text.H2.Centered.White.OfText("خدمات التصميم الهندسي لكافة التخصصات ، وخدمات المكتب الفني وإدارة المشروعات")}
+					pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))}
+				/>
 
-	</EmoStrip>
+			</EmoStr>
 
 			<EmoBtn
 				pText="تصميم هندسي"
@@ -78,25 +93,18 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESe
 				pWidth="300px"
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-		<EmoStrip
-
+		<EmoStr
 			pBg={new ElemBg(Colors.BlackOff,new EmoMediaData("Img","/Media/Home/","Emodsign.webp",true))}
 			pSize={new Size(new NumPer(1920, "100%"), new NumPer(900, "680px"))}
->
+		>
 
-	<EmoStrip
-		pHzAlign={Align.LeftCenter}
-		pVrAlign={Align.LeftCenter}
-	>
+			<EmoStr pHzAlign={Align.LeftCenter} pVrAlign={Align.LeftCenter}>
 
-		<Emograph
-			pTitle={Text.H2.Centered.White.OfText("مقاولات")}
-			pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))}
-		/>
+				<Emograph pTitle={Text.H2.Centered.White.OfText("مقاولات")} pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))} />
 
-	</EmoStrip>
+			</EmoStr>
 
 			<EmoBtn
 				pText="مقاولات"
@@ -105,25 +113,18 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESe
 				pWidth="300px"
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-		<EmoStrip
-
+		<EmoStr
 			pBg={new ElemBg(Colors.BlackOff,new EmoMediaData("Img","/Media/Home/","Emodsign.webp",true))}
 			pSize={new Size(new NumPer(1920, "100%"), new NumPer(900, "680px"))}
->
+		>
 
-	<EmoStrip
-		pHzAlign={Align.LeftCenter}
-		pVrAlign={Align.LeftCenter}
-	>
+			<EmoStr pHzAlign={Align.LeftCenter} pVrAlign={Align.LeftCenter}>
 
-		<Emograph
-			pTitle={Text.H2.Centered.White.OfText("رخام")}
-			pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))}
-		/>
+				<Emograph pTitle={Text.H2.Centered.White.OfText("رخام")} pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))} />
 
-	</EmoStrip>
+			</EmoStr>
 
 			<EmoBtn
 				pText="رخام"
@@ -132,25 +133,18 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESe
 				pWidth="300px"
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-		<EmoStrip
-
+		<EmoStr
 			pBg={new ElemBg(Colors.BlackOff,new EmoMediaData("Img","/Media/Home/","Emodsign.webp",true))}
 			pSize={new Size(new NumPer(1920, "100%"), new NumPer(900, "680px"))}
->
+		>
 
-	<EmoStrip
-		pHzAlign={Align.LeftCenter}
-		pVrAlign={Align.LeftCenter}
-	>
+			<EmoStr pHzAlign={Align.LeftCenter} pVrAlign={Align.LeftCenter}>
 
-		<Emograph
-			pTitle={Text.H2.Centered.White.OfText("توريدات")}
-			pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))}
-		/>
+				<Emograph pTitle={Text.H2.Centered.White.OfText("توريدات")} pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))} />
 
-	</EmoStrip>
+			</EmoStr>
 
 			<EmoBtn
 				pText="توريدات"
@@ -159,25 +153,18 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESe
 				pWidth="300px"
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-		<EmoStrip
-
+		<EmoStr
 			pBg={new ElemBg(Colors.BlackOff,new EmoMediaData("Img","/Media/Home/","Emodsign.webp",true))}
 			pSize={new Size(new NumPer(1920, "100%"), new NumPer(900, "680px"))}
->
+		>
 
-	<EmoStrip
-		pHzAlign={Align.LeftCenter}
-		pVrAlign={Align.LeftCenter}
-	>
+			<EmoStr pHzAlign={Align.LeftCenter} pVrAlign={Align.LeftCenter}>
 
-		<Emograph
-			pTitle={Text.H2.Centered.White.OfText("تراخيص")}
-			pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))}
-		/>
+				<Emograph pTitle={Text.H2.Centered.White.OfText("تراخيص")} pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))} />
 
-	</EmoStrip>
+			</EmoStr>
 
 			<EmoBtn
 				pText="تراخيص"
@@ -186,25 +173,18 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESe
 				pWidth="300px"
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-		<EmoStrip
-
+		<EmoStr
 			pBg={new ElemBg(Colors.BlackOff,new EmoMediaData("Img","/Media/Home/","Emodsign.webp",true))}
 			pSize={new Size(new NumPer(1920, "100%"), new NumPer(900, "680px"))}
->
+		>
 
-	<EmoStrip
-		pHzAlign={Align.LeftCenter}
-		pVrAlign={Align.LeftCenter}
-	>
+			<EmoStr pHzAlign={Align.LeftCenter} pVrAlign={Align.LeftCenter}>
 
-		<Emograph
-			pTitle={Text.H2.Centered.White.OfText("تراخيص طبية")}
-			pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))}
-		/>
+				<Emograph pTitle={Text.H2.Centered.White.OfText("تراخيص طبية")} pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))} />
 
-	</EmoStrip>
+			</EmoStr>
 
 			<EmoBtn
 				pText="تراخيص طبية"
@@ -213,25 +193,18 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESe
 				pWidth="300px"
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-		<EmoStrip
-
+		<EmoStr
 			pBg={new ElemBg(Colors.BlackOff,new EmoMediaData("Img","/Media/Home/","Emodsign.webp",true))}
 			pSize={new Size(new NumPer(1920, "100%"), new NumPer(900, "680px"))}
->
+		>
 
-	<EmoStrip
-		pHzAlign={Align.LeftCenter}
-		pVrAlign={Align.LeftCenter}
-	>
+			<EmoStr pHzAlign={Align.LeftCenter} pVrAlign={Align.LeftCenter}>
 
-		<Emograph
-			pTitle={Text.H2.Centered.White.OfText("خدمات استشارية")}
-			pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))}
-		/>
+				<Emograph pTitle={Text.H2.Centered.White.OfText("خدمات استشارية")} pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))} />
 
-	</EmoStrip>
+			</EmoStr>
 
 			<EmoBtn
 				pText="خدمات استشارية"
@@ -240,25 +213,18 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESe
 				pWidth="300px"
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-		<EmoStrip
-
+		<EmoStr
 			pBg={new ElemBg(Colors.BlackOff,new EmoMediaData("Img","/Media/Home/","Emodsign.webp",true))}
 			pSize={new Size(new NumPer(1920, "100%"), new NumPer(900, "680px"))}
->
+		>
 
-	<EmoStrip
-		pHzAlign={Align.LeftCenter}
-		pVrAlign={Align.LeftCenter}
-	>
+			<EmoStr pHzAlign={Align.LeftCenter} pVrAlign={Align.LeftCenter}>
 
-		<Emograph
-			pTitle={Text.H2.Centered.White.OfText("تسويق عقاري")}
-			pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))}
-		/>
+				<Emograph pTitle={Text.H2.Centered.White.OfText("تسويق عقاري")} pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))} />
 
-	</EmoStrip>
+			</EmoStr>
 
 			<EmoBtn
 				pText="تسويق عقاري"
@@ -267,9 +233,15 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESe
 				pWidth="300px"
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
+
+
+
+
+
+
 
 </BLayout>
 
@@ -303,6 +275,33 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, Emograph, EmoList, EmoStrip, ESe
 		font-weight: 500;
 		text-align: center;
 	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
 
 	@media (orientation: portrait) {
 		.HeroSlogan {

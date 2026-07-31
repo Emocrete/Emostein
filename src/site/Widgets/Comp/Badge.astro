@@ -1,8 +1,8 @@
 ---
+import { Emograph } from "@/Widgets/Comp";
+import { RespImg } from "@/Widgets/Media";
 import { Colors, EmoMediaData, NumPer, Pixel, Place, type PlaceProps, Size, Text } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import Emograph from "./Emograph.astro";
-import RespImg from "../Media/RespImage.astro";
 
 type TBadgeTextPos = "Right" | "Left" | "Top" | "Bottom";
 type TBadgeNumberView = "Split" | "Inline";
@@ -241,59 +241,144 @@ function GetCssName(pName: string): string {
 }
 ---
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div
-	class={`Badge ${cPlace.Class} ${cTextPosClass} ${cNumViewClass} ${pGivenClass}`.trim()}
-	style={cPlace.Style}
+	class = {`Badge ${cPlace.Class} ${cTextPosClass} ${cNumViewClass} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
 	id={pGivenID}
 	data-badge-cols={cMobCols}
 	{...RemAttr}
 >
-	<div class="BadgeList">
-		{cBadges.map((cBadge) => (
-			<div class="BadgeItem" data-badge-item="true">
-				{cTextFirst && (
+
+
+
+
+
+
+
+	<div class = " BadgeList ">
+
+		{ cBadges.map((cBadge) => (
+
+			<div class = " BadgeItem " data-badge-item="true">
+
+				{ cTextFirst && (
 					cBadge.Number !== undefined ? (
 						pNumberView === "Split" ? (
-							<div class="BadgeTextBlock">
-								<Emograph pTitle={cNumFont.OfText(String(cBadge.Number))} />
-								<Emograph pTitle={cTextFont.OfText(cBadge.Text)} />
-							</div>
-						) : (
-							<p class="BadgeInlineText">
-								<span class="BadgeInlineNum">{cBadge.Number}</span>
-								<span class="BadgeInlineDesc">{cBadge.Text}</span>
-							</p>
-						)
-					) : (
-						<Emograph pTitle={cTextFont.OfText(cBadge.Text)} />
-					)
-				)}
 
-				<RespImg class="BadgeImg" pImg={cBadge.Img} />
+							<div class = " BadgeTextBlock ">
 
-				{!cTextFirst && (
-					cBadge.Number !== undefined ? (
-						pNumberView === "Split" ? (
-							<div class="BadgeTextBlock">
 								<Emograph pTitle={cNumFont.OfText(String(cBadge.Number))} />
+
 								<Emograph pTitle={cTextFont.OfText(cBadge.Text)} />
+
 							</div>
-						) : (
-							<p class="BadgeInlineText">
-								<span class="BadgeInlineNum">{cBadge.Number}</span>
-								<span class="BadgeInlineDesc">{cBadge.Text}</span>
-							</p>
-						)
-					) : (
-						<Emograph pTitle={cTextFont.OfText(cBadge.Text)} />
-					)
-				)}
+
+							) : (
+
+								<p class = " BadgeInlineText ">
+
+									<span class = " BadgeInlineNum ">
+										{cBadge.Number}
+									</span>
+
+									<span class = " BadgeInlineDesc ">
+										{cBadge.Text}
+									</span>
+
+								</p>
+
+							)
+							) : (
+
+								<Emograph pTitle={cTextFont.OfText(cBadge.Text)} />
+
+							)) }
+
+					<RespImg class = " BadgeImg " pImg={cBadge.Img} />
+
+					{ !cTextFirst && (
+						cBadge.Number !== undefined ? (
+							pNumberView === "Split" ? (
+
+								<div class = " BadgeTextBlock ">
+
+									<Emograph pTitle={cNumFont.OfText(String(cBadge.Number))} />
+
+									<Emograph pTitle={cTextFont.OfText(cBadge.Text)} />
+
+								</div>
+
+								) : (
+
+									<p class = " BadgeInlineText ">
+
+										<span class = " BadgeInlineNum ">
+											{cBadge.Number}
+										</span>
+
+										<span class = " BadgeInlineDesc ">
+											{cBadge.Text}
+										</span>
+
+									</p>
+
+								)
+								) : (
+
+									<Emograph pTitle={cTextFont.OfText(cBadge.Text)} />
+
+								)) }
+
+					</div>
+
+					)) }
+
 			</div>
-		))}
-	</div>
-</div>
+
+		</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <style>
+
+
+
 	.Badge {
 		position: relative;
 		display: block;
@@ -305,14 +390,16 @@ function GetCssName(pName: string): string {
 		color: var(--BadgeColor, currentColor);
 	}
 
-	.Badge.PlaceSized {
-		width: var(--PlaceWidthL);
-		height: var(--PlaceHeightL);
+	.Badge :global(.BadgeImg.RespImg) {
+		flex: 0 0 auto;
+		max-width: 100%;
 	}
 
-	.Badge.IsPlaced {
-		position: absolute;
+	.Badge :global(.Emograph) {
+		width: max-content;
+		max-width: 100%;
 	}
+
 
 	.BadgeList {
 		display: flex;
@@ -327,6 +414,7 @@ function GetCssName(pName: string): string {
 		direction: rtl;
 	}
 
+
 	.BadgeItem {
 		display: flex;
 		flex-direction: row;
@@ -340,10 +428,6 @@ function GetCssName(pName: string): string {
 		color: var(--BadgeColor, currentColor);
 	}
 
-	.Badge.TextTop .BadgeItem,
-	.Badge.TextBottom .BadgeItem {
-		flex-direction: column;
-	}
 
 	.BadgeTextBlock {
 		display: flex;
@@ -355,6 +439,7 @@ function GetCssName(pName: string): string {
 		max-width: 100%;
 		text-align: center;
 	}
+
 
 	.BadgeInlineText {
 		margin: 0;
@@ -369,26 +454,65 @@ function GetCssName(pName: string): string {
 		white-space: normal;
 	}
 
+
 	.BadgeInlineNum {
 		font-size: var(--BadgeNumSizeL);
 		font-weight: 700;
 		line-height: 1;
 	}
 
+
 	.BadgeInlineDesc {
 		font-size: var(--BadgeTextSizeL);
 		line-height: 1.25;
 	}
 
-	.Badge :global(.BadgeImg.RespImg) {
-		flex: 0 0 auto;
-		max-width: 100%;
+
+
+	.Badge.PlaceSized {
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
 	}
 
-	.Badge :global(.Emograph) {
-		width: max-content;
-		max-width: 100%;
+
+	.Badge.IsPlaced {
+		position: absolute;
 	}
+
+
+
+	.Badge.TextTop .BadgeItem,
+	.Badge.TextBottom .BadgeItem
+	{
+		flex-direction: column;
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
 
 	@media (orientation: portrait) {
 		.Badge {
@@ -433,4 +557,7 @@ function GetCssName(pName: string): string {
 			font-size: var(--BadgeTextSizeP);
 		}
 	}
+
+
+
 </style>

@@ -1,7 +1,11 @@
 ---
-import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
+import { CardsGr } from "@/Widgets/Cards";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { RespImg } from "@/Widgets/Media";
+import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoPipelineStrip, EmoStr } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
 
 
@@ -29,6 +33,12 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip
 	pDescr="خدمة تسويق محلات للإيجار، تشمل تجهيز بيانات المحل، تحديد الأنشطة المناسبة، فرز المستأجرين، تنظيم المعاينات، ومراجعة شروط الإيجار التجاري."
 >
 
+
+
+
+
+
+
 	<Hero
 		pImgL="/Media/Emostate/Retail/Rent/HeroD.webp"
 		pImgP="/Media/Emostate/Retail/Rent/HeroM.webp"
@@ -48,40 +58,42 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip
 
 	</Hero>
 
-	<ESec
+
+
+
+
+
+
+	<EmoSec
 		id="Intro"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = {`--StripBg:${Colors.GreenLite};`}
 			pTitle="إيجار المحل التجاري يحتاج مستأجرًا مناسبًا للنشاط"
 			pDesc="كل نشاط له احتياجات مختلفة في الواجهة، الكهرباء، التهوية، الصرف، التخزين، حركة العملاء، ومواعيد التشغيل"
-			style={`--StripBg:${Colors.GreenLite};`}
 		/>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.WhiteOff)}
-
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
->
+		>
 
-			<HzStack
+			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
-
-				pGap={new Pixel(30, 15)}
-				pPad={new Pixel(30, 15)}
->
-
-				<RespImg pImg={new EmoMediaData("Img", "/Media/Emostate/Retail/Rent/", "HeroD.webp", false, "محلات للإيجار", new Size(new NumPer(520, "100%"), new NumPer("auto", "auto")))} />
+				<RespImg
+					pImg={new EmoMediaData("Img", "/Media/Emostate/Retail/Rent/", "HeroD.webp", false, "محلات للإيجار", new Size(new NumPer(520, "100%"), new NumPer("auto", "auto")))}
+				/>
 
 				<VrStack
-
 					pWidth={new Pixel(700, 340)}
 					pGap={new Pixel(20, 15)}
 					pPad={new Pixel(0, 0)}
->
+				>
 
 					<Emograph
 						pTitle={Text.H3.OfText("المحل لا يصلح لكل مستأجر")}
@@ -103,35 +115,36 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
-	<ESec
+
+
+
+
+
+
+	<EmoSec
 		id="Tenant"
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = {`--StripBg:${Colors.Gray5};`}
 			pTitle="فرز المستأجر التجاري"
 			pDesc="الأسئلة الأولى تحدد هل النشاط مناسب للمحل قبل ترتيب زيارة"
-			style={`--StripBg:${Colors.Gray5};`}
 		/>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.Gray1)}
-
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
->
+		>
 
-			<HzStack
-
-
-				pGap={new Pixel(30, 15)}
-				pPad={new Pixel(30, 15)}
->
+			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
 				<EmoList
 					pWidth={new RespString("560px", "100%")}
@@ -167,20 +180,27 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
-	<ESec
+
+
+
+
+
+
+	<EmoSec
 		id="Terms"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = {`--StripBg:${Colors.SkyLite};`}
 			pTitle="بنود يجب توضيحها قبل الإيجار"
 			pDesc="الإيجار التجاري يحتاج اتفاقًا أكثر تفصيلًا من السكني بسبب طبيعة النشاط والتعديلات"
-			style={`--StripBg:${Colors.SkyLite};`}
 		/>
 
 		<CardsGr
@@ -197,26 +217,32 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip
 			pTopic5={new Topic("التسليم والإخلاء", "حالة المحل عند الاستلام وكيفية رده عند انتهاء العلاقة.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
-	<ESec
+
+
+
+
+
+
+	<EmoSec
 		id="Fit"
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = {`--StripBg:${Colors.Gray5};`}
 			pTitle="مطابقة المحل للنشاط"
 			pDesc="كل نشاط له متطلبات تشغيل وترخيص مختلفة"
-			style={`--StripBg:${Colors.Gray5};`}
 		/>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.Gray1)}
-
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
->
+		>
 
 			<EmoList
 				pWidth={new RespString("1000px", "100%")}
@@ -233,9 +259,15 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip
 				]}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
+
+
+
+
+
+
 
 	<EmoPipelineStrip
 		pTitle="طلبات إيجار المحلات المفتوحة"
@@ -243,37 +275,44 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip
 		pServiceName="محلات للإيجار"
 	/>
 
-	<ReadAlso
-		pTitle={Text.H2.Centered.OfText("اقرأ أيضًا")}
 
->
 
-	<ReadAlsoItem
-		pTitle="تسويق عقاري"
-		pDesc="الصفحة الرئيسية لمجموعة التسويق العقاري."
-		pHref="/emostate"
-		pImg="/Media/Emostate/HeroD.webp"
-	/>
 
-	<ReadAlsoItem
-		pTitle="محلات للبيع"
-		pDesc="تسويق محل تجاري للبيع للمستخدم أو المستثمر."
-		pHref="/emostate/retail"
-		pImg="/Media/Emostate/Retail/Sell/HeroD.webp"
-	/>
 
-	<ReadAlsoItem
-		pTitle="شقق للإيجار"
-		pDesc="خدمة تأجير الشقق داخل المجموعة نفسها."
-		pHref="/emostate/apartment/rent"
-		pImg="/Media/Emostate/Apartment/Rent/HeroD.webp"
-	/>
 
-</ReadAlso>
 
-	<RelServices
-		pTitle={Text.H2.Centered.White.OfText("خدمات مرتبطة بالمحل")}
-	>
+	<ReadAlso pTitle={Text.H2.Centered.OfText("اقرأ أيضًا")}>
+
+		<ReadAlsoItem
+			pTitle="تسويق عقاري"
+			pDesc="الصفحة الرئيسية لمجموعة التسويق العقاري."
+			pHref="/emostate"
+			pImg="/Media/Emostate/HeroD.webp"
+		/>
+
+		<ReadAlsoItem
+			pTitle="محلات للبيع"
+			pDesc="تسويق محل تجاري للبيع للمستخدم أو المستثمر."
+			pHref="/emostate/retail"
+			pImg="/Media/Emostate/Retail/Sell/HeroD.webp"
+		/>
+
+		<ReadAlsoItem
+			pTitle="شقق للإيجار"
+			pDesc="خدمة تأجير الشقق داخل المجموعة نفسها."
+			pHref="/emostate/apartment/rent"
+			pImg="/Media/Emostate/Apartment/Rent/HeroD.webp"
+		/>
+
+	</ReadAlso>
+
+
+
+
+
+
+
+	<RelServices pTitle={Text.H2.Centered.White.OfText("خدمات مرتبطة بالمحل")}>
 
 		<RelServiceItem
 			pTitle="ترخيص محل تجاري"
@@ -298,6 +337,12 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip
 
 	</RelServices>
 
+
+
+
+
+
+
 	<EmoFaq>
 
 		<FaqItem
@@ -315,11 +360,14 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip
 			pAnswer="نعم، لأن المستأجر التجاري غالبًا يريد تشغيل النشاط رسميًا؛ لذلك وجود رسم أو بيانات واضحة يساعد في اتخاذ القرار."
 		/>
 
-		<FaqItem
-			pQuestion="هل يتم ذكر الأنشطة المرفوضة؟"
-			pAnswer="نعم، ذكر الأنشطة غير المقبولة يوفر وقت المالك ويقلل الاتصالات غير المناسبة."
-		/>
+		<FaqItem pQuestion="هل يتم ذكر الأنشطة المرفوضة؟" pAnswer="نعم، ذكر الأنشطة غير المقبولة يوفر وقت المالك ويقلل الاتصالات غير المناسبة." />
 
 	</EmoFaq>
+
+
+
+
+
+
 
 </BLayout>

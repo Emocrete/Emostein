@@ -1,8 +1,12 @@
 ---
-import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic, HoverColors } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Badge, CardsGr, EmoBtn, EmoCall, EmoContactStrip, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, PriceCard, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, RetailDwgMonthlyOffer, SecTitle, VrStack } from "@/Widgets";
-import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
+import { CardsGr } from "@/Widgets/Cards";
+import { Badge, EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { EmoGallery } from "@/Widgets/Media";
+import { RetailDwgMonthlyOffer } from "@/Widgets/Offers";
+import { EmoFaq, EmoSec, FaqItem, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStr } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
 
 
@@ -89,7 +93,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec data-port-only>
+	<EmoSec data-port-only>
 
 		<Badge
 			pYears={6}
@@ -98,7 +102,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 			pDurationText="خلال يوم واحد"
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -114,12 +118,15 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 
 
-	<ESec>
+	<EmoSec>
 
 		<SecTitle GreenLite pTitle="خدمات الرسم الهندسي لترخيص محل تجاري" />
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -164,17 +171,17 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		data-ops-event="DwgSpecs"
 		data-ops-on="view"
 		data-ops-label="مواصفات الرسم الهندسي"
@@ -182,8 +189,11 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 		<SecTitle Bistage pTitle="مواصفات الرسم الهندسي لـترخيص محل تجاري" />
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Creamy)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<EmoList
 				pDesc={Text.Body.Centered.OfText("يجب أن يتضمن الرسم الهندسي للمحل التجاري عدة عناصر رئيسية لتوصيف المحل وتوضيح مدى ملاءمته للمواصفات المطلوبة للنشاط الذي سيتم له ترخيص المحل التجاري.")}
@@ -195,17 +205,17 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 				]}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="DrawingSamples"
 		data-ops-event="DwgSamples"
 		data-ops-on="view"
@@ -216,7 +226,7 @@ import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
 
 		<EmoGallery pFolder="/Media/Emoperm/Retail/General/Dwg/Samples" />
 
-	</ESec>
+	</EmoSec>
 
 
 

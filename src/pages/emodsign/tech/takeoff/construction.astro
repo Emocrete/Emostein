@@ -1,11 +1,12 @@
 ---
-import { Align, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { CardsGr, DuoCol, DuoStr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, FreeHero, Grid, Hero, HzStack, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
+import { CardsGr } from "@/Widgets/Cards";
+import { EmoBtn, EmoCall, Emograph, EmoList, Grid, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { RespImg } from "@/Widgets/Media";
+import { DivCol, DivStr, EmoFaq, EmoSec, FaqItem, FreeHero, Hero, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { BadgeFrame, BlurBlob, DiagonalBottom, FloatingPanel, GlassCard, LinePath, Ribbon, SoftArc, SvgDots, TiltCard } from "@/Widgets/Shapes";
-
-
-
+import { EmoStr } from "@/Widgets/Strips";
+import { Align, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 
 const cHeroFolder = "/Media/Emodsign/Tech/Takeoff/Construction/";
 const cTakeoffFolder = "/Media/Emodsign/Tech/Takeoff/";
@@ -69,7 +70,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 	<FreeHero pImgF={cHeroFolder}>
 
-		<EmoStrip
+		<EmoStr
 			style = " background : linear-gradient(90deg, rgba(8,10,14,.94) 0%, rgba(14,17,24,.82) 42%, rgba(14,17,24,.28) 100%) "
 			pLoc={new Loc(new NumPer(0, 0), new NumPer(0, 0))}
 			pSize={MakeHeroSize("100%", "100%", "100%", "100%")}
@@ -289,7 +290,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<DuoStr
+	<DivStr
 		id="takeoff-meaning"
 		pBg={new ElemBg(cCream)}
 		pContentSize={new Size(new NumPer(1180, "calc(100% - 24px)"), new NumPer("auto", "auto"))}
@@ -297,7 +298,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 		pGap={new Pixel(34, 18)}
 	>
 
-		<DuoCol
+		<DivCol
 			pBg={new ElemBg("rgba(255,249,237,.88)")}
 			pBgOpacity={new Percent(100)}
 			pBlur={new Pixel(0)}
@@ -327,9 +328,9 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 				]}
 			/>
 
-		</DuoCol>
+		</DivCol>
 
-		<DuoCol
+		<DivCol
 			pBg={new ElemBg(cDark)}
 			pBgOpacity={new Percent(100)}
 			pBlur={new Pixel(0)}
@@ -365,9 +366,9 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 			</BadgeFrame>
 
-		</DuoCol>
+		</DivCol>
 
-	</DuoStr>
+	</DivStr>
 
 
 
@@ -387,7 +388,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec
+	<EmoSec
 		id="documents"
 		pBg={new ElemBg(cDark)}
 		pMinH={new NumPer(700, 0)}
@@ -410,13 +411,13 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pDesc="لا توجد كمية دقيقة من فراغ. دقة الحصر تعتمد على وضوح الرسومات التنفيذية، اكتمال الجداول، وجود المواصفات الفنية، وتحديد حدود الخدمة: هل المطلوب خرسانة وحديد فقط أم بنود بناء كاملة تشمل الحفر والردم والشدات والمباني؟"
 		/>
 
-		<DuoStr
+		<DivStr
 			pContentSize={new Size(new NumPer(1180, "calc(100% - 24px)"), new NumPer("auto", "auto"))}
 			pPad={new Pixel(36, 22)}
 			pGap={new Pixel(28, 16)}
 		>
 
-			<DuoCol
+			<DivCol
 				pBg={new ElemBg("rgba(255,249,237,.08)")}
 				pBgOpacity={new Percent(100)}
 				pBlur={new Pixel(12)}
@@ -441,9 +442,9 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 					]}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol
+			<DivCol
 				pBg={new ElemBg("rgba(255,249,237,.92)")}
 				pBgOpacity={new Percent(100)}
 				pPad={new Pixel(38, 22)}
@@ -466,11 +467,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 					pTopic2={new Topic("تقديرية", "كمية محسوبة على افتراض واضح بسبب نقص تفصيلة أو مواصفة.")}
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -490,7 +491,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec
+	<EmoSec
 		id="scope-map"
 		pBg={new ElemBg(cCream)}
 		pHzAlign={Align.Center}
@@ -523,7 +524,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic8={new Topic("ملاحظات القياس", "تسجيل مصدر كل كمية، الافتراضات، النواقص، وأي تعارض بين اللوحات قبل استخدام الجدول في التسعير.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -531,7 +532,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<DuoStr
+	<DivStr
 		id="workflow"
 		pBg={new ElemBg(cDark)}
 		pContentSize={new Size(new NumPer(1180, "calc(100% - 24px)"), new NumPer("auto", "auto"))}
@@ -539,7 +540,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 		pGap={new Pixel(34, 18)}
 	>
 
-		<DuoCol
+		<DivCol
 			pBg={new ElemBg("rgba(255,249,237,.08)")}
 			pBgOpacity={new Percent(100)}
 			pBlur={new Pixel(10)}
@@ -565,9 +566,9 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 				]}
 			/>
 
-		</DuoCol>
+		</DivCol>
 
-		<DuoCol
+		<DivCol
 			pBg={new ElemBg(cPaper)}
 			pBgOpacity={new Percent(100)}
 			pPad={new Pixel(32, 18)}
@@ -636,17 +637,17 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 			</Grid>
 
-		</DuoCol>
+		</DivCol>
 
-	</DuoStr>
-
-
+	</DivStr>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="deliverables"
 		pBg={new ElemBg(cPaper)}
 		pHzAlign={Align.Center}
@@ -736,7 +737,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</Grid>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -744,7 +745,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<EmoStrip
+	<EmoStr
 		id="risk-control"
 		pBg={new ElemBg(cDark)}
 		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
@@ -817,7 +818,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</Grid>
 
-	</EmoStrip>
+	</EmoStr>
 
 
 
@@ -825,7 +826,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec
+	<EmoSec
 		pBg={new ElemBg(cCream)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
@@ -871,7 +872,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</EmoFaq>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1028,7 +1029,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec
+	<EmoSec
 		id="takeoff-meaning"
 		pBg={new ElemBg("#F7F1E6")}
 		pHzAlign={Align.Center}
@@ -1062,7 +1063,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1070,8 +1071,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#0E1118")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#0E1118")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1093,7 +1097,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic4={new Topic("عند ضبط ميزانية المشروع", "ربط الرسومات بتقدير مالي أوضح، خصوصًا في الهيكل الخرساني حيث تظهر فروق كبيرة بسبب النظام الإنشائي والبحور وكمية الحديد والشدات.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1101,14 +1105,14 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<EmoStrip
+	<EmoStr
 		pBg={new ElemBg("#0E1118")}
 		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg("#151923")}
 			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
 			pHzAlign={Align.Center}
@@ -1121,7 +1125,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
@@ -1156,7 +1160,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</HzStack>
 
-	</EmoStrip>
+	</EmoStr>
 
 
 
@@ -1164,7 +1168,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec
+	<EmoSec
 		id="construction-items"
 		pBg={new ElemBg("#FFFFFF")}
 		pHzAlign={Align.Center}
@@ -1193,7 +1197,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic6={new Topic("المباني والطوب", "حصر الحوائط الخارجية والداخلية والبارابيت والمناور والفتحات حسب المساقط والقطاعات، مع فصل السماكات وأنواع الطوب إن وجدت.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1201,8 +1205,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#F7F1E6")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1240,7 +1247,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1248,8 +1255,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1274,7 +1284,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			]}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1282,14 +1292,14 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<EmoStrip
+	<EmoStr
 		pBg={new ElemBg("#F7F1E6")}
 		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg("#111318")}
 			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
 			pHzAlign={Align.Center}
@@ -1302,7 +1312,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
@@ -1332,7 +1342,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</HzStack>
 
-	</EmoStrip>
+	</EmoStr>
 
 
 
@@ -1340,7 +1350,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec
+	<EmoSec
 		id="workflow"
 		pBg={new ElemBg("#0E1118")}
 		pHzAlign={Align.Center}
@@ -1369,7 +1379,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic6={new Topic("تسليم جدول الحصر", "تسليم ملف منظم يحتوي البنود والوحدات والكميات والملاحظات، مع ملخصات تساعد في التسعير والمقارنة.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1377,8 +1387,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#F7F1E6")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1424,7 +1437,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1432,7 +1445,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec
+	<EmoSec
 		id="deliverables"
 		pBg={new ElemBg("#FFFFFF")}
 		pHzAlign={Align.Center}
@@ -1461,7 +1474,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic6={new Topic("توصيات مراجعة", "ملاحظات فنية مختصرة حول البنود الحساسة أو الكميات الشاذة أو نطاقات تحتاج تدقيقًا قبل الشراء أو التنفيذ.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1469,14 +1482,14 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<EmoStrip
+	<EmoStr
 		pBg={new ElemBg("#0E1118")}
 		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg("#151923")}
 			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
 			pHzAlign={Align.Center}
@@ -1489,7 +1502,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<CardsGr
 			pWidth={new RespString("1200px", "340px")}
@@ -1505,7 +1518,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic4={new Topic("المستخلص", "قياس ما تم تنفيذه فعليًا في الموقع ومقارنته بالكميات التعاقدية أو المعتمدة لصرف دفعات مرحلية.")}
 		/>
 
-	</EmoStrip>
+	</EmoStr>
 
 
 
@@ -1513,8 +1526,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -1552,7 +1568,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1560,8 +1576,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1585,7 +1604,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic6={new Topic("تجهيز مقايسة", "تحويل الكميات إلى جدول يصلح لإضافة أسعار الوحدة وإجمالي كل بند، مع ملاحظات تحمي المالك من الغموض.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1593,7 +1612,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec
+	<EmoSec
 		id="risk-control"
 		pBg={new ElemBg("#0E1118")}
 		pHzAlign={Align.Center}
@@ -1646,7 +1665,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1654,8 +1673,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -1677,7 +1699,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic4={new Topic("بند يحتاج استكمال", "بند ظاهر في المشروع لكن لا توجد بيانات كافية لحصره، ويجب طلب رسومات أو قرار قبل إدراجه بدقة.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1685,14 +1707,14 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<EmoStrip
+	<EmoStr
 		pBg={new ElemBg("#F7F1E6")}
 		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg("#111318")}
 			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
 			pHzAlign={Align.Center}
@@ -1705,7 +1727,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
@@ -1730,7 +1752,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</HzStack>
 
-	</EmoStrip>
+	</EmoStr>
 
 
 
@@ -1738,8 +1760,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1763,7 +1788,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic6={new Topic("قائمة ملاحظات", "تسجل الافتراضات والتعارضات والنواقص، وهي جزء مهم من الحصر لا يقل قيمة عن الأرقام نفسها.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1771,8 +1796,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1807,7 +1835,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1815,8 +1843,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1841,7 +1872,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			]}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1849,14 +1880,14 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<EmoStrip
+	<EmoStr
 		pBg={new ElemBg("#0E1118")}
 		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg("#151923")}
 			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
 			pHzAlign={Align.Center}
@@ -1869,7 +1900,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<CardsGr
 			pWidth={new RespString("1200px", "340px")}
@@ -1885,7 +1916,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic4={new Topic("المشرف", "يريد مرجعًا يساعده عند مراجعة الخامات والدفعات والكميات المنفذة والتغييرات التي تظهر في الموقع.")}
 		/>
 
-	</EmoStrip>
+	</EmoStr>
 
 
 
@@ -1893,8 +1924,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -1916,7 +1950,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic4={new Topic("حصر شراء خامات", "مناسب عند التحضير للتنفيذ وشراء الحديد أو الخرسانة أو الطوب، مع فصل الكمية الصافية عن الهالك أو الاحتياطي عند الحاجة.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1924,8 +1958,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#F7F1E6")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1971,7 +2008,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -1979,8 +2016,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -2002,7 +2042,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic4={new Topic("مع الإشراف", "المشرف يستخدم الحصر كمرجع عند متابعة الخامات والدفعات والكميات المنفذة والتغييرات في الموقع.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -2010,8 +2050,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -2036,7 +2079,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			]}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -2044,8 +2087,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#0E1118")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#0E1118")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -2067,7 +2113,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic4={new Topic("مراجعة لاحقة", "يمكن تحديث الحصر بعد استكمال الرسومات أو صدور نسخة جديدة، بدل إعادة العمل من الصفر إذا كان الجدول منظمًا. ")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -2075,8 +2121,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#F7F1E6")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -2105,7 +2154,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -2113,8 +2162,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -2138,7 +2190,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic6={new Topic("ما مستوى التفصيل؟", "ملخص سريع، جدول بنود، فصل حسب الدور، فصل حسب العنصر، أو ملف مناسب لإرساله للمقاولين.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -2146,8 +2198,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -2171,7 +2226,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic6={new Topic("مرحلة السطح والخدمات", "حصر البارابيت وغرف السطح وقواعد الخزانات أو المعدات والعناصر الإنشائية الصغيرة التي تنسى كثيرًا في المقايسات المختصرة.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -2179,8 +2234,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#F7F1E6")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -2226,7 +2284,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -2234,14 +2292,14 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<EmoStrip
+	<EmoStr
 		pBg={new ElemBg("#0E1118")}
 		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg("#151923")}
 			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
 			pHzAlign={Align.Center}
@@ -2254,7 +2312,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
@@ -2286,7 +2344,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</HzStack>
 
-	</EmoStrip>
+	</EmoStr>
 
 
 
@@ -2294,8 +2352,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -2317,7 +2378,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic4={new Topic("تأثير مالي", "إذا كان الجدول مسعرًا، يمكن ربط فرق الكمية بأثر مالي واضح قبل الموافقة على التعديل.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -2325,8 +2386,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#F7F1E6")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -2372,7 +2436,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -2380,8 +2444,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -2461,7 +2528,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -2469,8 +2536,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -2494,7 +2564,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic6={new Topic("قابلية المراجعة", "الوصف الجيد يسمح بمراجعة الكمية والسعر لاحقًا دون الرجوع لسلسلة طويلة من التفسيرات الشفوية.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -2502,8 +2572,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#0E1118")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#0E1118")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -2541,7 +2614,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -2549,8 +2622,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#F7F1E6")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -2574,7 +2650,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic6={new Topic("غرض غير مناسب", "حصر الميزانية لا يستخدم كأمر شراء، وحصر الشراء لا يستخدم كمستخلص، إلا بعد ضبطه للغرض المطلوب.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -2582,8 +2658,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -2629,7 +2708,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</HzStack>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -2637,8 +2716,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#F7F1E6")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -2660,7 +2742,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic4={new Topic("الكمية المنفذة", "هي ما تم تنفيذه فعليًا في الموقع، وتستخدم في المستخلصات ومراجعة التغييرات.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -2668,8 +2750,11 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<EmoSec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -2693,7 +2778,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 			pTopic6={new Topic("هل الكمية نهائية؟", "ملاحظات درجة الدقة تمنع استخدام حصر مبدئي كمرجع نهائي للتنفيذ.")}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -2701,7 +2786,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 
 
-	<ESec
+	<EmoSec
 		id="faq"
 		pBg={new ElemBg("#F7F1E6")}
 		pHzAlign={Align.Center}
@@ -2798,7 +2883,7 @@ const MakeHeroSize = (pWL: number | string, pHL: number | string, pWP: number | 
 
 		</EmoFaq>
 
-	</ESec>
+	</EmoSec>
 
 
 

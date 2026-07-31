@@ -1,7 +1,11 @@
 ---
-import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
+import { CardsGr } from "@/Widgets/Cards";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { RespImg } from "@/Widgets/Media";
+import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStr } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
 
 
@@ -29,6 +33,12 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 	pDescr="تسويق عقاري للعقارات المعروضة للبيع والإيجار في مساكن شيراتون والنزهة ومصر الجديدة، يشمل شقق للبيع وشقق للإيجار وشقق مفروش ومحلات للبيع ومحلات للإيجار."
 >
 
+
+
+
+
+
+
 	<Hero
 		pTitle="تسويق عقاري"
 		pDesc="للعرض والطلب في مساكن شيراتون والنزهة ومصر الجديدة"
@@ -46,19 +56,29 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 	</Hero>
 
-	<ESec
+
+
+
+
+
+
+	<EmoSec
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = {`--StripBg:${Colors.GreenLite};`}
 			pTitle="تسويق عقاري بمنطقة مساكن شيراتون و النزهة و مصر الجديدة"
 			pDesc="صفحة مخصصة للعرض والطلب، تجمع المعروضات العقارية النشطة وتفصلها حسب نوع العقار وطريقة التعامل"
-			style={`--StripBg:${Colors.GreenLite};`}
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(30, 16)} pPad={new Pixel(30, 10)}>
 
@@ -81,23 +101,33 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
-	<ESec
+
+
+
+
+
+
+	<EmoSec
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = {`--StripBg:${Colors.Gray5};`}
 			pTitle="المعروض الحالي"
 			pDesc="شقة للبيع في مصر الجديدة بالقرب من شارع عبد العزيز فهمي والكلية الحربية"
-			style={`--StripBg:${Colors.Gray5};`}
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Gray1)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(26, 14)} pPad={new Pixel(30, 10)}>
 
@@ -137,23 +167,33 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
-	<ESec
+
+
+
+
+
+
+	<EmoSec
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = {`--StripBg:${Colors.SkyLite};`}
 			pTitle="صور الشقة المعروضة"
 			pDesc="صور داخلية للفراغات والتشطيب وبعض عناصر الحمام والمعيشة"
-			style={`--StripBg:${Colors.SkyLite};`}
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack pGap={new Pixel(20, 14)} pPad={new Pixel(30, 10)}>
 
@@ -259,23 +299,33 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 			</VrStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
-	<ESec
+
+
+
+
+
+
+	<EmoSec
 		pBg={new ElemBg(Colors.BlackOff)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = {`--StripBg:${Colors.BistageDark};`}
 			pTitle="فروع العرض والطلب"
 			pDesc="تقسيم المعروضات حسب نوع العقار، مع توضيح حالة كل فرع بدل خلط كل الطلبات في صفحة واحدة"
-			style={`--StripBg:${Colors.BistageDark};`}
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.BlackOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1220px", "100%")}
@@ -292,23 +342,33 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 				pTopic7={new Topic("صيدليات للإيجار", "لا يوجد معروضات حاليًا. يتم التعامل مع هذا النوع بحذر بسبب حساسية الموقع والتراخيص والمسافات.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
-	<ESec
+
+
+
+
+
+
+	<EmoSec
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = {`--StripBg:${Colors.OrangeLite};`}
 			pTitle="طريقة عرض العقار"
 			pDesc="العقار الجيد لا يكفي أن يقال عنه للبيع أو للإيجار؛ يجب أن تعرض بياناته بترتيب يختصر وقت البائع والمشتري"
-			style={`--StripBg:${Colors.OrangeLite};`}
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<EmoList
 				pWidth={new RespString("980px", "100%")}
@@ -326,24 +386,34 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 				]}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
-	<ESec
+
+
+
+
+
+
+	<EmoSec
 		id="cta"
 		pBg={new ElemBg(Colors.BlackOff)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = {`--StripBg:${Colors.BlackOff};`}
 			pTitle="اعرض عقارك أو اطلب عقارًا مناسبًا"
 			pDesc="اتصل لإرسال بيانات العقار المعروض أو تسجيل طلب شراء أو إيجار داخل مساكن شيراتون والنزهة ومصر الجديدة"
-			style={`--StripBg:${Colors.BlackOff};`}
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.BlackOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack pGap={new Pixel(22, 14)} pPad={new Pixel(30, 10)}>
 
@@ -357,9 +427,15 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 			</VrStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
+
+
+
+
+
+
 
 	<EmoFaq>
 
@@ -390,41 +466,51 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 
 	</EmoFaq>
 
-	<ReadAlso
 
->
 
-	<ReadAlsoItem
-		pTitle="شقق للبيع"
-		pDesc="فرع مخصص للشقق المعروضة للبيع وبيانات السعر والمساحة والموقع."
-		pHref="/emostate/apartment"
-	/>
 
-	<ReadAlsoItem
-		pTitle="شقق للإيجار"
-		pDesc="طلبات ومعروضات الشقق الإيجار عند توفر وحدات مناسبة."
-		pHref="/emostate/apartment/rent"
-	/>
 
-	<ReadAlsoItem
-		pTitle="شقق مفروش"
-		pDesc="فرع خاص بالشقق المفروشة للإيجار حسب المنطقة والمدة والميزانية."
-		pHref="/emostate/apartment/furn"
-	/>
 
-	<ReadAlsoItem
-		pTitle="محلات للبيع"
-		pDesc="عرض المحلات المتاحة للبيع مع بيانات الموقع والمساحة والسعر."
-		pHref="/emostate/retail"
-	/>
 
-	<ReadAlsoItem
-		pTitle="محلات للإيجار"
-		pDesc="طلبات ومعروضات المحلات الإيجار عند توفر بيانات مناسبة."
-		pHref="/emostate/retail/rent"
-	/>
+	<ReadAlso>
 
-</ReadAlso>
+		<ReadAlsoItem
+			pTitle="شقق للبيع"
+			pDesc="فرع مخصص للشقق المعروضة للبيع وبيانات السعر والمساحة والموقع."
+			pHref="/emostate/apartment"
+		/>
+
+		<ReadAlsoItem
+			pTitle="شقق للإيجار"
+			pDesc="طلبات ومعروضات الشقق الإيجار عند توفر وحدات مناسبة."
+			pHref="/emostate/apartment/rent"
+		/>
+
+		<ReadAlsoItem
+			pTitle="شقق مفروش"
+			pDesc="فرع خاص بالشقق المفروشة للإيجار حسب المنطقة والمدة والميزانية."
+			pHref="/emostate/apartment/furn"
+		/>
+
+		<ReadAlsoItem
+			pTitle="محلات للبيع"
+			pDesc="عرض المحلات المتاحة للبيع مع بيانات الموقع والمساحة والسعر."
+			pHref="/emostate/retail"
+		/>
+
+		<ReadAlsoItem
+			pTitle="محلات للإيجار"
+			pDesc="طلبات ومعروضات المحلات الإيجار عند توفر بيانات مناسبة."
+			pHref="/emostate/retail/rent"
+		/>
+
+	</ReadAlso>
+
+
+
+
+
+
 
 	<RelServices>
 
@@ -447,5 +533,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, H
 		/>
 
 	</RelServices>
+
+
+
+
+
+
 
 </BLayout>

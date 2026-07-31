@@ -1,7 +1,9 @@
 ---
-import { EmoBtn, Emograph, EmoStrip, Stack } from "@/Widgets";
-import { Align, ElemBg, NumPer, Pixel, Place, type PlaceProps, Size, Text } from "@/TypesLib";
+import { EmoBtn, Emograph, Stack } from "@/Widgets/Comp";
+import { EmoStr } from "@/Widgets/Strips";
+import { Align, ElemBg, NumPer, Pixel, type PlaceProps, Size, Text } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
+
 interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
 	pForceShow?: boolean;
 }
@@ -46,8 +48,6 @@ const {
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
 
 const cWidgetId = pGivenID;
-
-
 ---
 
 
@@ -69,7 +69,7 @@ const cWidgetId = pGivenID;
 
 
 
-<EmoStrip
+<EmoStr
 	class = {`PhDwgMonthlyOffer ${pGivenClass}`.trim()}
 	style = {cGivenStyle}
 	id={cWidgetId}
@@ -90,6 +90,12 @@ const cWidgetId = pGivenID;
 	{...RemAttr}
 >
 
+
+
+
+
+
+
 	<Stack
 		class = " PhDwgMonthlyOffer__Main "
 		pDir="Row"
@@ -103,7 +109,9 @@ const cWidgetId = pGivenID;
 
 			<Emograph pTitle={Text.Body.OfSize(80,60).DarkSky.Centered.OfText("1000 جنيه")} />
 
-			<Emograph pTitle={Text.Body.OfSize(30, 18).White.Centered.OfText("على الرسم الهندسي للصيدلية عند حجز معاينة خلال الأيام الثلاثة الأولى من الشهر")} />
+			<Emograph
+				pTitle={Text.Body.OfSize(30, 18).White.Centered.OfText("على الرسم الهندسي للصيدلية عند حجز معاينة خلال الأيام الثلاثة الأولى من الشهر")}
+			/>
 
 		</Stack>
 
@@ -290,7 +298,11 @@ const cWidgetId = pGivenID;
 				التسجيل لا يعني تأكيد الموعد نهائيًا. سيتم التواصل مع الطبيب للتنسيق وتأكيد التفاصيل.
 			</p>
 
-			<div class = " PhDwgMonthlyOffer__Message " role="status" data-ph-message>
+			<div
+				class = " PhDwgMonthlyOffer__Message "
+				role="status"
+				data-ph-message
+			>
 
 			</div>
 
@@ -338,7 +350,13 @@ const cWidgetId = pGivenID;
 
 	</Stack>
 
-</EmoStrip>
+
+
+
+
+
+
+</EmoStr>
 
 
 
@@ -631,7 +649,7 @@ const cWidgetId = pGivenID;
 
 
 
-	.EmoStrip.PhDwgMonthlyOffer {
+	.EmoStr.PhDwgMonthlyOffer {
 		width: 100%;
 		max-width: 100%;
 		height: 400px;
@@ -643,17 +661,17 @@ const cWidgetId = pGivenID;
 		color: #ffffff;
 	}
 
-	.EmoStrip.PhDwgMonthlyOffer {
+	.EmoStr.PhDwgMonthlyOffer {
 		box-sizing: border-box;
 	}
 
-	.EmoStrip.PhDwgMonthlyOffer > .SlotBox {
+	.EmoStr.PhDwgMonthlyOffer > .SlotBox {
 		width: 100%;
 		height: 100%;
 		align-items: stretch;
 	}
 
-	.EmoStrip.PhDwgMonthlyOffer > .SlotBox > .SlotContent {
+	.EmoStr.PhDwgMonthlyOffer > .SlotBox > .SlotContent {
 		width: 100%;
 		height: 100%;
 		max-width: 100%;
@@ -753,14 +771,14 @@ const cWidgetId = pGivenID;
 
 
 
-	.EmoStrip.PhDwgMonthlyOffer,
-	.EmoStrip.PhDwgMonthlyOffer *
+	.EmoStr.PhDwgMonthlyOffer,
+	.EmoStr.PhDwgMonthlyOffer *
 	{
 		box-sizing: border-box;
 	}
 
 
-	.EmoStrip.PhDwgMonthlyOffer[hidden] {
+	.EmoStr.PhDwgMonthlyOffer[hidden] {
 		display: none;
 	}
 
@@ -815,15 +833,41 @@ const cWidgetId = pGivenID;
 	}
 
 
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style is:global>
+
+
+
 	@media (max-width: 1100px) {
-		.EmoStrip.PhDwgMonthlyOffer {
+		.EmoStr.PhDwgMonthlyOffer {
 			height: auto;
 			min-height: 400px;
 			overflow: visible;
 		}
 
-		.EmoStrip.PhDwgMonthlyOffer > .SlotBox,
-		.EmoStrip.PhDwgMonthlyOffer > .SlotBox > .SlotContent
+		.EmoStr.PhDwgMonthlyOffer > .SlotBox,
+		.EmoStr.PhDwgMonthlyOffer > .SlotBox > .SlotContent
 		{
 			height: auto;
 		}
@@ -858,15 +902,15 @@ const cWidgetId = pGivenID;
 
 
 	@media (max-width: 650px) {
-		.EmoStrip.PhDwgMonthlyOffer {
+		.EmoStr.PhDwgMonthlyOffer {
 			height: auto !important;
 			min-height: 0;
 			padding: 12px 10px;
 			overflow: visible;
 		}
 
-		.EmoStrip.PhDwgMonthlyOffer > .SlotBox,
-		.EmoStrip.PhDwgMonthlyOffer > .SlotBox > .SlotContent
+		.EmoStr.PhDwgMonthlyOffer > .SlotBox,
+		.EmoStr.PhDwgMonthlyOffer > .SlotBox > .SlotContent
 		{
 			height: auto !important;
 			min-height: 0;

@@ -1,9 +1,13 @@
 ---
-import { Align, ElemBg, GetHzAlignCss, GetVrAlignCss, type HzAlignValue, NumPer, Pixel, Place, Size, type PlaceProps, type VrAlignValue } from "@/TypesLib";
+import { Align, ElemBg, GetHzAlignCss, GetVrAlignCss, type HzAlignValue, NumPer, Pixel, Place, type PlaceProps, Size, type VrAlignValue } from "@/TypesLib";
 import { Media } from "@/Media";
 import { SeoText } from "@/SeoText";
 import type { HTMLAttributes } from "astro/types";
 
+/**
+ * حاسبة تقديرية لتكلفة تشطيب الوحدة بناءً على المساحة
+ * ومستوى التشطيب واختيارات المطبخ والتكييف.
+ */
 interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
 	pBg?: ElemBg;
 	pBox?: Size;
@@ -62,7 +66,7 @@ const {
 	pMoveViewMargin,
 	pMoveViewTarget,
 
-	id: pGivenID = GetWidgetId("DuoStr"),
+	id: pGivenID = GetWidgetId("DivStr"),
 	class: pGivenClass = "",
 	style: pGivenStyle = "",
 	...RemAttr
@@ -124,8 +128,8 @@ const cDuoStyle = [
 	`--DuoGapP:${pGap.Portrait};`,
 	`--DuoPadL:${pPad.Landscape};`,
 	`--DuoPadP:${pPad.Portrait};`,
-	`--DuoColMinHeightL:${cColMinHeightL};`,
-	`--DuoColMinHeightP:${cColMinHeightP};`,
+	`--DivColMinHeightL:${cColMinHeightL};`,
+	`--DivColMinHeightP:${cColMinHeightP};`,
 	GetStyleText(pGivenStyle),
 ].filter(Boolean).join(" ");
 
@@ -179,34 +183,105 @@ function HasExplicitCssSize(pValue?: string) {
 }
 ---
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div
-	class={`DuoStr ${cPlace.Class} ${pGivenClass}`.trim()}
-	style={cPlace.Style}
+	class = {`DivStr ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
 	id={pGivenID}
 	data-emo-auto-container="true"
 	data-emo-explicit-height={cHasExplicitHeight ? "true" : "false"}
 	data-emo-empty-height="200"
 	{...RemAttr}
 >
-	{cHasBgImg && (
-		<picture class="DuoStrBg" data-emo-container-bg="true">
+
+	{ cHasBgImg && (
+
+		<picture class = " DivStrBg " data-emo-container-bg="true">
+		
+		
+		
+		
+		
+		
+		
 			<source media="(orientation: portrait)" srcset={cFinalBgImgP} />
+		
+		
+		
+		
+		
+		
+		
 			<img
-				class="DuoStrBgImg"
+				class = " DivStrBgImg "
 				src={cFinalBgImgL}
 				alt={cBgAlt}
 				loading={cLoading}
 				decoding="async"
 				fetchpriority={cFetchPriority}
 			/>
+		
+		
+		
+		
+		
+		
+		
 		</picture>
-	)}
+	) }
 
 	<slot />
+
+
+
+
+
+
+
 </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <style is:global>
-	.DuoStr {
+
+
+
+	.DivStr {
 		position: relative;
 		isolation: isolate;
 		display: flex;
@@ -227,7 +302,8 @@ function HasExplicitCssSize(pValue?: string) {
 		overflow: visible;
 	}
 
-	.DuoStrBg {
+
+	.DivStrBg {
 		position: absolute;
 		inset: 0;
 		z-index: -1;
@@ -237,7 +313,8 @@ function HasExplicitCssSize(pValue?: string) {
 		pointer-events: none;
 	}
 
-	.DuoStrBgImg {
+
+	.DivStrBgImg {
 		display: block;
 		width: 100%;
 		height: 100%;
@@ -246,35 +323,37 @@ function HasExplicitCssSize(pValue?: string) {
 		user-select: none;
 	}
 
-	.DuoStr.DuoStr > :not(.DuoStrBg):not(.DuoCol):not(.IsPlaced):not(.PlaceSized) {
+
+
+	.DivStr.DivStr > :not(.DivStrBg):not(.DivCol):not(.IsPlaced):not(.PlaceSized) {
 		flex: 0 0 100%;
 		width: 100%;
 		max-width: 100%;
 		box-sizing: border-box;
 	}
 
-	.DuoStr.DuoStr > .DuoCol.DuoCol {
+	.DivStr.DivStr > .DivCol.DivCol {
 		flex-grow: 1;
 		flex-shrink: 1;
 		flex-basis: 0px;
 		width: auto;
 		max-width: 100%;
 		min-width: 0;
-		min-height: var(--DuoColMinHeightL, auto);
+		min-height: var(--DivColMinHeightL, auto);
 		align-self: stretch;
 		box-sizing: border-box;
 		margin-inline: 0;
 	}
 
-	.DuoStr.DuoStr > .DuoCol.DuoCol[data-duo-width-l="true"] {
+	.DivStr.DivStr > .DivCol.DivCol[data-duo-width-l="true"] {
 		flex-grow: 0;
 		flex-shrink: 1;
-		flex-basis: var(--DuoColWidthL);
-		width: var(--DuoColWidthL);
-		max-width: min(100%, var(--DuoColWidthL));
+		flex-basis: var(--DivColWidthL);
+		width: var(--DivColWidthL);
+		max-width: min(100%, var(--DivColWidthL));
 	}
 
-	.DuoStr.DuoStr > .DuoCol.DuoCol:not([data-duo-width-l="true"]):has(> [data-own-size]) {
+	.DivStr.DivStr > .DivCol.DivCol:not([data-duo-width-l="true"]):has(> [data-own-size]) {
 		flex-grow: 0;
 		flex-shrink: 1;
 		flex-basis: fit-content;
@@ -282,18 +361,48 @@ function HasExplicitCssSize(pValue?: string) {
 		max-width: 100%;
 	}
 
-	.DuoStr.IsPlaced {
+
+	.DivStr.IsPlaced {
 		position: absolute;
 		width: var(--PlaceWidthL);
 		height: var(--PlaceHeightL);
 	}
 
-	.DuoStr[hidden] {
+
+
+	.DivStr[hidden] {
 		display: none;
 	}
 
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style is:global>
+
+
+
 	@media (orientation: portrait) {
-		.DuoStr {
+		.DivStr {
 			align-content: var(--DuoAlignP, var(--DuoAlignL, center));
 			justify-content: var(--DuoJustifyP, var(--DuoJustifyL, center));
 			width: var(--DuoBoxWidthP, var(--DuoBoxWidthL, 100%));
@@ -303,22 +412,25 @@ function HasExplicitCssSize(pValue?: string) {
 			gap: var(--DuoGapP, var(--DuoGapL, 0px));
 		}
 
-		.DuoStr.DuoStr > .DuoCol.DuoCol {
+		.DivStr.DivStr > .DivCol.DivCol {
 			flex: 0 0 auto;
-			width: var(--DuoColWidthP, 100%);
-			max-width: min(100%, var(--DuoColWidthP, 100%));
-			min-height: var(--DuoColMinHeightP, auto);
+			width: var(--DivColWidthP, 100%);
+			max-width: min(100%, var(--DivColWidthP, 100%));
+			min-height: var(--DivColMinHeightP, auto);
 		}
 
-		.DuoStr.DuoStr > .DuoCol.DuoCol:not([data-duo-width-p="true"]):has(> [data-own-size]) {
+		.DivStr.DivStr > .DivCol.DivCol:not([data-duo-width-p="true"]):has(> [data-own-size]) {
 			width: fit-content;
 			max-width: 100%;
 			align-self: center;
 		}
 
-		.DuoStr.IsPlaced {
+		.DivStr.IsPlaced {
 			width: var(--PlaceWidthP);
 			height: var(--PlaceHeightP);
 		}
 	}
+
+
+
 </style>

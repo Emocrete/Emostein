@@ -10,6 +10,6 @@ export { default as EmoRatingStrip } from "./EmoRatingStrip.astro";
 
 export { default as EmoStatsStrip } from "./EmoStatsStrip.astro";
 
-export { default as EmoStrip } from "./EmoStrip.astro";
+export { default as EmoStr } from "./EmoStr.astro";
 
 export { default as IconCardsStrip } from "./IconCardsStrip.astro";

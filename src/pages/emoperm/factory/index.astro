@@ -1,7 +1,11 @@
 ---
-import { Align, Angle, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Badge, CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip, ESec, FaqItem, Hero, HzStack, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle } from "@/Widgets";
+import { CardsGr } from "@/Widgets/Cards";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle } from "@/Widgets/Comp";
+import { RespImg } from "@/Widgets/Media";
+import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStr } from "@/Widgets/Strips";
+import { Align, Angle, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import { PriceCard, VrStack } from "../../../site/Widgets";
 import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, Ribbon, SvgDots, TiltCard } from "../../../site/Widgets/Shapes";
 ---
@@ -68,7 +72,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 
 
-	<ESec
+	<EmoSec
 		id="factory-permit-service"
 		pBg={new ElemBg("#071419")}
 		pBox={new Size(new NumPer("100%"), new NumPer(760, 980))}
@@ -201,7 +205,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			pSize={new Size(new NumPer(270, 260), new NumPer(56, 52))}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -209,7 +213,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 
 
-	<ESec
+	<EmoSec
 		id="factory-permit-prices"
 		pBg={new ElemBg("#F7F0D7")}
 		pBox={new Size(new NumPer("100%"), new NumPer(720, 980))}
@@ -335,7 +339,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			pSize={new Size(new NumPer(270, 260), new NumPer(56, 52))}
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -343,7 +347,7 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 
 
-	<ESec
+	<EmoSec
 		id="factory-service"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -355,8 +359,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			pDesc="تجهيز ومتابعة ملف ترخيص المصنع هندسيًا وإداريًا، من مراجعة النشاط والموقع والمستندات حتى تجهيز الملف الفني ومتابعة الاستيفاءات المطلوبة لرخصة التشغيل."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1200px", "100%")}
@@ -389,17 +396,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 			<EmoCall BlackSky pText="ابدأ مراجعة ملف المصنع" />
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		hidden
 		id="factory-prices"
 		pBg={new ElemBg(Colors.BlackOff)}
@@ -412,8 +419,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			pDesc="السعر النهائي يتحدد بعد معرفة النشاط، مساحة المصنع، حالة المستندات، وجود رسومات، واحتياج الملف لتقارير حريق أو بيئة أو صلاحية مبنى."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.BlackOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(24, 16)} pPad={new Pixel(30, 15)}>
 
@@ -457,17 +467,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 			<EmoCall BlackSky pText="اعرف تكلفة ملف مصنعك" />
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="factory-nature"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -480,8 +490,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			pDesc="الجهة المختصة لا تراجع اسم المصنع فقط؛ هي تراجع النشاط، الموقع، سند الحيازة، سلامة المبنى، أثر التشغيل، الوقاية من الحريق، والملف الفني الذي يثبت أن المكان صالح لممارسة النشاط الصناعي المطلوب."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
@@ -497,18 +510,21 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+
+
+	<EmoSec
+		pBg={new ElemBg(Colors.BlackOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -516,8 +532,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			pDesc="تجهيز الملف يبدأ من تحديد مسار الترخيص: إخطار، مسبق، أو تقديم من خلال مكتب اعتماد، مع مراعاة أن طبيعة النشاط قد تنقل الملف من مسار سريع إلى فحص أعمق."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.BlackOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1200px", "100%")}
@@ -533,17 +552,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 				pTopic4={new Topic("حالات خاصة", "الصناعات الدوائية أو الثقيلة أو الخطرة أو ذات الأثر البيئي العالي تحتاج مسارًا أدق وموافقات إضافية حسب النشاط والكود الصناعي والموقع.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="factory-documents"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -556,8 +575,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			pDesc="القائمة التالية تصلح كبداية عملية لمراجعة ملف رخصة تشغيل المصنع، مع تعديلها حسب النشاط والمنطقة الصناعية وحالة المنشأة القائمة أو الجديدة."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<EmoList
 				pWidth={new RespString("1050px", "100%")}
@@ -575,17 +597,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 				]}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="factory-procedures"
 		pBg={new ElemBg(Colors.Creamy)}
 		pHzAlign={Align.Center}
@@ -598,8 +620,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			pDesc="الترتيب العملي للخدمة يبدأ من فرز الحالة، ثم تجهيز الملف، ثم التقديم والمتابعة والاستيفاءات حتى صدور رخصة التشغيل أو تحديد المطلوب لاستكمالها."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Creamy)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<EmoList
 				pWidth={new RespString("1050px", "100%")}
@@ -620,17 +645,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 				]}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="factory-engineering"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -643,8 +668,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			pDesc="أغلب التأخير لا يأتي من نقص صورة بطاقة، بل من تعارض هندسي أو تشغيلي يظهر عند مراجعة المبنى أو الحريق أو البيئة أو خطوط الإنتاج."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1200px", "100%")}
@@ -660,17 +688,17 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 				pTopic4={new Topic("تشغيل المعدات", "مراجعة توزيع الماكينات ومسارات الحركة والأحمال الكهربائية والميكانيكية وربطها بالرسم والملف الفني حتى لا يظهر تضارب أثناء الفحص.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="factory-service"
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
@@ -683,8 +711,11 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 			pDesc="الخدمة مناسبة للمصنع الجديد، المصنع القائم بدون رخصة واضحة، المصنع الذي يحتاج تعديل نشاط أو بيانات، والمنشأة التي تريد تجهيز ملفها قبل التقديم الرسمي."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Gray1)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(24, 16)} pPad={new Pixel(30, 15)}>
 
@@ -722,9 +753,9 @@ import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, R
 
 			<EmoCall BlackSky pText="ابدأ مراجعة ملف المصنع" />
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
 
 

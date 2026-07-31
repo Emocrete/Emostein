@@ -3,8 +3,8 @@ import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
 import { Badge, EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
 import { EmoGallery, RespImg } from "@/Widgets/Media";
-import { DuoCol, DuoStr, EmoFaq, ESec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
-import { EmoStrip } from "@/Widgets/Strips";
+import { DivCol, DivStr, EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStr } from "@/Widgets/Strips";
 import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
 
@@ -69,7 +69,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 
 
 
-	<ESec
+	<EmoSec
 		id="secCompare"
 		pBg={new ElemBg(Colors.WhiteOff,new EmoMediaData("Img","/Media/Emostone/","MarbleVsGranite.webp",true,"قطعة رخام بألوان براقة ومبهجة مع قطعة جرانيت أبيض بنقاط سوداء"))}
 		pHzAlign={Align.LeftCenter}
@@ -82,63 +82,63 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 			pTitle="أيهما أفضل ؟ الرخام أم الجرانيت ؟"
 		/>
 
-		<DuoStr id="strCompare">
+		<DivStr id="strCompare">
 
-			<DuoCol />
+			<DivCol />
 
-			<DuoCol>
+			<DivCol>
 
-				<HzStack>
+				<DivStr>
 
-					<RespImg
-						pImg={new EmoMediaData(
-					"Img",
-					"/Media/Emostone",
-					"MarbleCompare.webp",
-					false,
-					"رخام أبيض مستورد",
-				)}
-					/>
+					<DivCol>
 
-					<Emograph
-						pTitle={Text.H3.OfText("الرخام للأناقة والنعومة البصرية")}
-						pText={Text.Body.OfText("يتميز الرخام بمظهره الأنيق وسطحه الناعم، ويستخدم في التصميم الداخلي والخارجي عند اختيار النوع المناسب. نوفر رخامًا مصريًا أصليًا، ورخامًا مستوردًا، وخيارات متعددة تناسب الأرضيات والحوائط والمداخل والحمامات والديكورات.")}
-					/>
+						<RespImg pImg={new EmoMediaData("Img","/Media/Emostone","MarbleCompare.webp",false,"رخام أبيض مستورد")} />
 
-				</HzStack>
+					</DivCol>
 
-				<HzStack>
+					<DivCol>
 
-					<Emograph
-						pTitle={Text.H3.WithAlign("right").OfText("الجرانيت للتحمل والاستخدام الخارجي")}
-						pText={Text.Body.WithAlign("right").OfText("يشتهر الجرانيت بتحمله للصدمات والخدوش وملائمته للاستخدام الخارجي والواجهات. يستخدم أيضًا في المطابخ والسلالم والأرضيات عالية الحركة، مع تنوع كبير في الألوان مثل الأسود والبني والنجراني والروزا والجلاكسي.")}
-					/>
+						<Emograph
+							pTitle={Text.H3.OfText("الرخام للأناقة والنعومة البصرية")}
+							pText={Text.Body.OfText("يتميز الرخام بمظهره الأنيق وسطحه الناعم، ويستخدم في التصميم الداخلي والخارجي عند اختيار النوع المناسب. نوفر رخامًا مصريًا أصليًا، ورخامًا مستوردًا، وخيارات متعددة تناسب الأرضيات والحوائط والمداخل والحمامات والديكورات.")}
+						/>
 
-					<RespImg
-						pImg={new EmoMediaData(
-					"Img",
-					"/Media/Emostone",
-					"GranitCompare.webp",
-					false,
-					"جرانيت نيو حلايب",
-				)}
-					/>
+					</DivCol>
 
-				</HzStack>
+				</DivStr>
 
-			</DuoCol>
+				<DivStr>
 
-		</DuoStr>
+					<DivCol>
 
-	</ESec>
+						<Emograph
+							pTitle={Text.H3.WithAlign("right").OfText("الجرانيت للتحمل والاستخدام الخارجي")}
+							pText={Text.Body.WithAlign("right").OfText("يشتهر الجرانيت بتحمله للصدمات والخدوش وملائمته للاستخدام الخارجي والواجهات. يستخدم أيضًا في المطابخ والسلالم والأرضيات عالية الحركة، مع تنوع كبير في الألوان مثل الأسود والبني والنجراني والروزا والجلاكسي.")}
+						/>
 
+					</DivCol>
 
+					<DivCol>
+
+						<RespImg pImg={new EmoMediaData("Img","/Media/Emostone","GranitCompare.webp",false,"جرانيت نيو حلايب")} />
+
+					</DivCol>
+
+				</DivStr>
+
+			</DivCol>
+
+		</DivStr>
+
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="secMarble"
 		pBg={new ElemBg(Colors.Creamy)}
 		pHzAlign={Align.Center}
@@ -152,9 +152,9 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 			pDesc="نقدم أنواع الرخام المتعارف عليها في السوق المصري والعالمي، مع ترشيح النوع حسب الاستخدام والميزانية"
 		/>
 
-		<DuoStr id="strEgMarble">
+		<DivStr id="strEgMarble">
 
-			<DuoCol>
+			<DivCol>
 
 				<Emograph
 					id="txtEgMarple"
@@ -163,19 +163,19 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 					data-own-size
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol>
+			<DivCol>
 
 				<EmoGallery id="galEgMarble" pFolder="/Media/Emostone/Marble/Eg/Samples" />
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-		<DuoStr>
+		<DivStr>
 
-			<DuoCol>
+			<DivCol>
 
 				<Emograph
 					id="txtImpMarple"
@@ -184,25 +184,25 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 					data-own-size
 				/>
 
-			</DuoCol>
+			</DivCol>
 
-			<DuoCol>
+			<DivCol>
 
 				<EmoGallery id="galImpMarble" pFolder="/Media/Emostone/Marble/Imp/Samples" />
 
-			</DuoCol>
+			</DivCol>
 
-		</DuoStr>
+		</DivStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		hidden
 		id="secGraniteTypes"
 		pBg={new ElemBg(Colors.Gray1)}
@@ -216,7 +216,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 			pDesc="الجرانيت اختيار مناسب للأرضيات والواجهات الخارجية والمطابخ بسبب مقاومة الحرارة والصدمات وسهولة الصيانة"
 		/>
 
-		<EmoStrip id="strGraniteTypes" pBg={new ElemBg(Colors.Gray1)}>
+		<EmoStr id="strGraniteTypes" pBg={new ElemBg(Colors.Gray1)}>
 
 			<HzStack>
 
@@ -250,17 +250,17 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		hidden
 		id="secUses"
 		pBg={new ElemBg(Colors.Creamy)}
@@ -270,7 +270,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 
 		<SecTitle GreenLite pTitle="استخدامات الرخام والجرانيت" />
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.Creamy)}
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
@@ -289,17 +289,17 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 				pTopic6={new Topic("الديكورات الداخلية", "ألواح كبيرة، خلفيات، أعمدة، حليات، ورسومات هندسية حسب التصميم المطلوب.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		hidden
 		id="secChoose"
 		pBg={new ElemBg(Colors.Gray1)}
@@ -313,7 +313,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 			pTitle="اختيار الرخام المناسب"
 		/>
 
-		<EmoStrip
+		<EmoStr
 			pBg={new ElemBg(Colors.Gray1)}
 			pHzAlign={Align.Center}
 			pVrAlign={Align.Center}
@@ -350,9 +350,9 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
 
 

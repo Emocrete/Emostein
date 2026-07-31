@@ -1,7 +1,10 @@
 ---
-import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { Badge, CardsGr, EmoBtn, EmoCall, EmoContactStrip, EmoCountdown, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip, ESec, FaqItem, Hero, HzStack, IndexBtn, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
+import { CardsGr } from "@/Widgets/Cards";
+import { Badge, EmoCall, EmoCountdown, Emograph, EmoList, SecTitle, VrStack } from "@/Widgets/Comp";
+import { EmoFaq, EmoSec, FaqItem, Hero } from "@/Widgets/Sections";
+import { EmoStr } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, Loc, NumPer, Percent, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
 
 
@@ -83,7 +86,7 @@ import { Badge, CardsGr, EmoBtn, EmoCall, EmoContactStrip, EmoCountdown, EmoFaq,
 
 
 
-	<ESec
+	<EmoSec
 		id="reconcile-update"
 		pBg={new ElemBg(Colors.BlackOff)}
 		pHzAlign={Align.Center}
@@ -101,20 +104,23 @@ import { Badge, CardsGr, EmoBtn, EmoCall, EmoContactStrip, EmoCountdown, EmoFaq,
 
 		<EmoCountdown pDeadline="2026-11-05T23:59:59+02:00" pSize={new Size(new NumPer("1120px", "94%"))} />
 
-		<EmoStrip pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.BlackOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
-
-
-
+	</EmoSec>
 
 
-	<ESec
+
+
+
+
+
+	<EmoSec
 		id="secReport"
 		pBg={new ElemBg(Colors.BlackOff)}
 		pHzAlign={Align.Center}
@@ -127,7 +133,7 @@ import { Badge, CardsGr, EmoBtn, EmoCall, EmoContactStrip, EmoCountdown, EmoFaq,
 			pDesc="خدمة هندسية لتجهيز تقرير السلامة الإنشائية المطلوب في ملف التصالح ، مع متابعة إصدار الشهادة المؤمنة من نقابة المهندسين"
 		/>
 
-	</ESec>
+	</EmoSec>
 
 
 
@@ -135,7 +141,7 @@ import { Badge, CardsGr, EmoBtn, EmoCall, EmoContactStrip, EmoCountdown, EmoFaq,
 
 
 
-	<ESec
+	<EmoSec
 		id="reconcile-scope"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -151,8 +157,11 @@ import { Badge, CardsGr, EmoBtn, EmoCall, EmoContactStrip, EmoCountdown, EmoFaq,
 			pDesc="الصفحة موجهة لصاحب ملف التصالح الذي يحتاج مستندًا هندسيًا واضحًا: رسم معماري للوضع القائم، تقرير سلامة إنشائية، شهادة قيد مؤمنة، أو ملف رقمي قابل للتقديم والمتابعة."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1240px", "100%")}
@@ -167,17 +176,17 @@ import { Badge, CardsGr, EmoBtn, EmoCall, EmoContactStrip, EmoCountdown, EmoFaq,
 				pTopic4={new Topic("نسخة رقمية منظمة", "تجميع المستندات الفنية في صورة واضحة ومهيأة للتقديم من خلال المركز التكنولوجي أو المنظومة الإلكترونية.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="reconcile-documents"
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
@@ -193,8 +202,11 @@ import { Badge, CardsGr, EmoBtn, EmoCall, EmoContactStrip, EmoCountdown, EmoFaq,
 			pDesc="لا نعرض قائمة أوراق إدارية طويلة فقط، لكن نرتب المستندات الفنية التي تؤثر فعليًا على قبول وفحص الملف."
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Gray1)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<EmoList
 				pWidth={new RespString("1180px", "100%")}
@@ -211,17 +223,17 @@ import { Badge, CardsGr, EmoBtn, EmoCall, EmoContactStrip, EmoCountdown, EmoFaq,
 				]}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec
+
+
+	<EmoSec
 		id="reconcile-deliverables"
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
@@ -233,8 +245,11 @@ import { Badge, CardsGr, EmoBtn, EmoCall, EmoContactStrip, EmoCountdown, EmoFaq,
 
 		<SecTitle SkyDark pTitle="مخرجات التسليم من خدمة التصالح" />
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Gray1)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1240px", "100%")}
@@ -249,9 +264,9 @@ import { Badge, CardsGr, EmoBtn, EmoCall, EmoContactStrip, EmoCountdown, EmoFaq,
 				pTopic4={new Topic("نسخة رقمية", "ملفات رقمية مرتبة للمستندات الفنية والمساندة لتسهيل التقديم والمتابعة والاستيفاء.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
 
 

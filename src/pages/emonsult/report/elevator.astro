@@ -1,7 +1,9 @@
 ---
-import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text, HoverColors } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, Hero, HzStack, PriceCard, VrStack } from "@/Widgets";
+import { EmoBtn, EmoCall, Emograph, EmoList, HzStack, VrStack } from "@/Widgets/Comp";
+import { EmoSec } from "@/Widgets/Sections";
+import { EmoStr } from "@/Widgets/Strips";
+import { Colors, ElemBg, Loc, NumPer, Size, Text } from "@/TypesLib";
 ---
 
 
@@ -29,7 +31,13 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, He
 	pDescr="تقرير هندسي استشاري لترخيص تركيب أو تشغيل مصعد في نطاق محافظتي القاهرة والجيزة، مع إمكانية اعتماد التقرير من مهندس استشاري فقط أو من مهندس استشاري ونقابة المهندسين."
 >
 
-	<ESec data-hero pImgAlt="ساكن يطلب مصعد تم عمل تقرير سلامة انشائية وسلامة تشغيل له">
+
+
+
+
+
+
+	<EmoSec data-hero pImgAlt="ساكن يطلب مصعد تم عمل تقرير سلامة انشائية وسلامة تشغيل له">
 
 		<VrStack pSize={new Size(new NumPer("35%","95%"))} pLoc={new Loc(new NumPer("65%","2.5%"),new NumPer("5%","10%"))}>
 
@@ -42,17 +50,23 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, He
 
 		</VrStack>
 
-	</ESec>
+	</EmoSec>
 
-	<ESec id="secDetails">
 
-		<EmoStrip pBg={new ElemBg(Colors.Sky)}>
+
+
+
+
+
+	<EmoSec id="secDetails">
+
+		<EmoStr pBg={new ElemBg(Colors.Sky)}>
 
 			<Emograph pTitle={Text.H2.Centered.OfText("تفاصيل التقارير الهندسية المطلوبة لترخيص المصعد")} />
 
-		</EmoStrip>
+		</EmoStr>
 
-		<EmoStrip>
+		<EmoStr>
 
 			<HzStack>
 
@@ -115,19 +129,25 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, He
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
-	<ESec id="secInstallingCost">
 
-		<EmoStrip pBg={new ElemBg(Colors.Sky)}>
+
+
+
+
+
+	<EmoSec id="secInstallingCost">
+
+		<EmoStr pBg={new ElemBg(Colors.Sky)}>
 
 			<Emograph pTitle={Text.H2.Centered.OfText("تكلفة أتعاب اعتماد تقرير تركيب مصعد")} />
 
-		</EmoStrip>
+		</EmoStr>
 
-		<EmoStrip>
+		<EmoStr>
 
 			<VrStack pSize={new Size(new NumPer("100%"))}>
 
@@ -178,19 +198,25 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, He
 
 			</VrStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
-	<ESec id="secOperationCost">
 
-		<EmoStrip pBg={new ElemBg(Colors.Sky)}>
+
+
+
+
+
+	<EmoSec id="secOperationCost">
+
+		<EmoStr pBg={new ElemBg(Colors.Sky)}>
 
 			<Emograph pTitle={Text.H2.Centered.OfText("تكلفة أتعاب اعتماد تقرير تشغيل مصعد")} />
 
-		</EmoStrip>
+		</EmoStr>
 
-		<EmoStrip>
+		<EmoStr>
 
 			<VrStack pSize={new Size(new NumPer("100%"))}>
 
@@ -241,8 +267,14 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, He
 
 			</VrStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
+
+
+
+
+
+
 
 </BLayout>

@@ -75,6 +75,12 @@ const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
 	{...RemAttr}
 >
 
+
+
+
+
+
+
 	<div
 		style = "
 				display : flex ;
@@ -107,6 +113,12 @@ const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
 		</video>
 
 	</div>
+
+
+
+
+
+
 
 	<div
 		style = "
@@ -180,7 +192,11 @@ const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
 				"
 		>
 
-			<input id="fKitchen" type="checkbox" checked />
+			<input
+				id="fKitchen"
+				type="checkbox"
+				checked
+			/>
 
 			مطبخ (زيادة تقديرية)
 
@@ -202,6 +218,12 @@ const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
 		</label>
 
 	</div>
+
+
+
+
+
+
 
 	<div
 		style = "
@@ -226,11 +248,21 @@ const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
 
 		</div>
 
-		<a class = " btnBrand " href="#cta" data-ga="calc_cta">
+		<a
+			class = " btnBrand "
+			href="#cta"
+			data-ga="calc_cta"
+		>
 			اطلب عرض سعر دقيق
 		</a>
 
 	</div>
+
+
+
+
+
+
 
 </section>
 
@@ -254,34 +286,61 @@ const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
 
 
 <script is:inline>
+
+
+
+	// ==================== Definitions: Variables & Methods ====================
+
 	const fRoot = document.currentScript.closest("section");
 
 	const fAreaEl = fRoot.querySelector("#fArea");
+
 	const fLevelEl = fRoot.querySelector("#fLevel");
+
 	const fKitchenEl = fRoot.querySelector("#fKitchen");
+
 	const fAcEl = fRoot.querySelector("#fAc");
+
 	const fOutEl = fRoot.querySelector("#fOut");
 
-	function fFmt(n) {
-	return Math.round(n).toLocaleString("ar-EG");
+
+
+
+
+	function fFmt(n)
+	{
+		return Math.round(n).toLocaleString("ar-EG");
 	}
 
-	function fCalc() {
-	const fArea = Number(fAreaEl.value || 0);
-	const fRate = Number(fLevelEl.value || 0);
-	let fTotal = fArea * fRate;
 
-	if (fKitchenEl.checked) fTotal += fArea * 450; // تقديري
-	if (fAcEl.checked) fTotal += fArea * 250; // تقديري
 
-	fOutEl.textContent = fFmt(fTotal);
+
+
+	function fCalc()
+	{
+		const fArea = Number(fAreaEl.value || 0);
+		const fRate = Number(fLevelEl.value || 0);
+		let fTotal = fArea * fRate;
+		if (fKitchenEl.checked) fTotal += fArea * 450; // تقديري
+		if (fAcEl.checked) fTotal += fArea * 250; // تقديري
+		fOutEl.textContent = fFmt(fTotal);
 	}
 
-	["input", "change"].forEach((ev) => {
-	fAreaEl.addEventListener(ev, fCalc);
-	fLevelEl.addEventListener(ev, fCalc);
-	fKitchenEl.addEventListener(ev, fCalc);
-	fAcEl.addEventListener(ev, fCalc);
+
+
+
+
+	// ==================== Execution Logic ====================
+
+	[
+		"input",
+		"change"
+	].forEach((ev) =>
+		{
+			fAreaEl.addEventListener(ev, fCalc);
+			fLevelEl.addEventListener(ev, fCalc);
+			fKitchenEl.addEventListener(ev, fCalc);
+			fAcEl.addEventListener(ev, fCalc);
 	});
 
 	fCalc();

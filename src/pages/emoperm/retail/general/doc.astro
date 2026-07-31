@@ -1,7 +1,11 @@
 ---
-import { Align, Angle, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { BottTriSep, Card, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, IncLineSep, IndexBtn, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, Tree, VrStack, YTPlayer } from "@/Widgets";
+import { CardsGr } from "@/Widgets/Cards";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { RespImg } from "@/Widgets/Media";
+import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStr } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
 
 
@@ -68,7 +72,7 @@ import { BottTriSep, Card, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph,
 
 
 
-	<ESec
+	<EmoSec
 		id="RequiredDocuments"
 		pBg={new ElemBg(Colors.WhiteOff)}
 		pHzAlign={Align.Center}
@@ -77,8 +81,11 @@ import { BottTriSep, Card, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph,
 
 		<SecTitle SkyLite pTitle="المستندات المطلوبة لترخيص محل تجاري" />
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1600px", "100%")}
@@ -103,23 +110,29 @@ import { BottTriSep, Card, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph,
 				])}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+
+
+	<EmoSec
+		pBg={new ElemBg(Colors.Gray1)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle Bistage pTitle="مستندات قد تطلب حسب صفة طالب الترخيص" />
 
-		<EmoStrip pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Gray1)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1600px", "100%")}
@@ -132,18 +145,21 @@ import { BottTriSep, Card, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph,
 				pTopic4={new Topic("إذا كان هناك مدير مسؤول", "في بعض الأنشطة لا يكفي اسم صاحب الترخيص، بل تحتاج الجهة لبيانات المدير المسؤول عن التشغيل، وقد تطلب صحيفة حالة جنائية أو مستندات صحية أو مهنية حسب النشاط.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+
+
+	<EmoSec
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			Sky
@@ -151,8 +167,11 @@ import { BottTriSep, Card, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph,
 			pDesc="أكبر سبب لتعطل ملف الترخيص غالبًا لا يكون بطاقة صاحب الطلب، بل حالة العين نفسها: الملكية، الإيجار، القيمة الإيجارية، موقف العقار، والرسم التوضيحي"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<EmoList
 				pWidth={new RespString("980px", "100%")}
@@ -169,18 +188,21 @@ import { BottTriSep, Card, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph,
 				]}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+
+
+	<EmoSec
+		pBg={new ElemBg(Colors.Creamy)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -188,8 +210,11 @@ import { BottTriSep, Card, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph,
 			pDesc="بعد إثبات صفة طالب الترخيص وحالة العين، تأتي مستندات النشاط نفسه: ضريبة، سجل، تأمينات، شهادات صحية، وموافقات خاصة عند الحاجة"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.Creamy)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack pGap={new Pixel(28, 16)}>
 
@@ -218,18 +243,21 @@ import { BottTriSep, Card, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph,
 
 			</HzStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+
+
+	<EmoSec
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -237,8 +265,11 @@ import { BottTriSep, Card, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph,
 			pDesc="القائمة الصحيحة لا تكفي إذا كانت النسخ غير واضحة أو البيانات غير متطابقة أو النشاط مكتوبًا بأكثر من صيغة بين المستندات"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<CardsGr
 				pWidth={new RespString("1180px", "100%")}
@@ -251,18 +282,21 @@ import { BottTriSep, Card, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph,
 				pTopic4={new Topic("تقديم صور بلا أصول", "كثير من الجهات تطلب الاطلاع على الأصل مع تقديم الصورة، لذلك يجب تجهيز الأصول قبل الذهاب حتى لا يتوقف الملف رغم وجود الصور.")}
 			/>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
-
-
+	</EmoSec>
 
 
 
 
 
-	<ESec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+
+
+	<EmoSec
+		pBg={new ElemBg(Colors.WhiteOff)}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -270,8 +304,11 @@ import { BottTriSep, Card, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph,
 			pDesc="الخدمة ليست تجميع صور فقط، بل مراجعة منطق الملف قبل دخوله إلى الجهة الإدارية"
 		/>
 
-		<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStr
+			pBg={new ElemBg(Colors.WhiteOff)}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack pWidth={new Pixel(1050, 340)} pGap={new Pixel(22, 14)}>
 
@@ -289,9 +326,9 @@ import { BottTriSep, Card, CardsGr, DataCard, EmoBtn, EmoCall, EmoFaq, Emograph,
 
 			</VrStack>
 
-		</EmoStrip>
+		</EmoStr>
 
-	</ESec>
+	</EmoSec>
 
 
 
