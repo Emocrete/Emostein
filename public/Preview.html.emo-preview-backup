@@ -1,0 +1,3295 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Emo Preview</title>
+
+		<style>
+			html,
+			body {
+				margin: 0;
+				width: 100vw;
+				height: 100vh;
+				overflow: hidden;
+				background: #000000;
+			}
+
+			body {
+				position: relative;
+			}
+
+			#stage {
+				display: grid;
+				grid-template-columns: 1fr;
+				grid-template-rows: 36px 1fr;
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+			}
+
+			.tools-bar {
+				position: relative;
+				z-index: 10;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 8px;
+				height: 36px;
+				padding: 3px 8px;
+				box-sizing: border-box;
+				border-bottom: 1px solid #333333;
+				background: #111111;
+				color: #ffffff;
+				font-family: Arial, sans-serif;
+				font-size: 12px;
+				direction: rtl;
+				overflow: hidden;
+				user-select: none;
+			}
+
+			body.ToolsSide #stage {
+				grid-template-columns: 100px minmax(0, 1fr);
+				grid-template-rows: 1fr;
+			}
+
+			body.ToolsSide .tools-bar {
+				width: 100px;
+				height: 100%;
+				min-width: 0;
+				max-width: 100px;
+				flex-direction: column;
+				align-items: stretch;
+				justify-content: flex-start;
+				padding: 6px 3px;
+				border-bottom: none;
+				border-inline-end: 1px solid #333333;
+				overflow-x: hidden;
+				overflow-y: auto;
+			}
+
+			body.ToolsSide .tools-bar > * {
+				flex: 0 0 auto;
+				min-width: 0;
+				max-width: 100%;
+				overflow: hidden;
+			}
+
+			body.ToolsSide .tool-group {
+				width: 100%;
+				min-width: 0;
+				max-width: 100%;
+			}
+
+			body.ToolsSide .path-group {
+				flex: 0 0 auto;
+				min-width: 0;
+				max-width: 100%;
+			}
+
+			body.IsProdPreview .tools-bar {
+	background: #073b1f;
+	border-bottom-color: #126b3a;
+}
+
+			.tool-group {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				gap: 4px;
+				white-space: nowrap;
+			}
+
+			.tool-group label {
+				color: #d8d8d8;
+				font-size: 11px;
+				line-height: 1;
+			}
+
+			.tool-group select,
+			.tool-group input,
+			.reset-btn,
+			.copy-btn,
+			.frame-toggle-btn {
+				height: 24px;
+				box-sizing: border-box;
+				border: 1px solid #555555;
+				border-radius: 5px;
+				background: #111111;
+				color: #ffffff;
+				font-size: 12px;
+			}
+
+			.tool-group select {
+				min-width: 150px;
+			}
+
+			.size-input {
+				width: 60px;
+				text-align: center;
+			}
+
+			.port-group {
+				flex: 0 0 auto;
+			}
+
+			.port-input {
+				width: 58px;
+				direction: ltr;
+				text-align: center;
+			}
+
+			.path-group {
+				flex: 1 1 420px;
+				min-width: 220px;
+				max-width: 760px;
+			}
+
+			.link-input {
+				width: 100%;
+				direction: ltr;
+				text-align: left;
+			}
+
+			.reset-btn,
+			.copy-btn,
+			.frame-toggle-btn {
+				width: 28px;
+				padding: 0;
+				cursor: pointer;
+				background: #2b2b2b;
+				text-align: center;
+			}
+
+			.frame-toggle-btn {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				color: #ffffff;
+			}
+
+			.frame-toggle-btn.is-active {
+				color: #008fa3;
+			}
+
+			.frame-toggle-btn svg {
+				display: block;
+				width: 18px;
+				height: 18px;
+			}
+
+			.frame-toggle-btn svg * {
+				stroke: currentColor;
+			}
+
+			.zoom-mode-btn svg circle {
+				fill: currentColor;
+				stroke: none;
+			}
+
+			.preview-area {
+				position: relative;
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+			}
+
+			.pane {
+				position: absolute;
+				top: 0;
+				height: 100%;
+				overflow: hidden;
+			}
+
+			.separator {
+				position: absolute;
+				top: 0;
+				height: 100%;
+				width: 30px;
+				pointer-events: none;
+				background: transparent;
+			}
+
+			.scale-wrapper {
+				position: absolute;
+				transform-origin: top left;
+			}
+
+			.scale-wrapper.landscape {
+				width: 1920px;
+				height: 911px;
+			}
+
+			.scale-wrapper.portrait {
+				width: 360px;
+				height: 680px;
+			}
+
+			iframe {
+				display: block;
+				width: 100%;
+				height: 100%;
+				border: none;
+				background: #ffffff;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="stage">
+
+			<div id="toolsBar" class="tools-bar">
+
+				<div class="tool-group">
+					<select id="mobileModelSelect"></select>
+					<label for="mobileModelSelect">M</label>
+				</div>
+
+				<div class="tool-group">
+					<select id="desktopSizeSelect"></select>
+					<label for="desktopSizeSelect">D</label>
+				</div>
+
+			
+
+				<div class="tool-group">
+					<input id="desktopHeightInput" class="size-input" type="number" min="1" step="50">
+					<label for="desktopHeightInput">H</label>
+				</div>
+
+				<div class="tool-group">
+					<input id="desktopWidthInput" class="size-input" type="number" min="1" step="50">
+					<label for="desktopWidthInput">W</label>
+				</div>
+
+				<div class="tool-group path-group">
+					<input id="previewPathInput" class="link-input" type="text">
+					<label for="previewPathInput">P</label>
+				</div>
+
+				<div class="tool-group port-group">
+					<input id="previewPortInput" class="port-input" type="number" min="1" max="65535" step="1">
+					<label for="previewPortInput">S</label>
+				</div>
+
+				<button id="mobileFrameBtn" class="frame-toggle-btn is-active" type="button" title="إظهار / إخفاء فريم الموبايل" aria-label="إظهار أو إخفاء فريم الموبايل" aria-pressed="true">
+					<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<rect x="7" y="2.5" width="10" height="19" rx="2.2"></rect>
+						<line x1="10" y1="18.5" x2="14" y2="18.5"></line>
+					</svg>
+				</button>
+
+				<button id="desktopFrameBtn" class="frame-toggle-btn is-active" type="button" title="إظهار / إخفاء فريم الديسكتوب" aria-label="إظهار أو إخفاء فريم الديسكتوب" aria-pressed="true">
+					<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<rect x="3" y="4" width="18" height="12" rx="1.5"></rect>
+						<line x1="9" y1="20" x2="15" y2="20"></line>
+						<line x1="12" y1="16" x2="12" y2="20"></line>
+					</svg>
+				</button>
+
+
+				<button id="zoomAnchorModeBtn" class="frame-toggle-btn zoom-mode-btn" type="button" title="تفعيل زووم يحافظ على تركيب الصفحة ويرتكز عند مؤشر الماوس" aria-label="تبديل طريقة زووم محتوى الفريم" aria-pressed="false">
+					<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<rect x="3" y="5" width="18" height="14" rx="2"></rect>
+						<circle cx="12" cy="12" r="2.2" fill="currentColor"></circle>
+					</svg>
+				</button>
+
+				<button id="copyBtn" class="copy-btn" type="button" title="Copy final URL">C</button>
+				<button id="resetBtn" class="reset-btn" type="button" title="Reset">R</button>
+
+			</div>
+
+			<div id="previewArea" class="preview-area">
+
+				<div id="landPane" class="pane">
+					<div id="landWrapper" class="scale-wrapper landscape">
+						<iframe
+	id="landFrame"
+	name="EmoPreviewLandscape"
+	class="preview-frame"
+	title="Landscape Preview"
+></iframe>
+					</div>
+				</div>
+
+				<div id="separator" class="separator"></div>
+
+				<div id="portPane" class="pane">
+					<div id="portWrapper" class="scale-wrapper portrait">
+						<iframe
+	id="portFrame"
+	name="EmoPreviewPortrait"
+	class="preview-frame"
+	title="Portrait Preview"
+></iframe>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+		<script>
+			const cDefaultPreviewPort = "4321";
+			const cDefaultRelativeSrc = "";
+			const cDefaultPublishedBaseSource = "https://www.emocrete.com/";
+			const cToolsSideStorageKey = "EmoPreviewToolsSide";
+			
+			const cDefaultMobileKey = "CurrentMobile";
+			const cDefaultDesktopKey = "CurrentDesktop";
+			const cCustomDesktopKey = "CustomDesktop";
+
+			const cDefaultLandscape = {
+				Width: 1920,
+				Height: 911
+			};
+
+			const cDefaultPortrait = {
+				Width: 360,
+				Height: 680
+			};
+
+			const cMobileModels = {
+				CurrentMobile: {
+					Title: "الحالي - 360 × 680",
+					Width: 360,
+					Height: 680
+				},
+
+				IphoneSE: {
+					Title: "iPhone SE - 375 × 667",
+					Width: 375,
+					Height: 667
+				},
+
+				GalaxyS20: {
+					Title: "Galaxy S20 - 360 × 800",
+					Width: 360,
+					Height: 800
+				}
+			};
+
+			const cDesktopSizes = {
+				CurrentDesktop: {
+					Title: "الحالي - 1920 × 911",
+					Width: 1920,
+					Height: 911
+				},
+
+				FullHD: {
+					Title: "Full HD - 1920 × 1080",
+					Width: 1920,
+					Height: 1080
+				},
+
+				Laptop1366: {
+					Title: "Laptop - 1366 × 768",
+					Width: 1366,
+					Height: 768
+				}
+			};
+
+			const cLandscape = {
+				Width: cDefaultLandscape.Width,
+				Height: cDefaultLandscape.Height
+			};
+
+			const cPortrait = {
+				Width: cDefaultPortrait.Width,
+				Height: cDefaultPortrait.Height
+			};
+
+			const cGap = 30;
+
+			const cPreviewArea = document.getElementById("previewArea");
+
+			const cLandPane = document.getElementById("landPane");
+			const cPortPane = document.getElementById("portPane");
+			const cSeparator = document.getElementById("separator");
+
+			const cLandWrapper = document.getElementById("landWrapper");
+			const cPortWrapper = document.getElementById("portWrapper");
+
+			const cLandFrame = document.getElementById("landFrame");
+const cPortFrame = document.getElementById("portFrame");
+
+			const cMobileModelSelect = document.getElementById("mobileModelSelect");
+			const cDesktopSizeSelect = document.getElementById("desktopSizeSelect");
+
+			const cDesktopWidthInput = document.getElementById("desktopWidthInput");
+			const cDesktopHeightInput = document.getElementById("desktopHeightInput");
+
+			const cPreviewPortInput = document.getElementById("previewPortInput");
+			const cPreviewPathInput = document.getElementById("previewPathInput");
+
+			const cMobileFrameBtn = document.getElementById("mobileFrameBtn");
+			const cDesktopFrameBtn = document.getElementById("desktopFrameBtn");
+
+			const cCopyBtn = document.getElementById("copyBtn");
+			const cResetBtn = document.getElementById("resetBtn");
+			const cToolsBar = document.getElementById("toolsBar");
+
+			let cPreviewSrc = BuildPreviewSource(cDefaultPreviewPort, cDefaultRelativeSrc);
+			let cShowLandscapeFrame = true;
+			let cShowPortraitFrame = true;
+			let cResizeFrame = 0;
+
+			InitializeTools();
+SetPreviewSources();
+UpdateLayout();
+UpdatePreviewMode();
+
+window.addEventListener("resize", RequestUpdateLayout);
+
+			function InitializeTools() {
+				FillMobileSelect();
+				FillDesktopSelect();
+
+				cMobileModelSelect.value = cDefaultMobileKey;
+				cDesktopSizeSelect.value = cDefaultDesktopKey;
+
+				cPreviewPortInput.value = cDefaultPreviewPort;
+				cPreviewPathInput.value = cDefaultRelativeSrc;
+
+				ApplyPreviewUrlParameters();
+
+				SyncDesktopInputs();
+				ApplyWrapperBaseSizes();
+				SetFrameToggleButtonStates();
+				SetToolsSide(localStorage.getItem(cToolsSideStorageKey) === "1", false);
+				RegisterToolEvents();
+			}
+
+			function FillMobileSelect() {
+				FillSelectFromDictionary(cMobileModelSelect, cMobileModels);
+			}
+
+			function FillDesktopSelect() {
+				cDesktopSizeSelect.textContent = "";
+
+				const cCustomOption = document.createElement("option");
+				cCustomOption.value = cCustomDesktopKey;
+				cCustomOption.textContent = "مخصص من الخانات";
+				cDesktopSizeSelect.appendChild(cCustomOption);
+
+				AppendDictionaryOptions(cDesktopSizeSelect, cDesktopSizes);
+			}
+
+			function FillSelectFromDictionary(pSelect, pDictionary) {
+				pSelect.textContent = "";
+				AppendDictionaryOptions(pSelect, pDictionary);
+			}
+
+			function AppendDictionaryOptions(pSelect, pDictionary) {
+				for (const [cKey, cItem] of Object.entries(pDictionary)) {
+					const cOption = document.createElement("option");
+					cOption.value = cKey;
+					cOption.textContent = cItem.Title;
+					pSelect.appendChild(cOption);
+				}
+			}
+
+			function RegisterToolEvents() {
+	cMobileModelSelect.addEventListener("change", ApplySelectedMobileModel);
+	cDesktopSizeSelect.addEventListener("change", ApplySelectedDesktopSize);
+
+	cDesktopWidthInput.addEventListener("input", ApplyDesktopInputs);
+	cDesktopHeightInput.addEventListener("input", ApplyDesktopInputs);
+
+	cPreviewPortInput.addEventListener("input", ApplyPreviewSourceInputs);
+	cPreviewPathInput.addEventListener("input", ApplyPreviewSourceInputs);
+
+	cPreviewPathInput.addEventListener("focus", SelectPathInputText);
+	cPreviewPathInput.addEventListener("mouseup", KeepPathInputSelection);
+cPreviewPathInput.addEventListener("paste", HandlePathInputPaste);
+
+	cMobileFrameBtn.addEventListener("click", TogglePortraitFrame);
+	cDesktopFrameBtn.addEventListener("click", ToggleLandscapeFrame);
+
+	cCopyBtn.addEventListener("click", CopyPreviewSource);
+	cResetBtn.addEventListener("click", ResetPreviewSystem);
+		cToolsBar.addEventListener("dblclick", ToggleToolsOrientation);
+}
+
+	function ToggleToolsOrientation(pEvent) {
+		if (pEvent.target && pEvent.target.closest && pEvent.target.closest("input,select,button")) {
+			return;
+		}
+
+		pEvent.preventDefault();
+		SetToolsSide(!document.body.classList.contains("ToolsSide"), true);
+	}
+
+	function SetToolsSide(pIsSide, pPersist) {
+		document.body.classList.toggle("ToolsSide", pIsSide);
+		cToolsBar.title = pIsSide ? "دبل كليك لتحويل الأدوات إلى شريط علوي" : "دبل كليك لتحويل الأدوات إلى شريط جانبي";
+
+		if (pPersist) {
+			localStorage.setItem(cToolsSideStorageKey, pIsSide ? "1" : "0");
+		}
+
+		RequestUpdateLayout();
+	}
+
+
+  function SelectPathInputText() {
+
+	window.setTimeout(() => {
+		cPreviewPathInput.select();
+	}, 0);
+}
+
+function KeepPathInputSelection(pEvent) {
+	pEvent.preventDefault();
+}
+
+function HandlePathInputPaste(pEvent) {
+	pEvent.preventDefault();
+
+	const cText = pEvent.clipboardData.getData("text/plain");
+
+	cPreviewPathInput.value = cText;
+	ApplyPreviewSourceInputs();
+
+	window.setTimeout(() => {
+		cPreviewPathInput.focus();
+		cPreviewPathInput.select();
+	}, 0);
+}
+
+function PastePathInputByMouse(pEvent) {
+	const cIsRightClick = pEvent.button === 2;
+	const cIsDoubleLeftClick = pEvent.button === 0 && pEvent.detail === 2;
+
+	if (!cIsRightClick && !cIsDoubleLeftClick) {
+		return;
+	}
+
+	PasteIntoPathInput(pEvent);
+}
+
+function PreventDefaultEvent(pEvent) {
+	pEvent.preventDefault();
+}
+
+async function PasteIntoPathInput(pEvent) {
+
+	cPreviewPathInput.focus();
+	cPreviewPathInput.select();
+
+	if (!navigator.clipboard || !navigator.clipboard.readText) {
+		return;
+	}
+
+	try {
+		const cText = await navigator.clipboard.readText();
+
+		cPreviewPathInput.value = cText;
+		ApplyPreviewSourceInputs();
+		cPreviewPathInput.select();
+	}
+	catch {
+		cPreviewPathInput.focus();
+		cPreviewPathInput.select();
+	}
+}
+
+			function TogglePortraitFrame() {
+				SetPortraitFrameVisibility(!cShowPortraitFrame);
+			}
+
+			function ToggleLandscapeFrame() {
+				SetLandscapeFrameVisibility(!cShowLandscapeFrame);
+			}
+
+			function SetPortraitFrameVisibility(pVisible) {
+				if (!pVisible && !cShowLandscapeFrame) {
+					return;
+				}
+
+				cShowPortraitFrame = pVisible;
+				SetFrameToggleButtonStates();
+				RequestUpdateLayout();
+			}
+
+			function SetLandscapeFrameVisibility(pVisible) {
+				if (!pVisible && !cShowPortraitFrame) {
+					return;
+				}
+
+				cShowLandscapeFrame = pVisible;
+				SetFrameToggleButtonStates();
+				RequestUpdateLayout();
+			}
+
+			function SetFrameToggleButtonStates() {
+				SetToggleButtonState(cMobileFrameBtn, cShowPortraitFrame);
+				SetToggleButtonState(cDesktopFrameBtn, cShowLandscapeFrame);
+			}
+
+			function SetToggleButtonState(pButton, pIsActive) {
+				pButton.classList.toggle("is-active", pIsActive);
+				pButton.setAttribute("aria-pressed", pIsActive ? "true" : "false");
+			}
+
+			function ApplySelectedMobileModel() {
+				const cModel = cMobileModels[cMobileModelSelect.value];
+
+				if (!cModel) {
+					return;
+				}
+
+				cPortrait.Width = cModel.Width;
+				cPortrait.Height = cModel.Height;
+
+				ApplyWrapperBaseSizes();
+				RequestUpdateLayout();
+			}
+
+			function ApplySelectedDesktopSize() {
+				if (cDesktopSizeSelect.value === cCustomDesktopKey) {
+					return;
+				}
+
+				const cSize = cDesktopSizes[cDesktopSizeSelect.value];
+
+				if (!cSize) {
+					return;
+				}
+
+				cLandscape.Width = cSize.Width;
+				cLandscape.Height = cSize.Height;
+
+				SyncDesktopInputs();
+				ApplyWrapperBaseSizes();
+				RequestUpdateLayout();
+			}
+
+			function ApplyDesktopInputs() {
+				cDesktopSizeSelect.value = cCustomDesktopKey;
+
+				cLandscape.Width = GetPositiveNumber(cDesktopWidthInput.value, cLandscape.Width);
+				cLandscape.Height = GetPositiveNumber(cDesktopHeightInput.value, cLandscape.Height);
+
+				ApplyWrapperBaseSizes();
+				RequestUpdateLayout();
+			}
+
+			function ApplyPreviewSourceInputs() {
+				cPreviewSrc = BuildPreviewSource(cPreviewPortInput.value, cPreviewPathInput.value);
+				SetPreviewSources();
+			}
+
+			function ResetPreviewSystem() {
+				cLandscape.Width = cDefaultLandscape.Width;
+				cLandscape.Height = cDefaultLandscape.Height;
+
+				cPortrait.Width = cDefaultPortrait.Width;
+				cPortrait.Height = cDefaultPortrait.Height;
+
+				cPreviewSrc = BuildPreviewSource(cDefaultPreviewPort, cDefaultRelativeSrc);
+				cShowLandscapeFrame = true;
+				cShowPortraitFrame = true;
+
+				cMobileModelSelect.value = cDefaultMobileKey;
+				cDesktopSizeSelect.value = cDefaultDesktopKey;
+
+				cPreviewPortInput.value = cDefaultPreviewPort;
+				cPreviewPathInput.value = cDefaultRelativeSrc;
+
+				SyncDesktopInputs();
+				SetFrameToggleButtonStates();
+				SetPreviewSources();
+				ApplyWrapperBaseSizes();
+				RequestUpdateLayout();
+			}
+
+			function SetPreviewSources() {
+	const cSource = cPreviewSrc || "about:blank";
+
+	SetFrameSource(cLandFrame, cSource);
+	SetFrameSource(cPortFrame, cSource);
+}
+
+function SetFrameSource(pFrame, pSource) {
+	if (!pFrame) {
+		return;
+	}
+
+	pFrame.src = pSource;
+}
+
+			function BuildPreviewSource(pPreviewPort, pRelativeSrc) {
+				const cServer = BuildLocalServerSource(pPreviewPort);
+				const cRelative = CleanRelativePreviewPath(pRelativeSrc);
+
+				if (!cServer && !cRelative) {
+					return "";
+				}
+
+				if (!cServer) {
+					return cRelative;
+				}
+
+				if (!cRelative) {
+					return cServer;
+				}
+
+				try {
+					return new URL(cRelative, cServer).href;
+				}
+				catch {
+					return `${cServer}${cRelative.replace(/^\/+/, "")}`;
+				}
+			}
+
+			function BuildLocalServerSource(pPreviewPort) {
+				const cPort = CleanPreviewPort(pPreviewPort);
+
+				if (!cPort) {
+					return "";
+				}
+
+				return `http://localhost:${cPort}/`;
+			}
+
+			function CleanPreviewPort(pPreviewPort) {
+				const cPortText = String(pPreviewPort || "").trim().replace(/[^\d]/g, "");
+				const cPort = Number(cPortText);
+
+				if (!Number.isInteger(cPort) || cPort < 1 || cPort > 65535) {
+					return cDefaultPreviewPort;
+				}
+
+				return cPortText;
+			}
+
+			function CleanRelativePreviewPath(pRelativeSrc) {
+	let cPath = String(pRelativeSrc || "").trim();
+
+	if (!cPath) {
+		return "";
+	}
+
+	cPath = cPath.replace(/^["']+|["']+$/g, "");
+	cPath = cPath.replace(/\\/g, "/");
+	cPath = cPath.replace(/\/+/g, "/");
+
+	cPath = cPath.replace(/^.*?src\/pages\//i, "");
+	cPath = cPath.replace(/^\/+/, "");
+	cPath = cPath.replace(/^pages\//i, "");
+
+	cPath = cPath.replace(/\.astro$/i, "");
+
+	if (/^index$/i.test(cPath)) {
+		cPath = "";
+	}
+	else {
+		cPath = cPath.replace(/\/index$/i, "");
+	}
+
+	cPath = cPath.replace(/^\/+/, "");
+	cPath = cPath.replace(/\/+$/, "");
+
+	return cPath;
+}
+
+			async function CopyPreviewSource(pEvent) {
+				const cSource = cPreviewSrc || BuildPreviewSource(cPreviewPortInput.value, cPreviewPathInput.value);
+				const cOpenMode = GetCopyButtonOpenMode(pEvent);
+				const cCopyValue = GetCopyButtonCopyValue(cOpenMode, cSource);
+
+				if (!cCopyValue) {
+					ShowCopyButtonFeedback(false);
+					return;
+				}
+
+				let cCopied = false;
+
+				try {
+					await navigator.clipboard.writeText(cCopyValue);
+					cCopied = true;
+				}
+				catch {
+					cCopied = CopyTextFallback(cCopyValue);
+				}
+
+				ShowCopyButtonFeedback(cCopied);
+
+				if (!cCopied) {
+					return;
+				}
+
+				OpenCopyButtonTarget(cOpenMode, cSource);
+			}
+
+			function GetCopyButtonOpenMode(pEvent) {
+				if (!pEvent) {
+					return "";
+				}
+
+				const cHasControl = !!(pEvent.ctrlKey || pEvent.metaKey);
+				const cHasAlt = !!pEvent.altKey;
+
+				if (cHasControl && cHasAlt) {
+					return "preview";
+				}
+
+				if (cHasControl) {
+					return "source";
+				}
+
+				if (cHasAlt) {
+					return "published";
+				}
+
+				return "";
+			}
+
+			function GetCopyButtonCopyValue(pOpenMode, pSource) {
+				if (pOpenMode === "published") {
+					return BuildPublishedPreviewSource();
+				}
+
+				return pSource || "";
+			}
+
+			function OpenCopyButtonTarget(pOpenMode, pSource) {
+				const cTarget = GetCopyButtonTarget(pOpenMode, pSource);
+
+				if (!cTarget) {
+					return;
+				}
+
+				OpenUrlInChrome(cTarget);
+			}
+
+			function GetCopyButtonTarget(pOpenMode, pSource) {
+				if (pOpenMode === "preview") {
+					return BuildPreviewPageSplitSource();
+				}
+
+				if (pOpenMode === "published") {
+					return BuildPublishedPreviewSource();
+				}
+
+				if (pOpenMode === "source") {
+					return pSource || "";
+				}
+
+				return "";
+			}
+
+			function OpenUrlInChrome(pUrl) {
+				if (!pUrl) {
+					return;
+				}
+
+				try {
+					if (typeof window.EmoPreviewOpenChrome === "function") {
+						window.EmoPreviewOpenChrome(pUrl);
+						return;
+					}
+				}
+				catch {
+				}
+
+				try {
+					window.open(pUrl, "_blank");
+				}
+				catch {
+				}
+			}
+
+			function BuildPublishedPreviewSource() {
+				const cBase = GetPublishedBaseSource();
+				const cRelative = CleanRelativePreviewPath(cPreviewPathInput.value || cDefaultRelativeSrc);
+
+				try {
+					return new URL(cRelative ? cRelative + "/" : "", cBase).href;
+				}
+				catch {
+					return cBase;
+				}
+			}
+
+			function GetPublishedBaseSource() {
+				const cBridgeValue = typeof window.__emoPreviewPublishedBaseUrl === "string" ? window.__emoPreviewPublishedBaseUrl : "";
+				const cBase = CleanPublishedBaseSource(cBridgeValue || cDefaultPublishedBaseSource);
+
+				return cBase || cDefaultPublishedBaseSource;
+			}
+
+			function CleanPublishedBaseSource(pBase) {
+				let cBase = String(pBase || "").trim();
+
+				if (!cBase) {
+					return "";
+				}
+
+				if (!/^https?:\/\//i.test(cBase)) {
+					cBase = "https://" + cBase.replace(/^\/+/, "");
+				}
+
+				return cBase.replace(/\/+$/, "") + "/";
+			}
+
+			function BuildPreviewPageSplitSource() {
+				try {
+					const cUrl = new URL(window.location.href);
+
+					cUrl.searchParams.set("emoPreview", "1");
+					cUrl.searchParams.set("mode", "split");
+					cUrl.searchParams.set("port", CleanPreviewPort(cPreviewPortInput.value));
+					cUrl.searchParams.set("path", cPreviewPathInput.value || "");
+					cUrl.searchParams.set("desktopKey", cDesktopSizeSelect.value || cDefaultDesktopKey);
+					cUrl.searchParams.set("mobileKey", cMobileModelSelect.value || cDefaultMobileKey);
+					cUrl.searchParams.set("desktopWidth", String(cLandscape.Width));
+					cUrl.searchParams.set("desktopHeight", String(cLandscape.Height));
+					cUrl.searchParams.set("mobileWidth", String(cPortrait.Width));
+					cUrl.searchParams.set("mobileHeight", String(cPortrait.Height));
+
+					return cUrl.href;
+				}
+				catch {
+					return window.location.href;
+				}
+			}
+
+			function ApplyPreviewUrlParameters() {
+				const cParams = new URLSearchParams(window.location.search);
+
+				if (cParams.get("emoPreview") !== "1") {
+					return;
+				}
+
+				const cMobileKey = cParams.get("mobileKey");
+
+				if (cMobileKey && cMobileModels[cMobileKey]) {
+					cMobileModelSelect.value = cMobileKey;
+					cPortrait.Width = cMobileModels[cMobileKey].Width;
+					cPortrait.Height = cMobileModels[cMobileKey].Height;
+				}
+
+				const cDesktopKey = cParams.get("desktopKey");
+
+				if (cDesktopKey && cDesktopSizes[cDesktopKey]) {
+					cDesktopSizeSelect.value = cDesktopKey;
+					cLandscape.Width = cDesktopSizes[cDesktopKey].Width;
+					cLandscape.Height = cDesktopSizes[cDesktopKey].Height;
+				}
+
+				const cDesktopWidth = GetPositiveNumber(cParams.get("desktopWidth"), cLandscape.Width);
+				const cDesktopHeight = GetPositiveNumber(cParams.get("desktopHeight"), cLandscape.Height);
+				const cMobileWidth = GetPositiveNumber(cParams.get("mobileWidth"), cPortrait.Width);
+				const cMobileHeight = GetPositiveNumber(cParams.get("mobileHeight"), cPortrait.Height);
+
+				cLandscape.Width = cDesktopWidth;
+				cLandscape.Height = cDesktopHeight;
+				cPortrait.Width = cMobileWidth;
+				cPortrait.Height = cMobileHeight;
+
+				if (cDesktopKey === cCustomDesktopKey || (!cDesktopKey && (cParams.has("desktopWidth") || cParams.has("desktopHeight")))) {
+					cDesktopSizeSelect.value = cCustomDesktopKey;
+				}
+
+				if (cParams.has("port")) {
+					cPreviewPortInput.value = CleanPreviewPort(cParams.get("port"));
+				}
+
+				if (cParams.has("path")) {
+					cPreviewPathInput.value = cParams.get("path") || "";
+				}
+
+				if (cParams.get("mode") === "split") {
+					cShowLandscapeFrame = true;
+					cShowPortraitFrame = true;
+				}
+
+				cPreviewSrc = BuildPreviewSource(cPreviewPortInput.value, cPreviewPathInput.value);
+			}
+
+			function CopyTextFallback(pText) {
+				const cTextArea = document.createElement("textarea");
+
+				cTextArea.value = pText;
+				cTextArea.setAttribute("readonly", "");
+				cTextArea.style.position = "fixed";
+				cTextArea.style.left = "-9999px";
+				cTextArea.style.top = "-9999px";
+
+				document.body.appendChild(cTextArea);
+				cTextArea.focus();
+				cTextArea.select();
+
+				let cCopied = false;
+
+				try {
+					cCopied = document.execCommand("copy");
+				}
+				catch {
+					cCopied = false;
+				}
+
+				document.body.removeChild(cTextArea);
+
+				return cCopied;
+			}
+
+			function ShowCopyButtonFeedback(pSucceeded) {
+				cCopyBtn.textContent = pSucceeded ? "✓" : "!";
+
+				window.setTimeout(() => {
+					cCopyBtn.textContent = "C";
+				}, 800);
+			}
+
+			function SyncDesktopInputs() {
+				cDesktopWidthInput.value = cLandscape.Width;
+				cDesktopHeightInput.value = cLandscape.Height;
+			}
+
+			function ApplyWrapperBaseSizes() {
+	ApplyFrameBaseSize(cLandWrapper, cLandFrame, cLandscape.Width, cLandscape.Height);
+	ApplyFrameBaseSize(cPortWrapper, cPortFrame, cPortrait.Width, cPortrait.Height);
+}
+
+function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
+	pWrapper.style.width = `${pWidth}px`;
+	pWrapper.style.height = `${pHeight}px`;
+
+	pFrame.style.width = `${pWidth}px`;
+	pFrame.style.height = `${pHeight}px`;
+
+	pFrame.setAttribute("width", String(pWidth));
+	pFrame.setAttribute("height", String(pHeight));
+}
+
+			function GetPositiveNumber(pValue, pFallback) {
+				const cValue = Number(pValue);
+
+				if (!Number.isFinite(cValue) || cValue <= 0) {
+					return pFallback;
+				}
+
+				return cValue;
+			}
+
+			function GetScale(pPaneWidth, pPaneHeight, pBaseWidth, pBaseHeight) {
+				return Math.min(pPaneWidth / pBaseWidth, pPaneHeight / pBaseHeight);
+			}
+
+			function FindBestSplit(pTotalWidth, pTotalHeight) {
+				const cUsableWidth = Math.max(0, pTotalWidth - cGap);
+
+				const cLandScaleByHeight = pTotalHeight / cLandscape.Height;
+				const cPortScaleByHeight = pTotalHeight / cPortrait.Height;
+
+				const cLandNeedWidth = cLandscape.Width * cLandScaleByHeight;
+				const cPortNeedWidth = cPortrait.Width * cPortScaleByHeight;
+
+				const cNeededGroupWidth = cLandNeedWidth + cGap + cPortNeedWidth;
+
+				if (cNeededGroupWidth <= pTotalWidth) {
+					return {
+						StartX: (pTotalWidth - cNeededGroupWidth) / 2,
+						LandPaneWidth: cLandNeedWidth,
+						PortPaneWidth: cPortNeedWidth
+					};
+				}
+
+				let cBestLeftWidth = Math.max(1, Math.floor(cUsableWidth / 2));
+				let cBestMinScale = -1;
+				let cBestSumScale = -1;
+				let cBestBalance = Infinity;
+
+				for (let i = 1; i < cUsableWidth; i++) {
+					const cLeftWidth = i;
+					const cRightWidth = cUsableWidth - i;
+
+					const cLandScale = GetScale(
+						cLeftWidth,
+						pTotalHeight,
+						cLandscape.Width,
+						cLandscape.Height
+					);
+
+					const cPortScale = GetScale(
+						cRightWidth,
+						pTotalHeight,
+						cPortrait.Width,
+						cPortrait.Height
+					);
+
+					const cMinScale = Math.min(cLandScale, cPortScale);
+					const cSumScale = cLandScale + cPortScale;
+					const cBalance = Math.abs(cLandScale - cPortScale);
+
+					const cIsBetter =
+						(cMinScale > cBestMinScale) ||
+						(cMinScale === cBestMinScale && cSumScale > cBestSumScale) ||
+						(cMinScale === cBestMinScale && cSumScale === cBestSumScale && cBalance < cBestBalance);
+
+					if (cIsBetter) {
+						cBestLeftWidth = cLeftWidth;
+						cBestMinScale = cMinScale;
+						cBestSumScale = cSumScale;
+						cBestBalance = cBalance;
+					}
+				}
+
+				return {
+					StartX: 0,
+					LandPaneWidth: cBestLeftWidth,
+					PortPaneWidth: cUsableWidth - cBestLeftWidth
+				};
+			}
+
+			function ApplyPaneLayout(pPane, pWrapper, pLeft, pWidth, pHeight, pBaseWidth, pBaseHeight) {
+				const cScale = GetScale(pWidth, pHeight, pBaseWidth, pBaseHeight);
+
+				const cScaledWidth = pBaseWidth * cScale;
+				const cScaledHeight = pBaseHeight * cScale;
+
+				const cOffsetX = (pWidth - cScaledWidth) / 2;
+				const cOffsetY = (pHeight - cScaledHeight) / 2;
+
+				pPane.style.left = `${pLeft}px`;
+				pPane.style.width = `${pWidth}px`;
+				pPane.style.height = `${pHeight}px`;
+
+				pWrapper.style.transform = `translate(${cOffsetX}px, ${cOffsetY}px) scale(${cScale})`;
+			}
+
+			function UpdateLayout() {
+				const cTotalWidth = cPreviewArea.clientWidth;
+				const cTotalHeight = cPreviewArea.clientHeight;
+
+				if (cShowLandscapeFrame && !cShowPortraitFrame) {
+					cLandPane.style.display = "block";
+					cPortPane.style.display = "none";
+					cSeparator.style.display = "none";
+
+					ApplyPaneLayout(
+						cLandPane,
+						cLandWrapper,
+						0,
+						cTotalWidth,
+						cTotalHeight,
+						cLandscape.Width,
+						cLandscape.Height
+					);
+
+					return;
+				}
+
+				if (!cShowLandscapeFrame && cShowPortraitFrame) {
+					cLandPane.style.display = "none";
+					cPortPane.style.display = "block";
+					cSeparator.style.display = "none";
+
+					ApplyPaneLayout(
+						cPortPane,
+						cPortWrapper,
+						0,
+						cTotalWidth,
+						cTotalHeight,
+						cPortrait.Width,
+						cPortrait.Height
+					);
+
+					return;
+				}
+
+				cLandPane.style.display = "block";
+				cPortPane.style.display = "block";
+				cSeparator.style.display = "block";
+
+				const cSplit = FindBestSplit(cTotalWidth, cTotalHeight);
+
+				const cLandLeft = cSplit.StartX;
+				const cSepLeft = cLandLeft + cSplit.LandPaneWidth;
+				const cPortLeft = cSepLeft + cGap;
+
+				ApplyPaneLayout(
+					cLandPane,
+					cLandWrapper,
+					cLandLeft,
+					cSplit.LandPaneWidth,
+					cTotalHeight,
+					cLandscape.Width,
+					cLandscape.Height
+				);
+
+				ApplyPaneLayout(
+					cPortPane,
+					cPortWrapper,
+					cPortLeft,
+					cSplit.PortPaneWidth,
+					cTotalHeight,
+					cPortrait.Width,
+					cPortrait.Height
+				);
+
+				cSeparator.style.left = `${cSepLeft}px`;
+				cSeparator.style.height = `${cTotalHeight}px`;
+			}
+
+			function RequestUpdateLayout() {
+				cancelAnimationFrame(cResizeFrame);
+				cResizeFrame = requestAnimationFrame(UpdateLayout);
+			}
+
+			async function UpdatePreviewMode() {
+	let cIsProd = false;
+
+	try {
+		const cResponse = await fetch("/__emo_preview_mode.json", {
+			cache: "no-store"
+		});
+
+		if (cResponse.ok) {
+			const cData = await cResponse.json();
+			cIsProd = cData && cData.mode === "prod";
+		}
+	}
+	catch {
+		cIsProd = false;
+	}
+
+	document.body.classList.toggle("IsProdPreview", cIsProd);
+}
+
+
+		</script>
+<!-- EMO_PREVIEW_LOCAL_FRAME_ZOOM_START -->
+		<script>
+			(function () {
+				if (window.__emoPreviewLocalFrameZoomLoaded) {
+					return;
+				}
+
+				window.__emoPreviewLocalFrameZoomLoaded = true;
+
+				const cZoomLevels = [1, 1.1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4, 5];
+				const cWheelStepThreshold = 35;
+				const cZoomAdjustmentHoldMilliseconds = 420;
+				const cFrameStates = {
+					land: CreateFrameZoomState("landFrame"),
+					port: CreateFrameZoomState("portFrame")
+				};
+				let fPreserveStructureZoom = false;
+
+				function CreateFrameZoomState(pFrameId) {
+					return {
+						FrameId: pFrameId,
+						LevelIndex: 0,
+						WheelDelta: 0,
+						Document: undefined,
+						Window: undefined,
+						BaseInlineZoom: "",
+						BaseInlineWidth: "",
+						BaseInlineOverflowX: "",
+						BaseBodyInlineOverflowX: "",
+						BaseComputedZoom: 1,
+						LastPointerX: undefined,
+						LastPointerY: undefined,
+						AdjustmentToken: 0,
+						AdjustingUntil: 0,
+						RtlScrollType: undefined,
+						Url: "",
+						LastScrollSnapshot: undefined
+					};
+				}
+
+				function InitializeLocalFrameZoom() {
+					RegisterFrameLoad("land");
+					RegisterFrameLoad("port");
+					RegisterResetButton();
+					RegisterZoomModeButton();
+					RegisterAvailableFrames();
+					window.setInterval(RegisterAvailableFrames, 750);
+				}
+
+				window.__emoPreviewShouldSuppressScrollSync = function () {
+					return Object.values(cFrameStates).some(function (pState) {
+						return Date.now() < pState.AdjustingUntil;
+					});
+				};
+
+				window.__emoPreviewCancelFrameZoomCorrections = function (pName) {
+					const cName = pName === "port" ? "port" : "land";
+					const cState = cFrameStates[cName];
+
+					if (!cState) {
+						return;
+					}
+
+					cState.AdjustmentToken += 1;
+					cState.AdjustingUntil = 0;
+				};
+
+				window.__emoPreviewRememberFrameScroll = function (pName) {
+					RememberFrameScroll(pName === "port" ? "port" : "land", true);
+				};
+
+				function RegisterFrameLoad(pName) {
+					const cState = cFrameStates[pName];
+					const cFrame = document.getElementById(cState.FrameId);
+
+					if (!cFrame || cFrame.dataset.emoLocalZoomLoadRegistered === "1") {
+						return;
+					}
+
+					cFrame.dataset.emoLocalZoomLoadRegistered = "1";
+					cFrame.addEventListener("load", function () {
+						RegisterLocalZoomFrame(pName);
+					});
+				}
+
+				function RegisterResetButton() {
+					const cResetButton = document.getElementById("resetBtn");
+
+					if (!cResetButton || cResetButton.dataset.emoLocalZoomResetRegistered === "1") {
+						return;
+					}
+
+					cResetButton.dataset.emoLocalZoomResetRegistered = "1";
+					cResetButton.addEventListener("click", ResetAllFrameZoom);
+				}
+
+				function RegisterZoomModeButton() {
+					const cModeButton = document.getElementById("zoomAnchorModeBtn");
+
+					if (!cModeButton || cModeButton.dataset.emoZoomModeRegistered === "1") {
+						return;
+					}
+
+					cModeButton.dataset.emoZoomModeRegistered = "1";
+					cModeButton.addEventListener("click", ToggleZoomMode);
+					UpdateZoomModeButton();
+				}
+
+				function ToggleZoomMode() {
+					fPreserveStructureZoom = !fPreserveStructureZoom;
+					UpdateZoomModeButton();
+					ReapplyFrameZoomMode("land");
+					ReapplyFrameZoomMode("port");
+				}
+
+				function UpdateZoomModeButton() {
+					const cModeButton = document.getElementById("zoomAnchorModeBtn");
+
+					if (!cModeButton) {
+						return;
+					}
+
+					cModeButton.classList.toggle("is-active", fPreserveStructureZoom);
+					cModeButton.setAttribute("aria-pressed", String(fPreserveStructureZoom));
+					cModeButton.title = fPreserveStructureZoom
+						? "زووم بصري يحافظ على تركيب الصفحة ويتمركز عند مؤشر الماوس"
+						: "زووم إعادة تدفق بدون سكرول أفقي — اضغط لتفعيل الزووم البصري";
+				}
+
+				function ReapplyFrameZoomMode(pName) {
+					const cState = cFrameStates[pName];
+					const cFrameWindow = GetStateWindow(cState);
+
+					if (!cState.Document || !cFrameWindow || cState.LevelIndex === 0) {
+						return;
+					}
+
+					const cPointerX = GetFrameAnchorX(cState, cFrameWindow);
+					const cPointerY = GetFrameAnchorY(cState, cFrameWindow);
+					const cAnchor = CaptureContentAnchor(cState.Document, cPointerX, cPointerY);
+					const cToken = BeginZoomAdjustment(cState);
+
+					ApplyFrameZoom(pName);
+					RestoreContentAnchor(pName, cAnchor, cPointerX, cPointerY, fPreserveStructureZoom, cToken);
+				}
+
+				function RegisterAvailableFrames() {
+					RegisterLocalZoomFrame("land");
+					RegisterLocalZoomFrame("port");
+				}
+
+				function RegisterLocalZoomFrame(pName) {
+					const cState = cFrameStates[pName];
+					const cFrame = document.getElementById(cState.FrameId);
+
+					if (!cFrame) {
+						return;
+					}
+
+					let cFrameDocument;
+					let cFrameWindow;
+
+					try {
+						cFrameDocument = cFrame.contentDocument;
+						cFrameWindow = cFrame.contentWindow;
+						void cFrameDocument.documentElement;
+					}
+					catch {
+						return;
+					}
+
+					if (!cFrameDocument || !cFrameWindow || cState.Document === cFrameDocument) {
+						return;
+					}
+
+					RememberFrameScroll(pName, true);
+					const cPreviousUrl = cState.Url;
+					const cCurrentUrl = GetFrameDocumentUrl(cFrameWindow);
+					const cCanRestorePrevious = cPreviousUrl !== "" && cPreviousUrl === cCurrentUrl;
+					const cPreviousSnapshot = cCanRestorePrevious ? cState.LastScrollSnapshot : undefined;
+
+					cState.Document = cFrameDocument;
+					cState.Window = cFrameWindow;
+					cState.Url = cCurrentUrl;
+					cState.WheelDelta = 0;
+					cState.AdjustmentToken += 1;
+					cState.RtlScrollType = undefined;
+					cState.BaseInlineZoom = cFrameDocument.documentElement.style.zoom || "";
+					cState.BaseInlineWidth = cFrameDocument.documentElement.style.width || "";
+					cState.BaseInlineOverflowX = cFrameDocument.documentElement.style.overflowX || "";
+					cState.BaseBodyInlineOverflowX = cFrameDocument.body ? cFrameDocument.body.style.overflowX || "" : "";
+					cState.BaseComputedZoom = GetPositiveZoom(cFrameWindow.getComputedStyle(cFrameDocument.documentElement).zoom);
+					const cInitialSnapshot = CaptureFrameScrollSnapshot(cState);
+					const cRestoreSnapshot = HasMeaningfulScrollSnapshot(cInitialSnapshot) ? cInitialSnapshot : cPreviousSnapshot;
+					cState.LastScrollSnapshot = cRestoreSnapshot || cInitialSnapshot;
+
+					cFrameWindow.addEventListener("wheel", function (pEvent) {
+						HandleFrameZoomWheel(pEvent, pName);
+					}, {
+						capture: true,
+						passive: false
+					});
+
+					cFrameWindow.addEventListener("scroll", function () {
+						RememberFrameScroll(pName, false);
+					}, {
+						passive: true
+					});
+
+					cFrameWindow.addEventListener("pagehide", function () {
+						RememberFrameScroll(pName, true);
+					});
+
+					const cToken = BeginZoomAdjustment(cState);
+					ApplyFrameZoom(pName);
+					RestoreFrameScrollSnapshot(pName, cRestoreSnapshot, cToken);
+				}
+
+				function GetFrameDocumentUrl(pFrameWindow) {
+					try {
+						const cUrl = new URL(pFrameWindow.location.href);
+						cUrl.hash = "";
+						return cUrl.href;
+					}
+					catch {
+						return "";
+					}
+				}
+
+				function CaptureFrameScrollSnapshot(pState) {
+					const cDocument = pState.Document;
+					const cFrameWindow = GetStateWindow(pState);
+					const cScrollElement = GetScrollElement(cDocument);
+
+					if (!cDocument || !cFrameWindow || !cScrollElement) {
+						return undefined;
+					}
+
+					const cViewportWidth = cFrameWindow.innerWidth || cScrollElement.clientWidth || 1;
+					const cViewportHeight = cFrameWindow.innerHeight || cScrollElement.clientHeight || 1;
+					const cScrollTop = Number(cScrollElement.scrollTop) || Number(cFrameWindow.scrollY) || 0;
+					const cPhysicalLeft = GetPhysicalScrollLeft(pState, cScrollElement);
+					const cMaxScrollTop = Math.max(0, cScrollElement.scrollHeight - cScrollElement.clientHeight);
+					const cMaxPhysicalLeft = Math.max(0, cScrollElement.scrollWidth - cScrollElement.clientWidth);
+					const cFocusRatioX = 0.5;
+					const cFocusRatioY = 0.35;
+					const cFocusX = cViewportWidth * cFocusRatioX;
+					const cFocusY = cViewportHeight * cFocusRatioY;
+					let cAnchorElement;
+
+					try {
+						const cPointElement = cDocument.elementFromPoint(cFocusX, cFocusY);
+						cAnchorElement = cPointElement && cPointElement.closest ? cPointElement.closest("[id]") : undefined;
+					}
+					catch {
+						cAnchorElement = undefined;
+					}
+
+					let cAnchorId = "";
+					let cAnchorRatioX = 0.5;
+					let cAnchorRatioY = 0.5;
+
+					if (cAnchorElement) {
+						const cRect = cAnchorElement.getBoundingClientRect();
+
+						if (cRect.width > 0 && cRect.height > 0) {
+							cAnchorId = String(cAnchorElement.id || "").trim();
+							cAnchorRatioX = ClampNumber((cFocusX - cRect.left) / cRect.width, 0, 1);
+							cAnchorRatioY = ClampNumber((cFocusY - cRect.top) / cRect.height, 0, 1);
+						}
+					}
+
+					return {
+						AnchorId: cAnchorId,
+						AnchorRatioX: cAnchorRatioX,
+						AnchorRatioY: cAnchorRatioY,
+						FocusRatioX: cFocusRatioX,
+						FocusRatioY: cFocusRatioY,
+						ScrollTop: cScrollTop,
+						ScrollRatio: cMaxScrollTop > 0 ? cScrollTop / cMaxScrollTop : 0,
+						DocumentFocusRatio: cScrollElement.scrollHeight > 0 ? (cScrollTop + cFocusY) / cScrollElement.scrollHeight : 0,
+						PhysicalLeft: cPhysicalLeft,
+						PhysicalLeftRatio: cMaxPhysicalLeft > 0 ? cPhysicalLeft / cMaxPhysicalLeft : 0
+					};
+				}
+
+				function HasMeaningfulScrollSnapshot(pSnapshot) {
+					if (!pSnapshot) {
+						return false;
+					}
+
+					return Math.abs(Number(pSnapshot.ScrollTop) || 0) > 2
+						|| Math.abs(Number(pSnapshot.PhysicalLeft) || 0) > 2
+						|| Math.abs(Number(pSnapshot.ScrollRatio) || 0) > 0.0001
+						|| Math.abs(Number(pSnapshot.PhysicalLeftRatio) || 0) > 0.0001;
+				}
+
+				function RememberFrameScroll(pName, pForce) {
+					const cState = cFrameStates[pName];
+
+					if (!cState || !cState.Document || (!pForce && Date.now() < cState.AdjustingUntil)) {
+						return;
+					}
+
+					const cSnapshot = CaptureFrameScrollSnapshot(cState);
+
+					if (cSnapshot) {
+						cState.LastScrollSnapshot = cSnapshot;
+					}
+				}
+
+				function RestoreFrameScrollSnapshot(pName, pSnapshot, pToken) {
+					const cState = cFrameStates[pName];
+					const cFrameWindow = GetStateWindow(cState);
+
+					if (!pSnapshot || !cFrameWindow) {
+						cFrameWindow?.setTimeout(function () {
+							RememberFrameScroll(pName, true);
+						}, cZoomAdjustmentHoldMilliseconds + 30);
+						return;
+					}
+
+					RunZoomCorrections(pName, pToken, function (pCurrentState) {
+						const cDocument = pCurrentState.Document;
+						const cScrollElement = GetScrollElement(cDocument);
+						const cWindow = GetStateWindow(pCurrentState);
+
+						if (!cDocument || !cScrollElement || !cWindow) {
+							return;
+						}
+
+						const cViewportHeight = cWindow.innerHeight || cScrollElement.clientHeight || 1;
+						const cMaxScrollTop = Math.max(0, cScrollElement.scrollHeight - cScrollElement.clientHeight);
+						const cMaxPhysicalLeft = Math.max(0, cScrollElement.scrollWidth - cScrollElement.clientWidth);
+						let cTargetTop = NaN;
+
+						if (pSnapshot.AnchorId) {
+							const cAnchorElement = cDocument.getElementById(pSnapshot.AnchorId);
+
+							if (cAnchorElement) {
+								const cRect = cAnchorElement.getBoundingClientRect();
+								const cCurrentTop = Number(cScrollElement.scrollTop) || Number(cWindow.scrollY) || 0;
+								const cAnchorY = cRect.top + cCurrentTop + cRect.height * ClampNumber(Number(pSnapshot.AnchorRatioY) || 0, 0, 1);
+								cTargetTop = cAnchorY - cViewportHeight * ClampNumber(Number(pSnapshot.FocusRatioY) || 0.35, 0, 1);
+							}
+						}
+
+						if (!Number.isFinite(cTargetTop) && Number.isFinite(Number(pSnapshot.DocumentFocusRatio))) {
+							cTargetTop = Number(pSnapshot.DocumentFocusRatio) * cScrollElement.scrollHeight - cViewportHeight * ClampNumber(Number(pSnapshot.FocusRatioY) || 0.35, 0, 1);
+						}
+
+						if (!Number.isFinite(cTargetTop) && Number.isFinite(Number(pSnapshot.ScrollRatio))) {
+							cTargetTop = Number(pSnapshot.ScrollRatio) * cMaxScrollTop;
+						}
+
+						if (!Number.isFinite(cTargetTop)) {
+							cTargetTop = Number(pSnapshot.ScrollTop) || 0;
+						}
+
+						cScrollElement.scrollTop = ClampNumber(cTargetTop, 0, cMaxScrollTop);
+
+						if (fPreserveStructureZoom) {
+							const cTargetPhysicalLeft = Number.isFinite(Number(pSnapshot.PhysicalLeftRatio))
+								? Number(pSnapshot.PhysicalLeftRatio) * cMaxPhysicalLeft
+								: Number(pSnapshot.PhysicalLeft) || 0;
+							SetPhysicalScrollLeft(pCurrentState, cScrollElement, cTargetPhysicalLeft);
+						}
+						else {
+							SetLogicalHorizontalStart(pCurrentState, cScrollElement);
+						}
+					});
+
+					cFrameWindow.setTimeout(function () {
+						RememberFrameScroll(pName, true);
+					}, cZoomAdjustmentHoldMilliseconds + 50);
+				}
+
+				function HandleFrameZoomWheel(pEvent, pName) {
+					if (!pEvent.ctrlKey) {
+						return;
+					}
+
+					pEvent.preventDefault();
+					pEvent.stopPropagation();
+					pEvent.stopImmediatePropagation();
+					pEvent.returnValue = false;
+
+					const cState = cFrameStates[pName];
+					const cFrameWindow = GetStateWindow(cState) || pEvent.view;
+
+					if (!cFrameWindow) {
+						return;
+					}
+
+					cState.LastPointerX = ClampNumber(Number(pEvent.clientX) || 0, 0, cFrameWindow.innerWidth);
+					cState.LastPointerY = ClampNumber(Number(pEvent.clientY) || 0, 0, cFrameWindow.innerHeight);
+					cState.WheelDelta += Number(pEvent.deltaY) || 0;
+
+					if (Math.abs(cState.WheelDelta) < cWheelStepThreshold) {
+						return;
+					}
+
+					const cDirection = cState.WheelDelta < 0 ? 1 : -1;
+					cState.WheelDelta = 0;
+					const cNextIndex = ClampNumber(cState.LevelIndex + cDirection, 0, cZoomLevels.length - 1);
+
+					if (cNextIndex === cState.LevelIndex) {
+						return;
+					}
+
+					SetFrameZoomLevel(pName, cNextIndex, cState.LastPointerX, cState.LastPointerY);
+				}
+
+				function SetFrameZoomLevel(pName, pNextIndex, pPointerX, pPointerY) {
+					const cState = cFrameStates[pName];
+					const cFrameWindow = GetStateWindow(cState);
+
+					if (!cState.Document || !cFrameWindow || pNextIndex === cState.LevelIndex) {
+						return;
+					}
+
+					const cPointerX = ClampNumber(Number(pPointerX) || 0, 0, cFrameWindow.innerWidth);
+					const cPointerY = ClampNumber(Number(pPointerY) || 0, 0, cFrameWindow.innerHeight);
+					const cOldZoom = cZoomLevels[cState.LevelIndex];
+					const cNewZoom = cZoomLevels[pNextIndex];
+					const cToken = BeginZoomAdjustment(cState);
+					let cVisualAnchor;
+					let cContentAnchor;
+
+					if (fPreserveStructureZoom) {
+						cVisualAnchor = CaptureVisualAnchor(cState, cFrameWindow, cPointerX, cPointerY, cOldZoom, cNewZoom);
+					}
+					else {
+						cContentAnchor = CaptureContentAnchor(cState.Document, cPointerX, cPointerY);
+					}
+
+					cState.LevelIndex = pNextIndex;
+					ApplyFrameZoom(pName);
+
+					if (fPreserveStructureZoom) {
+						RestoreVisualAnchor(pName, cVisualAnchor, cToken);
+					}
+					else {
+						RestoreContentAnchor(pName, cContentAnchor, cPointerX, cPointerY, false, cToken);
+					}
+				}
+
+				function ApplyFrameZoom(pName) {
+					const cState = cFrameStates[pName];
+					const cFrameDocument = cState.Document;
+
+					if (!cFrameDocument || !cFrameDocument.documentElement) {
+						return;
+					}
+
+					const cRoot = cFrameDocument.documentElement;
+					const cBody = cFrameDocument.body;
+					const cLocalZoom = cZoomLevels[cState.LevelIndex];
+
+					if (cLocalZoom === 1) {
+						cRoot.style.zoom = cState.BaseInlineZoom;
+						cRoot.style.width = cState.BaseInlineWidth;
+						cRoot.style.overflowX = cState.BaseInlineOverflowX;
+
+						if (cBody) {
+							cBody.style.overflowX = cState.BaseBodyInlineOverflowX;
+						}
+
+						return;
+					}
+
+					cRoot.style.zoom = String(cState.BaseComputedZoom * cLocalZoom);
+
+					if (fPreserveStructureZoom) {
+						/* Counter the reduced effective viewport so responsive structure stays exactly as it was at 100%. */
+						cRoot.style.width = `${cLocalZoom * 100}%`;
+						cRoot.style.overflowX = cState.BaseInlineOverflowX;
+
+						if (cBody) {
+							cBody.style.overflowX = cState.BaseBodyInlineOverflowX;
+						}
+					}
+					else {
+						/* Reflow mode deliberately keeps the reduced effective viewport and blocks horizontal movement. */
+						cRoot.style.width = cState.BaseInlineWidth;
+						cRoot.style.overflowX = "hidden";
+
+						if (cBody) {
+							cBody.style.overflowX = "hidden";
+						}
+					}
+				}
+
+				function CaptureVisualAnchor(pState, pFrameWindow, pPointerX, pPointerY, pOldZoom, pNewZoom) {
+					const cScrollElement = GetScrollElement(pState.Document);
+					const cPhysicalLeft = GetPhysicalScrollLeft(pState, cScrollElement);
+					const cScrollTop = cScrollElement ? cScrollElement.scrollTop : pFrameWindow.scrollY || 0;
+					const cRatio = pOldZoom > 0 ? pNewZoom / pOldZoom : 1;
+
+					return {
+						TargetPhysicalLeft: (cPhysicalLeft + pPointerX) * cRatio - pPointerX,
+						TargetScrollTop: (cScrollTop + pPointerY) * cRatio - pPointerY
+					};
+				}
+
+				function RestoreVisualAnchor(pName, pAnchor, pToken) {
+					if (!pAnchor) {
+						return;
+					}
+
+					RunZoomCorrections(pName, pToken, function (pState) {
+						const cScrollElement = GetScrollElement(pState.Document);
+
+						if (!cScrollElement) {
+							return;
+						}
+
+						SetPhysicalScrollLeft(pState, cScrollElement, pAnchor.TargetPhysicalLeft);
+						cScrollElement.scrollTop = ClampNumber(
+							pAnchor.TargetScrollTop,
+							0,
+							Math.max(0, cScrollElement.scrollHeight - cScrollElement.clientHeight)
+						);
+					});
+				}
+
+				function CaptureContentAnchor(pDocument, pClientX, pClientY) {
+					if (!pDocument) {
+						return undefined;
+					}
+
+					const cTextAnchor = CaptureTextAnchor(pDocument, pClientX, pClientY);
+
+					if (cTextAnchor) {
+						return cTextAnchor;
+					}
+
+					const cElement = pDocument.elementFromPoint(pClientX, pClientY) || pDocument.body || pDocument.documentElement;
+
+					if (!cElement) {
+						return undefined;
+					}
+
+					const cRect = cElement.getBoundingClientRect();
+
+					return {
+						Kind: "element",
+						Element: cElement,
+						RatioX: cRect.width > 0 ? ClampNumber((pClientX - cRect.left) / cRect.width, 0, 1) : 0.5,
+						RatioY: cRect.height > 0 ? ClampNumber((pClientY - cRect.top) / cRect.height, 0, 1) : 0.5
+					};
+				}
+
+				function CaptureTextAnchor(pDocument, pClientX, pClientY) {
+					let cNode;
+					let cOffset;
+
+					try {
+						if (typeof pDocument.caretPositionFromPoint === "function") {
+							const cPosition = pDocument.caretPositionFromPoint(pClientX, pClientY);
+							cNode = cPosition && cPosition.offsetNode;
+							cOffset = cPosition && cPosition.offset;
+						}
+						else if (typeof pDocument.caretRangeFromPoint === "function") {
+							const cRange = pDocument.caretRangeFromPoint(pClientX, pClientY);
+							cNode = cRange && cRange.startContainer;
+							cOffset = cRange && cRange.startOffset;
+						}
+					}
+					catch {
+						return undefined;
+					}
+
+					if (!cNode || cNode.nodeType !== Node.TEXT_NODE || !cNode.isConnected || !cNode.textContent) {
+						return undefined;
+					}
+
+					const cLength = cNode.textContent.length;
+					const cStart = ClampNumber(Number(cOffset) || 0, 0, Math.max(0, cLength - 1));
+					const cRange = pDocument.createRange();
+					cRange.setStart(cNode, cStart);
+					cRange.setEnd(cNode, Math.min(cStart + 1, cLength));
+					const cRect = GetUsefulRangeRect(cRange);
+
+					if (!cRect) {
+						return undefined;
+					}
+
+					return {
+						Kind: "text",
+						Node: cNode,
+						Start: cStart,
+						End: Math.min(cStart + 1, cLength),
+						RatioX: cRect.width > 0 ? ClampNumber((pClientX - cRect.left) / cRect.width, 0, 1) : 0.5,
+						RatioY: cRect.height > 0 ? ClampNumber((pClientY - cRect.top) / cRect.height, 0, 1) : 0.5
+					};
+				}
+
+				function RestoreContentAnchor(pName, pAnchor, pPointerX, pPointerY, pRestoreHorizontal, pToken) {
+					if (!pAnchor) {
+						return;
+					}
+
+					RunZoomCorrections(pName, pToken, function (pState) {
+						const cPosition = ResolveContentAnchorPosition(pState.Document, pAnchor);
+						const cScrollElement = GetScrollElement(pState.Document);
+
+						if (!cPosition || !cScrollElement) {
+							return;
+						}
+
+						const cDeltaY = cPosition.Y - pPointerY;
+						cScrollElement.scrollTop = ClampNumber(
+							cScrollElement.scrollTop + cDeltaY,
+							0,
+							Math.max(0, cScrollElement.scrollHeight - cScrollElement.clientHeight)
+						);
+
+						if (pRestoreHorizontal) {
+							const cPhysicalLeft = GetPhysicalScrollLeft(pState, cScrollElement);
+							SetPhysicalScrollLeft(pState, cScrollElement, cPhysicalLeft + cPosition.X - pPointerX);
+						}
+						else {
+							SetLogicalHorizontalStart(pState, cScrollElement);
+						}
+					});
+				}
+
+				function ResolveContentAnchorPosition(pDocument, pAnchor) {
+					if (!pDocument || !pAnchor) {
+						return undefined;
+					}
+
+					if (pAnchor.Kind === "text" && pAnchor.Node && pAnchor.Node.isConnected) {
+						try {
+							const cLength = pAnchor.Node.textContent ? pAnchor.Node.textContent.length : 0;
+							const cRange = pDocument.createRange();
+							cRange.setStart(pAnchor.Node, ClampNumber(pAnchor.Start, 0, cLength));
+							cRange.setEnd(pAnchor.Node, ClampNumber(pAnchor.End, 0, cLength));
+							const cRect = GetUsefulRangeRect(cRange);
+
+							if (cRect) {
+								return {
+									X: cRect.left + cRect.width * pAnchor.RatioX,
+									Y: cRect.top + cRect.height * pAnchor.RatioY
+								};
+							}
+						}
+						catch {
+						}
+					}
+
+					if (pAnchor.Kind === "element" && pAnchor.Element && pAnchor.Element.isConnected) {
+						const cRect = pAnchor.Element.getBoundingClientRect();
+						return {
+							X: cRect.left + cRect.width * pAnchor.RatioX,
+							Y: cRect.top + cRect.height * pAnchor.RatioY
+						};
+					}
+
+					return undefined;
+				}
+
+				function GetUsefulRangeRect(pRange) {
+					const cRects = Array.from(pRange.getClientRects());
+					return cRects.find(function (pRect) {
+						return pRect.width > 0 || pRect.height > 0;
+					}) || pRange.getBoundingClientRect();
+				}
+
+				function RunZoomCorrections(pName, pToken, pCorrection) {
+					const cState = cFrameStates[pName];
+					const cFrameWindow = GetStateWindow(cState);
+
+					if (!cFrameWindow) {
+						return;
+					}
+
+					const Apply = function () {
+						if (cState.AdjustmentToken !== pToken || !cState.Document) {
+							return;
+						}
+
+						MarkZoomAdjustment(cState);
+						pCorrection(cState);
+					};
+
+					Apply();
+					cFrameWindow.requestAnimationFrame(function () {
+						Apply();
+						cFrameWindow.requestAnimationFrame(function () {
+							Apply();
+							cFrameWindow.setTimeout(Apply, 80);
+						});
+					});
+				}
+
+				function BeginZoomAdjustment(pState) {
+					pState.AdjustmentToken += 1;
+					MarkZoomAdjustment(pState);
+					return pState.AdjustmentToken;
+				}
+
+				function MarkZoomAdjustment(pState) {
+					pState.AdjustingUntil = Date.now() + cZoomAdjustmentHoldMilliseconds;
+				}
+
+				function GetScrollElement(pDocument) {
+					return pDocument ? pDocument.scrollingElement || pDocument.documentElement || pDocument.body : undefined;
+				}
+
+				function GetPhysicalScrollLeft(pState, pScrollElement) {
+					if (!pScrollElement) {
+						return 0;
+					}
+
+					const cMax = Math.max(0, pScrollElement.scrollWidth - pScrollElement.clientWidth);
+					const cDirection = GetDocumentDirection(pState.Document, pScrollElement);
+					const cRaw = pScrollElement.scrollLeft;
+
+					if (cDirection !== "rtl") {
+						return ClampNumber(cRaw, 0, cMax);
+					}
+
+					const cType = GetRtlScrollType(pState);
+
+					if (cType === "negative") {
+						return ClampNumber(cMax + cRaw, 0, cMax);
+					}
+
+					if (cType === "reverse") {
+						return ClampNumber(cMax - cRaw, 0, cMax);
+					}
+
+					return ClampNumber(cRaw, 0, cMax);
+				}
+
+				function SetPhysicalScrollLeft(pState, pScrollElement, pPhysicalLeft) {
+					if (!pScrollElement) {
+						return;
+					}
+
+					const cMax = Math.max(0, pScrollElement.scrollWidth - pScrollElement.clientWidth);
+					const cPhysical = ClampNumber(Number(pPhysicalLeft) || 0, 0, cMax);
+					const cDirection = GetDocumentDirection(pState.Document, pScrollElement);
+
+					if (cDirection !== "rtl") {
+						pScrollElement.scrollLeft = cPhysical;
+						return;
+					}
+
+					const cType = GetRtlScrollType(pState);
+
+					if (cType === "negative") {
+						pScrollElement.scrollLeft = cPhysical - cMax;
+					}
+					else if (cType === "reverse") {
+						pScrollElement.scrollLeft = cMax - cPhysical;
+					}
+					else {
+						pScrollElement.scrollLeft = cPhysical;
+					}
+				}
+
+				function SetLogicalHorizontalStart(pState, pScrollElement) {
+					const cDirection = GetDocumentDirection(pState.Document, pScrollElement);
+					const cMax = Math.max(0, pScrollElement.scrollWidth - pScrollElement.clientWidth);
+					SetPhysicalScrollLeft(pState, pScrollElement, cDirection === "rtl" ? cMax : 0);
+				}
+
+				function GetDocumentDirection(pDocument, pScrollElement) {
+					if (!pDocument || !pDocument.defaultView) {
+						return "ltr";
+					}
+
+					const cWindow = pDocument.defaultView;
+					const cRootDirection = pDocument.documentElement ? cWindow.getComputedStyle(pDocument.documentElement).direction : "";
+					const cBodyDirection = pDocument.body ? cWindow.getComputedStyle(pDocument.body).direction : "";
+					const cScrollDirection = pScrollElement ? cWindow.getComputedStyle(pScrollElement).direction : "";
+					return cScrollDirection === "rtl" || cRootDirection === "rtl" || cBodyDirection === "rtl" ? "rtl" : "ltr";
+				}
+
+				function GetRtlScrollType(pState) {
+					if (pState.RtlScrollType) {
+						return pState.RtlScrollType;
+					}
+
+					const cDocument = pState.Document;
+
+					if (!cDocument || !cDocument.body) {
+						return "negative";
+					}
+
+					const cOuter = cDocument.createElement("div");
+					const cInner = cDocument.createElement("div");
+					cOuter.dir = "rtl";
+					cOuter.style.cssText = "position:absolute;left:-10000px;top:-10000px;width:4px;height:1px;overflow:scroll;visibility:hidden;";
+					cInner.style.cssText = "width:8px;height:1px;";
+					cOuter.appendChild(cInner);
+					cDocument.body.appendChild(cOuter);
+
+					if (cOuter.scrollLeft > 0) {
+						pState.RtlScrollType = "default";
+					}
+					else {
+						cOuter.scrollLeft = 1;
+						pState.RtlScrollType = cOuter.scrollLeft === 0 ? "negative" : "reverse";
+					}
+
+					cOuter.remove();
+					return pState.RtlScrollType;
+				}
+
+				function GetStateWindow(pState) {
+					return pState.Window || (pState.Document && pState.Document.defaultView);
+				}
+
+				function GetFrameAnchorX(pState, pFrameWindow) {
+					if (Number.isFinite(pState.LastPointerX)) {
+						return pState.LastPointerX;
+					}
+
+					return pFrameWindow ? pFrameWindow.innerWidth / 2 : 0;
+				}
+
+				function GetFrameAnchorY(pState, pFrameWindow) {
+					if (Number.isFinite(pState.LastPointerY)) {
+						return pState.LastPointerY;
+					}
+
+					return pFrameWindow ? pFrameWindow.innerHeight / 2 : 0;
+				}
+
+				function ResetAllFrameZoom() {
+					ResetFrameZoom("land");
+					ResetFrameZoom("port");
+				}
+
+				function ResetFrameZoom(pName) {
+					const cState = cFrameStates[pName];
+					cState.WheelDelta = 0;
+
+					if (cState.LevelIndex === 0) {
+						return;
+					}
+
+					SetFrameZoomLevel(
+						pName,
+						0,
+						GetFrameAnchorX(cState, cState.Window),
+						GetFrameAnchorY(cState, cState.Window)
+					);
+				}
+
+				function GetPositiveZoom(pValue) {
+					const cValue = Number.parseFloat(String(pValue || ""));
+					return Number.isFinite(cValue) && cValue > 0 ? cValue : 1;
+				}
+
+				function ClampNumber(pValue, pMin, pMax) {
+					return Math.min(Math.max(pValue, pMin), pMax);
+				}
+
+				if (document.readyState === "loading") {
+					document.addEventListener("DOMContentLoaded", InitializeLocalFrameZoom);
+				}
+				else {
+					InitializeLocalFrameZoom();
+				}
+			})();
+		</script>
+		<!-- EMO_PREVIEW_LOCAL_FRAME_ZOOM_END -->
+
+		<!-- EMO_PREVIEW_AUTO_FOLLOW_START -->
+		<style id="emoPreviewAutoFollowStyle">
+			#autoFollowBtn.follow-btn,
+				#scrollSyncBtn.follow-btn,
+				#locateCodeBtn.follow-btn {
+				height: 24px;
+				width: 32px;
+				box-sizing: border-box;
+				border: 1px solid #555555;
+				border-radius: 5px;
+				background: #2b2b2b;
+				color: #ffffff;
+				font-size: 12px;
+				font-weight: 700;
+				text-align: center;
+				cursor: pointer;
+				padding: 0;
+			}
+
+			#autoFollowBtn.follow-btn.is-active,
+				#scrollSyncBtn.follow-btn.is-active,
+				#locateCodeBtn.follow-btn.is-active {
+				background: #008fa3;
+				border-color: #00b7d1;
+				color: #ffffff;
+			}
+
+			#autoFollowBtn.follow-btn.is-held,
+				#scrollSyncBtn.follow-btn.is-held {
+				background: #5a3200;
+				border-color: #b56900;
+				color: #ffffff;
+			}
+
+			#emoPreviewLocateMenu {
+				position: fixed;
+				z-index: 2147483647;
+				display: none;
+				min-width: 190px;
+				padding: 5px;
+				border: 1px solid #444444;
+				border-radius: 7px;
+				background: #151515;
+				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+				font-family: Arial, sans-serif;
+				direction: ltr;
+			}
+
+			#emoPreviewLocateMenu button {
+				display: block;
+				width: 100%;
+				padding: 7px 9px;
+				border: none;
+				border-radius: 5px;
+				background: transparent;
+				color: #ffffff;
+				font-size: 12px;
+				text-align: left;
+				cursor: pointer;
+			}
+
+			#emoPreviewLocateMenu button:hover {
+				background: #008fa3;
+			}
+		</style>
+
+		<script id="emoPreviewAutoFollowBridge">
+			(function () {
+				if (window.__emoPreviewAutoFollowBridgeLoaded) {
+					return;
+				}
+
+				window.__emoPreviewAutoFollowBridgeLoaded = true;
+
+				const cAutoFollowStorageKey = "EmoPreviewAutoFollow";
+				const cScrollSyncStorageKey = "EmoPreviewScrollSync";
+				const cActivePageFileName = "__emo_active_page.json";
+				const cDefaultLocateBridgePort = 38921;
+				const cOpenChromePath = "/__emo_preview_open_chrome";
+const cDefaultPublishedBaseUrl = "https://www.emocrete.com/";
+
+				let cAutoFollow = localStorage.getItem(cAutoFollowStorageKey) !== "0";
+				let cScrollSync = localStorage.getItem(cScrollSyncStorageKey) !== "0";
+				let cLastFollowedPath = "";
+				let cApplyingActivePath = false;
+				let cScrollSyncFrame = 0;
+				let cPendingScrollSource = "";
+				let cIgnoredScrollName = "";
+				let cIgnoredScrollUntil = 0;
+				let cLocateBridgePort = cDefaultLocateBridgePort;
+				let cPublishedBaseUrl = cDefaultPublishedBaseUrl;
+				let cLastCursorStamp = 0;
+				let cPendingCursorTarget = undefined;
+				let cLastContextTarget = undefined;
+
+				function InitializeAutoFollowBridge() {
+					EnsureAutoFollowButton();
+					EnsureScrollSyncButton();
+					EnsureLocateCodeButton();
+					EnsureLocateMenu();
+					ExposeChromeBridge();
+					RegisterManualPathHold();
+					InitializeScrollSync();
+					CheckActivePage();
+					window.setInterval(CheckActivePage, 350);
+				}
+
+				function EnsureAutoFollowButton() {
+					const cToolsBar = document.getElementById("toolsBar");
+
+					if (!cToolsBar) {
+						return;
+					}
+
+					let cButton = document.getElementById("autoFollowBtn");
+
+					if (!cButton) {
+						cButton = document.createElement("button");
+						cButton.id = "autoFollowBtn";
+						cButton.className = "follow-btn";
+						cButton.type = "button";
+						cButton.addEventListener("click", ToggleAutoFollow);
+
+						const cCopyButton = document.getElementById("copyBtn");
+
+						if (cCopyButton && cCopyButton.parentElement === cToolsBar) {
+							cToolsBar.insertBefore(cButton, cCopyButton);
+						}
+						else {
+							cToolsBar.appendChild(cButton);
+						}
+					}
+
+					SetAutoFollowButtonState();
+				}
+
+				function RegisterManualPathHold() {
+					const cPreviewPathInput = document.getElementById("previewPathInput");
+
+					if (!cPreviewPathInput || cPreviewPathInput.dataset.emoPreviewHoldRegistered === "1") {
+						return;
+					}
+
+					cPreviewPathInput.dataset.emoPreviewHoldRegistered = "1";
+
+					cPreviewPathInput.addEventListener("input", function () {
+						if (!cApplyingActivePath) {
+							SetAutoFollow(false);
+						}
+					});
+
+					cPreviewPathInput.addEventListener("paste", function () {
+						if (!cApplyingActivePath) {
+							SetAutoFollow(false);
+						}
+					});
+				}
+
+				function ToggleAutoFollow() {
+					SetAutoFollow(!cAutoFollow);
+				}
+
+				function SetAutoFollow(pValue) {
+					cAutoFollow = pValue;
+					localStorage.setItem(cAutoFollowStorageKey, cAutoFollow ? "1" : "0");
+					SetAutoFollowButtonState();
+
+					if (cAutoFollow) {
+						CheckActivePage();
+					}
+				}
+
+				function SetAutoFollowButtonState() {
+					const cButton = document.getElementById("autoFollowBtn");
+
+					if (!cButton) {
+						return;
+					}
+
+					cButton.classList.toggle("is-active", cAutoFollow);
+					cButton.classList.toggle("is-held", !cAutoFollow);
+					cButton.textContent = cAutoFollow ? "A" : "H";
+					cButton.title = cAutoFollow ? "Auto Follow active Astro page" : "Hold preview on current path";
+					cButton.setAttribute("aria-pressed", cAutoFollow ? "true" : "false");
+				}
+
+				async function CheckActivePage() {
+					if (document.hidden) {
+						return;
+					}
+
+					try {
+						const cResponse = await fetch(BuildActivePageUrl(), {
+							cache: "no-store"
+						});
+
+						if (!cResponse.ok) {
+							return;
+						}
+
+						const cData = await cResponse.json();
+						ApplyActivePageData(cData);
+					}
+					catch {
+					}
+				}
+
+				function BuildActivePageUrl() {
+					const cPortInput = document.getElementById("previewPortInput");
+					const cPort = CleanPreviewPortForBridge(cPortInput && cPortInput.value ? cPortInput.value : "4321");
+					const cStamp = Date.now();
+
+					if (window.location.protocol === "file:") {
+						return "http://localhost:" + cPort + "/" + cActivePageFileName + "?t=" + cStamp;
+					}
+
+					return "/" + cActivePageFileName + "?t=" + cStamp;
+				}
+
+				function CleanPreviewPortForBridge(pValue) {
+					const cText = String(pValue || "").trim().replace(/[^\d]/g, "");
+					const cPort = Number(cText);
+
+					if (!Number.isInteger(cPort) || cPort < 1 || cPort > 65535) {
+						return "4321";
+					}
+
+					return cText;
+				}
+
+				function ApplyActivePageData(pData) {
+					if (!pData) {
+						return;
+					}
+
+					if (Number.isInteger(pData.bridgePort) && pData.bridgePort > 0) {
+						cLocateBridgePort = pData.bridgePort;
+					}
+
+					if (pData.publishedBaseUrl) {
+						cPublishedBaseUrl = CleanPublishedBaseUrlForBridge(pData.publishedBaseUrl) || cPublishedBaseUrl;
+					}
+
+					ExposeChromeBridge();
+
+					const cPath = pData.route || pData.pagesRelativePath || pData.path || pData.workspaceRelativePath || "";
+
+					if (cAutoFollow) {
+						ApplyActivePagePath(cPath);
+					}
+
+					ApplyCursorPreviewTarget(pData.cursor, cPath);
+				}
+
+				function ApplyActivePagePath(pPath) {
+					const cPreviewPathInput = document.getElementById("previewPathInput");
+
+					if (!cPreviewPathInput) {
+						return;
+					}
+
+					const cCleanPath = CleanPathForPreview(pPath);
+
+					if (cCleanPath === cLastFollowedPath) {
+						return;
+					}
+
+					cLastFollowedPath = cCleanPath;
+					cApplyingActivePath = true;
+
+					try {
+						cPreviewPathInput.value = cCleanPath;
+
+						if (typeof ApplyPreviewSourceInputs === "function") {
+							ApplyPreviewSourceInputs();
+						}
+						else {
+							cPreviewPathInput.dispatchEvent(new Event("input", {
+								bubbles: true
+							}));
+						}
+					}
+					finally {
+						cApplyingActivePath = false;
+					}
+				}
+
+				function CleanPathForPreview(pPath) {
+					if (typeof CleanRelativePreviewPath === "function") {
+						return CleanRelativePreviewPath(pPath);
+					}
+
+					let cPath = String(pPath || "").trim();
+
+					cPath = cPath.replace(/^["']+|["']+$/g, "");
+					cPath = cPath.replace(/\\/g, "/");
+					cPath = cPath.replace(/\/+/g, "/");
+					cPath = cPath.replace(/^.*?src\/pages\//i, "");
+					cPath = cPath.replace(/^\/+/, "");
+					cPath = cPath.replace(/^pages\//i, "");
+					cPath = cPath.replace(/\.astro$/i, "");
+
+					if (/^index$/i.test(cPath)) {
+						cPath = "";
+					}
+					else {
+						cPath = cPath.replace(/\/index$/i, "");
+					}
+
+					cPath = cPath.replace(/^\/+/, "");
+					cPath = cPath.replace(/\/+$/, "");
+
+					return cPath;
+				}
+
+				function ExposeChromeBridge() {
+					window.__emoPreviewBridgePort = cLocateBridgePort;
+					window.__emoPreviewPublishedBaseUrl = cPublishedBaseUrl;
+					window.EmoPreviewOpenChrome = OpenChromeThroughBridge;
+				}
+
+				function CleanPublishedBaseUrlForBridge(pBase) {
+					let cBase = String(pBase || "").trim();
+
+					if (!cBase) {
+						return "";
+					}
+
+					if (!/^https?:\/\//i.test(cBase)) {
+						cBase = "https://" + cBase.replace(/^\/+/, "");
+					}
+
+					return cBase.replace(/\/+$/, "") + "/";
+				}
+
+				async function OpenChromeThroughBridge(pUrl) {
+					if (!pUrl) {
+						return false;
+					}
+
+					try {
+						const cResponse = await fetch("http://127.0.0.1:" + cLocateBridgePort + cOpenChromePath, {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json"
+							},
+							body: JSON.stringify({
+								url: pUrl,
+								newWindow: false
+							})
+						});
+
+						if (!cResponse.ok) {
+							throw new Error("HTTP " + cResponse.status);
+						}
+
+						const cResult = await cResponse.json();
+						return !!(cResult && cResult.ok);
+					}
+					catch (cError) {
+						console.error("Emo Preview open Chrome request failed", cError);
+						return false;
+					}
+				}
+
+				function EnsureScrollSyncButton() {
+					const cToolsBar = document.getElementById("toolsBar");
+
+					if (!cToolsBar) {
+						return;
+					}
+
+					let cButton = document.getElementById("scrollSyncBtn");
+
+					if (!cButton) {
+						cButton = document.createElement("button");
+						cButton.id = "scrollSyncBtn";
+						cButton.className = "follow-btn";
+						cButton.type = "button";
+						cButton.addEventListener("click", ToggleScrollSync);
+
+						const cAutoButton = document.getElementById("autoFollowBtn");
+						const cCopyButton = document.getElementById("copyBtn");
+
+						if (cAutoButton && cAutoButton.parentElement === cToolsBar) {
+							cToolsBar.insertBefore(cButton, cAutoButton.nextSibling);
+						}
+						else if (cCopyButton && cCopyButton.parentElement === cToolsBar) {
+							cToolsBar.insertBefore(cButton, cCopyButton);
+						}
+						else {
+							cToolsBar.appendChild(cButton);
+						}
+					}
+
+					SetScrollSyncButtonState();
+				}
+
+				function ToggleScrollSync() {
+					SetScrollSync(!cScrollSync);
+				}
+
+				function SetScrollSync(pValue) {
+					cScrollSync = pValue;
+					localStorage.setItem(cScrollSyncStorageKey, cScrollSync ? "1" : "0");
+					SetScrollSyncButtonState();
+
+					if (cScrollSync) {
+						RegisterScrollSyncFrames();
+						QueueScrollSync("land");
+					}
+				}
+
+				function SetScrollSyncButtonState() {
+					const cButton = document.getElementById("scrollSyncBtn");
+
+					if (!cButton) {
+						return;
+					}
+
+					cButton.classList.toggle("is-active", cScrollSync);
+					cButton.classList.toggle("is-held", !cScrollSync);
+					cButton.textContent = cScrollSync ? "S" : "s";
+					cButton.title = cScrollSync ? "Scroll Sync active between desktop and mobile" : "Scroll Sync stopped";
+					cButton.setAttribute("aria-pressed", cScrollSync ? "true" : "false");
+				}
+
+				function InitializeScrollSync() {
+					RegisterScrollSyncFrames();
+
+					const cLandFrame = document.getElementById("landFrame");
+					const cPortFrame = document.getElementById("portFrame");
+
+					if (cLandFrame) {
+						cLandFrame.addEventListener("load", function () {
+							RegisterScrollSyncFrames();
+							ApplyPendingCursorToFrame("land");
+							QueueScrollSync("port");
+						});
+					}
+
+					if (cPortFrame) {
+						cPortFrame.addEventListener("load", function () {
+							RegisterScrollSyncFrames();
+							ApplyPendingCursorToFrame("port");
+							QueueScrollSync("land");
+						});
+					}
+
+					window.addEventListener("resize", function () {
+						QueueScrollSync(cPendingScrollSource || "land");
+					});
+
+					window.addEventListener("click", HideLocateMenu, true);
+					window.setInterval(RegisterScrollSyncFrames, 1000);
+				}
+
+				function RegisterScrollSyncFrames() {
+					RegisterScrollSyncFrame("land");
+					RegisterScrollSyncFrame("port");
+				}
+
+				function RegisterScrollSyncFrame(pName) {
+					const cWin = GetFrameWindow(pName);
+
+					if (!cWin || cWin.__emoPreviewScrollSyncRegistered) {
+						return;
+					}
+
+					try {
+						void cWin.document;
+					}
+					catch {
+						return;
+					}
+
+					cWin.__emoPreviewScrollSyncRegistered = true;
+
+					cWin.addEventListener("scroll", function () {
+						HandleFrameScroll(pName);
+					}, {
+						passive: true
+					});
+
+					cWin.addEventListener("resize", function () {
+						QueueScrollSync(pName);
+					}, {
+						passive: true
+					});
+
+					cWin.document.addEventListener("contextmenu", function (pEvent) {
+						HandleFrameContextMenu(pEvent, pName);
+					}, true);
+
+					InstallFrameResizeObserver(cWin, pName);
+				}
+
+				function InstallFrameResizeObserver(pWin, pName) {
+					try {
+						if (!pWin.ResizeObserver || !pWin.document || pWin.__emoPreviewScrollSyncResizeObserver) {
+							return;
+						}
+
+						const cObserver = new pWin.ResizeObserver(function () {
+							QueueScrollSync(pName);
+						});
+
+						cObserver.observe(pWin.document.body);
+						pWin.__emoPreviewScrollSyncResizeObserver = cObserver;
+					}
+					catch {
+					}
+				}
+
+				function HandleFrameScroll(pName) {
+					if (!cScrollSync) {
+						return;
+					}
+
+					if (pName === cIgnoredScrollName && Date.now() < cIgnoredScrollUntil) {
+						return;
+					}
+
+					QueueScrollSync(pName);
+				}
+
+				function QueueScrollSync(pSourceName) {
+					if (!cScrollSync || !IsBothFramesVisible()) {
+						return;
+					}
+
+					cPendingScrollSource = pSourceName;
+
+					if (cScrollSyncFrame) {
+						return;
+					}
+
+					cScrollSyncFrame = window.requestAnimationFrame(ApplyQueuedScrollSync);
+				}
+
+				function ApplyQueuedScrollSync() {
+					cScrollSyncFrame = 0;
+
+					const cSourceName = cPendingScrollSource === "port" ? "port" : "land";
+					const cTargetName = cSourceName === "land" ? "port" : "land";
+
+					const cSourceWin = GetFrameWindow(cSourceName);
+					const cTargetWin = GetFrameWindow(cTargetName);
+
+					if (!cSourceWin || !cTargetWin) {
+						return;
+					}
+
+					const cState = GetFrameScrollState(cSourceWin);
+					const cTargetTop = GetTargetScrollTop(cTargetWin, cState);
+
+					if (!Number.isFinite(cTargetTop)) {
+						return;
+					}
+
+					cIgnoredScrollName = cTargetName;
+					cIgnoredScrollUntil = Date.now() + 140;
+					cTargetWin.scrollTo(0, cTargetTop);
+				}
+
+				function GetFrameWindow(pName) {
+					const cFrame = document.getElementById(pName === "port" ? "portFrame" : "landFrame");
+
+					if (!cFrame || !cFrame.contentWindow) {
+						return undefined;
+					}
+
+					try {
+						void cFrame.contentWindow.document;
+						return cFrame.contentWindow;
+					}
+					catch {
+						return undefined;
+					}
+				}
+
+				function IsBothFramesVisible() {
+					const cLandPane = document.getElementById("landPane");
+					const cPortPane = document.getElementById("portPane");
+
+					return (!cLandPane || cLandPane.style.display !== "none") && (!cPortPane || cPortPane.style.display !== "none");
+				}
+
+				function GetFrameScrollState(pWin) {
+					const cScrollElement = GetFrameScrollElement(pWin.document);
+					const cScrollTop = pWin.scrollY || cScrollElement.scrollTop || 0;
+					const cViewportHeight = pWin.innerHeight || cScrollElement.clientHeight || 1;
+					const cScrollHeight = GetFrameScrollHeight(pWin);
+					const cMaxScroll = Math.max(0, cScrollHeight - cViewportHeight);
+					const cEdge = GetScrollEdge(cScrollTop, cMaxScroll);
+					const cAnchorState = GetAnchorScrollState(pWin, cScrollTop, cViewportHeight, cScrollHeight);
+
+					return {
+						ScrollRatio: cMaxScroll > 0 ? cScrollTop / cMaxScroll : 0,
+						CenterRatio: cScrollHeight > 0 ? (cScrollTop + cViewportHeight * 0.5) / cScrollHeight : 0,
+						Edge: cEdge,
+						Anchor: cAnchorState
+					};
+				}
+
+				function GetTargetScrollTop(pWin, pState) {
+					const cScrollElement = GetFrameScrollElement(pWin.document);
+					const cViewportHeight = pWin.innerHeight || cScrollElement.clientHeight || 1;
+					const cScrollHeight = GetFrameScrollHeight(pWin);
+					const cMaxScroll = Math.max(0, cScrollHeight - cViewportHeight);
+
+					if (pState && pState.Edge === "top") {
+						return 0;
+					}
+
+					if (pState && pState.Edge === "bottom") {
+						return cMaxScroll;
+					}
+
+					const cAnchorTop = GetTargetAnchorScrollTop(pWin, pState ? pState.Anchor : undefined);
+
+					if (Number.isFinite(cAnchorTop)) {
+						return ClampNumber(cAnchorTop, 0, cMaxScroll);
+					}
+
+					let cTop = pState.CenterRatio * cScrollHeight - cViewportHeight * 0.5;
+
+					if (!Number.isFinite(cTop)) {
+						cTop = pState.ScrollRatio * cMaxScroll;
+					}
+
+					return ClampNumber(cTop, 0, cMaxScroll);
+				}
+
+				function GetScrollEdge(pScrollTop, pMaxScroll) {
+					const cTolerance = 2;
+
+					if (pScrollTop <= cTolerance) {
+						return "top";
+					}
+
+					if (pMaxScroll <= 0 || pMaxScroll - pScrollTop <= cTolerance) {
+						return "bottom";
+					}
+
+					return "middle";
+				}
+
+				function GetAnchorScrollState(pWin, pScrollTop, pViewportHeight, pScrollHeight) {
+					const cAnchors = GetSyncAnchors(pWin.document);
+
+					if (cAnchors.length < 2) {
+						return undefined;
+					}
+
+					const cFocusY = pScrollTop + pViewportHeight * 0.5;
+					let cIndex = 0;
+
+					for (let i = 0; i < cAnchors.length; i++) {
+						if (cAnchors[i].Top <= cFocusY) {
+							cIndex = i;
+						}
+						else {
+							break;
+						}
+					}
+
+					const cCurrent = cAnchors[cIndex];
+					const cNext = cAnchors[cIndex + 1];
+					const cEndTop = cNext ? cNext.Top : pScrollHeight;
+					const cRange = Math.max(1, cEndTop - cCurrent.Top);
+					const cOffsetRatio = ClampNumber((cFocusY - cCurrent.Top) / cRange, 0, 1);
+
+					return {
+						Id: cCurrent.Id,
+						Index: cIndex,
+						OffsetRatio: cOffsetRatio
+					};
+				}
+
+				function GetTargetAnchorScrollTop(pWin, pAnchorState) {
+					if (!pAnchorState || !pAnchorState.Id) {
+						return NaN;
+					}
+
+					const cAnchors = GetSyncAnchors(pWin.document);
+					let cIndex = cAnchors.findIndex(function (pAnchor) {
+						return pAnchor.Id === pAnchorState.Id;
+					});
+
+					if (cIndex < 0) {
+						cIndex = Math.min(pAnchorState.Index, cAnchors.length - 1);
+					}
+
+					if (cIndex < 0) {
+						return NaN;
+					}
+
+					const cScrollElement = GetFrameScrollElement(pWin.document);
+					const cViewportHeight = pWin.innerHeight || cScrollElement.clientHeight || 1;
+					const cScrollHeight = GetFrameScrollHeight(pWin);
+					const cMaxScroll = Math.max(0, cScrollHeight - cViewportHeight);
+					const cCurrent = cAnchors[cIndex];
+					const cNext = cAnchors[cIndex + 1];
+					const cEndTop = cNext ? cNext.Top : cScrollHeight;
+					const cRange = Math.max(1, cEndTop - cCurrent.Top);
+					const cFocusY = cCurrent.Top + cRange * pAnchorState.OffsetRatio;
+
+					return ClampNumber(cFocusY - cViewportHeight * 0.5, 0, cMaxScroll);
+				}
+
+				function GetSyncAnchors(pDoc) {
+					let cElements = Array.from(pDoc.querySelectorAll("main > [id], body > [id], section[id], article[id], header[id], footer[id], [data-hero][id]"));
+
+					if (cElements.length < 2) {
+						cElements = Array.from(pDoc.querySelectorAll("main > *, body > *, section, article, header, footer, [data-hero]"));
+					}
+
+					const cUsed = new Set();
+					const cAnchors = [];
+
+					for (let i = 0; i < cElements.length; i++) {
+						const cElement = cElements[i];
+						let cId = String(cElement.id || "").trim();
+
+						if (!cId) {
+							cId = "__auto_" + i;
+						}
+
+						if (cUsed.has(cId)) {
+							continue;
+						}
+
+						const cRect = cElement.getBoundingClientRect();
+
+						if (cRect.width <= 0 || cRect.height <= 10) {
+							continue;
+						}
+
+						cUsed.add(cId);
+						cAnchors.push({
+							Id: cId,
+							Top: cRect.top + (pDoc.defaultView ? pDoc.defaultView.scrollY : 0)
+						});
+					}
+
+					cAnchors.sort(function (pFirst, pSecond) {
+						return pFirst.Top - pSecond.Top;
+					});
+
+					return cAnchors;
+				}
+
+				function ApplyCursorPreviewTarget(pCursor, pPath) {
+					if (!pCursor || !pCursor.updatedAt) {
+						return;
+					}
+
+					const cTargetPath = CleanPathForPreview(pPath || "");
+					const cCurrentPath = GetCurrentPreviewRoute();
+
+					if (cTargetPath !== cCurrentPath) {
+						return;
+					}
+
+					if (pCursor.updatedAt === cLastCursorStamp) {
+						return;
+					}
+
+					cLastCursorStamp = pCursor.updatedAt;
+					cPendingCursorTarget = pCursor;
+
+					window.setTimeout(function () {
+						ApplyPendingCursorToFrame("land");
+						ApplyPendingCursorToFrame("port");
+					}, 120);
+				}
+
+				function ApplyPendingCursorToFrame(pName) {
+					if (!cPendingCursorTarget) {
+						return;
+					}
+
+					const cWin = GetFrameWindow(pName);
+
+					if (!cWin) {
+						return;
+					}
+
+					const cElement = FindElementByCursorTarget(cWin.document, cPendingCursorTarget);
+
+					if (!cElement) {
+						return;
+					}
+
+					const cTop = GetElementScrollTop(cWin, cElement, 0.32);
+
+					if (Number.isFinite(cTop)) {
+						cIgnoredScrollName = pName;
+						cIgnoredScrollUntil = Date.now() + 180;
+						cWin.scrollTo(0, cTop);
+					}
+				}
+
+				function FindElementByCursorTarget(pDoc, pCursor) {
+					if (pCursor.id) {
+						const cById = pDoc.getElementById(pCursor.id);
+
+						if (cById) {
+							return cById;
+						}
+					}
+
+					const cSnippets = Array.isArray(pCursor.snippets) ? pCursor.snippets : [];
+
+					for (const cSnippet of cSnippets) {
+						const cElement = FindElementContainingText(pDoc, cSnippet);
+
+						if (cElement) {
+							return GetMajorOwnerElement(cElement) || cElement;
+						}
+					}
+
+					return undefined;
+				}
+
+				function FindElementContainingText(pDoc, pText) {
+					const cNeedle = NormalizeDomText(pText);
+
+					if (!cNeedle || cNeedle.length < 4) {
+						return undefined;
+					}
+
+					const cElements = Array.from(pDoc.querySelectorAll("h1,h2,h3,h4,p,li,a,button,span,strong,em,div,section,article,header"));
+					let cBest = undefined;
+					let cBestLength = Infinity;
+
+					for (const cElement of cElements) {
+						const cText = NormalizeDomText(cElement.innerText || cElement.textContent || "");
+
+						if (!cText || !cText.includes(cNeedle)) {
+							continue;
+						}
+
+						if (cText.length < cBestLength) {
+							cBest = cElement;
+							cBestLength = cText.length;
+						}
+					}
+
+					return cBest;
+				}
+
+				function GetMajorOwnerElement(pElement) {
+					if (!pElement || !pElement.closest) {
+						return pElement;
+					}
+
+					return pElement.closest("[data-hero],section,article,header,footer,main") || pElement.closest("div") || pElement;
+				}
+
+				function GetElementScrollTop(pWin, pElement, pViewportRatio) {
+					const cRect = pElement.getBoundingClientRect();
+					const cScrollElement = GetFrameScrollElement(pWin.document);
+					const cViewportHeight = pWin.innerHeight || cScrollElement.clientHeight || 1;
+					const cScrollHeight = GetFrameScrollHeight(pWin);
+					const cMaxScroll = Math.max(0, cScrollHeight - cViewportHeight);
+					const cTop = cRect.top + (pWin.scrollY || cScrollElement.scrollTop || 0) - cViewportHeight * (pViewportRatio || 0.3);
+
+					return ClampNumber(cTop, 0, cMaxScroll);
+				}
+
+				function EnsureLocateCodeButton() {
+					const cToolsBar = document.getElementById("toolsBar");
+
+					if (!cToolsBar) {
+						return;
+					}
+
+					let cButton = document.getElementById("locateCodeBtn");
+
+					if (!cButton) {
+						cButton = document.createElement("button");
+						cButton.id = "locateCodeBtn";
+						cButton.className = "follow-btn is-active";
+						cButton.type = "button";
+						cButton.textContent = "L";
+						cButton.title = "Locate visible preview part in Astro code";
+						cButton.addEventListener("click", LocateVisibleInCode);
+
+						const cScrollButton = document.getElementById("scrollSyncBtn");
+						const cCopyButton = document.getElementById("copyBtn");
+
+						if (cScrollButton && cScrollButton.parentElement === cToolsBar) {
+							cToolsBar.insertBefore(cButton, cScrollButton.nextSibling);
+						}
+						else if (cCopyButton && cCopyButton.parentElement === cToolsBar) {
+							cToolsBar.insertBefore(cButton, cCopyButton);
+						}
+						else {
+							cToolsBar.appendChild(cButton);
+						}
+					}
+				}
+
+				function EnsureLocateMenu() {
+					let cMenu = document.getElementById("emoPreviewLocateMenu");
+
+					if (cMenu) {
+						return;
+					}
+
+					cMenu = document.createElement("div");
+					cMenu.id = "emoPreviewLocateMenu";
+					cMenu.innerHTML = '<button type="button" data-mode="selItem">Locate sel item</button><button type="button" data-mode="ownerDiv">Locate owner div</button><button type="button" data-mode="ownerSection">Locate owner section</button>';
+					document.body.appendChild(cMenu);
+
+					cMenu.addEventListener("click", function (pEvent) {
+						const cButton = pEvent.target && pEvent.target.closest ? pEvent.target.closest("button[data-mode]") : undefined;
+
+						if (!cButton) {
+							return;
+						}
+
+						pEvent.preventDefault();
+						pEvent.stopPropagation();
+						LocateContextInCode(cButton.dataset.mode || "selItem");
+					});
+				}
+
+				function HandleFrameContextMenu(pEvent, pName) {
+					pEvent.preventDefault();
+					pEvent.stopPropagation();
+
+					cLastContextTarget = {
+						FrameName: pName,
+						Element: pEvent.target
+					};
+
+					ShowLocateMenu(pName, pEvent.clientX, pEvent.clientY);
+				}
+
+				function ShowLocateMenu(pName, pClientX, pClientY) {
+					const cMenu = document.getElementById("emoPreviewLocateMenu");
+					const cFrame = document.getElementById(pName === "port" ? "portFrame" : "landFrame");
+
+					if (!cMenu || !cFrame) {
+						return;
+					}
+
+					const cRect = cFrame.getBoundingClientRect();
+					const cScaleX = cFrame.offsetWidth ? cRect.width / cFrame.offsetWidth : 1;
+					const cScaleY = cFrame.offsetHeight ? cRect.height / cFrame.offsetHeight : 1;
+					const cLeft = cRect.left + pClientX * cScaleX;
+					const cTop = cRect.top + pClientY * cScaleY;
+
+					cMenu.style.left = Math.min(cLeft, window.innerWidth - 210) + "px";
+					cMenu.style.top = Math.min(cTop, window.innerHeight - 120) + "px";
+					cMenu.style.display = "block";
+				}
+
+				function HideLocateMenu() {
+					const cMenu = document.getElementById("emoPreviewLocateMenu");
+
+					if (cMenu) {
+						cMenu.style.display = "none";
+					}
+				}
+
+				function LocateContextInCode(pMode) {
+					HideLocateMenu();
+
+					if (!cLastContextTarget || !cLastContextTarget.Element) {
+						return;
+					}
+
+					const cWin = GetFrameWindow(cLastContextTarget.FrameName);
+
+					if (!cWin) {
+						return;
+					}
+
+					const cPayload = BuildDomLocatePayload(cWin, cLastContextTarget.Element, pMode, cLastContextTarget.FrameName);
+					SendLocatePayload(cPayload);
+				}
+
+				function LocateVisibleInCode() {
+					const cName = cPendingScrollSource === "port" ? "port" : "land";
+					const cWin = GetFrameWindow(cName) || GetFrameWindow("land") || GetFrameWindow("port");
+
+					if (!cWin) {
+						return;
+					}
+
+					const cElement = cWin.document.elementFromPoint(cWin.innerWidth * 0.5, cWin.innerHeight * 0.38) || cWin.document.body;
+					const cPayload = BuildDomLocatePayload(cWin, cElement, "visible", cName);
+					SendLocatePayload(cPayload);
+				}
+
+				function BuildDomLocatePayload(pWin, pElement, pMode, pFrameName) {
+					const cTarget = PickLocateTargetElement(pElement, pMode);
+
+					return {
+						mode: pMode || "selItem",
+						frame: pFrameName || "land",
+						route: GetCurrentPreviewRoute(),
+						tagName: cTarget && cTarget.tagName ? cTarget.tagName.toLowerCase() : "",
+						id: cTarget && cTarget.id ? cTarget.id : "",
+						classNames: cTarget && cTarget.classList ? Array.from(cTarget.classList).slice(0, 12) : [],
+						snippets: ExtractDomSnippets(cTarget || pElement, pElement)
+					};
+				}
+
+				function PickLocateTargetElement(pElement, pMode) {
+					if (!pElement || !pElement.closest) {
+						return pElement;
+					}
+
+					if (pMode === "ownerDiv") {
+						return pElement.closest("div") || pElement;
+					}
+
+					if (pMode === "ownerSection" || pMode === "visible") {
+						return pElement.closest("[data-hero],section,article,header,footer,main") || pElement.closest("div") || pElement;
+					}
+
+					return pElement;
+				}
+
+				function ExtractDomSnippets(pTarget, pOriginal) {
+					const cSnippets = [];
+					const cSeen = new Set();
+
+					AddDomSnippet(cSnippets, cSeen, pOriginal ? (pOriginal.innerText || pOriginal.textContent || "") : "");
+
+					if (pTarget && pTarget.querySelectorAll) {
+						const cTextNodes = Array.from(pTarget.querySelectorAll("h1,h2,h3,h4,p,li,a,button,strong,span"));
+
+						for (const cNode of cTextNodes) {
+							AddDomSnippet(cSnippets, cSeen, cNode.innerText || cNode.textContent || "");
+
+							if (cSnippets.length >= 8) {
+								break;
+							}
+						}
+					}
+
+					AddDomSnippet(cSnippets, cSeen, pTarget ? (pTarget.innerText || pTarget.textContent || "") : "");
+					return cSnippets.slice(0, 8);
+				}
+
+				function AddDomSnippet(pSnippets, pSeen, pText) {
+					let cText = CleanDomText(pText);
+
+					if (!cText || cText.length < 5) {
+						return;
+					}
+
+					if (cText.length > 90) {
+						cText = cText.slice(0, 90).trim();
+					}
+
+					const cKey = NormalizeDomText(cText);
+
+					if (!cKey || pSeen.has(cKey)) {
+						return;
+					}
+
+					pSeen.add(cKey);
+					pSnippets.push(cText);
+				}
+
+				function GetCurrentPreviewRoute() {
+					const cInput = document.getElementById("previewPathInput");
+					return CleanPathForPreview(cInput ? cInput.value : "");
+				}
+
+				async function SendLocatePayload(pPayload) {
+					try {
+						const cResponse = await fetch("http://127.0.0.1:" + cLocateBridgePort + "/__emo_preview_locate", {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json"
+							},
+							body: JSON.stringify(pPayload || {})
+						});
+
+						if (!cResponse.ok) {
+							throw new Error("HTTP " + cResponse.status);
+						}
+
+						const cResult = await cResponse.json();
+
+						if (!cResult || !cResult.ok) {
+							throw new Error(cResult && cResult.error ? cResult.error : "Locate failed");
+						}
+					}
+					catch (cError) {
+						console.error("Emo Preview locate request failed", cError);
+						window.alert("Locate in code failed. تأكد أن إضافة VS Code مركبة وأن نفس المشروع مفتوح.");
+					}
+				}
+
+				function NormalizeDomText(pText) {
+					return CleanDomText(pText)
+						.toLowerCase()
+						.replace(/[أإآٱ]/g, "ا")
+						.replace(/[ىي]/g, "ي")
+						.replace(/ة/g, "ه")
+						.replace(/[ًٌٍَُِّْـ]/g, "")
+						.replace(/[\u200e\u200f\u202a-\u202e]/g, "")
+						.replace(/\s+/g, " ")
+						.trim();
+				}
+
+				function CleanDomText(pText) {
+					return String(pText || "")
+						.replace(/\s+/g, " ")
+						.replace(/^[\s:،,؛.\-–—|]+|[\s:،,؛.\-–—|]+$/g, "")
+						.trim();
+				}
+
+				function GetFrameScrollElement(pDoc) {
+					return pDoc.scrollingElement || pDoc.documentElement || pDoc.body;
+				}
+
+				function GetFrameScrollHeight(pWin) {
+					const cDoc = pWin.document;
+					const cBody = cDoc.body;
+					const cHtml = cDoc.documentElement;
+
+					return Math.max(
+						cBody ? cBody.scrollHeight : 0,
+						cBody ? cBody.offsetHeight : 0,
+						cHtml ? cHtml.clientHeight : 0,
+						cHtml ? cHtml.scrollHeight : 0,
+						cHtml ? cHtml.offsetHeight : 0
+					);
+				}
+
+				function ClampNumber(pValue, pMin, pMax) {
+					return Math.min(Math.max(pValue, pMin), pMax);
+				}
+
+				if (document.readyState === "loading") {
+					document.addEventListener("DOMContentLoaded", InitializeAutoFollowBridge);
+				}
+				else {
+					InitializeAutoFollowBridge();
+				}
+			})();
+		</script>
+		<!-- EMO_PREVIEW_AUTO_FOLLOW_END -->
+	</body>
+
+</html>
