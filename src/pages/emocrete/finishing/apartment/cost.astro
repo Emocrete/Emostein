@@ -1,7 +1,9 @@
 ---
-import { Align, ElemBg, NumPer, Size, Text } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzStack, SecTitle, VrStack } from "@/Widgets";
+import { EmoCall, Emograph, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { ESec, Hero } from "@/Widgets/Sections";
+import { EmoStrip } from "@/Widgets/Strips";
+import { Align, ElemBg, Loc, NumPer, Size, Text } from "@/TypesLib";
 ---
 
 
@@ -29,32 +31,53 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 	pDescr="متوسط تكلفة تشطيب شقة 100 متر في مصر من حالة نصف التشطيب، مع تفصيل بنود الكهرباء والسباكة والسيراميك والدهانات والنجارة والألوميتال والجبس بورد والنثريات."
 >
 
-	<Hero
-		pTitle="تكلفة تشطيب شقة"
-		pDesc="متوسط تكلفة البنود الأساسية لتشطيب شقة سكنية مساحة 100 متر من حالة النصف تشطيب"
-		pTitleClr="#17345C"
-		pDescClr="#17345C"
-		pHzAlign="center"
-		pVrAlign="center"
-		pPosL="40% 20% 20% 50%"
-		pPosP="60% 5% 10% 5%"
-		pBlurL="off"
-		pBlurP="off"
-	/>
+
+
+
+
+
+
+	<Hero>
+
+		<VrStack
+			pLoc={new Loc(new NumPer("50%","2.5%"),new NumPer("30%","55%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pHzAlign={"Center"}
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("تكلفة تشطيب شقة")}
+				pText={Text.Body.Centered.OfText("متوسط تكلفة البنود الأساسية لتشطيب شقة سكنية مساحة 100 متر من حالة النصف تشطيب")}
+			/>
+
+			<EmoCall BlackSky />
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
 
 	<ESec
 		pBg={new ElemBg("#FFFDF8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
 			pTitle="افتراضات حساب تكلفة تشطيب الشقة"
 			pDesc="الحساب تقريبي ومبني على نموذج شقة سكنية متوسطة، والتكلفة النهائية تتغير حسب الرسومات والخامات وطبيعة الموقع"
-			style="--StripBg:#F6F1E8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFDF8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFDF8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<Emograph
 				pTitle={Text.H3.WithColor("#17345C").OfText("نطاق الحساب")}
@@ -66,19 +89,29 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#F6F1E8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #17345C "
 			pTitle="ملخص التكلفة التقريبية"
 			pDesc="الأرقام التالية مبنية على متوسط أسعار الخامات والمصنعيات في يونيو 2024"
-			style="--StripBg:#17345C;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F6F1E8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#F6F1E8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -106,19 +139,29 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#FFFFFF")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #FFFDF8 "
 			pTitle="تفصيل بنود تكلفة التشطيب"
 			pDesc="توزيع تقريبي لقيمة البنود الأساسية الداخلة في حساب تكلفة شقة 100 متر"
-			style="--StripBg:#FFFDF8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFFFF")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack>
 
@@ -210,19 +253,29 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#F6F1E8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #B78A25 "
 			pTitle="أعمال الكهرباء"
 			pDesc="الكهرباء من أول البنود التي يفضل تنفيذها لأنها تحتاج تكسير وتمديد خراطيم وتوزيع دوائر داخل الحوائط والأسقف"
-			style="--StripBg:#B78A25;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F6F1E8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#F6F1E8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack>
 
@@ -250,19 +303,29 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#FFFFFF")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #FFFDF8 "
 			pTitle="تقدير خامات تأسيس الكهرباء"
 			pDesc="متوسط تقريبي لخامات تأسيس كهرباء شقة 100 متر مكونة من ثلاث غرف"
-			style="--StripBg:#FFFDF8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFFFF")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<VrStack>
 
@@ -300,19 +363,29 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#F6F1E8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #17345C "
 			pTitle="أعمال السباكة"
 			pDesc="السباكة تشمل خطوط المياه والصرف والتهوية وتركيب التجهيزات الصحية، وتحتاج تنسيقا دقيقا قبل إغلاق الحوائط والأرضيات"
-			style="--StripBg:#17345C;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F6F1E8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#F6F1E8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -340,19 +413,29 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#FFFFFF")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #FFFDF8 "
 			pTitle="أعمال السيراميك والبلاط"
 			pDesc="البلاط والسيراميك من البنود التي تظهر نتيجتها بصريا بوضوح، وأي خطأ في التوزيع أو الفواصل يصعب إخفاؤه بعد التنفيذ"
-			style="--StripBg:#FFFDF8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFFFF")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -380,19 +463,29 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#F6F1E8")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #B78A25 "
 			pTitle="أعمال الدهانات"
 			pDesc="الدهانات من أكثر البنود تأثيرا على الإحساس النهائي بالشقة، لكنها تعتمد قبل اللون على جودة تجهيز السطح"
-			style="--StripBg:#B78A25;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#F6F1E8")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#F6F1E8")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -420,19 +513,29 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#FFFFFF")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #FFFDF8 "
 			pTitle="النجارة والألوميتال والجبس بورد"
 			pDesc="بنود ظاهرة في الاستخدام اليومي والشكل النهائي، وتتأثر تكلفتها جدا بمستوى الخامات والتفاصيل"
-			style="--StripBg:#FFFDF8;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#FFFFFF")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -460,19 +563,29 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 
 	</ESec>
 
+
+
+
+
+
+
 	<ESec
 		pBg={new ElemBg("#17345C")}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
+
 		<SecTitle
+			style = " --StripBg : #102744 "
 			pTitle="النثريات والمصاريف الجانبية"
 			pDesc="بنود صغيرة ظاهريا لكنها مؤثرة في ضبط الميزانية لأنها تتكرر طوال فترة التنفيذ"
-			style="--StripBg:#102744;"
 		/>
 
-		<EmoStrip pBg={new ElemBg("#17345C")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+		<EmoStrip
+			pBg={new ElemBg("#17345C")}
+			pHzAlign={Align.Center}
+			pVrAlign={Align.Center}
+		>
 
 			<HzStack>
 
@@ -493,5 +606,11 @@ import { EmoBtn, EmoCall, EmoContactStrip, Emograph, EmoStrip, ESec, Hero, HzSta
 		</EmoStrip>
 
 	</ESec>
+
+
+
+
+
+
 
 </BLayout>

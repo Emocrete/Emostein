@@ -1,7 +1,7 @@
 ---
-import { Colors, Place, type PlaceProps, HoverColors, HoverImg } from "@/TypesLib";
+import { Colors, HoverColors, HoverImg, Place, type PlaceProps } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import { GetBoolAttr, GetButtonPreset, GetButtonTitleColors, type ButtonPresetProps } from "./ButtonPresets";
+import { type ButtonPresetProps, GetBoolAttr, GetButtonPreset, GetButtonTitleColors } from "./ButtonPresets";
 
 export interface Props extends HTMLAttributes<"a">, PlaceProps, ButtonPresetProps {
 	/** النص الظاهر داخل زر الاتصال. */
@@ -416,9 +416,6 @@ function GetCssName(pName: string) {
 		text-decoration: none;
 	}
 
-	.CallBtn.noIcon .BtnText {
-		width: 100%;
-	}
 
 	.BtnTextPhone {
 		display: none;
@@ -514,6 +511,11 @@ function GetCssName(pName: string) {
 		direction: ltr;
 	}
 
+
+
+	.CallBtn.noIcon .BtnText {
+		width: 100%;
+	}
 
 
 	.CallBtn.IsPlaced {

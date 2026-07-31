@@ -9,20 +9,9 @@ const cPreviewLocatePath = "/__emo_preview_locate";
 const cPreviewBridgeFirstPort = 38921;
 const cPreviewBridgeLastPort = 38932;
 
-const cTestPreviewIntegration = {
-	name: "emo-test-preview",
+const cPreviewIntegration = {
+	name: "emo-preview",
 	hooks: {
-		"astro:config:setup": ({ command, injectRoute }) => {
-			if (command !== "dev") {
-				return;
-			}
-
-			injectRoute({
-				pattern: "/__emo_tests/[...test]",
-				entrypoint: fileURLToPath(new URL("./src/site/TestPreview.astro", import.meta.url)),
-				prerender: false
-			});
-		},
 		"astro:server:setup": ({ server }) => {
 			server.middlewares.use(cPreviewLocatePath, async (pRequest, pResponse) => {
 				if (pRequest.method !== "POST") {
@@ -145,7 +134,7 @@ export default defineConfig({
 		enabled: false
 	},
 	integrations: [
-		cTestPreviewIntegration,
+		cPreviewIntegration,
 		...(cReplayMode ? [] : [sitemap()])
 	],
 	build: {

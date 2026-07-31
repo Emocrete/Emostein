@@ -22,16 +22,23 @@ interface Props extends DebugOutlineProps, HTMLAttributes<"article">, PlaceProps
 	pIconSize?: Pixel;
 	pIconHoverTransform?: string;
 	pIconHoverFilter?: string;
+	pCardEnterDuration?: string;
+	pCardExitDuration?: string;
+	pIconStartDelay?: string;
+	pIconFlipDuration?: string;
+	pIconBgDuration?: string;
+	pIconFilterDuration?: string;
 	pReveal?: boolean;
+	pRevealDuration?: string;
 }
 
 const cProps = Astro.props as Props & Record<string, unknown>;
 
 const {
-	pTitle,
-	pIcon = "",
+	pTitle = "العنوان",
+	pIcon = "/Media/ErrorImg.webp",
 	pIconAlt,
-	pDesc,
+	pDesc ="المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى ",
 	pTitleLevel = 4,
 	pBg = "transparent",
 	pColor,
@@ -47,7 +54,14 @@ const {
 	pIconSize = new Pixel(70),
 	pIconHoverTransform = "rotateX(360deg)",
 	pIconHoverFilter = "brightness(0) saturate(100%)",
+	pCardEnterDuration = "55ms",
+	pCardExitDuration = "80ms",
+	pIconStartDelay = "35ms",
+	pIconFlipDuration = "220ms",
+	pIconBgDuration = "120ms",
+	pIconFilterDuration = "90ms",
 	pReveal = true,
+	pRevealDuration = "0.8s",
 
 	pLoc,
 	pSize,
@@ -108,6 +122,13 @@ const cStyle = [
 	`--IconInfoCardIconSizeP:${pIconSize.Portrait};`,
 	`--IconInfoCardIconHoverTransform:${pIconHoverTransform};`,
 	`--IconInfoCardIconHoverFilter:${pIconHoverFilter};`,
+	`--IconInfoCardCardEnterDuration:${pCardEnterDuration};`,
+	`--IconInfoCardCardExitDuration:${pCardExitDuration};`,
+	`--IconInfoCardIconStartDelay:${pIconStartDelay};`,
+	`--IconInfoCardIconFlipDuration:${pIconFlipDuration};`,
+	`--IconInfoCardIconBgDuration:${pIconBgDuration};`,
+	`--IconInfoCardIconFilterDuration:${pIconFilterDuration};`,
+	`--IconInfoCardRevealDuration:${pRevealDuration};`,
 	cGivenStyle,
 ].filter(Boolean).join(" ");
 
@@ -145,88 +166,170 @@ function GetCssName(pName: string) {
 }
 ---
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <article
-	class={cClass}
-	style={cPlace.Style}
+	class = {cClass}
+	style = {cPlace.Style}
 	id={pGivenID}
 	{...RemAttr}
 >
-	{pIcon && (
-		<div class="IconInfoCardIconBox">
-			<img
-				class="IconInfoCardIcon"
-				src={pIcon}
-				alt={cIconAlt}
-				loading="lazy"
-				decoding="async"
-			/>
-		</div>
-	)}
 
-	<TitleTag class="IconInfoCardTitle">
+	{ pIcon && (
+
+		<div class = " IconInfoCardIconRevealBox ">
+		
+		
+		
+		
+		
+		
+		
+			<div class = " IconInfoCardIconBox ">
+		
+				<img
+					class = " IconInfoCardIcon "
+					src={pIcon}
+					alt={cIconAlt}
+					loading="lazy"
+					decoding="async"
+				/>
+		
+			</div>
+		
+		
+		
+		
+		
+		
+		
+		</div>
+	) }
+
+	<TitleTag class = " IconInfoCardTitle ">
+
 		{pTitle}
+
 	</TitleTag>
 
-	{pDesc && (
-		<p class="IconInfoCardBody">
+	{ pDesc && (
+
+		<p class = " IconInfoCardBody ">
 			{pDesc}
 		</p>
-	)}
+	) }
 
-	{cHasSlot && (
-		<div class="IconInfoCardBody">
+	{ cHasSlot && (
+
+		<div class = " IconInfoCardBody ">
+		
+		
+		
+		
+		
+		
+		
 			<slot />
+		
+		
+		
+		
+		
+		
+		
 		</div>
-	)}
+	) }
+
 </article>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <style>
+
+
+
 	.IconInfoCard {
 		direction: rtl;
 		text-align: right;
 		display: flex;
 		flex-direction: column;
 		height: 100%;
-		align-items: self-start;
+		align-items: flex-start;
 		box-sizing: border-box;
 		min-width: 0;
+		contain: layout paint style;
 		gap: var(--IconInfoCardGapL);
 		padding: var(--IconInfoCardPadL);
 		border-radius: var(--IconInfoCardRadiusL);
 		background-color: var(--IconInfoCardBg);
-		transition: 0.3s linear;
+		transition-property: background-color;
+		transition-duration: var(--IconInfoCardCardExitDuration);
+		transition-timing-function: linear;
+		transition-delay: 0ms;
 	}
 
-	.IconInfoCard:hover {
-		background-color: var(--IconInfoCardHoverBg);
-		transition: 0.3s linear;
-	}
 
-	.IconInfoCardIconBox {
+	.IconInfoCardIconRevealBox {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		width: var(--IconInfoCardIconSizeL);
 		height: var(--IconInfoCardIconSizeL);
+	}
+
+
+	.IconInfoCardIconBox {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		height: 100%;
 		overflow: hidden;
-		transition: 0.3s linear;
 		border-radius: 50%;
 		background-color: var(--IconInfoCardIconBg);
+		transform: rotateX(0deg) translateZ(0);
 		transform-style: preserve-3d;
+		transition-property: background-color, transform;
+		transition-duration: var(--IconInfoCardIconBgDuration), var(--IconInfoCardIconFlipDuration);
+		transition-timing-function: linear, linear;
+		transition-delay: 0ms, 0ms;
+		will-change: background-color, transform;
 	}
 
-	.IconInfoCard.IconReveal .IconInfoCardIconBox {
-		visibility: visible;
-		animation-name: IconInfoCardFadeInRight;
-		animation-duration: 0.8s;
-		animation-fill-mode: both;
-	}
-
-	.IconInfoCard:hover .IconInfoCardIconBox {
-		transition: 0.3s linear;
-		background-color: var(--IconInfoCardIconHoverBg);
-		transform: var(--IconInfoCardIconHoverTransform);
-	}
 
 	.IconInfoCardIcon {
 		display: block;
@@ -234,12 +337,12 @@ function GetCssName(pName: string) {
 		max-height: 100%;
 		width: auto;
 		height: auto;
-		transition: 0.3s linear;
+		transition-property: filter;
+		transition-duration: var(--IconInfoCardIconFilterDuration);
+		transition-timing-function: linear;
+		transition-delay: 0ms;
 	}
 
-	.IconInfoCard:hover .IconInfoCardIcon {
-		filter: var(--IconInfoCardIconHoverFilter);
-	}
 
 	.IconInfoCardTitle {
 		margin: 0;
@@ -250,6 +353,7 @@ function GetCssName(pName: string) {
 		line-height: 1.5;
 		text-align: right;
 	}
+
 
 	.IconInfoCardBody {
 		margin: 0;
@@ -270,11 +374,88 @@ function GetCssName(pName: string) {
 		margin-block-end: 0;
 	}
 
+
+
+	.IconInfoCard.IconReveal .IconInfoCardIconRevealBox {
+		visibility: visible;
+		animation-name: IconInfoCardFadeInRight;
+		animation-duration: var(--IconInfoCardRevealDuration);
+		animation-fill-mode: both;
+	}
+
+
 	.IconInfoCard.IsPlaced {
 		position: absolute;
 		width: var(--PlaceWidthL);
 		height: var(--PlaceHeightL);
 	}
+
+
+
+	.IconInfoCard:hover,
+	.IconInfoCard:focus-within
+	{
+		background-color: var(--IconInfoCardHoverBg);
+		transition-duration: var(--IconInfoCardCardEnterDuration);
+		transition-delay: 0ms;
+	}
+
+
+	.IconInfoCard:hover .IconInfoCardIconBox,
+	.IconInfoCard:focus-within .IconInfoCardIconBox
+	{
+		background-color: var(--IconInfoCardIconHoverBg);
+		transform: var(--IconInfoCardIconHoverTransform) translateZ(0);
+		transition-delay: var(--IconInfoCardIconStartDelay), var(--IconInfoCardIconStartDelay);
+	}
+
+
+	.IconInfoCard:hover .IconInfoCardIcon,
+	.IconInfoCard:focus-within .IconInfoCardIcon
+	{
+		filter: var(--IconInfoCardIconHoverFilter);
+		transition-delay: var(--IconInfoCardIconStartDelay);
+	}
+
+
+	@keyframes IconInfoCardFadeInRight {
+	0% {
+						opacity: 0;
+						transform: translate3d(100%, 0, 0);
+					}
+	
+					100% {
+						opacity: 1;
+						transform: translate3d(0, 0, 0);
+					}
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
 
 	@media (orientation: portrait), (max-width: 920px) {
 		.IconInfoCard {
@@ -283,7 +464,7 @@ function GetCssName(pName: string) {
 			border-radius: var(--IconInfoCardRadiusP, var(--IconInfoCardRadiusL));
 		}
 
-		.IconInfoCardIconBox {
+		.IconInfoCardIconRevealBox {
 			width: var(--IconInfoCardIconSizeP, var(--IconInfoCardIconSizeL));
 			height: var(--IconInfoCardIconSizeP, var(--IconInfoCardIconSizeL));
 		}
@@ -302,15 +483,6 @@ function GetCssName(pName: string) {
 		}
 	}
 
-	@keyframes IconInfoCardFadeInRight {
-		0% {
-			opacity: 0;
-			transform: translate3d(100%, 0, 0);
-		}
 
-		100% {
-			opacity: 1;
-			transform: translate3d(0, 0, 0);
-		}
-	}
+
 </style>

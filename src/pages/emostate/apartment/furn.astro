@@ -1,7 +1,12 @@
 ---
-import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip, ESec, FaqItem, Hero, HzStack, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
+import { CardsGr } from "@/Widgets/Cards";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { ApartmentSaleForm } from "@/Widgets/Forms";
+import { RespImg } from "@/Widgets/Media";
+import { EmoFaq, ESec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoPipelineStrip, EmoStrip } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
 
 
@@ -29,281 +34,108 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip
 	pDescr="خدمة تسويق شقق مفروشة للإيجار، تشمل تجهيز وصف الشقة والمنقولات، تحديد مدة الإقامة والتأمين، فرز العملاء، وتنظيم التسليم والاستلام."
 >
 
-	<Hero
-		pImgL="/Media/Emostate/Apartment/Furn/HeroD.webp"
-		pImgP="/Media/Emostate/Apartment/Furn/HeroM.webp"
-		pTitle="شقق مفروش"
-		pDesc="تسويق شقة مفروشة بإظهار التجهيزات والمنقولات وشروط الإقامة بوضوح"
-		pTitleClr={Colors.WhiteOff}
-		pDescClr={Colors.WhiteOff}
-		pHzAlign="center"
-		pVrAlign="center"
-		pBlurL="on"
-		pBlurP="on"
-		pPosL="44% 8% 12% 8%"
-		pPosP="42% 5% 10% 5%"
-	>
 
-		<EmoCall BlackSky pText="اعرض شقة مفروشة" />
+
+
+
+
+
+	<Hero>
+
+		<VrStack
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pHzAlign={"Center"}
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("شقق مفروش")}
+				pText={Text.Body.Centered.OfText("خدمة تسويق شقق مفروشة للإيجار، تشمل تجهيز وصف الشقة والمنقولات، تحديد مدة الإقامة والتأمين، فرز العملاء، وتنظيم التسليم والاستلام.")}
+			/>
+
+			<EmoCall BlackSky />
+
+		</VrStack>
 
 	</Hero>
 
-	<ESec
-		id="Intro"
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-		<SecTitle
-			pTitle="تسويق الشقة المفروشة يحتاج تفاصيل أكثر"
-			pDesc="الشقة المفروشة لا تُعرض بالمساحة والموقع فقط؛ قيمة العرض تتأثر بالأثاث، الأجهزة، مستوى النظافة، مدة الإقامة، التأمين، وقواعد الاستخدام"
-			style={`--StripBg:${Colors.GreenLite};`}
-		/>
-
-		<EmoStrip
-			pBg={new ElemBg(Colors.WhiteOff)}
-
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
->
-
-			<HzStack
 
 
-				pGap={new Pixel(30, 15)}
-				pPad={new Pixel(30, 15)}
->
 
-				<RespImg pImg={new EmoMediaData("Img", "/Media/Emostate/Apartment/Furn/", "HeroD.webp", false, "شقق مفروش", new Size(new NumPer(520, "100%"), new NumPer("auto", "auto")))} />
 
-				<VrStack
 
-					pWidth={new Pixel(700, 340)}
-					pGap={new Pixel(20, 15)}
-					pPad={new Pixel(0, 0)}
->
 
-					<Emograph
-						pTitle={Text.H3.OfText("المنقولات جزء من قيمة العرض")}
-						pText={Text.Body.OfText("العميل الذي يبحث عن شقة مفروشة يريد معرفة مستوى الأثاث، الأجهزة، الإنترنت، التكييف، المطبخ، الغرف، وعدد الأفراد المسموح بهم. لذلك يجب توثيق قائمة المنقولات وحالتها قبل المعاينة والتسليم.")}
-						pSize={new Size(new NumPer(700, "100%"), new NumPer("auto", "auto"))}
-					/>
+	<ESec>
 
-					<CardsGr
-						pWidth={new RespString("700px", "100%")}
-						pCardBg={new ElemBg(Colors.Gray1)}
-						pCardTitleFnt={Text.H4.Centered}
-						pCardBodyFnt={Text.Body.Centered}
-						pTopic1={new Topic("منقولات", "قائمة أثاث وأجهزة وحالة كل عنصر مهم")}
-						pTopic2={new Topic("مدة إقامة", "يومي أو شهري أو مدة متوسطة حسب رغبة المالك")}
-						pTopic3={new Topic("تأمين وتسليم", "توثيق الحالة وقواعد الاستخدام قبل الاستلام")}
-					/>
-
-				</VrStack>
-
-			</HzStack>
-
-		</EmoStrip>
+		<ApartmentSaleForm pSourcePage="شقق للإيجار" pWhatsapp="201014490054" />
 
 	</ESec>
 
-	<ESec
-		id="Inventory"
-		pBg={new ElemBg(Colors.Gray1)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-		<SecTitle
-			pTitle="قائمة المنقولات والتجهيزات"
-			pDesc="قائمة دقيقة تمنع الخلاف عند الخروج وتحسن ثقة العميل قبل الدخول"
-			style={`--StripBg:${Colors.Gray5};`}
+
+
+
+
+
+
+	<ReadAlso>
+
+		<ReadAlsoItem
+			pTitle="تسويق عقاري"
+			pDesc="الصفحة الرئيسية لمجموعة التسويق العقاري."
+			pHref="/emostate"
 		/>
 
-		<EmoStrip
-			pBg={new ElemBg(Colors.Gray1)}
-
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
->
-
-			<HzStack
-
-
-				pGap={new Pixel(30, 15)}
-				pPad={new Pixel(30, 15)}
->
-
-				<EmoList
-					pWidth={new RespString("560px", "100%")}
-					pTitle={Text.H3.Centered.OfText("محتوى العرض")}
-					pDesc={Text.Body.Centered.OfText("ما يحتاج العميل معرفته قبل المعاينة")}
-					pHeadBg={new ElemBg(Colors.GreenLite)}
-					pItemsBg={new ElemBg(Colors.WhiteOff)}
-					pNumbered={true}
-					pItems={[
-						"عدد الغرف والأسرة وسعة الإقامة المناسبة",
-						"الأجهزة الأساسية: ثلاجة، بوتاجاز، غسالة، تكييف، سخان",
-						"حالة المطبخ والحمام والمفروشات",
-						"توفر الإنترنت أو الغاز أو المصعد أو الجراج",
-						"صور لكل غرفة وصورة للواجهة أو المدخل عند الإمكان"
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("560px", "100%")}
-					pTitle={Text.H3.Centered.OfText("شروط الإقامة")}
-					pDesc={Text.Body.Centered.OfText("تُحسم قبل قبول العميل")}
-					pHeadBg={new ElemBg(Colors.SkyLite)}
-					pItemsBg={new ElemBg(Colors.WhiteOff)}
-					pNumbered={true}
-					pItems={[
-						"الحد الأدنى لمدة الإقامة",
-						"قيمة التأمين وطريقة رده",
-						"عدد الأفراد المسموح به",
-						"قواعد الضيوف والحفلات والحيوانات الأليفة",
-						"مسؤولية النظافة والصيانة والاستهلاك"
-					]}
-				/>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-	<ESec
-		id="ClientTypes"
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-		<SecTitle
-			pTitle="أنواع العملاء المناسبة"
-			pDesc="اختيار نوع العميل يحدد طريقة التسعير والتسليم والمتابعة"
-			style={`--StripBg:${Colors.SkyLite};`}
+		<ReadAlsoItem
+			pTitle="شقق للإيجار"
+			pDesc="تسويق شقة خالية أو نصف مفروشة للإيجار."
+			pHref="/emostate/apartment/rent"
 		/>
 
-		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.OfText("أمثلة على الطلبات")}
-			pCardBg={new ElemBg(Colors.WhiteOff)}
-			pCardTitleFnt={Text.H4.Centered}
-			pCardBodyFnt={Text.Body.Centered}
-			pStackDir="Row"
-			pTopic1={new Topic("إقامة عمل", "موظف أو مدير يحتاج وحدة جاهزة قريبة من مقر العمل لمدة محددة.")}
-			pTopic2={new Topic("أسرة مؤقتة", "أسرة تنتظر استلام وحدة أو تنفيذ تشطيب وتحتاج شقة مجهزة لفترة انتقالية.")}
-			pTopic3={new Topic("زيارة علاجية أو تعليمية", "إقامة مرتبطة بمستشفى أو جامعة أو مهمة قصيرة تتطلب موقعًا واضحًا ومواصلات سهلة.")}
-			pTopic4={new Topic("إقامة شهرية", "عميل يحتاج مرونة أكبر من الإيجار الطويل مع التزام أوضح من اليوميات السريعة.")}
+		<ReadAlsoItem
+			pTitle="شقق للبيع"
+			pDesc="تسويق شقة للبيع وفرز المشترين."
+			pHref="/emostate/apartment"
 		/>
 
-	</ESec>
+	</ReadAlso>
 
-	<ESec
-		id="Warnings"
-		pBg={new ElemBg(Colors.Gray1)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-		<SecTitle
-			pTitle="نقاط يجب ضبطها قبل الإعلان"
-			pDesc="الشقة المفروشة أعلى حساسية في التلفيات والاستهلاك، لذلك تحتاج قواعد مكتوبة"
-			style={`--StripBg:${Colors.Gray5};`}
-		/>
 
-		<EmoStrip
-			pBg={new ElemBg(Colors.Gray1)}
 
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
->
 
-			<EmoList
-				pWidth={new RespString("1000px", "100%")}
-				pTitle={Text.H3.Centered.OfText("قبل التسليم")}
-				pDesc={Text.Body.Centered.OfText("هذه النقاط لا تؤخر التسويق؛ لكنها تحمي الاتفاق")}
-				pHeadBg={new ElemBg(Colors.GreenLite)}
-				pItemsBg={new ElemBg(Colors.WhiteOff)}
-				pNumbered={true}
-				pItems={[
-					"تصوير كل غرفة والأجهزة والمنقولات قبل دخول العميل",
-					"تسجيل قراءة العدادات وحالة التكييفات والسخان والأجهزة",
-					"تحديد الحد الأقصى لعدد المقيمين",
-					"تحديد قواعد الاستهلاك والنظافة والمغادرة",
-					"في حالة التشغيل السياحي المنظم أو المتكرر يجب مراجعة الاشتراطات المختصة قبل تحويل الوحدة لنشاط إقامة سياحية"
-				]}
-			/>
 
-		</EmoStrip>
 
-	</ESec>
 
-	<EmoPipelineStrip
-		pTitle="طلبات الشقق المفروشة"
-		pDesc="تحتاج الشقة المفروشة تجهيز بيانات أكثر من الشقة الخالية، لذلك يتم ترتيب الأولوية حسب جاهزية الصور وقائمة المنقولات وشروط الإقامة."
-		pServiceName="شقق مفروش"
-	/>
-
-	<ReadAlso
-		pTitle={Text.H2.Centered.OfText("اقرأ أيضًا")}
-
->
-
-	<ReadAlsoItem
-		pTitle="تسويق عقاري"
-		pDesc="الصفحة الرئيسية لمجموعة التسويق العقاري."
-		pHref="/emostate"
-		pImg="/Media/Emostate/HeroD.webp"
-	/>
-
-	<ReadAlsoItem
-		pTitle="شقق للإيجار"
-		pDesc="تسويق شقة خالية أو نصف مفروشة للإيجار."
-		pHref="/emostate/apartment/rent"
-		pImg="/Media/Emostate/Apartment/Rent/HeroD.webp"
-	/>
-
-	<ReadAlsoItem
-		pTitle="شقق للبيع"
-		pDesc="تسويق شقة للبيع وفرز المشترين."
-		pHref="/emostate/apartment"
-		pImg="/Media/Emostate/Apartment/Sell/HeroD.webp"
-	/>
-
-</ReadAlso>
-
-	<RelServices
-		pTitle={Text.H2.Centered.White.OfText("خدمات مساعدة")}
-	>
+	<RelServices>
 
 		<RelServiceItem
 			pTitle="تشطيب شقق"
 			pDesc="تجهيز الشقة المفروشة أو إصلاحها قبل العرض."
 			pHref="/emocrete/finishing/apartment"
-			pImg="/Media/Emocrete/Finishing/Apartment/HeroL.webp"
 		/>
 
 		<RelServiceItem
 			pTitle="تكلفة تشطيب شقة"
 			pDesc="حساب تكلفة الإصلاحات قبل التأجير المفروش."
 			pHref="/emocrete/finishing/apartment/cost"
-			pImg="/Media/Emocrete/Finishing/Apartment/Cost/HeroL.webp"
 		/>
 
 		<RelServiceItem
 			pTitle="تصميم داخلي"
 			pDesc="تحسين توزيع وأثاث الوحدة قبل تسويقها كمفروش."
 			pHref="/emodsign/des/cr/int"
-			pImg="/Media/Emodsign/Des/Cr/Int/HeroL.webp"
 		/>
 
 	</RelServices>
 
+
+
+
+
+
+
 	<EmoFaq>
 
-		<FaqItem
-			pQuestion="هل قائمة المنقولات ضرورية؟"
-			pAnswer="نعم، لأنها تحدد ما تم تسليمه وحالته وتقلل الخلاف عند الاستلام النهائي."
-		/>
+		<FaqItem pQuestion="هل قائمة المنقولات ضرورية؟" pAnswer="نعم، لأنها تحدد ما تم تسليمه وحالته وتقلل الخلاف عند الاستلام النهائي." />
 
 		<FaqItem
 			pQuestion="هل التأمين أعلى من الإيجار العادي؟"
@@ -321,5 +153,11 @@ import { CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoPipelineStrip, EmoStrip
 		/>
 
 	</EmoFaq>
+
+
+
+
+
+
 
 </BLayout>

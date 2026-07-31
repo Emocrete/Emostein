@@ -1139,6 +1139,10 @@ export class Text {
 
 export class Colors {
 
+	static readonly BrownDark = "#261E17"
+	static readonly Brown = "#8C6E54"
+	static readonly BrownLite = "#BFAE9F"
+
 	static readonly BlackOff = "#333333";
 	static readonly Black = "#111111";
 	static readonly WhiteOff = "#FAFAFA";

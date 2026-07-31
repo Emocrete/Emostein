@@ -33,10 +33,10 @@ interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
 const cProps = Astro.props as Props & Record<string, unknown>;
 
 const {
-	pTitle,
-	pIcon = "",
+pTitle = "العنوان",
+pIcon = "/Media/ErrorImg.webp",
 	pIconAlt,
-	pDesc,
+	pDesc ="المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى ",
 	pTitleLevel = 4,
 	pBg = "transparent",
 	pColor,
@@ -160,42 +160,118 @@ function GetCssName(pName: string) {
 }
 ---
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div
-	class={cClass}
-	style={cPlace.Style}
+	class = {cClass}
+	style = {cPlace.Style}
 	id={pGivenID}
 	{...RemAttr}
 >
-	{pIcon && (
-		<div class="IconInfoCardIconBox">
+
+	{ pIcon && (
+
+		<div class = " IconInfoCardIconBox ">
+		
+		
+		
+		
+		
+		
+		
 			<img
-				class="IconInfoCardIcon"
+				class = " IconInfoCardIcon "
 				src={pIcon}
 				alt={cIconAlt}
 				loading="lazy"
 				decoding="async"
 			/>
+		
+		
+		
+		
+		
+		
+		
 		</div>
-	)}
+	) }
 
-	<TitleTag class="IconInfoCardTitle">
+	<TitleTag class = " IconInfoCardTitle ">
+
 		{pTitle}
+
 	</TitleTag>
 
-	{pDesc && (
-		<p class="IconInfoCardBody">
+	{ pDesc && (
+
+		<p class = " IconInfoCardBody ">
 			{pDesc}
 		</p>
-	)}
+	) }
 
-	{cHasSlot && (
-		<div class="IconInfoCardBody">
+	{ cHasSlot && (
+
+		<div class = " IconInfoCardBody ">
+		
+		
+		
+		
+		
+		
+		
 			<slot />
+		
+		
+		
+		
+		
+		
+		
 		</div>
-	)}
+	) }
+
 </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <style>
+
+
+
 	.IconInfoCard {
 		direction: rtl;
 		text-align: right;
@@ -230,12 +306,17 @@ function GetCssName(pName: string) {
 		opacity: 1;
 	}
 
-	.IconInfoCardIconBox,
-	.IconInfoCardTitle,
-	.IconInfoCardBody {
-		position: relative;
-		z-index: 1;
+	.IconInfoCard:hover .IconInfoCardIconBox {
+		background-color: var(--IconInfoCardIconHoverBg);
+		transform: var(--IconInfoCardIconHoverTransform);
+		transition-delay: var(--IconInfoCardIconDelay), var(--IconInfoCardIconDelay);
 	}
+
+	.IconInfoCard:hover .IconInfoCardIcon {
+		filter: var(--IconInfoCardIconHoverFilter);
+		transition-delay: var(--IconInfoCardIconDelay);
+	}
+
 
 	.IconInfoCardIconBox {
 		display: flex;
@@ -248,17 +329,11 @@ function GetCssName(pName: string) {
 		background-color: var(--IconInfoCardIconBg);
 		transform: translateZ(0);
 		transform-style: preserve-3d;
-		transition:
-			background-color var(--IconInfoCardIconColorDuration) linear 0ms,
+		transition: background-color var(--IconInfoCardIconColorDuration) linear 0ms,
 			transform var(--IconInfoCardIconFlipDuration) linear 0ms;
 		will-change: background-color, transform;
 	}
 
-	.IconInfoCard:hover .IconInfoCardIconBox {
-		background-color: var(--IconInfoCardIconHoverBg);
-		transform: var(--IconInfoCardIconHoverTransform);
-		transition-delay: var(--IconInfoCardIconDelay), var(--IconInfoCardIconDelay);
-	}
 
 	.IconInfoCardIcon {
 		display: block;
@@ -269,17 +344,6 @@ function GetCssName(pName: string) {
 		transition: filter var(--IconInfoCardIconColorDuration) linear 0ms;
 	}
 
-	.IconInfoCard:hover .IconInfoCardIcon {
-		filter: var(--IconInfoCardIconHoverFilter);
-		transition-delay: var(--IconInfoCardIconDelay);
-	}
-
-	.IconInfoCard.IconReveal .IconInfoCardIconBox {
-		visibility: visible;
-		animation-name: IconInfoCardFadeInRight;
-		animation-duration: var(--IconInfoCardRevealDuration);
-		animation-fill-mode: both;
-	}
 
 	.IconInfoCardTitle {
 		margin: 0;
@@ -290,6 +354,7 @@ function GetCssName(pName: string) {
 		line-height: 1.5;
 		text-align: right;
 	}
+
 
 	.IconInfoCardBody {
 		margin: 0;
@@ -310,11 +375,71 @@ function GetCssName(pName: string) {
 		margin-block-end: 0;
 	}
 
+
+
+	.IconInfoCard.IconReveal .IconInfoCardIconBox {
+		visibility: visible;
+		animation-name: IconInfoCardFadeInRight;
+		animation-duration: var(--IconInfoCardRevealDuration);
+		animation-fill-mode: both;
+	}
+
+
 	.IconInfoCard.IsPlaced {
 		position: absolute;
 		width: var(--PlaceWidthL);
 		height: var(--PlaceHeightL);
 	}
+
+
+
+	.IconInfoCardIconBox,
+	.IconInfoCardTitle,
+	.IconInfoCardBody
+	{
+		position: relative;
+		z-index: 1;
+	}
+
+
+	@keyframes IconInfoCardFadeInRight {
+	0% {
+						opacity: 0;
+						transform: translate3d(100%, 0, 0);
+					}
+	
+					100% {
+						opacity: 1;
+						transform: translate3d(0, 0, 0);
+					}
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
 
 	@media (orientation: portrait), (max-width: 920px) {
 		.IconInfoCard {
@@ -342,15 +467,6 @@ function GetCssName(pName: string) {
 		}
 	}
 
-	@keyframes IconInfoCardFadeInRight {
-		0% {
-			opacity: 0;
-			transform: translate3d(100%, 0, 0);
-		}
 
-		100% {
-			opacity: 1;
-			transform: translate3d(0, 0, 0);
-		}
-	}
+
 </style>

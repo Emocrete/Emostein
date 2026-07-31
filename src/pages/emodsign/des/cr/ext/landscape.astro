@@ -1,7 +1,11 @@
 ---
-import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle } from "@/Widgets";
+import { CardsGr } from "@/Widgets/Cards";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { RespImg } from "@/Widgets/Media";
+import { EmoFaq, ESec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStrip } from "@/Widgets/Strips";
+import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
 
 
@@ -35,98 +39,24 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<Hero
-		pImgF="/Media/Emodsign/Des/Cr/Ext/Landscape/"
-		pTitle="تصميم لاندسكيب"
-		pDesc="تصميم خارجي متكامل للحديقة والروف ومدخل الفيلا والجلسات والمشايات والزراعة والري والإضاءة، حتى تتحول المساحة المفتوحة إلى جزء مستخدم من المشروع لا مجرد فراغ أخضر حول المبنى."
-		pTitleClr="#F4E5C4"
-		pDescClr="#FFFFFF"
-		pHzAlign="right"
-		pVrAlign="right"
-		pPosL="18% 50% 12% 8%"
-		pPosP="12% 8% 45% 8%"
-		pBlurL="on"
-		pBlurP="on"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="اطلب تصميم اللاندسكيب" />
+		<VrStack
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("35%","10%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pHzAlign={"Center"}
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("تصميم لاندسكيب")}
+				pText={Text.Body.Centered.OfText("تصميم خارجي متكامل للحديقة والروف ومدخل الفيلا والجلسات والمشايات والزراعة والري والإضاءة، حتى تتحول المساحة المفتوحة إلى جزء مستخدم من المشروع لا مجرد فراغ أخضر حول المبنى.")}
+			/>
+
+			<EmoCall BlackSky />
+
+		</VrStack>
 
 	</Hero>
-
-
-
-
-
-
-
-	<IndexSec
-		pMedia={new EmoMediaData("Img", "/Media/Emodsign/Des/Cr/Ext/Landscape/", "HeroL.webp")}
-		pTitleClr="#ffffff"
-		pBlurL="on"
-		pBlurP="on"
-	>
-
-		<EmoBtn
-			pText="فكرة اللاندسكيب"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#ffffff"
-			pTextColorHover="#111318"
-			pWidth="260px"
-			pHeight="44px"
-			onclick="location.href='#landscape-meaning'"
-		/>
-
-		<EmoBtn
-			pText="محاور التصميم"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#ffffff"
-			pTextColorHover="#111318"
-			pWidth="260px"
-			pHeight="44px"
-			onclick="location.href='#landscape-axes'"
-		/>
-
-		<EmoBtn
-			pText="لاندسكيب فلل"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#ffffff"
-			pTextColorHover="#111318"
-			pWidth="260px"
-			pHeight="44px"
-			onclick="location.href='#villa-landscape'"
-		/>
-
-		<EmoBtn
-			pText="الروف والجلسات"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#ffffff"
-			pTextColorHover="#111318"
-			pWidth="260px"
-			pHeight="44px"
-			onclick="location.href='#roof-garden'"
-		/>
-
-		<EmoBtn
-			pText="الري والإضاءة"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#ffffff"
-			pTextColorHover="#111318"
-			pWidth="260px"
-			pHeight="44px"
-			onclick="location.href='#irrigation-lighting'"
-		/>
-
-		<EmoBtn
-			pText="مخرجات التصميم"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#ffffff"
-			pTextColorHover="#111318"
-			pWidth="260px"
-			pHeight="44px"
-			onclick="location.href='#deliverables'"
-		/>
-
-	</IndexSec>
 
 
 
@@ -176,8 +106,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#0E1118")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#0E1118")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -327,8 +260,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#F7F1E6")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -379,7 +315,6 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("ما الذي نهتم به في فيلا خاصة؟")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -402,8 +337,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -412,7 +350,6 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("نماذج تصميم مناسبة")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -458,7 +395,6 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 		</EmoStrip>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("لاندسكيب للأنشطة التجارية")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -530,8 +466,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -585,8 +524,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#F7F1E6")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -595,7 +537,6 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("طبقات الزراعة داخل التصميم")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -660,8 +601,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#F7F1E6")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -711,8 +655,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#0E1118")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#0E1118")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -721,7 +668,6 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("كيف نحدد نوع المسطح؟")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -742,8 +688,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -791,8 +740,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -801,7 +753,6 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("قرارات العناصر المائية")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -824,8 +775,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#F7F1E6")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -864,8 +818,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -874,7 +831,6 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("اعتبارات المناخ والاستخدام")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -897,8 +853,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -935,8 +894,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#F7F1E6")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -1000,7 +962,6 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("ملفات يمكن الاتفاق عليها")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -1023,8 +984,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#0E1118")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#0E1118")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -1033,7 +997,6 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("من المعاينة إلى التسليم")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -1056,8 +1019,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -1111,8 +1077,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#F7F1E6")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1121,7 +1090,6 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("ما الذي نمنعه من البداية؟")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -1144,8 +1112,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -1188,8 +1159,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#F7F1E6")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1198,7 +1172,6 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("بنود التنفيذ التي يجب مقارنتها")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -1221,8 +1194,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -1268,8 +1244,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1278,7 +1257,6 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("اختر الوصف الأقرب لمشروعك")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -1301,8 +1279,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -1354,8 +1335,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#F7F1E6")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1364,7 +1348,6 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("طبقات الإضاءة")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -1387,8 +1370,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -1436,8 +1422,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1446,7 +1435,6 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("توزيع الأولويات")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -1469,8 +1457,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -1520,8 +1511,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#F7F1E6")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1530,7 +1524,6 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("قرارات تقلل الهدر")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -1553,8 +1546,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -1608,8 +1604,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1618,7 +1617,6 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("مستويات التعديل")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -1641,8 +1639,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -1688,8 +1689,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#F7F1E6")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1698,7 +1702,6 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("نقاط تسليم مهمة")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -1721,8 +1724,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #D9C89B "
@@ -1731,7 +1737,6 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("كيف تعرف أن الحديقة نجحت؟")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -1754,8 +1759,11 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ESec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center}
- pVrAlign={Align.Center}>
+	<ESec
+		pBg={new ElemBg("#FFFFFF")}
+		pHzAlign={Align.Center}
+		pVrAlign={Align.Center}
+	>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1889,47 +1897,36 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<ReadAlso
-		pTitle={Text.H2.Centered.WithColor("#111318").OfText("اقرأ أيضًا")}
-		pDesc={Text.Body.Centered.WithColor("#333333").OfText("صفحات قريبة من خدمة اللاندسكيب داخل فرع التصميم الخارجي والتصميم الإبداعي.")}
-		pHeadBg={new ElemBg("#D9C89B")}
-		pBodyBg={new ElemBg("#F7F1E6")}
-		pCardBg={new ElemBg("#FFFFFF")}
-	>
+	<ReadAlso>
 
 		<ReadAlsoItem
 			pTitle="تصميم خارجي"
 			pDesc="الصفحة الأم لخدمات التصميم الخارجي، وتشمل الواجهات واللاندسكيب وربط المبنى بمحيطه."
 			pHref="/emodsign/des/cr/ext"
-			pImg="/Media/Emodsign/Des/Cr/Ext/HeroL.webp"
 		/>
 
 		<ReadAlsoItem
 			pTitle="تصميم الواجهات"
 			pDesc="تصميم واجهات الفلل والمباني والمحلات وربط الخامات والإضاءة الخارجية بشكل المبنى."
 			pHref="/emodsign/des/cr/ext/facade"
-			pImg="/Media/Emodsign/Des/Cr/Ext/Facade/HeroL.webp"
 		/>
 
 		<ReadAlsoItem
 			pTitle="تصميم إبداعي"
 			pDesc="مدخل خدمات التصميم الداخلي والخارجي والفراغات التي تحتاج هوية بصرية متكاملة."
 			pHref="/emodsign/des/cr"
-			pImg="/Media/Emodsign/Des/Cr/HeroL.webp"
 		/>
 
 		<ReadAlsoItem
 			pTitle="تصميم داخلي"
 			pDesc="تصميم المساحات الداخلية واختيار الخامات والإضاءة والأثاث وربطها بالواجهة والحديقة."
 			pHref="/emodsign/des/cr/int"
-			pImg="/Media/Emodsign/Des/Cr/Int/HeroL.webp"
 		/>
 
 		<ReadAlsoItem
 			pTitle="تشطيب فلل"
 			pDesc="خدمة تنفيذ وتشطيب الفلل، وغالبًا ترتبط بالواجهة واللاندسكيب والمداخل الخارجية."
 			pHref="/emocrete/finishing/villa"
-			pImg="/Media/Emocrete/Finishing/Villa/HeroL.webp"
 		/>
 
 	</ReadAlso>
@@ -1940,76 +1937,54 @@ import { CardsGr, EmoBtn, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, Fa
 
 
 
-	<RelServices
-		pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("خدمات مرتبطة بتصميم اللاندسكيب")}
-		pDesc={Text.Body.Centered.WithColor("#F8F4EA").OfText("خدمات تجارية فعلية يمكن أن يحتاجها العميل مع تصميم الحديقة أو بعده.")}
-		pHeadBg={new ElemBg("#0E1118")}
-		pBodyBg={new ElemBg("#F7F1E6")}
-		pCardBg={new ElemBg("#FFFFFF")}
-	>
+	<RelServices>
 
 		<RelServiceItem
 			pTitle="تصميم واجهات"
 			pDesc="ربط شكل المبنى بالخامات والإضاءة والمشايات والنباتات الخارجية."
 			pHref="/emodsign/des/cr/ext/facade"
-			pImg="/Media/Emodsign/Des/Cr/Ext/Facade/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="تصميم داخلي"
 			pDesc="تنسيق الداخل مع التراسات والإطلالات والجلسات الخارجية والحديقة."
 			pHref="/emodsign/des/cr/int"
-			pImg="/Media/Emodsign/Des/Cr/Int/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="تصميم معماري"
 			pDesc="تحديد علاقة الأبواب والتراسات والواجهات والمداخل بالمساحات الخارجية."
 			pHref="/emodsign/des/eng/arch"
-			pImg="/Media/Emodsign/Des/Eng/Arch/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="تصميم كهرباء"
 			pDesc="توزيع التغذية والإضاءة الخارجية ونقاط التشغيل اللازمة للحديقة والمضخات والمعدات."
 			pHref="/emodsign/des/eng/elec"
-			pImg="/Media/Emodsign/Des/Eng/Elec/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="حصر كميات"
 			pDesc="تحويل رسومات التصميم إلى بنود وكميات تساعد في تسعير التنفيذ ومقارنة العروض."
 			pHref="/emodsign/tech/takeoff"
-			pImg="/Media/Emodsign/Tech/Takeoff/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="تشطيب فلل"
 			pDesc="تنفيذ وتشطيب الفلل مع ربط الداخل والواجهة والحديقة والمداخل الخارجية."
 			pHref="/emocrete/finishing/villa"
-			pImg="/Media/Emocrete/Finishing/Villa/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="إشراف التشطيبات"
 			pDesc="متابعة تنفيذ التشطيبات ومطابقة الخامات والملاحظات الفنية أثناء العمل."
 			pHref="/emocrete/supervision/finishing"
-			pImg="/Media/Emocrete/Supervision/Finishing/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="إشراف البناء"
 			pDesc="متابعة تنفيذ الأعمال الإنشائية والمعمارية طبقًا للرسومات والمواصفات."
 			pHref="/emocrete/supervision/construction"
-			pImg="/Media/Emocrete/Supervision/Construction/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 	</RelServices>

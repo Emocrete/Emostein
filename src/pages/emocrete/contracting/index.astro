@@ -1,6 +1,12 @@
 ---
 import BLayout from "@/Layout.astro";
-import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoContactStrip, EmoList, EmoStrip, ESec, Hero, IncLineSep, IndexSec, Tree, YTPlayer } from "@/Widgets";
+import { CardsGr, DataCard } from "@/Widgets/Cards";
+import { EmoBtn, EmoCall, Emograph, EmoList, Tree, VrStack } from "@/Widgets/Comp";
+import { YTPlayer } from "@/Widgets/Media";
+import { ESec, Hero, IndexSec } from "@/Widgets/Sections";
+import { BottTriSep, IncLineSep } from "@/Widgets/Separators";
+import { EmoContactStrip, EmoStrip } from "@/Widgets/Strips";
+import { Loc, NumPer, Size, Text } from "@/TypesLib";
 ---
 
 
@@ -22,21 +28,44 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoContactStrip, EmoList, EmoStr
 
 
 
-<BLayout pSchemaType="Service" pTitle="مقاولات عامة" pDescr="عمارات سكنية - فيلات - هناجر معدنية - خزانات مباني - خزانات خرسانة - حمامات سباحة">
+<BLayout
+	pSchemaType="Service"
+	pTitle="مقاولات عامة"
+	pDescr="عمارات سكنية - فيلات - هناجر معدنية - خزانات مباني - خزانات خرسانة - حمامات سباحة"
+>
 
-	<Hero
-		pTitle="مقاولات عامة"
-		pDesc="مهندس متخصص لتنفيذ المنشآت الخرسانية والمعدنية"
-		pTitleClr="white"
-		pPosL="40% 50% 10% 10%"
-		pPosP="10% 10% 50% 10%"
-	>
 
-		<p>
-			عمارات سكنية - فيلات - هناجر معدنية - خزانات مباني - خزانات خرسانة - حمامات سباحة
-		</p>
+
+
+
+
+
+	<Hero>
+
+		<VrStack
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pHzAlign={"Center"}
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("مقاولات عامة")}
+				pText={Text.Body.Centered.OfText("مهندس متخصص لتنفيذ المنشآت الخرسانية والمعدنية")}
+			/>
+
+			<Emograph pText={Text.Body.Centered.OfText("عمارات سكنية - فيلات - هناجر معدنية - خزانات مباني - خزانات خرسانة - حمامات سباحة")} />
+
+			<EmoCall BlackSky />
+
+		</VrStack>
 
 	</Hero>
+
+
+
+
+
+
 
 	<section class = " Hero ">
 
@@ -74,6 +103,12 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoContactStrip, EmoList, EmoStr
 
 	</section>
 
+
+
+
+
+
+
 	<section class = " Section ">
 
 		<div class = " Wrap Narrow ">
@@ -93,6 +128,12 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoContactStrip, EmoList, EmoStr
 		</div>
 
 	</section>
+
+
+
+
+
+
 
 	<section class = " Section Alt " id="scope">
 
@@ -182,6 +223,12 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoContactStrip, EmoList, EmoStr
 
 	</section>
 
+
+
+
+
+
+
 	<section class = " Section ">
 
 		<div class = " Wrap ">
@@ -262,6 +309,12 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoContactStrip, EmoList, EmoStr
 
 	</section>
 
+
+
+
+
+
+
 	<section class = " Section Dark ">
 
 		<div class = " Wrap ">
@@ -330,6 +383,12 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoContactStrip, EmoList, EmoStr
 
 	</section>
 
+
+
+
+
+
+
 	<section class = " Section Alt ">
 
 		<div class = " Wrap Narrow ">
@@ -349,6 +408,12 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoContactStrip, EmoList, EmoStr
 		</div>
 
 	</section>
+
+
+
+
+
+
 
 	<section class = " Section ">
 
@@ -377,6 +442,12 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoContactStrip, EmoList, EmoStr
 		</div>
 
 	</section>
+
+
+
+
+
+
 
 </BLayout>
 
@@ -642,6 +713,38 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoContactStrip, EmoList, EmoStr
 	}
 
 
+
+	:global(html) {
+		scroll-behavior: smooth;
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+
 	@media (max-width: 980px) {
 		.Cards3,
 		.Steps,
@@ -676,12 +779,6 @@ import { BottTriSep, CardsGr, DataCard, EmoBtn, EmoContactStrip, EmoList, EmoStr
 		p {
 			font-size: 17px;
 		}
-	}
-
-
-
-	:global(html) {
-		scroll-behavior: smooth;
 	}
 
 

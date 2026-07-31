@@ -22,20 +22,16 @@ interface Props extends DebugOutlineProps, HTMLAttributes<"article">, PlaceProps
 	pIconSize?: Pixel;
 	pIconHoverTransform?: string;
 	pIconHoverFilter?: string;
-	pHoverDuration?: string;
-	pIconFlipDuration?: string;
-	pIconHoverDelay?: string;
-	pRevealDuration?: string;
 	pReveal?: boolean;
 }
 
 const cProps = Astro.props as Props & Record<string, unknown>;
 
 const {
-	pTitle,
-	pIcon = "",
+pTitle = "العنوان",
+pIcon = "/Media/ErrorImg.webp",
 	pIconAlt,
-	pDesc,
+	pDesc ="المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى المحتوى ",
 	pTitleLevel = 4,
 	pBg = "transparent",
 	pColor,
@@ -51,10 +47,6 @@ const {
 	pIconSize = new Pixel(70),
 	pIconHoverTransform = "rotateX(360deg)",
 	pIconHoverFilter = "brightness(0) saturate(100%)",
-	pHoverDuration = "80ms",
-	pIconFlipDuration = "160ms",
-	pIconHoverDelay = "45ms",
-	pRevealDuration = "0.8s",
 	pReveal = true,
 
 	pLoc,
@@ -116,10 +108,6 @@ const cStyle = [
 	`--IconInfoCardIconSizeP:${pIconSize.Portrait};`,
 	`--IconInfoCardIconHoverTransform:${pIconHoverTransform};`,
 	`--IconInfoCardIconHoverFilter:${pIconHoverFilter};`,
-	`--IconInfoCardHoverDuration:${pHoverDuration};`,
-	`--IconInfoCardIconFlipDuration:${pIconFlipDuration};`,
-	`--IconInfoCardIconHoverDelay:${pIconHoverDelay};`,
-	`--IconInfoCardRevealDuration:${pRevealDuration};`,
 	cGivenStyle,
 ].filter(Boolean).join(" ");
 
@@ -157,44 +145,118 @@ function GetCssName(pName: string) {
 }
 ---
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <article
-	class={cClass}
-	style={cPlace.Style}
+	class = {cClass}
+	style = {cPlace.Style}
 	id={pGivenID}
 	{...RemAttr}
 >
-	{pIcon && (
-		<div class="IconInfoCardIconReveal">
-			<div class="IconInfoCardIconBox">
-				<img
-					class="IconInfoCardIcon"
-					src={pIcon}
-					alt={cIconAlt}
-					loading="lazy"
-					decoding="async"
-				/>
-			</div>
-		</div>
-	)}
 
-	<TitleTag class="IconInfoCardTitle">
+	{ pIcon && (
+
+		<div class = " IconInfoCardIconBox ">
+		
+		
+		
+		
+		
+		
+		
+			<img
+				class = " IconInfoCardIcon "
+				src={pIcon}
+				alt={cIconAlt}
+				loading="lazy"
+				decoding="async"
+			/>
+		
+		
+		
+		
+		
+		
+		
+		</div>
+	) }
+
+	<TitleTag class = " IconInfoCardTitle ">
+
 		{pTitle}
+
 	</TitleTag>
 
-	{pDesc && (
-		<p class="IconInfoCardBody">
+	{ pDesc && (
+
+		<p class = " IconInfoCardBody ">
 			{pDesc}
 		</p>
-	)}
+	) }
 
-	{cHasSlot && (
-		<div class="IconInfoCardBody">
+	{ cHasSlot && (
+
+		<div class = " IconInfoCardBody ">
+		
+		
+		
+		
+		
+		
+		
 			<slot />
+		
+		
+		
+		
+		
+		
+		
 		</div>
-	)}
+	) }
+
 </article>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <style>
+
+
+
 	.IconInfoCard {
 		direction: rtl;
 		text-align: right;
@@ -208,22 +270,24 @@ function GetCssName(pName: string) {
 		padding: var(--IconInfoCardPadL);
 		border-radius: var(--IconInfoCardRadiusL);
 		background-color: var(--IconInfoCardBg);
-		transition: background-color var(--IconInfoCardHoverDuration) linear 0ms;
-		will-change: background-color;
+		transition: 0.3s linear;
 	}
 
 	.IconInfoCard:hover {
 		background-color: var(--IconInfoCardHoverBg);
+		transition: 0.3s linear;
 	}
 
-	.IconInfoCardIconReveal {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: var(--IconInfoCardIconSizeL);
-		height: var(--IconInfoCardIconSizeL);
-		perspective: 900px;
+	.IconInfoCard:hover .IconInfoCardIconBox {
+		transition: 0.3s linear;
+		background-color: var(--IconInfoCardIconHoverBg);
+		transform: var(--IconInfoCardIconHoverTransform);
 	}
+
+	.IconInfoCard:hover .IconInfoCardIcon {
+		filter: var(--IconInfoCardIconHoverFilter);
+	}
+
 
 	.IconInfoCardIconBox {
 		display: flex;
@@ -232,27 +296,12 @@ function GetCssName(pName: string) {
 		width: var(--IconInfoCardIconSizeL);
 		height: var(--IconInfoCardIconSizeL);
 		overflow: hidden;
-		transition:
-			background-color var(--IconInfoCardHoverDuration) linear 0ms,
-			transform var(--IconInfoCardIconFlipDuration) linear 0ms;
+		transition: 0.3s linear;
 		border-radius: 50%;
 		background-color: var(--IconInfoCardIconBg);
 		transform-style: preserve-3d;
-		will-change: background-color, transform;
 	}
 
-	.IconInfoCard.IconReveal .IconInfoCardIconReveal {
-		visibility: visible;
-		animation-name: IconInfoCardFadeInRight;
-		animation-duration: var(--IconInfoCardRevealDuration);
-		animation-fill-mode: both;
-	}
-
-	.IconInfoCard:hover .IconInfoCardIconBox {
-		background-color: var(--IconInfoCardIconHoverBg);
-		transform: var(--IconInfoCardIconHoverTransform);
-		transition-delay: var(--IconInfoCardIconHoverDelay), var(--IconInfoCardIconHoverDelay);
-	}
 
 	.IconInfoCardIcon {
 		display: block;
@@ -260,13 +309,9 @@ function GetCssName(pName: string) {
 		max-height: 100%;
 		width: auto;
 		height: auto;
-		transition: filter var(--IconInfoCardHoverDuration) linear 0ms;
+		transition: 0.3s linear;
 	}
 
-	.IconInfoCard:hover .IconInfoCardIcon {
-		filter: var(--IconInfoCardIconHoverFilter);
-		transition-delay: var(--IconInfoCardIconHoverDelay);
-	}
 
 	.IconInfoCardTitle {
 		margin: 0;
@@ -277,6 +322,7 @@ function GetCssName(pName: string) {
 		line-height: 1.5;
 		text-align: right;
 	}
+
 
 	.IconInfoCardBody {
 		margin: 0;
@@ -297,11 +343,62 @@ function GetCssName(pName: string) {
 		margin-block-end: 0;
 	}
 
+
+
+	.IconInfoCard.IconReveal .IconInfoCardIconBox {
+		visibility: visible;
+		animation-name: IconInfoCardFadeInRight;
+		animation-duration: 0.8s;
+		animation-fill-mode: both;
+	}
+
+
 	.IconInfoCard.IsPlaced {
 		position: absolute;
 		width: var(--PlaceWidthL);
 		height: var(--PlaceHeightL);
 	}
+
+
+
+	@keyframes IconInfoCardFadeInRight {
+	0% {
+					opacity: 0;
+					transform: translate3d(100%, 0, 0);
+				}
+	
+				100% {
+					opacity: 1;
+					transform: translate3d(0, 0, 0);
+				}
+	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
 
 	@media (orientation: portrait), (max-width: 920px) {
 		.IconInfoCard {
@@ -310,7 +407,6 @@ function GetCssName(pName: string) {
 			border-radius: var(--IconInfoCardRadiusP, var(--IconInfoCardRadiusL));
 		}
 
-		.IconInfoCardIconReveal,
 		.IconInfoCardIconBox {
 			width: var(--IconInfoCardIconSizeP, var(--IconInfoCardIconSizeL));
 			height: var(--IconInfoCardIconSizeP, var(--IconInfoCardIconSizeL));
@@ -330,15 +426,6 @@ function GetCssName(pName: string) {
 		}
 	}
 
-	@keyframes IconInfoCardFadeInRight {
-		0% {
-			opacity: 0;
-			transform: translate3d(100%, 0, 0);
-		}
 
-		100% {
-			opacity: 1;
-			transform: translate3d(0, 0, 0);
-		}
-	}
+
 </style>

@@ -22,9 +22,10 @@
 
 			#stage {
 				display: grid;
+				grid-template-columns: 1fr;
 				grid-template-rows: 36px 1fr;
-				width: 100vw;
-				height: 100vh;
+				width: 100%;
+				height: 100%;
 				overflow: hidden;
 			}
 
@@ -45,6 +46,46 @@
 				font-size: 12px;
 				direction: rtl;
 				overflow: hidden;
+				user-select: none;
+			}
+
+			body.ToolsSide #stage {
+				grid-template-columns: 100px minmax(0, 1fr);
+				grid-template-rows: 1fr;
+			}
+
+			body.ToolsSide .tools-bar {
+				width: 100px;
+				height: 100%;
+				min-width: 0;
+				max-width: 100px;
+				flex-direction: column;
+				align-items: stretch;
+				justify-content: flex-start;
+				padding: 6px 3px;
+				border-bottom: none;
+				border-inline-end: 1px solid #333333;
+				overflow-x: hidden;
+				overflow-y: auto;
+			}
+
+			body.ToolsSide .tools-bar > * {
+				flex: 0 0 auto;
+				min-width: 0;
+				max-width: 100%;
+				overflow: hidden;
+			}
+
+			body.ToolsSide .tool-group {
+				width: 100%;
+				min-width: 0;
+				max-width: 100%;
+			}
+
+			body.ToolsSide .path-group {
+				flex: 0 0 auto;
+				min-width: 0;
+				max-width: 100%;
 			}
 
 			body.IsProdPreview .tools-bar {
@@ -149,7 +190,7 @@
 
 			.preview-area {
 				position: relative;
-				width: 100vw;
+				width: 100%;
 				height: 100%;
 				overflow: hidden;
 			}
@@ -294,6 +335,7 @@
 			const cDefaultPreviewPort = "4321";
 			const cDefaultRelativeSrc = "";
 			const cDefaultPublishedBaseSource = "https://www.emocrete.com/";
+			const cToolsSideStorageKey = "EmoPreviewToolsSide";
 			
 			const cDefaultMobileKey = "CurrentMobile";
 			const cDefaultDesktopKey = "CurrentDesktop";
@@ -387,6 +429,7 @@ const cPortFrame = document.getElementById("portFrame");
 
 			const cCopyBtn = document.getElementById("copyBtn");
 			const cResetBtn = document.getElementById("resetBtn");
+			const cToolsBar = document.getElementById("toolsBar");
 
 			let cPreviewSrc = BuildPreviewSource(cDefaultPreviewPort, cDefaultRelativeSrc);
 			let cShowLandscapeFrame = true;
@@ -415,6 +458,7 @@ window.addEventListener("resize", RequestUpdateLayout);
 				SyncDesktopInputs();
 				ApplyWrapperBaseSizes();
 				SetFrameToggleButtonStates();
+				SetToolsSide(localStorage.getItem(cToolsSideStorageKey) === "1", false);
 				RegisterToolEvents();
 			}
 
@@ -466,7 +510,28 @@ cPreviewPathInput.addEventListener("paste", HandlePathInputPaste);
 
 	cCopyBtn.addEventListener("click", CopyPreviewSource);
 	cResetBtn.addEventListener("click", ResetPreviewSystem);
+		cToolsBar.addEventListener("dblclick", ToggleToolsOrientation);
 }
+
+	function ToggleToolsOrientation(pEvent) {
+		if (pEvent.target && pEvent.target.closest && pEvent.target.closest("input,select,button")) {
+			return;
+		}
+
+		pEvent.preventDefault();
+		SetToolsSide(!document.body.classList.contains("ToolsSide"), true);
+	}
+
+	function SetToolsSide(pIsSide, pPersist) {
+		document.body.classList.toggle("ToolsSide", pIsSide);
+		cToolsBar.title = pIsSide ? "دبل كليك لتحويل الأدوات إلى شريط علوي" : "دبل كليك لتحويل الأدوات إلى شريط جانبي";
+
+		if (pPersist) {
+			localStorage.setItem(cToolsSideStorageKey, pIsSide ? "1" : "0");
+		}
+
+		RequestUpdateLayout();
+	}
 
 
   function SelectPathInputText() {
@@ -712,27 +777,17 @@ function SetFrameSource(pFrame, pSource) {
 	cPath = cPath.replace(/\\/g, "/");
 	cPath = cPath.replace(/\/+/g, "/");
 
-	const cTestMatch = cPath.match(/(?:^|\/)src\/site\/tests\/(.+)$/i);
-	const cIsTestPath = !!cTestMatch;
-
-	if (cTestMatch) {
-		cPath = "__emo_tests/" + cTestMatch[1];
-	}
-	else {
-		cPath = cPath.replace(/^.*?src\/pages\//i, "");
-		cPath = cPath.replace(/^\/+/, "");
-		cPath = cPath.replace(/^pages\//i, "");
-	}
+	cPath = cPath.replace(/^.*?src\/pages\//i, "");
+	cPath = cPath.replace(/^\/+/, "");
+	cPath = cPath.replace(/^pages\//i, "");
 
 	cPath = cPath.replace(/\.astro$/i, "");
 
-	if (!cIsTestPath) {
-		if (/^index$/i.test(cPath)) {
-			cPath = "";
-		}
-		else {
-			cPath = cPath.replace(/\/index$/i, "");
-		}
+	if (/^index$/i.test(cPath)) {
+		cPath = "";
+	}
+	else {
+		cPath = cPath.replace(/\/index$/i, "");
 	}
 
 	cPath = cPath.replace(/^\/+/, "");
@@ -1243,7 +1298,9 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 						LastPointerY: undefined,
 						AdjustmentToken: 0,
 						AdjustingUntil: 0,
-						RtlScrollType: undefined
+						RtlScrollType: undefined,
+						Url: "",
+						LastScrollSnapshot: undefined
 					};
 				}
 
@@ -1258,7 +1315,7 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 
 				window.__emoPreviewShouldSuppressScrollSync = function () {
 					return Object.values(cFrameStates).some(function (pState) {
-						return pState.LevelIndex > 0 || Date.now() < pState.AdjustingUntil;
+						return Date.now() < pState.AdjustingUntil;
 					});
 				};
 
@@ -1366,8 +1423,15 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 						return;
 					}
 
+					RememberFrameScroll(pName, true);
+					const cPreviousUrl = cState.Url;
+					const cCurrentUrl = GetFrameDocumentUrl(cFrameWindow);
+					const cCanRestorePrevious = cPreviousUrl !== "" && cPreviousUrl === cCurrentUrl;
+					const cPreviousSnapshot = cCanRestorePrevious ? cState.LastScrollSnapshot : undefined;
+
 					cState.Document = cFrameDocument;
 					cState.Window = cFrameWindow;
+					cState.Url = cCurrentUrl;
 					cState.WheelDelta = 0;
 					cState.AdjustmentToken += 1;
 					cState.RtlScrollType = undefined;
@@ -1376,6 +1440,9 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 					cState.BaseInlineOverflowX = cFrameDocument.documentElement.style.overflowX || "";
 					cState.BaseBodyInlineOverflowX = cFrameDocument.body ? cFrameDocument.body.style.overflowX || "" : "";
 					cState.BaseComputedZoom = GetPositiveZoom(cFrameWindow.getComputedStyle(cFrameDocument.documentElement).zoom);
+					const cInitialSnapshot = CaptureFrameScrollSnapshot(cState);
+					const cRestoreSnapshot = HasMeaningfulScrollSnapshot(cInitialSnapshot) ? cInitialSnapshot : cPreviousSnapshot;
+					cState.LastScrollSnapshot = cRestoreSnapshot || cInitialSnapshot;
 
 					cFrameWindow.addEventListener("wheel", function (pEvent) {
 						HandleFrameZoomWheel(pEvent, pName);
@@ -1384,7 +1451,178 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 						passive: false
 					});
 
+					cFrameWindow.addEventListener("scroll", function () {
+						RememberFrameScroll(pName, false);
+					}, {
+						passive: true
+					});
+
+					cFrameWindow.addEventListener("pagehide", function () {
+						RememberFrameScroll(pName, true);
+					});
+
+					const cToken = BeginZoomAdjustment(cState);
 					ApplyFrameZoom(pName);
+					RestoreFrameScrollSnapshot(pName, cRestoreSnapshot, cToken);
+				}
+
+				function GetFrameDocumentUrl(pFrameWindow) {
+					try {
+						const cUrl = new URL(pFrameWindow.location.href);
+						cUrl.hash = "";
+						return cUrl.href;
+					}
+					catch {
+						return "";
+					}
+				}
+
+				function CaptureFrameScrollSnapshot(pState) {
+					const cDocument = pState.Document;
+					const cFrameWindow = GetStateWindow(pState);
+					const cScrollElement = GetScrollElement(cDocument);
+
+					if (!cDocument || !cFrameWindow || !cScrollElement) {
+						return undefined;
+					}
+
+					const cViewportWidth = cFrameWindow.innerWidth || cScrollElement.clientWidth || 1;
+					const cViewportHeight = cFrameWindow.innerHeight || cScrollElement.clientHeight || 1;
+					const cScrollTop = Number(cScrollElement.scrollTop) || Number(cFrameWindow.scrollY) || 0;
+					const cPhysicalLeft = GetPhysicalScrollLeft(pState, cScrollElement);
+					const cMaxScrollTop = Math.max(0, cScrollElement.scrollHeight - cScrollElement.clientHeight);
+					const cMaxPhysicalLeft = Math.max(0, cScrollElement.scrollWidth - cScrollElement.clientWidth);
+					const cFocusRatioX = 0.5;
+					const cFocusRatioY = 0.35;
+					const cFocusX = cViewportWidth * cFocusRatioX;
+					const cFocusY = cViewportHeight * cFocusRatioY;
+					let cAnchorElement;
+
+					try {
+						const cPointElement = cDocument.elementFromPoint(cFocusX, cFocusY);
+						cAnchorElement = cPointElement && cPointElement.closest ? cPointElement.closest("[id]") : undefined;
+					}
+					catch {
+						cAnchorElement = undefined;
+					}
+
+					let cAnchorId = "";
+					let cAnchorRatioX = 0.5;
+					let cAnchorRatioY = 0.5;
+
+					if (cAnchorElement) {
+						const cRect = cAnchorElement.getBoundingClientRect();
+
+						if (cRect.width > 0 && cRect.height > 0) {
+							cAnchorId = String(cAnchorElement.id || "").trim();
+							cAnchorRatioX = ClampNumber((cFocusX - cRect.left) / cRect.width, 0, 1);
+							cAnchorRatioY = ClampNumber((cFocusY - cRect.top) / cRect.height, 0, 1);
+						}
+					}
+
+					return {
+						AnchorId: cAnchorId,
+						AnchorRatioX: cAnchorRatioX,
+						AnchorRatioY: cAnchorRatioY,
+						FocusRatioX: cFocusRatioX,
+						FocusRatioY: cFocusRatioY,
+						ScrollTop: cScrollTop,
+						ScrollRatio: cMaxScrollTop > 0 ? cScrollTop / cMaxScrollTop : 0,
+						DocumentFocusRatio: cScrollElement.scrollHeight > 0 ? (cScrollTop + cFocusY) / cScrollElement.scrollHeight : 0,
+						PhysicalLeft: cPhysicalLeft,
+						PhysicalLeftRatio: cMaxPhysicalLeft > 0 ? cPhysicalLeft / cMaxPhysicalLeft : 0
+					};
+				}
+
+				function HasMeaningfulScrollSnapshot(pSnapshot) {
+					if (!pSnapshot) {
+						return false;
+					}
+
+					return Math.abs(Number(pSnapshot.ScrollTop) || 0) > 2
+						|| Math.abs(Number(pSnapshot.PhysicalLeft) || 0) > 2
+						|| Math.abs(Number(pSnapshot.ScrollRatio) || 0) > 0.0001
+						|| Math.abs(Number(pSnapshot.PhysicalLeftRatio) || 0) > 0.0001;
+				}
+
+				function RememberFrameScroll(pName, pForce) {
+					const cState = cFrameStates[pName];
+
+					if (!cState || !cState.Document || (!pForce && Date.now() < cState.AdjustingUntil)) {
+						return;
+					}
+
+					const cSnapshot = CaptureFrameScrollSnapshot(cState);
+
+					if (cSnapshot) {
+						cState.LastScrollSnapshot = cSnapshot;
+					}
+				}
+
+				function RestoreFrameScrollSnapshot(pName, pSnapshot, pToken) {
+					const cState = cFrameStates[pName];
+					const cFrameWindow = GetStateWindow(cState);
+
+					if (!pSnapshot || !cFrameWindow) {
+						cFrameWindow?.setTimeout(function () {
+							RememberFrameScroll(pName, true);
+						}, cZoomAdjustmentHoldMilliseconds + 30);
+						return;
+					}
+
+					RunZoomCorrections(pName, pToken, function (pCurrentState) {
+						const cDocument = pCurrentState.Document;
+						const cScrollElement = GetScrollElement(cDocument);
+						const cWindow = GetStateWindow(pCurrentState);
+
+						if (!cDocument || !cScrollElement || !cWindow) {
+							return;
+						}
+
+						const cViewportHeight = cWindow.innerHeight || cScrollElement.clientHeight || 1;
+						const cMaxScrollTop = Math.max(0, cScrollElement.scrollHeight - cScrollElement.clientHeight);
+						const cMaxPhysicalLeft = Math.max(0, cScrollElement.scrollWidth - cScrollElement.clientWidth);
+						let cTargetTop = NaN;
+
+						if (pSnapshot.AnchorId) {
+							const cAnchorElement = cDocument.getElementById(pSnapshot.AnchorId);
+
+							if (cAnchorElement) {
+								const cRect = cAnchorElement.getBoundingClientRect();
+								const cCurrentTop = Number(cScrollElement.scrollTop) || Number(cWindow.scrollY) || 0;
+								const cAnchorY = cRect.top + cCurrentTop + cRect.height * ClampNumber(Number(pSnapshot.AnchorRatioY) || 0, 0, 1);
+								cTargetTop = cAnchorY - cViewportHeight * ClampNumber(Number(pSnapshot.FocusRatioY) || 0.35, 0, 1);
+							}
+						}
+
+						if (!Number.isFinite(cTargetTop) && Number.isFinite(Number(pSnapshot.DocumentFocusRatio))) {
+							cTargetTop = Number(pSnapshot.DocumentFocusRatio) * cScrollElement.scrollHeight - cViewportHeight * ClampNumber(Number(pSnapshot.FocusRatioY) || 0.35, 0, 1);
+						}
+
+						if (!Number.isFinite(cTargetTop) && Number.isFinite(Number(pSnapshot.ScrollRatio))) {
+							cTargetTop = Number(pSnapshot.ScrollRatio) * cMaxScrollTop;
+						}
+
+						if (!Number.isFinite(cTargetTop)) {
+							cTargetTop = Number(pSnapshot.ScrollTop) || 0;
+						}
+
+						cScrollElement.scrollTop = ClampNumber(cTargetTop, 0, cMaxScrollTop);
+
+						if (fPreserveStructureZoom) {
+							const cTargetPhysicalLeft = Number.isFinite(Number(pSnapshot.PhysicalLeftRatio))
+								? Number(pSnapshot.PhysicalLeftRatio) * cMaxPhysicalLeft
+								: Number(pSnapshot.PhysicalLeft) || 0;
+							SetPhysicalScrollLeft(pCurrentState, cScrollElement, cTargetPhysicalLeft);
+						}
+						else {
+							SetLogicalHorizontalStart(pCurrentState, cScrollElement);
+						}
+					});
+
+					cFrameWindow.setTimeout(function () {
+						RememberFrameScroll(pName, true);
+					}, cZoomAdjustmentHoldMilliseconds + 50);
 				}
 
 				function HandleFrameZoomWheel(pEvent, pName) {

@@ -1,10 +1,11 @@
 ---
 import BLayout from "@/Layout.astro";
+import { CardsGr } from "@/Widgets/Cards";
+import { Badge, EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { EmoGallery, RespImg } from "@/Widgets/Media";
+import { DuoCol, DuoStr, EmoFaq, ESec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoStrip } from "@/Widgets/Strips";
 import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
-import { Badge, CardsGr, EmoCall, EmoFaq, Emograph, EmoList, EmoStrip, ESec, FaqItem, Hero, HzStack, IconCardsStrip, IconInfoCard, IconInfoCard1, IconInfoCard2, IconInfoCard3, IconInfoCard4, IconInfoCard5, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices, RespImg, SecTitle, VrStack } from "@/Widgets";
-import EmoGallery from "@/Widgets/Media/EmoGallery.astro";
-import { DuoCol, DuoStr } from "../../site/Widgets";
-import { StoneProductStrip } from "../../site/Widgets/Stone";
 ---
 
 
@@ -69,130 +70,21 @@ import { StoneProductStrip } from "../../site/Widgets/Stone";
 
 
 	<ESec
-		hidden
-		pBg={new ElemBg(Colors.Creamy)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
-			pTitle="المحجر لخدمات الرخام والجرانيت"
-			pDesc="خبرة في اختيار الخامات، فرز الألواح، التوريد، التركيب، التشطيب، والصيانة داخل القاهرة والجيزة"
-		/>
-
-		<EmoStrip
-			pBg={new ElemBg(Colors.Creamy)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<VrStack
-					pWidth={new Pixel(350, 340)}
-					pGap={new Pixel(15, 15)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.WhiteOff)}
-				>
-
-					<RespImg
-						pImg={new EmoMediaData(
-							"Img",
-							"https://static.wixstatic.com/media/308dfd_a8f97366f71b4e85a042201b00c3ea78~mv2.webp/v1/fill/w_88,h_88,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/",
-							"Experience%20Icon.webp",
-							false,
-							"خبرة",
-							new Size(new NumPer(80, "80px"), new NumPer("auto", "auto"))
-						)}
-					/>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("+ 15 عام")}
-						pText={Text.Body.Centered.OfText("خبرة في توريد وتركيب الرخام والجرانيت للأرضيات والواجهات والسلالم والمطابخ والحمامات.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-				<VrStack
-					pWidth={new Pixel(350, 340)}
-					pGap={new Pixel(15, 15)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.SkyLite)}
-				>
-
-					<RespImg
-						pImg={new EmoMediaData(
-							"Img",
-							"https://static.wixstatic.com/media/308dfd_7ba36b9723a6436e86a1ca0cef82bf6e~mv2.webp/v1/fill/w_88,h_88,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/",
-							"Diamond%20Icon.webp",
-							false,
-							"فرز أول",
-							new Size(new NumPer(80, "80px"), new NumPer("auto", "auto"))
-						)}
-					/>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("فرز أول")}
-						pText={Text.Body.Centered.OfText("مراجعة الخامة قبل التوريد من حيث اللون والعروق والشروخ والكسور وجودة التلميع.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-				<VrStack
-					pWidth={new Pixel(350, 340)}
-					pGap={new Pixel(15, 15)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.OrangeLite)}
-				>
-
-					<RespImg
-						pImg={new EmoMediaData(
-							"Img",
-							"https://static.wixstatic.com/media/308dfd_50c25a6580834545bec5af2ebf36503b~mv2.webp/v1/fill/w_88,h_88,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/",
-							"Loc%20Icon.webp",
-							false,
-							"القاهرة والجيزة",
-							new Size(new NumPer(80, "80px"), new NumPer("auto", "auto"))
-						)}
-					/>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("القاهرة والجيزة")}
-						pText={Text.Body.Centered.OfText("تنفيذ للمشاريع السكنية والتجارية والصناعية داخل القاهرة والجيزة وما حولهما.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
 		id="secCompare"
 		pBg={new ElemBg(Colors.WhiteOff,new EmoMediaData("Img","/Media/Emostone/","MarbleVsGranite.webp",true,"قطعة رخام بألوان براقة ومبهجة مع قطعة جرانيت أبيض بنقاط سوداء"))}
 		pHzAlign={Align.LeftCenter}
 		pVrAlign={Align.LeftCenter}
 	>
 
-		<SecTitle WhiteOff pTitle="أيهما أفضل ؟ الرخام أم الجرانيت ؟" />
+		<SecTitle
+			id="sectCompare"
+			WhiteOff
+			pTitle="أيهما أفضل ؟ الرخام أم الجرانيت ؟"
+		/>
 
-		<DuoStr>
+		<DuoStr id="strCompare">
 
-			<DuoCol>
-
-			</DuoCol>
+			<DuoCol />
 
 			<DuoCol>
 
@@ -247,19 +139,20 @@ import { StoneProductStrip } from "../../site/Widgets/Stone";
 
 
 	<ESec
-		id="secMarbleEgImp"
+		id="secMarble"
 		pBg={new ElemBg(Colors.Creamy)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
+			id="sectMarble"
 			GreenLite
 			pTitle="الرخام المصري والمستورد"
 			pDesc="نقدم أنواع الرخام المتعارف عليها في السوق المصري والعالمي، مع ترشيح النوع حسب الاستخدام والميزانية"
 		/>
 
-		<DuoStr>
+		<DuoStr id="strEgMarble">
 
 			<DuoCol>
 
@@ -274,7 +167,7 @@ import { StoneProductStrip } from "../../site/Widgets/Stone";
 
 			<DuoCol>
 
-				<EmoGallery pFolder="/Media/Emostone/Marble/Eg/Samples" />
+				<EmoGallery id="galEgMarble" pFolder="/Media/Emostone/Marble/Eg/Samples" />
 
 			</DuoCol>
 
@@ -285,6 +178,7 @@ import { StoneProductStrip } from "../../site/Widgets/Stone";
 			<DuoCol>
 
 				<Emograph
+					id="txtImpMarple"
 					pTitle={Text.H3.Centered.OfText("رخام مستورد")}
 					pSize={new Size(new NumPer(200),new NumPer(30))}
 					data-own-size
@@ -294,7 +188,7 @@ import { StoneProductStrip } from "../../site/Widgets/Stone";
 
 			<DuoCol>
 
-				<EmoGallery pFolder="/Media/Emostone/Marble/Imp/Samples" />
+				<EmoGallery id="galImpMarble" pFolder="/Media/Emostone/Marble/Imp/Samples" />
 
 			</DuoCol>
 
@@ -368,16 +262,13 @@ import { StoneProductStrip } from "../../site/Widgets/Stone";
 
 	<ESec
 		hidden
+		id="secUses"
 		pBg={new ElemBg(Colors.Creamy)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
-		<SecTitle
-			GreenLite
-			pTitle="استخدامات الرخام والجرانيت"
-			pDesc="كل استخدام يحتاج خامة وتشطيب وطريقة تركيب مناسبة لطبيعة الحركة والرطوبة والشمس والتنظيف"
-		/>
+		<SecTitle GreenLite pTitle="استخدامات الرخام والجرانيت" />
 
 		<EmoStrip
 			pBg={new ElemBg(Colors.Creamy)}
@@ -386,9 +277,7 @@ import { StoneProductStrip } from "../../site/Widgets/Stone";
 		>
 
 			<CardsGr
-				pWidth={new RespString("1300px", "100%")}
 				pCardBg={new ElemBg(Colors.WhiteOff)}
-				pGrTitle={Text.H3.Centered.OfText("تطبيقات شائعة")}
 				pCardTitleFnt={Text.H4}
 				pCardBodyFnt={Text.Body}
 				pSpacing={20}
@@ -411,15 +300,17 @@ import { StoneProductStrip } from "../../site/Widgets/Stone";
 
 
 	<ESec
+		hidden
+		id="secChoose"
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
 		<SecTitle
+			id="sectChoose"
 			Gray2
 			pTitle="اختيار الرخام المناسب"
-			pDesc="الاختيار يعتمد على المساحة والاستخدام واللون والتصميم والميزانية والفرز"
 		/>
 
 		<EmoStrip
@@ -458,61 +349,6 @@ import { StoneProductStrip } from "../../site/Widgets/Stone";
 				/>
 
 			</HzStack>
-
-		</EmoStrip>
-
-	</ESec>
-
-
-
-
-
-
-
-	<ESec
-		hidden
-		pBg={new ElemBg(Colors.Creamy)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			GreenLite
-			pTitle="الأرضيات والواجهات والتصميم"
-			pDesc="الرخام والجرانيت يرفعان القيمة الجمالية والوظيفية للمكان عند اختيار الخامة المناسبة"
-		/>
-
-		<EmoStrip
-			pBg={new ElemBg(Colors.Creamy)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<VrStack
-				pWidth={new Pixel(1200, 340)}
-				pGap={new Pixel(30, 15)}
-				pPad={new Pixel(30, 15)}
-			>
-
-				<Emograph
-					pTitle={Text.H3.Centered.OfText("الأرضيات الرخامية والجرانيتية")}
-					pText={Text.Body.Centered.OfText("استخدام الرخام والجرانيت للأرضيات شائع في الفيلات والمنازل والمكاتب والفنادق. الأرضيات الرخامية تضيف فخامة واتساعًا بصريًا، وأرضيات الجرانيت تقدم متانة وتحملًا طويلًا، خاصة في المناطق عالية الحركة.")}
-					pSize={new Size(new NumPer(1100, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.Centered.OfText("واجهات الرخام والجرانيت")}
-					pText={Text.Body.Centered.OfText("الواجهات الخارجية بالرخام أو الجرانيت تعطي المبنى طابعًا فخمًا وتحملًا جيدًا ضد العوامل الجوية عند اختيار خامة مناسبة وطريقة تثبيت صحيحة. واجهات المحلات تستفيد من الشكل الجمالي للحجر في جذب العملاء ورفع قيمة العقار.")}
-					pSize={new Size(new NumPer(1100, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.Centered.OfText("تصميم الرخام والجرانيت")}
-					pText={Text.Body.Centered.OfText("دمج الألوان واختيار النقوش وقص البلاطات وتنسيقها يحقق الجمال والوظيفة في نفس الوقت. الألواح الكبيرة تعطي مظهرًا فاخرًا وتوحد السطح بفواصل أقل، والقصات الخاصة تسمح برسومات هندسية أو كلاسيكية حسب التصميم.")}
-					pSize={new Size(new NumPer(1100, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</VrStack>
 
 		</EmoStrip>
 
@@ -564,42 +400,30 @@ import { StoneProductStrip } from "../../site/Widgets/Stone";
 
 
 
-	<ReadAlso
-		pTitle={Text.H2.Centered.OfText("أقسام EmoStone")}
-		pDesc={Text.Body.Centered.OfText("اختر الصفحة المتخصصة حسب الخامة التي تفكر فيها")}
-		pHeadBg={new ElemBg(Colors.GreenLite)}
-		pBodyBg={new ElemBg(Colors.WhiteOff)}
-		pCardBg={new ElemBg(Colors.SkyLite)}
-		pWidth={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
-		pGap={new Pixel(20, 15)}
-	>
+	<ReadAlso>
 
 		<ReadAlsoItem
 			pTitle="توريد وتركيب رخام"
 			pDesc="رخام مصري ومستورد للأرضيات والسلالم والمداخل والحوائط والديكور الداخلي."
 			pHref="/emostone/marble"
-			pImg="https://static.wixstatic.com/media/498793_c6c5812bd532499bb3e8aecf1abcf687~mv2.jpg/v1/crop/x_107%2Cy_0%2Cw_626%2Ch_612/fill/w_220%2Ch_215%2Cal_c%2Cq_90%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/Galala.jpg"
 		/>
 
 		<ReadAlsoItem
 			pTitle="توريد وتركيب جرانيت"
 			pDesc="جرانيت مصري ومستورد للمطابخ والسلالم والواجهات والأرضيات عالية الحركة."
 			pHref="/emostone/granit"
-			pImg="https://static.wixstatic.com/media/498793_2891cf9afb27469eb388cd04da704e30~mv2.webp/v1/fill/w_220%2Ch_215%2Cal_c%2Cq_90%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/new%20halayeb.webp"
 		/>
 
 		<ReadAlsoItem
 			pTitle="توريد وتركيب كوارتز"
 			pDesc="كوارتز للمطابخ والحمامات والجزيرات والأسطح الحديثة."
 			pHref="/emostone/quartz"
-			pImg="https://static.wixstatic.com/media/498793_9670278a55b54bffaa91e740ea0c613d~mv2.jpg/v1/crop/x_93%2Cy_0%2Cw_614%2Ch_600/fill/w_220%2Ch_215%2Cal_c%2Cq_90%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/%D9%83%D9%84%D9%83%D8%AA%D8%A7%20%D8%AC%D9%88%D9%84%D8%AF.jpg"
 		/>
 
 		<ReadAlsoItem
 			pTitle="توريد وتركيب حجر طبيعي"
 			pDesc="حجر طبيعي للواجهات والأسوار والديكورات الخارجية والداخلية."
 			pHref="/emostone/stone"
-			pImg="https://static.wixstatic.com/media/498793_d862f6adb8e943f3be6c0946085d8ebf~mv2.png/v1/fill/w_980%2Ch_980%2Cal_c%2Cq_90%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/498793_d862f6adb8e943f3be6c0946085d8ebf~mv2.png"
 		/>
 
 	</ReadAlso>
@@ -610,38 +434,24 @@ import { StoneProductStrip } from "../../site/Widgets/Stone";
 
 
 
-	<RelServices
-		pTitle={Text.H2.Centered.White.OfText("خدمات هندسية وتشطيبات مرتبطة")}
-		pDesc={Text.Body.Centered.White.OfText("الرخام والجرانيت جزء من منظومة التشطيب والتصميم والإشراف")}
-		pHeadBg={new ElemBg(Colors.Gray5)}
-		pBodyBg={new ElemBg(Colors.Gray1)}
-		pCardBg={new ElemBg(Colors.WhiteOff)}
-		pWidth={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
-		pGap={new Pixel(20, 15)}
-	>
+	<RelServices>
 
 		<RelServiceItem
 			pTitle="تشطيب شقق وفلل"
 			pDesc="تنسيق خامات الأرضيات والحوائط والسلالم والمطابخ ضمن خطة التشطيب الكاملة."
 			pHref="/emocrete/finishing"
-			pImg="https://static.wixstatic.com/media/308dfd_a5f737ad08a046e3be8c0cf47e983ddb~mv2.webp/v1/fill/w_1896,h_800,al_c,q_85,enc_avif,quality_auto/308dfd_a5f737ad08a046e3be8c0cf47e983ddb~mv2.webp"
-			pBtnText="افتح الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="تشطيب محل تجاري"
 			pDesc="اختيار خامة واجهة وأرضيات تناسب هوية المحل وحركة العملاء والتنظيف اليومي."
 			pHref="/emocrete/finishing/retail"
-			pImg="https://static.wixstatic.com/media/498793_9670278a55b54bffaa91e740ea0c613d~mv2.jpg/v1/crop/x_93%2Cy_0%2Cw_614%2Ch_600/fill/w_220%2Ch_215%2Cal_c%2Cq_90%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/%D9%83%D9%84%D9%83%D8%AA%D8%A7%20%D8%AC%D9%88%D9%84%D8%AF.jpg"
-			pBtnText="افتح الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="إشراف على التشطيب"
 			pDesc="مراجعة المقاسات والاستلام وجودة التركيب قبل ضياع قيمة الخامة."
 			pHref="/emocrete/supervision/finishing"
-			pImg="https://static.wixstatic.com/media/498793_2891cf9afb27469eb388cd04da704e30~mv2.webp/v1/fill/w_220%2Ch_215%2Cal_c%2Cq_90%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/new%20halayeb.webp"
-			pBtnText="افتح الخدمة"
 		/>
 
 	</RelServices>

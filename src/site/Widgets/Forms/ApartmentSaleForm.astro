@@ -1,6 +1,7 @@
 ---
 import { Colors, Place, type PlaceProps } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
+
 interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps {
 	pSubmitUrl?: string;
 	pSourcePage?: string;
@@ -102,6 +103,12 @@ const cPlace = new Place(Astro.props as PlaceProps, cStyle);
 	{...RemAttr}
 >
 
+
+
+
+
+
+
 	<div class = " FormShell ">
 
 		<div class = " FormHeader ">
@@ -123,7 +130,11 @@ const cPlace = new Place(Astro.props as PlaceProps, cStyle);
 			data-form="true"
 		>
 
-			<input type="hidden" name="sourcePage" value={pSourcePage} />
+			<input
+				type="hidden"
+				name="sourcePage"
+				value={pSourcePage}
+			/>
 
 			<input
 				class = " Honey "
@@ -140,7 +151,7 @@ const cPlace = new Place(Astro.props as PlaceProps, cStyle);
 				</h3>
 
 				<p>
-					البيانات دي للاتصال بالمالك فقط، ولا تظهر في الإعلان.
+					خاصة باستخدام إدارة الموقع فقط ولن تستخدم في الإعلان
 				</p>
 
 			</div>
@@ -163,7 +174,7 @@ const cPlace = new Place(Astro.props as PlaceProps, cStyle);
 			<label class = " Field ">
 
 				<span>
-					رقم الموبايل
+					رقم الهاتف
 				</span>
 
 				<input
@@ -194,7 +205,7 @@ const cPlace = new Place(Astro.props as PlaceProps, cStyle);
 			<label class = " Field ">
 
 				<span>
-					أفضل وقت للتواصل
+					الوقت المناسب للتواصل
 				</span>
 
 				<select name="callTime">
@@ -232,10 +243,6 @@ const cPlace = new Place(Astro.props as PlaceProps, cStyle);
 				<h3>
 					بيانات الموقع
 				</h3>
-
-				<p>
-					اكتب المنطقة بدقة كافية لتقييم السعر، بدون إرسال عنوان تفصيلي حساس في المرحلة الأولى.
-				</p>
 
 			</div>
 
@@ -275,7 +282,11 @@ const cPlace = new Place(Astro.props as PlaceProps, cStyle);
 					علامة قريبة أو شارع رئيسي
 				</span>
 
-				<input name="nearby" type="text" placeholder="مثال: قريب من شارع التسعين / الجامعة الأمريكية" />
+				<input
+					name="nearby"
+					type="text"
+					placeholder="مثال: قريب من شارع التسعين / الجامعة الأمريكية"
+				/>
 
 			</label>
 
@@ -284,10 +295,6 @@ const cPlace = new Place(Astro.props as PlaceProps, cStyle);
 				<h3>
 					بيانات الشقة
 				</h3>
-
-				<p>
-					الهدف هنا تكوين صورة أولية عن الوحدة قبل المعاينة أو التصوير.
-				</p>
 
 			</div>
 
@@ -346,7 +353,11 @@ const cPlace = new Place(Astro.props as PlaceProps, cStyle);
 					الدور
 				</span>
 
-				<input name="floor" type="text" placeholder="مثال: الثالث / أرضي / روف" />
+				<input
+					name="floor"
+					type="text"
+					placeholder="مثال: الثالث / أرضي / روف"
+				/>
 
 			</label>
 
@@ -524,10 +535,6 @@ const cPlace = new Place(Astro.props as PlaceProps, cStyle);
 					السعر وطريقة العرض
 				</h3>
 
-				<p>
-					السعر المبدئي يساعد على فرز المشتري الجاد قبل تحديد المعاينة.
-				</p>
-
 			</div>
 
 			<label class = " Field ">
@@ -643,7 +650,11 @@ const cPlace = new Place(Astro.props as PlaceProps, cStyle);
 					ملاحظات مهمة عن الشقة
 				</span>
 
-				<textarea name="notes" rows="5" placeholder="اكتب أي مميزات أو عيوب مؤثرة: الواجهة، الجراج، النادي، حالة العمارة، احتياج صيانة، سبب البيع...">
+				<textarea
+					name="notes"
+					rows="5"
+					placeholder="اكتب أي مميزات أو عيوب مؤثرة: الواجهة، الجراج، النادي، حالة العمارة، احتياج صيانة، سبب البيع..."
+				>
 
 				</textarea>
 
@@ -663,7 +674,11 @@ const cPlace = new Place(Astro.props as PlaceProps, cStyle);
 
 			<label class = " Check Full ">
 
-				<input name="contactApproval" type="checkbox" required />
+				<input
+					name="contactApproval"
+					type="checkbox"
+					required
+				/>
 
 				<span>
 					أوافق على التواصل معي بخصوص بيانات الشقة وترتيب الخطوة التالية.
@@ -688,6 +703,12 @@ const cPlace = new Place(Astro.props as PlaceProps, cStyle);
 		</form>
 
 	</div>
+
+
+
+
+
+
 
 </section>
 
@@ -947,6 +968,32 @@ const cPlace = new Place(Astro.props as PlaceProps, cStyle);
 	.Status[data-mode="work"] {
 		color: var(--FormSoftText);
 	}
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
 
 
 	@media (max-width: 900px) {

@@ -1,7 +1,11 @@
 ---
-import { Align, Colors, ElemBg, EmoMediaData, NumPer, RespString, Size, Text, Topic } from "@/TypesLib";
 import BLayout from "@/Layout.astro";
-import { BottTriSep, CardsGr, EmoBtn, EmoContactStrip, Emograph, EmoList, EmoStrip, ESec, Hero, HzStack, IncLineSep, IndexSec, SecTitle, VrStack } from "@/Widgets";
+import { CardsGr } from "@/Widgets/Cards";
+import { EmoBtn, EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { ESec, Hero } from "@/Widgets/Sections";
+import { BottTriSep, IncLineSep } from "@/Widgets/Separators";
+import { EmoStrip } from "@/Widgets/Strips";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, RespString, Size, Text, Topic } from "@/TypesLib";
 
 const cWhatsappLink = "https://wa.me/201014490054";
 const cPhoneLink = "tel:01014490054";
@@ -32,130 +36,43 @@ const cPhoneLink = "tel:01014490054";
 	pDescr="متوسط تكلفة تشطيب فيلا في مصر من حالة نصف التشطيب، مع تفصيل بنود الكهرباء والسباكة والسيراميك والدهانات والنجارة والألوميتال والجبس بورد والنثريات."
 >
 
-	<Hero
-		pTitle="تكلفة تشطيب فيلا"
-		pDesc="دليل عملي لفهم بنود التكلفة، وكيف التحول من رقم عشوائي إلى مقايسة واضحة."
-		pHzAlign="center"
-		pVrAlign="center"
-		pPosL="30% 10% 25% 40%"
-		pPosP="50% 0% 5% 0%"
-		pBlurL="on"
-		pBlurP="on"
-	>
 
-		<HzStack>
 
-			<EmoBtn
-				pText="احسب تكلفة فيلتك"
-				pBgColor={Colors.BistageLite}
-				pBgColorHover={Colors.SkyLite}
-				pTextColor={Colors.BlackOff}
-				pWidth="200px"
-				pHeight="50px"
-				pRadius="5px"
-				onclick="location.href='#cost-model'"
+
+
+
+
+	<Hero>
+
+		<VrStack
+			pLoc={new Loc(new NumPer("50%","2.5%"),new NumPer("30%","55%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pHzAlign={"Center"}
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("تكلفة تشطيب فيلا")}
+				pText={Text.Body.Centered.OfText("دليل عملي لفهم بنود التكلفة، وكيف التحول من رقم عشوائي إلى مقايسة واضحة.")}
 			/>
 
-			<EmoBtn
-				pText="اطلب مقايسة"
-				pBgColor="black"
-				pBgColorHover={Colors.Gray5}
-				pTextColor="white"
-				pWidth="150px"
-				pHeight="50px"
-				pRadius="5px"
-				onclick="location.href='#cta'"
-			/>
+			<EmoCall BlackSky />
 
-		</HzStack>
+		</VrStack>
 
 	</Hero>
 
-	<IndexSec
-		pMedia={new EmoMediaData("Vid", "/Media/", "IndexBgVid.mp4")}
-		pTitleClr="white"
-		pBlurL="on"
-		pBlurP="on"
-	>
 
-		<VrStack>
 
-			<EmoBtn
-				pText="طريقة الحساب"
-				pBgImg="/Media/IndexBtn.webp"
-				pTextColor="white"
-				pTextColorHover={Colors.OrangeDark}
-				pWidth="320px"
-				pHeight="48px"
-				onclick="location.href='#cost-model'"
-			/>
 
-			<EmoBtn
-				pText="بنود التشطيب"
-				pBgImg="/Media/IndexBtn.webp"
-				pTextColor="white"
-				pTextColorHover={Colors.OrangeDark}
-				pWidth="320px"
-				pHeight="48px"
-				onclick="location.href='#items'"
-			/>
 
-			<EmoBtn
-				pText="مثال حسابي"
-				pBgImg="/Media/IndexBtn.webp"
-				pTextColor="white"
-				pTextColorHover={Colors.OrangeDark}
-				pWidth="320px"
-				pHeight="48px"
-				onclick="location.href='#example'"
-			/>
 
-		</VrStack>
 
-		<VrStack>
+	<ESec id="secIntro" pBg={new ElemBg(Colors.WhiteOff)}>
 
-			<EmoBtn
-				pText="بنود الفيلا الخاصة"
-				pBgImg="/Media/IndexBtn.webp"
-				pTextColor="white"
-				pTextColorHover={Colors.OrangeDark}
-				pWidth="320px"
-				pHeight="48px"
-				onclick="location.href='#villa-special'"
-			/>
-
-			<EmoBtn
-				pText="أخطاء التسعير"
-				pBgImg="/Media/IndexBtn.webp"
-				pTextColor="white"
-				pTextColorHover={Colors.OrangeDark}
-				pWidth="320px"
-				pHeight="48px"
-				onclick="location.href='#mistakes'"
-			/>
-
-			<EmoBtn
-				pText="التسليم النهائي"
-				pBgImg="/Media/IndexBtn.webp"
-				pTextColor="white"
-				pTextColorHover={Colors.OrangeDark}
-				pWidth="320px"
-				pHeight="48px"
-				onclick="location.href='#handover'"
-			/>
-
-		</VrStack>
-
-	</IndexSec>
-
-	<ESec
-		id="intro"
-		pBg={new ElemBg(Colors.WhiteOff)}
-	>
 		<SecTitle
+			Gray2
 			pTitle="لماذا لا يصلح سؤال: متر تشطيب الفيلا بكام؟"
 			pDesc="سعر المتر مفيد كبداية، لكنه لا يكفي وحده في تشطيب الفيلات. الفيلا ليست شقة كبيرة فقط؛ لأنها تحتوي على واجهات خارجية وسطح وسلالم وحديقة وسور وبوابات وفراغات مزدوجة الارتفاع أحيانا، وقد تحتوي على حمامات أكثر ونقاط تكييف وشبكات خارجية وأعمال عزل أوسع."
-			style={`--StripBg:${Colors.Gray5};`}
 		/>
 
 		<VrStack>
@@ -167,7 +84,6 @@ const cPhoneLink = "tel:01014490054";
 			/>
 
 			<CardsGr
-				pWidth={new RespString("1300px", "100%")}
 				pCardBg={new ElemBg("white")}
 				pGrTitle={Text.H3.Centered.OrangeDark.OfText("ما الذي يجعل تكلفة الفيلا مختلفة؟")}
 				pCardTitleFnt={Text.H4}
@@ -182,36 +98,33 @@ const cPhoneLink = "tel:01014490054";
 
 	</ESec>
 
-	<ESec
-		id="cost-model"
-		pBg={new ElemBg("white")}
-	>
+
+
+
+
+
+
+	<ESec id="cost-model" pBg={new ElemBg("white")}>
+
 		<SecTitle
+			SkyLite
 			pTitle="طريقة حساب متوسط تكلفة تشطيب الفيلا"
 			pDesc="الهدف من الحساب ليس استخراج رقم نهائي من أول جلسة، بل تكوين تقدير منطقي يوضح أين تذهب الميزانية. بعد ذلك تتحول الأرقام إلى مقايسة تفصيلية بعد الرفع والمعاينة واختيار الخامات."
-			style={`--StripBg:${Colors.SkyLite};`}
 		/>
 
 		<VrStack>
 
-			<EmoStrip
+			<EmoStrip pBg={new ElemBg(Colors.BistageLite)}>
 
+				<EmoStrip pBg={new ElemBg(Colors.BistageLite)} pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}>
 
-				pBg={new ElemBg(Colors.BistageLite)}
->
+					<Emograph
+						pTitle={Text.H3.OfText("المعادلة المختصرة")}
+						pText={Text.Body.OfText("التكلفة التقديرية = مساحة التشطيب الداخلي × متوسط متر داخلي مناسب للمستوى المطلوب + تكلفة الواجهات + تكلفة السطح + تكلفة اللاندسكيب والسور + الأنظمة الخاصة + احتياطي إدارة وتغيرات. هذه المعادلة أبسط من المقايسة، لكنها أكثر أمانا من رقم متر عشوائي، لأنها تفصل البنود التي لا تتشابه من فيلا لأخرى.")}
+						pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
+					/>
 
-	<EmoStrip
-		pBg={new ElemBg(Colors.BistageLite)}
-		pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}
-	>
-
-		<Emograph
-			pTitle={Text.H3.OfText("المعادلة المختصرة")}
-			pText={Text.Body.OfText("التكلفة التقديرية = مساحة التشطيب الداخلي × متوسط متر داخلي مناسب للمستوى المطلوب + تكلفة الواجهات + تكلفة السطح + تكلفة اللاندسكيب والسور + الأنظمة الخاصة + احتياطي إدارة وتغيرات. هذه المعادلة أبسط من المقايسة، لكنها أكثر أمانا من رقم متر عشوائي، لأنها تفصل البنود التي لا تتشابه من فيلا لأخرى.")}
-			pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
-		/>
-
-	</EmoStrip>
+				</EmoStrip>
 
 				<EmoList
 					pWidth={new RespString("1100px", "100%")}
@@ -230,7 +143,6 @@ const cPhoneLink = "tel:01014490054";
 			</EmoStrip>
 
 			<CardsGr
-				pWidth={new RespString("1300px", "100%")}
 				pCardBg={new ElemBg(Colors.WhiteOff)}
 				pGrTitle={Text.H3.Centered.DarkSky.OfText("نطاقات تقديرية مفيدة قبل المقايسة")}
 				pCardTitleFnt={Text.H4.DarkSky}
@@ -251,36 +163,33 @@ const cPhoneLink = "tel:01014490054";
 
 	</ESec>
 
-	<ESec
-		id="items"
-		pBg={new ElemBg(Colors.Gray5)}
-	>
+
+
+
+
+
+
+	<ESec id="items" pBg={new ElemBg(Colors.Gray5)}>
+
 		<SecTitle
+			Gray2
 			pTitle="بنود تكلفة تشطيب الفيلا من الطوب الأحمر"
 			pDesc="تشطيب الفيلا يبدأ قبل المحارة وقبل السيراميك. أول بند حقيقي هو استلام الحالة على الطوب الأحمر والتأكد أن المبنى قابل للتشطيب بدون مفاجآت إنشائية أو معمارية أو ميكانيكية."
-			style={`--StripBg:${Colors.Gray5};`}
 		/>
 
 		<VrStack>
 
-			<EmoStrip
+			<EmoStrip pBg={new ElemBg(Colors.Gray5)}>
 
+				<EmoStrip pBg={new ElemBg(Colors.Gray5)} pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}>
 
-				pBg={new ElemBg(Colors.Gray5)}
->
+					<Emograph
+						pTitle={Text.H3.WithColor(Colors.BistageLite).OfText("1. الاستلام والمعاينة والرفع")}
+						pText={Text.Body.WithColor("white").OfText("في هذه المرحلة يتم فحص الحوائط، الأعمدة، مناسيب السلالم، منسوب الشبابيك، أماكن الفتحات، حالة اللياسة القديمة إن وجدت، مناسيب الأرضيات، تمديدات السباكة السابقة إن وجدت، ومطابقة التنفيذ للرسومات. التكلفة هنا قد تبدو صغيرة، لكنها تمنع أخطاء ضخمة لاحقا. إذا كان باب الحمام في مكان سيئ، أو منسوب السلم غير مريح، أو فتحة الشباك لا تناسب تصميم الواجهة، فإصلاحها قبل التشطيب أرخص بكثير من اكتشافها بعد السيراميك والدهان.")}
+						pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
+					/>
 
-	<EmoStrip
-		pBg={new ElemBg(Colors.Gray5)}
-		pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}
-	>
-
-		<Emograph
-			pTitle={Text.H3.WithColor(Colors.BistageLite).OfText("1. الاستلام والمعاينة والرفع")}
-			pText={Text.Body.WithColor("white").OfText("في هذه المرحلة يتم فحص الحوائط، الأعمدة، مناسيب السلالم، منسوب الشبابيك، أماكن الفتحات، حالة اللياسة القديمة إن وجدت، مناسيب الأرضيات، تمديدات السباكة السابقة إن وجدت، ومطابقة التنفيذ للرسومات. التكلفة هنا قد تبدو صغيرة، لكنها تمنع أخطاء ضخمة لاحقا. إذا كان باب الحمام في مكان سيئ، أو منسوب السلم غير مريح، أو فتحة الشباك لا تناسب تصميم الواجهة، فإصلاحها قبل التشطيب أرخص بكثير من اكتشافها بعد السيراميك والدهان.")}
-			pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
-		/>
-
-	</EmoStrip>
+				</EmoStrip>
 
 				<EmoList
 					pWidth={new RespString("1100px", "100%")}
@@ -298,27 +207,19 @@ const cPhoneLink = "tel:01014490054";
 
 			</EmoStrip>
 
-			<EmoStrip
+			<EmoStrip pBg={new ElemBg(Colors.WhiteOff)}>
 
+				<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}>
 
-				pBg={new ElemBg(Colors.WhiteOff)}
->
+					<Emograph
+						pTitle={Text.H3.OfText("2. التعديلات المدنية والتجهيز قبل التأسيس")}
+						pText={Text.Body.OfText("بعد الاستلام تظهر غالبا أعمال تكسير وفتح مسارات وتعديل حوائط وسد فتحات وتظبيط عتب أو عمل مباني إضافية أو معالجة شروخ أو تسوية منسوب أرضيات. هذا البند لا يصح دفنه داخل سعر المتر، لأنه يتغير جدا حسب حالة الفيلا. فيلا مستلمة من مطور جيد قد تحتاج أعمالا محدودة، بينما فيلا منفذة منذ سنوات أو بدون متابعة هندسية قد تحتاج ميزانية واضحة للتصحيح قبل التشطيب.")}
+						pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
+					/>
 
-	<EmoStrip
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}
-	>
-
-		<Emograph
-			pTitle={Text.H3.OfText("2. التعديلات المدنية والتجهيز قبل التأسيس")}
-			pText={Text.Body.OfText("بعد الاستلام تظهر غالبا أعمال تكسير وفتح مسارات وتعديل حوائط وسد فتحات وتظبيط عتب أو عمل مباني إضافية أو معالجة شروخ أو تسوية منسوب أرضيات. هذا البند لا يصح دفنه داخل سعر المتر، لأنه يتغير جدا حسب حالة الفيلا. فيلا مستلمة من مطور جيد قد تحتاج أعمالا محدودة، بينما فيلا منفذة منذ سنوات أو بدون متابعة هندسية قد تحتاج ميزانية واضحة للتصحيح قبل التشطيب.")}
-			pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
-		/>
-
-	</EmoStrip>
+				</EmoStrip>
 
 				<CardsGr
-					pWidth={new RespString("1200px", "100%")}
 					pCardBg={new ElemBg("white")}
 					pGrTitle={Text.H4.Centered.OrangeDark.OfText("أمثلة على بنود التصحيح")}
 					pCardTitleFnt={Text.H5}
@@ -331,24 +232,17 @@ const cPhoneLink = "tel:01014490054";
 
 			</EmoStrip>
 
-			<EmoStrip
+			<EmoStrip pBg={new ElemBg(Colors.Gray5)}>
 
+				<EmoStrip pBg={new ElemBg(Colors.Gray5)} pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}>
 
-				pBg={new ElemBg(Colors.Gray5)}
->
+					<Emograph
+						pTitle={Text.H3.WithColor(Colors.BistageLite).OfText("3. الكهرباء والتيار الخفيف والسمارت")}
+						pText={Text.Body.WithColor("white").OfText("الكهرباء في الفيلا لا تعني مفاتيح وبرايز فقط. يتم حساب اللوحات الرئيسية والفرعية، مسارات التغذية، نقاط القوى، الإنارة الداخلية والخارجية، إنارة السور والحديقة، كاميرات المراقبة، الإنترنت، الدش، الإنتركم، البوابات، الجرس، حساسات الحركة، ونقاط الأنظمة الذكية إن وجدت. الفرق بين تشطيب اقتصادي وتشطيب محترم يظهر هنا بوضوح، لأن ضعف التأسيس الكهربائي لا يتم علاجه بسهولة بعد الدهان والجبس.")}
+						pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
+					/>
 
-	<EmoStrip
-		pBg={new ElemBg(Colors.Gray5)}
-		pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}
-	>
-
-		<Emograph
-			pTitle={Text.H3.WithColor(Colors.BistageLite).OfText("3. الكهرباء والتيار الخفيف والسمارت")}
-			pText={Text.Body.WithColor("white").OfText("الكهرباء في الفيلا لا تعني مفاتيح وبرايز فقط. يتم حساب اللوحات الرئيسية والفرعية، مسارات التغذية، نقاط القوى، الإنارة الداخلية والخارجية، إنارة السور والحديقة، كاميرات المراقبة، الإنترنت، الدش، الإنتركم، البوابات، الجرس، حساسات الحركة، ونقاط الأنظمة الذكية إن وجدت. الفرق بين تشطيب اقتصادي وتشطيب محترم يظهر هنا بوضوح، لأن ضعف التأسيس الكهربائي لا يتم علاجه بسهولة بعد الدهان والجبس.")}
-			pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
-		/>
-
-	</EmoStrip>
+				</EmoStrip>
 
 				<EmoList
 					pWidth={new RespString("1100px", "100%")}
@@ -366,24 +260,17 @@ const cPhoneLink = "tel:01014490054";
 
 			</EmoStrip>
 
-			<EmoStrip
+			<EmoStrip pBg={new ElemBg(Colors.SkyLite)}>
 
+				<EmoStrip pBg={new ElemBg(Colors.SkyLite)} pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}>
 
-				pBg={new ElemBg(Colors.SkyLite)}
->
+					<Emograph
+						pTitle={Text.H3.OfText("4. السباكة والصرف والعزل")}
+						pText={Text.Body.OfText("السباكة في الفيلا تشمل تغذية وصرف الحمامات والمطابخ وغرف الغسيل والسطح والحديقة، وقد تشمل خزان أرضي أو علوي ومضخات وفلاتر وسخانات مركزية أو نقاط سخانات منفصلة. بند العزل لا يقل أهمية عن السباكة، خصوصا في الحمامات والبلكونات والسطح وغرف الغسيل. أي توفير غير محسوب في هذا البند قد يتحول لاحقا إلى تسريب مكلف وإعادة تشطيب.")}
+						pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
+					/>
 
-	<EmoStrip
-		pBg={new ElemBg(Colors.SkyLite)}
-		pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}
-	>
-
-		<Emograph
-			pTitle={Text.H3.OfText("4. السباكة والصرف والعزل")}
-			pText={Text.Body.OfText("السباكة في الفيلا تشمل تغذية وصرف الحمامات والمطابخ وغرف الغسيل والسطح والحديقة، وقد تشمل خزان أرضي أو علوي ومضخات وفلاتر وسخانات مركزية أو نقاط سخانات منفصلة. بند العزل لا يقل أهمية عن السباكة، خصوصا في الحمامات والبلكونات والسطح وغرف الغسيل. أي توفير غير محسوب في هذا البند قد يتحول لاحقا إلى تسريب مكلف وإعادة تشطيب.")}
-			pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
-		/>
-
-	</EmoStrip>
+				</EmoStrip>
 
 				<CardsGr
 					pWidth={new RespString("1200px", "100%")}
@@ -399,44 +286,31 @@ const cPhoneLink = "tel:01014490054";
 
 			</EmoStrip>
 
-			<EmoStrip
+			<EmoStrip pBg={new ElemBg(Colors.WhiteOff)}>
 
-				pBg={new ElemBg(Colors.WhiteOff)}
->
+				<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}>
 
-	<EmoStrip
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}
-	>
+					<Emograph
+						pTitle={Text.H3.OfText("5. المحارة والمونة والتسويات")}
+						pText={Text.Body.OfText("المحارة بند تأسيسي مؤثر في جودة الدهان، استقامة الوزرات، تركيب الأبواب، واستواء السيراميك والبورسلين. في الفيلا تزيد أهمية المحارة بسبب المساحات الكبيرة والحوائط الطويلة والفراغات المفتوحة التي تكشف أي تموج. لا يتم حساب المحارة فقط بالمتر، بل بحالة المباني وسمك الطبقة واحتياج الحوائط إلى شبك أو معالجات خاصة حول التمديدات والعتب والأعمدة.")}
+						pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
+					/>
 
-		<Emograph
-			pTitle={Text.H3.OfText("5. المحارة والمونة والتسويات")}
-			pText={Text.Body.OfText("المحارة بند تأسيسي مؤثر في جودة الدهان، استقامة الوزرات، تركيب الأبواب، واستواء السيراميك والبورسلين. في الفيلا تزيد أهمية المحارة بسبب المساحات الكبيرة والحوائط الطويلة والفراغات المفتوحة التي تكشف أي تموج. لا يتم حساب المحارة فقط بالمتر، بل بحالة المباني وسمك الطبقة واحتياج الحوائط إلى شبك أو معالجات خاصة حول التمديدات والعتب والأعمدة.")}
-			pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
-		/>
+				</EmoStrip>
 
-	</EmoStrip>
+			</EmoStrip>
 
-</EmoStrip>
+			<EmoStrip pBg={new ElemBg(Colors.Gray5)}>
 
-			<EmoStrip
+				<EmoStrip pBg={new ElemBg(Colors.Gray5)} pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}>
 
+					<Emograph
+						pTitle={Text.H3.WithColor(Colors.BistageLite).OfText("6. الأرضيات والحوائط والرخام والسلالم")}
+						pText={Text.Body.WithColor("white").OfText("هذا هو البند الذي يراه العميل مباشرة، لكنه ليس مجرد اختيار سيراميك. يتم حساب الأرضيات حسب مساحات الغرف والطرقات والاستقبال، وحوائط الحمامات والمطابخ حسب المسطح الرأسي، والسلالم حسب عدد الدرجات والبسطات والخامة وطريقة التشطيب. في الفيلات قد يستهلك السلم الداخلي جزءا واضحا من الميزانية إذا تم تنفيذه رخام طبيعي أو خشب أو زجاج مع درابزين خاص.")}
+						pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
+					/>
 
-				pBg={new ElemBg(Colors.Gray5)}
->
-
-	<EmoStrip
-		pBg={new ElemBg(Colors.Gray5)}
-		pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}
-	>
-
-		<Emograph
-			pTitle={Text.H3.WithColor(Colors.BistageLite).OfText("6. الأرضيات والحوائط والرخام والسلالم")}
-			pText={Text.Body.WithColor("white").OfText("هذا هو البند الذي يراه العميل مباشرة، لكنه ليس مجرد اختيار سيراميك. يتم حساب الأرضيات حسب مساحات الغرف والطرقات والاستقبال، وحوائط الحمامات والمطابخ حسب المسطح الرأسي، والسلالم حسب عدد الدرجات والبسطات والخامة وطريقة التشطيب. في الفيلات قد يستهلك السلم الداخلي جزءا واضحا من الميزانية إذا تم تنفيذه رخام طبيعي أو خشب أو زجاج مع درابزين خاص.")}
-			pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
-		/>
-
-	</EmoStrip>
+				</EmoStrip>
 
 				<EmoList
 					pWidth={new RespString("1100px", "100%")}
@@ -454,104 +328,83 @@ const cPhoneLink = "tel:01014490054";
 
 			</EmoStrip>
 
-			<EmoStrip
+			<EmoStrip pBg={new ElemBg(Colors.BistageLite)}>
 
-				pBg={new ElemBg(Colors.BistageLite)}
->
+				<EmoStrip pBg={new ElemBg(Colors.BistageLite)} pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}>
 
-	<EmoStrip
-		pBg={new ElemBg(Colors.BistageLite)}
-		pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}
-	>
+					<Emograph
+						pTitle={Text.H3.OfText("7. الأسقف والجبس والإضاءة")}
+						pText={Text.Body.OfText("الجبس بورد والإضاءة المخفية قد يبدوان بندا ديكوريا فقط، لكنهما يرتبطان بالتكييف والإنارة والكهرباء ومخارج الستائر والسمارت هوم. في الفيلا يجب تحديد الأماكن التي تحتاج سقف ساقط فعلا، والأماكن التي يكفيها كورنيش أو بيت نور، والأماكن التي يفضل تركها بسيطة حتى لا يحدث ازدحام بصري أو زيادة تكلفة بلا قيمة. الحساب الجيد هنا يكون حسب المتر المسطح أو المتر الطولي أو النقطة، طبقا لطبيعة التصميم.")}
+						pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
+					/>
 
-		<Emograph
-			pTitle={Text.H3.OfText("7. الأسقف والجبس والإضاءة")}
-			pText={Text.Body.OfText("الجبس بورد والإضاءة المخفية قد يبدوان بندا ديكوريا فقط، لكنهما يرتبطان بالتكييف والإنارة والكهرباء ومخارج الستائر والسمارت هوم. في الفيلا يجب تحديد الأماكن التي تحتاج سقف ساقط فعلا، والأماكن التي يكفيها كورنيش أو بيت نور، والأماكن التي يفضل تركها بسيطة حتى لا يحدث ازدحام بصري أو زيادة تكلفة بلا قيمة. الحساب الجيد هنا يكون حسب المتر المسطح أو المتر الطولي أو النقطة، طبقا لطبيعة التصميم.")}
-			pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
-		/>
+				</EmoStrip>
 
-	</EmoStrip>
+			</EmoStrip>
 
-</EmoStrip>
+			<EmoStrip pBg={new ElemBg(Colors.WhiteOff)}>
 
-			<EmoStrip
+				<EmoStrip pBg={new ElemBg(Colors.WhiteOff)} pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}>
 
-				pBg={new ElemBg(Colors.WhiteOff)}
->
+					<Emograph
+						pTitle={Text.H3.OfText("8. الدهانات والديكورات النهائية")}
+						pText={Text.Body.OfText("الدهانات لا يتم تسعيرها على أنها لون فقط. هناك معجون، صنفرة، برايمر، طبقات نهائية، دهانات مقاومة للرطوبة في أماكن معينة، وربما دهانات ديكورية أو ميكروسيمنت أو ورق حائط أو بدائل خشب. جودة المحارة والجبس تؤثر مباشرة على تكلفة الدهان، لأن الأسطح السيئة تحتاج معالجة أكبر قبل الوصول إلى نتيجة نظيفة.")}
+						pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
+					/>
 
-	<EmoStrip
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}
-	>
+				</EmoStrip>
 
-		<Emograph
-			pTitle={Text.H3.OfText("8. الدهانات والديكورات النهائية")}
-			pText={Text.Body.OfText("الدهانات لا يتم تسعيرها على أنها لون فقط. هناك معجون، صنفرة، برايمر، طبقات نهائية، دهانات مقاومة للرطوبة في أماكن معينة، وربما دهانات ديكورية أو ميكروسيمنت أو ورق حائط أو بدائل خشب. جودة المحارة والجبس تؤثر مباشرة على تكلفة الدهان، لأن الأسطح السيئة تحتاج معالجة أكبر قبل الوصول إلى نتيجة نظيفة.")}
-			pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
-		/>
+			</EmoStrip>
 
-	</EmoStrip>
+			<EmoStrip pBg={new ElemBg(Colors.Gray5)}>
 
-</EmoStrip>
+				<EmoStrip pBg={new ElemBg(Colors.Gray5)} pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}>
 
-			<EmoStrip
+					<Emograph
+						pTitle={Text.H3.WithColor(Colors.BistageLite).OfText("9. الأبواب والشبابيك والألوميتال والحدادة")}
+						pText={Text.Body.WithColor("white").OfText("في الفيلات يظهر بند الفتحات بقوة، لأن عدد الشبابيك والأبواب الخارجية أكبر من الشقق، وقد توجد أبواب زجاجية جرارة على الحديقة أو التراس. الحساب يجب أن يفرق بين باب غرفة، باب حمام، باب مدخل، شبابيك ألوميتال، زجاج سيكوريت، درابزين، بوابة، وسور. كل نوع له طريقة قياس مختلفة، ولا يصح وضعهم كلهم داخل بند نجارة عام.")}
+						pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
+					/>
 
-				pBg={new ElemBg(Colors.Gray5)}
->
+				</EmoStrip>
 
-	<EmoStrip
-		pBg={new ElemBg(Colors.Gray5)}
-		pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}
-	>
+			</EmoStrip>
 
-		<Emograph
-			pTitle={Text.H3.WithColor(Colors.BistageLite).OfText("9. الأبواب والشبابيك والألوميتال والحدادة")}
-			pText={Text.Body.WithColor("white").OfText("في الفيلات يظهر بند الفتحات بقوة، لأن عدد الشبابيك والأبواب الخارجية أكبر من الشقق، وقد توجد أبواب زجاجية جرارة على الحديقة أو التراس. الحساب يجب أن يفرق بين باب غرفة، باب حمام، باب مدخل، شبابيك ألوميتال، زجاج سيكوريت، درابزين، بوابة، وسور. كل نوع له طريقة قياس مختلفة، ولا يصح وضعهم كلهم داخل بند نجارة عام.")}
-			pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
-		/>
+			<EmoStrip pBg={new ElemBg(Colors.SkyLite)}>
 
-	</EmoStrip>
+				<EmoStrip pBg={new ElemBg(Colors.SkyLite)} pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}>
 
-</EmoStrip>
+					<Emograph
+						pTitle={Text.H3.OfText("10. الأدوات الصحية والإكسسوارات والتشغيل")}
+						pText={Text.Body.OfText("بعد تأسيس السباكة وتركيب السيراميك تأتي مرحلة الأدوات الصحية: قواعد، أحواض، خلاطات، شاور، كبائن، إكسسوارات، مرايات، سخانات، وحدات حمام إن وجدت. الفرق هنا كبير جدا بين المحلي والمتوسط والمستورد، لذلك الأفضل تحديد شريحة سعرية لكل حمام. مثلا حمام الضيوف قد يكون أعلى في الشكل، وحمام العمالة أو الخدمة يكون عملي، والماستر يأخذ ميزانية أكبر.")}
+						pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
+					/>
 
-			<EmoStrip
+				</EmoStrip>
 
-				pBg={new ElemBg(Colors.SkyLite)}
->
-
-	<EmoStrip
-		pBg={new ElemBg(Colors.SkyLite)}
-		pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}
-	>
-
-		<Emograph
-			pTitle={Text.H3.OfText("10. الأدوات الصحية والإكسسوارات والتشغيل")}
-			pText={Text.Body.OfText("بعد تأسيس السباكة وتركيب السيراميك تأتي مرحلة الأدوات الصحية: قواعد، أحواض، خلاطات، شاور، كبائن، إكسسوارات، مرايات، سخانات، وحدات حمام إن وجدت. الفرق هنا كبير جدا بين المحلي والمتوسط والمستورد، لذلك الأفضل تحديد شريحة سعرية لكل حمام. مثلا حمام الضيوف قد يكون أعلى في الشكل، وحمام العمالة أو الخدمة يكون عملي، والماستر يأخذ ميزانية أكبر.")}
-			pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
-		/>
-
-	</EmoStrip>
-
-</EmoStrip>
+			</EmoStrip>
 
 		</VrStack>
 
 	</ESec>
 
-	<ESec
-		id="villa-special"
-		pBg={new ElemBg(Colors.SkyLite)}
-	>
+
+
+
+
+
+
+	<ESec id="villa-special" pBg={new ElemBg(Colors.SkyLite)}>
+
 		<SecTitle
+			SkyDark
 			pTitle="بنود خاصة بالفيلات غالبا لا تظهر في حساب الشقق"
 			pDesc="هذه البنود هي السبب الرئيسي في أن تكلفة تشطيب الفيلا لا يجب أن تقارن مباشرة بتكلفة تشطيب شقة بنفس مستوى الخامات."
-			style={`--StripBg:${Colors.SkyDark};`}
 		/>
 
 		<VrStack>
 
 			<CardsGr
-				pWidth={new RespString("1300px", "100%")}
 				pCardBg={new ElemBg("white")}
 				pGrTitle={Text.H3.Centered.DarkSky.OfText("أهم البنود الإضافية")}
 				pCardTitleFnt={Text.H4.DarkSky}
@@ -574,36 +427,33 @@ const cPhoneLink = "tel:01014490054";
 
 	</ESec>
 
-	<ESec
-		id="example"
-		pBg={new ElemBg(Colors.WhiteOff)}
-	>
+
+
+
+
+
+
+	<ESec id="example" pBg={new ElemBg(Colors.WhiteOff)}>
+
 		<SecTitle
+			Gray2
 			pTitle="مثال حسابي لتقريب تكلفة تشطيب فيلا"
 			pDesc="المثال التالي لا يمثل عرض سعر، لكنه يوضح كيف يتم التفكير الحسابي قبل المقايسة التفصيلية."
-			style={`--StripBg:${Colors.Gray5};`}
 		/>
 
 		<VrStack>
 
-			<EmoStrip
+			<EmoStrip pBg={new ElemBg(Colors.Gray5)}>
 
+				<EmoStrip pBg={new ElemBg(Colors.Gray5)} pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}>
 
-				pBg={new ElemBg(Colors.Gray5)}
->
+					<Emograph
+						pTitle={Text.H3.WithColor(Colors.BistageLite).OfText("بيانات المثال")}
+						pText={Text.Body.WithColor("white").OfText("نفترض فيلا مكونة من أرضي وأول ورووف خدمات، بإجمالي تشطيب داخلي 450 م²، وعدد 5 حمامات، ومطبخ رئيسي، وغرفة غسيل، وسطح قابل للاستخدام بمساحة 160 م²، وواجهات خارجية تقريبية 600 م²، وحديقة ومداخل 220 م². مستوى التشطيب المطلوب متوسط جيد، لا هو اقتصادي ضعيف ولا فاخر جدا.")}
+						pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
+					/>
 
-	<EmoStrip
-		pBg={new ElemBg(Colors.Gray5)}
-		pSize={new Size(new NumPer(1300, "100%"), new NumPer("auto", "auto"))}
-	>
-
-		<Emograph
-			pTitle={Text.H3.WithColor(Colors.BistageLite).OfText("بيانات المثال")}
-			pText={Text.Body.WithColor("white").OfText("نفترض فيلا مكونة من أرضي وأول ورووف خدمات، بإجمالي تشطيب داخلي 450 م²، وعدد 5 حمامات، ومطبخ رئيسي، وغرفة غسيل، وسطح قابل للاستخدام بمساحة 160 م²، وواجهات خارجية تقريبية 600 م²، وحديقة ومداخل 220 م². مستوى التشطيب المطلوب متوسط جيد، لا هو اقتصادي ضعيف ولا فاخر جدا.")}
-			pSize={new Size(new NumPer("1100px", "100%"), new NumPer("auto", "auto"))}
-		/>
-
-	</EmoStrip>
+				</EmoStrip>
 
 				<EmoList
 					pWidth={new RespString("1100px", "100%")}
@@ -642,7 +492,6 @@ const cPhoneLink = "tel:01014490054";
 			</IncLineSep>
 
 			<CardsGr
-				pWidth={new RespString("1300px", "100%")}
 				pCardBg={new ElemBg("white")}
 				pGrTitle={Text.H3.Centered.OrangeDark.OfText("كيف تقلل التكلفة بدون إفساد الجودة؟")}
 				pCardTitleFnt={Text.H4}
@@ -657,14 +506,18 @@ const cPhoneLink = "tel:01014490054";
 
 	</ESec>
 
-	<ESec
-		id="mistakes"
-		pBg={new ElemBg("white")}
-	>
+
+
+
+
+
+
+	<ESec id="mistakes" pBg={new ElemBg("white")}>
+
 		<SecTitle
+			OrangeLite
 			pTitle="أخطاء شائعة تجعل تكلفة تشطيب الفيلا تنفلت"
 			pDesc="المشكلة غالبا لا تكون في ارتفاع السعر فقط، بل في أن الحساب بدأ ناقصا من البداية."
-			style={`--StripBg:${Colors.OrangeLite};`}
 		/>
 
 		<VrStack>
@@ -707,20 +560,23 @@ const cPhoneLink = "tel:01014490054";
 
 	</ESec>
 
-	<ESec
-		id="handover"
-		pBg={new ElemBg(Colors.WhiteOff)}
-	>
+
+
+
+
+
+
+	<ESec id="handover" pBg={new ElemBg(Colors.WhiteOff)}>
+
 		<SecTitle
+			SkyLite
 			pTitle="من التشطيب إلى التسليم النهائي"
 			pDesc="التسليم النهائي لا يعني أن الفيلا شكلها جميل فقط. التسليم الصحيح يعني أن كل بند تم اختباره، وكل ملاحظة تم تسجيلها، وكل نظام يعمل، وكل خامة ظاهرة تم تنظيفها وحمايتها."
-			style={`--StripBg:${Colors.SkyLite};`}
 		/>
 
 		<VrStack>
 
 			<CardsGr
-				pWidth={new RespString("1300px", "100%")}
 				pCardBg={new ElemBg("white")}
 				pGrTitle={Text.H3.Centered.DarkSky.OfText("مراحل التسليم")}
 				pCardTitleFnt={Text.H4.DarkSky}
@@ -758,14 +614,17 @@ const cPhoneLink = "tel:01014490054";
 
 	</ESec>
 
-	<ESec
-		id="cta"
-		pBg={new ElemBg(Colors.BistageLite)}
-	>
+
+
+
+
+
+
+	<ESec id="cta" pBg={new ElemBg(Colors.BistageLite)}>
+
 		<SecTitle
 			pTitle="هل تريد حساب تكلفة تشطيب فيلتك؟"
 			pDesc="أرسل مساحة الفيلا، عدد الأدوار، عدد الحمامات، حالة الاستلام، ومستوى التشطيب المطلوب، وسيتم تحديد طريقة إعداد مقايسة مناسبة قبل بدء التنفيذ."
-			style="--StripBg:black;"
 		/>
 
 		<VrStack>
@@ -805,5 +664,11 @@ const cPhoneLink = "tel:01014490054";
 		</VrStack>
 
 	</ESec>
+
+
+
+
+
+
 
 </BLayout>
