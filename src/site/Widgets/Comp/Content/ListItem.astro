@@ -1,0 +1,48 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends DebugOutlineProps, HTMLAttributes<"div"> {
+
+	/**
+	 * Plain text rendered as one direct EmoList item.
+	 */
+	pText: string;
+}
+
+const {
+	pText,
+	id: pGivenID = GetWidgetId("ListItem"),
+	class: pGivenClass = "",
+	...RemAttr
+} = Astro.props as Props;
+---
+
+<div
+	class={`ListItem ${pGivenClass}`.trim()}
+	id={pGivenID}
+	{...RemAttr}
+>
+	{pText}
+</div>
+
+<style>
+	.ListItem {
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+		box-sizing: border-box;
+		color: var(--ItemColor, inherit);
+		font-family: var(--ItemFamily, inherit);
+		font-size: var(--ItemSizeL, 18px);
+		font-weight: var(--ItemWeight, 400);
+		line-height: 2;
+		text-align: var(--ItemAlign, right);
+		overflow-wrap: break-word;
+	}
+
+	@media (orientation: portrait) {
+		.ListItem {
+			font-size: var(--ItemSizeP, var(--ItemSizeL, 18px));
+		}
+	}
+</style>

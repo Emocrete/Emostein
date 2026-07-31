@@ -1,6 +1,6 @@
 ---
 import BLayout from "@/Layout.astro";
-import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { EmoCall, Emograph, EmoList, HzStack, ListItem, SecTitle, VrStack } from "@/Widgets/Comp";
 import { Price } from "@/Widgets/Prices";
 import { DivCol, DivStr, EmoSec, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
@@ -39,11 +39,16 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } fro
 
 	<Hero>
 
-		<VrStack pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","10%"))} pSize={new Size(new NumPer("50%","95%"))}>
+		<VrStack
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","10%"))}
+			pSize={new Size(new NumPer("50%","95%"))}
+			pHzAlign="Center"
+			pVrAlign="Center"
+		>
 
 			<Emograph
-				pTitle={Text.H1.White.OfText("شهادة صلاحية المبنى للإشغال")}
-				pText={Text.Body.White.OfText("خدمات إصدار شهادة صلاحية المبنى للإشغال لتوصيل المرافق واعتماد جاهزية المبنى للاستخدام")}
+				pTitle={Text.H1.White.Centered.OfText("شهادة صلاحية المبنى للإشغال")}
+				pText={Text.Body.White.Centered.OfText("خدمات إصدار شهادة صلاحية المبنى للإشغال لتوصيل المرافق واعتماد جاهزية المبنى للاستخدام")}
 			/>
 
 			<EmoCall OrangeBlack pText="تواصل معنا" />
@@ -105,7 +110,13 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } fro
 
 				<Emograph pTitle={Text.H3.Centered.OfText("في حال كانت رخصة البناء صادرة باسم مالك فردي").WithColor("#2f3340")} />
 
-				<EmoList pNumbered={false} pItems={["صورة رخصة البناء المعتمدة","صورة بطاقة المالك"]} />
+				<EmoList pNumbered={false}>
+
+					<ListItem pText="صورة رخصة البناء المعتمدة" />
+
+					<ListItem pText="صورة بطاقة المالك" />
+
+				</EmoList>
 
 			</DivCol>
 
@@ -196,15 +207,15 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } fro
 
 				<Emograph pTitle={Text.H4.OfText("مثال لحالة مشروع سكني أو تجاري أو إداري :").WithColor("#8b1e2d")} />
 
-				<EmoList
-					pWidth={new RespString("100%", "100%")}
-					pNumbered={false}
-					pItems={[
-						"منطوق الرخصة ( بدروم + أرضي + متكرر + غرف سطح + سور ) تحتسب جميعًا كمبنى واحد",
-						"منطوق الرخصة ( أرضي + متكرر + غرف سطح ) تحتسب جميعًا كمبنى واحد",
-						"منطوق الرخصة ( أرضي + متكرر + غرفة كهرباء ) تحتسب على أنها 2 مبنى"
-					]}
-				/>
+				<EmoList pWidth={new RespString("100%", "100%")} pNumbered={false}>
+
+					<ListItem pText="منطوق الرخصة ( بدروم + أرضي + متكرر + غرف سطح + سور ) تحتسب جميعًا كمبنى واحد" />
+
+					<ListItem pText="منطوق الرخصة ( أرضي + متكرر + غرف سطح ) تحتسب جميعًا كمبنى واحد" />
+
+					<ListItem pText="منطوق الرخصة ( أرضي + متكرر + غرفة كهرباء ) تحتسب على أنها 2 مبنى" />
+
+				</EmoList>
 
 				<Emograph
 					pTitle={Text.H4.OfText("مثال لحالة مباني صناعية :").WithColor("#8b1e2d")}
@@ -213,7 +224,7 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } fro
 
 			</VrStack>
 
-			<HzStack pBg={new ElemBg(Colors.WhiteOff)}>
+			<HzStack id="StkRatio" pBg={new ElemBg(Colors.WhiteOff)}>
 
 				<Emograph
 					pTitle={Text.Body.Bold.OfSize(80,30).OfText("% 0.45")}
@@ -234,6 +245,7 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } fro
 			<Emograph pTitle={Text.H4.OfText("حالات الإعفاء من دفع الدمغة الهندسية :").WithColor("#302c3c")} pText={Text.Body.OfText("")} />
 
 			<EmoList
+				id="5656"
 				pWidth={new RespString("100%", "100%")}
 				pNumbered={false}
 				pItems={[

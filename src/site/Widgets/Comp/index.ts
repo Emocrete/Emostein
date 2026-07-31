@@ -1,4 +1,35 @@
-export { default as Badge } from "./Badge.astro";
+import BadgeIndexExport from "./Badge.astro";
+
+/**
+ * @pYears as string | number
+ * @pYearsText as string
+ * @pYearsImg as TBadgeImg
+ * @pWorks as string | number
+ * @pWorksText as string
+ * @pWorksImg as TBadgeImg
+ * @pDuration as string | number
+ * @pDurationText as string
+ * @pDurationImg as TBadgeImg
+ * @pQualityText as string
+ * @pQualityImg as TBadgeImg
+ * @pScopeText as string
+ * @pScopeImg as TBadgeImg
+ * @pTextPos as TBadgeTextPos
+ * @pNumberView as TBadgeNumberView
+ * @pNumSize as Pixel
+ * @pTextSize as Pixel
+ * @pImgTextGap as Pixel
+ * @pNumTextGap as Pixel
+ * @pItemGap as Pixel
+ * @pImgSize as Size
+ * @pUseBg as boolean
+ * @pBgColor as string
+ * @pPad as Pixel
+ * @pWidth as Pixel
+ * @pColor as string
+ * @pMobMaxCols as number
+ */
+export const Badge = BadgeIndexExport;
 
 export type { ButtonColorPreset } from "./Btn/ButtonPresets";
 
@@ -34,76 +65,146 @@ export type { ButtonPresetProps } from "./Btn/ButtonPresets";
 
 export { CreateButtonPreset } from "./Btn/ButtonPresets";
 
-/**
- * EmoBtn
- *
- * Props:
- * data-own-size: Lets button keep its internal width inside Stack / Strip instead of being stretched.
- */
-export { default as EmoBtn } from "./Btn/EmoBtn.astro";
+import EmoBtnIndexExport from "./Btn/EmoBtn.astro";
 
 /**
- * EmoCall
- *
- * Props:
- * pText: النص الظاهر داخل زر الاتصال.
- * pIconImgs: صور الأيقونة في الحالات الثلاث: Normal / Hover / Click.
- * pIconPos: مكان الأيقونة داخل الزر.
- * pBgColors: ألوان خلفية الزر في الحالات الثلاث: Normal / Hover / Click.
- * pBgImgs: صور خلفية الزر في الحالات الثلاث: Normal / Hover / Click.
- * pTitleColors: ألوان عنوان الزر في الحالات الثلاث: Normal / Hover / Click.
- * data-own-size: Lets button keep its internal width inside Stack / Strip instead of being stretched.
+ * @pText as string (Default: "")
+ * @pIcon as string (Default: "")
+ * @pIconHover as string
+ * @pIconActive as string
+ * @pIconPos as "right" | "left" | "top" | "bottom" (Default: "right")
+ * @pWidth as string (Default: "fit-content")
+ * @pHeight as string (Default: "auto")
+ * @pRadius as string (Default: "5px")
+ * @pBgColor as string
+ * @pBgColorHover as string
+ * @pBgColorActive as string
+ * @pBgImg as string (Default: "")
+ * @pBgImgHover as string
+ * @pBgImgActive as string
+ * @pTextColor as string
+ * @pTextColorHover as string
+ * @pTextColorActive as string
+ * @pFontSize as string (Default: "16px")
+ * @data-own-size as boolean | string — Lets button keep its internal width inside Stack / Strip instead of being stretched. (Default: true)
  */
-export { default as EmoCall } from "./Btn/EmoCall.astro";
+export const EmoBtn = EmoBtnIndexExport;
 
-export { default as EmoCountdown } from "./EmoCountdown.astro";
+import EmoCallIndexExport from "./Btn/EmoCall.astro";
 
 /**
- * EmoDet
- *
- * Props:
- * pText: نص زر التفاصيل.
- * pHref: رابط التفاصيل. يمكن استخدام href مباشرة كذلك.
- * pBlank: فتح الرابط في تبويب جديد مع rel آمن.
- * Sky: Preset سماوي قديم للتوافق.
- * Bistage: Preset بيستاج قديم للتوافق.
- * Gold: Preset ذهبي قديم للتوافق.
- * Green: Preset أخضر داكن قديم للتوافق.
- * Ghost: Preset شفاف قديم للتوافق.
- * Light: Preset فاتح قديم للتوافق.
- * pIconImgs: صور الأيقونة في الحالات الثلاث: Normal / Hover / Click.
- * pIconPos: مكان الأيقونة داخل الزر.
- * pBgColors: ألوان خلفية الزر في الحالات الثلاث: Normal / Hover / Click.
- * pBgImgs: صور خلفية الزر في الحالات الثلاث: Normal / Hover / Click.
- * pTitleColors: ألوان عنوان الزر في الحالات الثلاث: Normal / Hover / Click.
- * data-own-size: Lets button keep its internal width inside Stack / Strip instead of being stretched.
+ * @pText as string — النص الظاهر داخل زر الاتصال.
+ * @pIconImgs as HoverImg — صور الأيقونة في الحالات الثلاث: Normal / Hover / Click.
+ * @pIconPos as "right" | "left" | "top" | "bottom" — مكان الأيقونة داخل الزر. (Default: "right")
+ * @pWidth as string (Default: "250px")
+ * @pHeight as string (Default: "50px")
+ * @pRadius as string (Default: "5px")
+ * @pBgColors as HoverColors — ألوان خلفية الزر في الحالات الثلاث: Normal / Hover / Click.
+ * @pBgImgs as HoverImg — صور خلفية الزر في الحالات الثلاث: Normal / Hover / Click.
+ * @pTitleColors as HoverColors — ألوان عنوان الزر في الحالات الثلاث: Normal / Hover / Click.
+ * @pFontSize as string (Default: "18px")
+ * @data-own-size as boolean | string — Lets button keep its internal width inside Stack / Strip instead of being stretched. (Default: true)
  */
-export { default as EmoDet } from "./Btn/EmoDet.astro";
+export const EmoCall = EmoCallIndexExport;
 
-export { default as Emograph } from "./Content/Emograph.astro";
-
-export { default as EmoList } from "./Content/EmoList.astro";
+import EmoCountdownIndexExport from "./EmoCountdown.astro";
 
 /**
- * EmoWhats
- *
- * Props:
- * pText: النص الظاهر داخل زر الواتساب.
- * pPhone: رقم الواتساب بصيغة محلية أو دولية.
- * pMessage: رسالة جاهزة اختيارية تفتح داخل محادثة واتساب.
- * pQrImg: صورة QR مخصصة عند الحاجة. الافتراضي مدمج للرقم الأساسي.
- * Green: Preset واتساب أخضر.
- * GreenDark: Preset واتساب أخضر داكن.
- * Sky: Preset سماوي قديم للتوافق.
- * Bistage: Preset بيستاج قديم للتوافق.
- * pIconImgs: صور الأيقونة في الحالات الثلاث: Normal / Hover / Click.
- * pIconPos: مكان الأيقونة داخل الزر.
- * pBgColors: ألوان خلفية الزر في الحالات الثلاث: Normal / Hover / Click.
- * pBgImgs: صور خلفية الزر في الحالات الثلاث: Normal / Hover / Click.
- * pTitleColors: ألوان عنوان الزر في الحالات الثلاث: Normal / Hover / Click.
- * data-own-size: Lets button keep its internal width inside Stack / Strip instead of being stretched.
+ * @pDeadline as string | Date — Final deadline used by the client countdown.
+ * Use a full ISO value whenever possible, e.g. 2026-11-05T23:59:59+02:00.
+ * @pSize as Size — Responsive width/height box for the widget.
+ * * DefVal = new Size(new NumPer("1120px", "94%")) (Default: new Size(new NumPer("1120px", "94%")))
+ * @pAccent as string — Accent color used for the first card, separators, and live glow.
+ * * DefVal = Colors.Yellow (Default: Colors.Yellow)
+ * @pTextColor as string — Main text color.
+ * * DefVal = Colors.WhiteOff (Default: Colors.WhiteOff)
+ * @pExpiredText as string — Optional text shown only after the countdown reaches zero.
+ * * DefVal = "" (Default: "")
  */
-export { default as EmoWhats } from "./Btn/EmoWhats.astro";
+export const EmoCountdown = EmoCountdownIndexExport;
+
+import EmoDetIndexExport from "./Btn/EmoDet.astro";
+
+/**
+ * @pText as string — نص زر التفاصيل.
+ * @pHref as string — رابط التفاصيل. يمكن استخدام href مباشرة كذلك.
+ * @pBlank as boolean — فتح الرابط في تبويب جديد مع rel آمن. (Default: false)
+ * @Sky as boolean — Preset سماوي قديم للتوافق. (Default: false)
+ * @Bistage as boolean — Preset بيستاج قديم للتوافق. (Default: false)
+ * @Gold as boolean — Preset ذهبي قديم للتوافق. (Default: false)
+ * @Green as boolean — Preset أخضر داكن قديم للتوافق. (Default: false)
+ * @Ghost as boolean — Preset شفاف قديم للتوافق. (Default: false)
+ * @Light as boolean — Preset فاتح قديم للتوافق. (Default: false)
+ * @pIconImgs as HoverImg — صور الأيقونة في الحالات الثلاث: Normal / Hover / Click.
+ * @pIconPos as "right" | "left" | "top" | "bottom" — مكان الأيقونة داخل الزر. (Default: "right")
+ * @pWidth as string (Default: "170px")
+ * @pHeight as string (Default: "48px")
+ * @pRadius as string (Default: "999px")
+ * @pBgColors as HoverColors — ألوان خلفية الزر في الحالات الثلاث: Normal / Hover / Click.
+ * @pBgImgs as HoverImg — صور خلفية الزر في الحالات الثلاث: Normal / Hover / Click.
+ * @pTitleColors as HoverColors — ألوان عنوان الزر في الحالات الثلاث: Normal / Hover / Click.
+ * @pFontSize as string (Default: "18px")
+ * @data-own-size as boolean | string — Lets button keep its internal width inside Stack / Strip instead of being stretched. (Default: true)
+ */
+export const EmoDet = EmoDetIndexExport;
+
+import EmographIndexExport from "./Content/Emograph.astro";
+
+/**
+ * @pTitle as Text — Main title text displayed at the top of the Emograph widget.
+ * * DefVal = Text.Body.WithText("العنوان") only when both pTitle and pText are not provided.
+ * @pText as Text — Body text displayed below the title.
+ * * DefVal = Text.Body.WithText("الوصف") only when both pTitle and pText are not provided.
+ * * Requires: Default slot content is rendered only when pText exists.
+ * @pSize as Size — Responsive width box used to control the widget width in landscape and portrait orientations.
+ * * DefVal = new Box() (Default: new Size())
+ * @data-own-size as boolean — Lets the widget keep its own size instead of being stretched by parent Stack row sizing.
+ * * DefVal = false
+ * * Requires: Effective only when this widget is a direct child of Stack with pDir="Row".
+ */
+export const Emograph = EmographIndexExport;
+
+export { default as EmoLine } from "./Content/EmoLine.astro";
+
+import EmoListIndexExport from "./Content/EmoList.astro";
+
+/**
+ * @pWidth as RespString (Default: new RespString("50%", "100%"))
+ * @pTitle as Text
+ * @pDesc as Text
+ * @pHeadBg as ElemBg (Default: new ElemBg("transparent"))
+ * @pItems as TItem[] — Legacy item source kept only for pages that have not yet moved to the default slot.
+ * New usage should place ListItem, Emograph, or TotalGraph as direct slot children. (Default: [])
+ * @pItemFnt as Text — Default text format used only by direct ListItem children and legacy pItems content. (Default: Text.Body)
+ * @pItemsBg as ElemBg (Default: new ElemBg("transparent"))
+ * @pNumbered as boolean (Default: true)
+ * @pBulletIcon as string (Default: "")
+ */
+export const EmoList = EmoListIndexExport;
+
+import EmoWhatsIndexExport from "./Btn/EmoWhats.astro";
+
+/**
+ * @pText as string — النص الظاهر داخل زر الواتساب.
+ * @pPhone as string — رقم الواتساب بصيغة محلية أو دولية. (Default: cDefaultPhoneText)
+ * @pMessage as string — رسالة جاهزة اختيارية تفتح داخل محادثة واتساب. (Default: "")
+ * @pQrImg as string — صورة QR مخصصة عند الحاجة. الافتراضي مدمج للرقم الأساسي.
+ * @Green as boolean — Preset واتساب أخضر. (Default: false)
+ * @GreenDark as boolean — Preset واتساب أخضر داكن. (Default: false)
+ * @Sky as boolean — Preset سماوي قديم للتوافق. (Default: false)
+ * @Bistage as boolean — Preset بيستاج قديم للتوافق. (Default: false)
+ * @pIconImgs as HoverImg — صور الأيقونة في الحالات الثلاث: Normal / Hover / Click.
+ * @pIconPos as "right" | "left" | "top" | "bottom" — مكان الأيقونة داخل الزر. (Default: "right")
+ * @pWidth as string (Default: "250px")
+ * @pHeight as string (Default: "50px")
+ * @pRadius as string (Default: "5px")
+ * @pBgColors as HoverColors — ألوان خلفية الزر في الحالات الثلاث: Normal / Hover / Click.
+ * @pBgImgs as HoverImg — صور خلفية الزر في الحالات الثلاث: Normal / Hover / Click.
+ * @pTitleColors as HoverColors — ألوان عنوان الزر في الحالات الثلاث: Normal / Hover / Click.
+ * @pFontSize as string (Default: "18px")
+ * @data-own-size as boolean | string — Lets button keep its internal width inside Stack / Strip instead of being stretched. (Default: true)
+ */
+export const EmoWhats = EmoWhatsIndexExport;
 
 export { GetBoolAttr } from "./Btn/ButtonPresets";
 
@@ -111,18 +212,143 @@ export { GetButtonPreset } from "./Btn/ButtonPresets";
 
 export { GetButtonTitleColors } from "./Btn/ButtonPresets";
 
-export { default as Grid } from "./Layout/Grid.astro";
+import GridIndexExport from "./Layout/Grid.astro";
 
-export { default as HzStack } from "./Layout/HzStack.astro";
+/**
+ * @pMax as number | string
+ * @pMaxP as number | string
+ * @pSize as Size
+ * @pGap as Pixel
+ * @pPad as Pixel
+ * @pMargin as Pixel
+ * @pBg as ElemBg
+ * @pRadius as Pixel
+ * @pHzAlign as HzAlignValue
+ * @pVrAlign as VrAlignValue
+ * @Centered as boolean | string
+ * @pCentered as boolean | string
+ */
+export const Grid = GridIndexExport;
 
-export { default as IndexBtn } from "./Btn/IndexBtn.astro";
+import HzStackIndexExport from "./Layout/HzStack.astro";
 
-export { default as SecTitle } from "./SecTitle.astro";
+/**
+ * @pSize as Size
+ * @pGap as Pixel
+ * @pPad as Pixel
+ * @pMargin as Pixel
+ * @pBg as ElemBg
+ * @pRadius as Pixel
+ * @pHzAlign as HzAlignValue
+ * @pVrAlign as VrAlignValue
+ * @pForceHz as boolean
+ */
+export const HzStack = HzStackIndexExport;
 
-export { default as SiteSearch404 } from "./SiteSearch404.astro";
+import IndexBtnIndexExport from "./Btn/IndexBtn.astro";
 
-export { default as Stack } from "./Layout/Stack.astro";
+/**
+ * @pText as string (Default: "اسم العنصر")
+ * @pIcon as string (Default: "")
+ * @pIconHover as string
+ * @pIconActive as string
+ * @pIconPos as "right" | "left" | "top" | "bottom" (Default: "left")
+ * @pWidth as string (Default: "360px")
+ * @pHeight as string (Default: "40px")
+ * @pRadius as string (Default: "5px")
+ * @pBgColor as string (Default: "#ffffff")
+ * @pBgColorHover as string
+ * @pBgColorActive as string
+ * @pBgImg as string (Default: "/Media/IndexBtn.webp")
+ * @pBgImgHover as string
+ * @pBgImgActive as string
+ * @pTextColor as string (Default: "white")
+ * @pTextColorHover as string (Default: Colors.OrangeDark)
+ * @pTextColorActive as string
+ * @pFontSize as string (Default: "16px")
+ */
+export const IndexBtn = IndexBtnIndexExport;
+
+import ListItemIndexExport from "./Content/ListItem.astro";
+
+/**
+ * @pText as string — Plain text rendered as one direct EmoList item.
+ */
+export const ListItem = ListItemIndexExport;
+
+import SecTitleIndexExport from "./SecTitle.astro";
+
+/**
+ * @pTitle as string
+ * @pDesc as string
+ */
+export const SecTitle = SecTitleIndexExport;
+
+import SiteSearch404IndexExport from "./SiteSearch404.astro";
+
+/**
+ * @pMaxResults as number (Default: 12)
+ */
+export const SiteSearch404 = SiteSearch404IndexExport;
+
+import StackIndexExport from "./Layout/Stack.astro";
+
+/**
+ * @pDir as StackDir
+ * @pWidth as StackCssValue
+ * @pHeight as StackCssValue
+ * @pHzAlign as HzAlignValue
+ * @pVrAlign as VrAlignValue
+ * @pGap as StackCssValue
+ * @pPad as StackCssValue
+ * @pFlipNarrow as boolean
+ * @pBgColor as ElemBg
+ * @pBgOpacity as Percent
+ * @pBlur as StackCssValue
+ * @pMainSizeMode as StackItemSizeMode — اتجاه Row: المقاس الأساسي = العرض.
+ * اتجاه Col: المقاس الأساسي = الارتفاع.
+ * Own   : كل عنصر بحجمه الطبيعي.
+ * Equal : Row يوزع العرض بالتساوي، و Col يساوي الارتفاع على أكبر عنصر.
+ * Fixed : كل العناصر تلتزم بقيمة pItemMainSize.
+ * @pCrossSizeMode as StackItemSizeMode — اتجاه Row: المقاس الثانوي = الارتفاع.
+ * اتجاه Col: المقاس الثانوي = العرض.
+ * Own   : كل عنصر بحجمه الطبيعي.
+ * Equal : كل العناصر على أكبر مقاس ثانوي داخل المجموعة.
+ * Fixed : كل العناصر تلتزم بقيمة pItemCrossSize.
+ * @pItemMainSize as StackCssValue
+ * @pItemCrossSize as StackCssValue
+ */
+export const Stack = StackIndexExport;
+
+import TotalGraphIndexExport from "./Content/TotalGraph.astro";
+
+/**
+ * @pSize as Size — Responsive width and height of the composed paragraph container.
+ * * DefVal = new Size() (Default: new Size())
+ * @data-own-size as boolean — Lets the widget keep its own size instead of being stretched by parent Stack row sizing.
+ * * DefVal = false
+ * * Requires: Effective only when this widget is a direct child of Stack with pDir="Row".
+ */
+export const TotalGraph = TotalGraphIndexExport;
 
 export { default as Tree } from "./Tree.astro";
 
-export { default as VrStack } from "./Layout/VrStack.astro";
+import VrStackIndexExport from "./Layout/VrStack.astro";
+
+/**
+ * @pSize as Size
+ * @pWidth as Pixel
+ * @pHeight as Pixel
+ * @pGap as Pixel
+ * @pPad as Pixel
+ * @pMargin as Pixel
+ * @pBg as ElemBg
+ * @pBgColor as ElemBg
+ * @pBgOpacity as Percent
+ * @pBlur as Pixel
+ * @pRadius as Pixel
+ * @pHzAlign as HzAlignValue
+ * @pVrAlign as VrAlignValue
+ * @pFitContent as boolean
+ */
+export const VrStack = VrStackIndexExport;

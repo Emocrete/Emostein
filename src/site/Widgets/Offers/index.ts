@@ -1,3 +1,13 @@
-export { default as PhDwgMonthlyOffer } from "./PhDwgMonthlyOffer.astro";
+import PhDwgMonthlyOfferIndexExport from "./PhDwgMonthlyOffer.astro";
 
-export { default as RetailDwgMonthlyOffer } from "./RetailDwgMonthlyOffer.astro";
+/**
+ * @pForceShow as boolean (Default: false)
+ */
+export const PhDwgMonthlyOffer = PhDwgMonthlyOfferIndexExport;
+
+import RetailDwgMonthlyOfferIndexExport from "./RetailDwgMonthlyOffer.astro";
+
+/**
+ * @pForceShow as boolean (Default: false)
+ */
+export const RetailDwgMonthlyOffer = RetailDwgMonthlyOfferIndexExport;

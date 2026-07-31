@@ -1319,6 +1319,22 @@ function ApplyFrameBaseSize(pWrapper, pFrame, pWidth, pHeight) {
 					});
 				};
 
+				window.__emoPreviewCancelFrameZoomCorrections = function (pName) {
+					const cName = pName === "port" ? "port" : "land";
+					const cState = cFrameStates[cName];
+
+					if (!cState) {
+						return;
+					}
+
+					cState.AdjustmentToken += 1;
+					cState.AdjustingUntil = 0;
+				};
+
+				window.__emoPreviewRememberFrameScroll = function (pName) {
+					RememberFrameScroll(pName === "port" ? "port" : "land", true);
+				};
+
 				function RegisterFrameLoad(pName) {
 					const cState = cFrameStates[pName];
 					const cFrame = document.getElementById(cState.FrameId);

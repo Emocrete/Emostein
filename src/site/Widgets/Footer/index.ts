@@ -1,7 +1,43 @@
-export { default as EmoFooterFollowBar } from "./EmoFooterFollowBar.astro";
+import EmoFooterFollowBarIndexExport from "./EmoFooterFollowBar.astro";
 
-export { default as EmoFooterJobsButton } from "./EmoFooterJobsButton.astro";
+/**
+ * @pTitle as string (Default: "تابع الجديد")
+ * @pFacebookFollow as string (Default: "#")
+ * @pInstagramFollow as string (Default: "https://www.instagram.com/emocrete")
+ * @pLinkedInFollow as string (Default: "https://www.linkedin.com/in/ayman-ashoor-998433128")
+ * @pYouTubeFollow as string (Default: "https://www.youtube.com/@aymanashoor7410")
+ * @pTikTokFollow as string (Default: "#")
+ */
+export const EmoFooterFollowBar = EmoFooterFollowBarIndexExport;
 
-export { default as EmoFooterPanel } from "./EmoFooterPanel.astro";
+import EmoFooterJobsButtonIndexExport from "./EmoFooterJobsButton.astro";
 
-export { default as EmoFooterShareBar } from "./EmoFooterShareBar.astro";
+/**
+ * @pText as string (Default: "انضم للعمل معنا")
+ * @pHref as string (Default: "/jobs")
+ */
+export const EmoFooterJobsButton = EmoFooterJobsButtonIndexExport;
+
+import EmoFooterPanelIndexExport from "./EmoFooterPanel.astro";
+
+/**
+ * @pShareTitle as string (Default: "تجدنا على")
+ * @pFollowTitle as string (Default: "تابع الجديد")
+ * @pShareText as string (Default: "")
+ * @pFacebookFollow as string (Default: "#")
+ * @pInstagramFollow as string (Default: "https://www.instagram.com/emocrete")
+ * @pLinkedInFollow as string (Default: "https://www.linkedin.com/in/ayman-ashoor-998433128")
+ * @pYouTubeFollow as string (Default: "https://www.youtube.com/@aymanashoor7410")
+ * @pTikTokFollow as string (Default: "#")
+ * @pPartnerText as string (Default: "انضم للعمل معنا")
+ * @pPartnerHref as string (Default: "/jobs")
+ */
+export const EmoFooterPanel = EmoFooterPanelIndexExport;
+
+import EmoFooterShareBarIndexExport from "./EmoFooterShareBar.astro";
+
+/**
+ * @pTitle as string (Default: "تجدنا على")
+ * @pShareText as string (Default: "")
+ */
+export const EmoFooterShareBar = EmoFooterShareBarIndexExport;

@@ -1,0 +1,13 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends DebugOutlineProps, HTMLAttributes<"br"> {}
+
+const {
+	id: pGivenID = GetWidgetId("EmoLine"),
+	class: pGivenClass = "",
+	...RemAttr
+} = Astro.props as Props;
+---
+
+<br class={`EmoLine ${pGivenClass}`.trim()} id={pGivenID} {...RemAttr} />

@@ -1,0 +1,112 @@
+---
+import { Place, type PlaceProps, Size } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
+
+	/**
+	 * Responsive width and height of the composed paragraph container.
+	 ** DefVal = new Size()
+	 */
+	pSize?: Size;
+
+	/**
+	 * Lets the widget keep its own size instead of being stretched by parent Stack row sizing.
+	 ** DefVal = false
+	 ** Requires: Effective only when this widget is a direct child of Stack with pDir="Row".
+	 */
+	"data-own-size"?: boolean;
+}
+
+const {
+	pSize = new Size(),
+
+	pLoc,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+
+	id: pGivenID = GetWidgetId("TotalGraph"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	role: pRole = "paragraph",
+	...RemAttr
+} = Astro.props as Props;
+
+const cCssVars = `
+--WidthL:${pSize.WidthL};
+--WidthP:${pSize.WidthP};
+--HeightL:${pSize.HeightL};
+--HeightP:${pSize.HeightP};
+${pGivenStyle || ""}
+`;
+
+const cPlace = new Place(Astro.props as PlaceProps, cCssVars);
+---
+
+<div
+	class={`TotalGraph ${cPlace.Class} ${pGivenClass}`.trim()}
+	style={cPlace.Style}
+	id={pGivenID}
+	role={pRole}
+	{...RemAttr}
+>
+	<slot />
+</div>
+
+<style>
+	.TotalGraph {
+		width: var(--WidthL, auto);
+		height: var(--HeightL, auto);
+		max-width: 100%;
+		min-width: 0;
+		box-sizing: border-box;
+		display: block;
+		overflow-wrap: break-word;
+	}
+
+	.TotalGraph > :global(.Emograph) {
+		display: inline;
+		width: auto;
+		height: auto;
+		max-width: none;
+		vertical-align: baseline;
+	}
+
+	.TotalGraph > :global(.Emograph) > :global(*) {
+		display: inline;
+		width: auto;
+		max-width: none;
+		vertical-align: baseline;
+	}
+
+	@media (orientation: portrait) {
+		.TotalGraph {
+			width: var(--WidthP, var(--WidthL, auto));
+			height: var(--HeightP, var(--HeightL, auto));
+		}
+	}
+</style>
