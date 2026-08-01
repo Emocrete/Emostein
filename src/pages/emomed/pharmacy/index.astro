@@ -1,7 +1,7 @@
 ---
 import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
-import { EmoCall, Emograph, EmoList, EmoWhats, Grid, HzStack, IndexBtn, SecTitle, VrStack } from "@/Widgets/Comp";
+import { EmoCall, Emograph, EmoList, EmoWhats, Grid, HzStack, IndexBtn, ListItem, SecTitle, VrStack } from "@/Widgets/Comp";
 import { RespImg, YTPlayer } from "@/Widgets/Media";
 import { PharmacyWorkCard } from "@/Widgets/Pharmacy";
 import { DivCol, DivStr, EmoFaq, EmoSec, FaqItem, Hero, IndexSec, RelServiceItem, RelServices } from "@/Widgets/Sections";
@@ -9,21 +9,6 @@ import { IncLineSep } from "@/Widgets/Separators";
 import { BadgeFrame, CircleGlow, FloatingIcon, FloatingPanel, GlassCard, LinePath, Splash, SvgDots, TiltCard } from "@/Widgets/Shapes";
 import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -46,14 +31,14 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 		<GlassCard
 			pMove="SlideInRight"
 			pMoveLoc={new Loc(new NumPer("45%", "2.5%"), new NumPer("50%", "45%"))}
-			pMoveBox={new Size(new NumPer("50%", "95%"), new NumPer("auto", "auto"))}
+			pMoveBox={new Size(new NumPer("40%", "95%"), new NumPer("auto", "auto"))}
 			pMoveDuration={1000}
 			pMoveViewTarget="self"
 			pZ={4}
 			pBg="rgba(17,24,32,.74)"
 			pBorder="rgba(255,255,255,.22)"
-			pRadius={20}
-			pBlur={5}
+			pRadius={15}
+			pBlur={2}
 		>
 
 			<VrStack
@@ -65,14 +50,14 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 				<Emograph
 					pTitle={Text.H1.Centered.White.OfText("ترخيص صيدلية")}
-					pText={Text.Body.Centered.White.OfText("دليل عملي وخدمة هندسية لترخيص الصيدليات: فحص صلاحية المكان، قياس المسافة، حساب المساحة والارتفاع، تجهيز الرسم الهندسي، ترتيب المستندات، ومتابعة إجراءات الترخيص في القاهرة والجيزة.")}
+					pText={Text.Body.Centered.White.OfText("خدمات استخراج ترخيص الصيدليات وتجهيز وتقديم كافة الأوراق المطلوبة لترخيص صيدلية بهيئة الدواء المصرية ، ومتابعة الحي والجهات ذات العلاقة")}
 				/>
 
 				<HzStack pGap={new Pixel(20, 10)} pPad={new Pixel(20,10)}>
 
 					<EmoCall BlackSky pText="للطلب والاستفسار" />
 
-					<EmoWhats BistageBlack pText="أرسل رسالة" />
+					<EmoWhats BistageSky pText="أرسل رسالة" />
 
 				</HzStack>
 
@@ -88,12 +73,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 
 
-	<IndexSec
-		pMedia={new EmoMediaData("Vid", "/Media/", "IndexBgVid.mp4")}
-		pTitleClr="white"
-		pBlurL="on"
-		pBlurP="on"
-	>
+	<IndexSec pTitleClr="white">
 
 		<VrStack>
 
@@ -245,11 +225,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 			pZ={1}
 		/>
 
-		<SecTitle
-			BistageLite
-			pTitle="تكلفة خدمات ترخيص الصيدليات"
-			pDesc="اختر باقة الخدمات المناسبة لحالتك"
-		/>
+		<SecTitle BistageLite pTitle="تكلفة خدمات ترخيص الصيدليات" pDesc="اختر باقة الخدمات المناسبة لحالتك" />
 
 		<Grid
 			id="srvPackages"
@@ -332,11 +308,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 			pHzAlign={new Align("Center", "Center", "Center", "Center")}
 		>
 
-			<VrStack
-				pPad={new Pixel(30,10)}
-				pGap={new Pixel(30,10)}
-				pHzAlign={new Align("Center","Center")}
-			>
+			<VrStack pPad={new Pixel(30,10)} pGap={new Pixel(30,10)} pHzAlign={new Align("Center","Center")}>
 
 				<Emograph
 					pTitle={Text.H3.Centered.Bistage.OfText("لا يشمل")}
@@ -365,11 +337,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 		pVrAlign={new Align("Center", "Top", "Center", "Top")}
 	>
 
-		<SecTitle
-			SkyLite
-			pTitle="أعمال ترخيص الصيدليات الجارية"
-			pDesc="متابعة مختصرة لحالة ملفات الصيدليات المفتوحة ونسبة إنجاز كل ملف."
-		/>
+		<SecTitle SkyLite pTitle="أعمال ترخيص الصيدليات الجارية" pDesc="متابعة مختصرة لحالة ملفات الصيدليات المفتوحة ونسبة إنجاز كل ملف." />
 
 		<Grid
 			pMax={3}
@@ -469,23 +437,11 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 			pDesc="أكبر مخاطرة في ترخيص الصيدليات أن يتم اختيار محل غير مطابق ثم تظهر المشكلة عند المعاينة الأولى. لذلك يتم التعامل مع الترخيص كقرار فني وإجرائي يبدأ بفحص الموقع، وليس مجرد تجميع مستندات وإرسال طلب."
 		/>
 
-		<DivStr
-			pContentSize={new Size(new NumPer("92%", "96%"))}
-			pGap={new Pixel(28, 16)}
-			pPad={new Pixel(28, 18)}
-		>
+		<DivStr pContentSize={new Size(new NumPer("92%", "96%"))} pGap={new Pixel(28, 16)} pPad={new Pixel(28, 18)}>
 
-			<DivCol
-				pBgColor={new ElemBg(Colors.Gray5)}
-				pBgOpacity={new Percent(100)}
-				pBlur={new Pixel(0)}
-			>
+			<DivCol pBgColor={new ElemBg(Colors.Gray5)} pBgOpacity={new Percent(100)} pBlur={new Pixel(0)}>
 
-				<FloatingPanel
-					pBg="rgba(17,24,32,.96)"
-					pBorder="rgba(255,255,255,.14)"
-					pAccent={Colors.SkyDark}
-				>
+				<FloatingPanel pBg="rgba(17,24,32,.96)" pBorder="rgba(255,255,255,.14)" pAccent={Colors.SkyDark}>
 
 					<Emograph
 						pTitle={Text.H3.Bistage.OfText("ما الذي نقدمه في ترخيص الصيدليات؟")}
@@ -566,7 +522,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 			pWidth={new RespString("1500px", "94%")}
 			pCardBg={new ElemBg(Colors.WhiteOff)}
 			pGrTitle={Text.H3.Centered.Bistage.OfText("مراحل فحص شروط ترخيص الصيدليات")}
-			pCardTitleFnt={Text.H4.Centered.Sky}
+			pCardTitleFnt={Text.H4.Centered.DarkSky}
 			pCardBodyFnt={Text.Body.Centered}
 			pStackDir="Row"
 			pSpacing={24}
@@ -589,7 +545,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 					pBadge="طالب الترخيص"
 					pBg="rgba(17,17,17,.92)"
 					pBadgeBg={Colors.BistageLite}
-					pColor={Colors.WhiteOff}
+					pColor={Colors.BlackOff}
 				>
 
 					<EmoList
@@ -624,7 +580,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 				/>
 
 				<Emograph
-					pTitle={Text.H3.Centered.Sky.OfText("شروط خاصة بالصيدلية")}
+					pTitle={Text.H3.Centered.DarkSky.OfText("شروط خاصة بالصيدلية")}
 					pText={Text.Body.Centered.OfText("شروط المعاينة الأولى واجبة التحقق ولا بدائل لها غالبًا؛ فإذا لم تتحقق المسافة أو المساحة أو الارتفاع مع عدم وجود إمكانية علاج، قد يتم رفض الطلب مباشرة بعد المعاينة الأولى.")}
 				/>
 
@@ -643,7 +599,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 				<EmoList
 					pWidth={new RespString("100%", "100%")}
-					pTitle={Text.H3.Sky.OfText("شروط المعاينة الأولى")}
+					pTitle={Text.H3.DarkSky.OfText("شروط المعاينة الأولى")}
 					pDesc={Text.Body.OfText("بنود يجب التأكد منها قبل التقديم لأنها غالبًا لا تعالج بسهولة بعد اختيار المكان.")}
 					pItemFnt={Text.Body}
 					pNumbered={false}
@@ -689,6 +645,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 
 	<IncLineSep
+		id="000000"
 		pTopColor={Colors.Gray5}
 		pBottomColor={Colors.WhiteOff}
 		pHeight={620}
@@ -716,23 +673,15 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 			pDesc="ينقسم ملف الترخيص إلى مستندات أساسية يتم تقديمها مع طلب الترخيص، ومستندات استكمال بعد المعاينة الثانية وقبل إصدار الترخيص النهائي."
 		/>
 
-		<DivStr
-			pContentSize={new Size(new NumPer("92%", "96%"))}
-			pGap={new Pixel(28, 18)}
-			pPad={new Pixel(36, 18)}
-		>
+		<DivStr pContentSize={new Size(new NumPer("92%", "96%"))} pGap={new Pixel(28, 18)} pPad={new Pixel(36, 18)}>
 
 			<DivCol pBgColor={new ElemBg(Colors.WhiteOff)}>
 
-				<TiltCard
-					pBg={Colors.WhiteOff}
-					pColor={Colors.BlackOff}
-					pTilt={-1}
-				>
+				<TiltCard pBg={Colors.WhiteOff} pColor={Colors.BlackOff} pTilt={-1}>
 
 					<EmoList
 						pWidth={new RespString("100%", "100%")}
-						pTitle={Text.H3.Sky.OfText("مستندات التقديم الأساسية")}
+						pTitle={Text.H3.DarkSky.OfText("مستندات التقديم الأساسية")}
 						pDesc={Text.Body.OfText("المستندات التي يبدأ بها ملف طلب الترخيص، مع مراجعة النسخ والأختام والبيانات قبل الإرسال.")}
 						pItemFnt={Text.Body}
 						pNumbered={true}
@@ -741,12 +690,30 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 							"صورة بطاقة الرقم القومي أو صورة جواز سفر، وكلاهما ساري.",
 							"صورة ترخيص مزاولة المهنة.",
 							"صورة كارنيه النقابة العامة للصيادلة.",
-							"صحيفة حالة جنائية حديثة ونظيفة وموجهة إلى فرع هيئة الدواء المصرية التابع له الصيدلية.",
-							"مستخرج شهادة ميلاد كمبيوتر.",
-							"رسم هندسي للصيدلية من 3 نسخ أصلية معتمدة بختم مهندس نقابي.",
-							"إيصال حوالة بريدية لحساب هيئة الدواء المصرية بقيمة 5 جنيهات مصرية، ويتم كتابة رقم إيصال البريد في طلب الترخيص."
+							"",
+							"",
+							"",
+							""
 						]}
-					/>
+					>
+
+						<ListItem pText="طلب ترخيص صيدلية مستوفي البيانات الخاصة بالصيدلي والصيدلية." />
+
+						<ListItem pText="صورة بطاقة الرقم القومي أو صورة جواز سفر، وكلاهما ساري." />
+
+						<ListItem pText="صورة ترخيص مزاولة المهنة." />
+
+						<ListItem pText="صورة كارنيه النقابة العامة للصيادلة." />
+
+						<ListItem pText="صحيفة حالة جنائية حديثة ونظيفة وموجهة إلى فرع هيئة الدواء المصرية التابع له الصيدلية." />
+
+						<ListItem pText="مستخرج شهادة ميلاد كمبيوتر." />
+
+						<ListItem pText="رسم هندسي للصيدلية من 3 نسخ أصلية معتمدة بختم مهندس نقابي." />
+
+						<ListItem pText="إيصال حوالة بريدية لحساب هيئة الدواء المصرية بقيمة 5 جنيهات مصرية، ويتم كتابة رقم إيصال البريد في طلب الترخيص." />
+
+					</EmoList>
 
 				</TiltCard>
 
@@ -754,11 +721,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 			<DivCol pBgColor={new ElemBg(Colors.WhiteOff)}>
 
-				<TiltCard
-					pBg={Colors.WhiteOff}
-					pColor={Colors.BlackOff}
-					pTilt={1}
-				>
+				<TiltCard pBg={Colors.WhiteOff} pColor={Colors.BlackOff} pTilt={1}>
 
 					<EmoList
 						pWidth={new RespString("100%", "100%")}
@@ -812,10 +775,11 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 		<SecTitle BistageLite pTitle="إجراءات ترخيص صيدلية" />
 
 		<LinePath
+			pLandOnly
 			pStroke="rgba(50,143,232,.42)"
 			pDot={Colors.Bistage}
 			pWidth={4}
-			pLoc={new Loc(new NumPer("5%", "5%"), new NumPer("270px", "330px"))}
+			pLoc={new Loc(new NumPer("5%", "5%"), new NumPer("80%", "330px"))}
 			pSize={new Size(new NumPer("90%", "90%"), new NumPer("130px", "90px"))}
 			pZ={1}
 		/>
@@ -837,9 +801,11 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 			>
 
 				<Emograph
-					pTitle={Text.H4.Centered.Sky.OfText("تجهيز الملف")}
+					pTitle={Text.H4.Centered.DarkSky.OfText("تجهيز الملف")}
 					pText={Text.Body.Centered.OfText("تحميل وكتابة طلب ترخيص صيدلية وتجميع المستندات في ملف واحد قبل الإرسال.")}
 				/>
+
+				<RespImg pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "PreparePharmacyFile.webp", false, "تجهيز ملف ترخيص صيدلية")} />
 
 			</BadgeFrame>
 
@@ -851,9 +817,11 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 			>
 
 				<Emograph
-					pTitle={Text.H4.Centered.Sky.OfText("إرسال الطلب")}
+					pTitle={Text.H4.Centered.DarkSky.OfText("إرسال الطلب")}
 					pText={Text.Body.Centered.OfText("إرسال ملف الترخيص إلى فرع هيئة الدواء المصرية الرئيسي الخاص بالمحافظة بخطاب مسجل بعلم الوصول.")}
 				/>
+
+				<RespImg pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "SendReq.webp", false, "إرسال طلب ترخيص صيدلية")} />
 
 			</BadgeFrame>
 
@@ -865,9 +833,11 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 			>
 
 				<Emograph
-					pTitle={Text.H4.Centered.Sky.OfText("المعاينة الأولى")}
+					pTitle={Text.H4.Centered.DarkSky.OfText("المعاينة الأولى")}
 					pText={Text.Body.Centered.OfText("التحقق من المسافة لأقرب صيدلية، والمساحة، والارتفاع، ووضوح حدود العين.")}
 				/>
+
+				<RespImg pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "Inspection.webp", false, "معاينة صيدلية للترخيص")} />
 
 			</BadgeFrame>
 
@@ -879,9 +849,11 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 			>
 
 				<Emograph
-					pTitle={Text.H4.Centered.Sky.OfText("المعاينة الثانية")}
+					pTitle={Text.H4.Centered.DarkSky.OfText("المعاينة الثانية")}
 					pText={Text.Body.Centered.OfText("فحص خامات التشطيب والصرف والتهوية والمعمل أو الحمام إن وجد ومدى صلاحية التشغيل.")}
 				/>
+
+				<RespImg pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "Inspection.webp", false, "معاينة صيدلية للترخيص")} />
 
 			</BadgeFrame>
 
@@ -893,33 +865,15 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 			>
 
 				<Emograph
-					pTitle={Text.H4.Centered.Sky.OfText("استخراج الرخصة")}
+					pTitle={Text.H4.Centered.DarkSky.OfText("استخراج الرخصة")}
 					pText={Text.Body.Centered.OfText("تستخرج الرخصة خلال ثلاثين يومًا من تاريخ استيفاء باقي المستندات بعد تحقق شروط المعاينة الثانية.")}
 				/>
+
+				<RespImg pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "Inspection.webp", false, "معاينة صيدلية للترخيص")} />
 
 			</BadgeFrame>
 
 		</Grid>
-
-		<HzStack
-			pGap={new Pixel(28, 14)}
-			pPad={new Pixel(30, 18)}
-			hidden
-		>
-
-			<RespImg
-				pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "PreparePharmacyFile.webp", false, "تجهيز ملف ترخيص صيدلية", new Size(new NumPer(360, 280), new NumPer("auto", "auto")))}
-			/>
-
-			<RespImg
-				pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "SendReq.webp", false, "إرسال طلب ترخيص صيدلية", new Size(new NumPer(360, 280), new NumPer("auto", "auto")))}
-			/>
-
-			<RespImg
-				pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "Inspection.webp", false, "معاينة صيدلية للترخيص", new Size(new NumPer(360, 280), new NumPer("auto", "auto")))}
-			/>
-
-		</HzStack>
 
 	</EmoSec>
 
@@ -998,11 +952,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 				pAnswer="يحق للصيدلي فتح صيدلية بعد مرور سنة على مزاولته الفعلية للمهنة في أي مؤسسة حكومية أو خاصة، وليس سنة من تاريخ التخرج."
 			/>
 
-			<FaqItem
-				id="faq-count"
-				pQuestion="كم صيدلية يحق للصيدلي فتحها؟"
-				pAnswer="يحق للصيدلي أن يكون مالكا أو شريكا في صيدليتين فقط."
-			/>
+			<FaqItem id="faq-count" pQuestion="كم صيدلية يحق للصيدلي فتحها؟" pAnswer="يحق للصيدلي أن يكون مالكا أو شريكا في صيدليتين فقط." />
 
 			<FaqItem
 				id="faq-non-pharmacist"
@@ -1042,17 +992,9 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 		pMaxP={1}
 	>
 
-		<RelServiceItem
-			pTitle="رسم هندسي لصيدلية"
-			pDesc="إعداد الرسم الهندسي المطلوب للمعاينة الأولى أو الرسم النهائي بعد التشطيب."
-			pHref="/emomed/pharmacy/dwg"
-		/>
+		<RelServiceItem pTitle="رسم هندسي لصيدلية" pDesc="إعداد الرسم الهندسي المطلوب للمعاينة الأولى أو الرسم النهائي بعد التشطيب." pHref="/emomed/pharmacy/dwg" />
 
-		<RelServiceItem
-			pTitle="قياس المسافة بين صيدليتين"
-			pDesc="فحص شرط المسافة قبل استئجار المحل أو تقديم ملف الترخيص."
-			pHref="/emomed/pharmacy/distance"
-		/>
+		<RelServiceItem pTitle="قياس المسافة بين صيدليتين" pDesc="فحص شرط المسافة قبل استئجار المحل أو تقديم ملف الترخيص." pHref="/emomed/pharmacy/distance" />
 
 		<RelServiceItem
 			pTitle="تقرير هندسي عن حالة مبنى مقر الصيدلية"
