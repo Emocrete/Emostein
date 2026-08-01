@@ -251,7 +251,7 @@ import HeroIndexExport from "./Hero.astro";
  * @pBg as ElemBg
  * @pBox as Size
  * @pMinH as NumPer
- * @pAlign as Align | "left" | "right" | "center" (Default: Align.Center)
+ * @pAlign as Align | "left" | "right" | "center" — MAY BE NEED TO REMOVE OLD STYLE (Default: Align.Center)
  * @pImgF as string (Default: "")
  * @pImgL as string (Default: "")
  * @pImgP as string (Default: "")
