@@ -1,10 +1,10 @@
 ---
 import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
-import { EmoCall, Emograph, EmoList, EmoWhats, Grid, HzStack, IndexBtn, ListItem, SecTitle, VrStack } from "@/Widgets/Comp";
+import { EmoCall, Emograph, EmoList, EmoWhats, Grid, HzStack, ListItem, SecTitle, VrStack } from "@/Widgets/Comp";
 import { RespImg, YTPlayer } from "@/Widgets/Media";
 import { PharmacyWorkCard } from "@/Widgets/Pharmacy";
-import { DivCol, DivStr, EmoFaq, EmoSec, FaqItem, Hero, IndexSec, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { DivCol, DivStr, EmoFaq, EmoSec, FaqItem, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { IncLineSep } from "@/Widgets/Separators";
 import { BadgeFrame, CircleGlow, FloatingIcon, FloatingPanel, GlassCard, LinePath, Splash, SvgDots, TiltCard } from "@/Widgets/Shapes";
 import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
@@ -73,33 +73,29 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 
 
-	<IndexSec pTitleClr="white">
+	<EmoSec id="secRegHint" pBg={new ElemBg(Colors.Gray1)}>
 
-		<VrStack>
+		<DivStr>
 
-			<IndexBtn pText="صلاحية المكان قبل التقديم" onclick="location.href='#overview'" />
+			<DivCol pVrAlign={"Center"} pHzAlign={"Center"}>
 
-			<IndexBtn pText="شروط ترخيص صيدلية" onclick="location.href='#conditions'" />
+				<RespImg
+					pImg={new EmoMediaData("Img","/Media/Emomed/Pharmacy","EDA_Logo.png",false,"شعار هيئة الدواء المصرية",new Size(new NumPer("80%","80%"),new NumPer("auto","auto")))}
+				/>
 
-			<IndexBtn pText="الأوراق المطلوبة" onclick="location.href='#documents'" />
+			</DivCol>
 
-			<IndexBtn pText="إجراءات الترخيص" onclick="location.href='#procedures'" />
+			<DivCol pVrAlign={"Center"}>
 
-		</VrStack>
+				<Emograph
+					pText={Text.Body.Bold.Centered.OrangeDark.OfText("تأكد من تسجيل حسابك الشخصي كصيدلي على المنصة الإلكترونية لهيئة الدواء المصرية ، يمكننا المساعدة في التسجيل كأولى خطوات الإجراءات لترخيص صيدلية ، قد يتطلب زيارة شخصية من الصيدلي لفرع هيئة الدواء التابع له الصيدلية لإتمام تفعيل تسجيل حساب الصيدلي ، ليتم تفعيل قائمة الخدمات الإلكترونية على المنصة")}
+				/>
 
-		<VrStack>
+			</DivCol>
 
-			<IndexBtn pText="المعاينة الأولى والثانية" onclick="location.href='#inspection'" />
+		</DivStr>
 
-			<IndexBtn pText="صلاحية الترخيص" onclick="location.href='#validity'" />
-
-			<IndexBtn pText="الأسئلة الشائعة" onclick="location.href='#faq'" />
-
-			<IndexBtn pText="الخدمات المرتبطة" onclick="location.href='#related-services'" />
-
-		</VrStack>
-
-	</IndexSec>
+	</EmoSec>
 
 
 
@@ -519,74 +515,58 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1500px", "94%")}
 			pCardBg={new ElemBg(Colors.WhiteOff)}
 			pGrTitle={Text.H3.Centered.Bistage.OfText("مراحل فحص شروط ترخيص الصيدليات")}
 			pCardTitleFnt={Text.H4.Centered.DarkSky}
 			pCardBodyFnt={Text.Body.Centered}
 			pStackDir="Row"
-			pSpacing={24}
-			pTopic1={new Topic("أولا: عند فحص الملف", "يتم مراجعة المستندات المرفقة بالطلب والتأكد من توفر المستندات الأساسية مرفقة بطلب الترخيص.")}
+			pSpacing={25}
+			pTopic1={new Topic("أولا: عند تقديم الملف", "يتم مراجعة المستندات المرفوعة على المنصة والتحقق من صحة البيانات ومدة السريان للمستندات ذات الصلاحية الزمنية.")}
 			pTopic2={new Topic("ثانيا: أثناء المعاينة الأولى", "يتم التحقق من الصلاحية المبدئية لمقر الصيدلية من خلال الشروط الأساسية وهي المسافة والمساحة والارتفاع.")}
 			pTopic3={new Topic("ثالثا: أثناء المعاينة الثانية", "يتم التحقق من توفر الاشتراطات الصحية واستكمال أعمال التشطيب والتجهيز والفرش الأساسي ومدى صلاحية الصيدلية للتشغيل.")}
 			pTopic4={new Topic("رابعا: بعد المعاينة الثانية", "يتم التحقق من استيفاء باقي المستندات المطلوبة قبل إصدار ترخيص الصيدلية.")}
 		/>
 
-		<DivStr
-			id="inspection"
-			pContentSize={new Size(new NumPer("92%", "96%"))}
-			pGap={new Pixel(28, 18)}
-			pPad={new Pixel(36, 18)}
+		<BadgeFrame
+			pBadge="طالب الترخيص"
+			pBg="rgba(17,17,17,.92)"
+			pBadgeBg={Colors.BistageLite}
+			pColor={Colors.BlackOff}
+			pHzAlign={"Center"}
+			pSize={new Size(new NumPer("60%"))}
 		>
 
-			<DivCol pBgColor={new ElemBg(Colors.BlackOff)}>
+			<EmoList
+				pWidth={new RespString("100%", "100%")}
+				pTitle={Text.H3.Bistage.OfText("شروط خاصة بالصيدلي")}
+				pItemFnt={Text.Body.White}
+				pNumbered={false}
+			>
 
-				<BadgeFrame
-					pBadge="طالب الترخيص"
-					pBg="rgba(17,17,17,.92)"
-					pBadgeBg={Colors.BistageLite}
-					pColor={Colors.BlackOff}
-				>
+				<ListItem pText="أن يكون الصيدلي طالب ترخيص الصيدلية حاصلًا على ترخيص بمزاولة المهنة." />
 
-					<EmoList
-						pWidth={new RespString("100%", "100%")}
-						pTitle={Text.H3.Bistage.OfText("شروط خاصة بالصيدلي")}
-						pDesc={Text.Body.White.OfText("هذه البنود تخص طالب الترخيص نفسه، وتؤثر في قبول الطلب قبل الدخول في تفاصيل تجهيز المكان.")}
-						pItemFnt={Text.Body.White}
-						pItemsBg={new ElemBg("transparent")}
-						pNumbered={false}
-						pItems={[
-							"أن يكون الصيدلي طالب ترخيص الصيدلية حاصلًا على ترخيص بمزاولة المهنة.",
-							"أن يكون الصيدلي له خبرة فعلية سنة على الأقل في مؤسسة حكومية أو أهلية.",
-							"ألا يكون الصيدلي مالكًا أو شريكًا في أكثر من صيدليتين."
-						]}
-					/>
+				<ListItem pText="أن يكون الصيدلي له خبرة فعلية سنة على الأقل في مؤسسة حكومية أو أهلية." />
 
-				</BadgeFrame>
+				<ListItem pText="ألا يكون الصيدلي مالكًا أو شريكًا في أكثر من صيدليتين." />
 
-			</DivCol>
+				<ListItem pText="أن يكون للصيدلي حساب مفعل على منصة الخدمات الإلكترونية لهيئة الدواء المصرية ( الميكنة ) ليتاح له تقديم الطلب" />
 
-			<DivCol Centered pBgColor={new ElemBg(Colors.SkyLite)}>
+			</EmoList>
 
-				<RespImg
-					pImg={new EmoMediaData(
-						"Img",
-						"/Media/Emomed/Pharmacy/",
-						"Inspection.webp",
-						false,
-						"معاينة مقر صيدلية قبل الترخيص",
-						new Size(new NumPer(430, 290), new NumPer("auto", "auto"))
-					)}
-				/>
+		</BadgeFrame>
 
-				<Emograph
-					pTitle={Text.H3.Centered.DarkSky.OfText("شروط خاصة بالصيدلية")}
-					pText={Text.Body.Centered.OfText("شروط المعاينة الأولى واجبة التحقق ولا بدائل لها غالبًا؛ فإذا لم تتحقق المسافة أو المساحة أو الارتفاع مع عدم وجود إمكانية علاج، قد يتم رفض الطلب مباشرة بعد المعاينة الأولى.")}
-				/>
+		<HzStack pBg={new ElemBg(Colors.Creamy)} pHzAlign={"Center"} pVrAlign={"Center"}>
 
-			</DivCol>
+			<Emograph
+				pTitle={Text.H3.Centered.DarkSky.OfText("شروط خاصة بالصيدلية")}
+				pText={Text.Body.Centered.OfText("شروط المعاينة الأولى واجبة التحقق ولا بدائل لها غالبًا؛ فإذا لم تتحقق المسافة أو المساحة أو الارتفاع مع عدم وجود إمكانية علاج، قد يتم رفض الطلب مباشرة بعد المعاينة الأولى.")}
+			/>
 
-		</DivStr>
+			<RespImg
+				pImg={new EmoMediaData("Img","/Media/Emomed/Pharmacy/","Inspection.webp",false,"معاينة مقر صيدلية قبل الترخيص",	new Size(new NumPer("25%", "50%"), new NumPer("auto", "auto")))}
+			/>
+
+		</HzStack>
 
 		<DivStr
 			pBg={new ElemBg(Colors.WhiteOff)}
@@ -600,7 +580,6 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 				<EmoList
 					pWidth={new RespString("100%", "100%")}
 					pTitle={Text.H3.DarkSky.OfText("شروط المعاينة الأولى")}
-					pDesc={Text.Body.OfText("بنود يجب التأكد منها قبل التقديم لأنها غالبًا لا تعالج بسهولة بعد اختيار المكان.")}
 					pItemFnt={Text.Body}
 					pNumbered={false}
 					pItems={[
@@ -618,7 +597,6 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 				<EmoList
 					pWidth={new RespString("100%", "100%")}
 					pTitle={Text.H3.Bistage.OfText("شروط المعاينة الثانية")}
-					pDesc={Text.Body.OfText("بنود تتعلق بالتجهيز النهائي والتشطيب والصرف والتهوية والفصل عن الأنشطة أو الوحدات الأخرى.")}
 					pItemFnt={Text.Body}
 					pNumbered={false}
 					pItems={[
@@ -683,21 +661,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 						pWidth={new RespString("100%", "100%")}
 						pTitle={Text.H3.DarkSky.OfText("مستندات التقديم الأساسية")}
 						pDesc={Text.Body.OfText("المستندات التي يبدأ بها ملف طلب الترخيص، مع مراجعة النسخ والأختام والبيانات قبل الإرسال.")}
-						pItemFnt={Text.Body}
-						pNumbered={true}
-						pItems={[
-							"طلب ترخيص صيدلية مستوفي البيانات الخاصة بالصيدلي والصيدلية.",
-							"صورة بطاقة الرقم القومي أو صورة جواز سفر، وكلاهما ساري.",
-							"صورة ترخيص مزاولة المهنة.",
-							"صورة كارنيه النقابة العامة للصيادلة.",
-							"",
-							"",
-							"",
-							""
-						]}
 					>
-
-						<ListItem pText="طلب ترخيص صيدلية مستوفي البيانات الخاصة بالصيدلي والصيدلية." />
 
 						<ListItem pText="صورة بطاقة الرقم القومي أو صورة جواز سفر، وكلاهما ساري." />
 
@@ -710,8 +674,6 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 						<ListItem pText="مستخرج شهادة ميلاد كمبيوتر." />
 
 						<ListItem pText="رسم هندسي للصيدلية من 3 نسخ أصلية معتمدة بختم مهندس نقابي." />
-
-						<ListItem pText="إيصال حوالة بريدية لحساب هيئة الدواء المصرية بقيمة 5 جنيهات مصرية، ويتم كتابة رقم إيصال البريد في طلب الترخيص." />
 
 					</EmoList>
 
@@ -801,11 +763,11 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 			>
 
 				<Emograph
-					pTitle={Text.H4.Centered.DarkSky.OfText("تجهيز الملف")}
-					pText={Text.Body.Centered.OfText("تحميل وكتابة طلب ترخيص صيدلية وتجميع المستندات في ملف واحد قبل الإرسال.")}
+					pTitle={Text.H3.Centered.DarkSky.OfText("رفع الملف")}
+					pText={Text.Body.Centered.OfText("رفع الملف على المنصة الإلكترونية لهيئة الدواء المصرية")}
 				/>
 
-				<RespImg pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "PreparePharmacyFile.webp", false, "تجهيز ملف ترخيص صيدلية")} />
+				<RespImg pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "SendReq.webp", false, "تجهيز ملف ترخيص صيدلية")} />
 
 			</BadgeFrame>
 
@@ -817,11 +779,11 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 			>
 
 				<Emograph
-					pTitle={Text.H4.Centered.DarkSky.OfText("إرسال الطلب")}
-					pText={Text.Body.Centered.OfText("إرسال ملف الترخيص إلى فرع هيئة الدواء المصرية الرئيسي الخاص بالمحافظة بخطاب مسجل بعلم الوصول.")}
+					pTitle={Text.H3.Centered.DarkSky.OfText("تسليم الأصول")}
+					pText={Text.Body.Centered.OfText("زيارة مقر هيئة الدواء لتسليم أصول المستندات المرفوعة على المنصة الإلكترونية تمهيدا لتحديد موعد المعاينة الأولى")}
 				/>
 
-				<RespImg pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "SendReq.webp", false, "إرسال طلب ترخيص صيدلية")} />
+				<RespImg pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "PhFile.png", false, "إرسال طلب ترخيص صيدلية")} />
 
 			</BadgeFrame>
 
@@ -833,7 +795,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 			>
 
 				<Emograph
-					pTitle={Text.H4.Centered.DarkSky.OfText("المعاينة الأولى")}
+					pTitle={Text.H3.Centered.DarkSky.OfText("المعاينة الأولى")}
 					pText={Text.Body.Centered.OfText("التحقق من المسافة لأقرب صيدلية، والمساحة، والارتفاع، ووضوح حدود العين.")}
 				/>
 
@@ -849,7 +811,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 			>
 
 				<Emograph
-					pTitle={Text.H4.Centered.DarkSky.OfText("المعاينة الثانية")}
+					pTitle={Text.H3.Centered.DarkSky.OfText("المعاينة الثانية")}
 					pText={Text.Body.Centered.OfText("فحص خامات التشطيب والصرف والتهوية والمعمل أو الحمام إن وجد ومدى صلاحية التشغيل.")}
 				/>
 
@@ -865,11 +827,11 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 			>
 
 				<Emograph
-					pTitle={Text.H4.Centered.DarkSky.OfText("استخراج الرخصة")}
+					pTitle={Text.H3.Centered.DarkSky.OfText("استخراج الرخصة")}
 					pText={Text.Body.Centered.OfText("تستخرج الرخصة خلال ثلاثين يومًا من تاريخ استيفاء باقي المستندات بعد تحقق شروط المعاينة الثانية.")}
 				/>
 
-				<RespImg pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "Inspection.webp", false, "معاينة صيدلية للترخيص")} />
+				<RespImg pImg={new EmoMediaData("Img", "/Media/Emomed/Pharmacy/", "Certificate.webp", false, "معاينة صيدلية للترخيص")} />
 
 			</BadgeFrame>
 
@@ -885,7 +847,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 	<EmoSec id="secValidity" pBg={new ElemBg(Colors.SkyLite)}>
 
-		<SecTitle Gray1 pTitle="صلاحية ترخيص الصيدلية بعد إصداره" />
+		<SecTitle cGreenDarkWhiteOff pTitle="صلاحية ترخيص الصيدلية بعد إصداره" />
 
 		<GlassCard
 			pBg="rgba(255,255,255,.82)"
@@ -897,7 +859,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 			<EmoList
 				pWidth={new RespString("100%", "100%")}
-				pTitle={Text.H3.Centered.DarkSky.OfText("متى يعتبر الترخيص لاغياً؟")}
+				pTitle={Text.H3.Centered.Red.OfText("متى يعتبر الترخيص لاغياً؟")}
 				pDesc={Text.Body.OfText("​بعد الحصول على ترخيص صيدلية يعتبر الترخيص لاغياً في الحالات التالية:")}
 				pItemFnt={Text.Body}
 				pNumbered={false}
@@ -918,63 +880,53 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 
 
-	<EmoSec id="faq" pBg={new ElemBg(Colors.Gray5)}>
+	<EmoFaq>
 
-		<SecTitle
-			BistageLite
-			pTitle="الأسئلة الشائعة عن ترخيص الصيدليات"
-			pDesc="إجابات مباشرة على أهم الأسئلة العملية التي تظهر قبل شراء مقر الصيدلية أو قبل تقديم ملف الترخيص."
+		<FaqItem
+			id="faq-distance"
+			pQuestion="كيفية قياس المسافة بين صيدليتين؟"
+			pAnswer="يتم قياس المسافة بين الصيدليات باعتبارها طول أقصر مسار للمشاة يمكن للشخص المترجل سلوكه مشيًا على الأقدام بين الصيدليتين، على أن يكون هذا المسار من خطوط مستقيمة عمودية تبدأ من منتصف باب الصيدلية الأولى وتنتهي عند منتصف باب الصيدلية الثانية. ويتم اختيار أقرب صيدلية من أي اتجاه، سواء كانت في نفس جانب الشارع أو الجانب المقابل أو شارع عمودي أو شارع موازي. مسار المشاة غير مقيد بفتحات الدوران المرورية للسيارات ولا بمناطق عبور المشاة المخططة، وإنما يحسب من أقرب نقطة يمكن للمترجل العبور منها فعليًا. تتوفر لدينا خدمة قياس المسافة بين الصيدليات طبقا للأسلوب المتبع من هيئة الدواء المصرية في القاهرة والجيزة فقط."
 		/>
 
-		<EmoFaq>
+		<FaqItem
+			id="faq-area"
+			pQuestion="ما أقل مساحة لترخيص صيدلية وكيف يتم حسابها؟"
+			pAnswer="أقل مساحة لترخيص صيدلية هي 25 م2، ويتم حسابها باعتبارها المساحة الصافية الداخلية المتاحة للفرش بعد استبعاد المساحات المستغلة في بناء الحوائط الخارجية والداخلية ومساحات الأعمدة وبروزاتها. ويدخل ضمن مساحة الصيدلية المساحة المخصصة لعمل حمام أو معمل بالصيدلية."
+		/>
 
-			<FaqItem
-				id="faq-distance"
-				pQuestion="كيفية قياس المسافة بين صيدليتين؟"
-				pAnswer="يتم قياس المسافة بين الصيدليات باعتبارها طول أقصر مسار للمشاة يمكن للشخص المترجل سلوكه مشيًا على الأقدام بين الصيدليتين، على أن يكون هذا المسار من خطوط مستقيمة عمودية تبدأ من منتصف باب الصيدلية الأولى وتنتهي عند منتصف باب الصيدلية الثانية. ويتم اختيار أقرب صيدلية من أي اتجاه، سواء كانت في نفس جانب الشارع أو الجانب المقابل أو شارع عمودي أو شارع موازي. مسار المشاة غير مقيد بفتحات الدوران المرورية للسيارات ولا بمناطق عبور المشاة المخططة، وإنما يحسب من أقرب نقطة يمكن للمترجل العبور منها فعليًا. تتوفر لدينا خدمة قياس المسافة بين الصيدليات طبقا للأسلوب المتبع من هيئة الدواء المصرية في القاهرة والجيزة فقط."
-			/>
+		<FaqItem
+			id="faq-height"
+			pQuestion="كيفية حساب ارتفاع الصيدلية؟"
+			pAnswer="أقل ارتفاع صالح لترخيص صيدلية هو 2.6 م، ويكون هو ارتفاع الفراغ الصافي من منسوب تشطيب الصيدلية إلى باطن منسوب السقف الخرساني الأصلي أو إلى باطن منسوب السقف المستعار لو كان مستخدما."
+		/>
 
-			<FaqItem
-				id="faq-area"
-				pQuestion="ما أقل مساحة لترخيص صيدلية وكيف يتم حسابها؟"
-				pAnswer="أقل مساحة لترخيص صيدلية هي 25 م2، ويتم حسابها باعتبارها المساحة الصافية الداخلية المتاحة للفرش بعد استبعاد المساحات المستغلة في بناء الحوائط الخارجية والداخلية ومساحات الأعمدة وبروزاتها. ويدخل ضمن مساحة الصيدلية المساحة المخصصة لعمل حمام أو معمل بالصيدلية."
-			/>
+		<FaqItem
+			id="faq-when"
+			pQuestion="متى يحق للصيدلي فتح صيدلية؟"
+			pAnswer="يحق للصيدلي فتح صيدلية بعد مرور سنة على مزاولته الفعلية للمهنة في أي مؤسسة حكومية أو خاصة، وليس سنة من تاريخ التخرج."
+		/>
 
-			<FaqItem
-				id="faq-height"
-				pQuestion="كيفية حساب ارتفاع الصيدلية؟"
-				pAnswer="أقل ارتفاع صالح لترخيص صيدلية هو 2.6 م، ويكون هو ارتفاع الفراغ الصافي من منسوب تشطيب الصيدلية إلى باطن منسوب السقف الخرساني الأصلي أو إلى باطن منسوب السقف المستعار لو كان مستخدما."
-			/>
+		<FaqItem id="faq-count" pQuestion="كم صيدلية يحق للصيدلي فتحها؟" pAnswer="يحق للصيدلي أن يكون مالكا أو شريكا في صيدليتين فقط." />
 
-			<FaqItem
-				id="faq-when"
-				pQuestion="متى يحق للصيدلي فتح صيدلية؟"
-				pAnswer="يحق للصيدلي فتح صيدلية بعد مرور سنة على مزاولته الفعلية للمهنة في أي مؤسسة حكومية أو خاصة، وليس سنة من تاريخ التخرج."
-			/>
+		<FaqItem
+			id="faq-non-pharmacist"
+			pQuestion="هل يمكن ترخيص صيدلية لغير صيدلي؟"
+			pAnswer="لا يحق لغير الصيدلي الحصول على ترخيص صيدلية، ولكن يمكن لغير الصيدلي عمل تعاقد مشاركة مادية لتمويل مشروع الصيدلية مع أحد الصيادلة المصرح لهم بالحصول على ترخيص صيدلية، على أن يكون الترخيص والإدارة الفعلية من خلال الصيدلي المشارك وليس مجرد إعطاء اسمه للشريك بدون تواجده الفعلي. ولا يحق للشريك غير الصيدلي العمل بالصيدلية أو إدارتها من الباطن تحت أي ظرف، وإلا تعرض الطرفان للعقوبة المقررة قانونا في هذا الشأن."
+		/>
 
-			<FaqItem id="faq-count" pQuestion="كم صيدلية يحق للصيدلي فتحها؟" pAnswer="يحق للصيدلي أن يكون مالكا أو شريكا في صيدليتين فقط." />
+		<FaqItem
+			id="faq-penalty"
+			pQuestion="ما عقوبة فتح صيدلية بدون ترخيص؟"
+			pAnswer="عقوبة فتح صيدلية بدون ترخيص تشمل الحبس مدة لا تقل عن سنة، وغرامة مالية من 5 إلى 10 آلاف جنيه مصري، والغلق الإداري للصيدلية المخالفة."
+		/>
 
-			<FaqItem
-				id="faq-non-pharmacist"
-				pQuestion="هل يمكن ترخيص صيدلية لغير صيدلي؟"
-				pAnswer="لا يحق لغير الصيدلي الحصول على ترخيص صيدلية، ولكن يمكن لغير الصيدلي عمل تعاقد مشاركة مادية لتمويل مشروع الصيدلية مع أحد الصيادلة المصرح لهم بالحصول على ترخيص صيدلية، على أن يكون الترخيص والإدارة الفعلية من خلال الصيدلي المشارك وليس مجرد إعطاء اسمه للشريك بدون تواجده الفعلي. ولا يحق للشريك غير الصيدلي العمل بالصيدلية أو إدارتها من الباطن تحت أي ظرف، وإلا تعرض الطرفان للعقوبة المقررة قانونا في هذا الشأن."
-			/>
+		<FaqItem
+			id="faq-deadline"
+			pQuestion="كيفية حساب المهلة بين المعاينتين؟"
+			pAnswer="المهلة الأولى بين المعاينة الأولى والثانية تكون 8 شهور، ويمكن قطعها من خلال طلب تقديم موعد المعاينة الثانية. وفي حالة فشل المعاينة الثانية وعدم تحقق الاشتراطات تكون المهلة الثانية 4 شهور إذا استفاد الصيدلي من مدة المهلة الأولى كاملة، أو تكون مساوية لنصف الفترة الزمنية بين المعاينة الأولى وتاريخ تقديم طلب إجراء المعاينة الثانية."
+		/>
 
-			<FaqItem
-				id="faq-penalty"
-				pQuestion="ما عقوبة فتح صيدلية بدون ترخيص؟"
-				pAnswer="عقوبة فتح صيدلية بدون ترخيص تشمل الحبس مدة لا تقل عن سنة، وغرامة مالية من 5 إلى 10 آلاف جنيه مصري، والغلق الإداري للصيدلية المخالفة."
-			/>
-
-			<FaqItem
-				id="faq-deadline"
-				pQuestion="كيفية حساب المهلة بين المعاينتين؟"
-				pAnswer="المهلة الأولى بين المعاينة الأولى والثانية تكون 8 شهور، ويمكن قطعها من خلال طلب تقديم موعد المعاينة الثانية. وفي حالة فشل المعاينة الثانية وعدم تحقق الاشتراطات تكون المهلة الثانية 4 شهور إذا استفاد الصيدلي من مدة المهلة الأولى كاملة، أو تكون مساوية لنصف الفترة الزمنية بين المعاينة الأولى وتاريخ تقديم طلب إجراء المعاينة الثانية."
-			/>
-
-		</EmoFaq>
-
-	</EmoSec>
+	</EmoFaq>
 
 
 
@@ -982,15 +934,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 
 
-	<RelServices
-		id="related-services"
-		pTitle={Text.H2.Centered.WithColor(Colors.BistageLite).OfText("خدمات أخرى")}
-		pHeadBg={new ElemBg(Colors.Gray5)}
-		pBodyBg={new ElemBg(Colors.SkyLite)}
-		pCardBg={new ElemBg("#FFFFFF")}
-		pMax={3}
-		pMaxP={1}
-	>
+	<RelServices id="related-services" pMax={3} pMaxP={1}>
 
 		<RelServiceItem pTitle="رسم هندسي لصيدلية" pDesc="إعداد الرسم الهندسي المطلوب للمعاينة الأولى أو الرسم النهائي بعد التشطيب." pHref="/emomed/pharmacy/dwg" />
 
@@ -1012,7 +956,6 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 			pTitle="دعبس .. بيع وشراء صيدليات"
 			pDesc="خدمات الربط بين أصحاب الصيدليات والمحلات المعروضة للبيع وبين الصيادلة الجادين الراغبين في الشراء"
 			pHref="/emomed/pharmacy/mining"
-			pBtnText="التفاصيل"
 		/>
 
 	</RelServices>
