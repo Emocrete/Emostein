@@ -14,17 +14,6 @@ interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps
 	pImgP?: string;
 	/** وصف صورة خلفية الهيرو لمحركات البحث وقارئات الشاشة. */
 	pImgAlt?: string;
-
-	/** Legacy Hero props: kept only so old Hero pages do not break before migration. */
-	pTitle?: string;
-	pTitleClr?: string;
-	pTitleEff?: boolean;
-	pDesc?: string;
-	pDescClr?: string;
-	pPosL?: string;
-	pPosP?: string;
-	pBlurL?: "auto" | "on" | "off";
-	pBlurP?: "auto" | "on" | "off";
 }
 
 const {
@@ -36,16 +25,6 @@ const {
 	pImgL = "",
 	pImgP = "",
 	pImgAlt = "",
-
-	pTitle,
-	pTitleClr = "black",
-	pTitleEff = false,
-	pDesc,
-	pDescClr = "black",
-	pPosL = "0% 0% 0% 0%",
-	pPosP = "0% 0% 0% 0%",
-	pBlurL = "auto",
-	pBlurP = "auto",
 
 	pLoc,
 	pSize,
@@ -86,9 +65,6 @@ const {
 const cGivenStyle = GetStyleText(pGivenStyle);
 const cSectionAlign = pAlign instanceof Align ? pAlign : Align.Center;
 const cLegacyAlign = typeof pAlign === "string" ? pAlign : "center";
-const cUseLegacyBox = pTitle !== undefined || pDesc !== undefined;
-const cLegacyBlurL = GetLegacyBlurClass(pBlurL, "L");
-const cLegacyBlurP = GetLegacyBlurClass(pBlurP, "P");
 
 const cPagePath = Astro.url.pathname;
 const cImgFolder = pImgF || Media.GetPageFolder(cPagePath);
@@ -106,7 +82,7 @@ const cBgImgP = pImgP
 const cFinalBgImgL = cBgImgL || cBgImgP || pBg?.Img?.LinkL || pBg?.Img?.LinkP || "";
 const cFinalBgImgP = cBgImgP || cBgImgL || pBg?.Img?.LinkP || pBg?.Img?.LinkL || "";
 const cHasBgImg = cFinalBgImgL !== "" || cFinalBgImgP !== "";
-const cAutoImgAlt = SeoText.GetLocalsImageAlt(Astro.locals) || SeoText.GetImageAlt(pTitle ?? "", pDesc ?? "");
+const cAutoImgAlt = SeoText.GetLocalsImageAlt(Astro.locals) ;
 const cBgAlt = pImgAlt || pBg?.Img?.Alt || cAutoImgAlt;
 
 const cHeroStyle = [
@@ -121,11 +97,7 @@ const cHeroStyle = [
 	`--HeroAlignP:${GetHorizontalAlign(cSectionAlign.HzP)};`,
 	`--HeroJustifyL:${GetVerticalAlign(cSectionAlign.VrL)};`,
 	`--HeroJustifyP:${GetVerticalAlign(cSectionAlign.VrP)};`,
-	`--HeroLegacyTitleClr:${pTitleClr};`,
-	`--HeroLegacyDescClr:${pDescClr};`,
 	`--HeroLegacyAlign:${cLegacyAlign};`,
-	`--HeroLegacyPosL:${pPosL};`,
-	`--HeroLegacyPosP:${pPosP};`,
 	cGivenStyle,
 ].filter(Boolean).join(" ");
 
@@ -166,21 +138,6 @@ function GetLegacyBlurClass(pValue: "auto" | "on" | "off", pAxis: "L" | "P") {
 	return "";
 }
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -229,54 +186,15 @@ function GetLegacyBlurClass(pValue: "auto" | "on" | "off", pAxis: "L" | "P") {
 		</picture>
 	) }
 
-	{ cUseLegacyBox ? (
+	<slot />
 
-		<div class = {`HeroLegacyBox ${cLegacyBlurL} ${cLegacyBlurP}`.trim()}>
-		
-			{ pTitle && (
-		
-				<h1 class = {`HeroLegacyTitle ${pTitleEff ? "HasTitleEff" : ""}`.trim()}>
-					{pTitle}
-				</h1>
-			) }
-		
-			{ pDesc && (
-		
-				<p class = " HeroLegacyDesc ">
-					{pDesc}
-				</p>
-			) }
-		
-			<slot />
-		
-		
-		
-		
-		
-		
-		
-		</div>
-	) : (
 
-		<slot />
-	) }
+
+
+
+
 
 </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -329,37 +247,6 @@ function GetLegacyBlurClass(pValue: "auto" | "on" | "off", pAxis: "L" | "P") {
 	}
 
 
-	.HeroLegacyBox {
-		position: absolute;
-		inset: var(--HeroLegacyPosL, 0% 0% 0% 0%);
-		z-index: 1;
-		box-sizing: border-box;
-		display: flex;
-		flex-direction: column;
-		align-content: var(--HeroLegacyAlign, center);
-		align-items: var(--HeroLegacyAlign, center);
-	}
-
-
-	.HeroLegacyTitle {
-		margin: 0 0 10px 0;
-		font-size: clamp(30px, 3vw, 50px);
-		line-height: 1.4;
-		color: var(--HeroLegacyTitleClr, black);
-		text-align: var(--HeroLegacyAlign, center);
-	}
-
-
-	.HeroLegacyDesc {
-		margin: 0 0 10px 0;
-		font-size: clamp(18px, 1.2vw, 22px);
-		line-height: 1.9;
-		max-width: 80ch;
-		color: var(--HeroLegacyDescClr, black);
-		text-align: var(--HeroLegacyAlign, center);
-	}
-
-
 
 	.Hero.IsPlaced {
 		position: absolute;
@@ -368,32 +255,8 @@ function GetLegacyBlurClass(pValue: "auto" | "on" | "off", pAxis: "L" | "P") {
 	}
 
 
-	.HeroLegacyBox.LegacyBlurL {
-		background: rgba(0, 0, 0, 0.2);
-		backdrop-filter: blur(10px);
-		-webkit-backdrop-filter: blur(10px);
-		border-radius: 20px;
-		padding: clamp(16px, 2vw, 28px);
-	}
-
-
 
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -416,26 +279,6 @@ function GetLegacyBlurClass(pValue: "auto" | "on" | "off", pAxis: "L" | "P") {
 		.Hero.IsPlaced {
 			width: var(--PlaceWidthP);
 			height: var(--PlaceHeightP);
-		}
-
-		.HeroLegacyBox {
-			inset: var(--HeroLegacyPosP, var(--HeroLegacyPosL, 0% 0% 0% 0%));
-		}
-
-		.HeroLegacyBox.LegacyBlurL {
-			background: transparent;
-			backdrop-filter: none;
-			-webkit-backdrop-filter: none;
-			border-radius: 0;
-			padding: 0;
-		}
-
-		.HeroLegacyBox.LegacyBlurP {
-			background: rgba(0, 0, 0, 0.2);
-			backdrop-filter: blur(10px);
-			-webkit-backdrop-filter: blur(10px);
-			border-radius: 20px;
-			padding: clamp(16px, 2vw, 28px);
 		}
 	}
 

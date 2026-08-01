@@ -256,15 +256,6 @@ import HeroIndexExport from "./Hero.astro";
  * @pImgL as string (Default: "")
  * @pImgP as string (Default: "")
  * @pImgAlt as string — وصف صورة خلفية الهيرو لمحركات البحث وقارئات الشاشة. (Default: "")
- * @pTitle as string — Legacy Hero props: kept only so old Hero pages do not break before migration.
- * @pTitleClr as string (Default: "black")
- * @pTitleEff as boolean (Default: false)
- * @pDesc as string
- * @pDescClr as string (Default: "black")
- * @pPosL as string (Default: "0% 0% 0% 0%")
- * @pPosP as string (Default: "0% 0% 0% 0%")
- * @pBlurL as "auto" | "on" | "off" (Default: "auto")
- * @pBlurP as "auto" | "on" | "off" (Default: "auto")
  */
 export const Hero = HeroIndexExport;
 
