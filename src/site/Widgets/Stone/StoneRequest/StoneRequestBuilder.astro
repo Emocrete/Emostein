@@ -1,0 +1,1226 @@
+---
+import { Place, type PlaceProps } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import StoneRequestHeader from "./StoneRequestHeader.astro";
+import StoneRequestResume from "./StoneRequestResume.astro";
+import StoneRequestItemsTable from "./StoneRequestItemsTable.astro";
+import StoneRequestProjectOverlay from "./StoneRequestProjectOverlay.astro";
+import StoneRequestItemOverlay from "./StoneRequestItemOverlay.astro";
+import StoneRequestReviewOverlay from "./StoneRequestReviewOverlay.astro";
+
+interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps {
+	/** API used to save, resume and submit StoneReq drafts. DefVal = "/api/stone-req" */
+	pApiUrl?: string;
+
+	/** Logical source page stored with the request. DefVal = "صفحة الرخام والجرانيت" */
+	pSourcePage?: string;
+
+	/** Main widget title. */
+	pTitle?: string;
+
+	/** Short explanation below the title. */
+	pDesc?: string;
+
+	/** IndexedDB record key. Change it only when separate drafts are required on the same site. */
+	pStorageKey?: string;
+
+	/** Maximum compressed images stored inside one item. DefVal = 5 */
+	pMaxAttachments?: number;
+
+	/** Approximate maximum size of each compressed image in KB. DefVal = 300 */
+	pMaxImageKb?: number;
+
+	/** Maximum decoded image payload across the whole request in MB. Capped at 2.5 for Vercel payload safety. DefVal = 2.5 */
+	pMaxRequestImageMb?: number;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+const {
+	pApiUrl = "/api/stone-req",
+	pSourcePage = "صفحة الرخام والجرانيت",
+	pTitle = "كوّن طلبية الرخام أو الجرانيت",
+	pDesc = "أضف كل صنف ومقاس على حدة. بياناتك تُحفظ تلقائيًا ويمكنك استكمال الطلب لاحقًا.",
+	pStorageKey = "EmoStoneRequestDraftV1",
+	pMaxAttachments = 5,
+	pMaxImageKb = 300,
+	pMaxRequestImageMb = 2.5,
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+
+	id: pGivenID = GetWidgetId("StoneRequestBuilder"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = cProps;
+
+function GetStyleText(pStyle: unknown) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+	if (typeof pStyle !== "object") return "";
+	return Object.entries(pStyle as Record<string, string | number | null | undefined>)
+		.map(([pName, pValue]) => pValue === undefined || pValue === null ? "" : `${pName.startsWith("--") ? pName : pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`)}:${pValue};`)
+		.filter(Boolean)
+		.join(" ");
+}
+
+const cStyle = `
+	--StoneReqHead:#273548;
+	--StoneReqHead2:#172331;
+	--StoneReqPanel:#f4f6f8;
+	--StoneReqText:#17202a;
+	--StoneReqMuted:#657180;
+	--StoneReqBorder:#d9dfe5;
+	--StoneReqAccent:#177a72;
+	--StoneReqAccentSoft:#dff3f0;
+	--StoneReqOk:#177245;
+	--StoneReqOkSoft:#e0f4e8;
+	--StoneReqWarnSoft:#fff4d6;
+	--StoneReqDanger:#ad2c35;
+	--StoneReqRadius:20px;
+	${GetStyleText(pGivenStyle)}
+`;
+const cPlace = new Place(cProps as PlaceProps, cStyle);
+---
+
+<section
+	class={`StoneRequestBuilder ${cPlace.Class} ${pGivenClass}`.trim()}
+	style={cPlace.Style}
+	id={pGivenID}
+	dir="rtl"
+	data-stone-request-builder="true"
+	data-api-url={pApiUrl}
+	data-source-page={pSourcePage}
+	data-storage-key={pStorageKey}
+	data-max-attachments={Math.max(1, Math.trunc(pMaxAttachments))}
+	data-max-image-kb={Math.max(100, Math.trunc(pMaxImageKb))}
+	data-max-request-image-mb={Math.min(2.5, Math.max(1, Number(pMaxRequestImageMb) || 2.5))}
+	{...RemAttr}
+>
+	<StoneRequestHeader pTitle={pTitle} pDesc={pDesc} />
+	<StoneRequestResume />
+	<StoneRequestItemsTable />
+	<StoneRequestProjectOverlay />
+	<StoneRequestItemOverlay />
+	<StoneRequestReviewOverlay />
+
+	<footer class="StoneReqBuilderFoot">
+		<p><strong>الحفظ التلقائي:</strong> يحتفظ بكل تعديل على هذا الجهاز، وبعد وجود بيانات فعلية ينشئ مسودة آمنة على الخادم يمكن استكمالها من رابط خاص.</p>
+		<p data-builder-message="true"></p>
+	</footer>
+</section>
+
+<style>
+	.StoneRequestBuilder {
+		width: min(1280px, 100%);
+		margin-inline: auto;
+		box-sizing: border-box;
+		color: var(--StoneReqText);
+		font-family: inherit;
+		border-radius: var(--StoneReqRadius);
+		box-shadow: 0 18px 55px rgba(28, 38, 49, .14);
+	}
+
+	.StoneReqBuilderFoot {
+		display: grid;
+		gap: 5px;
+		padding: 16px 20px;
+		background: var(--StoneReqPanel);
+		border: 1px solid var(--StoneReqBorder);
+		border-top: 0;
+		border-radius: 0 0 var(--StoneReqRadius) var(--StoneReqRadius);
+	}
+
+	.StoneReqBuilderFoot p {
+		margin: 0;
+		color: var(--StoneReqMuted);
+		font-size: 13px;
+		line-height: 1.8;
+	}
+
+	.StoneReqBuilderFoot p[data-mode="error"] {
+		color: var(--StoneReqDanger);
+		font-weight: 800;
+	}
+
+	.StoneReqBuilderFoot p[data-mode="success"] {
+		color: var(--StoneReqOk);
+		font-weight: 800;
+	}
+</style>
+
+<script is:inline>
+(function () {
+	const cRoots = document.querySelectorAll("[data-stone-request-builder='true']");
+	for (const cRoot of cRoots) RegisterStoneRequestBuilder(cRoot);
+
+	function RegisterStoneRequestBuilder(pRoot) {
+		if (!pRoot || pRoot.dataset.ready === "true") return;
+		pRoot.dataset.ready = "true";
+
+		const cUsage = {
+			kitchen: { label: "مطبخ أو كاونتر", pieces: ["رخامة رئيسية", "رخامة جانبية", "جزيرة", "بار", "وزرة", "حائط خلفي Backsplash", "جانب هابط"] },
+			stairs: { label: "سلم", pieces: ["نائمة", "قائمة", "بسطة", "وزرة سلم", "صدفة أو حافة", "برامق"] },
+			floor: { label: "أرضيات", pieces: ["منطقة أرضية", "إطار محيط", "ميدالية", "وزرة أرضية", "عتبة انتقال"] },
+			wall: { label: "حوائط داخلية", pieces: ["لوح حائط", "منطقة تكسية", "ركن", "حلية", "نيش", "وزرة حائط"] },
+			facade: { label: "واجهة أو مدخل خارجي", pieces: ["لوح واجهة", "عمود", "كرنيش", "حلية", "عتب فتحة", "جلسة خارجية", "درج مدخل"] },
+			sills: { label: "جلسات وأعتاب ووزرات", pieces: ["جلسة شباك", "عتب باب", "عتب مصعد", "وزرة", "حلق", "قفلة جانبية"] },
+			bathroom: { label: "حمام أو وحدة حوض", pieces: ["رخامة حوض", "رف", "نيش", "عتبة شاور", "جلسة بانيو", "وزرة", "جانب هابط"] },
+			furniture: { label: "ترابيزة أو أثاث", pieces: ["سطح ترابيزة", "جانب", "قاعدة", "رف", "قطعة ديكور"] },
+			decor: { label: "مدفأة أو ديكور خاص", pieces: ["واجهة مدفأة", "رف مدفأة", "حلية", "لوح ديكور", "قاعدة", "قطعة خاصة"] },
+			other: { label: "استخدام آخر", pieces: ["قطعة", "لوح", "بلاطة", "وزرة", "حلية", "قطعة خاصة"] },
+		};
+
+		const cApiUrl = pRoot.dataset.apiUrl || "/api/stone-req";
+		const cSourcePage = pRoot.dataset.sourcePage || "صفحة الرخام والجرانيت";
+		const cStorageKey = pRoot.dataset.storageKey || "EmoStoneRequestDraftV1";
+		const cMaxAttachments = Math.max(1, Number(pRoot.dataset.maxAttachments) || 5);
+		const cMaxImageBytes = Math.max(100, Number(pRoot.dataset.maxImageKb) || 300) * 1024;
+		const cMaxRequestImageBytes = Math.min(2.5, Math.max(1, Number(pRoot.dataset.maxRequestImageMb) || 2.5)) * 1024 * 1024;
+		const cProjectOverlay = pRoot.querySelector("[data-project-overlay='true']");
+		const cProjectForm = pRoot.querySelector("[data-project-form='true']");
+		const cItemOverlay = pRoot.querySelector("[data-item-overlay='true']");
+		const cItemForm = pRoot.querySelector("[data-item-form='true']");
+		const cReviewOverlay = pRoot.querySelector("[data-review-overlay='true']");
+		const cResumePanel = pRoot.querySelector("[data-resume-panel='true']");
+		const cMessage = pRoot.querySelector("[data-builder-message='true']");
+		const cSaveState = pRoot.querySelector("[data-save-state='true']");
+		const cCompletion = pRoot.querySelector("[data-completion='true']");
+		const cItemsBody = pRoot.querySelector("[data-items-body='true']");
+		const cEmptyState = pRoot.querySelector("[data-empty-state='true']");
+		const cMeasureBody = pRoot.querySelector("[data-measure-body='true']");
+		const cAttachmentInput = pRoot.querySelector("[data-attachment-input='true']");
+		let cState = NewDraft();
+		let cPendingLocal = null;
+		let cSaveTimer = 0;
+		let cRemoteTimer = 0;
+		let cSavingRemote = false;
+		let cInitialized = false;
+
+		Initialize();
+
+		async function Initialize() {
+			BindEvents();
+			const cUrlDraft = new URL(window.location.href);
+			const cDraftId = Clean(cUrlDraft.searchParams.get("stoneDraft"));
+			const cToken = Clean(cUrlDraft.searchParams.get("stoneToken"));
+			if (cDraftId && cToken) {
+				SetSaveState("جارٍ تحميل المسودة من الخادم…");
+				const cRemote = await LoadRemoteDraft(cDraftId, cToken);
+				if (cRemote) {
+					cState = NormalizeDraft(cRemote);
+					cInitialized = true;
+					RenderAll();
+					SetMessage("تم استكمال الطلب المحفوظ من الخادم.", "success");
+					ResumeInterruptedEditor();
+					return;
+				}
+			}
+
+			cPendingLocal = await LoadLocalDraft();
+			cInitialized = true;
+			if (IsMeaningful(cPendingLocal) && cPendingLocal.meta?.status !== "submitted") {
+				ShowResumePrompt(cPendingLocal);
+			} else {
+				RenderAll();
+			}
+		}
+
+		function BindEvents() {
+			pRoot.addEventListener("click", HandleClick);
+			pRoot.addEventListener("input", HandleInput);
+			pRoot.addEventListener("change", HandleInput);
+			cProjectForm?.addEventListener("submit", SaveProjectForm);
+			cItemForm?.addEventListener("submit", SaveItemForm);
+			cAttachmentInput?.addEventListener("change", HandleAttachments);
+			document.addEventListener("keydown", HandleKeyDown);
+		}
+
+		function HandleKeyDown(pEvent) {
+			if (pEvent.key !== "Escape") return;
+			if (IsOpen(cReviewOverlay)) CloseOverlay(cReviewOverlay);
+			else if (IsOpen(cItemOverlay)) CloseOverlay(cItemOverlay);
+			else if (IsOpen(cProjectOverlay)) CloseOverlay(cProjectOverlay);
+		}
+
+		function HandleClick(pEvent) {
+			const cButton = pEvent.target.closest("button");
+			if (!cButton || !pRoot.contains(cButton)) return;
+			const cAction = cButton.dataset.action || "";
+			const cRowAction = cButton.dataset.rowAction || "";
+			if (cAction) {
+				pEvent.preventDefault();
+				RunAction(cAction, cButton);
+				return;
+			}
+			if (cRowAction) {
+				pEvent.preventDefault();
+				RunRowAction(cRowAction, cButton.dataset.itemId || "");
+				return;
+			}
+			if (cButton.dataset.stepJump !== undefined) {
+				pEvent.preventDefault();
+				GoItemStep(Number(cButton.dataset.stepJump));
+			}
+		}
+
+		function RunAction(pAction, pButton) {
+			if (pAction === "edit-project") OpenProject();
+			else if (pAction === "close-project") CloseOverlay(cProjectOverlay);
+			else if (pAction === "add-item") OpenNewItem();
+			else if (pAction === "close-item") CloseOverlay(cItemOverlay);
+			else if (pAction === "add-measure") AddMeasure();
+			else if (pAction === "item-prev") GoItemStep(CurrentItemStep() - 1);
+			else if (pAction === "item-next") GoItemStep(CurrentItemStep() + 1);
+			else if (pAction === "save-item") cItemForm?.requestSubmit();
+			else if (pAction === "save-item-draft") SaveWorkingItemDraft();
+			else if (pAction === "review-order") OpenOrderReview();
+			else if (pAction === "close-review") CloseOverlay(cReviewOverlay);
+			else if (pAction === "save-later") SaveAndShowResume();
+			else if (pAction === "save-draft-now") SaveAndShowResume();
+			else if (pAction === "copy-resume-link") CopyResumeLink();
+			else if (pAction === "submit-order") SubmitOrder(pButton);
+			else if (pAction === "resume-local") ResumeLocal();
+			else if (pAction === "discard-local") DiscardLocal();
+			else if (pAction === "remove-attachment") RemoveAttachment(Number(pButton.dataset.attachmentIndex));
+			else if (pAction === "remove-measure") RemoveMeasure(Number(pButton.dataset.measureIndex));
+		}
+
+		function RunRowAction(pAction, pItemId) {
+			const cIndex = cState.items.findIndex((pItem) => pItem.id === pItemId);
+			if (cIndex < 0) return;
+			if (pAction === "edit") OpenItem(cState.items[cIndex], pItemId);
+			if (pAction === "duplicate") {
+				const cCopy = DeepClone(cState.items[cIndex]);
+				cCopy.id = Uid("item");
+				cCopy.title = `${cCopy.title || UsageLabel(cCopy.usageType)} - نسخة`;
+				cCopy.measurements = (cCopy.measurements || []).map((pMeasure) => ({ ...pMeasure, id: Uid("measure") }));
+				cCopy.attachments = [];
+				cCopy.createdAt = NowIso();
+				cCopy.updatedAt = NowIso();
+				cState.items.splice(cIndex + 1, 0, NormalizeItem(cCopy));
+				TouchDraft();
+				RenderAll();
+			}
+			if (pAction === "delete") {
+				if (!window.confirm("حذف هذا الصنف بكل مقاساته؟")) return;
+				cState.items.splice(cIndex, 1);
+				TouchDraft();
+				RenderAll();
+			}
+		}
+
+		function HandleInput(pEvent) {
+			const cTarget = pEvent.target;
+			if (cProjectForm?.contains(cTarget)) {
+				ApplyProjectFormToState();
+				TouchDraft(true);
+				return;
+			}
+			if (!cItemForm?.contains(cTarget)) return;
+			if (cTarget.closest("[data-measure-row='true']")) UpdateMeasureFromInput(cTarget);
+			else ApplyItemFormToWorking();
+			if (cTarget.matches("[data-usage-type='true']")) RenderMeasurements();
+			TouchDraft(true);
+		}
+
+		function OpenProject() {
+			FillProjectForm();
+			OpenOverlay(cProjectOverlay);
+			cProjectForm?.querySelector("input")?.focus();
+		}
+
+		function SaveProjectForm(pEvent) {
+			pEvent.preventDefault();
+			ApplyProjectFormToState();
+			const cError = pRoot.querySelector("[data-project-error='true']");
+			if (!Clean(cState.customer.name) || !Clean(cState.customer.phone)) {
+				SetText(cError, "الاسم ورقم الهاتف مطلوبان قبل الإرسال النهائي، ويمكن حفظ المسودة بدونهما محليًا.");
+			} else SetText(cError, "");
+			TouchDraft();
+			RenderAll();
+			CloseOverlay(cProjectOverlay);
+		}
+
+		function ApplyProjectFormToState() {
+			if (!cProjectForm) return;
+			const cData = new FormData(cProjectForm);
+			cState.customer = {
+				name: Value(cData, "customerName"),
+				phone: Value(cData, "phone"),
+				whatsapp: Value(cData, "whatsapp"),
+				role: Value(cData, "customerRole"),
+				contactTime: Value(cData, "contactTime"),
+			};
+			cState.project = {
+				governorate: Value(cData, "governorate"),
+				city: Value(cData, "city"),
+				district: Value(cData, "district"),
+				type: Value(cData, "projectType"),
+				siteState: Value(cData, "siteState"),
+				executionTime: Value(cData, "executionTime"),
+				generalNotes: Value(cData, "generalNotes"),
+			};
+			cState.logistics = {
+				floor: Value(cData, "floor"),
+				elevator: Value(cData, "elevator"),
+				liftingAccess: Value(cData, "liftingAccess"),
+				vehicleAccess: Value(cData, "vehicleAccess"),
+				workRestrictions: Value(cData, "workRestrictions"),
+			};
+			cState.generalServices = Values(cData, "generalServices");
+		}
+
+		function FillProjectForm() {
+			if (!cProjectForm) return;
+			SetFormValue(cProjectForm, "customerName", cState.customer.name);
+			SetFormValue(cProjectForm, "phone", cState.customer.phone);
+			SetFormValue(cProjectForm, "whatsapp", cState.customer.whatsapp);
+			SetFormValue(cProjectForm, "customerRole", cState.customer.role || "مالك المشروع");
+			SetFormValue(cProjectForm, "contactTime", cState.customer.contactTime || "أي وقت");
+			SetFormValue(cProjectForm, "governorate", cState.project.governorate);
+			SetFormValue(cProjectForm, "city", cState.project.city);
+			SetFormValue(cProjectForm, "district", cState.project.district);
+			SetFormValue(cProjectForm, "projectType", cState.project.type || "شقة");
+			SetFormValue(cProjectForm, "siteState", cState.project.siteState || "جاهز للقياس والتركيب");
+			SetFormValue(cProjectForm, "executionTime", cState.project.executionTime || "في أقرب وقت");
+			SetFormValue(cProjectForm, "floor", cState.logistics.floor);
+			SetFormValue(cProjectForm, "elevator", cState.logistics.elevator || "غير محدد");
+			SetFormValue(cProjectForm, "liftingAccess", cState.logistics.liftingAccess || "رفع عادي");
+			SetFormValue(cProjectForm, "vehicleAccess", cState.logistics.vehicleAccess || "أمام المدخل");
+			SetFormValue(cProjectForm, "workRestrictions", cState.logistics.workRestrictions);
+			SetFormValue(cProjectForm, "generalNotes", cState.project.generalNotes);
+			SetCheckboxes(cProjectForm, "generalServices", cState.generalServices);
+		}
+
+		function OpenNewItem() {
+			const cExistingWorking = cState.ui?.workingItem;
+			if (cExistingWorking && !cState.ui.editingItemId) OpenItem(cExistingWorking, "");
+			else OpenItem(NewItem(), "");
+		}
+
+		function OpenItem(pItem, pEditingId) {
+			cState.ui.workingItem = NormalizeItem(DeepClone(pItem));
+			cState.ui.editingItemId = pEditingId || "";
+			cState.ui.currentStep = Math.max(0, Math.min(4, Number(cState.ui.currentStep) || 0));
+			FillItemForm(cState.ui.workingItem);
+			RenderMeasurements();
+			RenderAttachments();
+			SetText(pRoot.querySelector("[data-item-mode-label='true']"), pEditingId ? "تعديل صنف قائم" : "إضافة صنف جديد");
+			SetText(pRoot.querySelector("[data-item-dialog-title='true']"), cState.ui.workingItem.title || UsageLabel(cState.ui.workingItem.usageType) || "بيانات الصنف");
+			OpenOverlay(cItemOverlay);
+			GoItemStep(cState.ui.currentStep, false);
+			TouchDraft(false);
+		}
+
+		function FillItemForm(pItem) {
+			if (!cItemForm) return;
+			cItemForm.reset();
+			SetFormValue(cItemForm, "usageType", pItem.usageType);
+			SetFormValue(cItemForm, "title", pItem.title);
+			SetFormValue(cItemForm, "location", pItem.location);
+			SetFormValue(cItemForm, "workState", pItem.workState || "جديد");
+			SetCheckboxes(cItemForm, "itemServices", pItem.services);
+			SetFormValue(cItemForm, "itemDescription", pItem.description);
+			SetFormValue(cItemForm, "materialCategory", pItem.material.category);
+			SetFormValue(cItemForm, "materialOrigin", pItem.material.origin || "غير محدد");
+			SetFormValue(cItemForm, "materialName", pItem.material.name);
+			SetFormValue(cItemForm, "materialColor", pItem.material.color);
+			SetFormValue(cItemForm, "materialPattern", pItem.material.pattern || "غير محدد");
+			SetFormValue(cItemForm, "thicknessCm", pItem.material.thicknessCm);
+			SetFormValue(cItemForm, "surfaceFinish", pItem.material.surfaceFinish || "لامع مصقول");
+			SetFormValue(cItemForm, "priceLevel", pItem.material.priceLevel || "غير محدد");
+			SetFormValue(cItemForm, "selectionPriority", pItem.material.selectionPriority || "التوازن بين السعر والشكل");
+			SetChecked(cItemForm, "acceptAlternative", pItem.material.acceptAlternative);
+			SetChecked(cItemForm, "sameBatchRequired", pItem.material.sameBatchRequired);
+			SetCheckboxes(cItemForm, "processing", pItem.processing.features);
+			SetFormValue(cItemForm, "sinkOpenings", pItem.processing.sinkOpenings || 0);
+			SetFormValue(cItemForm, "cooktopOpenings", pItem.processing.cooktopOpenings || 0);
+			SetFormValue(cItemForm, "faucetOpenings", pItem.processing.faucetOpenings || 0);
+			SetFormValue(cItemForm, "specialOpenings", pItem.processing.specialOpenings || 0);
+			SetFormValue(cItemForm, "polishedEdgesM", pItem.processing.polishedEdgesM || "");
+			SetFormValue(cItemForm, "skirtingHeightCm", pItem.processing.skirtingHeightCm || "");
+			SetFormValue(cItemForm, "waterfallSides", pItem.processing.waterfallSides || 0);
+			SetFormValue(cItemForm, "antiSlipGrooves", pItem.processing.antiSlipGrooves || 0);
+			SetFormValue(cItemForm, "referenceUrl", pItem.referenceUrl);
+			SetFormValue(cItemForm, "processingNotes", pItem.processing.notes);
+		}
+
+		function ApplyItemFormToWorking() {
+			if (!cItemForm || !cState.ui.workingItem) return;
+			const cData = new FormData(cItemForm);
+			const cItem = cState.ui.workingItem;
+			cItem.usageType = Value(cData, "usageType");
+			cItem.title = Value(cData, "title") || UsageLabel(cItem.usageType);
+			cItem.location = Value(cData, "location");
+			cItem.workState = Value(cData, "workState");
+			cItem.services = Values(cData, "itemServices");
+			cItem.description = Value(cData, "itemDescription");
+			cItem.material = {
+				category: Value(cData, "materialCategory"),
+				origin: Value(cData, "materialOrigin"),
+				name: Value(cData, "materialName"),
+				color: Value(cData, "materialColor"),
+				pattern: Value(cData, "materialPattern"),
+				thicknessCm: Value(cData, "thicknessCm"),
+				surfaceFinish: Value(cData, "surfaceFinish"),
+				priceLevel: Value(cData, "priceLevel"),
+				selectionPriority: Value(cData, "selectionPriority"),
+				acceptAlternative: cData.has("acceptAlternative"),
+				sameBatchRequired: cData.has("sameBatchRequired"),
+			};
+			cItem.processing = {
+				features: Values(cData, "processing"),
+				sinkOpenings: Num(Value(cData, "sinkOpenings")),
+				cooktopOpenings: Num(Value(cData, "cooktopOpenings")),
+				faucetOpenings: Num(Value(cData, "faucetOpenings")),
+				specialOpenings: Num(Value(cData, "specialOpenings")),
+				polishedEdgesM: Num(Value(cData, "polishedEdgesM")),
+				skirtingHeightCm: Num(Value(cData, "skirtingHeightCm")),
+				waterfallSides: Num(Value(cData, "waterfallSides")),
+				antiSlipGrooves: Num(Value(cData, "antiSlipGrooves")),
+				notes: Value(cData, "processingNotes"),
+			};
+			cItem.referenceUrl = Value(cData, "referenceUrl");
+			cItem.updatedAt = NowIso();
+			cState.ui.workingItem = NormalizeItem(cItem);
+		}
+
+		function SaveItemForm(pEvent) {
+			pEvent.preventDefault();
+			CommitWorkingItem(true);
+		}
+
+		function SaveWorkingItemDraft() {
+			CommitWorkingItem(false);
+		}
+
+		function CommitWorkingItem(pRequireComplete) {
+			ApplyItemFormToWorking();
+			const cItem = NormalizeItem(cState.ui.workingItem);
+			const cErrorTarget = pRoot.querySelector("[data-item-error='true']");
+			if (!Clean(cItem.usageType)) {
+				SetText(cErrorTarget, "اختر نوع الاستخدام قبل حفظ الصنف.");
+				GoItemStep(0);
+				return;
+			}
+			const cErrors = ItemCoreErrors(cItem);
+			if (pRequireComplete && cErrors.length) {
+				SetText(cErrorTarget, cErrors[0]);
+				GoItemStep(cErrors[0].includes("الاستخدام") || cErrors[0].includes("الخدمة") ? 0 : cErrors[0].includes("الخامة") ? 1 : 2);
+				return;
+			}
+			SetText(cErrorTarget, "");
+			const cEditingId = cState.ui.editingItemId;
+			if (cEditingId) {
+				const cIndex = cState.items.findIndex((pValue) => pValue.id === cEditingId);
+				if (cIndex >= 0) cState.items[cIndex] = { ...cItem, id: cEditingId };
+				else cState.items.push(cItem);
+			} else cState.items.push(cItem);
+			cState.ui.workingItem = null;
+			cState.ui.editingItemId = "";
+			cState.ui.currentStep = 0;
+			TouchDraft();
+			RenderAll();
+			CloseOverlay(cItemOverlay);
+			SetMessage(pRequireComplete ? "تم حفظ الصنف داخل الطلبية." : "تم حفظ الصنف كمسودة ويمكن استكمال بياناته لاحقًا.", "success");
+		}
+
+		function GoItemStep(pStep, pPersist = true) {
+			if (!cState.ui.workingItem) return;
+			ApplyItemFormToWorking();
+			const cStep = Math.max(0, Math.min(4, Number(pStep) || 0));
+			if (cStep > CurrentItemStep()) {
+				const cError = ValidateStep(CurrentItemStep(), cState.ui.workingItem);
+				if (cError) {
+					SetText(pRoot.querySelector("[data-item-error='true']"), cError);
+					return;
+				}
+			}
+			SetText(pRoot.querySelector("[data-item-error='true']"), "");
+			cState.ui.currentStep = cStep;
+			for (const cSection of pRoot.querySelectorAll("[data-item-step]")) cSection.hidden = Number(cSection.dataset.itemStep) !== cStep;
+			for (const cButton of pRoot.querySelectorAll("[data-step-jump]")) cButton.classList.toggle("Active", Number(cButton.dataset.stepJump) === cStep);
+			const cPrev = pRoot.querySelector("[data-action='item-prev']");
+			const cNext = pRoot.querySelector("[data-action='item-next']");
+			const cSave = pRoot.querySelector("[data-action='save-item']");
+			if (cPrev) cPrev.hidden = cStep === 0;
+			if (cNext) cNext.hidden = cStep === 4;
+			if (cSave) cSave.hidden = cStep !== 4;
+			if (cStep === 4) RenderItemReview();
+			if (pPersist) TouchDraft(true);
+		}
+
+		function CurrentItemStep() {
+			return Math.max(0, Math.min(4, Number(cState.ui.currentStep) || 0));
+		}
+
+		function ValidateStep(pStep, pItem) {
+			if (pStep === 0 && !Clean(pItem.usageType)) return "اختر نوع الاستخدام أولًا.";
+			if (pStep === 0 && !pItem.services.length) return "حدد خدمة واحدة على الأقل لهذا الصنف.";
+			if (pStep === 1 && !Clean(pItem.material.category)) return "حدد فئة الخامة أو اختر أنها غير محددة.";
+			if (pStep === 2 && !HasValidMeasurement(pItem)) return "أضف مقاسًا واحدًا على الأقل بكمية وطول/عرض أو مساحة.";
+			return "";
+		}
+
+		function ItemCoreErrors(pItem) {
+			const cErrors = [];
+			const cStep0 = ValidateStep(0, pItem); if (cStep0) cErrors.push(cStep0);
+			const cStep1 = ValidateStep(1, pItem); if (cStep1) cErrors.push(cStep1);
+			const cStep2 = ValidateStep(2, pItem); if (cStep2) cErrors.push(cStep2);
+			return cErrors;
+		}
+
+		function AddMeasure() {
+			ApplyItemFormToWorking();
+			if (!cState.ui.workingItem) return;
+			const cPieces = PieceOptions(cState.ui.workingItem.usageType);
+			cState.ui.workingItem.measurements.push({
+				id: Uid("measure"), pieceType: cPieces[0] || "قطعة", description: "", quantity: 1,
+				lengthCm: 0, widthCm: 0, thicknessCm: Num(cState.ui.workingItem.material.thicknessCm), edgeTreatment: "", areaM2: 0, areaManual: false, visibleEdgeM: 0, notes: "",
+			});
+			RenderMeasurements();
+			TouchDraft(true);
+		}
+
+		function RemoveMeasure(pIndex) {
+			if (!cState.ui.workingItem || pIndex < 0) return;
+			cState.ui.workingItem.measurements.splice(pIndex, 1);
+			RenderMeasurements();
+			TouchDraft(true);
+		}
+
+		function UpdateMeasureFromInput(pTarget) {
+			const cRow = pTarget.closest("[data-measure-row='true']");
+			if (!cRow || !cState.ui.workingItem) return;
+			const cIndex = Number(cRow.dataset.measureIndex);
+			const cMeasure = cState.ui.workingItem.measurements[cIndex];
+			if (!cMeasure) return;
+			const cName = pTarget.dataset.measureField || "";
+			if (!cName) return;
+			if (["quantity", "lengthCm", "widthCm", "thicknessCm", "areaM2", "visibleEdgeM"].includes(cName)) cMeasure[cName] = Num(pTarget.value);
+			else cMeasure[cName] = Clean(pTarget.value);
+			if (cName === "areaM2") cMeasure.areaManual = Clean(pTarget.value) !== "";
+			if (!cMeasure.areaManual && ["quantity", "lengthCm", "widthCm"].includes(cName)) cMeasure.areaM2 = AutoArea(cMeasure);
+			cMeasure.updatedAt = NowIso();
+			RenderMeasureTotal();
+		}
+
+		function RenderMeasurements() {
+			if (!cMeasureBody || !cState.ui.workingItem) return;
+			const cItem = cState.ui.workingItem;
+			if (!cItem.measurements.length) AddMeasureWithoutRender(cItem);
+			const cOptions = PieceOptions(cItem.usageType);
+			cMeasureBody.innerHTML = cItem.measurements.map((pMeasure, pIndex) => {
+				const cArea = pMeasure.areaManual ? pMeasure.areaM2 : (pMeasure.areaM2 || AutoArea(pMeasure));
+				pMeasure.areaM2 = cArea;
+				return `<tr data-measure-row="true" data-measure-index="${pIndex}">
+					<td><select data-measure-field="pieceType">${OptionHtml(cOptions, pMeasure.pieceType)}</select></td>
+					<td><input data-measure-field="description" type="text" value="${Attr(pMeasure.description)}" placeholder="الموقع أو التمييز" /></td>
+					<td><input data-measure-field="quantity" type="number" min="1" step="1" value="${Attr(pMeasure.quantity || 1)}" /></td>
+					<td><input data-measure-field="lengthCm" type="number" min="0" step="0.1" value="${Attr(pMeasure.lengthCm || "")}" /></td>
+					<td><input data-measure-field="widthCm" type="number" min="0" step="0.1" value="${Attr(pMeasure.widthCm || "")}" /></td>
+					<td><input data-measure-field="thicknessCm" type="number" min="0" step="0.1" value="${Attr(pMeasure.thicknessCm || cItem.material.thicknessCm || "")}" /></td>
+					<td><select data-measure-field="edgeTreatment">${OptionHtml(["", "بدون تلميع", "مستقيمة ملمعة", "مشطوفة", "نصف دائرية", "دائرية", "تجميع سمكين", "مجرى مانع انزلاق", "نقطة تقطير"], pMeasure.edgeTreatment)}</select></td>
+					<td><input data-measure-field="areaM2" type="number" min="0" step="0.01" value="${Attr(Round(cArea, 3) || "")}" placeholder="تلقائي" /></td>
+					<td><input data-measure-field="visibleEdgeM" type="number" min="0" step="0.1" value="${Attr(pMeasure.visibleEdgeM || "")}" /></td>
+					<td><input data-measure-field="notes" type="text" value="${Attr(pMeasure.notes)}" /></td>
+					<td><button type="button" data-action="remove-measure" data-measure-index="${pIndex}">حذف</button></td>
+				</tr>`;
+			}).join("");
+			const cHint = pRoot.querySelector("[data-measure-hint='true']");
+			SetText(cHint, MeasureHint(cItem.usageType));
+			RenderMeasureTotal();
+		}
+
+		function AddMeasureWithoutRender(pItem) {
+			const cPieces = PieceOptions(pItem.usageType);
+			pItem.measurements.push({ id: Uid("measure"), pieceType: cPieces[0] || "قطعة", description: "", quantity: 1, lengthCm: 0, widthCm: 0, thicknessCm: Num(pItem.material.thicknessCm), edgeTreatment: "", areaM2: 0, areaManual: false, visibleEdgeM: 0, notes: "" });
+		}
+
+		function RenderMeasureTotal() {
+			if (!cState.ui.workingItem) return;
+			const cTotals = ItemTotals(cState.ui.workingItem);
+			SetText(pRoot.querySelector("[data-measure-total='true']"), `الإجمالي التقريبي: ${Round(cTotals.areaM2, 2)} م² • ${cTotals.quantity} قطعة • ${Round(cTotals.edgeM, 2)} م حواف ظاهرة`);
+		}
+
+		async function HandleAttachments(pEvent) {
+			const cFiles = Array.from(pEvent.target.files || []);
+			if (!cState.ui.workingItem || !cFiles.length) return;
+			const cRemaining = Math.max(0, cMaxAttachments - cState.ui.workingItem.attachments.length);
+			if (!cRemaining) {
+				SetText(pRoot.querySelector("[data-item-error='true']"), `الحد الأقصى ${cMaxAttachments} صور للصنف.`);
+				return;
+			}
+			SetText(pRoot.querySelector("[data-item-error='true']"), "جارٍ ضغط الصور…");
+			for (const cFile of cFiles.slice(0, cRemaining)) {
+				try {
+					const cAttachment = await CompressImage(cFile, cMaxImageBytes);
+					if (RequestAttachmentBytes() + cAttachment.size > cMaxRequestImageBytes) {
+						SetText(pRoot.querySelector("[data-item-error='true']"), `وصلت الصور للحد الإجمالي المسموح للطلب (${Round(cMaxRequestImageBytes / 1024 / 1024, 1)} MB). احذف صورة أو استخدم صورًا أقل.`);
+						break;
+					}
+					cState.ui.workingItem.attachments.push(cAttachment);
+				} catch (pError) {
+					SetText(pRoot.querySelector("[data-item-error='true']"), `تعذر تجهيز الصورة: ${cFile.name}`);
+				}
+			}
+			pEvent.target.value = "";
+			SetText(pRoot.querySelector("[data-item-error='true']"), "");
+			RenderAttachments();
+			TouchDraft(true);
+		}
+
+
+		function RequestAttachmentBytes() {
+			const cEditingId = Clean(cState.ui?.editingItemId);
+			let cBytes = cState.items.reduce((pTotal, pItem) => {
+				if (cEditingId && pItem.id === cEditingId) return pTotal;
+				return pTotal + (pItem.attachments || []).reduce((pSum, pAttachment) => pSum + Math.max(0, Num(pAttachment.size) || DataUrlBytes(pAttachment.dataUrl)), 0);
+			}, 0);
+			if (cState.ui?.workingItem) cBytes += (cState.ui.workingItem.attachments || []).reduce((pSum, pAttachment) => pSum + Math.max(0, Num(pAttachment.size) || DataUrlBytes(pAttachment.dataUrl)), 0);
+			return cBytes;
+		}
+
+		function RemoveAttachment(pIndex) {
+			if (!cState.ui.workingItem || pIndex < 0) return;
+			cState.ui.workingItem.attachments.splice(pIndex, 1);
+			RenderAttachments();
+			TouchDraft(true);
+		}
+
+		function RenderAttachments() {
+			const cBox = pRoot.querySelector("[data-attachments='true']");
+			if (!cBox || !cState.ui.workingItem) return;
+			cBox.innerHTML = cState.ui.workingItem.attachments.map((pAttachment, pIndex) => `<article class="StoneReqAttachment">
+				<img src="${Attr(pAttachment.dataUrl)}" alt="${Attr(pAttachment.name)}" />
+				<span>${Html(pAttachment.name)} • ${FormatBytes(pAttachment.size)}</span>
+				<button type="button" data-action="remove-attachment" data-attachment-index="${pIndex}" aria-label="حذف الصورة">×</button>
+			</article>`).join("");
+		}
+
+		function RenderItemReview() {
+			ApplyItemFormToWorking();
+			const cItem = NormalizeItem(cState.ui.workingItem);
+			const cTotals = ItemTotals(cItem);
+			const cErrors = ItemCoreErrors(cItem);
+			const cTarget = pRoot.querySelector("[data-item-review='true']");
+			if (!cTarget) return;
+			cTarget.innerHTML = `
+				<section class="StoneReqReviewCard"><h4>${Html(cItem.title || UsageLabel(cItem.usageType))}</h4><p>${Html(UsageLabel(cItem.usageType))} • ${Html(cItem.location || "الموقع داخل المشروع غير محدد")} • ${Html(cItem.services.join("، ") || "الخدمة غير محددة")}</p></section>
+				<section class="StoneReqReviewCard"><h4>الخامة</h4><p>${Html(MaterialText(cItem))}</p></section>
+				<section class="StoneReqReviewCard"><h4>القطع والمقاسات</h4><p>${cItem.measurements.length} مجموعة • ${cTotals.quantity} قطعة • ${Round(cTotals.areaM2, 2)} م² • ${Round(cTotals.edgeM, 2)} م حواف ظاهرة</p></section>
+				<section class="StoneReqReviewCard"><h4>التجهيزات</h4><p>${Html(ProcessingText(cItem))}</p></section>
+				<section class="StoneReqReviewCard"><h4>حالة البيانات</h4><p class="${cErrors.length ? "StoneReqMissing" : ""}">${Html(cErrors.length ? cErrors.join(" • ") : "الصنف جاهز للحفظ والتسعير المبدئي.")}</p></section>`;
+		}
+
+		function OpenOrderReview() {
+			RenderOrderReview();
+			OpenOverlay(cReviewOverlay);
+		}
+
+		function RenderOrderReview() {
+			const cTarget = pRoot.querySelector("[data-order-review='true']");
+			if (!cTarget) return;
+			const cProjectErrors = ProjectSubmitErrors();
+			const cReady = cState.items.filter((pItem) => ["estimate-ready", "complete"].includes(pItem.completionStatus)).length;
+			const cItemsHtml = cState.items.length ? cState.items.map((pItem, pIndex) => {
+				const cTotals = ItemTotals(pItem);
+				return `<article class="StoneReqOrderItem"><strong>${pIndex + 1}. ${Html(pItem.title || UsageLabel(pItem.usageType))}</strong><p>${Html(MaterialText(pItem))}<br>${cTotals.quantity} قطعة • ${Round(cTotals.areaM2, 2)} م² • ${Html(pItem.services.join("، "))}<br>الحالة: ${Html(StatusText(pItem.completionStatus))}${pItem.missingFields.length ? `<br><span class="StoneReqMissing">الناقص: ${Html(pItem.missingFields.join("، "))}</span>` : ""}</p></article>`;
+			}).join("") : `<p class="StoneReqMissing">لم تُضف أصنافًا بعد.</p>`;
+			cTarget.innerHTML = `
+				<section class="StoneReqOrderBlock"><h4>العميل والمشروع</h4><p>${Html(cState.customer.name || "الاسم غير مسجل")} • ${Html(cState.customer.phone || "الهاتف غير مسجل")}<br>${Html([cState.project.governorate, cState.project.city, cState.project.district].filter(Boolean).join(" - ") || "موقع المشروع غير مكتمل")}<br>${Html(cState.project.type || "نوع المشروع غير محدد")} • ${Html(cState.project.executionTime || "الموعد غير محدد")}</p></section>
+				<section class="StoneReqOrderBlock"><h4>ملخص الجاهزية</h4><p>${cState.items.length} صنف • ${cReady} جاهز للتسعير • اكتمال الطلب ${CompletionPercent()}%</p>${cProjectErrors.length ? `<p class="StoneReqMissing">${Html(cProjectErrors.join(" • "))}</p>` : ""}</section>
+				<section class="StoneReqOrderBlock StoneReqOrderItems"><h4>الأصناف</h4>${cItemsHtml}</section>`;
+			const cResumeBox = pRoot.querySelector("[data-resume-link-box='true']");
+			if (cResumeBox) cResumeBox.hidden = !Clean(cState.meta.draftId);
+			UpdateResumeLink();
+		}
+
+		async function SaveAndShowResume() {
+			TouchDraft(false);
+			await SaveLocalDraftNow();
+			OpenOrderReview();
+			if (!IsRemoteMeaningful(cState)) {
+				SetSubmitStatus("تم حفظ المسودة على هذا الجهاز. أدخل رقم هاتف صحيحًا أو أضف صنفًا لإنشاء رابط استكمال على الخادم.", "success");
+				return;
+			}
+			const cResult = await SaveRemote("save", true);
+			if (!cResult) return;
+			const cResumeBox = pRoot.querySelector("[data-resume-link-box='true']");
+			if (cResumeBox) cResumeBox.hidden = false;
+			UpdateResumeLink();
+			SetSubmitStatus("تم حفظ المسودة. استخدم الرابط للعودة إليها لاحقًا.", "success");
+		}
+
+		async function SubmitOrder(pButton) {
+			const cErrors = ProjectSubmitErrors();
+			if (cErrors.length) {
+				SetSubmitStatus(cErrors.join(" • "), "error");
+				return;
+			}
+			SetBusy(pButton, true, "جارٍ الإرسال…");
+			const cResult = await SaveRemote("submit", true);
+			SetBusy(pButton, false, "إرسال طلب المقايسة");
+			if (!cResult) return;
+			cState.meta.status = "submitted";
+			cState.meta.submittedAt = cResult.submittedAt || NowIso();
+			await DeleteLocalDraft();
+			RenderAll();
+			SetSubmitStatus(`تم إرسال الطلب رقم ${cResult.requestNo || cState.meta.requestNo || ""}. سنتواصل بعد مراجعة الأصناف والمقاسات.`, "success");
+			SetMessage("تم تسجيل طلب المقايسة وإرساله إلى EmoLive.", "success");
+		}
+
+		function ProjectSubmitErrors() {
+			const cErrors = [];
+			if (!Clean(cState.customer.name)) cErrors.push("اسم العميل مطلوب");
+			if (!ValidPhone(cState.customer.phone)) cErrors.push("رقم هاتف صحيح مطلوب");
+			if (!Clean(cState.project.city)) cErrors.push("المدينة أو المنطقة مطلوبة");
+			if (!cState.items.length) cErrors.push("أضف صنفًا واحدًا على الأقل");
+			if (cState.items.length && !cState.items.some((pItem) => HasValidMeasurement(pItem))) cErrors.push("لا يوجد صنف يحتوي مقاسات صالحة");
+			return cErrors;
+		}
+
+		function ResumeLocal() {
+			if (!cPendingLocal) return;
+			cState = NormalizeDraft(cPendingLocal);
+			cPendingLocal = null;
+			if (cResumePanel) cResumePanel.hidden = true;
+			RenderAll();
+			SetMessage("تم استكمال الطلب المحفوظ على هذا الجهاز.", "success");
+			ResumeInterruptedEditor();
+		}
+
+		async function DiscardLocal() {
+			if (!window.confirm("بدء طلب جديد وحذف المسودة المحلية من هذا الجهاز؟")) return;
+			await DeleteLocalDraft();
+			cPendingLocal = null;
+			cState = NewDraft();
+			if (cResumePanel) cResumePanel.hidden = true;
+			RenderAll();
+		}
+
+		function ShowResumePrompt(pDraft) {
+			if (!cResumePanel) return;
+			cResumePanel.hidden = false;
+			const cSummary = pRoot.querySelector("[data-resume-summary='true']");
+			const cUpdated = FormatDate(pDraft.meta?.updatedAt);
+			SetText(cSummary, `${pDraft.items?.length || 0} صنف • آخر تعديل ${cUpdated || "غير معروف"}${pDraft.ui?.workingItem ? " • يوجد صنف غير مكتمل داخل المحرر" : ""}`);
+			RenderAll();
+		}
+
+		function ResumeInterruptedEditor() {
+			if (!cState.ui?.workingItem) return;
+			window.setTimeout(() => OpenItem(cState.ui.workingItem, cState.ui.editingItemId || ""), 120);
+		}
+
+		function RenderAll() {
+			cState = NormalizeDraft(cState);
+			RenderItemsTable();
+			const cPercent = CompletionPercent();
+			SetText(cCompletion, `${cPercent}%`);
+			SetText(pRoot.querySelector("[data-item-count='true']"), String(cState.items.length));
+			SetText(pRoot.querySelector("[data-ready-count='true']"), String(cState.items.filter((pItem) => ["estimate-ready", "complete"].includes(pItem.completionStatus)).length));
+			if (cState.meta.status === "submitted") SetSaveState(`تم إرسال الطلب ${cState.meta.requestNo ? `#${cState.meta.requestNo}` : ""}`);
+			else if (cState.meta.draftId) SetSaveState(`مسودة محفوظة على الخادم ${cState.meta.requestNo ? `#${cState.meta.requestNo}` : ""}`);
+			else SetSaveState(IsMeaningful(cState) ? "محفوظ محليًا" : "لم يبدأ الحفظ بعد");
+		}
+
+		function RenderItemsTable() {
+			if (!cItemsBody || !cEmptyState) return;
+			cEmptyState.hidden = cState.items.length > 0;
+			const cTable = cItemsBody.closest("table");
+			if (cTable) cTable.hidden = cState.items.length === 0;
+			cItemsBody.innerHTML = cState.items.map((pItem) => {
+				const cTotals = ItemTotals(pItem);
+				return `<tr>
+					<td><span class="StoneReqItemTitle"><strong>${Html(pItem.title || UsageLabel(pItem.usageType))}</strong><small>${Html(UsageLabel(pItem.usageType))}${pItem.location ? ` • ${Html(pItem.location)}` : ""}</small></span></td>
+					<td>${Html(pItem.material.name || pItem.material.color || pItem.material.category || "غير محددة")}<br><span class="StoneReqCellSoft">${Html([pItem.material.origin, pItem.material.thicknessCm ? `${pItem.material.thicknessCm} سم` : "", pItem.material.surfaceFinish].filter(Boolean).join(" • "))}</span></td>
+					<td>${pItem.measurements.length} مجموعة<br><span class="StoneReqCellSoft">${cTotals.quantity} قطعة • ${Round(cTotals.areaM2, 2)} م²</span></td>
+					<td>${Html(pItem.services.join("، ") || "غير محددة")}</td>
+					<td><span class="StoneReqStatusTag" data-status="${Attr(pItem.completionStatus)}">${Html(StatusText(pItem.completionStatus))}</span>${pItem.missingFields.length ? `<br><span class="StoneReqCellSoft">${Html(pItem.missingFields.slice(0, 2).join("، "))}</span>` : ""}</td>
+					<td><span class="StoneReqRowActions"><button type="button" data-row-action="edit" data-item-id="${Attr(pItem.id)}">تعديل</button><button type="button" data-row-action="duplicate" data-item-id="${Attr(pItem.id)}">نسخ</button><button type="button" data-row-action="delete" data-item-id="${Attr(pItem.id)}">حذف</button></span></td>
+				</tr>`;
+			}).join("");
+		}
+
+		function TouchDraft(pRemote = true) {
+			if (!cInitialized) return;
+			cState.meta.updatedAt = NowIso();
+			window.clearTimeout(cSaveTimer);
+			cSaveTimer = window.setTimeout(SaveLocalDraftNow, 180);
+			if (pRemote && IsRemoteMeaningful(cState) && cState.meta.status !== "submitted") {
+				window.clearTimeout(cRemoteTimer);
+				cRemoteTimer = window.setTimeout(() => SaveRemote("save", false), 1600);
+			}
+			SetSaveState("جارٍ الحفظ…");
+		}
+
+		async function SaveLocalDraftNow() {
+			try {
+				await DbPut(cStorageKey, cState);
+				if (!cSavingRemote) SetSaveState(cState.meta.draftId ? "محفوظ محليًا وعلى الخادم" : "محفوظ محليًا");
+			} catch (pError) {
+				SetSaveState("تعذر الحفظ المحلي");
+				SetMessage("تعذر حفظ المسودة داخل المتصفح. قد تكون مساحة التخزين ممتلئة.", "error");
+			}
+		}
+
+		async function LoadLocalDraft() {
+			try { return NormalizeDraft(await DbGet(cStorageKey)); }
+			catch { return null; }
+		}
+
+		async function DeleteLocalDraft() {
+			try { await DbDelete(cStorageKey); }
+			catch { }
+		}
+
+		async function SaveRemote(pAction, pShowErrors) {
+			if (!IsRemoteMeaningful(cState)) return null;
+			while (cSavingRemote) await new Promise((pResolve) => window.setTimeout(pResolve, 80));
+			cSavingRemote = true;
+			SetSaveState(pAction === "submit" ? "جارٍ إرسال الطلب…" : "جارٍ مزامنة المسودة…");
+			try {
+				const cResponse = await fetch(cApiUrl, {
+					method: "POST",
+					headers: { "content-type": "application/json" },
+					body: JSON.stringify({
+						action: pAction,
+						draftId: cState.meta.draftId,
+						resumeToken: cState.meta.resumeToken,
+						sourcePage: cSourcePage,
+						pageUrl: window.location.href,
+						requestData: cState,
+					}),
+				});
+				const cResult = await cResponse.json().catch(() => ({}));
+				if (!cResponse.ok || !cResult.ok) throw new Error(cResult.error || `HTTP ${cResponse.status}`);
+				cState.meta.draftId = Clean(cResult.draftId) || cState.meta.draftId;
+				cState.meta.resumeToken = Clean(cResult.resumeToken) || cState.meta.resumeToken;
+				cState.meta.requestNo = cResult.requestNo || cState.meta.requestNo;
+				cState.meta.status = Clean(cResult.status) || cState.meta.status;
+				cState.meta.updatedAt = Clean(cResult.updatedAt) || NowIso();
+				if (cResult.submittedAt) cState.meta.submittedAt = cResult.submittedAt;
+				await SaveLocalDraftNow();
+				SetSaveState(pAction === "submit" ? "تم إرسال الطلب" : "المسودة محفوظة على الخادم");
+				UpdateResumeLink();
+				return cResult;
+			} catch (pError) {
+				SetSaveState("محفوظ محليًا — تعذرت المزامنة");
+				if (pShowErrors) {
+					SetSubmitStatus(`تعذر الحفظ على الخادم: ${Clean(pError?.message) || "خطأ غير معروف"}`, "error");
+					SetMessage("البيانات ما زالت محفوظة محليًا ويمكن إعادة المحاولة.", "error");
+				}
+				return null;
+			} finally {
+				cSavingRemote = false;
+			}
+		}
+
+		async function LoadRemoteDraft(pDraftId, pToken) {
+			try {
+				const cUrl = new URL(cApiUrl, window.location.origin);
+				cUrl.searchParams.set("draftId", pDraftId);
+				cUrl.searchParams.set("token", pToken);
+				const cResponse = await fetch(cUrl.toString(), { headers: { accept: "application/json" } });
+				const cResult = await cResponse.json().catch(() => ({}));
+				if (!cResponse.ok || !cResult.ok) throw new Error(cResult.error || "تعذر تحميل المسودة");
+				return cResult.requestData;
+			} catch (pError) {
+				SetMessage(Clean(pError?.message) || "تعذر تحميل المسودة من الرابط.", "error");
+				return null;
+			}
+		}
+
+		function UpdateResumeLink() {
+			const cInput = pRoot.querySelector("[data-resume-link='true']");
+			if (!cInput || !cState.meta.draftId || !cState.meta.resumeToken) return;
+			const cUrl = new URL(window.location.href);
+			cUrl.searchParams.set("stoneDraft", cState.meta.draftId);
+			cUrl.searchParams.set("stoneToken", cState.meta.resumeToken);
+			cInput.value = cUrl.toString();
+		}
+
+		async function CopyResumeLink() {
+			const cInput = pRoot.querySelector("[data-resume-link='true']");
+			if (!cInput?.value) return;
+			try {
+				await navigator.clipboard.writeText(cInput.value);
+				SetSubmitStatus("تم نسخ رابط الاستكمال.", "success");
+			} catch {
+				cInput.select();
+				document.execCommand("copy");
+				SetSubmitStatus("تم نسخ رابط الاستكمال.", "success");
+			}
+		}
+
+		function NewDraft() {
+			return {
+				version: 1,
+				meta: { draftId: "", resumeToken: "", requestNo: 0, status: "draft", sourcePage: cSourcePage, pageUrl: window.location.href, createdAt: NowIso(), updatedAt: NowIso(), submittedAt: "" },
+				customer: { name: "", phone: "", whatsapp: "", role: "مالك المشروع", contactTime: "أي وقت" },
+				project: { governorate: "", city: "", district: "", type: "شقة", siteState: "جاهز للقياس والتركيب", executionTime: "في أقرب وقت", generalNotes: "" },
+				logistics: { floor: "", elevator: "غير محدد", liftingAccess: "رفع عادي", vehicleAccess: "أمام المدخل", workRestrictions: "" },
+				generalServices: ["توريد", "قص وتجهيز", "نقل ورفع", "تركيب"],
+				items: [],
+				ui: { currentStep: 0, editingItemId: "", workingItem: null },
+			};
+		}
+
+		function NewItem() {
+			return NormalizeItem({
+				id: Uid("item"), usageType: "", title: "", location: "", workState: "جديد", services: ["توريد", "قص وتجهيز", "تركيب"], description: "",
+				material: { category: "", origin: "غير محدد", name: "", color: "", pattern: "غير محدد", thicknessCm: "", surfaceFinish: "لامع مصقول", priceLevel: "غير محدد", selectionPriority: "التوازن بين السعر والشكل", acceptAlternative: false, sameBatchRequired: false },
+				measurements: [],
+				processing: { features: [], sinkOpenings: 0, cooktopOpenings: 0, faucetOpenings: 0, specialOpenings: 0, polishedEdgesM: 0, skirtingHeightCm: 0, waterfallSides: 0, antiSlipGrooves: 0, notes: "" },
+				attachments: [], referenceUrl: "", createdAt: NowIso(), updatedAt: NowIso(),
+			});
+		}
+
+		function NormalizeDraft(pValue) {
+			if (!pValue || typeof pValue !== "object") return NewDraft();
+			const cBase = NewDraft();
+			const cDraft = {
+				...cBase,
+				...pValue,
+				meta: { ...cBase.meta, ...(pValue.meta || {}) },
+				customer: { ...cBase.customer, ...(pValue.customer || {}) },
+				project: { ...cBase.project, ...(pValue.project || {}) },
+				logistics: { ...cBase.logistics, ...(pValue.logistics || {}) },
+				generalServices: Array.isArray(pValue.generalServices) ? pValue.generalServices.map(Clean).filter(Boolean) : cBase.generalServices,
+				items: Array.isArray(pValue.items) ? pValue.items.map(NormalizeItem) : [],
+				ui: { ...cBase.ui, ...(pValue.ui || {}) },
+			};
+			if (cDraft.ui.workingItem) cDraft.ui.workingItem = NormalizeItem(cDraft.ui.workingItem);
+			return cDraft;
+		}
+
+		function NormalizeItem(pValue) {
+			const cItem = pValue && typeof pValue === "object" ? pValue : {};
+			const cMaterial = cItem.material && typeof cItem.material === "object" ? cItem.material : {};
+			const cProcessing = cItem.processing && typeof cItem.processing === "object" ? cItem.processing : {};
+			const cResult = {
+				id: Clean(cItem.id) || Uid("item"),
+				usageType: Clean(cItem.usageType), title: Clean(cItem.title), location: Clean(cItem.location), workState: Clean(cItem.workState) || "جديد",
+				services: Array.isArray(cItem.services) ? cItem.services.map(Clean).filter(Boolean) : [], description: Clean(cItem.description),
+				material: {
+					category: Clean(cMaterial.category), origin: Clean(cMaterial.origin) || "غير محدد", name: Clean(cMaterial.name), color: Clean(cMaterial.color), pattern: Clean(cMaterial.pattern) || "غير محدد", thicknessCm: Clean(cMaterial.thicknessCm), surfaceFinish: Clean(cMaterial.surfaceFinish) || "غير محدد", priceLevel: Clean(cMaterial.priceLevel) || "غير محدد", selectionPriority: Clean(cMaterial.selectionPriority) || "التوازن بين السعر والشكل", acceptAlternative: Boolean(cMaterial.acceptAlternative), sameBatchRequired: Boolean(cMaterial.sameBatchRequired),
+				},
+				measurements: Array.isArray(cItem.measurements) ? cItem.measurements.map((pMeasure) => ({ id: Clean(pMeasure.id) || Uid("measure"), pieceType: Clean(pMeasure.pieceType) || "قطعة", description: Clean(pMeasure.description), quantity: Math.max(1, Num(pMeasure.quantity) || 1), lengthCm: Math.max(0, Num(pMeasure.lengthCm)), widthCm: Math.max(0, Num(pMeasure.widthCm)), thicknessCm: Math.max(0, Num(pMeasure.thicknessCm)), edgeTreatment: Clean(pMeasure.edgeTreatment), areaM2: Math.max(0, Num(pMeasure.areaM2)), areaManual: Boolean(pMeasure.areaManual), visibleEdgeM: Math.max(0, Num(pMeasure.visibleEdgeM)), notes: Clean(pMeasure.notes) })) : [],
+				processing: {
+					features: Array.isArray(cProcessing.features) ? cProcessing.features.map(Clean).filter(Boolean) : [], sinkOpenings: Num(cProcessing.sinkOpenings), cooktopOpenings: Num(cProcessing.cooktopOpenings), faucetOpenings: Num(cProcessing.faucetOpenings), specialOpenings: Num(cProcessing.specialOpenings), polishedEdgesM: Num(cProcessing.polishedEdgesM), skirtingHeightCm: Num(cProcessing.skirtingHeightCm), waterfallSides: Num(cProcessing.waterfallSides), antiSlipGrooves: Num(cProcessing.antiSlipGrooves), notes: Clean(cProcessing.notes),
+				},
+				attachments: Array.isArray(cItem.attachments) ? cItem.attachments.filter((pAttachment) => pAttachment && typeof pAttachment === "object" && Clean(pAttachment.dataUrl)).slice(0, cMaxAttachments) : [],
+				referenceUrl: Clean(cItem.referenceUrl), createdAt: Clean(cItem.createdAt) || NowIso(), updatedAt: Clean(cItem.updatedAt) || NowIso(), completionStatus: "draft", missingFields: [],
+			};
+			const cMissing = [];
+			if (!cResult.usageType) cMissing.push("نوع الاستخدام");
+			if (!cResult.services.length) cMissing.push("الخدمة المطلوبة");
+			if (!cResult.material.category) cMissing.push("فئة الخامة");
+			if (!HasValidMeasurement(cResult)) cMissing.push("المقاسات");
+			cResult.missingFields = cMissing;
+			if (!HasValidMeasurement(cResult)) cResult.completionStatus = "needs-measurement";
+			else if (!cMissing.length && (cResult.material.name || cResult.material.color || cResult.material.category === "غير محدد")) cResult.completionStatus = "estimate-ready";
+			else cResult.completionStatus = "draft";
+			return cResult;
+		}
+
+		function CompletionPercent() {
+			let cDone = 0;
+			let cTotal = 5;
+			if (Clean(cState.customer.name)) cDone++;
+			if (ValidPhone(cState.customer.phone)) cDone++;
+			if (Clean(cState.project.city)) cDone++;
+			if (cState.items.length) cDone++;
+			if (cState.items.length && cState.items.every((pItem) => HasValidMeasurement(pItem))) cDone++;
+			for (const cItem of cState.items) {
+				cTotal += 4;
+				if (cItem.usageType) cDone++;
+				if (cItem.services.length) cDone++;
+				if (cItem.material.category) cDone++;
+				if (HasValidMeasurement(cItem)) cDone++;
+			}
+			return Math.round((cDone / Math.max(1, cTotal)) * 100);
+		}
+
+		function IsValidMeasurement(pMeasure) {
+			return Num(pMeasure?.quantity) > 0 && (Num(pMeasure?.areaM2) > 0 || (Num(pMeasure?.lengthCm) > 0 && Num(pMeasure?.widthCm) > 0));
+		}
+
+		function HasValidMeasurement(pItem) {
+			return Array.isArray(pItem?.measurements) && pItem.measurements.some(IsValidMeasurement);
+		}
+
+		function ItemTotals(pItem) {
+			return (pItem.measurements || []).reduce((pTotal, pMeasure) => {
+				if (!IsValidMeasurement(pMeasure)) return pTotal;
+				pTotal.quantity += Math.max(1, Num(pMeasure.quantity) || 1);
+				pTotal.areaM2 += Num(pMeasure.areaM2) || AutoArea(pMeasure);
+				pTotal.edgeM += Num(pMeasure.visibleEdgeM);
+				return pTotal;
+			}, { quantity: 0, areaM2: 0, edgeM: 0 });
+		}
+
+		function AutoArea(pMeasure) {
+			return (Math.max(1, Num(pMeasure.quantity) || 1) * Num(pMeasure.lengthCm) * Num(pMeasure.widthCm)) / 10000;
+		}
+
+		function MaterialText(pItem) {
+			return [pItem.material.category, pItem.material.origin, pItem.material.name || pItem.material.color, pItem.material.thicknessCm ? `${pItem.material.thicknessCm} سم` : "", pItem.material.surfaceFinish].filter((pValue) => Clean(pValue) && pValue !== "غير محدد").join(" • ") || "الخامة غير محددة";
+		}
+
+		function ProcessingText(pItem) {
+			const cParts = [...(pItem.processing.features || [])];
+			if (pItem.processing.sinkOpenings) cParts.push(`${pItem.processing.sinkOpenings} فتحة حوض`);
+			if (pItem.processing.cooktopOpenings) cParts.push(`${pItem.processing.cooktopOpenings} فتحة بوتاجاز`);
+			if (pItem.processing.faucetOpenings) cParts.push(`${pItem.processing.faucetOpenings} فتحة خلاط`);
+			if (pItem.processing.specialOpenings) cParts.push(`${pItem.processing.specialOpenings} فتحة خاصة`);
+			if (pItem.processing.polishedEdgesM) cParts.push(`${pItem.processing.polishedEdgesM} م تلميع`);
+			if (pItem.processing.waterfallSides) cParts.push(`${pItem.processing.waterfallSides} جانب هابط`);
+			return cParts.join("، ") || "لا توجد تجهيزات خاصة مسجلة";
+		}
+
+		function UsageLabel(pUsage) { return cUsage[pUsage]?.label || ""; }
+		function PieceOptions(pUsage) { return cUsage[pUsage]?.pieces || cUsage.other.pieces; }
+		function MeasureHint(pUsage) {
+			if (pUsage === "stairs") return "أدخل النوايم والقوائم والبسطات كمجموعات منفصلة، ويمكن تكرار المقاس بالعدد.";
+			if (pUsage === "floor" || pUsage === "wall" || pUsage === "facade") return "يمكن إدخال المساحة مباشرة أو إدخال الطول والعرض ليحسبها النظام تلقائيًا.";
+			if (pUsage === "kitchen") return "افصل كل رخامة أو جزيرة أو وزرة تختلف في المقاس أو الفتحات في صف مستقل.";
+			return "كل صف يمثل قطعة أو مجموعة قطع متطابقة في المقاس والتجهيز.";
+		}
+
+		function StatusText(pStatus) {
+			if (pStatus === "estimate-ready") return "جاهز لسعر مبدئي";
+			if (pStatus === "complete") return "مكتمل";
+			if (pStatus === "needs-measurement") return "يحتاج مقاسات";
+			return "مسودة ناقصة";
+		}
+
+		function IsMeaningful(pDraft) {
+			return Boolean(pDraft && (Clean(pDraft.customer?.name) || Clean(pDraft.customer?.phone) || Clean(pDraft.project?.city) || pDraft.items?.length || pDraft.ui?.workingItem));
+		}
+
+		function IsRemoteMeaningful(pDraft) {
+			return Boolean(pDraft && (ValidPhone(pDraft.customer?.phone) || pDraft.items?.length || pDraft.meta?.draftId));
+		}
+
+		function OpenOverlay(pOverlay) {
+			if (!pOverlay) return;
+			pOverlay.hidden = false;
+			pOverlay.setAttribute("aria-hidden", "false");
+			document.documentElement.style.overflow = "hidden";
+		}
+
+		function CloseOverlay(pOverlay) {
+			if (!pOverlay) return;
+			pOverlay.hidden = true;
+			pOverlay.setAttribute("aria-hidden", "true");
+			if (![cProjectOverlay, cItemOverlay, cReviewOverlay].some(IsOpen)) document.documentElement.style.overflow = "";
+		}
+
+		function IsOpen(pOverlay) { return Boolean(pOverlay && !pOverlay.hidden); }
+		function SetSaveState(pText) { SetText(cSaveState, pText); }
+		function SetMessage(pText, pMode = "") { SetText(cMessage, pText); if (cMessage) cMessage.dataset.mode = pMode; }
+		function SetSubmitStatus(pText, pMode = "") { const cTarget = pRoot.querySelector("[data-submit-status='true']"); SetText(cTarget, pText); if (cTarget) cTarget.dataset.mode = pMode; }
+		function SetText(pElement, pText) { if (pElement) pElement.textContent = pText || ""; }
+		function SetBusy(pButton, pBusy, pText) { if (!pButton) return; pButton.disabled = Boolean(pBusy); pButton.textContent = pText; }
+		function TouchDraftMeta() { cState.meta.updatedAt = NowIso(); }
+
+		function SetFormValue(pForm, pName, pValue) {
+			const cInput = pForm.elements.namedItem(pName);
+			if (cInput && "value" in cInput) cInput.value = pValue ?? "";
+		}
+
+		function SetChecked(pForm, pName, pValue) {
+			const cInput = pForm.elements.namedItem(pName);
+			if (cInput && "checked" in cInput) cInput.checked = Boolean(pValue);
+		}
+
+		function SetCheckboxes(pForm, pName, pValues) {
+			const cSet = new Set(Array.isArray(pValues) ? pValues : []);
+			for (const cInput of pForm.querySelectorAll(`input[name='${pName}']`)) cInput.checked = cSet.has(cInput.value);
+		}
+
+		function Value(pData, pName) { return Clean(pData.get(pName)); }
+		function Values(pData, pName) { return pData.getAll(pName).map(Clean).filter(Boolean); }
+		function Clean(pValue) { return String(pValue ?? "").trim(); }
+		function Num(pValue) { const cValue = Number(pValue); return Number.isFinite(cValue) ? cValue : 0; }
+		function Round(pValue, pDigits = 2) { const cFactor = 10 ** pDigits; return Math.round((Num(pValue) + Number.EPSILON) * cFactor) / cFactor; }
+		function ValidPhone(pValue) { return Clean(pValue).replace(/\D/g, "").length >= 10; }
+		function NowIso() { return new Date().toISOString(); }
+		function DeepClone(pValue) { return JSON.parse(JSON.stringify(pValue)); }
+		function Uid(pPrefix) { return `${pPrefix}_${crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}_${Math.random().toString(36).slice(2)}`}`; }
+		function Html(pValue) { return Clean(pValue).replace(/[&<>"']/g, (pChar) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[pChar])); }
+		function Attr(pValue) { return Html(pValue); }
+		function OptionHtml(pOptions, pSelected) { const cValues = Array.from(new Set([...(pOptions || []), Clean(pSelected)].filter(Boolean))); return cValues.map((pValue) => `<option value="${Attr(pValue)}"${pValue === pSelected ? " selected" : ""}>${Html(pValue)}</option>`).join(""); }
+		function FormatDate(pIso) { const cMs = Date.parse(Clean(pIso)); return Number.isFinite(cMs) ? new Intl.DateTimeFormat("ar-EG", { dateStyle: "medium", timeStyle: "short" }).format(new Date(cMs)) : ""; }
+		function FormatBytes(pBytes) { const cBytes = Num(pBytes); return cBytes < 1024 ? `${cBytes} B` : cBytes < 1024 * 1024 ? `${Round(cBytes / 1024, 1)} KB` : `${Round(cBytes / 1024 / 1024, 1)} MB`; }
+
+		async function CompressImage(pFile, pMaxBytes) {
+			if (!pFile.type.startsWith("image/")) throw new Error("Unsupported file");
+			const cSource = await FileToDataUrl(pFile);
+			const cImage = await LoadImage(cSource);
+			let cScale = Math.min(1, 1600 / Math.max(cImage.naturalWidth, cImage.naturalHeight));
+			let cQuality = .82;
+			let cDataUrl = "";
+			for (let cTry = 0; cTry < 8; cTry++) {
+				const cCanvas = document.createElement("canvas");
+				cCanvas.width = Math.max(1, Math.round(cImage.naturalWidth * cScale));
+				cCanvas.height = Math.max(1, Math.round(cImage.naturalHeight * cScale));
+				const cContext = cCanvas.getContext("2d");
+				cContext.drawImage(cImage, 0, 0, cCanvas.width, cCanvas.height);
+				cDataUrl = cCanvas.toDataURL("image/jpeg", cQuality);
+				if (DataUrlBytes(cDataUrl) <= pMaxBytes) break;
+				if (cQuality > .5) cQuality -= .1;
+				else cScale *= .82;
+			}
+			return { id: Uid("img"), name: pFile.name.replace(/\.[^.]+$/, "") + ".jpg", type: "image/jpeg", size: DataUrlBytes(cDataUrl), width: Math.round(cImage.naturalWidth * cScale), height: Math.round(cImage.naturalHeight * cScale), dataUrl: cDataUrl, createdAt: NowIso() };
+		}
+
+		function FileToDataUrl(pFile) { return new Promise((pResolve, pReject) => { const cReader = new FileReader(); cReader.onload = () => pResolve(cReader.result); cReader.onerror = pReject; cReader.readAsDataURL(pFile); }); }
+		function LoadImage(pSrc) { return new Promise((pResolve, pReject) => { const cImage = new Image(); cImage.onload = () => pResolve(cImage); cImage.onerror = pReject; cImage.src = pSrc; }); }
+		function DataUrlBytes(pDataUrl) { const cBase64 = Clean(pDataUrl).split(",")[1] || ""; return Math.ceil(cBase64.length * .75); }
+
+		function OpenDb() {
+			return new Promise((pResolve, pReject) => {
+				const cRequest = indexedDB.open("EmoStoneRequests", 1);
+				cRequest.onupgradeneeded = () => { const cDb = cRequest.result; if (!cDb.objectStoreNames.contains("drafts")) cDb.createObjectStore("drafts"); };
+				cRequest.onsuccess = () => pResolve(cRequest.result);
+				cRequest.onerror = () => pReject(cRequest.error);
+			});
+		}
+
+		async function DbPut(pKey, pValue) { const cDb = await OpenDb(); await DbTransaction(cDb, "readwrite", (pStore) => pStore.put(pValue, pKey)); cDb.close(); }
+		async function DbGet(pKey) { const cDb = await OpenDb(); const cValue = await DbTransaction(cDb, "readonly", (pStore) => pStore.get(pKey)); cDb.close(); return cValue; }
+		async function DbDelete(pKey) { const cDb = await OpenDb(); await DbTransaction(cDb, "readwrite", (pStore) => pStore.delete(pKey)); cDb.close(); }
+		function DbTransaction(pDb, pMode, pAction) { return new Promise((pResolve, pReject) => { const cTx = pDb.transaction("drafts", pMode); const cRequest = pAction(cTx.objectStore("drafts")); cRequest.onsuccess = () => pResolve(cRequest.result); cRequest.onerror = () => pReject(cRequest.error); cTx.onerror = () => pReject(cTx.error); }); }
+	}
+})();
+</script>

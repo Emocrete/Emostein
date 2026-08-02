@@ -1,6 +1,7 @@
 ---
 import { NumPer, Pixel, Place, type PlaceProps, Size } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
+import EmoCall from "../Comp/Btn/EmoCall.astro";
 
 interface Props extends DebugOutlineProps, HTMLAttributes<"article">, PlaceProps {
 	pThemeColor?: string;
@@ -231,21 +232,6 @@ function GetCssName(pName: string) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <article
 	class = {cRootClass}
 	style = {cPlace.Style}
@@ -264,16 +250,7 @@ function GetCssName(pName: string) {
 
 		<div class = " TPCHMedia " aria-hidden={pImage ? undefined : "true"}>
 
-			{ pImage && (
-
-				<img
-					class = " TPCHMediaImg "
-					src={pImage}
-					alt={pImageAlt}
-					loading="lazy"
-					decoding="async"
-				/>
-			) }
+			{ pImage && ( <img class = " TPCHMediaImg " src={pImage} alt={pImageAlt} loading="lazy" decoding="async" /> ) }
 
 		</div>
 
@@ -285,22 +262,7 @@ function GetCssName(pName: string) {
 
 			</div>
 
-			{ cActionTitle && cActionHref && (
-
-				<a
-					class = " TPCHAction "
-					href={cActionHref}
-					target={pActionTarget || undefined}
-					rel={cActionRel}
-				>
-
-					<span>
-						{cActionTitle}
-					</span>
-
-				</a>
-
-			) }
+			{ cActionTitle && ( <EmoCall BlackOrange pText={cActionTitle} /> ) }
 
 		</div>
 
@@ -333,21 +295,6 @@ function GetCssName(pName: string) {
 		</div>
 
 	</article>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -772,35 +719,20 @@ function GetCssName(pName: string) {
 
 	@container TPCHHz (max-width: 700px) {
 	.ThemedPriceCardHz.CanFlip .TPCHFrame {
-							grid-template-columns: minmax(0, 1fr);
-							grid-template-rows: var(--TPCHMediaHeightP) minmax(0, 1fr);
-							border-radius: var(--TPCHRadiusP);
-						}
+												grid-template-columns: minmax(0, 1fr);
+												grid-template-rows: var(--TPCHMediaHeightP) minmax(0, 1fr);
+												border-radius: var(--TPCHRadiusP);
+											}
 	
-						.ThemedPriceCardHz.CanFlip .TPCHMedia { grid-column: 1; grid-row: 1; width: 100%; height: var(--TPCHMediaHeightP); }
-						.ThemedPriceCardHz.CanFlip .TPCHBody { grid-column: 1; grid-row: 2; padding: calc(var(--TPCHIconSizeP) / 2 + 14px) var(--TPCHPadP) var(--TPCHPadP); gap: var(--TPCHGapP); }
-						.ThemedPriceCardHz.CanFlip .TPCHContent { width: min(100%, 280px); gap: var(--TPCHGapP); }
-						.ThemedPriceCardHz.CanFlip .TPCHIconBadge { left: 50%; right: auto; top: var(--TPCHMediaHeightP); width: var(--TPCHIconSizeP); height: var(--TPCHIconSizeP); max-width: 78px; max-height: 78px; transform: translate(-50%, -50%); }
+											.ThemedPriceCardHz.CanFlip .TPCHMedia { grid-column: 1; grid-row: 1; width: 100%; height: var(--TPCHMediaHeightP); }
+											.ThemedPriceCardHz.CanFlip .TPCHBody { grid-column: 1; grid-row: 2; padding: calc(var(--TPCHIconSizeP) / 2 + 14px) var(--TPCHPadP) var(--TPCHPadP); gap: var(--TPCHGapP); }
+											.ThemedPriceCardHz.CanFlip .TPCHContent { width: min(100%, 280px); gap: var(--TPCHGapP); }
+											.ThemedPriceCardHz.CanFlip .TPCHIconBadge { left: 50%; right: auto; top: var(--TPCHMediaHeightP); width: var(--TPCHIconSizeP); height: var(--TPCHIconSizeP); max-width: 78px; max-height: 78px; transform: translate(-50%, -50%); }
 	}
 
 
 
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

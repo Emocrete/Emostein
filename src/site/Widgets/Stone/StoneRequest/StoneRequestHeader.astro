@@ -1,0 +1,137 @@
+---
+interface Props {
+	pTitle?: string;
+	pDesc?: string;
+}
+
+const {
+	pTitle = "كوّن طلبية الرخام أو الجرانيت",
+	pDesc = "أضف كل صنف ومقاس على حدة. بياناتك تُحفظ تلقائيًا ويمكنك استكمال الطلب لاحقًا.",
+} = Astro.props as Props;
+---
+
+<header class="StoneReqHeader" data-stone-header="true">
+	<div class="StoneReqHeaderText">
+		<p class="StoneReqKicker">طلب مقايسة تفصيلي</p>
+		<h2>{pTitle}</h2>
+		<p>{pDesc}</p>
+	</div>
+
+	<div class="StoneReqHeaderState">
+		<span class="StoneReqSaveState" data-save-state="true">لم يبدأ الحفظ بعد</span>
+		<span class="StoneReqCompletion"><b data-completion="true">0%</b> اكتمال الطلب</span>
+	</div>
+</header>
+
+<nav class="StoneReqMainActions" aria-label="إدارة طلب المقايسة">
+	<button type="button" data-action="edit-project">بيانات المشروع والعميل</button>
+	<button type="button" data-action="add-item">إضافة صنف</button>
+	<button type="button" data-action="save-later">حفظ ومتابعة لاحقًا</button>
+	<button type="button" data-action="review-order" class="Primary">مراجعة وإرسال</button>
+</nav>
+
+<style>
+	.StoneReqHeader {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 24px;
+		align-items: center;
+		padding: 30px;
+		background: linear-gradient(135deg, var(--StoneReqHead), var(--StoneReqHead2));
+		color: #fff;
+		border-radius: var(--StoneReqRadius) var(--StoneReqRadius) 0 0;
+	}
+
+	.StoneReqHeaderText h2 {
+		margin: 2px 0 8px;
+		font-size: clamp(26px, 3vw, 42px);
+		line-height: 1.35;
+	}
+
+	.StoneReqHeaderText p {
+		margin: 0;
+		line-height: 1.9;
+	}
+
+	.StoneReqKicker {
+		font-size: 13px;
+		font-weight: 800;
+		letter-spacing: .05em;
+		opacity: .82;
+	}
+
+	.StoneReqHeaderState {
+		display: grid;
+		gap: 10px;
+		min-width: 190px;
+		padding: 16px;
+		border: 1px solid rgba(255, 255, 255, .2);
+		border-radius: 14px;
+		background: rgba(255, 255, 255, .08);
+		text-align: center;
+	}
+
+	.StoneReqSaveState {
+		font-size: 13px;
+		opacity: .86;
+	}
+
+	.StoneReqCompletion b {
+		font-size: 24px;
+		margin-inline-end: 5px;
+	}
+
+	.StoneReqMainActions {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 10px;
+		padding: 16px;
+		background: var(--StoneReqPanel);
+		border-inline: 1px solid var(--StoneReqBorder);
+	}
+
+	.StoneReqMainActions button {
+		min-height: 46px;
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 12px;
+		background: #fff;
+		color: var(--StoneReqText);
+		font: inherit;
+		font-weight: 800;
+		cursor: pointer;
+		transition: transform .18s ease, border-color .18s ease, background-color .18s ease;
+	}
+
+	.StoneReqMainActions button:hover {
+		transform: translateY(-1px);
+		border-color: var(--StoneReqAccent);
+	}
+
+	.StoneReqMainActions .Primary {
+		background: var(--StoneReqAccent);
+		border-color: var(--StoneReqAccent);
+		color: #fff;
+	}
+
+	@media (max-width: 780px) {
+		.StoneReqHeader {
+			grid-template-columns: 1fr;
+			padding: 22px 18px;
+		}
+
+		.StoneReqHeaderState {
+			grid-template-columns: 1fr 1fr;
+			min-width: 0;
+		}
+
+		.StoneReqMainActions {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	@media (max-width: 430px) {
+		.StoneReqMainActions {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

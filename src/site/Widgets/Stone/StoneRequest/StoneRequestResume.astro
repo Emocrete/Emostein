@@ -1,0 +1,59 @@
+<section class="StoneReqResume" data-resume-panel="true" hidden>
+	<div>
+		<strong>يوجد طلب غير مكتمل محفوظ</strong>
+		<p data-resume-summary="true"></p>
+	</div>
+	<div class="StoneReqResumeActions">
+		<button type="button" data-action="resume-local">استكمال الطلب</button>
+		<button type="button" data-action="discard-local">بدء طلب جديد</button>
+	</div>
+</section>
+
+<style>
+	.StoneReqResume {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 18px;
+		align-items: center;
+		padding: 18px 20px;
+		background: var(--StoneReqWarnSoft);
+		border-inline: 1px solid var(--StoneReqBorder);
+		border-bottom: 1px solid var(--StoneReqBorder);
+	}
+
+	.StoneReqResume[hidden] {
+		display: none;
+	}
+
+	.StoneReqResume strong {
+		font-size: 18px;
+	}
+
+	.StoneReqResume p {
+		margin: 5px 0 0;
+		color: var(--StoneReqMuted);
+	}
+
+	.StoneReqResumeActions {
+		display: flex;
+		gap: 8px;
+		flex-wrap: wrap;
+	}
+
+	.StoneReqResume button {
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 10px;
+		background: #fff;
+		color: var(--StoneReqText);
+		padding: 10px 16px;
+		font: inherit;
+		font-weight: 800;
+		cursor: pointer;
+	}
+
+	@media (max-width: 680px) {
+		.StoneReqResume {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

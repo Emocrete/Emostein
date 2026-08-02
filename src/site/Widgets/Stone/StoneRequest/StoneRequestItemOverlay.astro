@@ -1,0 +1,723 @@
+<section class="StoneReqOverlay" data-item-overlay="true" hidden aria-hidden="true">
+	<form class="StoneReqDialog StoneReqItemDialog" data-item-form="true">
+		<header class="StoneReqDialogHead">
+			<div>
+				<p data-item-mode-label="true">إضافة صنف جديد</p>
+				<h3 data-item-dialog-title="true">بيانات الصنف</h3>
+			</div>
+			<button type="button" data-action="close-item" aria-label="إغلاق">×</button>
+		</header>
+
+		<nav class="StoneReqSteps" aria-label="مراحل إدخال الصنف">
+			<button type="button" data-step-jump="0" class="Active"><b>1</b><span>التعريف</span></button>
+			<button type="button" data-step-jump="1"><b>2</b><span>الخامة</span></button>
+			<button type="button" data-step-jump="2"><b>3</b><span>القطع والمقاسات</span></button>
+			<button type="button" data-step-jump="3"><b>4</b><span>التجهيزات والصور</span></button>
+			<button type="button" data-step-jump="4"><b>5</b><span>المراجعة</span></button>
+		</nav>
+
+		<section class="StoneReqStep" data-item-step="0">
+			<div class="StoneReqFields">
+				<label><span>نوع الاستخدام *</span>
+					<select name="usageType" data-usage-type="true">
+						<option value="">اختر الاستخدام</option>
+						<option value="kitchen">مطبخ أو كاونتر</option>
+						<option value="stairs">سلم</option>
+						<option value="floor">أرضيات</option>
+						<option value="wall">حوائط داخلية</option>
+						<option value="facade">واجهة أو مدخل خارجي</option>
+						<option value="sills">جلسات شبابيك وأعتاب ووزرات</option>
+						<option value="bathroom">حمام أو وحدة حوض</option>
+						<option value="furniture">ترابيزة أو قطعة أثاث</option>
+						<option value="decor">مدفأة أو ديكور خاص</option>
+						<option value="other">استخدام آخر</option>
+					</select>
+				</label>
+				<label><span>اسم الصنف داخل الطلبية</span><input name="title" type="text" placeholder="مثال: رخام سلم المدخل" /></label>
+				<label><span>مكان الصنف داخل المشروع</span><input name="location" type="text" placeholder="المطبخ الرئيسي / مدخل الفيلا" /></label>
+				<label><span>حالة الأعمال</span>
+					<select name="workState">
+						<option value="جديد">تنفيذ جديد</option>
+						<option value="استبدال">فك واستبدال قائم</option>
+						<option value="تركيب خامة موجودة">تركيب خامة موجودة</option>
+						<option value="صيانة أو تلميع">صيانة أو تلميع</option>
+					</select>
+				</label>
+				<label class="Wide"><span>الخدمة المطلوبة لهذا الصنف *</span>
+					<div class="StoneReqChoiceGrid">
+						<label><input type="checkbox" name="itemServices" value="توريد" /> توريد</label>
+						<label><input type="checkbox" name="itemServices" value="قص وتجهيز" /> قص وتجهيز</label>
+						<label><input type="checkbox" name="itemServices" value="نقل ورفع" /> نقل ورفع</label>
+						<label><input type="checkbox" name="itemServices" value="تركيب" /> تركيب</label>
+						<label><input type="checkbox" name="itemServices" value="فك القديم" /> فك القديم</label>
+						<label><input type="checkbox" name="itemServices" value="تلميع أو معالجة" /> تلميع أو معالجة</label>
+					</div>
+				</label>
+				<label class="Wide"><span>وصف مختصر للصنف</span><textarea name="itemDescription" rows="4" placeholder="أي تفاصيل تساعد على فهم المطلوب قبل المقاسات"></textarea></label>
+			</div>
+		</section>
+
+		<section class="StoneReqStep" data-item-step="1" hidden>
+			<div class="StoneReqFields">
+				<label><span>فئة الخامة *</span>
+					<select name="materialCategory">
+						<option value="">اختر الخامة</option>
+						<option value="رخام">رخام</option>
+						<option value="جرانيت">جرانيت</option>
+						<option value="كوارتز صناعي">كوارتز صناعي</option>
+						<option value="حجر طبيعي">حجر طبيعي</option>
+						<option value="غير محدد">غير محدد وأحتاج ترشيح</option>
+					</select>
+				</label>
+				<label><span>المنشأ</span>
+					<select name="materialOrigin">
+						<option value="غير محدد">غير محدد</option>
+						<option value="مصري">مصري</option>
+						<option value="مستورد">مستورد</option>
+					</select>
+				</label>
+				<label><span>اسم الخامة إن كان معروفًا</span><input name="materialName" type="text" placeholder="جلالة لايت / أسود أسوان" /></label>
+				<label><span>اللون المطلوب</span><input name="materialColor" type="text" placeholder="أبيض بعروق رمادية / أسود" /></label>
+				<label><span>نمط الشكل والعروق</span>
+					<select name="materialPattern">
+						<option value="غير محدد">غير محدد</option>
+						<option value="سادة أو متجانس">سادة أو متجانس</option>
+						<option value="حبيبات">حبيبات</option>
+						<option value="عروق هادئة">عروق هادئة</option>
+						<option value="عروق قوية">عروق قوية</option>
+					</select>
+				</label>
+				<label><span>السمك العام للصنف (سم)</span><input name="thicknessCm" type="number" min="0" step="0.1" placeholder="مثال: 2" /></label>
+				<label><span>تشطيب السطح</span>
+					<select name="surfaceFinish">
+						<option value="لامع مصقول">لامع مصقول</option>
+						<option value="مطفي Honed">مطفي Honed</option>
+						<option value="محروق Flamed">محروق Flamed</option>
+						<option value="خشن مضاد للانزلاق">خشن مضاد للانزلاق</option>
+						<option value="معتق أو خاص">معتق أو خاص</option>
+						<option value="غير محدد">غير محدد</option>
+					</select>
+				</label>
+				<label><span>مستوى السعر المستهدف</span>
+					<select name="priceLevel">
+						<option value="غير محدد">غير محدد</option>
+						<option value="اقتصادي">اقتصادي</option>
+						<option value="متوسط">متوسط</option>
+						<option value="مرتفع">مرتفع</option>
+						<option value="الأفضل فنيًا بصرف النظر عن السعر">الأفضل فنيًا بصرف النظر عن السعر</option>
+					</select>
+				</label>
+				<label><span>أولوية الاختيار</span>
+					<select name="selectionPriority">
+						<option value="التوازن بين السعر والشكل">التوازن بين السعر والشكل</option>
+						<option value="أقل سعر مناسب">أقل سعر مناسب</option>
+						<option value="الشكل والعروق">الشكل والعروق</option>
+						<option value="التحمل وسهولة الصيانة">التحمل وسهولة الصيانة</option>
+					</select>
+				</label>
+				<label class="StoneReqInlineCheck"><input type="checkbox" name="acceptAlternative" /> أقبل بدائل قريبة إذا كانت الخامة غير متوفرة</label>
+				<label class="StoneReqInlineCheck"><input type="checkbox" name="sameBatchRequired" /> مطلوب توحيد اللون من دفعة أو بلوك واحد</label>
+			</div>
+		</section>
+
+		<section class="StoneReqStep StoneReqMeasureStep" data-item-step="2" hidden>
+			<header class="StoneReqMeasureHead">
+				<div>
+					<h4>مجموعات القطع والمقاسات</h4>
+					<p data-measure-hint="true">كل صف يمثل قطعة أو مجموعة قطع متطابقة.</p>
+				</div>
+				<button type="button" data-action="add-measure">إضافة مجموعة مقاسات</button>
+			</header>
+
+			<div class="StoneReqMeasureTableWrap">
+				<table class="StoneReqMeasureTable">
+					<thead>
+						<tr>
+							<th>نوع القطعة</th>
+							<th>الوصف</th>
+							<th>العدد</th>
+							<th>الطول سم</th>
+							<th>العرض سم</th>
+							<th>السمك سم</th>
+							<th>الحافة</th>
+							<th>المساحة م²</th>
+							<th>حواف ظاهرة م</th>
+							<th>ملاحظات</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody data-measure-body="true"></tbody>
+				</table>
+			</div>
+			<p class="StoneReqMeasureTotal" data-measure-total="true">الإجمالي التقريبي: 0 م²</p>
+		</section>
+
+		<section class="StoneReqStep" data-item-step="3" hidden>
+			<div class="StoneReqProcessing">
+				<fieldset>
+					<legend>تجهيزات القطع</legend>
+					<div class="StoneReqChoiceGrid Processing">
+						<label><input type="checkbox" name="processing" value="تلميع حواف" /> تلميع حواف</label>
+						<label><input type="checkbox" name="processing" value="حافة مشطوفة" /> حافة مشطوفة</label>
+						<label><input type="checkbox" name="processing" value="حافة دائرية" /> حافة دائرية</label>
+						<label><input type="checkbox" name="processing" value="تجميع سمكين" /> تجميع سمكين لإظهار سمك أكبر</label>
+						<label><input type="checkbox" name="processing" value="استمرار العروق" /> استمرار العروق</label>
+						<label><input type="checkbox" name="processing" value="Bookmatch" /> Bookmatch</label>
+						<label><input type="checkbox" name="processing" value="قص دائري أو منحني" /> قص دائري أو منحني</label>
+						<label><input type="checkbox" name="processing" value="Waterjet أو CNC" /> Waterjet أو CNC</label>
+						<label><input type="checkbox" name="processing" value="مجاري مانعة للانزلاق" /> مجاري مانعة للانزلاق</label>
+						<label><input type="checkbox" name="processing" value="تثبيت ميكانيكي" /> تثبيت ميكانيكي</label>
+						<label><input type="checkbox" name="processing" value="معالجة وحماية Sealer" /> معالجة وحماية Sealer</label>
+						<label><input type="checkbox" name="processing" value="تلميع نهائي بالموقع" /> تلميع نهائي بالموقع</label>
+					</div>
+				</fieldset>
+
+				<fieldset>
+					<legend>فتحات وعناصر خاصة</legend>
+					<div class="StoneReqFields Compact">
+						<label><span>فتحات أحواض</span><input name="sinkOpenings" type="number" min="0" value="0" /></label>
+						<label><span>فتحات بوتاجاز</span><input name="cooktopOpenings" type="number" min="0" value="0" /></label>
+						<label><span>فتحات خلاطات</span><input name="faucetOpenings" type="number" min="0" value="0" /></label>
+						<label><span>فتحات كهرباء أو خاصة</span><input name="specialOpenings" type="number" min="0" value="0" /></label>
+						<label><span>طول التلميع التقريبي م</span><input name="polishedEdgesM" type="number" min="0" step="0.1" /></label>
+						<label><span>ارتفاع الوزرة سم</span><input name="skirtingHeightCm" type="number" min="0" step="1" /></label>
+						<label><span>عدد الجوانب الهابطة</span><input name="waterfallSides" type="number" min="0" value="0" /></label>
+						<label><span>عدد مجاري منع الانزلاق</span><input name="antiSlipGrooves" type="number" min="0" value="0" /></label>
+					</div>
+				</fieldset>
+
+				<fieldset>
+					<legend>صور ورسومات الصنف</legend>
+					<p class="StoneReqHelp">يمكن رفع صور الموقع أو رسم يدوي أو صورة الخامة. تُضغط الصور تلقائيًا قبل الحفظ.</p>
+					<input data-attachment-input="true" type="file" accept="image/*" multiple />
+					<div class="StoneReqAttachments" data-attachments="true"></div>
+					<label class="StoneReqUrlField"><span>رابط ملف أو صورة خارجية</span><input name="referenceUrl" type="url" placeholder="https://..." /></label>
+					<label class="StoneReqUrlField"><span>ملاحظات التجهيز أو التركيب</span><textarea name="processingNotes" rows="4"></textarea></label>
+				</fieldset>
+			</div>
+		</section>
+
+		<section class="StoneReqStep" data-item-step="4" hidden>
+			<div class="StoneReqReview" data-item-review="true"></div>
+		</section>
+
+		<footer class="StoneReqDialogFoot">
+			<span data-item-error="true"></span>
+			<button type="button" data-action="save-item-draft">حفظ كمسودة</button>
+			<button type="button" data-action="item-prev">السابق</button>
+			<button type="button" data-action="item-next" class="Primary">التالي</button>
+			<button type="submit" data-action="save-item" class="Primary" hidden>حفظ الصنف</button>
+		</footer>
+	</form>
+</section>
+
+<style>
+	.StoneReqOverlay {
+		position: fixed;
+		inset: 0;
+		z-index: 1000000;
+		display: grid;
+		place-items: center;
+		padding: 18px;
+		background: rgba(14, 18, 24, .72);
+		backdrop-filter: blur(6px);
+		direction: rtl;
+	}
+
+	.StoneReqOverlay[hidden],
+	.StoneReqStep[hidden] {
+		display: none;
+	}
+
+	.StoneReqDialog {
+		width: min(1220px, 100%);
+		max-height: min(920px, calc(100vh - 36px));
+		overflow: auto;
+		background: #fff;
+		color: var(--StoneReqText);
+		border-radius: 18px;
+		box-shadow: 0 24px 80px rgba(0, 0, 0, .34);
+	}
+
+	.StoneReqDialogHead,
+	.StoneReqDialogFoot {
+		position: sticky;
+		z-index: 4;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 14px 18px;
+		background: #fff;
+	}
+
+	.StoneReqDialogHead {
+		top: 0;
+		justify-content: space-between;
+		border-bottom: 1px solid var(--StoneReqBorder);
+	}
+
+	.StoneReqDialogHead p,
+	.StoneReqDialogHead h3 {
+		margin: 0;
+	}
+
+	.StoneReqDialogHead p {
+		font-size: 12px;
+		color: var(--StoneReqMuted);
+	}
+
+	.StoneReqDialogHead h3 {
+		font-size: 23px;
+	}
+
+	.StoneReqDialogHead > button {
+		width: 40px;
+		height: 40px;
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 10px;
+		background: var(--StoneReqPanel);
+		font-size: 25px;
+		cursor: pointer;
+	}
+
+	.StoneReqSteps {
+		position: sticky;
+		top: 69px;
+		z-index: 3;
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		gap: 7px;
+		padding: 10px 18px;
+		background: #fff;
+		border-bottom: 1px solid var(--StoneReqBorder);
+	}
+
+	.StoneReqSteps button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 7px;
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 10px;
+		background: var(--StoneReqPanel);
+		padding: 8px;
+		font: inherit;
+		font-size: 12px;
+		font-weight: 800;
+		cursor: pointer;
+	}
+
+	.StoneReqSteps button b {
+		display: grid;
+		place-items: center;
+		width: 22px;
+		height: 22px;
+		border-radius: 50%;
+		background: #fff;
+	}
+
+	.StoneReqSteps button.Active {
+		background: var(--StoneReqAccentSoft);
+		border-color: var(--StoneReqAccent);
+	}
+
+	.StoneReqStep {
+		padding: 22px;
+		min-height: 390px;
+	}
+
+	.StoneReqFields {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 15px;
+	}
+
+	.StoneReqFields.Compact {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+
+	.StoneReqFields > label,
+	.StoneReqUrlField {
+		display: grid;
+		gap: 6px;
+		font-size: 13px;
+		font-weight: 800;
+	}
+
+	.StoneReqFields .Wide {
+		grid-column: 1 / -1;
+	}
+
+	.StoneReqFields input,
+	.StoneReqFields select,
+	.StoneReqFields textarea,
+	.StoneReqUrlField input,
+	.StoneReqUrlField textarea,
+	.StoneReqProcessing > fieldset > input {
+		width: 100%;
+		box-sizing: border-box;
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 10px;
+		background: #fff;
+		padding: 11px;
+		font: inherit;
+		color: var(--StoneReqText);
+	}
+
+	.StoneReqChoiceGrid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 8px;
+	}
+
+	.StoneReqChoiceGrid label,
+	.StoneReqInlineCheck {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 10px;
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 10px;
+		background: var(--StoneReqPanel);
+		font-size: 13px;
+		font-weight: 800;
+	}
+
+	.StoneReqChoiceGrid input,
+	.StoneReqInlineCheck input {
+		width: 18px;
+		height: 18px;
+		accent-color: var(--StoneReqAccent);
+	}
+
+	.StoneReqMeasureHead {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 14px;
+		margin-bottom: 14px;
+	}
+
+	.StoneReqMeasureHead h4,
+	.StoneReqMeasureHead p {
+		margin: 0;
+	}
+
+	.StoneReqMeasureHead p {
+		color: var(--StoneReqMuted);
+		font-size: 13px;
+	}
+
+	.StoneReqMeasureHead button {
+		border: 0;
+		border-radius: 10px;
+		background: var(--StoneReqAccent);
+		color: #fff;
+		padding: 10px 16px;
+		font: inherit;
+		font-weight: 800;
+		cursor: pointer;
+	}
+
+	.StoneReqMeasureTableWrap {
+		overflow-x: auto;
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 12px;
+	}
+
+	.StoneReqMeasureTable {
+		width: 100%;
+		min-width: 1120px;
+		border-collapse: collapse;
+	}
+
+	.StoneReqMeasureTable th,
+	.StoneReqMeasureTable td {
+		padding: 8px;
+		border-bottom: 1px solid var(--StoneReqBorder);
+		text-align: right;
+		vertical-align: middle;
+	}
+
+	.StoneReqMeasureTable th {
+		background: var(--StoneReqPanel);
+		font-size: 12px;
+	}
+
+	.StoneReqMeasureTable input,
+	.StoneReqMeasureTable select {
+		width: 100%;
+		min-width: 78px;
+		box-sizing: border-box;
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 8px;
+		padding: 8px;
+		font: inherit;
+		font-size: 12px;
+	}
+
+	.StoneReqMeasureTable button {
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 8px;
+		background: #fff;
+		color: var(--StoneReqDanger);
+		padding: 7px 9px;
+		cursor: pointer;
+	}
+
+	.StoneReqMeasureTotal {
+		margin: 13px 0 0;
+		font-weight: 900;
+	}
+
+	.StoneReqProcessing {
+		display: grid;
+		gap: 15px;
+	}
+
+	.StoneReqProcessing fieldset {
+		margin: 0;
+		padding: 17px;
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 13px;
+		background: var(--StoneReqPanel);
+	}
+
+	.StoneReqProcessing legend {
+		padding: 0 8px;
+		font-weight: 900;
+	}
+
+	.StoneReqAttachments {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+		gap: 10px;
+		margin: 12px 0;
+	}
+
+	.StoneReqAttachment {
+		position: relative;
+		overflow: hidden;
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 10px;
+		background: #fff;
+	}
+
+	.StoneReqAttachment img {
+		display: block;
+		width: 100%;
+		height: 110px;
+		object-fit: cover;
+	}
+
+	.StoneReqAttachment span {
+		display: block;
+		padding: 7px;
+		font-size: 11px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.StoneReqAttachment button {
+		position: absolute;
+		top: 5px;
+		left: 5px;
+		width: 28px;
+		height: 28px;
+		border: 0;
+		border-radius: 50%;
+		background: rgba(0, 0, 0, .72);
+		color: #fff;
+		cursor: pointer;
+	}
+
+	.StoneReqHelp {
+		margin: 0 0 10px;
+		color: var(--StoneReqMuted);
+		line-height: 1.8;
+	}
+
+	.StoneReqReview {
+		display: grid;
+		gap: 12px;
+	}
+
+	.StoneReqReviewCard {
+		padding: 16px;
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 12px;
+		background: var(--StoneReqPanel);
+	}
+
+	.StoneReqReviewCard h4,
+	.StoneReqReviewCard p {
+		margin: 0;
+	}
+
+	.StoneReqReviewCard p {
+		margin-top: 6px;
+		line-height: 1.8;
+		color: var(--StoneReqMuted);
+	}
+
+	.StoneReqDialogFoot {
+		bottom: 0;
+		justify-content: flex-end;
+		border-top: 1px solid var(--StoneReqBorder);
+	}
+
+	.StoneReqDialogFoot span {
+		margin-inline-end: auto;
+		color: var(--StoneReqDanger);
+		font-size: 13px;
+		font-weight: 800;
+	}
+
+	.StoneReqDialogFoot button {
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 10px;
+		background: #fff;
+		padding: 11px 18px;
+		font: inherit;
+		font-weight: 800;
+		cursor: pointer;
+	}
+
+	.StoneReqDialogFoot .Primary {
+		background: var(--StoneReqAccent);
+		border-color: var(--StoneReqAccent);
+		color: #fff;
+	}
+
+	@media (max-width: 900px) {
+		.StoneReqFields.Compact {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.StoneReqChoiceGrid {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	@media (max-width: 650px) {
+		.StoneReqOverlay {
+			padding: 0;
+		}
+
+		.StoneReqDialog {
+			min-height: 100vh;
+			max-height: 100vh;
+			border-radius: 0;
+		}
+
+		.StoneReqSteps {
+			top: 69px;
+			padding-inline: 8px;
+		}
+
+		.StoneReqSteps button span {
+			display: none;
+		}
+
+		.StoneReqStep {
+			padding: 16px 12px;
+		}
+
+		.StoneReqFields,
+		.StoneReqFields.Compact,
+		.StoneReqChoiceGrid {
+			grid-template-columns: 1fr;
+		}
+
+		.StoneReqMeasureHead {
+			align-items: flex-start;
+			flex-direction: column;
+		}
+	}
+</style>
+
+<style is:global>
+	[data-item-overlay="true"] [data-measure-row="true"] td {
+		padding: 8px;
+		border-bottom: 1px solid var(--StoneReqBorder);
+		text-align: right;
+		vertical-align: middle;
+	}
+
+	[data-item-overlay="true"] [data-measure-row="true"] input,
+	[data-item-overlay="true"] [data-measure-row="true"] select {
+		width: 100%;
+		min-width: 78px;
+		box-sizing: border-box;
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 8px;
+		padding: 8px;
+		font: inherit;
+		font-size: 12px;
+	}
+
+	[data-item-overlay="true"] [data-measure-row="true"] button {
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 8px;
+		background: #fff;
+		color: var(--StoneReqDanger);
+		padding: 7px 9px;
+		cursor: pointer;
+	}
+
+	[data-item-overlay="true"] .StoneReqAttachment {
+		position: relative;
+		overflow: hidden;
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 10px;
+		background: #fff;
+	}
+
+	[data-item-overlay="true"] .StoneReqAttachment img {
+		display: block;
+		width: 100%;
+		height: 110px;
+		object-fit: cover;
+	}
+
+	[data-item-overlay="true"] .StoneReqAttachment span {
+		display: block;
+		padding: 7px;
+		font-size: 11px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	[data-item-overlay="true"] .StoneReqAttachment button {
+		position: absolute;
+		top: 5px;
+		left: 5px;
+		width: 28px;
+		height: 28px;
+		border: 0;
+		border-radius: 50%;
+		background: rgba(0, 0, 0, .72);
+		color: #fff;
+		cursor: pointer;
+	}
+
+	[data-item-overlay="true"] .StoneReqReviewCard {
+		padding: 16px;
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 12px;
+		background: var(--StoneReqPanel);
+	}
+
+	[data-item-overlay="true"] .StoneReqReviewCard h4,
+	[data-item-overlay="true"] .StoneReqReviewCard p {
+		margin: 0;
+	}
+
+	[data-item-overlay="true"] .StoneReqReviewCard p {
+		margin-top: 6px;
+		line-height: 1.8;
+		color: var(--StoneReqMuted);
+	}
+</style>

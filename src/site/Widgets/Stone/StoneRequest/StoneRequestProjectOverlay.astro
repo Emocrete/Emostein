@@ -1,0 +1,319 @@
+<section class="StoneReqOverlay" data-project-overlay="true" hidden aria-hidden="true">
+	<form class="StoneReqDialog StoneReqProjectDialog" data-project-form="true">
+		<header class="StoneReqDialogHead">
+			<div>
+				<p>بيانات مشتركة على كل الأصناف</p>
+				<h3>العميل والمشروع والنقل</h3>
+			</div>
+			<button type="button" data-action="close-project" aria-label="إغلاق">×</button>
+		</header>
+
+		<div class="StoneReqProjectGrid">
+			<fieldset>
+				<legend>بيانات التواصل</legend>
+				<label><span>الاسم *</span><input name="customerName" type="text" autocomplete="name" /></label>
+				<label><span>رقم الهاتف *</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" /></label>
+				<label><span>رقم واتساب</span><input name="whatsapp" type="tel" inputmode="tel" /></label>
+				<label><span>صفة مقدم الطلب</span>
+					<select name="customerRole">
+						<option value="مالك المشروع">مالك المشروع</option>
+						<option value="مهندس أو مصمم">مهندس أو مصمم</option>
+						<option value="مقاول">مقاول</option>
+						<option value="شركة">شركة</option>
+						<option value="أخرى">أخرى</option>
+					</select>
+				</label>
+				<label><span>الوقت المناسب للتواصل</span>
+					<select name="contactTime">
+						<option value="أي وقت">أي وقت</option>
+						<option value="صباحًا">صباحًا</option>
+						<option value="بعد الظهر">بعد الظهر</option>
+						<option value="مساءً">مساءً</option>
+					</select>
+				</label>
+			</fieldset>
+
+			<fieldset>
+				<legend>بيانات المشروع</legend>
+				<label><span>المحافظة</span><input name="governorate" type="text" placeholder="القاهرة / الجيزة" /></label>
+				<label><span>المدينة أو المنطقة *</span><input name="city" type="text" placeholder="القاهرة الجديدة" /></label>
+				<label><span>الحي أو أقرب علامة</span><input name="district" type="text" /></label>
+				<label><span>نوع المشروع</span>
+					<select name="projectType">
+						<option value="شقة">شقة</option>
+						<option value="فيلا">فيلا</option>
+						<option value="محل أو مطعم">محل أو مطعم</option>
+						<option value="مكتب أو شركة">مكتب أو شركة</option>
+						<option value="مشروع تجاري">مشروع تجاري</option>
+						<option value="مبنى متعدد الوحدات">مبنى متعدد الوحدات</option>
+						<option value="أخرى">أخرى</option>
+					</select>
+				</label>
+				<label><span>حالة الموقع</span>
+					<select name="siteState">
+						<option value="جاهز للقياس والتركيب">جاهز للقياس والتركيب</option>
+						<option value="جاهز للقياس فقط">جاهز للقياس فقط</option>
+						<option value="أعمال التشطيب ما زالت جارية">أعمال التشطيب ما زالت جارية</option>
+						<option value="مطلوب فك أعمال قائمة">مطلوب فك أعمال قائمة</option>
+						<option value="غير معروف">غير معروف</option>
+					</select>
+				</label>
+				<label><span>موعد التنفيذ</span>
+					<select name="executionTime">
+						<option value="في أقرب وقت">في أقرب وقت</option>
+						<option value="خلال أسبوعين">خلال أسبوعين</option>
+						<option value="خلال شهر">خلال شهر</option>
+						<option value="بعد أكثر من شهر">بعد أكثر من شهر</option>
+						<option value="لم يتحدد">لم يتحدد</option>
+					</select>
+				</label>
+			</fieldset>
+
+			<fieldset>
+				<legend>الوصول والنقل والرفع</legend>
+				<label><span>الدور</span><input name="floor" type="text" placeholder="أرضي / الرابع / سطح" /></label>
+				<label><span>المصعد</span>
+					<select name="elevator">
+						<option value="غير محدد">غير محدد</option>
+						<option value="موجود ويستوعب القطع">موجود ويستوعب القطع</option>
+						<option value="موجود وقد لا يستوعب القطع">موجود وقد لا يستوعب القطع</option>
+						<option value="لا يوجد">لا يوجد</option>
+					</select>
+				</label>
+				<label><span>إمكانية الرفع</span>
+					<select name="liftingAccess">
+						<option value="رفع عادي">رفع عادي</option>
+						<option value="السلم واسع">السلم واسع</option>
+						<option value="قد نحتاج ونش">قد نحتاج ونش</option>
+						<option value="الرفع صعب أو غير معروف">الرفع صعب أو غير معروف</option>
+					</select>
+				</label>
+				<label><span>وقوف سيارة النقل</span>
+					<select name="vehicleAccess">
+						<option value="أمام المدخل">أمام المدخل</option>
+						<option value="على مسافة قصيرة">على مسافة قصيرة</option>
+						<option value="الوصول صعب">الوصول صعب</option>
+						<option value="غير معروف">غير معروف</option>
+					</select>
+				</label>
+				<label><span>قيود مواعيد العمل</span><input name="workRestrictions" type="text" placeholder="لا توجد / مواعيد كمبوند / تصريح دخول" /></label>
+			</fieldset>
+
+			<fieldset>
+				<legend>نطاق الطلب العام</legend>
+				<div class="StoneReqChecks">
+					<label><input type="checkbox" name="generalServices" value="رفع مقاسات" /> رفع مقاسات</label>
+					<label><input type="checkbox" name="generalServices" value="رسومات تنفيذية" /> رسومات تنفيذية</label>
+					<label><input type="checkbox" name="generalServices" value="توريد" /> توريد</label>
+					<label><input type="checkbox" name="generalServices" value="قص وتجهيز" /> قص وتجهيز</label>
+					<label><input type="checkbox" name="generalServices" value="نقل ورفع" /> نقل ورفع</label>
+					<label><input type="checkbox" name="generalServices" value="تركيب" /> تركيب</label>
+					<label><input type="checkbox" name="generalServices" value="فك القديم" /> فك القديم</label>
+					<label><input type="checkbox" name="generalServices" value="نقل مخلفات" /> نقل مخلفات</label>
+					<label><input type="checkbox" name="generalServices" value="تلميع ومعالجة" /> تلميع ومعالجة</label>
+				</div>
+				<label class="Wide"><span>ملاحظات عامة</span><textarea name="generalNotes" rows="4"></textarea></label>
+			</fieldset>
+		</div>
+
+		<footer class="StoneReqDialogFoot">
+			<span data-project-error="true"></span>
+			<button type="button" data-action="close-project">إلغاء</button>
+			<button type="submit" class="Primary">حفظ بيانات المشروع</button>
+		</footer>
+	</form>
+</section>
+
+<style>
+	.StoneReqOverlay {
+		position: fixed;
+		inset: 0;
+		z-index: 1000000;
+		display: grid;
+		place-items: center;
+		padding: 18px;
+		background: rgba(14, 18, 24, .7);
+		backdrop-filter: blur(6px);
+		direction: rtl;
+	}
+
+	.StoneReqOverlay[hidden] {
+		display: none;
+	}
+
+	.StoneReqDialog {
+		width: min(1180px, 100%);
+		max-height: min(900px, calc(100vh - 36px));
+		overflow: auto;
+		background: #fff;
+		color: var(--StoneReqText);
+		border-radius: 18px;
+		box-shadow: 0 24px 80px rgba(0, 0, 0, .32);
+	}
+
+	.StoneReqDialogHead,
+	.StoneReqDialogFoot {
+		position: sticky;
+		z-index: 2;
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 16px 20px;
+		background: #fff;
+	}
+
+	.StoneReqDialogHead {
+		top: 0;
+		justify-content: space-between;
+		border-bottom: 1px solid var(--StoneReqBorder);
+	}
+
+	.StoneReqDialogHead p,
+	.StoneReqDialogHead h3 {
+		margin: 0;
+	}
+
+	.StoneReqDialogHead p {
+		color: var(--StoneReqMuted);
+		font-size: 12px;
+	}
+
+	.StoneReqDialogHead h3 {
+		font-size: 24px;
+	}
+
+	.StoneReqDialogHead > button {
+		width: 40px;
+		height: 40px;
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 10px;
+		background: var(--StoneReqPanel);
+		font-size: 25px;
+		cursor: pointer;
+	}
+
+	.StoneReqProjectGrid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 16px;
+		padding: 20px;
+	}
+
+	.StoneReqProjectGrid fieldset {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 13px;
+		margin: 0;
+		padding: 18px;
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 14px;
+		background: var(--StoneReqPanel);
+	}
+
+	.StoneReqProjectGrid legend {
+		padding: 0 8px;
+		font-weight: 900;
+	}
+
+	.StoneReqProjectGrid label {
+		display: grid;
+		gap: 6px;
+		font-size: 13px;
+		font-weight: 800;
+	}
+
+	.StoneReqProjectGrid input,
+	.StoneReqProjectGrid select,
+	.StoneReqProjectGrid textarea {
+		width: 100%;
+		box-sizing: border-box;
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 9px;
+		background: #fff;
+		padding: 10px;
+		font: inherit;
+		color: var(--StoneReqText);
+	}
+
+	.StoneReqProjectGrid .Wide {
+		grid-column: 1 / -1;
+	}
+
+	.StoneReqChecks {
+		grid-column: 1 / -1;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 8px;
+	}
+
+	.StoneReqChecks label {
+		display: flex;
+		align-items: center;
+		gap: 7px;
+		padding: 9px;
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 9px;
+		background: #fff;
+	}
+
+	.StoneReqChecks input {
+		width: 18px;
+		height: 18px;
+		accent-color: var(--StoneReqAccent);
+	}
+
+	.StoneReqDialogFoot {
+		bottom: 0;
+		justify-content: flex-end;
+		border-top: 1px solid var(--StoneReqBorder);
+	}
+
+	.StoneReqDialogFoot span {
+		margin-inline-end: auto;
+		color: var(--StoneReqDanger);
+		font-weight: 800;
+	}
+
+	.StoneReqDialogFoot button {
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 10px;
+		background: #fff;
+		padding: 11px 18px;
+		font: inherit;
+		font-weight: 800;
+		cursor: pointer;
+	}
+
+	.StoneReqDialogFoot .Primary {
+		background: var(--StoneReqAccent);
+		border-color: var(--StoneReqAccent);
+		color: #fff;
+	}
+
+	@media (max-width: 900px) {
+		.StoneReqProjectGrid,
+		.StoneReqProjectGrid fieldset {
+			grid-template-columns: 1fr;
+		}
+
+		.StoneReqChecks {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.StoneReqOverlay {
+			padding: 0;
+		}
+
+		.StoneReqDialog {
+			max-height: 100vh;
+			min-height: 100vh;
+			border-radius: 0;
+		}
+
+		.StoneReqChecks {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

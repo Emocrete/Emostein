@@ -1,0 +1,264 @@
+<section class="StoneReqItems" data-items-panel="true">
+	<header class="StoneReqItemsHead">
+		<div>
+			<h3>أصناف الطلبية</h3>
+			<p>كل سطر يمثل صنفًا مستقلًا، وداخل الصنف يمكن إضافة أي عدد من القطع والمقاسات.</p>
+		</div>
+		<div class="StoneReqCounts">
+			<span><b data-item-count="true">0</b> صنف</span>
+			<span><b data-ready-count="true">0</b> جاهز للتسعير</span>
+		</div>
+	</header>
+
+	<div class="StoneReqTableWrap">
+		<table class="StoneReqTable">
+			<thead>
+				<tr>
+					<th>الصنف</th>
+					<th>الخامة</th>
+					<th>المقاسات</th>
+					<th>الخدمة</th>
+					<th>الحالة</th>
+					<th>إجراءات</th>
+				</tr>
+			</thead>
+			<tbody data-items-body="true"></tbody>
+		</table>
+	</div>
+
+	<div class="StoneReqEmpty" data-empty-state="true">
+		<strong>لم تُضف أي أصناف بعد</strong>
+		<p>ابدأ بإضافة المطبخ أو السلم أو الأرضيات أو أي بند آخر، ثم أدخل القطع والمقاسات داخله.</p>
+		<button type="button" data-action="add-item">إضافة أول صنف</button>
+	</div>
+</section>
+
+<style>
+	.StoneReqItems {
+		padding: 24px;
+		background: #fff;
+		border-inline: 1px solid var(--StoneReqBorder);
+		border-bottom: 1px solid var(--StoneReqBorder);
+	}
+
+	.StoneReqItemsHead {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 20px;
+		align-items: center;
+		margin-bottom: 18px;
+	}
+
+	.StoneReqItemsHead h3 {
+		margin: 0 0 5px;
+		font-size: 24px;
+	}
+
+	.StoneReqItemsHead p {
+		margin: 0;
+		color: var(--StoneReqMuted);
+		line-height: 1.8;
+	}
+
+	.StoneReqCounts {
+		display: flex;
+		gap: 8px;
+		flex-wrap: wrap;
+	}
+
+	.StoneReqCounts span {
+		padding: 8px 12px;
+		border-radius: 999px;
+		background: var(--StoneReqAccentSoft);
+		font-size: 13px;
+		font-weight: 800;
+	}
+
+	.StoneReqTableWrap {
+		overflow-x: auto;
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 14px;
+	}
+
+	.StoneReqTable {
+		width: 100%;
+		min-width: 880px;
+		border-collapse: collapse;
+	}
+
+	.StoneReqTable th,
+	.StoneReqTable td {
+		padding: 13px 12px;
+		border-bottom: 1px solid var(--StoneReqBorder);
+		text-align: right;
+		vertical-align: top;
+	}
+
+	.StoneReqTable th {
+		background: var(--StoneReqPanel);
+		font-size: 13px;
+	}
+
+	.StoneReqTable tbody tr:last-child td {
+		border-bottom: 0;
+	}
+
+	.StoneReqItemTitle {
+		display: grid;
+		gap: 3px;
+	}
+
+	.StoneReqItemTitle strong {
+		font-size: 15px;
+	}
+
+	.StoneReqItemTitle small,
+	.StoneReqCellSoft {
+		color: var(--StoneReqMuted);
+		font-size: 12px;
+	}
+
+	.StoneReqStatusTag {
+		display: inline-flex;
+		align-items: center;
+		padding: 6px 10px;
+		border-radius: 999px;
+		font-size: 12px;
+		font-weight: 800;
+		background: var(--StoneReqWarnSoft);
+	}
+
+	.StoneReqStatusTag[data-status="estimate-ready"],
+	.StoneReqStatusTag[data-status="complete"] {
+		background: var(--StoneReqOkSoft);
+	}
+
+	.StoneReqRowActions {
+		display: flex;
+		gap: 5px;
+		flex-wrap: wrap;
+	}
+
+	.StoneReqRowActions button {
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 8px;
+		background: #fff;
+		padding: 6px 9px;
+		font: inherit;
+		font-size: 12px;
+		font-weight: 800;
+		cursor: pointer;
+	}
+
+	.StoneReqRowActions button[data-row-action="delete"] {
+		color: var(--StoneReqDanger);
+	}
+
+	.StoneReqEmpty {
+		display: grid;
+		place-items: center;
+		gap: 8px;
+		padding: 42px 20px;
+		text-align: center;
+		background: var(--StoneReqPanel);
+		border: 1px dashed var(--StoneReqBorder);
+		border-radius: 14px;
+	}
+
+	.StoneReqEmpty[hidden] {
+		display: none;
+	}
+
+	.StoneReqEmpty p {
+		max-width: 680px;
+		margin: 0;
+		color: var(--StoneReqMuted);
+		line-height: 1.8;
+	}
+
+	.StoneReqEmpty button {
+		margin-top: 8px;
+		border: 0;
+		border-radius: 10px;
+		background: var(--StoneReqAccent);
+		color: #fff;
+		padding: 11px 20px;
+		font: inherit;
+		font-weight: 800;
+		cursor: pointer;
+	}
+
+	@media (max-width: 680px) {
+		.StoneReqItems {
+			padding: 18px 12px;
+		}
+
+		.StoneReqItemsHead {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
+
+<style is:global>
+	[data-items-panel="true"] [data-items-body="true"] td {
+		padding: 13px 12px;
+		border-bottom: 1px solid var(--StoneReqBorder);
+		text-align: right;
+		vertical-align: top;
+	}
+
+	[data-items-panel="true"] [data-items-body="true"] tr:last-child td {
+		border-bottom: 0;
+	}
+
+	[data-items-panel="true"] .StoneReqItemTitle {
+		display: grid;
+		gap: 3px;
+	}
+
+	[data-items-panel="true"] .StoneReqItemTitle strong {
+		font-size: 15px;
+	}
+
+	[data-items-panel="true"] .StoneReqItemTitle small,
+	[data-items-panel="true"] .StoneReqCellSoft {
+		color: var(--StoneReqMuted);
+		font-size: 12px;
+	}
+
+	[data-items-panel="true"] .StoneReqStatusTag {
+		display: inline-flex;
+		align-items: center;
+		padding: 6px 10px;
+		border-radius: 999px;
+		font-size: 12px;
+		font-weight: 800;
+		background: var(--StoneReqWarnSoft);
+	}
+
+	[data-items-panel="true"] .StoneReqStatusTag[data-status="estimate-ready"],
+	[data-items-panel="true"] .StoneReqStatusTag[data-status="complete"] {
+		background: var(--StoneReqOkSoft);
+	}
+
+	[data-items-panel="true"] .StoneReqRowActions {
+		display: flex;
+		gap: 5px;
+		flex-wrap: wrap;
+	}
+
+	[data-items-panel="true"] .StoneReqRowActions button {
+		border: 1px solid var(--StoneReqBorder);
+		border-radius: 8px;
+		background: #fff;
+		padding: 6px 9px;
+		font: inherit;
+		font-size: 12px;
+		font-weight: 800;
+		cursor: pointer;
+	}
+
+	[data-items-panel="true"] .StoneReqRowActions button[data-row-action="delete"] {
+		color: var(--StoneReqDanger);
+	}
+</style>
