@@ -2,27 +2,11 @@
 import BLayout from "@/Layout.astro";
 import { Badge, EmoCall, Emograph, EmoList, SecTitle, VrStack } from "@/Widgets/Comp";
 import { EmoGallery, RespImg } from "@/Widgets/Media";
-import { PhDwgMonthlyOffer } from "@/Widgets/Offers";
 import { ThemedPriceCardHz } from "@/Widgets/Prices";
 import { DivCol, DivStr, EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { EmoStr } from "@/Widgets/Strips";
 import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -40,7 +24,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 
 
-	<Hero pImgAlt="واجهة صيدلية مرخصة مفروشة بالأدوية">
+	<Hero pImgAlt="واجهة صيدلية مرخصة مفروشة بالأدوية" Readable>
 
 		<VrStack
 			pSize={new Size(new NumPer("35%","95%"))}
@@ -56,19 +40,11 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 				pText={Text.Body.Centered.White.OfText("خدمة إعداد الرسم الهندسي المطلوب لترخيص صيدلية جديدة اللازم للتقديم للمعاينة الأولى معتمد بختم مهندس نقابي ، والرسم الهندسي للمعاينة الثانية أو تعديل الرسم الهندسي للصيدلية معتمد بختم نقابة المهندسين")}
 			/>
 
-			<EmoCall
-				data-own-size
-				BlackSky
-				pText="للطلب والاستفسار"
-			/>
+			<EmoCall BlackSky />
 
 		</VrStack>
 
-		<VrStack
-			pLandOnly
-			pSize={new Size(new NumPer("60%","95%"))}
-			pLoc={new Loc(new NumPer("40%","2.5%"),new NumPer("75%","60%"))}
-		>
+		<VrStack pLandOnly pSize={new Size(new NumPer("60%","95%"))} pLoc={new Loc(new NumPer("40%","2.5%"),new NumPer("75%","60%"))}>
 
 			<Badge
 				pYears={6}
@@ -106,31 +82,34 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 
 
-	<PhDwgMonthlyOffer />
-
-
-
-
-
-
-
-	<EmoSec id="secDwgStages">
+	<EmoSec id="secDwgStages" Readable>
 
 		<SecTitle
+			id="sectDwgStages"
+			Readable
 			SkyLite
 			pTitle="مراحل الرسم الهندسي المطلوب لترخيص صيدلية جديدة"
 			pDesc="يتم تقديم الرسم الهندسي للصيدلية مرتين ، أحدهما يرسل كمرفق بطلب ترخيص الصيدلية عند التقديم ، والثاني يقدم كنسخة أخيرة مطابقة للواقع النهائي الذي سيتم تشغيل الصيدلية عليه"
 		/>
 
 		<DivStr
+			id="strDwgStages"
+			Readable
 			pContentSize={new Size(new NumPer("90%", "95%"))}
 			pGap={new Pixel(40, 20)}
 			pPad={new Pixel(40,20)}
 		>
 
-			<DivCol pBgColor={new ElemBg(Colors.Gray1)} pPad={new Pixel(30, 10)}>
+			<DivCol
+				id="colDwg1"
+				Readable
+				pBgColor={new ElemBg(Colors.Gray1)}
+				pPad={new Pixel(30, 10)}
+			>
 
 				<EmoList
+					id="lstDwg1"
+					Readable
 					pTitle={Text.H3.Centered.OfText("الرسم الهندسي للمعاينة الأولى")}
 					pDesc={Text.Body.OfText("يوفر الرسم الهندسي للمعاينة الأولى للصيدلية المعلومات المبدئية التي توضح صلاحية مقر الصيدلية للترخيص ، واستيفاءه للشروط الثلاثة الأساسية التي يجب توفرها في مقر الصيدلية وهي :")}
 					pItems={[
@@ -143,9 +122,16 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 			</DivCol>
 
-			<DivCol pBgColor={new ElemBg(Colors.Gray1)} pPad={new Pixel(30, 10)}>
+			<DivCol
+				id="colDwg2"
+				Readable
+				pBgColor={new ElemBg(Colors.Gray1)}
+				pPad={new Pixel(30, 10)}
+			>
 
 				<Emograph
+					id="txtDwg2"
+					Readable
 					pTitle={Text.H3.Centered.OfText("الرسم الهندسي للمعاينة الثانية")}
 					pText={Text.Body.OfText("يحتوي الرسم الهندسي للمعاينة الثانية للصيدلية على نفس عناصر الرسم الهندسي للمعاينة الأولى ، ولكن بما يطابق الوضع والأبعاد النهائية للصيدلية بعد اكتمال أعمال التشطيبات والتعديلات التي قد ينفذها الصيدلي صاحب الترخيص مثل إضافة حمام أو معمل أو كليهما .")}
 				/>
@@ -162,16 +148,19 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 
 
-	<EmoSec id="secDwgSpecs">
+	<EmoSec id="secDwgSpecs" Readable>
 
 		<SecTitle
+			id="sectDwgSpecs"
 			Sky
+			Readable
 			pTitle="شروط الرسم الهندسي المطلوب لترخيص صيدلية"
 			pDesc="يجب أن يتضمن الرسم الهندسي لترخيص الصيدلية عدة عناصر رئيسية لتوصيف مقر الصيدلية ، حيث يوضح الرسم الهندسي للمعاينة الأولى مدى استيفاء مقر الصيدلية للشروط القانونية المطلوبة لترخيص الصيدليات وهي ( المسافة - المساحة - الارتفاع ) ، وبناءا على محتوى الرسم الهندسي يتم عمل المعاينة الأولى للصيدلية وتحديد مدى صلاحية الموقع المبدئية لفتح صيدلية . ويوضح الرسم الهندسي للمعاينة الثانية مدى استيفاء المقر للشروط الصحية الخاصة بحوض المعمل والحمام إن وجد"
 		/>
 
 		<DivStr
-			id="secDwgTypes"
+			id="strDwgSpecs1Plan"
+			Readable
 			pContentSize={new Size(new NumPer("90%", "95%"))}
 			pGap={new Pixel(40, 20)}
 		>
@@ -212,7 +201,8 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 		</DivStr>
 
 		<DivStr
-			id="secDwgTypes"
+			id="strDwgSpecs2Sec"
+			Readable
 			pContentSize={new Size(new NumPer("90%", "95%"))}
 			pGap={new Pixel(40, 20)}
 		>
@@ -253,7 +243,8 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 		</DivStr>
 
 		<DivStr
-			id="secDwgTypes"
+			id="strDwgSpecs3Facade"
+			Readable
 			pContentSize={new Size(new NumPer("90%", "95%"))}
 			pGap={new Pixel(40, 20)}
 		>
@@ -294,7 +285,8 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 		</DivStr>
 
 		<DivStr
-			id="secDwgTypes"
+			id="strDwgSpecs4Map"
+			Readable
 			pContentSize={new Size(new NumPer("90%", "95%"))}
 			pGap={new Pixel(40, 20)}
 		>
@@ -356,7 +348,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 
 
-	<EmoSec Service>
+	<EmoSec Service id="secService">
 
 		<SecTitle BistageLite pTitle="خدمات الرسم الهندسي للصيدليات" />
 
@@ -370,6 +362,8 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 			>
 
 				<ThemedPriceCardHz
+					id="crdSrv1"
+					Readable
 					pThemeColor="#097a2f"
 					pImage="/Media/Emomed/Pharmacy/Dwg/Offers/First-Visit.webp"
 					pIcon="/Media/Emomed/Pharmacy/Dwg/Offers/First-Visit.webp"
@@ -389,6 +383,8 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 				</ThemedPriceCardHz>
 
 				<ThemedPriceCardHz
+					id="crdSrv2"
+					Readable
 					pThemeColor="#177737"
 					pImage="/Media/Emomed/Pharmacy/Dwg/Offers/First-Visit.webp"
 					pIcon="/Media/Emomed/Pharmacy/Dwg/Offers/First-Visit.webp"
@@ -412,6 +408,8 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 				</ThemedPriceCardHz>
 
 				<ThemedPriceCardHz
+					id="crdSrvEdit"
+					Readable
 					pThemeColor="#28c25b"
 					pImage="/Media/Emomed/Pharmacy/Dwg/Offers/First-Visit.webp"
 					pIcon="/Media/Emomed/Pharmacy/Dwg/Offers/First-Visit.webp"
@@ -439,14 +437,6 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 		</EmoStr>
 
 	</EmoSec>
-
-
-
-
-
-
-
-	<PhDwgMonthlyOffer />
 
 
 
@@ -489,37 +479,11 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 
 
-	<ReadAlso
-		pTitle={Text.H2.Centered.OfText("اقرأ أيضًا")}
-		pDesc={Text.Body.Centered.OfText("صفحات تساعدك على فهم ملف ترخيص الصيدلية من ناحية الشروط والإجراءات والمسافة.")}
-		pHeadBg={new ElemBg(Colors.SkyLite)}
-		pBodyBg={new ElemBg(Colors.WhiteOff)}
-		pCardBg={new ElemBg(Colors.WhiteOff)}
-	>
+	<ReadAlso>
 
-		<ReadAlsoItem
-			pTitle="ترخيص صيدلية"
-			pDesc="الصفحة الرئيسية لخدمة ترخيص الصيدليات وخطوات تجهيز الملف."
-			pHref="/emomed/pharmacy"
-		/>
+		<ReadAlsoItem pTitle="شروط ترخيص صيدلية" pDesc="الشروط الخاصة بالصيدلي والمقر والمعاينة الأولى والثانية." pHref="/emomed/pharmacy/cond" />
 
-		<ReadAlsoItem
-			pTitle="شروط ترخيص صيدلية"
-			pDesc="الشروط الخاصة بالصيدلي والمقر والمعاينة الأولى والثانية."
-			pHref="/emomed/pharmacy/cond"
-		/>
-
-		<ReadAlsoItem
-			pTitle="إجراءات ترخيص صيدلية"
-			pDesc="ترتيب خطوات الطلب والمعاينات واستكمال المستندات."
-			pHref="/emomed/pharmacy/proc"
-		/>
-
-		<ReadAlsoItem
-			pTitle="قياس المسافة بين صيدليتين"
-			pDesc="فهم شرط المسافة وطريقة قراءته قبل استئجار محل الصيدلية."
-			pHref="/emomed/pharmacy/distance"
-		/>
+		<ReadAlsoItem pTitle="إجراءات ترخيص صيدلية" pDesc="ترتيب خطوات الطلب والمعاينات واستكمال المستندات." pHref="/emomed/pharmacy/proc" />
 
 	</ReadAlso>
 
@@ -529,13 +493,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 
 
-	<RelServices
-		pTitle={Text.H2.Centered.WithColor(Colors.BistageLite).OfText("خدمات ذات علاقة")}
-		pDesc={Text.Body.Centered.White.OfText("خدمات تجارية مرتبطة بتجهيز ملف الصيدلية أو تنفيذها بعد قبول المقر.")}
-		pHeadBg={new ElemBg(Colors.Gray5)}
-		pBodyBg={new ElemBg(Colors.SkyLite)}
-		pCardBg={new ElemBg(Colors.WhiteOff)}
-	>
+	<RelServices>
 
 		<RelServiceItem
 			pTitle="استخراج ترخيص صيدلية"
