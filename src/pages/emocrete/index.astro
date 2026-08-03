@@ -1,12 +1,15 @@
 ---
 import BLayout from "@/Layout.astro";
+import { EmoCall, Emograph, VrStack } from "@/Widgets/Comp";
 import { Hero } from "@/Widgets/Sections";
+import { Loc, NumPer, Size, Text } from "@/TypesLib";
 ---
 
 
 
 
 
+<BLayout pSchemaType="GeneralContractor" pTitle="البناء والتشييد" pDescr="البناء والتشييد">
 
 
 
@@ -14,36 +17,15 @@ import { Hero } from "@/Widgets/Sections";
 
 
 
+	<Hero>
 
+		<VrStack pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))} pSize={new Size(new NumPer("40%","95%"))} pHzAlign={"Center"}>
 
+			<Emograph pTitle={Text.H1.Centered.OfText("البناء والتشييد")} pText={Text.Body.Centered.OfText("البناء والتشييد")} />
 
+			<EmoCall BlackSky />
 
-
-
-
-
-<BLayout
-	pSchemaType="GeneralContractor"
-	pTitle="البناء والتشييد"
-	pDescr="البناء والتشييد"
->
-
-
-
-
-
-
-
-	<Hero
-		pTitle="البناء والتشييد"
-		pDesc="البناء والتشييد"
-		pPosL="40% 50% 10% 10%"
-		pPosP="10% 10% 50% 10%"
-	>
-
-		<a class = " cta " href="#cta">
-			اطلب
-		</a>
+		</VrStack>
 
 	</Hero>
 

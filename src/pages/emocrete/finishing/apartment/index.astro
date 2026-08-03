@@ -1,24 +1,9 @@
 ---
 import BLayout from "@/Layout.astro";
-import { EmoBtn } from "@/Widgets/Comp";
+import { EmoBtn, EmoCall, Emograph, HzStack, VrStack } from "@/Widgets/Comp";
 import { Hero } from "@/Widgets/Sections";
-import { EmoStr } from "@/Widgets/Strips";
+import { Loc, NumPer, Pixel, Size, Text } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -36,62 +21,68 @@ import { EmoStr } from "@/Widgets/Strips";
 
 
 
-	<Hero
-		pTitle="تشطيب شقق"
-		pDesc="مهندس متخصص لتشطيب الشقق السكنية بجودة عالية وتكلفة مناسبة"
-		pTitleClr="#424242"
-		pDescClr="#424242"
-		pPosL="40% 15% 40% 50%"
-		pPosP="55% 10% 10% 10%"
-	>
+	<Hero>
 
-		<EmoBtn
-			style = " margin-bottom : 10px "
-			pText="معاينة مجانية عند التعاقد"
-			pIcon="/Media/Emocrete/Finishing/Apartment/HeroButton1N.webp"
-			pIconHover="/Media/Emocrete/Finishing/Apartment/HeroButton1H.webp"
-			pIconActive="/Media/Emocrete/Finishing/Apartment/HeroButton1C.webp"
-			pWidth="300px"
-			pHeight="50px"
-			pRadius="5px"
-			pBgColor="#87c3f5"
-			pBgColorHover="#008cff"
-			pBgColorActive="#ff6f6f"
-			pTextColor="#2e056c"
-			pFontSize="18px"
-		/>
+		<HzStack pLoc={new Loc(new NumPer("35%","2.5%"),new NumPer("30%","45%"))} pSize={new Size(new NumPer("60%","95%"))} pHzAlign={"Center"}>
 
-		<EmoBtn
-			style = " margin-bottom : 10px "
-			pText="التصميم مجانا عند التعاقد"
-			pIcon="/Media/Emocrete/Finishing/Apartment/HeroButton2N.webp"
-			pIconHover="/Media/Emocrete/Finishing/Apartment/HeroButton2H.webp"
-			pIconActive="/Media/Emocrete/Finishing/Apartment/HeroButton2C.webp"
-			pWidth="300px"
-			pHeight="50px"
-			pRadius="5px"
-			pBgColor="#87c3f5"
-			pBgColorHover="#008cff"
-			pBgColorActive="#ff6f6f"
-			pTextColor="#2e056c"
-			pFontSize="18px"
-		/>
+			<VrStack>
 
-		<EmoBtn
-			style = " margin-bottom : 10px "
-			pText="إشراف هندسي كامل"
-			pIcon="/Media/Emocrete/Finishing/Apartment/HeroButton3N.webp"
-			pIconHover="/Media/Emocrete/Finishing/Apartment/HeroButton3H.webp"
-			pIconActive="/Media/Emocrete/Finishing/Apartment/HeroButton3C.webp"
-			pWidth="300px"
-			pHeight="50px"
-			pRadius="5px"
-			pBgColor="#87c3f5"
-			pBgColorHover="#008cff"
-			pBgColorActive="#ff6f6f"
-			pTextColor="#2e056c"
-			pFontSize="18px"
-		/>
+				<Emograph pTitle={Text.H1.Centered.OfText("تشطيب شقق")} pText={Text.Body.Centered.OfText("مهندس متخصص لتشطيب الشقق السكنية بجودة عالية وتكلفة مناسبة")} />
+
+				<EmoCall BlackSky />
+
+			</VrStack>
+
+			<VrStack pGap={new Pixel(20,5)} pVrAlign={"Center"}>
+
+				<EmoBtn
+					pText="معاينة مجانية عند التعاقد"
+					pIcon="/Media/Emocrete/Finishing/Apartment/HeroButton1N.webp"
+					pIconHover="/Media/Emocrete/Finishing/Apartment/HeroButton1H.webp"
+					pIconActive="/Media/Emocrete/Finishing/Apartment/HeroButton1C.webp"
+					pWidth="300px"
+					pHeight="50px"
+					pRadius="5px"
+					pBgColor="#87c3f5"
+					pBgColorHover="#008cff"
+					pBgColorActive="#ff6f6f"
+					pTextColor="#2e056c"
+					pFontSize="18px"
+				/>
+
+				<EmoBtn
+					pText="التصميم مجانا عند التعاقد"
+					pIcon="/Media/Emocrete/Finishing/Apartment/HeroButton2N.webp"
+					pIconHover="/Media/Emocrete/Finishing/Apartment/HeroButton2H.webp"
+					pIconActive="/Media/Emocrete/Finishing/Apartment/HeroButton2C.webp"
+					pWidth="300px"
+					pHeight="50px"
+					pRadius="5px"
+					pBgColor="#87c3f5"
+					pBgColorHover="#008cff"
+					pBgColorActive="#ff6f6f"
+					pTextColor="#2e056c"
+					pFontSize="18px"
+				/>
+
+				<EmoBtn
+					pText="إشراف هندسي كامل"
+					pIcon="/Media/Emocrete/Finishing/Apartment/HeroButton3N.webp"
+					pIconHover="/Media/Emocrete/Finishing/Apartment/HeroButton3H.webp"
+					pIconActive="/Media/Emocrete/Finishing/Apartment/HeroButton3C.webp"
+					pWidth="300px"
+					pHeight="50px"
+					pRadius="5px"
+					pBgColor="#87c3f5"
+					pBgColorHover="#008cff"
+					pBgColorActive="#ff6f6f"
+					pTextColor="#2e056c"
+					pFontSize="18px"
+				/>
+
+			</VrStack>
+
+		</HzStack>
 
 	</Hero>
 
@@ -101,513 +92,4 @@ import { EmoStr } from "@/Widgets/Strips";
 
 
 
-	<EmoStr pImgL="/Media/Emocrete/Finishing/Apartment/DeadMeterL.webp" pImgP="/Media/Emocrete/Finishing/Apartment/DeadMeterP.webp">
-
-		<div
-			class = " ku3DBC "
-			id="comp-lk2rewcz"
-			data-testid="richTextElement"
-		>
-
-			<p
-				class = " font_2 color_11 "
-				style = "
-						font-size : 20px ;
-						line-height : normal ;
-						text-align : center ;
-						font-family : helveticaneueltw20-ligh,sans-serif ;
-						letter-spacing : 0.01em
-					"
-			>
-				نسبة إشراف
-			</p>
-
-			<p
-				class = "
-						font_2
-						wixui-rich-text__text
-						color_11
-					"
-				style = "
-						font-size : 20px ;
-						line-height : normal ;
-						text-align : center ;
-						font-family : helveticaneueltw20-ligh,sans-serif ;
-						letter-spacing : 0.01em
-					"
-			>
-				تبدأ من
-			</p>
-
-		</div>
-
-		<div data-mesh-id="MainCont" data-testid="mesh-container-content">
-
-			<div
-				class = " ku3DBC "
-				id="comp-lk2rewbc"
-				data-testid="richTextElement"
-			>
-
-				<p
-					class = " font_2 color_11 "
-					style = "
-							font-size : 20px ;
-							line-height : normal ;
-							text-align : center ;
-							font-family : helveticaneueltw20-ligh,sans-serif ;
-							letter-spacing : 0.01em
-						"
-				>
-					من إجمالي
-				</p>
-
-				<p
-					class = " font_2 color_11 "
-					style = "
-							font-size : 20px ;
-							line-height : normal ;
-							text-align : center ;
-							font-family : helveticaneueltw20-ligh,sans-serif ;
-							letter-spacing : 0.01em
-						"
-				>
-					التكلفة الفعلية
-				</p>
-
-			</div>
-
-			<div
-				class = "
-						ku3DBC
-						zQ9jDz
-						qvSjx3
-						Vq6kJx
-						comp-lk2rewcj
-						wixui-rich-text
-					"
-				id="comp-lk2rewcj"
-				data-testid="richTextElement"
-			>
-
-				<p
-					class = "
-							font_2
-							wixui-rich-text__text
-							color_29
-						"
-					style = "
-							font-size : 300px ;
-							line-height : 1em ;
-							text-align : center ;
-							font-family : chelsea market,fantasy ;
-							letter-spacing : 0.01em
-						"
-				>
-					15
-				</p>
-
-			</div>
-
-			<div
-				class = "
-						ku3DBC
-						zQ9jDz
-						qvSjx3
-						Vq6kJx
-						comp-lk2rf1ms
-						wixui-rich-text
-					"
-				id="comp-lk2rf1ms"
-				data-testid="richTextElement"
-			>
-
-				<p
-					class = "
-							font_2
-							wixui-rich-text__text
-							color_11
-						"
-					style = "
-							font-size : 50px ;
-							line-height : normal ;
-							text-align : center ;
-							font-weight : normal ;
-							font-family : chelsea market,fantasy ;
-							letter-spacing : 0.01em
-						"
-				>
-					%
-				</p>
-
-			</div>
-
-		</div>
-
-	</EmoStr>
-
-
-
-
-
-
-
 </BLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<style is:global>
-
-
-
-	.font_2 {
-		font: var(--font_2);
-		color: rgb(var(--color_40));
-		letter-spacing: normal;
-	}
-
-
-	.color_11 {
-		color: rgb(var(--color_11));
-	}
-
-
-	.color_29 {
-		color: rgb(var(--color_29));
-	}
-
-
-
-	#comp-lti5o27b {
-		width: 480px;
-		position: relative;
-		margin: 78px 0px 9px calc(50% - 490px);
-		left: 250px;
-		grid-area: 1 / 1 / 5 / 2;
-		place-self: start;
-	}
-
-
-	#comp-lk2rewbc {
-		width: 152px;
-		height: auto;
-	}
-
-
-	#comp-lk2rewcz {
-		--blendMode: normal;
-		--textShadow: 0px 0px transparent;
-		--textOutline: 0px 0px transparent;
-	}
-
-	#comp-lk2rewcz {
-		width: 152px;
-		height: auto;
-	}
-
-	#comp-lk2rewcz {
-		--text-direction: var(--wix-opt-in-direction);
-	}
-
-
-	#comp-lk2rewcj {
-		width: 329px;
-		height: auto;
-	}
-
-	#comp-lk2rewcj {
-		--min-height: 334px;
-		--text-direction: var(--wix-opt-in-direction);
-	}
-
-
-	#comp-lk2rf1ms {
-		--blendMode: normal;
-		--textShadow: 0px 0px transparent;
-		--textOutline: 0px 0px transparent;
-	}
-
-	#comp-lk2rf1ms {
-		width: 81px;
-		height: auto;
-	}
-
-	#comp-lk2rf1ms {
-		--text-direction: var(--wix-opt-in-direction);
-	}
-
-
-
-	[data-mesh-id="comp-lti5o27binlineContent"] {
-		height: auto;
-		width: 480px;
-	}
-
-
-	[data-mesh-id="MainCont"] {
-		position: static;
-		display: flex;
-		height: auto;
-		width: 480px;
-		min-height: auto;
-		outline: 5px solid red;
-	}
-
-	[data-mesh-id="MainCont"] > * {
-		outline: 5px solid yellow;
-	}
-
-
-
-	[data-mesh-id="MainCont"] > [id="comp-lk2rewbc"],
-	[data-mesh-id="MainCont"] > interact-element > [id="comp-lk2rewbc"]
-	{
-		position: relative;
-	}
-
-
-	[data-mesh-id="MainCont"] > [id="comp-lk2rewcz"],
-	[data-mesh-id="MainCont"] > interact-element > [id="comp-lk2rewcz"]
-	{
-		position: relative;
-	}
-
-
-	[data-mesh-id="MainCont"] > [id="comp-lk2rewcj"],
-	[data-mesh-id="MainCont"] > interact-element > [id="comp-lk2rewcj"]
-	{
-		position: relative;
-	}
-
-
-	[data-mesh-id="MainCont"] > [id="comp-lk2rf1ms"],
-	[data-mesh-id="MainCont"] > interact-element > [id="comp-lk2rf1ms"]
-	{
-		position: relative;
-	}
-
-
-	.MMl86N,
-	.ku3DBC
-	{
-		direction: var(--text-direction);
-		min-height: var(--min-height);
-		min-width: var(--min-width);
-		mix-blend-mode: var(--blendMode,normal);
-		overflow-wrap: break-word;
-		pointer-events: none;
-		text-align: start;
-		text-shadow: var(--textOutline,0 0 transparent),var(--textShadow,0 0 transparent);
-		text-transform: var(--textTransform,"none");
-	}
-
-
-	.MMl86N > *,
-	.ku3DBC > *
-	{
-		pointer-events: auto;
-	}
-
-
-	.MMl86N blockquote,
-	.MMl86N div,
-	.MMl86N h1,
-	.MMl86N h2,
-	.MMl86N h3,
-	.MMl86N h4,
-	.MMl86N h5,
-	.MMl86N h6,
-	.MMl86N p,
-	.ku3DBC blockquote,
-	.ku3DBC div,
-	.ku3DBC h1,
-	.ku3DBC h2,
-	.ku3DBC h3,
-	.ku3DBC h4,
-	.ku3DBC h5,
-	.ku3DBC h6,
-	.ku3DBC p
-	{
-		margin-block: 0px;
-		margin: 0px;
-	}
-
-
-	:root,
-	:host,
-	.spxThemeOverride,
-	.max-width-container,
-	#root
-	{
-		--color_0: 255,255,255;
-		--color_1: 255,255,255;
-		--color_2: 0,0,0;
-		--color_3: 237,28,36;
-		--color_4: 0,136,203;
-		--color_5: 255,203,5;
-		--color_6: 114,114,114;
-		--color_7: 176,176,176;
-		--color_8: 255,255,255;
-		--color_9: 114,114,114;
-		--color_10: 176,176,176;
-		--color_11: 255,255,255;
-		--color_12: 153,153,153;
-		--color_13: 102,102,102;
-		--color_14: 51,51,51;
-		--color_15: 0,0,0;
-		--color_16: 193,180,251;
-		--color_17: 161,142,248;
-		--color_18: 73,35,244;
-		--color_19: 49,23,163;
-		--color_20: 24,12,81;
-		--color_21: 237,223,216;
-		--color_22: 174,163,163;
-		--color_23: 133,117,117;
-		--color_24: 89,78,78;
-		--color_25: 44,39,39;
-		--color_26: 225,186,186;
-		--color_27: 194,128,128;
-		--color_28: 146,96,96;
-		--color_29: 97,64,64;
-		--color_30: 49,32,32;
-		--color_31: 244,234,177;
-		--color_32: 233,219,137;
-		--color_33: 222,195,40;
-		--color_34: 148,130,27;
-		--color_35: 74,65,13;
-		--color_36: 255,255,255;
-		--color_37: 0,0,0;
-		--color_38: 153,153,153;
-		--color_39: 102,102,102;
-		--color_40: 51,51,51;
-		--color_41: 73,35,244;
-		--color_42: 225,186,186;
-		--color_43: 242,255,0;
-		--color_44: 54,54,54;
-		--color_45: 0,0,0;
-		--color_46: 0,0,0;
-		--color_47: 51,51,51;
-		--color_48: 73,35,244;
-		--color_49: 73,35,244;
-		--color_50: 255,255,255;
-		--color_51: 255,255,255;
-		--color_52: 73,35,244;
-		--color_53: 73,35,244;
-		--color_54: 102,102,102;
-		--color_55: 102,102,102;
-		--color_56: 255,255,255;
-		--color_57: 255,255,255;
-		--color_58: 73,35,244;
-		--color_59: 73,35,244;
-		--color_60: 73,35,244;
-		--color_61: 73,35,244;
-		--color_62: 255,255,255;
-		--color_63: 255,255,255;
-		--color_64: 102,102,102;
-		--color_65: 102,102,102;
-		--font_0: normal normal bold 50px/normal janna-lt-w20-regular,sans-serif;
-		--font_1: normal normal normal 16px/1.4em din-next-w01-light,sans-serif;
-		--font_2: normal normal bold 20px/normal janna-lt-w20-regular,sans-serif;
-		--font_3: normal normal bold 18px/1.4em janna-lt-w20-regular,sans-serif;
-		--font_4: normal normal bold 16px/1.4em janna-lt-w20-regular,sans-serif;
-		--font_5: normal normal bold 14px/1.4em janna-lt-w20-regular,sans-serif;
-		--font_6: normal normal bold 12px/1.4em janna-lt-w20-regular,sans-serif;
-		--font_7: normal normal bold 18px/normal helveticaneueltw20-ligh,sans-serif;
-		--font_8: normal normal bold 16px/1.6em helveticaneueltw20-ligh,sans-serif;
-		--font_9: normal normal bold 14px/normal helveticaneueltw20-ligh,sans-serif;
-		--font_10: normal normal normal 12px/1.4em din-next-w01-light,sans-serif;
-		--wix-ads-height: 0px;
-		--sticky-offset: 0px;
-		--wix-ads-top-height: 0px;
-		--site-width: 980px;
-		--above-all-z-index: 100000;
-		--portals-z-index: 100001;
-		--wix-opt-in-direction: ltr;
-		--wix-opt-in-direction-multiplier: 1;
-		-webkit-font-smoothing: antialiased;
-		--minViewportSize: 320;
-		--maxViewportSize: 1920;
-		--theme-spx-ratio: 1px;
-		--full-viewport: 100 * var(--one-unit) * var(--browser-zoom);
-		--scaling-factor: clamp(var(--spx-stopper-min), var(--full-viewport), min(var(--spx-stopper-max), var(--section-max-width)));
-		--customScaleViewportLimit: clamp(var(--minViewportSize) * 1px, var(--full-viewport), min(var(--section-max-width), var(--maxViewportSize) * 1px));
-	}
-
-
-
-</style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<style is:global>
-
-
-
-	@media (prefers-reduced-motion: no-preference) {
-		#comp-lk2rewbc:not([data-motion-enter="done"]) {
-			animation: auto ease 0s 1 normal none running none;
-			animation-composition: replace;
-		}
-	}
-
-
-	@media (prefers-reduced-motion: no-preference) {
-		#comp-lk2rewcz:not([data-motion-enter="done"]) {
-			animation: auto ease 0s 1 normal none running none;
-			animation-composition: replace;
-		}
-	}
-
-
-	@media (prefers-reduced-motion: no-preference) {
-		#comp-lk2rewcj:not([data-motion-enter="done"]) {
-			animation: auto ease 0s 1 normal none running none;
-			animation-composition: replace;
-		}
-	}
-
-
-	@media (prefers-reduced-motion: no-preference) {
-		#comp-lk2rf1ms:not([data-motion-enter="done"]) {
-			animation: auto ease 0s 1 normal none running none;
-			animation-composition: replace;
-		}
-	}
-
-
-
-</style>

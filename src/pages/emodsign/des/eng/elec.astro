@@ -1,27 +1,12 @@
 ---
 import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
-import { EmoCall, Emograph, EmoList, HzStack, SecTitle } from "@/Widgets/Comp";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
 import { RespImg } from "@/Widgets/Media";
 import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { EmoStr } from "@/Widgets/Strips";
-import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -29,8 +14,8 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 <BLayout
 	pSchemaType="Service"
-	pTitle="تصميم لوحات كهرباء للمصانع والمنازل"
-	pDescr="خدمة تصميم لوحات كهرباء للمصانع والمنازل والمنشآت التجارية والإدارية، تشمل لوحات التوزيع الرئيسية والفرعية ولوحات التحكم ولوحات ATS وMCC وتحسين معامل القدرة، مع إعداد المخططات وجداول الأحمال والحماية والمواصفات الفنية."
+	pTitle="تصميم هندسي كهرباء"
+	pDescr="تصميم هندسي منظم للوحات التوزيع والتحكم للمصانع والمنازل والمنشآت المختلفة، من حساب الأحمال حتى مخططات التنفيذ والتجميع."
 >
 
 
@@ -39,21 +24,18 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<Hero
-		pImgF="/Media/Emodsign/Des/Eng/Elec/"
-		pTitle="تصميم لوحات كهرباء"
-		pDesc="تصميم هندسي منظم للوحات التوزيع والتحكم للمصانع والمنازل والمنشآت المختلفة، من حساب الأحمال حتى مخططات التنفيذ والتجميع."
-		pTitleClr="#F2DCA2"
-		pDescClr="#FFFFFF"
-		pHzAlign="right"
-		pVrAlign="right"
-		pPosL="16% 54% 12% 8%"
-		pPosP="12% 8% 46% 8%"
-		pBlurL="on"
-		pBlurP="on"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="اطلب تصميم لوحة كهرباء" />
+		<VrStack pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))} pSize={new Size(new NumPer("40%","95%"))} pHzAlign={"Center"}>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("تصميم هندسي كهرباء")}
+				pText={Text.Body.Centered.OfText("تصميم هندسي منظم للوحات التوزيع والتحكم للمصانع والمنازل والمنشآت المختلفة، من حساب الأحمال حتى مخططات التنفيذ والتجميع.")}
+			/>
+
+			<EmoCall BlackSky />
+
+		</VrStack>
 
 	</Hero>
 
@@ -381,11 +363,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 	<EmoSec pBg={new ElemBg("#F6F1E8")}>
 
-		<SecTitle
-			style = " --StripBg : #E8D7AA "
-			pTitle="الاستخدامات المختلفة"
-			pDesc="نطاق الخدمة مرن حسب نوع المشروع وحجم الأحمال وطبيعة التشغيل."
-		/>
+		<SecTitle style = " --StripBg : #E8D7AA " pTitle="الاستخدامات المختلفة" pDesc="نطاق الخدمة مرن حسب نوع المشروع وحجم الأحمال وطبيعة التشغيل." />
 
 		<CardsGr
 			pWidth={new RespString("1200px", "340px")}
@@ -533,37 +511,15 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<ReadAlso
-		pTitle={Text.H2.Centered.WithColor("#111318").OfText("اقرأ أيضًا")}
-		pDesc={Text.Body.Centered.WithColor("#333333").OfText("صفحات مرتبطة بخدمات التصميم الهندسي والتجهيز الفني.")}
-		pHeadBg={new ElemBg("#E8D7AA")}
-		pBodyBg={new ElemBg("#F6F1E8")}
-		pCardBg={new ElemBg("#FFFFFF")}
-	>
+	<ReadAlso>
 
-		<ReadAlsoItem
-			pTitle="تصميم هندسي"
-			pDesc="الصفحة الرئيسية لخدمات التصميم الهندسي."
-			pHref="/emodsign/des/eng"
-		/>
+		<ReadAlsoItem pTitle="تصميم هندسي" pDesc="الصفحة الرئيسية لخدمات التصميم الهندسي." pHref="/emodsign/des/eng" />
 
-		<ReadAlsoItem
-			pTitle="تصميم معماري"
-			pDesc="تصميم المساحات والواجهات والمخططات المعمارية."
-			pHref="/emodsign/des/eng/arch"
-		/>
+		<ReadAlsoItem pTitle="تصميم معماري" pDesc="تصميم المساحات والواجهات والمخططات المعمارية." pHref="/emodsign/des/eng/arch" />
 
-		<ReadAlsoItem
-			pTitle="تصميم ميكانيكا"
-			pDesc="تصميم أعمال التغذية والصرف والتكييف والتهوية."
-			pHref="/emodsign/des/eng/mech"
-		/>
+		<ReadAlsoItem pTitle="تصميم ميكانيكا" pDesc="تصميم أعمال التغذية والصرف والتكييف والتهوية." pHref="/emodsign/des/eng/mech" />
 
-		<ReadAlsoItem
-			pTitle="شوب دروينج كهرباء"
-			pDesc="تفصيل الرسومات الكهربائية للتنفيذ والتنسيق بالموقع."
-			pHref="/emodsign/tech/shopdwg/elec"
-		/>
+		<ReadAlsoItem pTitle="شوب دروينج كهرباء" pDesc="تفصيل الرسومات الكهربائية للتنفيذ والتنسيق بالموقع." pHref="/emodsign/tech/shopdwg/elec" />
 
 	</ReadAlso>
 
@@ -573,13 +529,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<RelServices
-		pTitle={Text.H2.Centered.WithColor("#F2DCA2").OfText("خدمات ذات علاقة")}
-		pDesc={Text.Body.Centered.WithColor("#F8F4EA").OfText("خدمات تجارية تكمل تصميم اللوحات داخل منظومة المشروع الكهربائية والإنشائية والتنفيذية.")}
-		pHeadBg={new ElemBg("#0B1017")}
-		pBodyBg={new ElemBg("#F6F1E8")}
-		pCardBg={new ElemBg("#FFFFFF")}
-	>
+	<RelServices>
 
 		<RelServiceItem
 			pTitle="شوب دروينج كهرباء"
@@ -589,23 +539,9 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<RelServiceItem
-			pTitle="تصميم ميكانيكا"
-			pDesc="تنسيق أحمال المضخات والتكييف والتهوية والخدمات مع التصميم الكهربائي."
-			pHref="/emodsign/des/eng/mech"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
 			pTitle="حصر كميات"
 			pDesc="استخراج كميات تساعد في التسعير والمقارنة بين عروض التنفيذ."
 			pHref="/emodsign/tech/takeoff"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="إدارة مشروع"
-			pDesc="تنظيم التنفيذ والتوريدات ومتابعة الأعمال طبقًا للرسومات."
-			pHref="/emodsign/tech/manage"
 			pBtnText="اطلب الخدمة"
 		/>
 

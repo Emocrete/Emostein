@@ -1,27 +1,12 @@
 ---
 import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
-import { EmoCall, Emograph, EmoList, HzStack, SecTitle } from "@/Widgets/Comp";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
 import { RespImg } from "@/Widgets/Media";
-import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoFaq, EmoSec, FaqItem, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { EmoStr } from "@/Widgets/Strips";
-import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -39,21 +24,18 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<Hero
-		pImgF="/Media/Emodsign/Des/Eng/Struc/"
-		pTitle="تصميم إنشائي"
-		pDesc="تحويل التصميم المعماري إلى هيكل آمن واقتصادي وقابل للتنفيذ، من اختيار النظام الإنشائي حتى اللوحات والنوتة الحسابية."
-		pTitleClr="#EED7A1"
-		pDescClr="#FFFFFF"
-		pHzAlign="right"
-		pVrAlign="right"
-		pPosL="15% 52% 12% 8%"
-		pPosP="12% 8% 46% 8%"
-		pBlurL="on"
-		pBlurP="on"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="اطلب تصميم إنشائي" />
+		<VrStack pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))} pSize={new Size(new NumPer("40%","95%"))} pHzAlign={"Center"}>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("تصميم إنشائي")}
+				pText={Text.Body.Centered.OfText("تحويل التصميم المعماري إلى هيكل آمن واقتصادي وقابل للتنفيذ، من اختيار النظام الإنشائي حتى اللوحات والنوتة الحسابية.")}
+			/>
+
+			<EmoCall BlackSky />
+
+		</VrStack>
 
 	</Hero>
 
@@ -63,10 +45,9 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec pBg={new ElemBg("#F7F1E8")}>
+	<EmoSec pBg={new ElemBg("#F7F1E8")} hidden>
 
 		<SecTitle
-			style = " --StripBg : #101820 "
 			pTitle="التصميم الإنشائي هو قرار الأمان والتكلفة في المشروع"
 			pDesc="كل مبنى يحتاج نظامًا إنشائيًا يترجم الفكرة المعمارية إلى مسار واضح للأحمال، من البلاطات والكمرات إلى الأعمدة والحوائط والأساسات. التصميم الجيد لا يبالغ في القطاعات ولا يغامر بالسلامة، بل يوازن بين الأمان، الاقتصاد، سهولة التنفيذ، ومتطلبات الترخيص."
 		/>
@@ -109,7 +90,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#EED7A1").OfText("ما الذي يتم تصميمه؟")}
 			pCardBg={new ElemBg("#F7F1E8")}
 			pCardTitleFnt={Text.H4.WithColor("#101820")}
@@ -158,6 +138,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 				pHeadBg={new ElemBg("transparent")}
 				pItemsBg={new ElemBg("transparent")}
 				pNumbered={false}
+				pItemFnt={Text.Body.White}
 				pItems={[
 					"المخططات المعمارية النهائية أو شبه النهائية.",
 					"تقرير التربة إن وجد، أو بيانات أولية عن طبيعة الأرض ومكان المشروع.",
@@ -200,8 +181,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#101820").OfText("أنظمة إنشائية شائعة")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#101820")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -226,7 +205,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 	<EmoSec pBg={new ElemBg("#FFFFFF")}>
 
 		<SecTitle
-			style = " --StripBg : #101820 "
 			pTitle="تصميم العناصر الخرسانية المسلحة"
 			pDesc="الخرسانة المسلحة هي أكثر نظم التنفيذ شيوعًا في المباني السكنية والتجارية في مصر. لذلك يتم التعامل مع كل عنصر باعتباره جزءًا من مسار أحمال متكامل، وليس قطاعًا منفصلًا."
 		/>
@@ -234,7 +212,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
 			<CardsGr
-				pWidth={new RespString("560px", "320px")}
 				pGrTitle={Text.H3.Centered.WithColor("#101820").OfText("العناصر الرئيسية")}
 				pCardBg={new ElemBg("#F7F1E8")}
 				pCardTitleFnt={Text.H4.WithColor("#101820")}
@@ -282,7 +259,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#101820").OfText("أنواع الأساسات ضمن الخدمة")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#101820")}
@@ -323,8 +299,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		</EmoStr>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#EED7A1").OfText("ملف اللوحات قد يشمل")}
 			pCardBg={new ElemBg("#F7F1E8")}
 			pCardTitleFnt={Text.H4.WithColor("#101820")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -457,15 +431,9 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 	<EmoSec pBg={new ElemBg("#F7F1E8")}>
 
-		<SecTitle
-			style = " --StripBg : #E6D1A0 "
-			pTitle="خدمات مطلوبة فعليًا في سوق التصميم الإنشائي"
-			pDesc="العميل قد يحتاج تصميمًا كاملًا، أو مراجعة، أو تحويل رسومات، أو شوب دروينج، أو حصر كميات. لذلك يمكن تقديم الخدمة على أكثر من مستوى حسب حالة المشروع."
-		/>
+		<SecTitle style = " --StripBg : #E6D1A0 " pTitle="خدمات مطلوبة فعليًا في سوق التصميم الإنشائي" />
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#101820").OfText("نطاقات قابلة للتقديم")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#101820")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -487,7 +455,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoStr pBg={new ElemBg("#101820")} pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}>
+	<EmoStr pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}>
 
 		<EmoStr
 			pBg={new ElemBg("#172430")}
@@ -506,7 +474,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 		<EmoList
 			pWidth={new RespString("1000px", "320px")}
-			pTitle={Text.H3.Centered.WithColor("#EED7A1").OfText("منهج العمل")}
 			pDesc={Text.Body.Centered.WithColor("#F7F1E8").OfText("كل مرحلة تخرج بنتيجة قابلة للمراجعة قبل الانتقال إلى المرحلة التالية.")}
 			pHeadBg={new ElemBg("transparent")}
 			pItemsBg={new ElemBg("transparent")}
@@ -572,7 +539,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#101820").OfText("نخدم هذه الاستخدامات")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#101820")}
@@ -588,43 +554,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 	</EmoSec>
-
-
-
-
-
-
-
-	<EmoStr pBg={new ElemBg("#101820")} pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}>
-
-		<EmoStr
-			pBg={new ElemBg("#172430")}
-			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<Emograph
-				pTitle={Text.H2.Centered.WithColor("#C6A15B").OfText("ابدأ التصميم الإنشائي قبل قرارات الموقع")}
-				pText={Text.Body.Centered.WithColor("#F7F1E8").OfText("أرسل المخططات المعمارية وبيانات الأرض وعدد الأدوار وتقرير التربة إن وجد. سنراجع المعطيات ونحدد نطاق التصميم المناسب: لوحات فقط، نوتة حسابية، حصر كميات، أو ملف إنشائي متكامل.")}
-				pSize={new Size(new NumPer(980, 320), new NumPer("auto", "auto"))}
-			/>
-
-		</EmoStr>
-
-		<HzStack pGap={new Pixel(20, 15)} pPad={new Pixel(30, 20)}>
-
-			<EmoCall BlackSky pText="اتصال مباشر" />
-
-			<Emograph
-				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
-				pTitle={Text.H3.WithColor("#EED7A1").OfText("بيانات تساعدنا في التسعير")}
-				pText={Text.Body.WithColor("#F7F1E8").OfText("نوع المبنى، المساحة، عدد الأدوار، وجود بدروم، تقرير التربة، حالة المخططات المعمارية، وهل المطلوب تصميم فقط أم لوحات ونوتة وحصر كميات أيضًا.")}
-			/>
-
-		</HzStack>
-
-	</EmoStr>
 
 
 
@@ -672,94 +601,27 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<ReadAlso
-		pTitle={Text.H2.Centered.WithColor("#101820").OfText("اقرأ أيضًا")}
-		pDesc={Text.Body.Centered.WithColor("#333333").OfText("صفحات مرتبطة بخدمات التصميم الهندسي والتجهيز الفني.")}
-		pHeadBg={new ElemBg("#E6D1A0")}
-		pBodyBg={new ElemBg("#F7F1E8")}
-		pCardBg={new ElemBg("#FFFFFF")}
-	>
-
-		<ReadAlsoItem
-			pTitle="تصميم هندسي"
-			pDesc="الصفحة الرئيسية لخدمات التصميم الهندسي وفروعها."
-			pHref="/emodsign/des/eng"
-		/>
-
-		<ReadAlsoItem
-			pTitle="تكلفة التصميم الإنشائي"
-			pDesc="صفحة متخصصة في عوامل تسعير التصميم الإنشائي وما يؤثر على الأتعاب."
-			pHref="/emodsign/des/eng/struc/cost"
-		/>
-
-		<ReadAlsoItem
-			pTitle="تصميم معماري"
-			pDesc="توزيع المساحات والواجهات والمخططات التي يبدأ منها التصميم الإنشائي."
-			pHref="/emodsign/des/eng/arch"
-		/>
-
-		<ReadAlsoItem
-			pTitle="تصميم كهرباء"
-			pDesc="تنسيق أحمال اللوحات ومسارات الكهرباء مع النظام الإنشائي."
-			pHref="/emodsign/des/eng/elec"
-		/>
-
-		<ReadAlsoItem
-			pTitle="تصميم ميكانيكا"
-			pDesc="تنسيق الشفتات والدكت والمواسير والمعدات مع العناصر الإنشائية."
-			pHref="/emodsign/des/eng/mech"
-		/>
-
-	</ReadAlso>
-
-
-
-
-
-
-
-	<RelServices
-		pTitle={Text.H2.Centered.WithColor("#EED7A1").OfText("خدمات ذات علاقة")}
-		pDesc={Text.Body.Centered.WithColor("#F7F1E8").OfText("خدمات تجارية تكمل التصميم الإنشائي وتساعد في تحويله إلى ملف تنفيذ ومتابعة وتسعير.")}
-		pHeadBg={new ElemBg("#101820")}
-		pBodyBg={new ElemBg("#F7F1E8")}
-		pCardBg={new ElemBg("#FFFFFF")}
-	>
+	<RelServices>
 
 		<RelServiceItem
 			pTitle="شوب دروينج إنشائي"
 			pDesc="تفصيل لوحات التسليح والقطاعات والبار بندنج للتنفيذ الدقيق في الموقع."
 			pHref="/emodsign/tech/shopdwg/struc"
-			pBtnText="اطلب الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="حصر كميات إنشائي"
 			pDesc="حصر الخرسانة وحديد التسليح والعناصر الإنشائية للتسعير ومقارنة عروض المقاولين."
 			pHref="/emodsign/tech/takeoff/construction"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="تصميم معماري"
-			pDesc="تجهيز المخطط المعماري الذي يتم البناء عليه في اختيار النظام الإنشائي."
-			pHref="/emodsign/des/eng/arch"
-			pBtnText="اطلب الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="الإشراف الهندسي على البناء"
 			pDesc="متابعة تنفيذ الأعمال الإنشائية طبقًا للرسومات والمواصفات."
 			pHref="/emocrete/supervision/construction"
-			pBtnText="اطلب الخدمة"
 		/>
 
-		<RelServiceItem
-			pTitle="استخراج ترخيص بناء"
-			pDesc="تجهيز ملف الترخيص ومتابعة الإجراءات حسب جهة الاختصاص."
-			pHref="/emoperm/building/newcities/construction"
-			pBtnText="اطلب الخدمة"
-		/>
+		<RelServiceItem pTitle="استخراج ترخيص بناء" pDesc="تجهيز ملف الترخيص ومتابعة الإجراءات حسب جهة الاختصاص." pHref="/emoperm/building/newcities/construction" />
 
 	</RelServices>
 

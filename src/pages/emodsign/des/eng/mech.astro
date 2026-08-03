@@ -1,27 +1,12 @@
 ---
 import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
-import { EmoCall, Emograph, EmoList, HzStack, SecTitle } from "@/Widgets/Comp";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
 import { RespImg } from "@/Widgets/Media";
 import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { EmoStr } from "@/Widgets/Strips";
-import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -29,7 +14,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 <BLayout
 	pSchemaType="Service"
-	pTitle="تصميم ميكانيكا MEP للمباني"
+	pTitle="تصميم هندسي ميكانيكا MEP"
 	pDescr="خدمة تصميم ميكانيكا للمباني والمنشآت تشمل رسومات السباكة والصحي وتغذية المياه والصرف الصحي، ورسومات التكييف والتهوية HVAC، ورسومات مكافحة الحريق Fire Fighting، مع حسابات الأحمال، اختيار المعدات، المخططات، الجداول، والتنسيق مع باقي التخصصات."
 >
 
@@ -39,21 +24,18 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<Hero
-		pImgF="/Media/Emodsign/Des/Eng/Mech/"
-		pTitle="تصميم ميكانيكا MEP"
-		pDesc="رسومات ميكانيكية منظمة للسباكة والصرف والتكييف والتهوية ومكافحة الحريق، من الفكرة الفنية حتى مخططات قابلة للتنسيق والتنفيذ."
-		pTitleClr="#EED7A1"
-		pDescClr="#FFFFFF"
-		pHzAlign="right"
-		pVrAlign="right"
-		pPosL="14% 8% 18% 50%"
-		pPosP="12% 8% 48% 8%"
-		pBlurL="on"
-		pBlurP="on"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="اطلب تصميم ميكانيكا" />
+		<VrStack pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))} pSize={new Size(new NumPer("40%","95%"))} pHzAlign={"Center"}>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("تصميم هندسي ميكانيكا MEP")}
+				pText={Text.Body.Centered.OfText("خدمة تصميم ميكانيكا للمباني والمنشآت تشمل رسومات السباكة والصحي وتغذية المياه والصرف الصحي، ورسومات التكييف والتهوية HVAC، ورسومات مكافحة الحريق Fire Fighting، مع حسابات الأحمال، اختيار المعدات، المخططات، الجداول، والتنسيق مع باقي التخصصات.")}
+			/>
+
+			<EmoCall BlackSky />
+
+		</VrStack>
 
 	</Hero>
 
@@ -66,7 +48,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 	<EmoSec pBg={new ElemBg("#F7F1E8")}>
 
 		<SecTitle
-			style = " --StripBg : #101820 "
 			pTitle="التصميم الميكانيكي هو البنية الخفية لراحة المبنى وتشغيله"
 			pDesc="المبنى قد يبدو مكتملًا من الخارج، لكن جودة استخدامه اليومية تعتمد على أنظمة لا يراها العميل غالبًا: مياه تصل بضغط مناسب، صرف يعمل دون روائح أو ارتجاع، تكييف وتهوية مريحان، ونظام مكافحة حريق واضح في مساراته ومعداته. لذلك يتم تصميم الميكانيكا كمنظومة تشغيل كاملة لا كرسومات منفصلة."
 		/>
@@ -728,35 +709,15 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		pCardBg={new ElemBg("#FFFFFF")}
 	>
 
-		<ReadAlsoItem
-			pTitle="تصميم هندسي"
-			pDesc="الصفحة الرئيسية لخدمات التصميم الهندسي وفروعها."
-			pHref="/emodsign/des/eng"
-		/>
+		<ReadAlsoItem pTitle="تصميم هندسي" pDesc="الصفحة الرئيسية لخدمات التصميم الهندسي وفروعها." pHref="/emodsign/des/eng" />
 
-		<ReadAlsoItem
-			pTitle="تصميم معماري"
-			pDesc="توزيع المساحات والواجهات والمخططات المعمارية."
-			pHref="/emodsign/des/eng/arch"
-		/>
+		<ReadAlsoItem pTitle="تصميم معماري" pDesc="توزيع المساحات والواجهات والمخططات المعمارية." pHref="/emodsign/des/eng/arch" />
 
-		<ReadAlsoItem
-			pTitle="تصميم كهرباء"
-			pDesc="تصميم الأحمال واللوحات والإنارة والقوى والأنظمة الكهربائية."
-			pHref="/emodsign/des/eng/elec"
-		/>
+		<ReadAlsoItem pTitle="تصميم كهرباء" pDesc="تصميم الأحمال واللوحات والإنارة والقوى والأنظمة الكهربائية." pHref="/emodsign/des/eng/elec" />
 
-		<ReadAlsoItem
-			pTitle="تصميم إنشائي"
-			pDesc="تصميم النظام الإنشائي وتنسيقه مع المعماري والميكانيكا."
-			pHref="/emodsign/des/eng/struc"
-		/>
+		<ReadAlsoItem pTitle="تصميم إنشائي" pDesc="تصميم النظام الإنشائي وتنسيقه مع المعماري والميكانيكا." pHref="/emodsign/des/eng/struc" />
 
-		<ReadAlsoItem
-			pTitle="شوب دروينج ميكانيكا"
-			pDesc="تفصيل رسومات الميكانيكا للتنفيذ والتنسيق بالموقع."
-			pHref="/emodsign/tech/shopdwg/mech"
-		/>
+		<ReadAlsoItem pTitle="شوب دروينج ميكانيكا" pDesc="تفصيل رسومات الميكانيكا للتنفيذ والتنسيق بالموقع." pHref="/emodsign/tech/shopdwg/mech" />
 
 	</ReadAlso>
 

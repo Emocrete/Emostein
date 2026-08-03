@@ -1,26 +1,11 @@
 ---
 import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
-import { EmoCall, Emograph, EmoList, HzStack, SecTitle } from "@/Widgets/Comp";
-import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { EmoFaq, EmoSec, FaqItem, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { EmoStr } from "@/Widgets/Strips";
-import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -38,21 +23,18 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } f
 
 
 
-	<Hero
-		pImgF="/Media/Emodsign/Des/Cr/Int/"
-		pTitle="تصميم داخلي"
-		pDesc="نحوّل المساحة إلى تجربة استخدام مريحة ومنظمة: توزيع ذكي، ألوان محسوبة، إضاءة مدروسة، خامات مناسبة، وأثاث يخدم الحياة اليومية أو التشغيل التجاري."
-		pTitleClr="#FFF2C8"
-		pDescClr={Colors.WhiteOff}
-		pHzAlign="right"
-		pVrAlign="right"
-		pPosL="14% 52% 12% 7%"
-		pPosP="12% 8% 46% 8%"
-		pBlurL="on"
-		pBlurP="on"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="اطلب تصميم داخلي" />
+		<VrStack pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))} pSize={new Size(new NumPer("40%","95%"))} pHzAlign={"Center"}>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("تصميم داخلي")}
+				pText={Text.Body.Centered.OfText("نحوّل المساحة إلى تجربة استخدام مريحة ومنظمة: توزيع ذكي، ألوان محسوبة، إضاءة مدروسة، خامات مناسبة، وأثاث يخدم الحياة اليومية أو التشغيل التجاري.")}
+			/>
+
+			<EmoCall BlackSky />
+
+		</VrStack>
 
 	</Hero>
 
@@ -62,14 +44,10 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } f
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
-			style = " --StripBg : #111318 "
+			cBrownWhite
 			pTitle="التصميم الداخلي يبدأ من طريقة استخدام المكان"
 			pDesc="المساحة الداخلية تجمع الدهانات والأثاث والصورة النهائية داخل نظام استخدام واضح. القرار الصحيح يبدأ من فهم من يستخدم المكان، كيف يتحرك داخله، أين يحتاج تخزينًا، كيف يدخل الضوء الطبيعي، أين توضع الكهرباء والتكييف، وما مستوى الخامات المناسب للميزانية وطبيعة الاستخدام."
 		/>
@@ -106,11 +84,7 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } f
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#111318")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#111318")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -119,10 +93,8 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } f
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#FFF2C8").OfText("حالات عملية نعمل عليها")}
 			pCardBg={new ElemBg("#F7F1E6")}
-			pCardTitleFnt={Text.H4.WithColor("#111318")}
+			pCardTitleFnt={Text.H3.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
 			pStackDir="Row"
 			pSpacing={20}
@@ -142,19 +114,14 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } f
 
 
 
-	<EmoStr
+	<EmoSec
 		pBg={new ElemBg("#0E1118")}
 		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
-		<EmoStr
-			pBg={new ElemBg("#151923")}
-			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+		<EmoStr pBg={new ElemBg("#151923")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("تصميم داخلي يربط الجمال بالتنفيذ")}
@@ -199,7 +166,7 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } f
 
 		</HzStack>
 
-	</EmoStr>
+	</EmoSec>
 
 
 
@@ -207,11 +174,7 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } f
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -220,8 +183,6 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } f
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("اختر مستوى المخرجات حسب مرحلة مشروعك")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -243,17 +204,9 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } f
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
-		<SecTitle
-			style = " --StripBg : #111318 "
-			pTitle="الفرق بين التصميم الداخلي والتشطيب والتأثيث"
-			pDesc="كثير من العملاء يخلطون بين هذه المراحل. الفصل بينها يساعد في اختيار الخدمة الصحيحة وتحديد المسؤوليات قبل التعاقد."
-		/>
+		<SecTitle style = " --StripBg : #111318 " pTitle="الفرق بين التصميم الداخلي والتشطيب والتأثيث" />
 
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
 
@@ -293,12 +246,7 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } f
 		pVrAlign={Align.Center}
 	>
 
-		<EmoStr
-			pBg={new ElemBg("#111318")}
-			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+		<EmoStr pBg={new ElemBg("#111318")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 			<Emograph
 				pTitle={Text.H2.Centered.WithColor("#FFF2C8").OfText("خدماتنا حسب نوع المساحة")}
@@ -309,8 +257,6 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } f
 		</EmoStr>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("كل استخدام له أولويات مختلفة")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -332,11 +278,7 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } f
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -386,11 +328,7 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } f
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #111318 "
@@ -498,49 +436,7 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } f
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = " --StripBg : #E7D3A1 "
-			pTitle="مخرجات يمكن الاتفاق عليها"
-			pDesc="نطاق التسليم يتغير حسب المشروع. بعض العملاء يحتاجون رؤية ثلاثية الأبعاد فقط، وآخرون يحتاجون ملفًا تنفيذيًا يساعد المقاول على التسعير والتنفيذ."
-		/>
-
-		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("أنواع ملفات التصميم الداخلي")}
-			pCardBg={new ElemBg("#F7F1E6")}
-			pCardTitleFnt={Text.H4.WithColor("#111318")}
-			pCardBodyFnt={Text.Body.WithColor("#333333")}
-			pStackDir="Row"
-			pSpacing={20}
-			pTopic1={new Topic("Layout", "مساقط توزيع الأثاث والحركة والوظائف الأساسية داخل الفراغات.")}
-			pTopic2={new Topic("Mood Board", "طراز وألوان وخامات ومراجع بصرية تساعد على تثبيت الاتجاه قبل التفاصيل.")}
-			pTopic3={new Topic("3D Views", "لقطات توضح الشكل المتوقع للفراغات المهمة قبل التنفيذ والشراء.")}
-			pTopic4={new Topic("Ceiling & Lighting", "تفاصيل الأسقف والإضاءة العامة والوظيفية والمزاجية وعلاقتها بالأثاث.")}
-			pTopic5={new Topic("Material Schedule", "جدول أو توصيات للخامات والألوان والتشطيبات والبدائل حسب الميزانية.")}
-			pTopic6={new Topic("Working Drawings", "رسومات تنفيذية للحوائط والأرضيات والأسقف والنجارة والكهرباء حسب الاتفاق.")}
-			pTopic7={new Topic("Furniture Guide", "مقاسات واتجاهات للأثاث الجاهز أو المصمم خصيصًا مع مراعاة الحركة والاستخدام.")}
-			pTopic8={new Topic("Design Notes", "ملاحظات تنفيذ وتسليم تساعد في تقليل سوء الفهم بين العميل والمقاول.")}
-		/>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #111318 "
@@ -572,11 +468,7 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } f
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -630,11 +522,7 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } f
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #111318 "
@@ -719,11 +607,7 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } f
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -773,11 +657,7 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } f
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #111318 "
@@ -876,118 +756,28 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text, Topic } f
 
 
 
-	<ReadAlso
-		pTitle={Text.H2.Centered.WithColor("#111318").OfText("اقرأ أيضًا")}
-		pDesc={Text.Body.Centered.WithColor("#333333").OfText("صفحات مرتبطة تساعدك على الانتقال بين التصميم الداخلي وباقي فروع التصميم والتشطيب.")}
-		pHeadBg={new ElemBg("#E7D3A1")}
-		pBodyBg={new ElemBg("#F7F1E6")}
-		pCardBg={new ElemBg("#FFFFFF")}
-	>
-
-		<ReadAlsoItem
-			pTitle="تصميم إبداعي"
-			pDesc="الصفحة الرئيسية لخدمات التصميم الداخلي والخارجي والواجهات واللاندسكيب."
-			pHref="/emodsign/des/cr"
-			pImg="/Media/Emodsign/Des/Cr/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="تصميم خارجي"
-			pDesc="خدمات التصميم الخارجي التي تشمل الواجهات واللاندسكيب وتنسيق علاقة المبنى بالخارج."
-			pHref="/emodsign/des/cr/ext"
-			pImg="/Media/Emodsign/Des/Cr/Ext/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="تصميم واجهات"
-			pDesc="تصميم واجهات فلل ومنازل ومحلات ومباني تجارية مع خامات وإضاءة وتفاصيل تنفيذ."
-			pHref="/emodsign/des/cr/ext/facade"
-			pImg="/Media/Emodsign/Des/Cr/Ext/Facade/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="تصميم هندسي"
-			pDesc="المدخل العام لخدمات التصميم المعماري والإنشائي والكهرباء والميكانيكا."
-			pHref="/emodsign/des/eng"
-			pImg="/Media/Emodsign/Des/Eng/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="شوب دروينج معماري"
-			pDesc="تحويل التصميمات المعمارية والداخلية إلى تفاصيل تنفيذية أوضح للمقاول والموقع."
-			pHref="/emodsign/tech/shopdwg/arch"
-			pImg="/Media/Emodsign/Tech/Shopdwg/Arch/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="إشراف التشطيبات"
-			pDesc="متابعة تنفيذ التشطيبات والخامات والبنود والدفعات والملاحظات النهائية."
-			pHref="/emocrete/supervision/finishing"
-			pImg="/Media/Emocrete/Supervision/Finishing/HeroL.webp"
-		/>
-
-	</ReadAlso>
-
-
-
-
-
-
-
-	<RelServices
-		pTitle={Text.H2.Centered.WithColor("#FFF2C8").OfText("خدمات مرتبطة بالتصميم الداخلي")}
-		pDesc={Text.Body.Centered.WithColor("#F8F4EA").OfText("خدمات تجارية مكملة تساعدك على تحويل التصميم من فكرة إلى رسومات وتنفيذ وتشطيب واضح.")}
-		pHeadBg={new ElemBg("#111318")}
-		pBodyBg={new ElemBg("#F7F1E6")}
-		pCardBg={new ElemBg("#FFFFFF")}
-	>
+	<RelServices>
 
 		<RelServiceItem
 			pTitle="تشطيب شقق"
 			pDesc="تنفيذ وتشطيب الشقق السكنية وفق مستوى خامات وتفاصيل مناسب للميزانية والتصميم."
 			pHref="/emocrete/finishing/apartment"
-			pImg="/Media/Emocrete/Finishing/Apartment/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
-		<RelServiceItem
-			pTitle="تشطيب فلل"
-			pDesc="تشطيب فلل ومنازل خاصة مع تنسيق الفراغات الداخلية والخارجية ومستوى الخامات."
-			pHref="/emocrete/finishing/villa"
-			pImg="/Media/Emocrete/Finishing/Villa/HeroL.webp"
-			pBtnText="اطلب الخدمة"
-		/>
+		<RelServiceItem pTitle="تشطيب فلل" pDesc="تشطيب فلل ومنازل خاصة مع تنسيق الفراغات الداخلية والخارجية ومستوى الخامات." pHref="/emocrete/finishing/villa" />
 
-		<RelServiceItem
-			pTitle="تشطيب محلات"
-			pDesc="تنفيذ وتشطيب محلات وأنشطة تجارية مع مراعاة الهوية والإضاءة وحركة العملاء."
-			pHref="/emocrete/finishing/retail"
-			pImg="/Media/Emocrete/Finishing/Retail/HeroL.webp"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="تصميم واجهات"
-			pDesc="تصميم الواجهة الخارجية للمبنى أو النشاط التجاري بما يتكامل مع الداخل والهوية العامة."
-			pHref="/emodsign/des/cr/ext/facade"
-			pImg="/Media/Emodsign/Des/Cr/Ext/Facade/HeroL.webp"
-			pBtnText="اطلب الخدمة"
-		/>
+		<RelServiceItem pTitle="تشطيب محلات" pDesc="تنفيذ وتشطيب محلات وأنشطة تجارية مع مراعاة الهوية والإضاءة وحركة العملاء." pHref="/emocrete/finishing/retail" />
 
 		<RelServiceItem
 			pTitle="شوب دروينج معماري"
 			pDesc="إخراج تفاصيل تنفيذية للحوائط والأسقف والأرضيات والنجارة بما يساعد المقاول على التنفيذ."
 			pHref="/emodsign/tech/shopdwg/arch"
-			pImg="/Media/Emodsign/Tech/Shopdwg/Arch/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="إشراف هندسي على التشطيبات"
 			pDesc="متابعة الخامات والبنود والعمال والدفعات لضمان توافق التنفيذ مع التصميم والمواصفات."
 			pHref="/emocrete/supervision/finishing"
-			pImg="/Media/Emocrete/Supervision/Finishing/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 	</RelServices>

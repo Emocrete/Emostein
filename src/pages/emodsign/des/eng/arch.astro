@@ -1,27 +1,12 @@
 ---
 import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
-import { EmoCall, Emograph, EmoList, HzStack, SecTitle } from "@/Widgets/Comp";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
 import { RespImg } from "@/Widgets/Media";
-import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoFaq, EmoSec, FaqItem, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { EmoStr } from "@/Widgets/Strips";
-import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -39,21 +24,18 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<Hero
-		pImgF="/Media/Emodsign/Des/Eng/Arch/"
-		pTitle="تصميم معماري فاخر"
-		pDesc="رسم هندسي معماري للمباني السكنية والتجارية والإدارية والخدمية، من الفكرة الأولى حتى مخطط قابل للتنفيذ والترخيص."
-		pTitleClr="#F4E5C4"
-		pDescClr="#FFFFFF"
-		pHzAlign="right"
-		pVrAlign="right"
-		pPosL="18% 52% 12% 8%"
-		pPosP="14% 8% 42% 8%"
-		pBlurL="on"
-		pBlurP="on"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="ابدأ تصميم مشروعك" />
+		<VrStack pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))} pSize={new Size(new NumPer("40%","95%"))} pHzAlign={"Center"}>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("خدمات تصميم هندسي معماري")}
+				pText={Text.Body.Centered.OfText("رسم هندسي معماري للمباني السكنية والتجارية والإدارية والخدمية، من الفكرة الأولى حتى مخطط قابل للتنفيذ والترخيص.")}
+			/>
+
+			<EmoCall BlackSky />
+
+		</VrStack>
 
 	</Hero>
 
@@ -79,17 +61,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 				pText={Text.Body.WithColor("#333333").OfText("يحدد التصميم المعماري طريقة تنسيق الواجهات بالشكل الذي يتلائم مع أماكن وأحجام المنافذ المطلة عليها للحصول على إطلالة خارجية جذابة متناسقة مع الوسط المحيط به. كما يحدد المناسيب وارتفاعات الأدوار المناسبة وأماكن الأبواب والشبابيك واتساع منافذ التهوية والإضاءة الطبيعية المناسب لطبيعة واستخدام المبنى.")}
 			/>
 
-			<RespImg
-				pImg={new EmoMediaData(
-					"Img",
-					"https://static.wixstatic.com/media/",
-					"308dfd_c6b1f8ad95ae43778cb89210d298f82e~mv2.webp/v1/fill/w_1905,h_800,al_c,q_85,enc_avif,quality_auto/308dfd_c6b1f8ad95ae43778cb89210d298f82e~mv2.webp",
-					false,
-					"رسم هندسي معماري للمباني",
-					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
-				)}
-			/>
-
 		</HzStack>
 
 	</EmoSec>
@@ -109,7 +80,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("محاور التصميم الأساسية")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -226,14 +196,11 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 	<EmoSec pBg={new ElemBg("#111318")}>
 
 		<SecTitle
-			style = " --StripBg : #111318 "
 			pTitle="أهمية التصميم المعماري للفلل"
 			pDesc="كل قرار معماري في الفيلا يؤثر على الراحة، التكلفة، التنفيذ، وإحساس الفخامة النهائي. لذلك يتم التعامل مع التصميم كمنظومة واحدة لا كواجهة منفصلة عن التخطيط الداخلي."
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#D9B86C").OfText("قيمة التصميم قبل التنفيذ")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -256,7 +223,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 	<EmoSec pBg={new ElemBg("#F7F1E6")}>
 
 		<SecTitle
-			style = " --StripBg : #E7D3A1 "
 			pTitle="مراحل خدمة تصميم معماري لفيلا"
 			pDesc="المراحل مرتبة بحيث ينتقل المشروع من رغبة عامة إلى مخطط دقيق، ثم إلى رسومات قابلة للتسليم والمراجعة والتنفيذ."
 		/>
@@ -499,43 +465,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoStr pBg={new ElemBg("#0E1118")} pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}>
-
-		<EmoStr
-			pBg={new ElemBg("#151923")}
-			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<Emograph
-				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("ابدأ التصميم بقرار هندسي واضح")}
-				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("أرسل بيانات الأرض، موقعها، المساحة، عدد الأدوار المطلوب، وصور أو أمثلة للطراز الذي تفضله. سنراجع المعطيات ونقترح نطاق تصميم مناسب قبل البدء.")}
-				pSize={new Size(new NumPer(980, 320), new NumPer("auto", "auto"))}
-			/>
-
-		</EmoStr>
-
-		<HzStack pGap={new Pixel(20, 15)} pPad={new Pixel(30, 20)}>
-
-			<EmoCall BlackSky pText="اتصال مباشر" />
-
-			<Emograph
-				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
-				pTitle={Text.H3.WithColor("#F4E5C4").OfText("بيانات تساعدنا في التسعير")}
-				pText={Text.Body.WithColor("#F8F4EA").OfText("نوع المبنى، مساحة الأرض، عدد الأدوار، المدينة أو الحي، الطراز المفضل، وهل المطلوب تصميم معماري فقط أم ملف متكامل مع إنشائي وتنفيذ وإشراف.")}
-			/>
-
-		</HzStack>
-
-	</EmoStr>
-
-
-
-
-
-
-
 	<EmoFaq>
 
 		<FaqItem
@@ -571,87 +500,20 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<ReadAlso
-		pTitle={Text.H2.Centered.WithColor("#111318").OfText("اقرأ أيضًا")}
-		pDesc={Text.Body.Centered.WithColor("#333333").OfText("صفحات تساعدك على فهم خدمات التصميم الهندسي المرتبطة بهذه الصفحة.")}
-		pHeadBg={new ElemBg("#E7D3A1")}
-		pBodyBg={new ElemBg("#F7F1E6")}
-		pCardBg={new ElemBg("#FFFFFF")}
-	>
+	<RelServices>
 
-		<ReadAlsoItem
-			pTitle="تصميم هندسي"
-			pDesc="الصفحة الرئيسية لخدمات التصميم الهندسي وفروعها."
-			pHref="/emodsign/des/eng"
-		/>
+		<RelServiceItem pTitle="تصميم إنشائي" pDesc="تحويل المخطط المعماري إلى نظام إنشائي آمن ومنسق." pHref="/emodsign/des/eng/struc" />
 
-		<ReadAlsoItem
-			pTitle="تصميم إنشائي"
-			pDesc="تصميم العناصر الإنشائية وتنسيقها مع الفكرة المعمارية."
-			pHref="/emodsign/des/eng/struc"
-		/>
+		<RelServiceItem pTitle="تصميم واجهات" pDesc="تطوير الواجهة بصياغة جمالية وخامات مناسبة لهوية المشروع." pHref="/emodsign/des/cr/ext/facade" />
 
-		<ReadAlsoItem
-			pTitle="تصميم كهرباء"
-			pDesc="توزيع الكهرباء والإنارة ومخارج القوى بالتنسيق مع المخطط المعماري."
-			pHref="/emodsign/des/eng/elec"
-		/>
+		<RelServiceItem pTitle="شوب دروينج معماري" pDesc="تفصيل الرسومات المعمارية للتنفيذ الدقيق في الموقع." pHref="/emodsign/tech/shopdwg/arch" />
 
-		<ReadAlsoItem
-			pTitle="تصميم ميكانيكا"
-			pDesc="تنسيق أعمال التغذية والصرف والتكييف والتهوية مع التصميم."
-			pHref="/emodsign/des/eng/mech"
-		/>
-
-	</ReadAlso>
-
-
-
-
-
-
-
-	<RelServices
-		pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("خدمات ذات علاقة")}
-		pDesc={Text.Body.Centered.WithColor("#F8F4EA").OfText("خدمات تجارية يمكن أن تكمل التصميم المعماري حتى يتحول إلى مشروع قابل للتنفيذ والمتابعة.")}
-		pHeadBg={new ElemBg("#111318")}
-		pBodyBg={new ElemBg("#F7F1E6")}
-		pCardBg={new ElemBg("#FFFFFF")}
-	>
-
-		<RelServiceItem
-			pTitle="تصميم إنشائي"
-			pDesc="تحويل المخطط المعماري إلى نظام إنشائي آمن ومنسق."
-			pHref="/emodsign/des/eng/struc"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="تصميم واجهات"
-			pDesc="تطوير الواجهة بصياغة جمالية وخامات مناسبة لهوية المشروع."
-			pHref="/emodsign/des/cr/ext/facade"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="شوب دروينج معماري"
-			pDesc="تفصيل الرسومات المعمارية للتنفيذ الدقيق في الموقع."
-			pHref="/emodsign/tech/shopdwg/arch"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="استخراج ترخيص بناء"
-			pDesc="تجهيز ملف الترخيص ومتابعة الإجراءات حسب جهة الاختصاص."
-			pHref="/emoperm/building/newcities/construction"
-			pBtnText="اطلب الخدمة"
-		/>
+		<RelServiceItem pTitle="استخراج ترخيص بناء" pDesc="تجهيز ملف الترخيص ومتابعة الإجراءات حسب جهة الاختصاص." pHref="/emoperm/building/newcities/construction" />
 
 		<RelServiceItem
 			pTitle="الإشراف الهندسي على البناء"
 			pDesc="متابعة التنفيذ للتأكد من مطابقة الأعمال للرسومات والمواصفات."
 			pHref="/emocrete/supervision/construction"
-			pBtnText="اطلب الخدمة"
 		/>
 
 	</RelServices>

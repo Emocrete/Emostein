@@ -1,27 +1,12 @@
 ---
 import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
-import { EmoBtn, EmoCall, Emograph, EmoList, HzStack, SecTitle } from "@/Widgets/Comp";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
 import { RespImg } from "@/Widgets/Media";
-import { EmoFaq, EmoSec, FaqItem, Hero, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoFaq, EmoSec, FaqItem, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { EmoStr } from "@/Widgets/Strips";
-import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -31,13 +16,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 	pSchemaType="Service"
 	pTitle="إدارة المشروعات الهندسية"
 	pDescr="خدمة إدارة مشروعات هندسية للمالك أو المطور، تشمل تنظيم نطاق العمل، متابعة التصميم، الجدول الزمني، التكلفة، المشتريات، التنسيق بين الأطراف، التقارير، إدارة المخاطر، ومتابعة قرارات المشروع حتى التسليم."
-	pSchemaImages={[
-		"/Media/Emodsign/Tech/Manage/HeroL.webp",
-		"/Media/Emodsign/Tech/Manage/Table/HeroL.webp",
-		"https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&fm=jpg&q=70&w=1600",
-		"https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&fm=jpg&q=70&w=1600",
-		"https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&fm=jpg&q=70&w=1600"
-	]}
 >
 
 
@@ -46,78 +24,20 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<Hero
-		pImgF="/Media/Emodsign/Tech/Manage/"
-		pTitle="إدارة المشروعات الهندسية"
-		pDesc="تنظيم المشروع من الفكرة والتصميم والتسعير إلى التعاقد والتنفيذ والمتابعة، مع خطة واضحة للوقت والتكلفة والجودة والقرارات المطلوبة من كل طرف."
-		pTitleClr="#F4E5C4"
-		pDescClr="#FFFFFF"
-		pHzAlign="right"
-		pVrAlign="right"
-		pPosL="18% 50% 12% 8%"
-		pPosP="12% 8% 44% 8%"
-		pBlurL="on"
-		pBlurP="on"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="اطلب إدارة مشروعك" />
+		<VrStack pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))} pSize={new Size(new NumPer("40%","95%"))} pHzAlign={"Center"}>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("إدارة المشروعات الهندسية")}
+				pText={Text.Body.Centered.OfText("خدمة إدارة مشروعات هندسية للمالك أو المطور، تشمل تنظيم نطاق العمل، متابعة التصميم، الجدول الزمني، التكلفة، المشتريات، التنسيق بين الأطراف، التقارير، إدارة المخاطر، ومتابعة قرارات المشروع حتى التسليم.")}
+			/>
+
+			<EmoCall BlackSky />
+
+		</VrStack>
 
 	</Hero>
-
-
-
-
-
-
-
-	<IndexSec
-		pMedia={new EmoMediaData("Img", "/Media/Emodsign/Tech/Manage/", "HeroL.webp")}
-		pTitleClr="#FFFFFF"
-		pBlurL="on"
-		pBlurP="on"
-	>
-
-		<EmoBtn
-			pText="خريطة الإدارة"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#FFFFFF"
-			pTextColorHover="#111318"
-			pWidth="250px"
-			pHeight="44px"
-			onclick="location.href='#manage-map'"
-		/>
-
-		<EmoBtn
-			pText="مراحل المشروع"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#FFFFFF"
-			pTextColorHover="#111318"
-			pWidth="250px"
-			pHeight="44px"
-			onclick="location.href='#project-stages'"
-		/>
-
-		<EmoBtn
-			pText="الجدول والتكلفة"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#FFFFFF"
-			pTextColorHover="#111318"
-			pWidth="250px"
-			pHeight="44px"
-			onclick="location.href='#time-cost'"
-		/>
-
-		<EmoBtn
-			pText="اطلب الخدمة"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#FFFFFF"
-			pTextColorHover="#111318"
-			pWidth="250px"
-			pHeight="44px"
-			onclick="location.href='#related-services'"
-		/>
-
-	</IndexSec>
 
 
 
@@ -167,11 +87,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#0E1118")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#0E1118")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -281,8 +197,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("من الفكرة إلى الإغلاق")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -304,11 +218,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -356,11 +266,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -455,11 +361,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -505,11 +407,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -599,11 +497,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -646,11 +540,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -697,11 +587,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -710,8 +596,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("ما الذي يتم ضبطه في التوريدات؟")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -793,11 +677,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -827,21 +707,14 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
-			style = " --StripBg : #0E1118 "
 			pTitle="مخرجات خدمة إدارة المشروعات"
 			pDesc="نطاق التسليم يختلف حسب المشروع، لكن هذه أمثلة على المخرجات التي يمكن الاتفاق عليها حتى يعرف المالك ما الذي سيستلمه فعليًا من خدمة الإدارة."
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("أمثلة على الملفات والتقارير")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -865,11 +738,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -993,11 +862,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1006,8 +871,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("تشخيص التعثر")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -1029,11 +892,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1079,11 +938,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1092,8 +947,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("نقاط خاصة بالتشطيبات")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -1115,11 +968,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1165,11 +1014,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1178,8 +1023,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("متى تحتاج خدمة مساعدة؟")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -1199,21 +1042,14 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
-			style = " --StripBg : #0E1118 "
 			pTitle="مستويات خدمة إدارة المشروع"
 			pDesc="يمكن تنفيذ الخدمة على مستويات مختلفة حسب حجم المشروع والميزانية وطبيعة المخاطر. المهم أن يكون مستوى التدخل واضحًا قبل البداية."
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("اختر مستوى المتابعة")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -1233,11 +1069,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1314,7 +1146,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		</EmoStr>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("كيف تعرف أن الإدارة تضيف قيمة؟")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -1337,11 +1168,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1391,11 +1218,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1442,11 +1265,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1455,8 +1274,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("أمثلة بوابات جودة")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -1478,11 +1295,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1580,11 +1393,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1593,8 +1402,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("حدود واقعية للخدمة")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -1614,21 +1421,14 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
-			style = " --StripBg : #0E1118 "
 			pTitle="نموذج تشغيل مبسط للمشروع"
 			pDesc="النموذج التالي يوضح طريقة التفكير اليومية داخل الإدارة: المعلومة تتحول إلى قرار، والقرار يتحول إلى تنفيذ، والتنفيذ يتحول إلى قياس، والقياس يتحول إلى تقرير، ثم تعود الدورة بقرارات جديدة."
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("دورة التحكم")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -1650,11 +1450,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1700,21 +1496,14 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
-			style = " --StripBg : #0E1118 "
 			pTitle="لوحة متابعة مختصرة للمالك"
 			pDesc="المالك يحتاج نسخة سهلة القراءة من موقف المشروع. لذلك يمكن تلخيص المتابعة في لوحة حالة توضح أين يسير المشروع بشكل جيد وأين يحتاج قرارًا أو تدخلًا سريعًا."
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("مؤشرات اللوحة")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -1736,11 +1525,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1838,11 +1623,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1922,131 +1703,59 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoFaq>
 
-		<SecTitle
-			style = " --StripBg : #E7D3A1 "
-			pTitle="أسئلة شائعة عن إدارة المشروعات الهندسية"
-			pDesc="إجابات مختصرة تساعدك على معرفة هل تحتاج إدارة مشروع كاملة أم خدمة فنية محددة مثل الجدول الزمني أو الحصر أو الإشراف."
+		<FaqItem
+			pQuestion="هل إدارة المشروع تعني تنفيذ المشروع؟"
+			pAnswer="لا. إدارة المشروع تنظم وتتابع وتراجع وتنسق وتصدر تقارير وتوصيات، لكنها لا تحل محل المقاول المنفذ إلا إذا كان هناك اتفاق منفصل على تنفيذ أو مقاولة."
 		/>
 
-		<EmoFaq>
-
-			<FaqItem
-				pQuestion="هل إدارة المشروع تعني تنفيذ المشروع؟"
-				pAnswer="لا. إدارة المشروع تنظم وتتابع وتراجع وتنسق وتصدر تقارير وتوصيات، لكنها لا تحل محل المقاول المنفذ إلا إذا كان هناك اتفاق منفصل على تنفيذ أو مقاولة."
-			/>
-
-			<FaqItem
-				pQuestion="هل يمكن طلب الإدارة مع وجود مقاول بالفعل؟"
-				pAnswer="نعم. في هذه الحالة تركز الخدمة على متابعة الجدول والتكلفة والمستخلصات والتغييرات والتقارير، مع توضيح حدود العلاقة بين المالك والمقاول."
-			/>
-
-			<FaqItem
-				pQuestion="هل الإدارة تغني عن الإشراف الهندسي؟"
-				pAnswer="ليست دائمًا. إذا كان المطلوب مراجعة فنية مستمرة للأعمال والاستلامات في الموقع، فقد تحتاج إشرافًا هندسيًا بجانب إدارة المشروع أو ضمن نطاق متفق عليه."
-			/>
-
-			<FaqItem
-				pQuestion="هل يمكن إدارة مشروع تشطيب صغير؟"
-				pAnswer="نعم، خاصة إذا كانت الخامات كثيرة أو المالك غير متفرغ أو المشروع مرتبطًا بموعد افتتاح أو انتقال. إدارة التشطيب تساعد في ترتيب الصنايعية والموردين والدفعات والملاحظات."
-			/>
-
-			<FaqItem
-				pQuestion="هل تعملون جدولًا زمنيًا فقط؟"
-				pAnswer="نعم، يمكن طلب خدمة الجدول الزمني كخدمة مستقلة عند وجود نطاق ورسومات وبيانات كافية. أما الإدارة الكاملة فتشمل متابعة أوسع من مجرد الجدول."
-			/>
-
-			<FaqItem
-				pQuestion="هل يمكن مراجعة مشروع متأخر أو متعثر؟"
-				pAnswer="نعم. يتم فحص الرسومات والعقود والدفعات والموقف الفعلي، ثم إعداد ملاحظات وخطة قرار تساعد المالك على استكمال المشروع أو إعادة تنظيم العلاقة مع المقاول."
-			/>
-
-			<FaqItem
-				pQuestion="هل تتم مراجعة مستخلصات المقاول؟"
-				pAnswer="يمكن ذلك إذا كان ضمن نطاق الخدمة، بشرط توفر عقد أو عرض أو كميات أو طريقة قياس واضحة تسمح بمراجعة قيمة الأعمال المنفذة."
-			/>
-
-			<FaqItem
-				pQuestion="هل يتم حضور اجتماعات مع المقاول؟"
-				pAnswer="يمكن الاتفاق على حضور اجتماعات دورية أو اجتماعات قرارات محددة، مع تلخيص النتائج والقرارات المطلوبة حتى لا تضيع النقاط في المحادثات الشفوية."
-			/>
-
-			<FaqItem
-				pQuestion="ما الفرق بين تقرير الإدارة وتقرير الإشراف؟"
-				pAnswer="تقرير الإشراف يركز غالبًا على حالة الأعمال الفنية والاستلامات، بينما تقرير الإدارة يضيف الوقت والتكلفة والتغييرات والقرارات والمخاطر والموقف العام للمشروع."
-			/>
-
-			<FaqItem
-				pQuestion="ما أسرع طريقة للحصول على عرض سعر؟"
-				pAnswer="أرسل نوع المشروع ومساحته ومرحلته الحالية والرسومات أو العروض المتاحة والمشكلة الأساسية التي تريد حلها، وسنحدد هل تحتاج إدارة كاملة أم جدولًا أو مراجعة أو إشرافًا."
-			/>
-
-		</EmoFaq>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<ReadAlso
-		pTitle={Text.H2.Centered.WithColor("#111318").OfText("اقرأ أيضًا")}
-		pDesc={Text.Body.Centered.WithColor("#333333").OfText("صفحات مرتبطة تساعدك على استكمال الصورة قبل طلب إدارة المشروع.")}
-		pHeadBg={new ElemBg("#E7D3A1")}
-		pBodyBg={new ElemBg("#F7F1E6")}
-		pCardBg={new ElemBg("#FFFFFF")}
-	>
-
-		<ReadAlsoItem
-			pTitle="جداول زمنية للمشروعات"
-			pDesc="خدمة متخصصة لإعداد جدول زمني يوضح مراحل المشروع والعلاقات بين الأعمال."
-			pHref="/emodsign/tech/manage/table"
-			pImg="/Media/Emodsign/Tech/Manage/Table/HeroL.webp"
+		<FaqItem
+			pQuestion="هل يمكن طلب الإدارة مع وجود مقاول بالفعل؟"
+			pAnswer="نعم. في هذه الحالة تركز الخدمة على متابعة الجدول والتكلفة والمستخلصات والتغييرات والتقارير، مع توضيح حدود العلاقة بين المالك والمقاول."
 		/>
 
-		<ReadAlsoItem
-			pTitle="حصر كميات"
-			pDesc="تحويل الرسومات إلى كميات وجداول قابلة للتسعير ومقارنة عروض المقاولين."
-			pHref="/emodsign/tech/takeoff"
-			pImg="/Media/Emodsign/Tech/Takeoff/HeroL.webp"
+		<FaqItem
+			pQuestion="هل الإدارة تغني عن الإشراف الهندسي؟"
+			pAnswer="ليست دائمًا. إذا كان المطلوب مراجعة فنية مستمرة للأعمال والاستلامات في الموقع، فقد تحتاج إشرافًا هندسيًا بجانب إدارة المشروع أو ضمن نطاق متفق عليه."
 		/>
 
-		<ReadAlsoItem
-			pTitle="شوب دروينج"
-			pDesc="تطوير الرسومات إلى تفاصيل تنفيذية أوضح قبل الدخول في الموقع."
-			pHref="/emodsign/tech/shopdwg"
-			pImg="/Media/Emodsign/Tech/Shopdwg/HeroL.webp"
+		<FaqItem
+			pQuestion="هل يمكن إدارة مشروع تشطيب صغير؟"
+			pAnswer="نعم، خاصة إذا كانت الخامات كثيرة أو المالك غير متفرغ أو المشروع مرتبطًا بموعد افتتاح أو انتقال. إدارة التشطيب تساعد في ترتيب الصنايعية والموردين والدفعات والملاحظات."
 		/>
 
-		<ReadAlsoItem
-			pTitle="تصميم هندسي"
-			pDesc="صفحة توزيع خدمات التصميم المعماري والإنشائي والكهرباء والميكانيكا."
-			pHref="/emodsign/des/eng"
-			pImg="/Media/Emodsign/Des/Eng/HeroL.webp"
+		<FaqItem
+			pQuestion="هل تعملون جدولًا زمنيًا فقط؟"
+			pAnswer="نعم، يمكن طلب خدمة الجدول الزمني كخدمة مستقلة عند وجود نطاق ورسومات وبيانات كافية. أما الإدارة الكاملة فتشمل متابعة أوسع من مجرد الجدول."
 		/>
 
-		<ReadAlsoItem
-			pTitle="إشراف هندسي على البناء"
-			pDesc="متابعة تنفيذ أعمال البناء والخرسانة والمباني طبقًا للرسومات والمواصفات."
-			pHref="/emocrete/supervision/construction"
-			pImg="/Media/Emocrete/Supervision/Construction/HeroL.webp"
+		<FaqItem
+			pQuestion="هل يمكن مراجعة مشروع متأخر أو متعثر؟"
+			pAnswer="نعم. يتم فحص الرسومات والعقود والدفعات والموقف الفعلي، ثم إعداد ملاحظات وخطة قرار تساعد المالك على استكمال المشروع أو إعادة تنظيم العلاقة مع المقاول."
 		/>
 
-		<ReadAlsoItem
-			pTitle="إشراف تشطيبات"
-			pDesc="متابعة جودة أعمال التشطيب والخامات والملاحظات والدفعات قبل التسليم."
-			pHref="/emocrete/supervision/finishing"
-			pImg="/Media/Emocrete/Supervision/Finishing/HeroL.webp"
+		<FaqItem
+			pQuestion="هل تتم مراجعة مستخلصات المقاول؟"
+			pAnswer="يمكن ذلك إذا كان ضمن نطاق الخدمة، بشرط توفر عقد أو عرض أو كميات أو طريقة قياس واضحة تسمح بمراجعة قيمة الأعمال المنفذة."
 		/>
 
-	</ReadAlso>
+		<FaqItem
+			pQuestion="هل يتم حضور اجتماعات مع المقاول؟"
+			pAnswer="يمكن الاتفاق على حضور اجتماعات دورية أو اجتماعات قرارات محددة، مع تلخيص النتائج والقرارات المطلوبة حتى لا تضيع النقاط في المحادثات الشفوية."
+		/>
+
+		<FaqItem
+			pQuestion="ما الفرق بين تقرير الإدارة وتقرير الإشراف؟"
+			pAnswer="تقرير الإشراف يركز غالبًا على حالة الأعمال الفنية والاستلامات، بينما تقرير الإدارة يضيف الوقت والتكلفة والتغييرات والقرارات والمخاطر والموقف العام للمشروع."
+		/>
+
+		<FaqItem
+			pQuestion="ما أسرع طريقة للحصول على عرض سعر؟"
+			pAnswer="أرسل نوع المشروع ومساحته ومرحلته الحالية والرسومات أو العروض المتاحة والمشكلة الأساسية التي تريد حلها، وسنحدد هل تحتاج إدارة كاملة أم جدولًا أو مراجعة أو إشرافًا."
+		/>
+
+	</EmoFaq>
 
 
 
@@ -2054,77 +1763,18 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<RelServices
-		id="related-services"
-		pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("خدمات مرتبطة بإدارة المشروع")}
-		pDesc={Text.Body.Centered.WithColor("#F8F4EA").OfText("هذه خدمات تجارية مباشرة يمكن طلبها مع إدارة المشروع أو بدلًا منها حسب احتياجك الحالي.")}
-		pHeadBg={new ElemBg("#0E1118")}
-		pBodyBg={new ElemBg("#F7F1E6")}
-		pCardBg={new ElemBg("#FFFFFF")}
-	>
+	<RelServices>
 
 		<RelServiceItem
 			pTitle="إدارة مشروع هندسي"
 			pDesc="تنظيم النطاق والوقت والتكلفة والتقارير والمشتريات والتغييرات بين المالك والمقاول والمصمم."
 			pHref="/emodsign/tech/manage"
-			pImg="/Media/Emodsign/Tech/Manage/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="إعداد جدول زمني"
 			pDesc="بناء جدول مراحل واضح للمشروع مع العلاقات ونقاط الاعتماد والتوريد والمتابعة."
 			pHref="/emodsign/tech/manage/table"
-			pImg="/Media/Emodsign/Tech/Manage/Table/HeroL.webp"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="حصر كميات البناء"
-			pDesc="حصر أعمال الخرسانة والمباني والبنود الإنشائية لتجهيز التسعير أو مراجعة عروض المقاولين."
-			pHref="/emodsign/tech/takeoff/construction"
-			pImg="/Media/Emodsign/Tech/Takeoff/Construction/HeroL.webp"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="حصر كميات التشطيبات"
-			pDesc="حصر الأرضيات والحوائط والأسقف والدهانات والأبواب والخامات النهائية قبل الشراء والتعاقد."
-			pHref="/emodsign/tech/takeoff/finishing"
-			pImg="/Media/Emodsign/Tech/Takeoff/Finishing/HeroL.webp"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="شوب دروينج معماري"
-			pDesc="تفصيل الرسومات المعمارية لتقليل القرارات المفتوحة أثناء التنفيذ."
-			pHref="/emodsign/tech/shopdwg/arch"
-			pImg="/Media/Emodsign/Tech/Shopdwg/Arch/HeroL.webp"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="إشراف هندسي على البناء"
-			pDesc="متابعة فنية لأعمال البناء والخرسانة والمباني وربطها بالرسومات والمواصفات."
-			pHref="/emocrete/supervision/construction"
-			pImg="/Media/Emocrete/Supervision/Construction/HeroL.webp"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="إشراف التشطيبات"
-			pDesc="متابعة التشطيبات والخامات والملاحظات والدفعات لضمان تسليم أوضح."
-			pHref="/emocrete/supervision/finishing"
-			pImg="/Media/Emocrete/Supervision/Finishing/HeroL.webp"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="تقارير واستشارات هندسية"
-			pDesc="مراجعة موقف فني أو مشكلة قائمة وإعداد تقرير يساعد المالك على اتخاذ قرار."
-			pHref="/emonsult/report"
-			pImg="/Media/Emonsult/Report/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 	</RelServices>

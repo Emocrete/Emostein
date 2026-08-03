@@ -1,27 +1,12 @@
 ---
 import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
-import { EmoBtn, EmoCall, Emograph, EmoList, HzStack, SecTitle } from "@/Widgets/Comp";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
 import { RespImg } from "@/Widgets/Media";
-import { EmoFaq, EmoSec, FaqItem, Hero, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoFaq, EmoSec, FaqItem, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { EmoStr } from "@/Widgets/Strips";
-import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -31,13 +16,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 	pSchemaType="Service"
 	pTitle="إعداد الجداول الزمنية للمشروعات الهندسية"
 	pDescr="خدمة إعداد جدول زمني هندسي للمشروع تشمل تقسيم نطاق العمل، ترتيب الأنشطة، العلاقات المنطقية، المدد، المسار الحرج، خط الأساس، خطة التوريدات، تحديثات التقدم، وتقارير المتابعة للمشروعات السكنية والتجارية وأعمال البناء والتشطيبات."
-	pSchemaImages={[
-		"/Media/Emodsign/Tech/Manage/Table/HeroL.webp",
-		"/Media/Emodsign/Tech/Manage/HeroL.webp",
-		"https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&fm=jpg&q=70&w=1600",
-		"https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&fm=jpg&q=70&w=1600",
-		"https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&fm=jpg&q=70&w=1600"
-	]}
 >
 
 
@@ -46,78 +24,20 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<Hero
-		pImgF="/Media/Emodsign/Tech/Manage/Table/"
-		pTitle="إعداد الجداول الزمنية"
-		pDesc="جدول زمني هندسي يترجم الرسومات والبنود والتوريدات إلى خطة تنفيذ قابلة للمتابعة: أنشطة، علاقات، مدد، مراحل، مسار حرج، تحديثات، ومؤشرات تأخير مبكرة."
-		pTitleClr="#F4E5C4"
-		pDescClr="#FFFFFF"
-		pHzAlign="right"
-		pVrAlign="right"
-		pPosL="18% 50% 12% 8%"
-		pPosP="12% 8% 44% 8%"
-		pBlurL="on"
-		pBlurP="on"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="اطلب جدولًا زمنيًا" />
+		<VrStack pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))} pSize={new Size(new NumPer("40%","95%"))} pHzAlign={"Center"}>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("إعداد الجداول الزمنية للمشروعات الهندسية")}
+				pText={Text.Body.Centered.OfText("خدمة إعداد جدول زمني هندسي للمشروع تشمل تقسيم نطاق العمل، ترتيب الأنشطة، العلاقات المنطقية، المدد، المسار الحرج، خط الأساس، خطة التوريدات، تحديثات التقدم، وتقارير المتابعة للمشروعات السكنية والتجارية وأعمال البناء والتشطيبات.")}
+			/>
+
+			<EmoCall BlackSky />
+
+		</VrStack>
 
 	</Hero>
-
-
-
-
-
-
-
-	<IndexSec
-		pMedia={new EmoMediaData("Img", "/Media/Emodsign/Tech/Manage/Table/", "HeroL.webp")}
-		pTitleClr="#FFFFFF"
-		pBlurL="on"
-		pBlurP="on"
-	>
-
-		<EmoBtn
-			pText="مشكلة الوقت"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#FFFFFF"
-			pTextColorHover="#111318"
-			pWidth="250px"
-			pHeight="44px"
-			onclick="location.href='#schedule-problem'"
-		/>
-
-		<EmoBtn
-			pText="مكونات الجدول"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#FFFFFF"
-			pTextColorHover="#111318"
-			pWidth="250px"
-			pHeight="44px"
-			onclick="location.href='#schedule-components'"
-		/>
-
-		<EmoBtn
-			pText="المسار الحرج"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#FFFFFF"
-			pTextColorHover="#111318"
-			pWidth="250px"
-			pHeight="44px"
-			onclick="location.href='#critical-path'"
-		/>
-
-		<EmoBtn
-			pText="مخرجات الخدمة"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#FFFFFF"
-			pTextColorHover="#111318"
-			pWidth="250px"
-			pHeight="44px"
-			onclick="location.href='#deliverables'"
-		/>
-
-	</IndexSec>
 
 
 
@@ -133,7 +53,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 	>
 
 		<SecTitle
-			style = " --StripBg : #0E1118 "
 			pTitle="الجدول الزمني ليس شكلًا على ورقة"
 			pDesc="المشكلة في كثير من المشروعات أن الوقت يدار بالكلام: هنبدأ بعد يومين، التشطيب بعد السقف، الكهرباء مع السباكة، الخامات لما تيجي. هذا الأسلوب يصلح للمحادثة، لكنه لا يصلح لإدارة مشروع فيه مالك ومقاول ومورد ومهندس ودفعات وتوريدات واعتمادات. الجدول الزمني يحول التوقعات إلى خطة يمكن اختبارها ومتابعتها."
 		/>
@@ -167,11 +86,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#111318")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#111318")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -180,8 +95,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("حالات عملية تستدعي جدولًا واضحًا")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -267,11 +180,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -280,8 +189,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("اختيار مستوى الجدول حسب الاستخدام")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -311,7 +218,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 	>
 
 		<SecTitle
-			style = " --StripBg : #0E1118 "
 			pTitle="المسار الحرج: الأنشطة التي تتحكم في تاريخ التسليم"
 			pDesc="داخل أي مشروع توجد أنشطة يمكن تأخيرها قليلًا دون أثر مباشر، وأنشطة أخرى يؤدي تأخيرها إلى تأخير المشروع كله. وظيفة التحليل الزمني أن يميز بين الاثنين، حتى لا ينشغل الفريق ببند عادي ويترك بندًا يتحكم في التسليم."
 		/>
@@ -414,11 +320,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -468,14 +370,9 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
-			style = " --StripBg : #0E1118 "
 			pTitle="أدوات الجداول الزمنية: برنامج أم منطق؟"
 			pDesc="يمكن إخراج الجدول على برامج مختلفة مثل بريمافيرا أو مايكروسوفت بروجكت أو حتى ملف مبسط حسب حجم المشروع. الأهم أن يكون منطق الأنشطة والعلاقات صحيحًا قبل الاهتمام بشكل الإخراج."
 		/>
@@ -584,11 +481,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -597,7 +490,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("خطوات إعداد البرنامج الزمني")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -620,14 +512,9 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
-			style = " --StripBg : #0E1118 "
 			pTitle="مدخلات نحتاجها من العميل أو المقاول"
 			pDesc="ليس مطلوبًا أن تكون كل البيانات مكتملة من أول تواصل، لكن اكتمالها يرفع دقة الجدول ويقلل الافتراضات."
 		/>
@@ -702,8 +589,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		</EmoStr>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("ما الذي يمكن تسليمه؟")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -725,11 +610,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -778,21 +659,14 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
-			style = " --StripBg : #0E1118 "
 			pTitle="ربط الجدول بالتكلفة والدفعات"
 			pDesc="البرنامج الزمني لا يحدد الوقت فقط. عند ربطه بالبند والكمية والمستخلص، يصبح أداة لمراجعة التدفق النقدي والدفعات وتوقع ضغط المصروفات قبل حدوثه."
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("فوائد ربط الوقت بالتكلفة")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -835,8 +709,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		</EmoStr>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("كيف يختلف الجدول؟")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -858,11 +730,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -905,21 +773,14 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
-			style = " --StripBg : #0E1118 "
 			pTitle="تحليل التأخير وخطة التعويض"
 			pDesc="عند تأخر المشروع، لا يكفي أن نقول الموقع متأخر. المطلوب معرفة أين حدث التأخير، وهل أثر على تاريخ التسليم، وما الخيارات الواقعية لتقليل الضرر دون خلق مشاكل جودة."
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("محاور خطة التعويض")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -941,11 +802,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1018,8 +875,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		</EmoStr>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("طرق استخدام الخدمة")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -1039,11 +894,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1089,14 +940,9 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
-			style = " --StripBg : #0E1118 "
 			pTitle="مخرجات تصلح للمالك والمقاول"
 			pDesc="الصفحة تستهدف مالكًا يريد ضبط مشروعه، ومقاولًا يريد تقديم برنامج أوضح، ومهندسًا يحتاج خطة متابعة. لذلك يمكن تشكيل التسليم حسب الطرف الذي سيستخدمه."
 		/>
@@ -1145,11 +991,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1158,8 +1000,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("تسلسل تشطيب قابل للمراجعة")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -1181,21 +1021,14 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
-			style = " --StripBg : #0E1118 "
 			pTitle="مثال عملي مبسط لأعمال البناء"
 			pDesc="في أعمال البناء، تسلسل الخرسانة والمباني والتأسيسات يفرض نفسه. لذلك يركز الجدول على دورات العمل والعناصر التي لا يمكن تجاوزها."
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("تسلسل بناء قابل للفحص")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -1217,11 +1050,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1230,8 +1059,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("مؤشرات المتابعة")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -1253,14 +1080,9 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
-			style = " --StripBg : #0E1118 "
 			pTitle="الجدول والقرارات اليومية في الموقع"
 			pDesc="القيمة الحقيقية للجدول تظهر عندما يستخدمه الفريق في قرارات يومية: أي بند يبدأ أولًا، أي خامة تطلب الآن، وأي مشكلة تحتاج تدخلًا سريعًا."
 		/>
@@ -1294,11 +1116,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1412,11 +1230,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1425,8 +1239,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("العلاقة لا تعني مجرد سهم")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -1448,14 +1260,9 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
-			style = " --StripBg : #0E1118 "
 			pTitle="تقدير مدد الأنشطة"
 			pDesc="مدة النشاط ليست رقمًا عشوائيًا. يتم تقديرها بناءً على الكمية والإنتاجية والموارد وقيود الموقع وأزمنة الانتظار الطبيعية. المدة القصيرة غير الواقعية لا تجعل المشروع أسرع؛ تجعل التأخير مؤكدًا."
 		/>
@@ -1506,11 +1313,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1519,8 +1322,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("اعتمادات تؤثر على الوقت")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -1602,11 +1403,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1615,8 +1412,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("أمثلة نقاط تسليم")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -1638,14 +1433,9 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
-			style = " --StripBg : #0E1118 "
 			pTitle="الجدول الزمني كأداة تفاوض مع المقاول"
 			pDesc="قبل التعاقد، يساعد الجدول على تحويل الوعد إلى التزام قابل للمراجعة. بعد التعاقد، يساعد على فصل التأخير الحقيقي عن الانطباع العام، ويعطي الطرفين لغة مشتركة في الاجتماعات."
 		/>
@@ -1696,11 +1486,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1709,8 +1495,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("اختر التقرير المناسب")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -1755,7 +1539,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 		</EmoStr>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
 			pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("خدمات قد تحتاجها قبل أو مع الجدول")}
 			pCardBg={new ElemBg("#F7F1E6")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
@@ -1778,11 +1561,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1832,21 +1611,15 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
-			style = " --StripBg : #0E1118 "
 			pTitle="لغة الجدول التي يفهمها غير المتخصص"
 			pDesc="المالك لا يحتاج أن يتحول إلى مخطط زمني محترف حتى يفهم مشروعه. لذلك يتم تبسيط المخرجات بلغة واضحة بجانب النسخة الفنية عند الحاجة."
 		/>
 
 		<CardsGr
 			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("تبسيط بدون إضعاف")}
 			pCardBg={new ElemBg("#FFFFFF")}
 			pCardTitleFnt={Text.H4.WithColor("#111318")}
 			pCardBodyFnt={Text.Body.WithColor("#333333")}
@@ -1936,133 +1709,13 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<ReadAlso
-		pTitle={Text.H2.Centered.WithColor("#111318").OfText("اقرأ أيضًا")}
-		pDesc={Text.Body.Centered.WithColor("#333333").OfText("صفحات مرتبطة تساعدك على فهم علاقة الجدول الزمني بباقي الخدمات الفنية داخل المشروع.")}
-		pHeadBg={new ElemBg("#E7D3A1")}
-		pBodyBg={new ElemBg("#F7F1E6")}
-		pCardBg={new ElemBg("#FFFFFF")}
-	>
-
-		<ReadAlsoItem
-			pTitle="إدارة المشروعات الهندسية"
-			pDesc="الصفحة الرئيسية لإدارة المشروع وربط النطاق والوقت والتكلفة والمخاطر والتقارير."
-			pHref="/emodsign/tech/manage"
-			pImg="/Media/Emodsign/Tech/Manage/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="حصر الكميات"
-			pDesc="مدخل خدمات الحصر التي تساعد في بناء جدول أكثر واقعية مرتبط بحجم العمل."
-			pHref="/emodsign/tech/takeoff"
-			pImg="/Media/Emodsign/Tech/Takeoff/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="حصر كميات أعمال البناء"
-			pDesc="حصر الخرسانات والمباني والبنود الإنشائية التي تؤثر على مدد البناء."
-			pHref="/emodsign/tech/takeoff/construction"
-			pImg="/Media/Emodsign/Tech/Takeoff/Construction/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="حصر كميات التشطيبات"
-			pDesc="حصر الأرضيات والحوائط والأسقف والخامات النهائية قبل التوريد والشراء."
-			pHref="/emodsign/tech/takeoff/finishing"
-			pImg="/Media/Emodsign/Tech/Takeoff/Finishing/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="شوب دروينج"
-			pDesc="تفصيل الرسومات التنفيذية لتقليل القرارات المفتوحة أثناء الموقع."
-			pHref="/emodsign/tech/shopdwg"
-			pImg="/Media/Emodsign/Tech/Shopdwg/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="إشراف هندسي على البناء"
-			pDesc="متابعة تنفيذ أعمال البناء والخرسانة والمباني طبقًا للرسومات والمواصفات."
-			pHref="/emocrete/supervision/construction"
-			pImg="/Media/Emocrete/Supervision/Construction/HeroL.webp"
-		/>
-
-	</ReadAlso>
-
-
-
-
-
-
-
-	<RelServices
-		pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("خدمات مرتبطة بالجدول الزمني")}
-		pDesc={Text.Body.Centered.WithColor("#F8F4EA").OfText("هذه خدمات تجارية مباشرة يمكن طلبها مع إعداد الجدول الزمني أو بعده حسب مرحلة المشروع.")}
-		pHeadBg={new ElemBg("#0E1118")}
-		pBodyBg={new ElemBg("#F7F1E6")}
-		pCardBg={new ElemBg("#FFFFFF")}
-	>
-
-		<RelServiceItem
-			pTitle="إعداد جدول زمني"
-			pDesc="بناء برنامج زمني للمشروع مع الأنشطة والعلاقات والمدد والمسار الحرج ومخرجات المتابعة."
-			pHref="/emodsign/tech/manage/table"
-			pImg="/Media/Emodsign/Tech/Manage/Table/HeroL.webp"
-			pBtnText="اطلب الخدمة"
-		/>
+	<RelServices>
 
 		<RelServiceItem
 			pTitle="إدارة مشروع هندسي"
 			pDesc="إدارة النطاق والوقت والتكلفة والتقارير والتوريدات والتغييرات بين أطراف المشروع."
 			pHref="/emodsign/tech/manage"
 			pImg="/Media/Emodsign/Tech/Manage/HeroL.webp"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="حصر كميات البناء"
-			pDesc="حصر الخرسانات والمباني والبنود الإنشائية لتجهيز التسعير أو بناء مدد أكثر واقعية."
-			pHref="/emodsign/tech/takeoff/construction"
-			pImg="/Media/Emodsign/Tech/Takeoff/Construction/HeroL.webp"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="حصر كميات التشطيبات"
-			pDesc="حصر الخامات النهائية وربطها بخطة الشراء والتوريد والتنفيذ."
-			pHref="/emodsign/tech/takeoff/finishing"
-			pImg="/Media/Emodsign/Tech/Takeoff/Finishing/HeroL.webp"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="شوب دروينج معماري"
-			pDesc="تفصيل الرسومات المعمارية قبل الجدولة التنفيذية لتقليل التعارضات والقرارات المفتوحة."
-			pHref="/emodsign/tech/shopdwg/arch"
-			pImg="/Media/Emodsign/Tech/Shopdwg/Arch/HeroL.webp"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="إشراف التشطيبات"
-			pDesc="متابعة مراحل التشطيب والخامات والملاحظات وربطها بتواريخ تسليم واضحة."
-			pHref="/emocrete/supervision/finishing"
-			pImg="/Media/Emocrete/Supervision/Finishing/HeroL.webp"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="إشراف هندسي على البناء"
-			pDesc="متابعة أعمال البناء والخرسانات والمباني حسب الرسومات والمواصفات ومراحل التنفيذ."
-			pHref="/emocrete/supervision/construction"
-			pImg="/Media/Emocrete/Supervision/Construction/HeroL.webp"
-			pBtnText="اطلب الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="تقارير واستشارات هندسية"
-			pDesc="مراجعة موقف فني أو تأخير أو مشكلة قائمة وإعداد تقرير يساعد المالك على اتخاذ قرار."
-			pHref="/emonsult/report"
-			pImg="/Media/Emonsult/Report/HeroL.webp"
 			pBtnText="اطلب الخدمة"
 		/>
 
