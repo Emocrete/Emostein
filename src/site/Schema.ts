@@ -551,7 +551,7 @@ public static GetPrimaryImageMeta( pTitle: string , pDescr: string , pUrl: strin
 
 			if (pImages.length > 0) {
 
-			const cPrimaryImage = pImages.find((pImage) => /\/HeroL\.(?:webp|avif|png|jpe?g)(?:[?#]|$)/i.test(Schema.GetImageUrl(pImage)));
+			const cPrimaryImage = pImages.find((pImage) => /HeroL[^/]*\.(?:webp|avif|png|jpe?g)(?:[?#]|$)/i.test(Schema.GetImageUrl(pImage)));
 
 			if (!cPrimaryImage) { throw new Error(`HeroL image was not found for ${pUrl}.`); }
 
