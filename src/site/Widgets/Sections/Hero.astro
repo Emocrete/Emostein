@@ -85,6 +85,10 @@ const cFinalBgImgP = Media.GetPageFile(cPagePath, cBgImgP || cBgImgL || pBg?.Img
 const cHasBgImg = cFinalBgImgL !== "" || cFinalBgImgP !== "";
 const cAutoImgAlt = SeoText.GetLocalsImageAlt(Astro.locals) ;
 const cBgAlt = pImgAlt || pBg?.Img?.Alt || cAutoImgAlt;
+const cImgWidthL = 1920;
+const cImgHeightL = 911;
+const cImgWidthP = cFinalBgImgP === cFinalBgImgL ? cImgWidthL : 360;
+const cImgHeightP = cFinalBgImgP === cFinalBgImgL ? cImgHeightL : 680;
 
 const cHeroStyle = [
 	`--HeroBg:${pBg?.Color || "transparent"};`,
@@ -161,7 +165,12 @@ function GetLegacyBlurClass(pValue: "auto" | "on" | "off", pAxis: "L" | "P") {
 		
 		
 		
-			<source media="(orientation: portrait)" srcset={cFinalBgImgP} />
+			<source
+				media="(orientation: portrait)"
+				srcset={cFinalBgImgP}
+				width={cImgWidthP}
+				height={cImgHeightP}
+			/>
 		
 		
 		
@@ -173,6 +182,8 @@ function GetLegacyBlurClass(pValue: "auto" | "on" | "off", pAxis: "L" | "P") {
 				class = " HeroBgImg "
 				src={cFinalBgImgL}
 				alt={cBgAlt}
+				width={cImgWidthL}
+				height={cImgHeightL}
 				loading="eager"
 				decoding="async"
 				fetchpriority="high"
