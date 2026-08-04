@@ -259,6 +259,20 @@ import HeroIndexExport from "./Hero.astro";
  */
 export const Hero = HeroIndexExport;
 
+import Hero260804IndexExport from "./Hero260804.astro";
+
+/**
+ * @pBg as ElemBg
+ * @pBox as Size
+ * @pMinH as NumPer
+ * @pAlign as Align | "left" | "right" | "center" — MAY BE NEED TO REMOVE OLD STYLE (Default: Align.Center)
+ * @pImgF as string (Default: "")
+ * @pImgL as string (Default: "")
+ * @pImgP as string (Default: "")
+ * @pImgAlt as string — وصف صورة خلفية الهيرو لمحركات البحث وقارئات الشاشة. (Default: "")
+ */
+export const Hero260804 = Hero260804IndexExport;
+
 import IndexSecIndexExport from "./IndexSec.astro";
 
 /**

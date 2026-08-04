@@ -67,3 +67,35 @@ import StoneProductStripIndexExport from "./StoneProductStrip.astro";
  * @pColorizeMs as number
  */
 export const StoneProductStrip = StoneProductStripIndexExport;
+
+import StoneRequestBuilderIndexExport from "./StoneRequest/StoneRequestBuilder.astro";
+
+/**
+ * @pApiUrl as string — API used to save, resume and submit StoneReq drafts. DefVal = "/api/stone-req"
+ * @pSourcePage as string — Logical source page stored with the request. DefVal = "صفحة الرخام والجرانيت"
+ * @pTitle as string — Main widget title.
+ * @pDesc as string — Short explanation below the title.
+ * @pStorageKey as string — IndexedDB record key. Change it only when separate drafts are required on the same site.
+ * @pMaxAttachments as number — Maximum compressed images stored inside one item. DefVal = 5
+ * @pMaxImageKb as number — Approximate maximum size of each compressed image in KB. DefVal = 300
+ * @pMaxRequestImageMb as number — Maximum decoded image payload across the whole request in MB. Capped at 2.5 for Vercel payload safety. DefVal = 2.5
+ */
+export const StoneRequestBuilder = StoneRequestBuilderIndexExport;
+
+import StoneRequestHeaderIndexExport from "./StoneRequest/StoneRequestHeader.astro";
+
+/**
+ * @pTitle as string (Default: "كوّن طلبية الرخام أو الجرانيت")
+ * @pDesc as string (Default: "أضف كل صنف ومقاس على حدة. بياناتك تُحفظ تلقائيًا ويمكنك استكمال الطلب لاحقًا.")
+ */
+export const StoneRequestHeader = StoneRequestHeaderIndexExport;
+
+export { default as StoneRequestItemOverlay } from "./StoneRequest/StoneRequestItemOverlay.astro";
+
+export { default as StoneRequestItemsTable } from "./StoneRequest/StoneRequestItemsTable.astro";
+
+export { default as StoneRequestProjectOverlay } from "./StoneRequest/StoneRequestProjectOverlay.astro";
+
+export { default as StoneRequestResume } from "./StoneRequest/StoneRequestResume.astro";
+
+export { default as StoneRequestReviewOverlay } from "./StoneRequest/StoneRequestReviewOverlay.astro";

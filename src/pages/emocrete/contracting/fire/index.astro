@@ -1,15 +1,21 @@
 ---
 import BLayout from "@/Layout.astro";
-import { EmoCall, Emograph, VrStack } from "@/Widgets/Comp";
-import { Hero } from "@/Widgets/Sections";
-import { Loc, NumPer, Size, Text } from "@/TypesLib";
+import { EmoCall, Emograph, EmoList, EmoWhats, Grid, ListItem, SecTitle, Stack, VrStack } from "@/Widgets/Comp";
+import { RespImg } from "@/Widgets/Media";
+import { DivCol, DivStr, EmoSec, Hero } from "@/Widgets/Sections";
+import { EmoStr } from "@/Widgets/Strips";
+import { Align, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
 ---
 
 
 
 
 
-<BLayout pSchemaType="Service" pTitle="مقاولات مكافحة الحريق" pDescr="تنفيذ مقاولات أعمال مكافحة الحريق">
+<BLayout
+	pSchemaType="Service"
+	pTitle="مقاولات أنظمة مكافحة الحريق"
+	pDescr="معاينة وتصميم وتوريد وتركيب واختبار أنظمة مكافحة الحريق للمباني والمنشآت، وتشمل شبكات المياه ومجموعات الضخ والرش الآلي والأنظمة المتخصصة والإنذار وفق طبيعة الإشغال ومتطلبات المشروع."
+>
 
 
 
@@ -19,15 +25,2571 @@ import { Loc, NumPer, Size, Text } from "@/TypesLib";
 
 	<Hero>
 
-		<VrStack pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","45%"))} pSize={new Size(new NumPer("40%","95%"))} pHzAlign={"Center"}>
+		<VrStack
+			pLoc={new Loc(new NumPer("5%", "2.5%"), new NumPer("30%", "45%"))}
+			pSize={new Size(new NumPer("50%", "95%"))}
+			pBg={new ElemBg("#0B1118")}
+			pBgOpacity={new Percent(78, 86)}
+			pBlur={new Pixel(5)}
+			pRadius={new Pixel(18, 12)}
+			pPad={new Pixel(36, 18)}
+			pGap={new Pixel(22, 14)}
+			pHzAlign="Center"
+		>
 
-			<Emograph pTitle={Text.H1.Centered.OfText("مقاولات مكافحة الحريق")} pText={Text.Body.Centered.OfText("تنفيذ مشروعات أعمال مكافحة الحريق")} />
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor("#FCFCFA").OfText("مقاولات أنظمة مكافحة الحريق")}
+				pText={Text.Body.Centered.WithColor("#FCFCFA").OfText(
+          "معاينة وتصميم وتوريد وتركيب واختبار أنظمة مكافحة الحريق للمباني والمنشآت، وتشمل شبكات المياه ومجموعات الضخ والرش الآلي والأنظمة المتخصصة والإنذار وفق طبيعة الإشغال ومتطلبات المشروع.",
+        )}
+			/>
 
-			<EmoCall BlackSky />
+			<EmoCall BlackSky pText="طلب معاينة المشروع" />
 
 		</VrStack>
 
 	</Hero>
+
+
+
+
+
+
+
+	<EmoSec
+		id="FireContractor"
+		Service
+		pBg={new ElemBg("#F5F2EC")}
+		pGap={new Pixel(0)}
+		pHzAlign={Align.Center}
+	>
+
+		<SecTitle cBlackOffWhiteOff pTitle="شركة مقاولات أنظمة الحريق" />
+
+		<EmoStr id="FireContractorProfile" pBg={new ElemBg("#FCFCFA")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Center"
+			>
+
+				<DivCol
+					pSize={new Size(new NumPer("62%", "100%"))}
+					pHzAlign="Right"
+					pVrAlign="Center"
+					pPad={new Pixel(8)}
+				>
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("نطاق الشركة الهندسي")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "تقدم Emocrete خدمات تصميم وتنفيذ أنظمة مكافحة الحريق للمشروعات الجديدة والمباني القائمة. يبدأ التكليف بفهم النشاط ومساحات الإشغال ومصادر الخطورة، ثم ينتقل إلى المعاينة والحسابات والمخططات والمواصفات والمقايسة واعتماد الخامات. يشمل نطاق العمل شبكات الرش الآلي وصناديق الحريق والهيدرنت والطلمبات والخزانات وأنظمة الإنذار والإخلاء الصوتي والإطفاء المتخصص، ويمتد إلى التوريد والتركيب والبرمجة والاختبارات وإعداد مستندات التسليم ضمن بنود فنية قابلة للمراجعة.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("منهج العمل وفريق المشروع")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#263442")
+              .OfText(
+                "يعتمد كل مشروع على مرجعية كودية محددة وإصدار معتمد من الجهة المختصة. تتوزع المسؤوليات بين التصميم والحصر والمشتريات والإشراف والتنفيذ والاختبارات مع مرجعية فنية موحدة تحفظ تطابق الرسومات وأعمال الموقع وملف التسليم. تثبت الحسابات سعة مصدر المياه وقدرة الطلمبات وأقطار الشبكات وكميات عوامل الإطفاء، وتوثق مراحل العمل بتقارير الفحص والاختبار ومخططات As-Built وكتيبات التشغيل والصيانة.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+				</DivCol>
+
+				<DivCol
+					pSize={new Size(new NumPer("38%", "100%"))}
+					pBg={new ElemBg("#17222D")}
+					pPad={new Pixel(18, 12)}
+					pVrAlign="Center"
+				>
+
+					<RespImg
+						pImg={new EmoMediaData(
+              "Img",
+              "https://sos-fire.com/assets/img/",
+              "homepage-hero-fire-protection-engineers-egypt.webp",
+              false,
+              "مهندسو أنظمة الحماية من الحريق أثناء فحص شبكة رش آلي",
+              new Size(new NumPer(560, "100%"), new NumPer("auto", "auto")),
+            )}
+					/>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+		<EmoStr id="FireContractorPrinciples" pBg={new ElemBg("#17222D")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Grid
+				pMax={3}
+				pMaxP={1}
+				pSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(44, 24)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Start"
+			>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("الرؤية")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تكوين منظومة حماية مترابطة تبدأ بفهم الخطر وطبيعة الإشغال، وتمتد إلى تصميم قابل للتنفيذ ونظام موثق للفحص والتشغيل والصيانة.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("الرسالة")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تقديم المعاينة والتصميم والمقايسة والتوريد والتنفيذ والاختبار من خلال فريق واحد يحتفظ بمرجعية فنية واضحة وحدود مسؤولية محددة طوال مدة المشروع.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("سياسة الجودة")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "ربط التصميم والخامة والتركيب والاختبار داخل سجل هندسي واحد يضم المراجعات الفنية واعتمادات المواد ونتائج الاختبارات والتعديلات الميدانية ومخططات التنفيذ الفعلي.",
+            )}
+				/>
+
+			</Grid>
+
+		</EmoStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		id="FireProjectStudy"
+		Service
+		pBg={new ElemBg("#FCFCFA")}
+		pGap={new Pixel(0)}
+		pHzAlign={Align.Center}
+	>
+
+		<SecTitle cWhiteOffBlack pTitle="دراسة المشروع" />
+
+		<EmoStr id="FireProjectSurvey" pBg={new ElemBg("#DCEEF4")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Start"
+			>
+
+				<DivCol pSize={new Size(new NumPer("60%", "100%"))} pHzAlign="Right">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("بيانات النشاط والمعاينة")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "تبدأ الدراسة بتعريف الإشغال ومساحات الأدوار والارتفاعات وأعداد الشاغلين وطبيعة التشغيل والمواد الموجودة بالموقع. توثق المعاينة الأبعاد الفعلية ومناسيب الأسقف ومسارات الحركة وغرف الخدمات ومصادر الطاقة والمياه، وتغطي مناطق التخزين وخطوط الإنتاج والسوائل القابلة للاشتعال وغرف الكهرباء والمطابخ ومناطق التجمع. تسجل كذلك العوائق المعمارية والإنشائية ومساحات الصيانة وطرق إدخال المعدات، فتتحول البيانات إلى أساس تصميم مرتبط بالواقع التنفيذي للمبنى.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("تصنيف الخطورة")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "يحدد التصنيف مقدار الوقود الحريقي ومعدل إطلاق الحرارة وطبيعة المواد وارتفاع التخزين وترتيب الرص. تؤثر النتيجة في كثافة تصرف الرشاشات ومساحة التصميم ومدة الإمداد المائي ونوع الكواشف وعامل الإطفاء ومسافات الوصول إلى معدات المكافحة.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+				</DivCol>
+
+				<DivCol
+					pSize={new Size(new NumPer("40%", "100%"))}
+					pBg={new ElemBg("#FCFCFA")}
+					pPad={new Pixel(34, 18)}
+					pHzAlign="Right"
+				>
+
+					<EmoList
+						pWidth={new RespString("100%", "100%")}
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("بيانات الدراسة")}
+						pItemFnt={Text.Body.AtRight.OfSize(18, 16).WithColor("#0B1118")}
+						pNumbered
+					>
+
+						<ListItem pText="طبيعة الإشغال ومساحات الاستخدام وأعداد الشاغلين." />
+
+						<ListItem pText="أنواع المواد وكمياتها وطرق التخزين والتداول." />
+
+						<ListItem pText="مصدر مياه الحريق والضغط والتصرف المتاحان." />
+
+						<ListItem pText="مناطق الحريق ومسالك الهروب ووسائل الإخلاء." />
+
+						<ListItem pText="متطلبات الحماية المدنية ومستندات الاعتماد." />
+
+						<ListItem pText="حدود التوريد والتنفيذ ونقاط الربط بالموقع." />
+
+					</EmoList>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+		<EmoStr id="FireProtectionStrategy" pBg={new ElemBg("#0B1118")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Stack
+				pDir="Row"
+				pWidth={new NumPer(1220, "100%")}
+				pGap={new Pixel(48, 24)}
+				pPad={new Pixel(48, 22)}
+				pHzAlign="Stretch"
+				pVrAlign="Start"
+			>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("استراتيجية الحماية")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تجمع الاستراتيجية بين الاكتشاف المبكر والتنبيه والإخلاء والسيطرة على الحريق وتوفير مياه الإطفاء ووصول فرق الطوارئ. ترتبط مناطق الحريق ومسالك الهروب ومقاومة العناصر بنظم الرش والصناديق والإنذار والتحكم في الدخان، وتدخل اشتراطات الحماية المدنية ضمن الرسومات والحسابات والمستندات التي تخضع للفحص والاعتماد.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("نطاق المشروع")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تثبت وثيقة النطاق الأنظمة المطلوبة وعدد المناطق وحدود الشبكات ومصدر التغذية ونقاط الربط والاختبارات ومستندات التسليم. يمنح هذا التحديد الحصر والتسعير والمشتريات والتنفيذ مرجعًا واحدًا قابلًا للمراجعة.",
+            )}
+				/>
+
+			</Stack>
+
+		</EmoStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		id="FireEngineeringDesign"
+		Service
+		pBg={new ElemBg("#F5F2EC")}
+		pGap={new Pixel(0)}
+		pHzAlign={Align.Center}
+	>
+
+		<SecTitle cBlackOffWhiteOff pTitle="التصميم الهندسي" />
+
+		<EmoStr id="FireHydraulicDesign" pBg={new ElemBg("#FCFCFA")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Grid
+				pMax={2}
+				pMaxP={1}
+				pSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(54, 28)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Start"
+			>
+
+				<Emograph
+					pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("أسس التصميم")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "تثبت أسس التصميم نوع الإشغال وتصنيف الخطورة وإصدار الكود واشتراطات الجهة المختصة وخصائص مصدر المياه والظروف البيئية. تشمل الوثيقة درجات الحرارة وبيانات المعدات وفرضيات التشغيل ومعايير اختيار النظام، وتصبح مرجعًا للحسابات والمراجعات اللاحقة.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("الحسابات الهيدروليكية")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "تحسب الشبكة عند المنطقة الأشد تأثيرًا هيدروليكيًا باستخدام التصرف المطلوب وفواقد الاحتكاك وفروق المناسيب وضغط التشغيل. تحدد النتائج أقطار المواسير والضغط والتصرف عند نقطة التغذية وقدرة الطلمبات، وتعرض المخرجات على مخطط الشبكة وملخص العقد ومسار التدفق.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("خزان الحريق")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "تحسب السعة الصافية من الطلب المتزامن ومدة الإمداد المقررة لنوع الخطورة. يراعي التصميم الحجم القابل للاستخدام ومنسوب السحب ومعدل إعادة الملء وتقسيم الخزان وفتحات الفحص ومؤشرات المنسوب وترتيب خطوط السحب والتصريف والـOverflow.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("اختيار الطلمبات")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "تنتقل نقطة الطلب الهيدروليكي إلى منحنى الطلمبة لمراجعة التصرف والضغط وقدرة المحرك وظروف السحب. يشمل الاختيار حدود Shutoff و150% Flow ولوحة التحكم وطلمبة المحافظة على الضغط وملحقات القياس والاختبار وتكوين المصدر الكهربائي أو الديزل.",
+            )}
+				/>
+
+			</Grid>
+
+		</EmoStr>
+
+		<EmoStr id="FireDesignDocuments" pBg={new ElemBg("#B8322A")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Stack
+				pDir="Row"
+				pWidth={new NumPer(1220, "100%")}
+				pGap={new Pixel(42, 22)}
+				pPad={new Pixel(48, 22)}
+				pHzAlign="Stretch"
+				pVrAlign="Start"
+			>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("المخططات التصميمية والتنفيذية")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "توضح المخططات التصميمية مناطق الحريق ومواقع الطلمبات والخزانات والرايزرات ونقاط التحكم ومعدات الإنذار والإطفاء ومساحات التغطية والربط بين الأنظمة. تضيف المخططات التنفيذية الأقطار والمناسيب والحوامل والصمامات والفتحات وأبعاد غرف المعدات وبيانات الموردين ونقاط العبور والتعارض، فتصل المعلومة إلى فريق الموقع بصيغة قابلة للتنفيذ والفحص.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("تنسيق الخدمات")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تراجع مسارات الحريق مع الإنشاء والمعماري والتكييف والكهرباء والصحي والأسقف المستعارة. يثبت التنسيق مناسيب العبور وفتحات الكور والدعامات المشتركة ومساحات الصيانة ومواقع الأجهزة والمعدات قبل بدء التركيبات، وتنتقل النتائج إلى إصدار تنفيذي موحد للموقع.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("المواصفات والمقايسة")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تحدد المواصفات مواد المواسير وتصنيفات الضغط وأنواع الصمامات والرشاشات والكواشف والكابلات واشتراطات الطلاء والعزل والتثبيت وشهادات المنتج ومعايير القبول. تربط المقايسة رقم كل بند بوصفه الفني ووحدته وكميته، وتشمل الشبكات والحوامل والمعدات والكابلات والبرمجة والاختبارات ومستندات التسليم.",
+            )}
+				/>
+
+			</Stack>
+
+		</EmoStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		id="WaterFireSystems"
+		Service
+		pBg={new ElemBg("#FCFCFA")}
+		pGap={new Pixel(0)}
+		pHzAlign={Align.Center}
+	>
+
+		<SecTitle cSkyLiteBlack pTitle="أنظمة الإطفاء بالماء" />
+
+		<EmoStr id="AutomaticSprinklers" pBg={new ElemBg("#DCEEF4")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Center"
+			>
+
+				<DivCol pSize={new Size(new NumPer("43%", "100%"))} pPad={new Pixel(8)} pVrAlign="Center">
+
+					<RespImg
+						pImg={new EmoMediaData(
+              "Img",
+              "https://sos-fire.com/assets/services/",
+              "fire-fighting.webp",
+              false,
+              "شبكة مواسير ورشاشات لمكافحة الحريق بالماء",
+              new Size(new NumPer(560, "100%"), new NumPer("auto", "auto")),
+            )}
+					/>
+
+				</DivCol>
+
+				<DivCol pSize={new Size(new NumPer("57%", "100%"))} pHzAlign="Right" pVrAlign="Center">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("شبكات الرش الآلي")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "توزع الرشاشات وفق نوع الإشغال ومساحة التغطية ودرجة الحرارة ومعامل K والعوائق المحيطة. يختار المصمم نوع الرشاش واتجاهه ودرجة استجابته، ثم يحدد منطقة الحساب وكثافة التصرف ومساحة التشغيل والطلب الإضافي لخراطيم الحريق. يعمل كل رشاش عند تعرض عنصره الحراري للحرارة، فتتركز المياه في نطاق الحريق خلال مراحله المبكرة.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("مكونات الشبكة")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "تشمل الشبكة Alarm Check Valve أو Dry Valve أو Pre-Action Valve، ومفاتيح تدفق وضغط، وصمامات تحكم مراقبة، ووصلات اختبار وتصريف، وMain Drain، وInspector's Test، إلى جانب المواسير والوصلات والحوامل والرشاشات المعتمدة.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+		<EmoStr id="SprinklerSystemTypes" pBg={new ElemBg("#FCFCFA")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Grid
+				pMax={3}
+				pMaxP={1}
+				pSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(48, 26)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Start"
+			>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("Wet Pipe")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "تظل المواسير مملوءة بالمياه ويعمل كل رشاش بصورة مستقلة عند وصول الحرارة إلى درجة تشغيل العنصر الحراري. يناسب النظام المساحات التي تحافظ على درجة حرارة مستقرة ويتميز ببنية تشغيل مباشرة وسهولة في الفحص الدوري.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("Dry Pipe")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "تحتوي الشبكة على هواء أو نيتروجين مضغوط، ويؤدي فتح الرشاش إلى تحرير الضغط وفتح Dry Pipe Valve ثم وصول المياه إلى نقطة التصريف. يستخدم في المناطق المعرضة للتجمد والفراغات ذات الظروف الحرارية الخاصة.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("Deluge")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "تستخدم الشبكة رشاشات مفتوحة مع Deluge Valve تتحكم فيها منظومة كشف مستقلة. يؤدي التشغيل إلى تصريف المياه من جميع الفتحات في المنطقة المصممة، وهو ترتيب مناسب للمخاطر سريعة النمو ومناطق السوائل القابلة للاشتعال.",
+            )}
+				/>
+
+			</Grid>
+
+		</EmoStr>
+
+		<EmoStr id="PreActionSystem" pBg={new ElemBg("#17222D")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(34, 18)}
+				pVrAlign="Center"
+			>
+
+				<DivCol pSize={new Size(new NumPer("58%", "100%"))} pHzAlign="Right">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#FCFCFA").OfText("Pre-Action")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#FCFCFA")
+              .OfText(
+                "تتكون المنظومة من شبكة رشاشات وصمام تحكم ووحدة إطلاق وإشراف ضغط ونظام كشف مستقل، وتخدم الأرشيف وغرف التبريد ومراكز البيانات والفراغات التي تتطلب تحكمًا إضافيًا قبل امتلاء المواسير. في Single Interlock يفتح الصمام بعد إشارة الكشف، وفي Double Interlock يرتبط الفتح بإشارة الكشف وانخفاض ضغط الشبكة. يحدد التصميم زمن وصول المياه وسعة الضاغط ومنطق الإشراف والإنذار.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+				</DivCol>
+
+				<DivCol pSize={new Size(new NumPer("42%", "100%"))} pVrAlign="Center">
+
+					<RespImg
+						pImg={new EmoMediaData(
+              "Img",
+              "https://www.unisafe-egypt.com/unisafe-egypt.com/uploads/",
+              "image014.png",
+              false,
+              "مكونات نظام Pre-Action لمكافحة الحريق",
+              new Size(new NumPer(560, "100%"), new NumPer("auto", "auto")),
+            )}
+					/>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+		<EmoStr id="HoseHydrantWaterSpray" pBg={new ElemBg("#F5F2EC")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Stack
+				pDir="Row"
+				pWidth={new NumPer(1220, "100%")}
+				pGap={new Pixel(48, 24)}
+				pPad={new Pixel(48, 22)}
+				pHzAlign="Stretch"
+				pVrAlign="Start"
+			>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("صناديق الحريق")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "توزع Hose Reels وLanding Valves داخل مسافات الوصول المعتمدة، وتختار أقطار الخراطيم والقواذف وضغوط التشغيل وفق نوع الإشغال. يراجع التصميم تصرف المخارج المتزامنة والضغط المتبقي عند أبعد نقطة وربط الرايزرات بمصدر المياه.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("الهيدرنت")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "تغطي الشبكة الخارجية محيط الموقع ومسارات سيارات الإطفاء ومناطق الخطورة. تشمل Underground Loop وSectional Valves وHydrants ووصلات الدفاع المدني وغرف المحابس، مع حساب التصرف المتزامن والفواقد حتى أبعد نقطة.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("Water Spray")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "يوجه النظام المياه من فوهات مفتوحة لحماية معدات أو أسطح محددة، مثل المحولات والخزانات والسيور والمعدات الصناعية. تحدد كثافة التطبيق وزاوية الرش وتوزيع الفوهات وتكوين Deluge Valve من تحليل الخطر وشكل السطح.",
+            )}
+				/>
+
+			</Stack>
+
+		</EmoStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		id="FirePumpRoom"
+		Service
+		pBg={new ElemBg("#F5F2EC")}
+		pGap={new Pixel(0)}
+		pHzAlign={Align.Center}
+	>
+
+		<SecTitle cBlackOffWhiteOff pTitle="غرف طلمبات الحريق" />
+
+		<EmoStr id="FirePumpRoomOverview" pBg={new ElemBg("#FCFCFA")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Center"
+			>
+
+				<DivCol
+					pSize={new Size(new NumPer("44%", "100%"))}
+					pBg={new ElemBg("#DDE3E8")}
+					pPad={new Pixel(18, 12)}
+					pVrAlign="Center"
+				>
+
+					<RespImg
+						pImg={new EmoMediaData(
+              "Img",
+              "https://sos-fire.com/assets/services/",
+              "pump-room.webp",
+              false,
+              "غرفة طلمبات حريق كهرباء وديزل وجوكي",
+              new Size(new NumPer(560, "100%"), new NumPer("auto", "auto")),
+            )}
+					/>
+
+				</DivCol>
+
+				<DivCol pSize={new Size(new NumPer("56%", "100%"))} pHzAlign="Right">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("غرفة الطلمبات")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "يرتب التصميم الطلمبات وخطوط السحب والطرد والصمامات والعدادات ولوحات التحكم مع مسافات خدمة تسمح بالفحص والفك. تراجع أقطار Header وسرعات المياه وظروف السحب الموجب وفتحات التهوية وتصريف الأرضية والإضاءة ومصدر الطاقة ومسار عادم الديزل. يضاف ترتيب Flow Test أو Test Header للتحقق من منحنى الأداء عند التصرفات المحددة.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("لوحات التحكم")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "تستقبل اللوحات إشارة انخفاض الضغط وتدير بدء التشغيل والإشراف على مصدر الطاقة وحالة المحرك والبطاريات والإنذارات. تضبط نقاط التشغيل بين Jockey Pump والطلمبة الكهربائية وطلمبة الديزل وفق تسلسل يحافظ على ضغط الشبكة ويضمن تشغيل المصدر الرئيسي عند الطلب.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+		<EmoStr id="FirePumpUnits" pBg={new ElemBg("#17222D")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Grid
+				pMax={4}
+				pMaxP={1}
+				pSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(46, 24)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Start"
+			>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("الطلمبة الكهربائية")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تمثل مصدر الضخ الرئيسي عند توافر تغذية كهربائية موثوقة، ويشمل الاختيار قدرة المحرك ووسيلة البدء ولوحة التحكم ومسار الكابلات ومتطلبات مصدر الطوارئ المعتمد للمشروع.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("الطلمبة الديزل")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "توفر مصدر تشغيل مستقل يعتمد على محرك ديزل وخزان وقود وبطاريات مزدوجة وشاحن ومجموعة عادم وتهوية. يراجع التصميم زمن التشغيل ودرجة حرارة الغرفة وسهولة أعمال الخدمة.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("Jockey Pump")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تحافظ على ضغط الشبكة أمام التسريبات البسيطة وتحد من دورات تشغيل الطلمبة الرئيسية. تضبط نقاط البدء والتوقف بالتتابع مع الطلمبات الرئيسية داخل منطق التحكم.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("خزان مياه الإطفاء")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "يخصص الحجم المحسوب لأغراض الإطفاء وفق الطلب المتزامن ومدة الإمداد. ترتب فتحات السحب والتغذية والفائض والتهوية والتصريف مع منسوب السحب والحجم القابل للاستخدام ومعدل إعادة الملء وفتحات الفحص ومؤشرات المنسوب وإمكان التنظيف.",
+            )}
+				/>
+
+			</Grid>
+
+		</EmoStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		id="SpecialSuppressionSystems"
+		Service
+		pBg={new ElemBg("#FCFCFA")}
+		pGap={new Pixel(0)}
+		pHzAlign={Align.Center}
+	>
+
+		<SecTitle cCreamyBlack pTitle="أنظمة الإطفاء المتخصصة" />
+
+		<EmoStr id="FoamSystems" pBg={new ElemBg("#F1E8D8")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Center"
+			>
+
+				<DivCol pSize={new Size(new NumPer("58%", "100%"))} pHzAlign="Right">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("أنظمة الرغوة")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "تستخدم الرغوة في أخطار السوائل القابلة للاشتعال لتكوين غطاء يحد من تصاعد الأبخرة ويفصل سطح الوقود عن الأكسجين ويساعد على التبريد. يحدد التصميم نوع الوقود ومساحة السطح ومعدل التطبيق وزمن التشغيل ونوع Foam Concentrate، ثم يختار Bladder Tank أو Foam Pump وProportioner وFoam Chamber أو Monitor أو Nozzle وفق شكل الخطر.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("Foam Concentrate")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "تتداول مركزات بنسب خلط 1% و3% و6% مع أنواع مخصصة للهيدروكربونات وأنواع مناسبة للمذيبات القطبية. يعتمد الاختيار على اعتماد المركز مع معدات الخلط والتصريف وبيانات اللزوجة ودرجة الحرارة وفترة التخزين وشهادة الاختبار.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+				</DivCol>
+
+				<DivCol pSize={new Size(new NumPer("42%", "100%"))} pVrAlign="Center">
+
+					<RespImg
+						pImg={new EmoMediaData(
+              "Img",
+              "https://www.shehabco.net/images/main/",
+              "062-foam-suppression-system.webp",
+              false,
+              "نظام إطفاء بالرغوة لحماية أخطار السوائل القابلة للاشتعال",
+              new Size(new NumPer(560, "100%"), new NumPer("auto", "auto")),
+            )}
+					/>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+		<EmoStr id="CleanAgentSystems" pBg={new ElemBg("#0B1118")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Center"
+			>
+
+				<DivCol pSize={new Size(new NumPer("40%", "100%"))} pVrAlign="Center">
+
+					<RespImg
+						pImg={new EmoMediaData(
+              "Img",
+              "https://sos-fire.com/assets/services/",
+              "fm200.webp",
+              false,
+              "أسطوانات ووحدة تحكم لنظام إطفاء FM-200",
+              new Size(new NumPer(560, "100%"), new NumPer("auto", "auto")),
+            )}
+					/>
+
+				</DivCol>
+
+				<DivCol pSize={new Size(new NumPer("60%", "100%"))} pHzAlign="Right">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#FCFCFA").OfText("العوامل النظيفة وFM-200")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#FCFCFA")
+              .OfText(
+                "تخدم العوامل النظيفة غرف الكهرباء والتحكم والخوادم والاتصالات التي تحتاج إطفاء سريعًا مع بقاء التجهيزات قابلة للتشغيل. يستخدم HFC-227ea في نظام FM-200 للإطفاء الكلي داخل حيز محكم، وتحسب كمية العامل من حجم الحيز والتركيز التصميمي ودرجة الحرارة والارتفاع. تحدد الحسابات الأسطوانات وشبكة المواسير والفوهات وزمن التصريف، ويشمل التصميم الكشف المتقاطع وتأخير الإطلاق وإيقاف التهوية وإغلاق الفتحات وإشارة Abort وManual Release وفتحات تنفيس الضغط.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("اختبار الحيز")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#FCFCFA")
+              .OfText(
+                "يحدد Door Fan Test معدل التسرب وزمن الاحتفاظ بالتركيز داخل الحيز. تربط النتائج بين إحكام الأبواب والفتحات ومخمدات الهواء وRelief Vent وكمية العامل، وتدخل ضمن ملف القبول والتشغيل.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+		<EmoStr id="GasSuppressionSystems" pBg={new ElemBg("#FCFCFA")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Grid
+				pMax={3}
+				pMaxP={1}
+				pSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(48, 26)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Start"
+			>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("FK-5-1-12")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "يعمل العامل السائل المتبخر بتركيز تصميمي محسوب لحماية المعدات الحساسة. يرد الاسم التجاري Novec 1230 في مستندات ومشروعات سابقة، كما تظهر عائلات Sapphire بضغط 25 و42 بار وSapphire Plus بضغط 70 بار في كتالوجات الأنظمة. أعلنت 3M إنهاء تصنيع مواد PFAS بنهاية 2025، لذلك يثبت اعتماد التوريد الحالي بيان المادة وشهادة المنشأ وتوافر إعادة التعبئة.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("الغازات الخاملة")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "تستخدم خلطات النيتروجين والأرجون في أنظمة مثل INERGEN وiFLOW لتخفيض تركيز الأكسجين إلى مستوى يسيطر على الحريق وفق حدود سلامة الإشغال. تسمح بنوك الأسطوانات المركزية وDirectional Valves بخدمة أكثر من حيز، ويحدد الحساب ضغط التخزين ومسارات المواسير وأقطار التنفيس.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("ثاني أكسيد الكربون")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "يطبق CO2 بنظام Total Flooding أو Local Application لحماية معدات ومخاطر صناعية محددة. يحقق الإطفاء بخفض تركيز الأكسجين والتبريد، وتدخل ضمن التصميم إنذارات ما قبل التصريف وتأخير الإطلاق وLockout ومفاتيح العزل وإجراءات إخلاء الحيز وتدريب فريق التشغيل.",
+            )}
+				/>
+
+			</Grid>
+
+		</EmoStr>
+
+		<EmoStr id="WaterMistKitchenCabinet" pBg={new ElemBg("#E3F1EE")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Center"
+			>
+
+				<DivCol pSize={new Size(new NumPer("42%", "100%"))} pVrAlign="Center">
+
+					<RespImg
+						pImg={new EmoMediaData(
+              "Img",
+              "https://www.shehabco.net/images/main/",
+              "070-high-pressure-water-mist-system.webp",
+              false,
+              "وحدة ضخ لنظام إطفاء بالضباب المائي عالي الضغط",
+              new Size(new NumPer(560, "100%"), new NumPer("auto", "auto")),
+            )}
+					/>
+
+				</DivCol>
+
+				<DivCol pSize={new Size(new NumPer("58%", "100%"))} pHzAlign="Right">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("Water Mist")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "ينتج النظام قطرات دقيقة تحقق التبريد وتقليل الإشعاع الحراري وإزاحة جزء من الأكسجين قرب اللهب. ترتبط كفاءة النظام بتصميم الفوهة والضغط وحجم القطرات وهندسة الحيز والاختبارات المعتمدة للتطبيق. يستخدم في الأنفاق ومراكز البيانات والمعدات والتطبيقات البحرية والبنية التحتية الحساسة، مع طلب مائي أقل ومسارات مواسير أصغر في العديد من الحلول عالية الضغط.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("أنظمة المطابخ")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "تستخدم Wet Chemical لحماية القلايات ومعدات الطهي والـHoods والـDucts. توزع الفوهات على مصادر الخطر وتربط وحدة الإطلاق بصمام الوقود ومراوح التهوية والإنذار، ويعاد ضبط النظام بعد تنظيف المعدات وفحص الأسطوانة وخطوط التصريف.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("حماية الكبائن")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "تستخدم الأنظمة Pre-Engineered أو أنبوب الكشف الحراري لحماية لوحات الكهرباء وماكينات CNC وكبائن المعدات. يطلق النظام عامل الإطفاء محليًا داخل الحيز الصغير، ويمكن تكوينه بآلية تشغيل مستقلة وفق اعتماد المنتج وتحليل الخطر.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		id="FireAlarmSystems"
+		Service
+		pBg={new ElemBg("#F5F2EC")}
+		pGap={new Pixel(0)}
+		pHzAlign={Align.Center}
+	>
+
+		<SecTitle cRedBlack pTitle="أنظمة إنذار الحريق" />
+
+		<EmoStr id="FireAlarmArchitectures" pBg={new ElemBg("#F4DAD7")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Center"
+			>
+
+				<DivCol pSize={new Size(new NumPer("43%", "100%"))} pVrAlign="Center">
+
+					<RespImg
+						pImg={new EmoMediaData(
+              "Img",
+              "https://sos-fire.com/assets/services/",
+              "fire-alarm-control-panel-hero.webp",
+              false,
+              "لوحة تحكم لنظام إنذار حريق",
+              new Size(new NumPer(560, "100%"), new NumPer("auto", "auto")),
+            )}
+					/>
+
+				</DivCol>
+
+				<DivCol pSize={new Size(new NumPer("57%", "100%"))} pHzAlign="Right">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("Conventional")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "تقسم اللوحة المبنى إلى Zones، وتحدد الإشارة المنطقة التي تحتوي على الجهاز العامل. يناسب التكوين المشروعات الصغيرة والمتوسطة ذات التقسيم الواضح، ويعتمد الحصر على عدد الدوائر والكواشف ونقاط النداء ودوائر الأجراس ووحدات التغذية.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("Addressable")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "يحمل كل جهاز عنوانًا يتيح تحديد موقعه وحالته على اللوحة، مع إمكان البرمجة والمراقبة وربط Input وOutput Modules. يناسب المباني متعددة المناطق والمنشآت التي تتطلب Cause & Effect تفصيليًا وسجل أحداث وتشخيصًا دقيقًا للأعطال وحالات الأجهزة.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+		<EmoStr id="FireAlarmFunctions" pBg={new ElemBg("#17222D")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Grid
+				pMax={2}
+				pMaxP={1}
+				pSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(48, 26)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Start"
+			>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("الكشف")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "يشمل كواشف الدخان والحرارة واللهب والدخان الخطي وكواشف مجاري الهواء وأجهزة Gas Detection بحسب طبيعة الخطر وسرعة تطوره وظروف البيئة المحيطة.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("الإخطار والتنبيه الجماعي")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "توزع الأجراس والصفارات والفلاشات لتحقيق مستويات السمع والرؤية المطلوبة في مناطق الإشغال، مع دوائر مراقبة وتغذية احتياطية محسوبة على حالتي الاستعداد والإنذار. تدير منظومات Mass Notification الرسائل الموجهة لحوادث الحريق والطوارئ التشغيلية عبر مناطق المنشأة ووسائل العرض والصوت وفق أولوية كل رسالة وصلاحيات الإرسال.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("الإخلاء الصوتي")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تستخدم الرسائل المسجلة والميكروفون المخصص للطوارئ ومناطق السماعات لتوجيه شاغلي المبنى. يراجع التصميم وضوح الكلام ومستوى الصوت وأولوية الرسائل.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("Cause & Effect")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تربط المصفوفة بين كل إشارة واردة والاستجابات المطلوبة، مثل إيقاف وحدات HVAC وإرجاع المصاعد وفتح الأبواب وإغلاق Fire Dampers وتشغيل أنظمة التحكم في الدخان.",
+            )}
+				/>
+
+			</Grid>
+
+		</EmoStr>
+
+		<EmoStr id="FireAlarmIntegration" pBg={new ElemBg("#FCFCFA")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Start"
+			>
+
+				<DivCol pBg={new ElemBg("#DCEEF4")} pPad={new Pixel(34, 18)} pHzAlign="Right">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("تكامل الأنظمة")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "يتبادل نظام الإنذار الإشارات مع BMS وHVAC والمصاعد وAccess Control والإضاءة الطارئة وطلمبات الحريق وأنظمة الإطفاء الغازي. تستخدم Modules وInterfaces معتمدة وتوثق كل إشارة واتجاهها وحالتها الطبيعية وزمن الاستجابة في مصفوفة التشغيل وتقارير الاختبار.",
+              )}
+					/>
+
+				</DivCol>
+
+				<DivCol pBg={new ElemBg("#F1E8D8")} pPad={new Pixel(34, 18)} pHzAlign="Right">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("الأنظمة المساندة")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "تدخل Public Address وMass Notification وCCTV وVMS وIntrusion Detection وAccess Control وPSIM ضمن بيئة التشغيل في المشروعات المتكاملة. يحدد التصميم نقاط تبادل الإشارات وصلاحيات المشغل وشاشات المراقبة وتسجيل الأحداث بما يخدم خطة الطوارئ وإدارة المنشأة.",
+              )}
+					/>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		id="FireEquipment"
+		Service
+		pBg={new ElemBg("#FCFCFA")}
+		pGap={new Pixel(0)}
+		pHzAlign={Align.Center}
+	>
+
+		<SecTitle cBlackOffWhiteOff pTitle="معدات مكافحة الحريق" />
+
+		<EmoStr id="FireEquipmentFamilies" pBg={new ElemBg("#F5F2EC")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Grid
+				pMax={3}
+				pMaxP={1}
+				pSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 24)}
+				pPad={new Pixel(48, 22)}
+				pBg={new ElemBg("#DDE3E8")}
+				pRadius={new Pixel(26, 18)}
+				pVrAlign="Start"
+			>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("طفايات الحريق")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "تضم طفايات Dry Powder وCO2 وFoam وWater وWet Chemical بأحجام وقدرات تتوافق مع تصنيف الحريق ومسافة الوصول والظروف البيئية.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("خزائن الحريق")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "تجمع Hose Reel أو Landing Valve مع الخرطوم والقاذف والطفاية وفق تكوين الخزانة. تتوافر هياكل صاج مطلي وStainless Steel بمقاسات تناسب التركيب الظاهر أو المدفون.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("Water Launcher")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "يستخدم القاذف المحمول لتوجيه تيار مركز إلى مسافة مناسبة. يرد في أحد كتالوجات الموردين نموذج من سبيكة ألومنيوم بوصلة 2.5 بوصة BS 366 وتصرف 215 لترًا في الدقيقة عند 5 إلى 8 بار ومدى يقارب 29 مترًا.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("معدات الطلمبات")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "تشمل الطلمبات ولوحات التحكم والعدادات ومفاتيح الضغط وصمامات العزل وعدم الرجوع والتنفيس وFlow Meter وTest Header وملحقات السحب والطرد.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("معدات الإنقاذ")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "تغطي أدوات الحماية الشخصية والتنفس والإضاءة والقطع والرفع والحبال والبطاطين ومهمات فرق الاستجابة، ويحدد نطاقها وفق خطة الطوارئ وطبيعة المنشأة.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("مكونات الإطفاء الثابت")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "تضم الرشاشات والصمامات والـAlarm Valves والـDeluge Valves وخزانات الرغوة والـProportioners والأسطوانات وشبكات المواسير وفوهات التصريف.",
+            )}
+				/>
+
+			</Grid>
+
+		</EmoStr>
+
+		<EmoStr id="FireEquipmentCatalog" pBg={new ElemBg("#0B1118")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Center"
+			>
+
+				<DivCol pSize={new Size(new NumPer("42%", "100%"))} pVrAlign="Center">
+
+					<RespImg
+						pImg={new EmoMediaData(
+              "Img",
+              "https://sos-fire.com/assets/services/",
+              "co2-suppression-cylinders-hero.webp",
+              false,
+              "أسطوانات إطفاء بثاني أكسيد الكربون",
+              new Size(new NumPer(560, "100%"), new NumPer("auto", "auto")),
+            )}
+					/>
+
+				</DivCol>
+
+				<DivCol pSize={new Size(new NumPer("58%", "100%"))} pHzAlign="Right">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#FCFCFA").OfText("بيانات الكتالوج")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#FCFCFA")
+              .OfText(
+                "تظهر في كتالوجات السوق أسماء Storm وPhoenix وSCOUT لطفايات Dry Powder، وأسماء Sinai 2 وSinai 6 لطفايات CO2. تتوافر سعات مسحوق 4 و6 و9 و12 كجم في نماذج تعمل ضمن درجات حرارة من ‎-30 إلى ‎+60 درجة مئوية وبضغط اختبار يصل إلى 35 بار، مع مسحوق MAP لتغطية حرائق الفئات A وB وC ومخاطر المعدات الكهربائية وفق شهادة كل موديل.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("عائلات الأنظمة")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#FCFCFA")
+              .OfText(
+                "تظهر كذلك أسماء Patterson في طلمبات الحريق، وSAPPHIRE وSAPPHIRE Plus وINERGEN وiFLOW في حلول الإطفاء الغازي، وأسماء SIEX وSKUM وAmeriflo وFOGTEC وTyco وJohnson Controls وVES في حلول الرغوة والضباب المائي والإنذار والطلمبات. يثبت العرض الفني العلامة والموديل وبلد المنشأ والاعتماد وبيانات الأداء وتوافر قطع الغيار وخدمة إعادة التعبئة قبل الشراء.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		id="FireSupply"
+		Service
+		pBg={new ElemBg("#F5F2EC")}
+		pGap={new Pixel(0)}
+		pHzAlign={Align.Center}
+	>
+
+		<SecTitle cCreamyBlack pTitle="توريد معدات الحريق" />
+
+		<EmoStr id="FireMaterialSubmittal" pBg={new ElemBg("#FCFCFA")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Start"
+			>
+
+				<DivCol pSize={new Size(new NumPer("58%", "100%"))} pHzAlign="Right">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("اعتماد الخامات")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "يبدأ التوريد بوصف فني يحدد النوع والمقاس وتصنيف الضغط ودرجة الحرارة والخامة وملحقات التركيب وشهادة الاعتماد المطلوبة. يضم Material Submittal المواصفة وجداول المطابقة وDatasheets وشهادات UL أو FM أو الاعتماد المطلوب وتقارير الاختبار وبلد المنشأ وبيانات الطراز. تربط المراجعة الموديل بالحسابات والرسومات وظروف الموقع، وتثبت المقاسات والضغوط والتوصيلات الكهربائية وبروتوكولات الاتصال قبل إصدار أمر الشراء.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("البدائل الفنية")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "يقدم البديل بجدول يوضح التكافؤ في الوظيفة والاعتماد والأداء والأبعاد ومتطلبات الصيانة. تراجع آثار التغيير على الحسابات والمخططات والكميات وقطع الغيار والضمان قبل إصدار اعتماد الشراء.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+				</DivCol>
+
+				<DivCol
+					pSize={new Size(new NumPer("42%", "100%"))}
+					pBg={new ElemBg("#DCEEF4")}
+					pPad={new Pixel(34, 18)}
+					pHzAlign="Right"
+				>
+
+					<EmoList
+						pWidth={new RespString("100%", "100%")}
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("ملف التوريد")}
+						pItemFnt={Text.Body.AtRight.OfSize(18, 16).WithColor("#0B1118")}
+						pNumbered={false}
+					>
+
+						<ListItem pText="مواصفة المنتج وجداول المطابقة." />
+
+						<ListItem pText="شهادات الاعتماد وتقارير الاختبار." />
+
+						<ListItem pText="بيانات المصنع وبلد المنشأ." />
+
+						<ListItem pText="أرقام التشغيل والتتبع وشهادات الفحص." />
+
+						<ListItem pText="مدة الضمان وتاريخ بدايته وإجراءات المطالبة ونطاق خدمة ما بعد البيع." />
+
+						<ListItem pText="قائمة قطع الغيار والمواد الاستهلاكية." />
+
+					</EmoList>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+		<EmoStr id="CleanAgentService" pBg={new ElemBg("#17222D")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Stack
+				pDir="Row"
+				pWidth={new NumPer(1220, "100%")}
+				pGap={new Pixel(48, 24)}
+				pPad={new Pixel(48, 22)}
+				pHzAlign="Stretch"
+				pVrAlign="Start"
+			>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("خدمة الأسطوانات")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تشمل الخدمة فحص جسم الأسطوانة والصمام والخرطوم ومجموعة التشغيل وقياس الوزن أو الضغط وإجراء الاختبار الهيدروستاتيكي عند استحقاقه. تسجل بيانات الأسطوانة قبل التعبئة وبعدها وتصدر بطاقة خدمة مرتبطة بالرقم التسلسلي.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("إعادة التعبئة")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تراجع مادة الإطفاء ودرجة النقاء وكمية الشحن وضغط التعزيز ومعدات التعبئة المعتمدة للنظام. يثبت تقرير الخدمة العامل المستخدم ووزنه وحالة الصمام ونتيجة اختبار التسريب وموعد الفحص التالي.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("قطع الغيار")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "يحدد ملف الصيانة الصمامات وActuators وSolenoids وPressure Switches والفوهات والكواشف والبطاريات والأجزاء ذات العمر المحدد. يساعد التخطيط المبكر للمخزون على استعادة جاهزية النظام بسرعة بعد التشغيل أو الصيانة.",
+            )}
+				/>
+
+			</Stack>
+
+		</EmoStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		id="FireSiteExecution"
+		Service
+		pBg={new ElemBg("#FCFCFA")}
+		pGap={new Pixel(0)}
+		pHzAlign={Align.Center}
+	>
+
+		<SecTitle cBlackOffWhiteOff pTitle="التنفيذ الميداني" />
+
+		<EmoStr id="FireSiteManagement" pBg={new ElemBg("#DDE3E8")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Start"
+			>
+
+				<DivCol pSize={new Size(new NumPer("63%", "100%"))} pHzAlign="Right">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("إدارة المشروع")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "يحول فريق المشروع نطاق التعاقد إلى برنامج تقديمات واعتمادات وتوريد وتنفيذ واختبارات، وتوزع المسؤوليات بين الإدارة والإشراف والحصر والمشتريات وفرق الموقع. تربط الخطة بين مدد الاعتماد والتوريد وتجهيز الجبهات وأعمال الأسقف والحوائط والكهرباء والتكييف والتشطيبات. تتابع القرارات الفنية والكميات والمخططات والعوائق الميدانية، وتحدث المستندات عند ظهور تغييرات معمارية أو تشغيلية.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("تنسيق الموقع")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "تراجع مناسيب الشبكات والفتحات والحوامل ومواقع اللوحات والكواشف والفوهات مع الأعمال الإنشائية والمعمارية والكهروميكانيكية. يثبت التنسيق مناطق الوصول للصيانة ومسافات الفصل ومواقع الاختبار والتصريف قبل غلق الأسقف والحوائط.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+				</DivCol>
+
+				<DivCol
+					pSize={new Size(new NumPer("37%", "100%"))}
+					pBg={new ElemBg("#FCFCFA")}
+					pPad={new Pixel(34, 18)}
+					pHzAlign="Right"
+				>
+
+					<EmoList
+						pWidth={new RespString("100%", "100%")}
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("نقاط ضبط التنفيذ")}
+						pItemFnt={Text.Body.AtRight.OfSize(18, 16).WithColor("#0B1118")}
+						pNumbered
+					>
+
+						<ListItem pText="استلام الخامات ومطابقة الموديلات والشهادات." />
+
+						<ListItem pText="تحديد المسارات والمناسيب ونقاط التعارض." />
+
+						<ListItem pText="فحص اللحام والقلاووظ والفلانشات والحوامل." />
+
+						<ListItem pText="مراجعة اتجاهات الصمامات ومساحات الخدمة." />
+
+						<ListItem pText="اختبار الدوائر والكابلات والعناوين والبرمجة." />
+
+						<ListItem pText="تسجيل التعديلات على رسومات التنفيذ الفعلي." />
+
+					</EmoList>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+		<EmoStr id="FireInstallationDisciplines" pBg={new ElemBg("#17222D")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Grid
+				pMax={3}
+				pMaxP={1}
+				pSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(46, 24)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Start"
+			>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("تمديدات الشبكة")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تشمل أعمال القياس والقطع والتجهيز واللحام أو القلاووظ والتركيب والدهان ووضع التعريفات، مع حوامل تتحمل وزن الشبكة وقوى الزلازل عند طلبها وتسمح بالتمدد والحركة وفق التفصيلة المعتمدة.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("تركيب المعدات")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تضبط قواعد الطلمبات والمحاذاة والـGrouting، وتثبت الصمامات والعدادات والأسطوانات والفوهات والخزائن والرشاشات وفق اتجاه التدفق ومسافات الخدمة وعزم الربط وتعليمات المصنع.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("تركيب الإنذار")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تنفذ دوائر الكشف والإخطار والاتصالات داخل مسارات معتمدة، مع ترقيم الكابلات والأجهزة واختبار العزل والاستمرارية والقطبية وعناوين النقاط والبطاريات ودوائر الإدخال والإخراج.",
+            )}
+				/>
+
+			</Grid>
+
+		</EmoStr>
+
+		<EmoStr id="FireQualitySafety" pBg={new ElemBg("#E6A02B")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Grid
+				pMax={2}
+				pMaxP={1}
+				pSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(52, 26)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Start"
+			>
+
+				<Emograph
+					pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("ضبط الجودة")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "تحدد Inspection & Test Plan نقاط الاستلام والفحص والاختبار والسجلات المطلوبة لكل نشاط. ترتبط الملاحظات بموقعها ورقم الرسم والبند والإجراء التصحيحي وتاريخ الإغلاق، فتظهر حالة الأعمال قبل الانتقال إلى التشغيل.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("السلامة المهنية")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#0B1118")
+            .OfText(
+              "تغطي خطة العمل تصاريح اللحام والقطع والعمل على ارتفاع والرفع والكهرباء والأماكن المحصورة وتداول الأسطوانات. تستخدم معدات الوقاية المناسبة وتحدد مناطق العزل ومراقبة الشرر ووسائل الإطفاء المؤقتة وخطة الاستجابة بالموقع.",
+            )}
+				/>
+
+			</Grid>
+
+		</EmoStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		id="FireAcceptanceTests"
+		Service
+		pBg={new ElemBg("#F5F2EC")}
+		pGap={new Pixel(0)}
+		pHzAlign={Align.Center}
+	>
+
+		<SecTitle cSkyLiteBlack pTitle="اختبارات القبول" />
+
+		<EmoStr id="FireTestSequence" pBg={new ElemBg("#DCEEF4")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Start"
+			>
+
+				<DivCol
+					pSize={new Size(new NumPer("43%", "100%"))}
+					pBg={new ElemBg("#FCFCFA")}
+					pPad={new Pixel(34, 18)}
+					pHzAlign="Right"
+				>
+
+					<EmoList
+						pWidth={new RespString("100%", "100%")}
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("برنامج الاختبارات")}
+						pItemFnt={Text.Body.AtRight.OfSize(18, 16).WithColor("#0B1118")}
+						pNumbered
+					>
+
+						<ListItem pText="اختبار ضغط المواسير وتوثيق مدة الثبات." />
+
+						<ListItem pText="غسيل الشبكات وقياس التصرف عند نقاط التصريف." />
+
+						<ListItem pText="اختبار الطلمبات عند Churn و100% و150% من التصرف." />
+
+						<ListItem pText="تشغيل جميع أجهزة الإنذار ووظائف Cause & Effect." />
+
+						<ListItem pText="اختبار دوائر الإطلاق والإنذارات المسبقة والعزل." />
+
+						<ListItem pText="التشغيل التجريبي بحضور فريق المشروع." />
+
+					</EmoList>
+
+				</DivCol>
+
+				<DivCol pSize={new Size(new NumPer("57%", "100%"))} pHzAlign="Right">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("اختبارات الشبكات")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "تغلق مناطق الاختبار وتملأ المواسير تدريجيًا وتطرد الجيوب الهوائية، ثم يطبق ضغط الاختبار للمدة المحددة ويسجل العداد ودرجة الحرارة والملاحظات. بعد الغسيل تقاس التصرفات وتفحص الصمامات ومفاتيح التدفق والـMain Drain وInspector's Test ووصلات الدفاع المدني.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("اختبارات الطلمبات")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "يقاس ضغط السحب والطرد والتصرف وسرعة الدوران والفولت والتيار أو بيانات محرك الديزل. ترسم النتائج على منحنى الأداء وتقارن بنقاط المصنع والتصميم، كما تختبر نقاط بدء التشغيل والإنذارات والبطاريات وشاحن الديزل وصمامات التنفيس ومصدر الوقود.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+		<EmoStr id="FireFunctionalTests" pBg={new ElemBg("#0B1118")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Stack
+				pDir="Row"
+				pWidth={new NumPer(1220, "100%")}
+				pGap={new Pixel(48, 24)}
+				pPad={new Pixel(48, 22)}
+				pHzAlign="Stretch"
+				pVrAlign="Start"
+			>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("اختبارات الإنذار")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "يشغل كل كاشف ونقطة نداء ووحدة مراقبة ومخرج تحكم، وتراجع رسالة اللوحة والعنوان والمنطقة والأجراس والفلاشات والسماعات والبطاريات وحالات الفصل والقصر وفقد التغذية. تنشط بنود Cause & Effect واحدًا بعد الآخر لمراجعة المراوح والكوابت والمصاعد والأبواب والإشارات الراجعة، وتختبر رسائل الإخلاء داخل مناطقها من حيث الأولوية ومستوى الصوت ووضوح الكلام والتحويل إلى التغذية الاحتياطية.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("اختبارات الغاز")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تختبر دوائر الكشف المتقاطع وManual Release وAbort وتأخير الإطلاق والإشارات الصوتية والضوئية وإيقاف التهوية. يراجع اختبار إحكام الحيز وحسابات الفوهات ووزن الأسطوانات وضغطها واتجاه التصريف.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("التشغيل التجريبي")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "يجمع التشغيل جميع السيناريوهات داخل سجل واحد يوضح المدخل والاستجابة والزمن والنتيجة وتوقيعات الحضور. تعالج الملاحظات وتكرر الوظيفة المتأثرة قبل إصدار محضر القبول.",
+            )}
+				/>
+
+			</Stack>
+
+		</EmoStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		id="FireProjectHandover"
+		Service
+		pBg={new ElemBg("#FCFCFA")}
+		pGap={new Pixel(0)}
+		pHzAlign={Align.Center}
+	>
+
+		<SecTitle cBlackOffWhiteOff pTitle="تسليم المشروع" />
+
+		<EmoStr id="FireHandoverFile" pBg={new ElemBg("#F5F2EC")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Start"
+			>
+
+				<DivCol pSize={new Size(new NumPer("60%", "100%"))} pHzAlign="Right">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("المعاينة النهائية ومخططات As-Built")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "تراجع المعاينة النهائية اكتمال الشبكات والمعدات واللافتات ومناطق الوصول وغرف الطلمبات والخزانات واللوحات، وتغلق ملاحظات التنفيذ والاختبارات داخل سجل واضح. تسجل مخططات As-Built المسارات والأقطار والمناسيب والصمامات وأرقام المناطق وعناوين أجهزة الإنذار ومواقع الوحدات والأسطوانات والفوهات كما نفذت بالموقع. ترتبط الرموز بقوائم المعدات والكابلات وبيانات اللوحات لتصبح مرجع التشغيل والصيانة والتوسعات المستقبلية.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("تدريب التشغيل")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "يتلقى فريق المنشأة شرحًا لحالات اللوحات وتسلسل تشغيل الطلمبات وإجراءات العزل وإعادة الضبط والفحص اليومي والأسبوعي والشهري. تشمل الجلسة سيناريوهات الإنذار والتصريف والتعامل مع الأعطال وتسجيل القراءات وطلب الخدمة.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+				</DivCol>
+
+				<DivCol
+					pSize={new Size(new NumPer("40%", "100%"))}
+					pBg={new ElemBg("#DCEEF4")}
+					pPad={new Pixel(34, 18)}
+					pHzAlign="Right"
+				>
+
+					<EmoList
+						pWidth={new RespString("100%", "100%")}
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("محتويات التسليم")}
+						pItemFnt={Text.Body.AtRight.OfSize(18, 16).WithColor("#0B1118")}
+						pNumbered={false}
+					>
+
+						<ListItem pText="مخططات التنفيذ الفعلي وجداول المعدات." />
+
+						<ListItem pText="تقارير الضغط والتدفق ومنحنيات الطلمبات." />
+
+						<ListItem pText="تقارير اختبار الإنذار ومصفوفة التشغيل." />
+
+						<ListItem pText="شهادات المعدات والضمانات وأرقام التشغيل." />
+
+						<ListItem pText="كتيبات التشغيل والصيانة وقطع الغيار." />
+
+						<ListItem pText="محاضر التدريب والاستلام ومتابعة الملاحظات." />
+
+					</EmoList>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		id="FireTechnicalStandards"
+		Service
+		pBg={new ElemBg("#F5F2EC")}
+		pGap={new Pixel(0)}
+		pHzAlign={Align.Center}
+	>
+
+		<SecTitle cGray5WhiteOff pTitle="المرجعية الفنية" />
+
+		<EmoStr id="FireEgyptianCode" pBg={new ElemBg("#E6A02B")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Emograph
+				pSize={new Size(new NumPer(1160, "100%"), new NumPer("auto", "auto"))}
+				pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("كود الحريق المصري")}
+				pText={Text.Body.AtRight.OfSize(19, 16)
+          .WithColor("#0B1118")
+          .OfText(
+            "تراجع متطلبات الكود المصري لأسس التصميم واشتراطات المنشآت ومصادر المياه والأنظمة المائية والإنذار والإطفاء المتخصص، مع تطبيق متطلبات الحماية المدنية والجهة صاحبة الولاية على المشروع. يثبت Basis of Design إصدار كل مرجع وترتيب تطبيق المتطلبات عند تعدد الأكواد والمواصفات التعاقدية.",
+          )}
+			/>
+
+		</EmoStr>
+
+		<EmoStr id="FireNfpaCodes" pBg={new ElemBg("#FCFCFA")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Grid
+				pMax={4}
+				pMaxP={1}
+				pSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(28, 18)}
+				pPad={new Pixel(48, 22)}
+				pBg={new ElemBg("#DDE3E8")}
+				pRadius={new Pixel(26, 18)}
+				pVrAlign="Start"
+			>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("NFPA 13")}
+					pText={Text.Body.AtRight.OfSize(19, 16).WithColor("#263442").OfText("تصميم وتركيب شبكات الرش الآلي.")}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("NFPA 14")}
+					pText={Text.Body.AtRight.OfSize(19, 16).WithColor("#263442").OfText("شبكات Standpipe وخراطيم وصناديق الحريق.")}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("NFPA 20")}
+					pText={Text.Body.AtRight.OfSize(19, 16).WithColor("#263442").OfText("تركيب طلمبات الحريق الثابتة.")}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("NFPA 22")}
+					pText={Text.Body.AtRight.OfSize(19, 16).WithColor("#263442").OfText("خزانات مياه الحماية من الحريق.")}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("NFPA 24")}
+					pText={Text.Body.AtRight.OfSize(19, 16).WithColor("#263442").OfText("شبكات مياه الحريق الخاصة خارج المبنى.")}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("NFPA 25")}
+					pText={Text.Body.AtRight.OfSize(19, 16).WithColor("#263442").OfText("الفحص والاختبار وصيانة الأنظمة المائية.")}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("NFPA 72")}
+					pText={Text.Body.AtRight.OfSize(19, 16).WithColor("#263442").OfText("أنظمة إنذار الحريق والإشارات.")}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("NFPA 11")}
+					pText={Text.Body.AtRight.OfSize(19, 16).WithColor("#263442").OfText("أنظمة الإطفاء بالرغوة.")}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("NFPA 12")}
+					pText={Text.Body.AtRight.OfSize(19, 16).WithColor("#263442").OfText("أنظمة الإطفاء بثاني أكسيد الكربون.")}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("NFPA 15")}
+					pText={Text.Body.AtRight.OfSize(19, 16).WithColor("#263442").OfText("أنظمة Water Spray الثابتة.")}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("NFPA 16")}
+					pText={Text.Body.AtRight.OfSize(19, 16).WithColor("#263442").OfText("أنظمة Foam-Water Sprinkler وFoam-Water Spray.")}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("NFPA 17A")}
+					pText={Text.Body.AtRight.OfSize(19, 16).WithColor("#263442").OfText("أنظمة Wet Chemical للمطابخ.")}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("NFPA 2001")}
+					pText={Text.Body.AtRight.OfSize(19, 16).WithColor("#263442").OfText("أنظمة الإطفاء بالعوامل النظيفة.")}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("NFPA 750")}
+					pText={Text.Body.AtRight.OfSize(19, 16).WithColor("#263442").OfText("أنظمة Water Mist.")}
+				/>
+
+			</Grid>
+
+		</EmoStr>
+
+		<EmoStr id="FireStandardApplication" pBg={new ElemBg("#17222D")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Grid
+				pMax={2}
+				pMaxP={1}
+				pSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(52, 26)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Start"
+			>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("إصدار الكود")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "يحدد العقد أو الجهة المختصة إصدار الكود المستخدم. تحفظ الإحالات والجداول والمعادلات داخل ملف الحسابات، وتراجع التعديلات التي تؤثر في نوع النظام أو كثافة التصميم أو زمن الإمداد أو أسلوب الاختبار.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("اعتماد المعدات")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تراجع Listing وApproval على مستوى الطراز والوظيفة والاستخدام الفعلي وتصنيف الضغط ودرجة الحرارة والوسط المحيط. يطابق ملف الاعتماد بين الشهادة وDatasheet واسم المنتج المقدم للتوريد، وتدخل الوثائق المعتمدة ضمن ملف التسليم.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("متطلبات الجهة المختصة")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تربط متطلبات الجهة المختصة بين سلامة المبنى ومسالك الهروب والإنذار والمكافحة ومصدر المياه والطلمبات والأنظمة التلقائية. تتحول قائمة الفحص الخاصة بنوع المنشأة إلى رسومات وحسابات وتجهيزات ميدانية وشهادات وتقارير تحقق مرتبطة بكل بند.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("تعليمات المصنع والاعتمادات المهنية")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تحدد تعليمات المصنع شروط التخزين والتركيب والتوصيل والبرمجة والاختبار والصيانة الخاصة بكل طراز. تسند أعمال التوقيع والاعتماد والإشراف إلى صاحب الاختصاص المهني المناسب، وتدرج بيانات الشركة القانونية ونطاق النشاط والقيد أو الترخيص المطلوب داخل مستندات التأهيل والتعاقد.",
+            )}
+				/>
+
+			</Grid>
+
+		</EmoStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		id="CivilProtectionLicensing"
+		Service
+		pBg={new ElemBg("#FCFCFA")}
+		pGap={new Pixel(0)}
+		pHzAlign={Align.Center}
+	>
+
+		<SecTitle cCreamyBlack pTitle="تراخيص الحماية المدنية" />
+
+		<EmoStr id="CivilProtectionFile" pBg={new ElemBg("#F1E8D8")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Start"
+			>
+
+				<DivCol pSize={new Size(new NumPer("58%", "100%"))} pHzAlign="Right">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("مراجعة المخططات")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "تراجع لوحات المعماري ومسالك الهروب ومناطق الحريق مع مخططات الإنذار والإطفاء والطلمبات والخزانات والتحكم في الدخان. توحد الرموز والملاحظات وبيانات الحسابات، وتثبت مواقع المعدات ومساحات الوصول ومسارات سيارات الإطفاء ووصلات التغذية الخارجية. تجهز اللوحات بالمقياس والجداول والبيانات والتوقيعات المطلوبة، وتتابع ملاحظات المراجعة على إصدارات مرقمة حتى استقرار النسخة المعتمدة.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("تجهيز المنشأة")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "تسبق المعاينة مراجعة ميدانية لحالة المخارج واللافتات والإضاءة والطلمبات والخزانات والشبكات والطفايات واللوحات والكواشف وسيناريو التشغيل. تجمع النتائج في سجل بنود يحدد المسؤول والتاريخ ودليل الإتمام، ويجهز فريق المنشأة الشهادات والتقارير والمفاتيح ومسؤولي التشغيل ليوم المعاينة.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("المتابعة والإصدار والتجديد")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "تتابع إجراءات التقديم والمراجعة والمعاينة والاستيفاءات داخل سجل يضم المستندات والملاحظات والردود وتواريخ الزيارات حتى صدور قرار الجهة المختصة. يسبق التجديد فحص الأنظمة وسجلات الصيانة والتعديلات التي طرأت على النشاط أو المساحات أو التخزين، ثم تحدث الرسومات والتقارير وتجهيزات الموقع وفق الحالة الراهنة للمنشأة.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+				</DivCol>
+
+				<DivCol
+					pSize={new Size(new NumPer("42%", "100%"))}
+					pBg={new ElemBg("#FCFCFA")}
+					pPad={new Pixel(34, 18)}
+					pHzAlign="Right"
+				>
+
+					<EmoList
+						pWidth={new RespString("100%", "100%")}
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("ملف الترخيص")}
+						pItemFnt={Text.Body.AtRight.OfSize(18, 16).WithColor("#0B1118")}
+						pNumbered
+					>
+
+						<ListItem pText="بيانات المنشأة والنشاط والمساحات والإشغال." />
+
+						<ListItem pText="المخططات والحسابات والمواصفات الفنية." />
+
+						<ListItem pText="اعتمادات المعدات وشهادات الاختبار." />
+
+						<ListItem pText="تقارير التشغيل ومحاضر الفحص الميداني." />
+
+						<ListItem pText="سجلات الصيانة والتدريب وخطة الطوارئ." />
+
+						<ListItem pText="مستندات التجديد وتحديثات النشاط والموقع." />
+
+					</EmoList>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		id="FireMaintenance"
+		Service
+		pBg={new ElemBg("#F5F2EC")}
+		pGap={new Pixel(0)}
+		pHzAlign={Align.Center}
+	>
+
+		<SecTitle cBlackOffWhiteOff pTitle="صيانة أنظمة الحريق" />
+
+		<EmoStr id="FireMaintenancePrograms" pBg={new ElemBg("#FCFCFA")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Center"
+			>
+
+				<DivCol pSize={new Size(new NumPer("42%", "100%"))} pVrAlign="Center">
+
+					<RespImg
+						pImg={new EmoMediaData(
+              "Img",
+              "https://www.unisafe-egypt.com/unisafe-egypt.com/uploads/",
+              "lpg_co2_3.jpg",
+              false,
+              "فحص وصيانة أسطوانات نظام إطفاء غازي",
+              new Size(new NumPer(560, "100%"), new NumPer("auto", "auto")),
+            )}
+					/>
+
+				</DivCol>
+
+				<DivCol pSize={new Size(new NumPer("58%", "100%"))} pHzAlign="Right">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("الصيانة الوقائية")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "يبنى البرنامج على جداول الفحص والاختبار لكل نظام ومعدة، ويحدد التكرار والمسؤول والقراءات وحدود القبول. تشمل الجولات حالة الصمامات والضغوط والمناسيب والطلمبات والبطاريات والكواشف والأجراس والأسطوانات والفوهات والطفايات والخزائن، وتوثق النتائج في سجل قابل للتتبع.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("الصيانة التصحيحية")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "يحلل العطل من سجل اللوحة والقياسات والفحص الميداني، ثم يحدد الجزء المتأثر ووسيلة العزل وقطع الغيار والاختبار المطلوب بعد الإصلاح. يسجل التقرير وصف الحالة والإجراء والمواد والنتيجة وتاريخ استعادة الخدمة.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+		<EmoStr id="FireMaintenanceScope" pBg={new ElemBg("#17222D")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Grid
+				pMax={3}
+				pMaxP={1}
+				pSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(46, 24)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Start"
+			>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("الطلمبات")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تشمل المتابعة التشغيل الأسبوعي وقراءات الضغط والتصرف والزيوت والوقود والبطاريات والعادم والتسريب والاهتزاز ونقاط البدء. تجرى اختبارات الأداء الدورية وتحدث منحنيات القياس داخل سجل الغرفة.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("الشبكات")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تفحص الصمامات ومفاتيح التدفق والعدادات والرشاشات والخراطيم والهيدرنت ووصلات الدفاع المدني. تشمل الأعمال Main Drain وInspector's Test وغسيل النقاط المتأثرة وإصلاح التسريب واستبدال المكونات المتضررة.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("الإنذار")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تفحص اللوحات والبطاريات والدوائر والكواشف ونقاط النداء والأجراس والفلاشات والسماعات والوحدات. تختبر العينة الدورية والحساسية والربط مع الأنظمة المساندة وسجل الأحداث ورسائل الأعطال.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("الأسطوانات")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تراجع الأوزان والضغوط والصمامات والخراطيم وActuators ودوائر الإطلاق ومواعيد الاختبارات الهيدروستاتيكية. تدخل إعادة التعبئة وتجديد الأجزاء وختم الخدمة ضمن تقرير منفصل لكل أسطوانة.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("الاستجابة الطارئة")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "يحدد العقد وسيلة استقبال البلاغ ودرجة الأولوية وزمن بدء المتابعة ونطاق الزيارة والمعدات الاحتياطية. يحفظ فريق المنشأة أرقام النظام والموديلات ورسائل اللوحة لتسريع التشخيص وتجهيز القطع.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("تأهيل الأنظمة")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تبدأ أعمال التطوير بمسح النظام القائم ومقارنة حالته بالنشاط الحالي والمخططات والاشتراطات. ينتج المسح قائمة تحديث تشمل التوسعات وتغيير المعدات وإعادة البرمجة وتحسين مصدر المياه واستكمال مستندات التشغيل.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("الصيانة التنبؤية")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#FCFCFA")
+            .OfText(
+              "تستخدم اتجاهات الضغط والتصرف ودرجات الحرارة والاهتزاز ورسائل الأعطال وأعمار البطاريات لتحديد تغير الأداء قبل الوصول إلى العطل. تتحول القراءات الدورية إلى أولويات خدمة وقطع غيار وتوقيتات توقف مخططة.",
+            )}
+				/>
+
+			</Grid>
+
+		</EmoStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		id="FireBusinessSectors"
+		Service
+		pBg={new ElemBg("#FCFCFA")}
+		pGap={new Pixel(0)}
+		pHzAlign={Align.Center}
+	>
+
+		<SecTitle cSkyLiteBlack pTitle="قطاعات الأعمال" />
+
+		<EmoStr id="FireSectorMatrix" pBg={new ElemBg("#DCEEF4")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Grid
+				pMax={4}
+				pMaxP={1}
+				pSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(30, 18)}
+				pPad={new Pixel(48, 22)}
+				pBg={new ElemBg("#FCFCFA")}
+				pRadius={new Pixel(26, 18)}
+				pVrAlign="Start"
+			>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("المصانع")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#263442")
+            .OfText(
+              "تبدأ حماية المصنع من فهم العمليات والمواد الخام والمنتج ومصادر الحرارة والكهرباء ومناطق التخزين. تقسم الأخطار بين خطوط الإنتاج وغرف الخدمات والساحات، وتختار أنظمة الكشف والإطفاء بما يدعم سلامة العاملين واستمرار التشغيل وخطة الطوارئ.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("المستودعات")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#263442")
+            .OfText(
+              "يرتبط تصميم المستودع بنوع السلعة ومواد التغليف وارتفاع الرص ونظام الأرفف ومسافات الممرات والخلوص أسفل الرشاشات. تحدد هذه البيانات نوع الرشاش وكثافة التصرف ومساحة التصميم ومصدر المياه، وتدخل خطة التخزين ضمن مستندات الحماية.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("المنشآت البترولية")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#263442")
+            .OfText(
+              "تغطي الدراسة خزانات الوقود ومناطق التحميل والمضخات والمحابس ومخاطر الانسكاب والأبخرة. تجمع الحماية بين كشف الغاز واللهب والرغوة وWater Spray وشبكات الهيدرنت والعزل الطارئ وفق خصائص المادة ومناطق الاحتواء والتشغيل.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("المراكز التجارية")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#263442")
+            .OfText(
+              "تجمع المراكز التجارية أعدادًا كبيرة من الزوار ومحالًا بأنشطة متعددة ومطاعم وجراجات وفراغات مشتركة. ينسق التصميم بين الرش والإنذار والإخلاء الصوتي وسحب الدخان ومناطق الحريق، ويحدد مسؤوليات الشبكة الرئيسية وتجهيزات كل وحدة تجارية.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("المباني الإدارية")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#263442")
+            .OfText(
+              "تتأثر المباني الإدارية بتقسيمات المكاتب والأسقف المستعارة وغرف الكهرباء والاتصالات وتغير توزيع المستأجرين. تنظم مناطق الإنذار والرش والصناديق حول الأدوار ومسالك الهروب، وتوثق التعديلات عند كل إعادة تقسيم للحفاظ على التغطية.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("المنشآت الصحية")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#263442")
+            .OfText(
+              "تراعي المنشآت الصحية المرضى ذوي الحركة المحدودة واستمرار الخدمات العلاجية وحساسية غرف العمليات والتصوير والغازات الطبية. تعتمد الاستراتيجية على التقسيم إلى قطاعات آمنة والاكتشاف المبكر والتحكم في الدخان وتنسيق الإخلاء المرحلي مع الأنظمة الطبية.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("الفنادق")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#263442")
+            .OfText(
+              "تجمع الفنادق غرف النزلاء والممرات والمطابخ والمغاسل وقاعات المناسبات والمناطق الخلفية التي تعمل على مدار اليوم. توزع أنظمة الرش والإنذار والإخلاء بحسب الإشغال، ويرتبط مركز التحكم بفرق التشغيل ومسالك الهروب وسيناريو الطوارئ.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("الأبراج السكنية")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#263442")
+            .OfText(
+              "تعالج الأبراج ضغط الشبكات عبر الارتفاع وتوزيع الرايزرات ومناطق التحكم والطلمبات والخزانات. يتكامل ذلك مع حماية السلالم والردهات والإنذار ومصاعد الطوارئ وفق ارتفاع المبنى وتقسيماته وعدد السكان.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("مراكز البيانات")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#263442")
+            .OfText(
+              "تعتمد حماية مراكز البيانات على كشف مبكر يناسب حركة الهواء وأنظمة إطفاء ملائمة للمعدات الكهربائية واستمرارية الخدمة. تراجع الفراغات أسفل الأرضيات وفوق الأسقف وإحكام الغرف وإيقاف التكييف وتسلسل التفريغ والعودة الآمنة للتشغيل.",
+            )}
+				/>
+
+				<Emograph
+					pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("البنية التحتية")}
+					pText={Text.Body.AtRight.OfSize(19, 16)
+            .WithColor("#263442")
+            .OfText(
+              "تشمل التطبيقات المطارات والأنفاق ومحطات النقل والمتاحف والأرشيف والمرافق ذات الاستمرارية التشغيلية العالية. يربط التصميم بين الكشف المبكر والتحكم في الدخان والاتصالات ونظم الإطفاء المتخصصة وإدارة الحشود ومراكز القيادة.",
+            )}
+				/>
+
+			</Grid>
+
+		</EmoStr>
+
+		<EmoStr id="FireSectorEngineering" pBg={new ElemBg("#0B1118")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<Emograph
+				pSize={new Size(new NumPer(1160, "100%"), new NumPer("auto", "auto"))}
+				pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#FCFCFA").OfText("تطبيقات الحماية")}
+				pText={Text.Body.AtRight.OfSize(19, 16)
+          .WithColor("#FCFCFA")
+          .OfText(
+            "تتغير كثافة الرش ومدة الإمداد ونوع الرشاش ونظام الكشف وعامل الإطفاء ومسارات الإخلاء مع تغير القطاع. تجمع المنشآت الصناعية بين Water Spray والرغوة وكشف الغاز، وتحتاج المراكز التجارية إلى إنذار وإخلاء صوتي وتكامل واسع، بينما تركز مراكز البيانات على الكشف المبكر وإحكام الحيز واستمرارية التشغيل. يوضح العرض الفني أساس الاختيار لكل منطقة داخل المشروع.",
+          )}
+			/>
+
+		</EmoStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		id="FireWorkDocumentation"
+		Service
+		pBg={new ElemBg("#F5F2EC")}
+		pGap={new Pixel(0)}
+		pHzAlign={Align.Center}
+	>
+
+		<SecTitle cBlackOffWhiteOff pTitle="توثيق الأعمال" />
+
+		<EmoStr id="FireCaseStudies" pBg={new ElemBg("#FCFCFA")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Center"
+			>
+
+				<DivCol
+					pSize={new Size(new NumPer("42%", "100%"))}
+					pBg={new ElemBg("#F1E8D8")}
+					pPad={new Pixel(18, 12)}
+					pVrAlign="Center"
+				>
+
+					<RespImg
+						pImg={new EmoMediaData(
+              "Img",
+              "https://www.unisafe-egypt.com/unisafe-egypt.com/uploads/",
+              "foam-systems.jpg",
+              false,
+              "تركيب مكونات نظام إطفاء بالرغوة داخل مشروع صناعي",
+              new Size(new NumPer(560, "100%"), new NumPer("auto", "auto")),
+            )}
+					/>
+
+				</DivCol>
+
+				<DivCol pSize={new Size(new NumPer("58%", "100%"))} pHzAlign="Right">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("المشروعات المنجزة ودراسات الحالة")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "يوثق كل مشروع باسم النشاط وموقعه ومساحته ونطاق الأعمال والأنظمة التي شملها التعاقد ومدة التنفيذ وحالة التسليم. تعرض دراسة الحالة بيانات الخطر والتحدي الهندسي والحل المعتمد والقيود الميدانية ونتائج الاختبارات، وترتبط الرسومات والقراءات والصور بعناوين ومواقع وتواريخ تشرح قيمة العمل بصورة قابلة للمراجعة.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("صور التنفيذ")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "يغطي التوثيق غرف الطلمبات ومسارات المواسير والحوامل والصمامات والرشاشات والخزائن واللوحات والكواشف والأسطوانات والفوهات. تكتمل المجموعة بصور الاختبارات وملصقات المعدات ومخططات As-Built ومحاضر الاستلام.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("العملاء والموردون")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "تعرض بيانات المشروعات المسموح بنشرها صفة العميل ونطاق التكليف وتاريخ الإنجاز ووثيقة الاستلام أو التوصية المتاحة. يختار المورد من قدرته على تقديم الطراز المحدد وشهاداته وسلسلة التوريد والدعم الفني والضمان وقطع الغيار، ويظل اعتماد المنتج مرتبطًا بمواصفات المشروع وموافقة الجهة المشرفة.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		id="FireSystemCost"
+		Service
+		pBg={new ElemBg("#FCFCFA")}
+		pGap={new Pixel(0)}
+		pHzAlign={Align.Center}
+	>
+
+		<SecTitle cCreamyBlack pTitle="تكلفة نظام مكافحة الحريق" />
+
+		<EmoStr id="FireCostBasis" pBg={new ElemBg("#F1E8D8")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Start"
+			>
+
+				<DivCol pSize={new Size(new NumPer("60%", "100%"))} pHzAlign="Right">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#0B1118").OfText("عناصر التكلفة")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "تشمل التكلفة التصميم والاعتمادات والمواسير والوصلات والصمامات والحوامل والطلمبات والخزانات واللوحات والكواشف والكابلات ومعدات الإطفاء والعمالة والاختبارات والتسليم. يتغير وزن كل عنصر مع مساحة المشروع وارتفاعاته وتصنيف الخطورة ومصدر المياه ونوع الشبكات وعدد نقاط الإنذار وكميات عوامل الإطفاء واعتمادات المعدات، كما تدخل أعمال الرفع والفتحات والتنسيق وظروف التشغيل داخل مبنى قائم أو مشروع تحت الإنشاء.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("المقايسة وعرض السعر")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "ترتب المقايسة البنود بوصف فني ووحدة وكمية وسعر، وتفصل المعدات الرئيسية عن الشبكات والملحقات والأعمال الميدانية. يثبت العرض الأنظمة والماركات أو المواصفات وأعمال التركيب والاختبارات والتسليم والضمان والبرنامج الزمني وشروط الدفعات وصلاحية السعر، ويرفق بقائمة المعدات والبدائل وحدود المسؤولية ونقاط الربط مع أعمال الموقع.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("معاينة التسعير")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#0B1118")
+              .OfText(
+                "تخدم المعاينة المباني القائمة التي تحتاج قياس المسارات ومراجعة غرف الخدمات وتحديد العوائق وأعمال الفك وإعادة التشطيب. يخرج الحصر الميداني بصور وأبعاد وملاحظات تدخل مباشرة في كميات العمالة والملحقات وبنود العرض.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+				</DivCol>
+
+				<DivCol
+					pSize={new Size(new NumPer("40%", "100%"))}
+					pBg={new ElemBg("#FCFCFA")}
+					pPad={new Pixel(34, 18)}
+					pHzAlign="Right"
+				>
+
+					<EmoList
+						pWidth={new RespString("100%", "100%")}
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#0B1118").OfText("بيانات التسعير")}
+						pItemFnt={Text.Body.AtRight.OfSize(18, 16).WithColor("#0B1118")}
+						pNumbered={false}
+					>
+
+						<ListItem pText="الموقع ونوع النشاط ومساحات الأدوار والارتفاعات." />
+
+						<ListItem pText="المخططات المعمارية والكهروميكانيكية المتاحة." />
+
+						<ListItem pText="نوع التخزين والمواد ومصادر الخطورة." />
+
+						<ListItem pText="مصدر المياه والطاقة وحالة الأنظمة القائمة." />
+
+						<ListItem pText="اشتراطات الاستشاري والحماية المدنية." />
+
+						<ListItem pText="موعد التنفيذ وحدود التوريد والاعتماد." />
+
+					</EmoList>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		id="FireServiceRequest"
+		Service
+		pBg={new ElemBg("#0B1118")}
+		pGap={new Pixel(0)}
+		pHzAlign={Align.Center}
+	>
+
+		<SecTitle cBlackOffWhiteOff pTitle="طلب الخدمة" />
+
+		<EmoStr id="FireServiceContact" pBg={new ElemBg("#17222D")} pSize={new Size(new NumPer(1320, "calc(100% - 24px)"), new NumPer("auto", "auto"))}>
+
+			<DivStr
+				pContentSize={new Size(new NumPer(1220, "100%"), new NumPer("auto", "auto"))}
+				pGap={new Pixel(38, 18)}
+				pPad={new Pixel(48, 22)}
+				pVrAlign="Center"
+			>
+
+				<DivCol pSize={new Size(new NumPer("64%", "100%"))} pHzAlign="Right" pVrAlign="Center">
+
+					<Emograph
+						pTitle={Text.H3.AtRight.OfSize(28, 21).WithColor("#FCFCFA").OfText("طلب عرض سعر أو عقد صيانة")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#FCFCFA")
+              .OfText(
+                "أرسل مخططات المشروع وجداول الكميات والمواصفات المتاحة مع اسم النشاط وموقع التنفيذ لإعداد نطاق التوريد والتركيب والاختبارات والتسعير. ولعقد الصيانة يرسل حصر الأنظمة والمعدات وآخر تقارير الاختبار وسجل الأعطال، ثم يحدد نطاق الزيارات والاختبارات وقطع الغيار والاستجابة وفق حالة الأصول.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("معاينة المشروع")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#FCFCFA")
+              .OfText(
+                "تحجز المعاينة للمباني القائمة ومشروعات التعديل والتوسعة وإعادة التأهيل والحالات التي تحتاج حصرًا ميدانيًا. يحدد عنوان الموقع ونوع النشاط والمساحة وموعد الدخول والمستندات المتاحة التخصصات اللازمة ونطاق الزيارة وموعد إعداد العرض الفني.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+					<Emograph
+						pTitle={Text.H4.AtRight.OfSize(23, 19).WithColor("#FCFCFA").OfText("الاستشارة الفنية ونطاق الخدمة")}
+						pText={Text.Body.AtRight.OfSize(19, 16)
+              .WithColor("#FCFCFA")
+              .OfText(
+                "تبدأ الاستشارة بمراجعة تصميم أو مقايسة أو عرض مورد أو صور موقع أو تقرير حماية مدنية أو قائمة أعطال، ويحدد نطاق الرأي الفني والمخرجات والمدة قبل بدء العمل. تغطي المعاينات والتنفيذ الميداني القاهرة والجيزة وفق موقع المشروع وحجم الأعمال، وتتاح مراجعة الرسومات والحسابات والمقايسات والاستشارات عن بُعد للمشروعات في بقية المحافظات بعد استلام مستندات كافية للمراجعة.",
+              )}
+						pSize={new Size(new NumPer(760, "100%"), new NumPer("auto", "auto"))}
+					/>
+
+				</DivCol>
+
+				<DivCol
+					pSize={new Size(new NumPer("36%", "100%"))}
+					pBg={new ElemBg("#B8322A")}
+					pPad={new Pixel(48, 22)}
+					pHzAlign="Center"
+					pVrAlign="Center"
+				>
+
+					<Emograph
+						pTitle={Text.H3.Centered.OfSize(28, 22).WithColor("#FCFCFA").OfText("01014490054")}
+						pText={Text.Body.Centered.OfSize(18, 16)
+              .WithColor("#FCFCFA")
+              .OfText("اتصال مباشر أو رسالة واتساب لطلب المعاينة والتسعير والخدمة الفنية.")}
+					/>
+
+					<Stack
+						pDir="Col"
+						pWidth={new NumPer("100%", "100%")}
+						pGap={new Pixel(14)}
+						pPad={new Pixel(10)}
+						pHzAlign="Center"
+					>
+
+						<EmoCall
+							pText="طلب معاينة"
+							BlackRed
+							pWidth="250px"
+							pHeight="54px"
+							pRadius="8px"
+						/>
+
+						<EmoWhats
+							pText="إرسال بيانات المشروع"
+							pPhone="01014490054"
+							pMessage="أرغب في إرسال بيانات مشروع لنظام مكافحة الحريق"
+							GreenDark
+							pWidth="250px"
+							pHeight="54px"
+							pRadius="8px"
+						/>
+
+					</Stack>
+
+				</DivCol>
+
+			</DivStr>
+
+		</EmoStr>
+
+	</EmoSec>
 
 
 

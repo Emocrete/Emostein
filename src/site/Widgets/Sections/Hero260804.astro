@@ -71,17 +71,17 @@ const cPagePath = Astro.url.pathname;
 const cImgFolder = pImgF || Media.GetPageFolder(cPagePath);
 
 const cBgImgL = pImgL
-	? Media.GetPageFile(cPagePath, pImgL, { pFolder: cImgFolder, pAbsolute: true })
-	: Media.GetHeroLandscape(cPagePath, { pFolder: cImgFolder, pAbsolute: true });
+	? Media.GetPageFile(cPagePath, pImgL, { pFolder: cImgFolder })
+	: Media.GetHeroLandscape(cPagePath, { pFolder: cImgFolder });
 
 const cBgImgP = pImgP
-	? Media.GetPageFile(cPagePath, pImgP, { pFolder: cImgFolder, pAbsolute: true })
+	? Media.GetPageFile(cPagePath, pImgP, { pFolder: cImgFolder })
 	: pImgL
 		? cBgImgL
-		: Media.GetHeroPortrait(cPagePath, { pFolder: cImgFolder, pAbsolute: true });
+		: Media.GetHeroPortrait(cPagePath, { pFolder: cImgFolder });
 
-const cFinalBgImgL = Media.GetPageFile(cPagePath, cBgImgL || cBgImgP || pBg?.Img?.LinkL || pBg?.Img?.LinkP || "", { pFolder: cImgFolder, pAbsolute: true });
-const cFinalBgImgP = Media.GetPageFile(cPagePath, cBgImgP || cBgImgL || pBg?.Img?.LinkP || pBg?.Img?.LinkL || "", { pFolder: cImgFolder, pAbsolute: true });
+const cFinalBgImgL = cBgImgL || cBgImgP || pBg?.Img?.LinkL || pBg?.Img?.LinkP || "";
+const cFinalBgImgP = cBgImgP || cBgImgL || pBg?.Img?.LinkP || pBg?.Img?.LinkL || "";
 const cHasBgImg = cFinalBgImgL !== "" || cFinalBgImgP !== "";
 const cAutoImgAlt = SeoText.GetLocalsImageAlt(Astro.locals) ;
 const cBgAlt = pImgAlt || pBg?.Img?.Alt || cAutoImgAlt;
