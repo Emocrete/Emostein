@@ -529,39 +529,43 @@ public static GetPrimaryImageMeta( pTitle: string , pDescr: string , pUrl: strin
 		{
 
 			const cPageNode: SchemaObject = {
-				"@type": pPageType,
-				"@id": pPageId,
-				"name": pTitle,
-				"description": pDescr,
-				"url": pUrl,
-				"inLanguage": "ar-EG",
-				"isPartOf": {
-					"@id": Schema.cWebsiteId
-				},
-				"breadcrumb": {
-					"@id": `${pUrl}#breadcrumb`
-				}
+			"@type": pPageType,
+			"@id": pPageId,
+			"name": pTitle,
+			"description": pDescr,
+			"url": pUrl,
+			"inLanguage": "ar-EG",
+			"isPartOf": {
+			"@id": Schema.cWebsiteId
+			},
+			"breadcrumb": {
+			"@id": `${pUrl}#breadcrumb`
+			}
 			};
 
 			if (pMainEntityId) {
-				cPageNode["mainEntity"] = {
-					"@id": pMainEntityId
-				};
+			cPageNode["mainEntity"] = {
+			"@id": pMainEntityId
+			};
 			}
 
 			if (pImages.length > 0) {
-				const cPrimaryImage = pImages[0];
-				const cPrimaryImageUrl = Schema.GetImageUrl(cPrimaryImage);
 
-				cPageNode["image"] = Schema.GetImageRefs(pImages);
+			const cPrimaryImage = pImages.find((pImage) => /\/HeroL\.(?:webp|avif|png|jpe?g)(?:[?#]|$)/i.test(Schema.GetImageUrl(pImage)));
 
-				if (cPrimaryImage?.["@id"]) {
-					cPageNode["primaryImageOfPage"] = {
-						"@id": cPrimaryImage["@id"]
-					};
-				}
+			if (!cPrimaryImage) { throw new Error(`HeroL image was not found for ${pUrl}.`); }
 
-				if (cPrimaryImageUrl) { cPageNode["thumbnailUrl"] = cPrimaryImageUrl; }
+			const cPrimaryImageUrl = Schema.GetImageUrl(cPrimaryImage);
+
+			cPageNode["image"] = Schema.GetImageRefs(pImages);
+
+			if (cPrimaryImage?.["@id"]) {
+			cPageNode["primaryImageOfPage"] = {
+			"@id": cPrimaryImage["@id"]
+			};
+			}
+
+			if (cPrimaryImageUrl) { cPageNode["thumbnailUrl"] = cPrimaryImageUrl; }
 			}
 
 			return cPageNode;
