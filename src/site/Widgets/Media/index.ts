@@ -56,7 +56,7 @@ import EGallIndexExport from "./EmoGallery.astro";
  * * DefVal = 1 (Default: 1)
  * @pCaptionFontSize as CssSize — Caption font size displayed over the image on hover.
  * * DefVal = 9 px
- * * Requires: The effect appears only when image items exist and the caption layer becomes visible on hover. (Default: 9)
+ * * Requires: The effect appears only when image items exist and the caption layer becomes visible on hover. (Default: 14)
  * @pName as string — Hidden input name used to store the selected image index.
  * * DefVal = ""
  * * Requires: Useful only when the gallery is inside a form or when external code reads the hidden input value. (Default: "")
@@ -116,7 +116,7 @@ import EmoGalleryIndexExport from "./EmoGallery.astro";
  * * DefVal = 1 (Default: 1)
  * @pCaptionFontSize as CssSize — Caption font size displayed over the image on hover.
  * * DefVal = 9 px
- * * Requires: The effect appears only when image items exist and the caption layer becomes visible on hover. (Default: 9)
+ * * Requires: The effect appears only when image items exist and the caption layer becomes visible on hover. (Default: 14)
  * @pName as string — Hidden input name used to store the selected image index.
  * * DefVal = ""
  * * Requires: Useful only when the gallery is inside a form or when external code reads the hidden input value. (Default: "")

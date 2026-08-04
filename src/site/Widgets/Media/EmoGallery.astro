@@ -1,9 +1,10 @@
 ---
 import { existsSync, readdirSync, readFileSync } from "fs";
-// @ts-ignore
 import { basename, extname, isAbsolute, relative, resolve } from "path";
 import { NumPer, Place, type PlaceProps, Size } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
+
+// @ts-ignore
 // @ts-ignore
 type CssSize = string | number;
 
@@ -154,7 +155,7 @@ const {
 	pHoverScale = 1.25,
 	pSelectedFrameShare = 1,
 	pSelectedScale = 1,
-	pCaptionFontSize = 9,
+	pCaptionFontSize = 14,
 	pName = "",
 	pMinThumb = 30,
 	pMaxCols = 0,
@@ -459,21 +460,6 @@ function NormalizeNumber(pValue: unknown, pFallback: number) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <div
 	class = {`EmoGallery ${cPlace.Class} ${pGivenClass}`.trim()}
 	style = {cPlace.Style}
@@ -546,21 +532,6 @@ function NormalizeNumber(pValue: unknown, pFallback: number) {
 
 
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -712,21 +683,6 @@ function NormalizeNumber(pValue: unknown, pFallback: number) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
 
 
@@ -784,1068 +740,1291 @@ function NormalizeNumber(pValue: unknown, pFallback: number) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script is:inline define:vars={{ pGivenID }}>
-	(() => {
-	const cRoot = document.getElementById(pGivenID);
-	const cStage = cRoot?.querySelector(".EmoGalleryStage");
-	const cValueInput = cRoot?.querySelector(".EmoGalleryValue");
-
-	if (!cRoot || !cStage) return;
-
-	const cGap = ReadNumber(cRoot.dataset.gap, 6);
-	const cMinThumb = Math.max(8, ReadNumber(cRoot.dataset.minThumb, 30));
-	const cClearOutside = cRoot.dataset.clearOutside === "true";
-
-	let fItems = [];
-	let fCurrentIndex = -1;
-	let fLayoutFrame = 0;
-	let fBaseRects = null;
-	let fBaseFrameKey = "";
-
-	PrepareItems();
-	RegisterEvents();
-	RequestLayout();
-
-	function PrepareItems() {
-	const cRawNodes = Array.from(cStage.children).filter(IsRawGalleryNode);
-	let cIndex = 0;
-
-	for (const cNode of cRawNodes) {
-	const cImg = GetNodeImage(cNode);
-
-	if (!cImg) continue;
-
-	const cTitle = GetImageTitle(cNode, cImg, cIndex);
-	const cItem = document.createElement("div");
-	const cCaption = document.createElement("span");
-
-	cItem.className = "EmoGalleryItem";
-	cItem.dataset.index = String(cIndex);
-	cItem.tabIndex = 0;
-	cItem.setAttribute("role", "button");
-	cItem.setAttribute("aria-label", cTitle ? `عرض صورة ${cTitle}` : "عرض الصورة");
-
-	cCaption.className = "EmoGalleryCaption";
-	cCaption.textContent = cTitle;
-
-	cNode.classList.add("EmoGalleryVisual");
-	cImg.classList.add("EmoGalleryImg");
-	cImg.draggable = false;
-	cImg.decoding = "async";
-	cImg.loading = "eager";
-
-	cStage.insertBefore(cItem, cNode);
-	cItem.appendChild(cNode);
-	cItem.appendChild(cCaption);
-
-	const cGalleryItem = {
-	Index: cIndex,
-	Elem: cItem,
-	Img: cImg,
-	Title: cTitle,
-	Ratio: GetImageRatio(cImg),
-	BaseRect: null,
-	};
-
-	fItems.push(cGalleryItem);
-
-	cItem.addEventListener("click", () => SelectItem(cGalleryItem.Index));
-	cItem.addEventListener("keydown", (pEvent) => HandleItemKey(pEvent, cGalleryItem.Index));
-	cImg.addEventListener("load", () => HandleImageLoad(cGalleryItem));
-
-	cIndex += 1;
-	}
-	}
-
-	function RegisterEvents() {
-	window.addEventListener("resize", HandleResize);
-	window.addEventListener("orientationchange", HandleResize);
-	window.addEventListener("load", HandleImagesReady);
-	document.addEventListener("keydown", HandleDocumentKey);
-
-	if (cClearOutside) {
-	document.addEventListener("pointerdown", HandleDocumentPointerDown, true);
-	}
-
-	if ("ResizeObserver" in window) {
-	const cObserver = new ResizeObserver(HandleResize);
-	cObserver.observe(cRoot);
-	}
-	}
-
-	function HandleResize() {
-	fBaseRects = null;
-	fBaseFrameKey = "";
-	RequestLayout();
-	}
-
-	function HandleImagesReady() {
-	if (fCurrentIndex < 0) {
-	fBaseRects = null;
-	fBaseFrameKey = "";
-	}
-
-	RequestLayout();
-	}
-
-	function IsRawGalleryNode(pNode) {
-	return pNode instanceof HTMLElement && !pNode.classList.contains("EmoGalleryItem");
-	}
-
-	function GetNodeImage(pNode) {
-	if (pNode instanceof HTMLImageElement) return pNode;
-
-	const cImg = pNode.querySelector("img");
-
-	return cImg instanceof HTMLImageElement ? cImg : null;
-	}
-
-	function GetImageTitle(pNode, pImg, pIndex) {
-	const cRawTitle =
-	pNode.getAttribute("data-title") ||
-	pImg.getAttribute("data-title") ||
-	pNode.getAttribute("title") ||
-	pImg.getAttribute("title") ||
-	pImg.getAttribute("alt") ||
-	GetFileName(pImg.currentSrc || pImg.src) ||
-	`صورة ${pIndex + 1}`;
-
-	return cRawTitle.trim();
-	}
-
-	function GetFileName(pSrc) {
-	try {
-	const cUrl = new URL(pSrc, window.location.href);
-	const cRawName = decodeURIComponent(cUrl.pathname.split("/").filter(Boolean).pop() || "");
-	const cCleanName = cRawName.replace(/\.[a-z0-9]+$/i, "").replace(/[-_]+/g, " ");
-
-	return cCleanName.trim();
-	} catch {
-	return "";
-	}
-	}
-
-	function HandleImageLoad(pItem) {
-	pItem.Ratio = GetImageRatio(pItem.Img);
-
-	if (fCurrentIndex < 0) {
-	fBaseRects = null;
-	fBaseFrameKey = "";
-	}
-
-	RequestLayout();
-	}
-
-	function HandleItemKey(pEvent, pIndex) {
-	if (pEvent.key !== "Enter" && pEvent.key !== " ") return;
-
-	pEvent.preventDefault();
-	SelectItem(pIndex);
-	}
-
-	function HandleDocumentKey(pEvent) {
-	if (pEvent.key === "Escape") {
-	SelectItem(-1);
-	}
-	}
-
-	function HandleDocumentPointerDown(pEvent) {
-	if (fCurrentIndex < 0) return;
-	if (pEvent.target instanceof Node && cRoot.contains(pEvent.target)) return;
-
-	SelectItem(-1);
-	}
-
-	function SelectItem(pIndex) {
-	if (fCurrentIndex === pIndex) return;
-
-	fCurrentIndex = pIndex;
-	SyncCurrentValue();
-	RequestLayout();
-	}
-
-	function SyncCurrentValue() {
-	const cItem = fItems.find((pItem) => pItem.Index === fCurrentIndex);
-	const cIndexValue = cItem ? String(cItem.Index) : "";
-	const cTitleValue = cItem ? cItem.Title : "";
-
-	cRoot.dataset.currentIndex = cIndexValue;
-	cRoot.dataset.currentTitle = cTitleValue;
-
-	if (cValueInput instanceof HTMLInputElement) {
-	cValueInput.value = cIndexValue;
-	}
-
-	cRoot.dispatchEvent(new CustomEvent("emo-gallery-change", {
-	bubbles: true,
-	detail: {
-	index: cItem ? cItem.Index : -1,
-	title: cTitleValue,
-	img: cItem?.Img || null,
-	},
-	}));
-	}
-
-	function RequestLayout() {
-	cancelAnimationFrame(fLayoutFrame);
-	fLayoutFrame = requestAnimationFrame(ApplyLayout);
-	}
-
-	function ApplyLayout() {
-	const cUsePortraitAutoFlow = IsPortraitAutoFlow();
-
-	cRoot.classList.toggle("IsPortraitAutoFlow", cUsePortraitAutoFlow);
-
-	if (cUsePortraitAutoFlow) {
-	ClearInlineLayout();
-	return;
-	}
-
-	const cFrame = cStage.getBoundingClientRect();
-	const cFrameRect = MakeRect(0, 0, Math.max(1, cFrame.width), Math.max(1, cFrame.height));
-	const cFrameKey = `${Math.round(cFrameRect.W)}x${Math.round(cFrameRect.H)}`;
-
-	RefreshRatios();
-
-	if (!fBaseRects || fBaseFrameKey !== cFrameKey) {
-	fBaseRects = BuildBaseCollage(fItems, cFrameRect, cGap);
-	fBaseFrameKey = cFrameKey;
-	}
-
-	for (const cItem of fItems) {
-	cItem.BaseRect = fBaseRects.get(cItem.Index) || null;
-	cItem.Elem.classList.toggle("IsCurrent", cItem.Index === fCurrentIndex);
-	}
-
-	if (fCurrentIndex < 0) {
-	ApplyRects(fItems, fBaseRects);
-	return;
-	}
-
-	ApplyExpandedLayout(cFrameRect, fBaseRects);
-	}
-
-	function RefreshRatios() {
-	for (const cItem of fItems) {
-	cItem.Ratio = GetImageRatio(cItem.Img);
-	}
-	}
-
-	function ApplyExpandedLayout(pFrameRect, pBaseRects) {
-	const cCurrentItem = fItems.find((pItem) => pItem.Index === fCurrentIndex);
-
-	if (!cCurrentItem) {
-	SelectItem(-1);
-	return;
-	}
-
-	const cBaseRect = pBaseRects.get(cCurrentItem.Index);
-
-	if (!cBaseRect) {
-	SelectItem(-1);
-	return;
-	}
-
-	const cOtherItems = fItems.filter((pItem) => pItem.Index !== fCurrentIndex);
-	const cPlan = GetBestSelectedPlan(pFrameRect, cBaseRect, cCurrentItem, cOtherItems);
-
-	MoveItem(
-	cCurrentItem,
-	cPlan.SelectedRect.X,
-	cPlan.SelectedRect.Y,
-	cPlan.SelectedRect.W,
-	cPlan.SelectedRect.H,
-	);
-
-	LayoutSingleRegion(cPlan.First.Items, cPlan.First.Rect);
-	LayoutSingleRegion(cPlan.Second.Items, cPlan.Second.Rect);
-	}
-
-	function GetBestSelectedPlan(pFrameRect, pBaseRect, pCurrentItem, pOtherItems) {
-	const cSelectedSize = GetMaxContainedSize(
-	pFrameRect.W,
-	pFrameRect.H,
-	pCurrentItem.Ratio,
-	);
-
-	const cAllowedX = GetAllowedStartRange(
-	pFrameRect.W,
-	pBaseRect.X,
-	pBaseRect.W,
-	cSelectedSize.W,
-	);
-
-	const cAllowedY = GetAllowedStartRange(
-	pFrameRect.H,
-	pBaseRect.Y,
-	pBaseRect.H,
-	cSelectedSize.H,
-	);
-
-	const cCandidateXs = GetCandidateStarts(cAllowedX, pBaseRect.X, pBaseRect.W, cSelectedSize.W);
-	const cCandidateYs = GetCandidateStarts(cAllowedY, pBaseRect.Y, pBaseRect.H, cSelectedSize.H);
-	let cBestPlan = null;
-
-	for (const cX of cCandidateXs) {
-	for (const cY of cCandidateYs) {
-	const cSelectedRect = MakeRect(cX, cY, cSelectedSize.W, cSelectedSize.H);
-	const cCandidateAxes = GetCandidateAxes(pFrameRect, cSelectedRect);
-
-	for (const cAxis of cCandidateAxes) {
-	const cPlan = MakeSelectedPlan(pFrameRect, cSelectedRect, pOtherItems, cAxis);
-	const cScore = ScoreSelectedPlan(pFrameRect, pBaseRect, cPlan);
-
-	if (!cBestPlan || cScore < cBestPlan.Score) {
-	cBestPlan = {
-	...cPlan,
-	Score: cScore,
-	};
-	}
-	}
-	}
-	}
-
-	return cBestPlan || MakeSelectedPlan(
-	pFrameRect,
-	MakeRect(cAllowedX.Min, cAllowedY.Min, cSelectedSize.W, cSelectedSize.H),
-	pOtherItems,
-	"X",
-	);
-	}
-
-	function GetMaxContainedSize(pFrameWidth, pFrameHeight, pRatio) {
-	let cWidth = pFrameWidth;
-	let cHeight = cWidth / Math.max(0.08, pRatio);
-
-	if (cHeight > pFrameHeight) {
-	cHeight = pFrameHeight;
-	cWidth = cHeight * Math.max(0.08, pRatio);
-	}
-
-	return {
-	W: Math.max(1, cWidth),
-	H: Math.max(1, cHeight),
-	};
-	}
-
-	function GetAllowedStartRange(pFrameSize, pBaseStart, pBaseSize, pSelectedSize) {
-	const cFrameMin = 0;
-	const cFrameMax = Math.max(0, pFrameSize - pSelectedSize);
-	const cContainMin = pBaseStart + pBaseSize - pSelectedSize;
-	const cContainMax = pBaseStart;
-	const cMin = Math.max(cFrameMin, cContainMin);
-	const cMax = Math.min(cFrameMax, cContainMax);
-
-	if (cMin <= cMax) {
-	return {
-	Min: cMin,
-	Max: cMax,
-	};
-	}
-
-	const cFallback = Clamp(
-	pBaseStart + pBaseSize / 2 - pSelectedSize / 2,
-	cFrameMin,
-	cFrameMax,
-	);
-
-	return {
-	Min: cFallback,
-	Max: cFallback,
-	};
-	}
-
-	function GetCandidateStarts(pRange, pBaseStart, pBaseSize, pSelectedSize) {
-	const cBaseCenterStart = pBaseStart + pBaseSize / 2 - pSelectedSize / 2;
-	const cBaseNearStart = pBaseStart;
-	const cBaseFarStart = pBaseStart + pBaseSize - pSelectedSize;
-	const cValues = [
-	pRange.Min,
-	pRange.Max,
-	(pRange.Min + pRange.Max) / 2,
-	Clamp(cBaseCenterStart, pRange.Min, pRange.Max),
-	Clamp(cBaseNearStart, pRange.Min, pRange.Max),
-	Clamp(cBaseFarStart, pRange.Min, pRange.Max),
-	];
-
-	return UniqueNumbers(cValues);
-	}
-
-	function UniqueNumbers(pValues) {
-	return [...new Set(pValues.map((pValue) => Round(pValue)))];
-	}
-
-	function GetCandidateAxes(pFrameRect, pSelectedRect) {
-	const cLeftArea = pSelectedRect.X * pFrameRect.H;
-	const cRightArea = Math.max(0, pFrameRect.W - (pSelectedRect.X + pSelectedRect.W)) * pFrameRect.H;
-	const cTopArea = pSelectedRect.Y * pFrameRect.W;
-	const cBottomArea = Math.max(0, pFrameRect.H - (pSelectedRect.Y + pSelectedRect.H)) * pFrameRect.W;
-	const cHorizontalArea = cLeftArea + cRightArea;
-	const cVerticalArea = cTopArea + cBottomArea;
-
-	return cHorizontalArea >= cVerticalArea ? ["X", "Y"] : ["Y", "X"];
-	}
-
-	function MakeSelectedPlan(pFrameRect, pSelectedRect, pOtherItems, pAxis) {
-	const cRegions = GetSplitRegions(pFrameRect, pSelectedRect, pAxis);
-	const cDivider = pAxis === "X"
-	? pSelectedRect.X + pSelectedRect.W / 2
-	: pSelectedRect.Y + pSelectedRect.H / 2;
-
-	const cFirstItems = [];
-	const cSecondItems = [];
-
-	for (const cItem of pOtherItems) {
-	const cBaseRect = cItem.BaseRect;
-
-	if (!cBaseRect) continue;
-
-	const cCenter = GetRectCenter(cBaseRect);
-	const cValue = pAxis === "X" ? cCenter.X : cCenter.Y;
-
-	if (cValue < cDivider) {
-	cFirstItems.push(cItem);
-	} else {
-	cSecondItems.push(cItem);
-	}
-	}
-
-	if (!cRegions.First && cRegions.Second) {
-	cSecondItems.unshift(...cFirstItems.splice(0));
-	}
-
-	if (!cRegions.Second && cRegions.First) {
-	cFirstItems.push(...cSecondItems.splice(0));
-	}
-
-	BalanceGroupsByRegionArea(
-	cFirstItems,
-	cSecondItems,
-	cRegions.First,
-	cRegions.Second,
-	pAxis,
-	cDivider,
-	);
-
-	return {
-	Axis: pAxis,
-	SelectedRect: pSelectedRect,
-	First: {
-	Items: cFirstItems,
-	Rect: cRegions.First,
-	},
-	Second: {
-	Items: cSecondItems,
-	Rect: cRegions.Second,
-	},
-	};
-	}
-
-	function GetSplitRegions(pFrameRect, pSelectedRect, pAxis) {
-	if (pAxis === "X") {
-	const cLeftRect = MakeRect(
-	0,
-	0,
-	Math.max(0, pSelectedRect.X - cGap),
-	pFrameRect.H,
-	);
-
-	const cRightRect = MakeRect(
-	pSelectedRect.X + pSelectedRect.W + cGap,
-	0,
-	Math.max(0, pFrameRect.W - (pSelectedRect.X + pSelectedRect.W + cGap)),
-	pFrameRect.H,
-	);
-
-	return {
-	First: IsUsableRect(cLeftRect) ? cLeftRect : null,
-	Second: IsUsableRect(cRightRect) ? cRightRect : null,
-	};
-	}
-
-	const cTopRect = MakeRect(
-	0,
-	0,
-	pFrameRect.W,
-	Math.max(0, pSelectedRect.Y - cGap),
-	);
-
-	const cBottomRect = MakeRect(
-	0,
-	pSelectedRect.Y + pSelectedRect.H + cGap,
-	pFrameRect.W,
-	Math.max(0, pFrameRect.H - (pSelectedRect.Y + pSelectedRect.H + cGap)),
-	);
-
-	return {
-	First: IsUsableRect(cTopRect) ? cTopRect : null,
-	Second: IsUsableRect(cBottomRect) ? cBottomRect : null,
-	};
-	}
-
-	function BalanceGroupsByRegionArea(pFirstItems, pSecondItems, pFirstRect, pSecondRect, pAxis, pDivider) {
-	const cTotalCount = pFirstItems.length + pSecondItems.length;
-
-	if (cTotalCount <= 1) return;
-	if (!pFirstRect || !pSecondRect) return;
-
-	const cFirstArea = GetRectArea(pFirstRect);
-	const cSecondArea = GetRectArea(pSecondRect);
-	const cTotalArea = cFirstArea + cSecondArea;
-
-	if (cTotalArea <= 0) return;
-
-	const cIdealFirst = Clamp(
-	Math.round(cTotalCount * cFirstArea / cTotalArea),
-	1,
-	cTotalCount - 1,
-	);
-
-	while (pFirstItems.length > cIdealFirst + 1 && pFirstItems.length > 1) {
-	pSecondItems.unshift(ExtractClosestItemToDivider(pFirstItems, pAxis, pDivider));
-	}
-
-	while (pFirstItems.length < cIdealFirst - 1 && pSecondItems.length > 1) {
-	pFirstItems.push(ExtractClosestItemToDivider(pSecondItems, pAxis, pDivider));
-	}
-	}
-
-	function ExtractClosestItemToDivider(pItems, pAxis, pDivider) {
-	let cBestIndex = 0;
-	let cBestDist = Number.POSITIVE_INFINITY;
-
-	for (let cIndex = 0; cIndex < pItems.length; cIndex += 1) {
-	const cItem = pItems[cIndex];
-	const cRect = cItem.BaseRect;
-
-	if (!cRect) continue;
-
-	const cCenter = GetRectCenter(cRect);
-	const cValue = pAxis === "X" ? cCenter.X : cCenter.Y;
-	const cDist = Math.abs(cValue - pDivider);
-
-	if (cDist < cBestDist) {
-	cBestDist = cDist;
-	cBestIndex = cIndex;
-	}
-	}
-
-	return pItems.splice(cBestIndex, 1)[0];
-	}
-
-	function ScoreSelectedPlan(pFrameRect, pBaseRect, pPlan) {
-	const cFrameArea = Math.max(1, GetRectArea(pFrameRect));
-	const cBaseCenter = GetRectCenter(pBaseRect);
-	const cSelectedCenter = GetRectCenter(pPlan.SelectedRect);
-	const cMoveDist = Distance(cBaseCenter, cSelectedCenter) / Math.max(1, Math.sqrt(cFrameArea));
-	const cSelectedArea = GetRectArea(pPlan.SelectedRect);
-	const cSelectedRate = cSelectedArea / cFrameArea;
-	const cFirstScore = ScoreRegionLayout(pPlan.First.Items, pPlan.First.Rect);
-	const cSecondScore = ScoreRegionLayout(pPlan.Second.Items, pPlan.Second.Rect);
-	const cEmptySidePenalty =
-	GetEmptySidePenalty(pPlan.First.Items, pPlan.First.Rect) +
-	GetEmptySidePenalty(pPlan.Second.Items, pPlan.Second.Rect);
-	const cDensityPenalty = GetDensityPenalty(pPlan.First.Items, pPlan.First.Rect) +
-	GetDensityPenalty(pPlan.Second.Items, pPlan.Second.Rect);
-
-	return cFirstScore +
-	cSecondScore +
-	cEmptySidePenalty * 85 +
-	cDensityPenalty * 70 +
-	cMoveDist * 10 -
-	cSelectedRate * 35;
-	}
-
-	function ScoreRegionLayout(pItems, pRect) {
-	if (!pItems.length) return 0;
-	if (!pRect) return 9999;
-
-	const cResult = BuildBaseCollageResult(pItems, pRect, Math.min(cGap, 5));
-	const cBox = GetLayoutBox(cResult.Items);
-	const cRegionArea = Math.max(1, GetRectArea(pRect));
-	const cUsedArea = cBox ? GetRectArea(cBox) : 0;
-	const cBlankPenalty = 1 - Clamp(cUsedArea / cRegionArea, 0, 1);
-
-	return cResult.Score + cBlankPenalty * 95;
-	}
-
-	function GetEmptySidePenalty(pItems, pRect) {
-	if (!pRect) return 0;
-	if (pItems.length) return 0;
-
-	return Math.sqrt(GetRectArea(pRect));
-	}
-
-	function GetDensityPenalty(pItems, pRect) {
-	if (!pItems.length || !pRect) return 0;
-
-	const cAreaPerItem = GetRectArea(pRect) / pItems.length;
-	const cMinArea = cMinThumb * cMinThumb;
-
-	if (cAreaPerItem >= cMinArea) return 0;
-
-	return (cMinArea - cAreaPerItem) / Math.max(1, cMinArea);
-	}
-
-	function LayoutSingleRegion(pItems, pRect) {
-	if (!pItems.length) return;
-
-	if (!pRect) {
-	ParkItemsOutside(pItems);
-	return;
-	}
-
-	const cItems = SortItemsForRect(pItems, pRect);
-	const cLayout = BuildBaseCollage(cItems, pRect, Math.min(cGap, 5));
-
-	ApplyRects(cItems, cLayout);
-	}
-
-	function BuildBaseCollage(pItems, pRect, pGap) {
-	return BuildBaseCollageResult(pItems, pRect, pGap).Rects;
-	}
-
-	function BuildBaseCollageResult(pItems, pRect, pGap) {
-	const cRects = new Map();
-
-	if (!pItems.length) {
-	return {
-	Rects: cRects,
-	Items: [],
-	Score: 0,
-	};
-	}
-
-	if (pItems.length === 1) {
-	const cRect = GetContainedRect(pRect, pItems[0].Ratio);
-	const cItems = [{
-	Item: pItems[0],
-	Rect: cRect,
-	}];
-
-	cRects.set(pItems[0].Index, cRect);
-
-	return {
-	Rects: cRects,
-	Items: cItems,
-	Score: ScoreBaseLayout(cItems, pRect, 1),
-	};
-	}
-
-	const cRowsResult = BuildBaseRowsCollage(pItems, pRect, pGap);
-	const cColsResult = BuildBaseColumnsCollage(pItems, pRect, pGap);
-	const cFrameRatio = pRect.W / Math.max(1, pRect.H);
-	let cBestResult = cRowsResult.Score <= cColsResult.Score ? cRowsResult : cColsResult;
-
-	if (cFrameRatio >= 1.3) {
-	cBestResult = cRowsResult;
-	}
-
-	if (cFrameRatio <= 0.77) {
-	cBestResult = cColsResult;
-	}
-
-	for (const cLayoutItem of cBestResult.Items) {
-	cRects.set(cLayoutItem.Item.Index, cLayoutItem.Rect);
-	}
-
-	return {
-	Rects: cRects,
-	Items: cBestResult.Items,
-	Score: cBestResult.Score,
-	};
-	}
-
-	function BuildBaseRowsCollage(pItems, pRect, pGap) {
-	let cBest = null;
-	const cMaxRows = Math.min(
-	pItems.length,
-	Math.max(1, Math.ceil(Math.sqrt(pItems.length) * 2.4)),
-	);
-
-	for (let cRowCount = 1; cRowCount <= cMaxRows; cRowCount += 1) {
-	const cRows = SplitBaseContiguousGroups(pItems, cRowCount, "Rows");
-	const cRowHeights = cRows.map((pRow) => {
-	const cAvailableWidth = Math.max(1, pRect.W - pGap * (pRow.length - 1));
-
-	return cAvailableWidth / Math.max(0.08, GetRatioSum(pRow));
-	});
-
-	const cRawHeight =
-	cRowHeights.reduce((pTotal, pHeight) => pTotal + pHeight, 0) +
-	pGap * (cRows.length - 1);
-
-	const cScale = Math.min(1, pRect.H / Math.max(1, cRawHeight));
-	const cFinalGap = pGap * cScale;
-	const cTotalHeight =
-	cRowHeights.reduce((pTotal, pHeight) => pTotal + pHeight * cScale, 0) +
-	cFinalGap * (cRows.length - 1);
-
-	const cFinalWidth = pRect.W * cScale;
-	const cStartX = pRect.X + Math.max(0, (pRect.W - cFinalWidth) / 2);
-	let cY = pRect.Y + Math.max(0, (pRect.H - cTotalHeight) / 2);
-	const cItems = [];
-
-	for (let cRowIndex = 0; cRowIndex < cRows.length; cRowIndex += 1) {
-	const cRow = cRows[cRowIndex];
-	const cRowHeight = cRowHeights[cRowIndex] * cScale;
-	const cAvailableWidth = Math.max(1, cFinalWidth - cFinalGap * (cRow.length - 1));
-	const cRatioSum = GetRatioSum(cRow);
-	let cX = cStartX;
-
-	for (const cItem of cRow) {
-	const cWidth = cAvailableWidth * (Math.max(0.08, cItem.Ratio) / cRatioSum);
-
-	cItems.push({
-	Item: cItem,
-	Rect: MakeRect(cX, cY, cWidth, cRowHeight),
-	});
-
-	cX += cWidth + cFinalGap;
-	}
-
-	cY += cRowHeight + cFinalGap;
-	}
-
-	const cScore = ScoreBaseLayout(cItems, pRect, cScale);
-
-	if (!cBest || cScore < cBest.Score) {
-	cBest = {
-	Items: cItems,
-	Score: cScore,
-	};
-	}
-	}
-
-	return cBest;
-	}
-
-	function BuildBaseColumnsCollage(pItems, pRect, pGap) {
-	let cBest = null;
-	const cMaxCols = Math.min(
-	pItems.length,
-	Math.max(1, Math.ceil(Math.sqrt(pItems.length) * 2.4)),
-	);
-
-	for (let cColCount = 1; cColCount <= cMaxCols; cColCount += 1) {
-	const cCols = SplitBaseContiguousGroups(pItems, cColCount, "Columns");
-	const cColWidths = cCols.map((pCol) => {
-	const cAvailableHeight = Math.max(1, pRect.H - pGap * (pCol.length - 1));
-
-	return cAvailableHeight / Math.max(0.08, GetInverseRatioSum(pCol));
-	});
-
-	const cRawWidth =
-	cColWidths.reduce((pTotal, pWidth) => pTotal + pWidth, 0) +
-	pGap * (cCols.length - 1);
-
-	const cScale = Math.min(1, pRect.W / Math.max(1, cRawWidth));
-	const cFinalGap = pGap * cScale;
-	const cTotalWidth =
-	cColWidths.reduce((pTotal, pWidth) => pTotal + pWidth * cScale, 0) +
-	cFinalGap * (cCols.length - 1);
-
-	const cFinalHeight = pRect.H * cScale;
-	const cStartY = pRect.Y + Math.max(0, (pRect.H - cFinalHeight) / 2);
-	let cX = pRect.X + Math.max(0, (pRect.W - cTotalWidth) / 2);
-	const cItems = [];
-
-	for (let cColIndex = 0; cColIndex < cCols.length; cColIndex += 1) {
-	const cCol = cCols[cColIndex];
-	const cColWidth = cColWidths[cColIndex] * cScale;
-	const cAvailableHeight = Math.max(1, cFinalHeight - cFinalGap * (cCol.length - 1));
-	const cInverseRatioSum = GetInverseRatioSum(cCol);
-	let cY = cStartY;
-
-	for (const cItem of cCol) {
-	const cHeight =
-	cAvailableHeight *
-	((1 / Math.max(0.08, cItem.Ratio)) / cInverseRatioSum);
-
-	cItems.push({
-	Item: cItem,
-	Rect: MakeRect(cX, cY, cColWidth, cHeight),
-	});
-
-	cY += cHeight + cFinalGap;
-	}
-
-	cX += cColWidth + cFinalGap;
-	}
-
-	const cScore = ScoreBaseLayout(cItems, pRect, cScale);
-
-	if (!cBest || cScore < cBest.Score) {
-	cBest = {
-	Items: cItems,
-	Score: cScore,
-	};
-	}
-	}
-
-	return cBest;
-	}
-
-	function SplitBaseContiguousGroups(pItems, pGroupCount, pMode) {
-	const cGroups = [];
-	const cTotalWeight = pItems.reduce((pTotal, pItem) => {
-	return pTotal + GetBaseGroupWeight(pItem, pMode);
-	}, 0);
-
-	const cTargetWeight = cTotalWeight / pGroupCount;
-	let cIndex = 0;
-
-	for (let cGroupIndex = 0; cGroupIndex < pGroupCount; cGroupIndex += 1) {
-	const cGroup = [];
-	let cWeight = 0;
-
-	while (cIndex < pItems.length) {
-	const cRemainingItems = pItems.length - cIndex;
-	const cRemainingGroups = pGroupCount - cGroupIndex - 1;
-
-	if (cRemainingItems <= cRemainingGroups) break;
-
-	const cItem = pItems[cIndex];
-	const cItemWeight = GetBaseGroupWeight(cItem, pMode);
-	const cCurrentDiff = Math.abs(cWeight - cTargetWeight);
-	const cNextDiff = Math.abs(cWeight + cItemWeight - cTargetWeight);
-
-	if (cGroup.length > 0 && cNextDiff > cCurrentDiff && cGroupIndex < pGroupCount - 1) {
-	break;
-	}
-
-	cGroup.push(cItem);
-	cWeight += cItemWeight;
-	cIndex += 1;
-	}
-
-	if (cGroup.length) {
-	cGroups.push(cGroup);
-	}
-	}
-
-	if (cIndex < pItems.length) {
-	if (!cGroups.length) {
-	cGroups.push([]);
-	}
-
-	cGroups[cGroups.length - 1].push(...pItems.slice(cIndex));
-	}
-
-	return cGroups.filter((pGroup) => pGroup.length);
-	}
-
-	function GetBaseGroupWeight(pItem, pMode) {
-	if (pMode === "Rows") {
-	return Math.max(0.08, pItem.Ratio);
-	}
-
-	return 1 / Math.max(0.08, pItem.Ratio);
-	}
-
-	function ScoreBaseLayout(pLayoutItems, pRect, pScale) {
-	const cBox = GetLayoutBox(pLayoutItems);
-	const cFrameArea = Math.max(1, GetRectArea(pRect));
-	const cUsedArea = cBox ? Math.max(1, GetRectArea(cBox)) : 1;
-	const cBlankPenalty = 1 - Clamp(cUsedArea / cFrameArea, 0, 1);
-	const cScalePenalty = 1 - pScale;
-	let cTinyPenalty = 0;
-
-	for (const cLayoutItem of pLayoutItems) {
-	const cRect = cLayoutItem.Rect;
-	const cMinSide = Math.min(cRect.W, cRect.H);
-
-	if (cMinSide < cMinThumb) {
-	cTinyPenalty += (cMinThumb - cMinSide) / Math.max(1, cMinThumb);
-	}
-	}
-
-	return cBlankPenalty * 120 + cScalePenalty * 80 + cTinyPenalty * 20;
-	}
-
-	function SortItemsForRect(pItems, pRect) {
-	const cUseRowsOrder = pRect.W >= pRect.H;
-
-	return [...pItems].sort((pA, pB) => {
-	const cRectA = pA.BaseRect;
-	const cRectB = pB.BaseRect;
-
-	if (!cRectA || !cRectB) {
-	return pA.Index - pB.Index;
-	}
-
-	const cCenterA = GetRectCenter(cRectA);
-	const cCenterB = GetRectCenter(cRectB);
-
-	if (cUseRowsOrder) {
-	return cCenterA.Y - cCenterB.Y || cCenterA.X - cCenterB.X || pA.Index - pB.Index;
-	}
-
-	return cCenterA.X - cCenterB.X || cCenterA.Y - cCenterB.Y || pA.Index - pB.Index;
-	});
-	}
-
-	function ApplyRects(pItems, pRects) {
-	for (const cItem of pItems) {
-	const cRect = pRects.get(cItem.Index);
-
-	if (!cRect) continue;
-
-	MoveItem(cItem, cRect.X, cRect.Y, cRect.W, cRect.H);
-	}
-	}
-
-	function ParkItemsOutside(pItems) {
-	for (const cItem of pItems) {
-	MoveItem(cItem, -9999, -9999, 1, 1);
-	}
-	}
-
-	function GetContainedRect(pRect, pRatio) {
-	const cSize = GetContainedSize(pRect.W, pRect.H, pRatio);
-
-	return MakeRect(
-	pRect.X + (pRect.W - cSize.W) / 2,
-	pRect.Y + (pRect.H - cSize.H) / 2,
-	cSize.W,
-	cSize.H,
-	);
-	}
-
-	function GetContainedSize(pWidth, pHeight, pRatio) {
-	let cWidth = Math.max(1, pWidth);
-	let cHeight = cWidth / Math.max(0.08, pRatio);
-
-	if (cHeight > pHeight) {
-	cHeight = Math.max(1, pHeight);
-	cWidth = cHeight * Math.max(0.08, pRatio);
-	}
-
-	return {
-	W: cWidth,
-	H: cHeight,
-	};
-	}
-
-	function GetLayoutBox(pLayoutItems) {
-	if (!pLayoutItems.length) return null;
-
-	const cLeft = Math.min(...pLayoutItems.map((pItem) => pItem.Rect.X));
-	const cTop = Math.min(...pLayoutItems.map((pItem) => pItem.Rect.Y));
-	const cRight = Math.max(...pLayoutItems.map((pItem) => pItem.Rect.X + pItem.Rect.W));
-	const cBottom = Math.max(...pLayoutItems.map((pItem) => pItem.Rect.Y + pItem.Rect.H));
-
-	return MakeRect(cLeft, cTop, cRight - cLeft, cBottom - cTop);
-	}
-
-	function GetRatioSum(pItems) {
-	return pItems.reduce((pTotal, pItem) => {
-	return pTotal + Math.max(0.08, pItem.Ratio);
-	}, 0);
-	}
-
-	function GetInverseRatioSum(pItems) {
-	return pItems.reduce((pTotal, pItem) => {
-	return pTotal + 1 / Math.max(0.08, pItem.Ratio);
-	}, 0);
-	}
-
-	function GetImageRatio(pImg) {
-	const cRatioFromData = ReadNumber(pImg.dataset.ratio, 0);
-
-	if (cRatioFromData > 0) return cRatioFromData;
-	if (pImg.naturalWidth > 0 && pImg.naturalHeight > 0) return pImg.naturalWidth / pImg.naturalHeight;
-
-	return 1;
-	}
-
-	function MoveItem(pItem, pX, pY, pWidth, pHeight) {
-	pItem.Elem.style.left = `${Round(pX)}px`;
-	pItem.Elem.style.top = `${Round(pY)}px`;
-	pItem.Elem.style.width = `${Round(pWidth)}px`;
-	pItem.Elem.style.height = `${Round(pHeight)}px`;
-	}
-
-	function MakeRect(pX, pY, pWidth, pHeight) {
-	return {
-	X: pX,
-	Y: pY,
-	W: Math.max(0, pWidth),
-	H: Math.max(0, pHeight),
-	};
-	}
-
-	function IsUsableRect(pRect) {
-	return pRect &&
-	pRect.W >= cMinThumb * 0.5 &&
-	pRect.H >= cMinThumb * 0.5 &&
-	GetRectArea(pRect) >= cMinThumb * cMinThumb * 0.25;
-	}
-
-	function GetRectArea(pRect) {
-	return Math.max(0, pRect.W) * Math.max(0, pRect.H);
-	}
-
-	function GetRectCenter(pRect) {
-	return {
-	X: pRect.X + pRect.W / 2,
-	Y: pRect.Y + pRect.H / 2,
-	};
-	}
-
-	function Distance(pA, pB) {
-	const cDx = pA.X - pB.X;
-	const cDy = pA.Y - pB.Y;
-
-	return Math.sqrt(cDx * cDx + cDy * cDy);
-	}
-
-	function IsPortraitAutoFlow() {
-	return cRoot.dataset.portraitAutoFlow === "true" &&
-	window.matchMedia("(orientation: portrait)").matches;
-	}
-
-	function ClearInlineLayout() {
-	fCurrentIndex = -1;
-	fBaseRects = null;
-	fBaseFrameKey = "";
-
-	for (const cItem of fItems) {
-	cItem.Elem.classList.remove("IsCurrent");
-	cItem.Elem.style.left = "";
-	cItem.Elem.style.top = "";
-	cItem.Elem.style.width = "";
-	cItem.Elem.style.height = "";
-	}
-	}
-
-	function ReadNumber(pValue, pFallback) {
-	const cNumber = Number.parseFloat(String(pValue ?? ""));
-
-	return Number.isFinite(cNumber) ? cNumber : pFallback;
-	}
-
-	function Clamp(pValue, pMin, pMax) {
-	return Math.max(pMin, Math.min(pMax, pValue));
-	}
-
-	function Round(pValue) {
-	return Math.round(pValue * 100) / 100;
-	}
+
+
+
+	(() =>
+	{
+
+		// ==================== Definitions: Variables & Methods ====================
+
+		const cRoot = document.getElementById(pGivenID);
+
+		const cStage = cRoot?.querySelector(".EmoGalleryStage");
+
+		const cValueInput = cRoot?.querySelector(".EmoGalleryValue");
+
+		const cGap = ReadNumber(cRoot.dataset.gap, 6);
+
+		const cMinThumb = Math.max(8, ReadNumber(cRoot.dataset.minThumb, 30));
+
+		const cClearOutside = cRoot.dataset.clearOutside === "true";
+
+		let fItems = [];
+
+		let fCurrentIndex = -1;
+
+		let fLayoutFrame = 0;
+
+		let fBaseRects = null;
+
+		let fBaseFrameKey = "";
+
+
+
+
+
+		function PrepareItems()
+		{
+			const cRawNodes = Array.from(cStage.children).filter(IsRawGalleryNode);
+			let cIndex = 0;
+			for (const cNode of cRawNodes)
+			{
+				const cImg = GetNodeImage(cNode);
+				if (!cImg) continue;
+				const cTitle = GetImageTitle(cNode, cImg, cIndex);
+				const cItem = document.createElement("div");
+				const cCaption = document.createElement("span");
+				cItem.className = "EmoGalleryItem";
+				cItem.dataset.index = String(cIndex);
+				cItem.tabIndex = 0;
+				cItem.setAttribute("role", "button");
+				cItem.setAttribute("aria-label", cTitle ? `عرض صورة ${cTitle}` : "عرض الصورة");
+				cCaption.className = "EmoGalleryCaption";
+				cCaption.textContent = cTitle;
+				cNode.classList.add("EmoGalleryVisual");
+				cImg.classList.add("EmoGalleryImg");
+				cImg.draggable = false;
+				cImg.decoding = "async";
+				cImg.loading = "eager";
+				cStage.insertBefore(cItem, cNode);
+				cItem.appendChild(cNode);
+				cItem.appendChild(cCaption);
+				const cGalleryItem = {
+					Index: cIndex,
+					Elem: cItem,
+					Img: cImg,
+					Title: cTitle,
+					Ratio: GetImageRatio(cImg),
+					BaseRect: null,
+				};
+				fItems.push(cGalleryItem);
+				cItem.addEventListener("click", () => SelectItem(cGalleryItem.Index));
+				cItem.addEventListener("keydown", (pEvent) => HandleItemKey(pEvent, cGalleryItem.Index));
+				cImg.addEventListener("load", () => HandleImageLoad(cGalleryItem));
+				cIndex += 1;
+			}
+		}
+
+
+
+
+
+		function RegisterEvents()
+		{
+			window.addEventListener("resize", HandleResize);
+			window.addEventListener("orientationchange", HandleResize);
+			window.addEventListener("load", HandleImagesReady);
+			document.addEventListener("keydown", HandleDocumentKey);
+			if (cClearOutside)
+			{
+				document.addEventListener("pointerdown", HandleDocumentPointerDown, true);
+			}
+			if ("ResizeObserver" in window)
+			{
+				const cObserver = new ResizeObserver(HandleResize);
+				cObserver.observe(cRoot);
+			}
+		}
+
+
+
+
+
+		function HandleResize()
+		{
+			fBaseRects = null;
+			fBaseFrameKey = "";
+			RequestLayout();
+		}
+
+
+
+
+
+		function HandleImagesReady()
+		{
+			if (fCurrentIndex < 0)
+			{
+				fBaseRects = null;
+				fBaseFrameKey = "";
+			}
+			RequestLayout();
+		}
+
+
+
+
+
+		function IsRawGalleryNode(pNode)
+		{
+			return pNode instanceof HTMLElement && !pNode.classList.contains("EmoGalleryItem");
+		}
+
+
+
+
+
+		function GetNodeImage(pNode)
+		{
+			if (pNode instanceof HTMLImageElement) return pNode;
+			const cImg = pNode.querySelector("img");
+			return cImg instanceof HTMLImageElement ? cImg : null;
+		}
+
+
+
+
+
+		function GetImageTitle(pNode, pImg, pIndex)
+		{
+			const cRawTitle =
+			pNode.getAttribute("data-title") ||
+			pImg.getAttribute("data-title") ||
+			pNode.getAttribute("title") ||
+			pImg.getAttribute("title") ||
+			pImg.getAttribute("alt") ||
+			GetFileName(pImg.currentSrc || pImg.src) ||
+			`صورة ${pIndex + 1}`;
+			return cRawTitle.trim();
+		}
+
+
+
+
+
+		function GetFileName(pSrc)
+		{
+			try
+			{
+				const cUrl = new URL(pSrc, window.location.href);
+				const cRawName = decodeURIComponent(cUrl.pathname.split("/").filter(Boolean).pop() || "");
+				const cCleanName = cRawName.replace(/\.[a-z0-9]+$/i, "").replace(/[-_]+/g, " ");
+				return cCleanName.trim();
+			} catch {
+				return "";
+			}
+		}
+
+
+
+
+
+		function HandleImageLoad(pItem)
+		{
+			pItem.Ratio = GetImageRatio(pItem.Img);
+			if (fCurrentIndex < 0)
+			{
+				fBaseRects = null;
+				fBaseFrameKey = "";
+			}
+			RequestLayout();
+		}
+
+
+
+
+
+		function HandleItemKey(pEvent, pIndex)
+		{
+			if (pEvent.key !== "Enter" && pEvent.key !== " ") return;
+			pEvent.preventDefault();
+			SelectItem(pIndex);
+		}
+
+
+
+
+
+		function HandleDocumentKey(pEvent)
+		{
+			if (pEvent.key === "Escape")
+			{
+				SelectItem(-1);
+			}
+		}
+
+
+
+
+
+		function HandleDocumentPointerDown(pEvent)
+		{
+			if (fCurrentIndex < 0) return;
+			if (pEvent.target instanceof Node && cRoot.contains(pEvent.target)) return;
+			SelectItem(-1);
+		}
+
+
+
+
+
+		function SelectItem(pIndex)
+		{
+			if (fCurrentIndex === pIndex) return;
+			fCurrentIndex = pIndex;
+			SyncCurrentValue();
+			RequestLayout();
+		}
+
+
+
+
+
+		function SyncCurrentValue()
+		{
+			const cItem = fItems.find((pItem) => pItem.Index === fCurrentIndex);
+			const cIndexValue = cItem ? String(cItem.Index) : "";
+			const cTitleValue = cItem ? cItem.Title : "";
+			cRoot.dataset.currentIndex = cIndexValue;
+			cRoot.dataset.currentTitle = cTitleValue;
+			if (cValueInput instanceof HTMLInputElement)
+			{
+				cValueInput.value = cIndexValue;
+			}
+			cRoot.dispatchEvent(new CustomEvent("emo-gallery-change", {
+						bubbles: true,
+						detail: {
+							index: cItem ? cItem.Index : -1,
+							title: cTitleValue,
+							img: cItem?.Img || null,
+						},
+			}));
+		}
+
+
+
+
+
+		function RequestLayout()
+		{
+			cancelAnimationFrame(fLayoutFrame);
+			fLayoutFrame = requestAnimationFrame(ApplyLayout);
+		}
+
+
+
+
+
+		function ApplyLayout()
+		{
+			const cUsePortraitAutoFlow = IsPortraitAutoFlow();
+			cRoot.classList.toggle("IsPortraitAutoFlow", cUsePortraitAutoFlow);
+			if (cUsePortraitAutoFlow)
+			{
+				ClearInlineLayout();
+				return;
+			}
+			const cFrame = cStage.getBoundingClientRect();
+			const cFrameRect = MakeRect(0, 0, Math.max(1, cFrame.width), Math.max(1, cFrame.height));
+			const cFrameKey = `${Math.round(cFrameRect.W)}x${Math.round(cFrameRect.H)}`;
+			RefreshRatios();
+			if (!fBaseRects || fBaseFrameKey !== cFrameKey)
+			{
+				fBaseRects = BuildBaseCollage(fItems, cFrameRect, cGap);
+				fBaseFrameKey = cFrameKey;
+			}
+			for (const cItem of fItems)
+			{
+				cItem.BaseRect = fBaseRects.get(cItem.Index) || null;
+				cItem.Elem.classList.toggle("IsCurrent", cItem.Index === fCurrentIndex);
+			}
+			if (fCurrentIndex < 0)
+			{
+				ApplyRects(fItems, fBaseRects);
+				return;
+			}
+			ApplyExpandedLayout(cFrameRect, fBaseRects);
+		}
+
+
+
+
+
+		function RefreshRatios()
+		{
+			for (const cItem of fItems)
+			{
+				cItem.Ratio = GetImageRatio(cItem.Img);
+			}
+		}
+
+
+
+
+
+		function ApplyExpandedLayout(pFrameRect, pBaseRects)
+		{
+			const cCurrentItem = fItems.find((pItem) => pItem.Index === fCurrentIndex);
+			if (!cCurrentItem)
+			{
+				SelectItem(-1);
+				return;
+			}
+			const cBaseRect = pBaseRects.get(cCurrentItem.Index);
+			if (!cBaseRect)
+			{
+				SelectItem(-1);
+				return;
+			}
+			const cOtherItems = fItems.filter((pItem) => pItem.Index !== fCurrentIndex);
+			const cPlan = GetBestSelectedPlan(pFrameRect, cBaseRect, cCurrentItem, cOtherItems);
+			MoveItem(
+				cCurrentItem,
+				cPlan.SelectedRect.X,
+				cPlan.SelectedRect.Y,
+				cPlan.SelectedRect.W,
+				cPlan.SelectedRect.H,
+			);
+			LayoutSingleRegion(cPlan.First.Items, cPlan.First.Rect);
+			LayoutSingleRegion(cPlan.Second.Items, cPlan.Second.Rect);
+		}
+
+
+
+
+
+		function GetBestSelectedPlan(pFrameRect, pBaseRect, pCurrentItem, pOtherItems)
+		{
+			const cSelectedSize = GetMaxContainedSize(
+				pFrameRect.W,
+				pFrameRect.H,
+				pCurrentItem.Ratio,
+			);
+			const cAllowedX = GetAllowedStartRange(
+				pFrameRect.W,
+				pBaseRect.X,
+				pBaseRect.W,
+				cSelectedSize.W,
+			);
+			const cAllowedY = GetAllowedStartRange(
+				pFrameRect.H,
+				pBaseRect.Y,
+				pBaseRect.H,
+				cSelectedSize.H,
+			);
+			const cCandidateXs = GetCandidateStarts(cAllowedX, pBaseRect.X, pBaseRect.W, cSelectedSize.W);
+			const cCandidateYs = GetCandidateStarts(cAllowedY, pBaseRect.Y, pBaseRect.H, cSelectedSize.H);
+			let cBestPlan = null;
+			for (const cX of cCandidateXs)
+			{
+				for (const cY of cCandidateYs)
+				{
+					const cSelectedRect = MakeRect(cX, cY, cSelectedSize.W, cSelectedSize.H);
+					const cCandidateAxes = GetCandidateAxes(pFrameRect, cSelectedRect);
+					for (const cAxis of cCandidateAxes)
+					{
+						const cPlan = MakeSelectedPlan(pFrameRect, cSelectedRect, pOtherItems, cAxis);
+						const cScore = ScoreSelectedPlan(pFrameRect, pBaseRect, cPlan);
+						if (!cBestPlan || cScore < cBestPlan.Score)
+						{
+							cBestPlan = {
+								...cPlan,
+								Score: cScore,
+							};
+						}
+					}
+				}
+			}
+			return cBestPlan || MakeSelectedPlan(
+				pFrameRect,
+				MakeRect(cAllowedX.Min, cAllowedY.Min, cSelectedSize.W, cSelectedSize.H),
+				pOtherItems,
+				"X",
+			);
+		}
+
+
+
+
+
+		function GetMaxContainedSize(pFrameWidth, pFrameHeight, pRatio)
+		{
+			let cWidth = pFrameWidth;
+			let cHeight = cWidth / Math.max(0.08, pRatio);
+			if (cHeight > pFrameHeight)
+			{
+				cHeight = pFrameHeight;
+				cWidth = cHeight * Math.max(0.08, pRatio);
+			}
+			return {
+				W: Math.max(1, cWidth),
+				H: Math.max(1, cHeight),
+			};
+		}
+
+
+
+
+
+		function GetAllowedStartRange(pFrameSize, pBaseStart, pBaseSize, pSelectedSize)
+		{
+			const cFrameMin = 0;
+			const cFrameMax = Math.max(0, pFrameSize - pSelectedSize);
+			const cContainMin = pBaseStart + pBaseSize - pSelectedSize;
+			const cContainMax = pBaseStart;
+			const cMin = Math.max(cFrameMin, cContainMin);
+			const cMax = Math.min(cFrameMax, cContainMax);
+			if (cMin <= cMax)
+			{
+				return {
+					Min: cMin,
+					Max: cMax,
+				};
+			}
+			const cFallback = Clamp(
+				pBaseStart + pBaseSize / 2 - pSelectedSize / 2,
+				cFrameMin,
+				cFrameMax,
+			);
+			return {
+				Min: cFallback,
+				Max: cFallback,
+			};
+		}
+
+
+
+
+
+		function GetCandidateStarts(pRange, pBaseStart, pBaseSize, pSelectedSize)
+		{
+			const cBaseCenterStart = pBaseStart + pBaseSize / 2 - pSelectedSize / 2;
+			const cBaseNearStart = pBaseStart;
+			const cBaseFarStart = pBaseStart + pBaseSize - pSelectedSize;
+			const cValues = [
+				pRange.Min,
+				pRange.Max,
+				(pRange.Min + pRange.Max) / 2,
+				Clamp(cBaseCenterStart, pRange.Min, pRange.Max),
+				Clamp(cBaseNearStart, pRange.Min, pRange.Max),
+				Clamp(cBaseFarStart, pRange.Min, pRange.Max),
+			];
+			return UniqueNumbers(cValues);
+		}
+
+
+
+
+
+		function UniqueNumbers(pValues)
+		{
+			return [...new Set(pValues.map((pValue) => Round(pValue)))];
+		}
+
+
+
+
+
+		function GetCandidateAxes(pFrameRect, pSelectedRect)
+		{
+			const cLeftArea = pSelectedRect.X * pFrameRect.H;
+			const cRightArea = Math.max(0, pFrameRect.W - (pSelectedRect.X + pSelectedRect.W)) * pFrameRect.H;
+			const cTopArea = pSelectedRect.Y * pFrameRect.W;
+			const cBottomArea = Math.max(0, pFrameRect.H - (pSelectedRect.Y + pSelectedRect.H)) * pFrameRect.W;
+			const cHorizontalArea = cLeftArea + cRightArea;
+			const cVerticalArea = cTopArea + cBottomArea;
+			return cHorizontalArea >= cVerticalArea ? [
+				"X",
+				"Y"
+			] : [
+				"Y",
+				"X"
+			];
+		}
+
+
+
+
+
+		function MakeSelectedPlan(pFrameRect, pSelectedRect, pOtherItems, pAxis)
+		{
+			const cRegions = GetSplitRegions(pFrameRect, pSelectedRect, pAxis);
+			const cDivider = pAxis === "X"
+			? pSelectedRect.X + pSelectedRect.W / 2
+			: pSelectedRect.Y + pSelectedRect.H / 2;
+			const cFirstItems = [];
+			const cSecondItems = [];
+			for (const cItem of pOtherItems)
+			{
+				const cBaseRect = cItem.BaseRect;
+				if (!cBaseRect) continue;
+				const cCenter = GetRectCenter(cBaseRect);
+				const cValue = pAxis === "X" ? cCenter.X : cCenter.Y;
+				if (cValue < cDivider)
+				{
+					cFirstItems.push(cItem);
+				} else {
+					cSecondItems.push(cItem);
+				}
+			}
+			if (!cRegions.First && cRegions.Second)
+			{
+				cSecondItems.unshift(...cFirstItems.splice(0));
+			}
+			if (!cRegions.Second && cRegions.First)
+			{
+				cFirstItems.push(...cSecondItems.splice(0));
+			}
+			BalanceGroupsByRegionArea(
+				cFirstItems,
+				cSecondItems,
+				cRegions.First,
+				cRegions.Second,
+				pAxis,
+				cDivider,
+			);
+			return {
+				Axis: pAxis,
+				SelectedRect: pSelectedRect,
+				First: {
+					Items: cFirstItems,
+					Rect: cRegions.First,
+				},
+				Second: {
+					Items: cSecondItems,
+					Rect: cRegions.Second,
+				},
+			};
+		}
+
+
+
+
+
+		function GetSplitRegions(pFrameRect, pSelectedRect, pAxis)
+		{
+			if (pAxis === "X")
+			{
+				const cLeftRect = MakeRect(
+					0,
+					0,
+					Math.max(0, pSelectedRect.X - cGap),
+					pFrameRect.H,
+				);
+				const cRightRect = MakeRect(
+					pSelectedRect.X + pSelectedRect.W + cGap,
+					0,
+					Math.max(0, pFrameRect.W - (pSelectedRect.X + pSelectedRect.W + cGap)),
+					pFrameRect.H,
+				);
+				return {
+					First: IsUsableRect(cLeftRect) ? cLeftRect : null,
+					Second: IsUsableRect(cRightRect) ? cRightRect : null,
+				};
+			}
+			const cTopRect = MakeRect(
+				0,
+				0,
+				pFrameRect.W,
+				Math.max(0, pSelectedRect.Y - cGap),
+			);
+			const cBottomRect = MakeRect(
+				0,
+				pSelectedRect.Y + pSelectedRect.H + cGap,
+				pFrameRect.W,
+				Math.max(0, pFrameRect.H - (pSelectedRect.Y + pSelectedRect.H + cGap)),
+			);
+			return {
+				First: IsUsableRect(cTopRect) ? cTopRect : null,
+				Second: IsUsableRect(cBottomRect) ? cBottomRect : null,
+			};
+		}
+
+
+
+
+
+		function BalanceGroupsByRegionArea(pFirstItems, pSecondItems, pFirstRect, pSecondRect, pAxis, pDivider)
+		{
+			const cTotalCount = pFirstItems.length + pSecondItems.length;
+			if (cTotalCount <= 1) return;
+			if (!pFirstRect || !pSecondRect) return;
+			const cFirstArea = GetRectArea(pFirstRect);
+			const cSecondArea = GetRectArea(pSecondRect);
+			const cTotalArea = cFirstArea + cSecondArea;
+			if (cTotalArea <= 0) return;
+			const cIdealFirst = Clamp(
+				Math.round(cTotalCount * cFirstArea / cTotalArea),
+				1,
+				cTotalCount - 1,
+			);
+			while (pFirstItems.length > cIdealFirst + 1 && pFirstItems.length > 1)
+			{
+				pSecondItems.unshift(ExtractClosestItemToDivider(pFirstItems, pAxis, pDivider));
+			}
+			while (pFirstItems.length < cIdealFirst - 1 && pSecondItems.length > 1)
+			{
+				pFirstItems.push(ExtractClosestItemToDivider(pSecondItems, pAxis, pDivider));
+			}
+		}
+
+
+
+
+
+		function ExtractClosestItemToDivider(pItems, pAxis, pDivider)
+		{
+			let cBestIndex = 0;
+			let cBestDist = Number.POSITIVE_INFINITY;
+			for (let cIndex = 0; cIndex < pItems.length; cIndex += 1)
+			{
+				const cItem = pItems[cIndex];
+				const cRect = cItem.BaseRect;
+				if (!cRect) continue;
+				const cCenter = GetRectCenter(cRect);
+				const cValue = pAxis === "X" ? cCenter.X : cCenter.Y;
+				const cDist = Math.abs(cValue - pDivider);
+				if (cDist < cBestDist)
+				{
+					cBestDist = cDist;
+					cBestIndex = cIndex;
+				}
+			}
+			return pItems.splice(cBestIndex, 1)[0];
+		}
+
+
+
+
+
+		function ScoreSelectedPlan(pFrameRect, pBaseRect, pPlan)
+		{
+			const cFrameArea = Math.max(1, GetRectArea(pFrameRect));
+			const cBaseCenter = GetRectCenter(pBaseRect);
+			const cSelectedCenter = GetRectCenter(pPlan.SelectedRect);
+			const cMoveDist = Distance(cBaseCenter, cSelectedCenter) / Math.max(1, Math.sqrt(cFrameArea));
+			const cSelectedArea = GetRectArea(pPlan.SelectedRect);
+			const cSelectedRate = cSelectedArea / cFrameArea;
+			const cFirstScore = ScoreRegionLayout(pPlan.First.Items, pPlan.First.Rect);
+			const cSecondScore = ScoreRegionLayout(pPlan.Second.Items, pPlan.Second.Rect);
+			const cEmptySidePenalty =
+			GetEmptySidePenalty(pPlan.First.Items, pPlan.First.Rect) +
+			GetEmptySidePenalty(pPlan.Second.Items, pPlan.Second.Rect);
+			const cDensityPenalty = GetDensityPenalty(pPlan.First.Items, pPlan.First.Rect) +
+			GetDensityPenalty(pPlan.Second.Items, pPlan.Second.Rect);
+			return cFirstScore +
+			cSecondScore +
+			cEmptySidePenalty * 85 +
+			cDensityPenalty * 70 +
+			cMoveDist * 10 -
+			cSelectedRate * 35;
+		}
+
+
+
+
+
+		function ScoreRegionLayout(pItems, pRect)
+		{
+			if (!pItems.length) return 0;
+			if (!pRect) return 9999;
+			const cResult = BuildBaseCollageResult(pItems, pRect, Math.min(cGap, 5));
+			const cBox = GetLayoutBox(cResult.Items);
+			const cRegionArea = Math.max(1, GetRectArea(pRect));
+			const cUsedArea = cBox ? GetRectArea(cBox) : 0;
+			const cBlankPenalty = 1 - Clamp(cUsedArea / cRegionArea, 0, 1);
+			return cResult.Score + cBlankPenalty * 95;
+		}
+
+
+
+
+
+		function GetEmptySidePenalty(pItems, pRect)
+		{
+			if (!pRect) return 0;
+			if (pItems.length) return 0;
+			return Math.sqrt(GetRectArea(pRect));
+		}
+
+
+
+
+
+		function GetDensityPenalty(pItems, pRect)
+		{
+			if (!pItems.length || !pRect) return 0;
+			const cAreaPerItem = GetRectArea(pRect) / pItems.length;
+			const cMinArea = cMinThumb * cMinThumb;
+			if (cAreaPerItem >= cMinArea) return 0;
+			return (cMinArea - cAreaPerItem) / Math.max(1, cMinArea);
+		}
+
+
+
+
+
+		function LayoutSingleRegion(pItems, pRect)
+		{
+			if (!pItems.length) return;
+			if (!pRect)
+			{
+				ParkItemsOutside(pItems);
+				return;
+			}
+			const cItems = SortItemsForRect(pItems, pRect);
+			const cLayout = BuildBaseCollage(cItems, pRect, Math.min(cGap, 5));
+			ApplyRects(cItems, cLayout);
+		}
+
+
+
+
+
+		function BuildBaseCollage(pItems, pRect, pGap)
+		{
+			return BuildBaseCollageResult(pItems, pRect, pGap).Rects;
+		}
+
+
+
+
+
+		function BuildBaseCollageResult(pItems, pRect, pGap)
+		{
+			const cRects = new Map();
+			if (!pItems.length)
+			{
+				return {
+					Rects: cRects,
+					Items: [],
+					Score: 0,
+				};
+			}
+			if (pItems.length === 1)
+			{
+				const cRect = GetContainedRect(pRect, pItems[0].Ratio);
+				const cItems = [{
+						Item: pItems[0],
+						Rect: cRect,
+				}];
+				cRects.set(pItems[0].Index, cRect);
+				return {
+					Rects: cRects,
+					Items: cItems,
+					Score: ScoreBaseLayout(cItems, pRect, 1),
+				};
+			}
+			const cRowsResult = BuildBaseRowsCollage(pItems, pRect, pGap);
+			const cColsResult = BuildBaseColumnsCollage(pItems, pRect, pGap);
+			const cFrameRatio = pRect.W / Math.max(1, pRect.H);
+			let cBestResult = cRowsResult.Score <= cColsResult.Score ? cRowsResult : cColsResult;
+			if (cFrameRatio >= 1.3)
+			{
+				cBestResult = cRowsResult;
+			}
+			if (cFrameRatio <= 0.77)
+			{
+				cBestResult = cColsResult;
+			}
+			for (const cLayoutItem of cBestResult.Items)
+			{
+				cRects.set(cLayoutItem.Item.Index, cLayoutItem.Rect);
+			}
+			return {
+				Rects: cRects,
+				Items: cBestResult.Items,
+				Score: cBestResult.Score,
+			};
+		}
+
+
+
+
+
+		function BuildBaseRowsCollage(pItems, pRect, pGap)
+		{
+			let cBest = null;
+			const cMaxRows = Math.min(
+				pItems.length,
+				Math.max(1, Math.ceil(Math.sqrt(pItems.length) * 2.4)),
+			);
+			for (let cRowCount = 1; cRowCount <= cMaxRows; cRowCount += 1)
+			{
+				const cRows = SplitBaseContiguousGroups(pItems, cRowCount, "Rows");
+				const cRowHeights = cRows.map((pRow) =>
+					{
+						const cAvailableWidth = Math.max(1, pRect.W - pGap * (pRow.length - 1));
+						return cAvailableWidth / Math.max(0.08, GetRatioSum(pRow));
+				});
+				const cRawHeight =
+				cRowHeights.reduce((pTotal, pHeight) => pTotal + pHeight, 0) +
+				pGap * (cRows.length - 1);
+				const cScale = Math.min(1, pRect.H / Math.max(1, cRawHeight));
+				const cFinalGap = pGap * cScale;
+				const cTotalHeight =
+				cRowHeights.reduce((pTotal, pHeight) => pTotal + pHeight * cScale, 0) +
+				cFinalGap * (cRows.length - 1);
+				const cFinalWidth = pRect.W * cScale;
+				const cStartX = pRect.X + Math.max(0, (pRect.W - cFinalWidth) / 2);
+				let cY = pRect.Y + Math.max(0, (pRect.H - cTotalHeight) / 2);
+				const cItems = [];
+				for (let cRowIndex = 0; cRowIndex < cRows.length; cRowIndex += 1)
+				{
+					const cRow = cRows[cRowIndex];
+					const cRowHeight = cRowHeights[cRowIndex] * cScale;
+					const cAvailableWidth = Math.max(1, cFinalWidth - cFinalGap * (cRow.length - 1));
+					const cRatioSum = GetRatioSum(cRow);
+					let cX = cStartX;
+					for (const cItem of cRow)
+					{
+						const cWidth = cAvailableWidth * (Math.max(0.08, cItem.Ratio) / cRatioSum);
+						cItems.push({
+								Item: cItem,
+								Rect: MakeRect(cX, cY, cWidth, cRowHeight),
+						});
+						cX += cWidth + cFinalGap;
+					}
+					cY += cRowHeight + cFinalGap;
+				}
+				const cScore = ScoreBaseLayout(cItems, pRect, cScale);
+				if (!cBest || cScore < cBest.Score)
+				{
+					cBest = {
+						Items: cItems,
+						Score: cScore,
+					};
+				}
+			}
+			return cBest;
+		}
+
+
+
+
+
+		function BuildBaseColumnsCollage(pItems, pRect, pGap)
+		{
+			let cBest = null;
+			const cMaxCols = Math.min(
+				pItems.length,
+				Math.max(1, Math.ceil(Math.sqrt(pItems.length) * 2.4)),
+			);
+			for (let cColCount = 1; cColCount <= cMaxCols; cColCount += 1)
+			{
+				const cCols = SplitBaseContiguousGroups(pItems, cColCount, "Columns");
+				const cColWidths = cCols.map((pCol) =>
+					{
+						const cAvailableHeight = Math.max(1, pRect.H - pGap * (pCol.length - 1));
+						return cAvailableHeight / Math.max(0.08, GetInverseRatioSum(pCol));
+				});
+				const cRawWidth =
+				cColWidths.reduce((pTotal, pWidth) => pTotal + pWidth, 0) +
+				pGap * (cCols.length - 1);
+				const cScale = Math.min(1, pRect.W / Math.max(1, cRawWidth));
+				const cFinalGap = pGap * cScale;
+				const cTotalWidth =
+				cColWidths.reduce((pTotal, pWidth) => pTotal + pWidth * cScale, 0) +
+				cFinalGap * (cCols.length - 1);
+				const cFinalHeight = pRect.H * cScale;
+				const cStartY = pRect.Y + Math.max(0, (pRect.H - cFinalHeight) / 2);
+				let cX = pRect.X + Math.max(0, (pRect.W - cTotalWidth) / 2);
+				const cItems = [];
+				for (let cColIndex = 0; cColIndex < cCols.length; cColIndex += 1)
+				{
+					const cCol = cCols[cColIndex];
+					const cColWidth = cColWidths[cColIndex] * cScale;
+					const cAvailableHeight = Math.max(1, cFinalHeight - cFinalGap * (cCol.length - 1));
+					const cInverseRatioSum = GetInverseRatioSum(cCol);
+					let cY = cStartY;
+					for (const cItem of cCol)
+					{
+						const cHeight =
+						cAvailableHeight *
+						((1 / Math.max(0.08, cItem.Ratio)) / cInverseRatioSum);
+						cItems.push({
+								Item: cItem,
+								Rect: MakeRect(cX, cY, cColWidth, cHeight),
+						});
+						cY += cHeight + cFinalGap;
+					}
+					cX += cColWidth + cFinalGap;
+				}
+				const cScore = ScoreBaseLayout(cItems, pRect, cScale);
+				if (!cBest || cScore < cBest.Score)
+				{
+					cBest = {
+						Items: cItems,
+						Score: cScore,
+					};
+				}
+			}
+			return cBest;
+		}
+
+
+
+
+
+		function SplitBaseContiguousGroups(pItems, pGroupCount, pMode)
+		{
+			const cGroups = [];
+			const cTotalWeight = pItems.reduce((pTotal, pItem) =>
+				{
+					return pTotal + GetBaseGroupWeight(pItem, pMode);
+				}, 0);
+			const cTargetWeight = cTotalWeight / pGroupCount;
+			let cIndex = 0;
+			for (let cGroupIndex = 0; cGroupIndex < pGroupCount; cGroupIndex += 1)
+			{
+				const cGroup = [];
+				let cWeight = 0;
+				while (cIndex < pItems.length)
+				{
+					const cRemainingItems = pItems.length - cIndex;
+					const cRemainingGroups = pGroupCount - cGroupIndex - 1;
+					if (cRemainingItems <= cRemainingGroups) break;
+					const cItem = pItems[cIndex];
+					const cItemWeight = GetBaseGroupWeight(cItem, pMode);
+					const cCurrentDiff = Math.abs(cWeight - cTargetWeight);
+					const cNextDiff = Math.abs(cWeight + cItemWeight - cTargetWeight);
+					if (cGroup.length > 0 && cNextDiff > cCurrentDiff && cGroupIndex < pGroupCount - 1)
+					{
+						break;
+					}
+					cGroup.push(cItem);
+					cWeight += cItemWeight;
+					cIndex += 1;
+				}
+				if (cGroup.length)
+				{
+					cGroups.push(cGroup);
+				}
+			}
+			if (cIndex < pItems.length)
+			{
+				if (!cGroups.length)
+				{
+					cGroups.push([]);
+				}
+				cGroups[cGroups.length - 1].push(...pItems.slice(cIndex));
+			}
+			return cGroups.filter((pGroup) => pGroup.length);
+		}
+
+
+
+
+
+		function GetBaseGroupWeight(pItem, pMode)
+		{
+			if (pMode === "Rows")
+			{
+				return Math.max(0.08, pItem.Ratio);
+			}
+			return 1 / Math.max(0.08, pItem.Ratio);
+		}
+
+
+
+
+
+		function ScoreBaseLayout(pLayoutItems, pRect, pScale)
+		{
+			const cBox = GetLayoutBox(pLayoutItems);
+			const cFrameArea = Math.max(1, GetRectArea(pRect));
+			const cUsedArea = cBox ? Math.max(1, GetRectArea(cBox)) : 1;
+			const cBlankPenalty = 1 - Clamp(cUsedArea / cFrameArea, 0, 1);
+			const cScalePenalty = 1 - pScale;
+			let cTinyPenalty = 0;
+			for (const cLayoutItem of pLayoutItems)
+			{
+				const cRect = cLayoutItem.Rect;
+				const cMinSide = Math.min(cRect.W, cRect.H);
+				if (cMinSide < cMinThumb)
+				{
+					cTinyPenalty += (cMinThumb - cMinSide) / Math.max(1, cMinThumb);
+				}
+			}
+			return cBlankPenalty * 120 + cScalePenalty * 80 + cTinyPenalty * 20;
+		}
+
+
+
+
+
+		function SortItemsForRect(pItems, pRect)
+		{
+			const cUseRowsOrder = pRect.W >= pRect.H;
+			return [...pItems].sort((pA, pB) =>
+				{
+					const cRectA = pA.BaseRect;
+					const cRectB = pB.BaseRect;
+					if (!cRectA || !cRectB)
+					{
+						return pA.Index - pB.Index;
+					}
+					const cCenterA = GetRectCenter(cRectA);
+					const cCenterB = GetRectCenter(cRectB);
+					if (cUseRowsOrder)
+					{
+						return cCenterA.Y - cCenterB.Y || cCenterA.X - cCenterB.X || pA.Index - pB.Index;
+					}
+					return cCenterA.X - cCenterB.X || cCenterA.Y - cCenterB.Y || pA.Index - pB.Index;
+			});
+		}
+
+
+
+
+
+		function ApplyRects(pItems, pRects)
+		{
+			for (const cItem of pItems)
+			{
+				const cRect = pRects.get(cItem.Index);
+				if (!cRect) continue;
+				MoveItem(cItem, cRect.X, cRect.Y, cRect.W, cRect.H);
+			}
+		}
+
+
+
+
+
+		function ParkItemsOutside(pItems)
+		{
+			for (const cItem of pItems)
+			{
+				MoveItem(cItem, -9999, -9999, 1, 1);
+			}
+		}
+
+
+
+
+
+		function GetContainedRect(pRect, pRatio)
+		{
+			const cSize = GetContainedSize(pRect.W, pRect.H, pRatio);
+			return MakeRect(
+				pRect.X + (pRect.W - cSize.W) / 2,
+				pRect.Y + (pRect.H - cSize.H) / 2,
+				cSize.W,
+				cSize.H,
+			);
+		}
+
+
+
+
+
+		function GetContainedSize(pWidth, pHeight, pRatio)
+		{
+			let cWidth = Math.max(1, pWidth);
+			let cHeight = cWidth / Math.max(0.08, pRatio);
+			if (cHeight > pHeight)
+			{
+				cHeight = Math.max(1, pHeight);
+				cWidth = cHeight * Math.max(0.08, pRatio);
+			}
+			return {
+				W: cWidth,
+				H: cHeight,
+			};
+		}
+
+
+
+
+
+		function GetLayoutBox(pLayoutItems)
+		{
+			if (!pLayoutItems.length) return null;
+			const cLeft = Math.min(...pLayoutItems.map((pItem) => pItem.Rect.X));
+			const cTop = Math.min(...pLayoutItems.map((pItem) => pItem.Rect.Y));
+			const cRight = Math.max(...pLayoutItems.map((pItem) => pItem.Rect.X + pItem.Rect.W));
+			const cBottom = Math.max(...pLayoutItems.map((pItem) => pItem.Rect.Y + pItem.Rect.H));
+			return MakeRect(cLeft, cTop, cRight - cLeft, cBottom - cTop);
+		}
+
+
+
+
+
+		function GetRatioSum(pItems)
+		{
+			return pItems.reduce((pTotal, pItem) =>
+				{
+					return pTotal + Math.max(0.08, pItem.Ratio);
+				}, 0);
+		}
+
+
+
+
+
+		function GetInverseRatioSum(pItems)
+		{
+			return pItems.reduce((pTotal, pItem) =>
+				{
+					return pTotal + 1 / Math.max(0.08, pItem.Ratio);
+				}, 0);
+		}
+
+
+
+
+
+		function GetImageRatio(pImg)
+		{
+			const cRatioFromData = ReadNumber(pImg.dataset.ratio, 0);
+			if (cRatioFromData > 0) return cRatioFromData;
+			if (pImg.naturalWidth > 0 && pImg.naturalHeight > 0) return pImg.naturalWidth / pImg.naturalHeight;
+			return 1;
+		}
+
+
+
+
+
+		function MoveItem(pItem, pX, pY, pWidth, pHeight)
+		{
+			pItem.Elem.style.left = `${Round(pX)}px`;
+			pItem.Elem.style.top = `${Round(pY)}px`;
+			pItem.Elem.style.width = `${Round(pWidth)}px`;
+			pItem.Elem.style.height = `${Round(pHeight)}px`;
+		}
+
+
+
+
+
+		function MakeRect(pX, pY, pWidth, pHeight)
+		{
+			return {
+				X: pX,
+				Y: pY,
+				W: Math.max(0, pWidth),
+				H: Math.max(0, pHeight),
+			};
+		}
+
+
+
+
+
+		function IsUsableRect(pRect)
+		{
+			return pRect &&
+			pRect.W >= cMinThumb * 0.5 &&
+			pRect.H >= cMinThumb * 0.5 &&
+			GetRectArea(pRect) >= cMinThumb * cMinThumb * 0.25;
+		}
+
+
+
+
+
+		function GetRectArea(pRect)
+		{
+			return Math.max(0, pRect.W) * Math.max(0, pRect.H);
+		}
+
+
+
+
+
+		function GetRectCenter(pRect)
+		{
+			return {
+				X: pRect.X + pRect.W / 2,
+				Y: pRect.Y + pRect.H / 2,
+			};
+		}
+
+
+
+
+
+		function Distance(pA, pB)
+		{
+			const cDx = pA.X - pB.X;
+			const cDy = pA.Y - pB.Y;
+			return Math.sqrt(cDx * cDx + cDy * cDy);
+		}
+
+
+
+
+
+		function IsPortraitAutoFlow()
+		{
+			return cRoot.dataset.portraitAutoFlow === "true" &&
+			window.matchMedia("(orientation: portrait)").matches;
+		}
+
+
+
+
+
+		function ClearInlineLayout()
+		{
+			fCurrentIndex = -1;
+			fBaseRects = null;
+			fBaseFrameKey = "";
+			for (const cItem of fItems)
+			{
+				cItem.Elem.classList.remove("IsCurrent");
+				cItem.Elem.style.left = "";
+				cItem.Elem.style.top = "";
+				cItem.Elem.style.width = "";
+				cItem.Elem.style.height = "";
+			}
+		}
+
+
+
+
+
+		function ReadNumber(pValue, pFallback)
+		{
+			const cNumber = Number.parseFloat(String(pValue ?? ""));
+			return Number.isFinite(cNumber) ? cNumber : pFallback;
+		}
+
+
+
+
+
+		function Clamp(pValue, pMin, pMax)
+		{
+			return Math.max(pMin, Math.min(pMax, pValue));
+		}
+
+
+
+
+
+		function Round(pValue)
+		{
+			return Math.round(pValue * 100) / 100;
+		}
+
+
+
+
+
+		// ==================== Execution Logic ====================
+
+		if (!cRoot || !cStage) return;
+
+		PrepareItems();
+
+		RegisterEvents();
+
+		RequestLayout();
 	})();
 </script>
