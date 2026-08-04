@@ -1,11 +1,9 @@
 ---
 import BLayout from "@/Layout.astro";
-import { CardsGr } from "@/Widgets/Cards";
-import { Badge, EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { Badge, EmoCall, Emograph, SecTitle, VrStack } from "@/Widgets/Comp";
 import { EmoGallery, RespImg } from "@/Widgets/Media";
-import { DivCol, DivStr, EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
-import { EmoStr } from "@/Widgets/Strips";
-import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { DivCol, DivStr, EmoSec, Hero } from "@/Widgets/Sections";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Size, Text } from "@/TypesLib";
 import { StoneRequestBuilder } from "../../site/Widgets/Stone/StoneRequest";
 ---
 
@@ -27,7 +25,7 @@ import { StoneRequestBuilder } from "../../site/Widgets/Stone/StoneRequest";
 
 	<Hero>
 
-		<VrStack pSize={new Size(new NumPer("50%","95%"))} pLoc={new Loc(new NumPer("40%","2.5%"),new NumPer("45%","40%"))}>
+		<VrStack pSize={new Size(new NumPer("40%","95%"))} pLoc={new Loc(new NumPer("47%","2.5%"),new NumPer("43%","74%"))} pHzAlign={"Center"}>
 
 			<Emograph
 				pTitle={Text.H1.Centered.OfText("توريد وتركيب رخام وجرانيت")}
@@ -35,6 +33,7 @@ import { StoneRequestBuilder } from "../../site/Widgets/Stone/StoneRequest";
 			/>
 
 			<Badge
+				pLandOnly
 				pYears={15}
 				pYearsText="سنوات الخبرة"
 				pQualityText="فرز أول"
@@ -55,19 +54,8 @@ import { StoneRequestBuilder } from "../../site/Widgets/Stone/StoneRequest";
 
 
 
-	<StoneRequestBuilder
-		pSourcePage="صفحة الرخام والجرانيت"
-		pTitle="سجل طلبية الرخام أو الجرانيت"
-		pDesc="أضف كل صنف ومقاس على حدة، واحفظ الطلب واستكمله لاحقًا."
-	/>
-
-
-
-
-
-
-
 	<EmoSec
+		hidden
 		id="secCompare"
 		pBg={new ElemBg(Colors.WhiteOff,new EmoMediaData("Img","/Media/Emostone/","MarbleVsGranite.webp",true,"قطعة رخام بألوان براقة ومبهجة مع قطعة جرانيت أبيض بنقاط سوداء"))}
 		pHzAlign={Align.LeftCenter}
@@ -139,12 +127,7 @@ import { StoneRequestBuilder } from "../../site/Widgets/Stone/StoneRequest";
 		pVrAlign={Align.Center}
 	>
 
-		<SecTitle
-			id="sectMarble"
-			GreenLite
-			pTitle="الرخام المصري والمستورد"
-			pDesc="نقدم أنواع الرخام المتعارف عليها في السوق المصري والعالمي، مع ترشيح النوع حسب الاستخدام والميزانية"
-		/>
+		<SecTitle id="sectMarble" GreenLite pTitle="الرخام المصري والمستورد" />
 
 		<DivStr id="strEgMarble">
 
@@ -161,7 +144,7 @@ import { StoneRequestBuilder } from "../../site/Widgets/Stone/StoneRequest";
 
 			<DivCol>
 
-				<EmoGallery id="galEgMarble" pFolder="/Media/Emostone/Marble/Eg/Samples" />
+				<EmoGallery id="galEgMarble" pFolder="/Media/Emostone/Marble/Eg/Samples/Raw" />
 
 			</DivCol>
 
@@ -182,7 +165,7 @@ import { StoneRequestBuilder } from "../../site/Widgets/Stone/StoneRequest";
 
 			<DivCol>
 
-				<EmoGallery id="galImpMarble" pFolder="/Media/Emostone/Marble/Imp/Samples" />
+				<EmoGallery id="galImpMarble" pFolder="/Media/Emostone/Marble/Imp/Samples/Raw" />
 
 			</DivCol>
 
@@ -197,89 +180,55 @@ import { StoneRequestBuilder } from "../../site/Widgets/Stone/StoneRequest";
 
 
 	<EmoSec
-		hidden
-		id="secGraniteTypes"
-		pBg={new ElemBg(Colors.Gray1)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			Gray2
-			pTitle="أنواع الجرانيت وأفضل استخداماتها"
-			pDesc="الجرانيت اختيار مناسب للأرضيات والواجهات الخارجية والمطابخ بسبب مقاومة الحرارة والصدمات وسهولة الصيانة"
-		/>
-
-		<EmoStr id="strGraniteTypes" pBg={new ElemBg(Colors.Gray1)}>
-
-			<HzStack>
-
-				<RespImg
-					pImg={new EmoMediaData(
-						"Img",
-						"/Media/Emostone",
-						"GranitCompare.webp",
-						false,
-						"جرانيت نيو حلايب",
-						new Size(new NumPer(360, "100%"), new NumPer("auto", "auto"))
-					)}
-				/>
-
-				<EmoList
-					pWidth={new RespString("850px", "100%")}
-					pTitle={Text.H3.Centered.OfText("مميزات الجرانيت")}
-					pDesc={Text.Body.Centered.OfText("خامة عملية تناسب الاستخدام اليومي والحركة العالية")}
-					pHeadBg={new ElemBg(Colors.WhiteOff)}
-					pItemsBg={new ElemBg(Colors.SkyLite)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						"مقاومة عالية للحرارة والصدمات.",
-						"تنوع في الألوان والأشكال مثل البني والأسود والنجراني والروزا.",
-						"سهولة في الصيانة وعمر افتراضي طويل.",
-						"استخدام واسع في الأرضيات والواجهات الخارجية والمطابخ والسلالم.",
-						"اختيارات مصرية ومستوردة مثل أحمر أسواني، روزي بينك، جندولا، نجران براون، وجالاكسي الهندي."
-					]}
-				/>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		hidden
-		id="secUses"
+		id="secGranit"
 		pBg={new ElemBg(Colors.Creamy)}
 		pHzAlign={Align.Center}
 		pVrAlign={Align.Center}
 	>
 
-		<SecTitle GreenLite pTitle="استخدامات الرخام والجرانيت" />
+		<SecTitle id="sectGranit" GreenLite pTitle="الجرانيت المصري والمستورد" />
 
-		<EmoStr pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
+		<DivStr id="strEgGranit">
 
-			<CardsGr
-				pCardBg={new ElemBg(Colors.WhiteOff)}
-				pCardTitleFnt={Text.H4}
-				pCardBodyFnt={Text.Body}
-				pSpacing={20}
-				pTopic1={new Topic("الأرضيات", "تضيف فخامة لأي مساحة داخلية، ويمكن استخدام الرخام الطبيعي أو الصناعي حسب الميزانية، مع اختيار الجرانيت في المناطق عالية الحركة.")}
-				pTopic2={new Topic("واجهات المباني", "الرخام الطبيعي أو الجرانيت المقاوم للعوامل الجوية يحافظ على شكل الواجهة لفترات طويلة عند التركيب الصحيح.")}
-				pTopic3={new Topic("المطابخ والحمامات", "تستخدم الخامات المناسبة لمقاومة البقع والرطوبة، مع إمكانية التشكيل حسب التصميم والفتحات المطلوبة.")}
-				pTopic4={new Topic("المصاعد والدرج", "يعطي الرخام والجرانيت مظهرًا أنيقًا ويزيد من قيمة العقار عند اختيار نوع يتحمل الحركة اليومية.")}
-				pTopic5={new Topic("المساحات الخارجية", "تستخدم الخامات المناسبة للواجهات والأسوار والمداخل الخارجية مع مراعاة مقاومة الشمس والمطر.")}
-				pTopic6={new Topic("الديكورات الداخلية", "ألواح كبيرة، خلفيات، أعمدة، حليات، ورسومات هندسية حسب التصميم المطلوب.")}
-			/>
+			<DivCol>
 
-		</EmoStr>
+				<Emograph
+					id="txtEgGranit"
+					pTitle={Text.H3.Centered.OfText("جرانيت مصري")}
+					pSize={new Size(new NumPer(200),new NumPer(30))}
+					data-own-size
+				/>
+
+			</DivCol>
+
+			<DivCol>
+
+				<EmoGallery id="galEgGranit" pFolder="/Media/Emostone/Granit/Eg/Samples/Raw" />
+
+			</DivCol>
+
+		</DivStr>
+
+		<DivStr>
+
+			<DivCol>
+
+				<Emograph
+					id="txtImpGranit"
+					pTitle={Text.H3.Centered.OfText("جرانيت مستورد")}
+					pSize={new Size(new NumPer(200),new NumPer(30))}
+					data-own-size
+				/>
+
+			</DivCol>
+
+			<DivCol>
+
+				<EmoGallery id="galImpGranit" pFolder="/Media/Emostone/Granit/Imp/Samples/Raw" />
+
+			</DivCol>
+
+		</DivStr>
 
 	</EmoSec>
 
@@ -289,130 +238,11 @@ import { StoneRequestBuilder } from "../../site/Widgets/Stone/StoneRequest";
 
 
 
-	<EmoSec
-		hidden
-		id="secChoose"
-		pBg={new ElemBg(Colors.Gray1)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle id="sectChoose" Gray2 pTitle="اختيار الرخام المناسب" />
-
-		<EmoStr pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<EmoList
-					pWidth={new RespString("650px", "100%")}
-					pTitle={Text.H3.Centered.OfText("عوامل الاختيار")}
-					pDesc={Text.Body.Centered.OfText("هذه العوامل تحدد النوع المناسب قبل الشراء")}
-					pHeadBg={new ElemBg(Colors.WhiteOff)}
-					pItemsBg={new ElemBg(Colors.SkyLite)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						{ Title: "المساحة والاستخدام", Items: ["تحديد الداخل أو الخارج.", "تحديد الأرضيات أو الواجهات أو المطابخ أو الديكور.", "اختيار خامة تتحمل طبيعة المكان."] },
-						{ Title: "اللون والتصميم", Items: ["الألوان الفاتحة تضيف اتساعًا وإشراقًا.", "الألوان الداكنة تعطي فخامة وأناقة.", "اختيار العروق بما يتناسب مع التصميم العام."] },
-						{ Title: "الميزانية", Items: ["الرخام المصري أكثر توفيرًا.", "الرخام المستورد يقدم تصميمات ونقشات عالمية.", "الجرانيت مناسب عند أولوية التحمل."] },
-						{ Title: "الفحص قبل الشراء", Items: ["التأكد من عدم وجود كسور أو شقوق.", "مراجعة السمك واللمعة والفرز.", "مطابقة العينة للكمية قدر الإمكان."] }
-					]}
-				/>
-
-				<RespImg
-					pImg={new EmoMediaData(
-						"Img",
-						"https://static.wixstatic.com/media/498793_c6c5812bd532499bb3e8aecf1abcf687~mv2.jpg/v1/crop/x_107%2Cy_0%2Cw_626%2Ch_612/fill/w_220%2Ch_215%2Cal_c%2Cq_90%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/",
-						"Galala.jpg",
-						false,
-						"رخام جلالة",
-						new Size(new NumPer(420, "100%"), new NumPer("auto", "auto"))
-					)}
-				/>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoFaq>
-
-		<FaqItem
-			pQuestion="هل يمكن تركيب الرخام في المطابخ؟"
-			pAnswer="نعم، يمكن استخدام الرخام الطبيعي أو الصناعي في المطابخ مع مراعاة مقاومة الماء والخدوش وطريقة الصيانة. في الاستخدام اليومي الشاق يمكن ترشيح الجرانيت أو الكوارتز حسب طبيعة المطبخ."
-		/>
-
-		<FaqItem
-			pQuestion="ما الفرق بين الرخام والجرانيت للأرضيات؟"
-			pAnswer="الرخام يعطي لمعانًا وأناقة وإحساسًا بالفخامة، والجرانيت أكثر مقاومة للتحمل والحركة، لذلك يناسب الأماكن عالية الاستخدام."
-		/>
-
-		<FaqItem
-			pQuestion="هل تحتاج الأرضيات إلى صيانة مستمرة؟"
-			pAnswer="الرخام الطبيعي يحتاج تلميعًا دوريًا للحفاظ على لمعانه، والجرانيت يحتاج تنظيفًا مناسبًا ومتابعة للفواصل والسطح حسب الاستخدام."
-		/>
-
-		<FaqItem
-			pQuestion="هل توفرون تركيب الواجهات الخارجية؟"
-			pAnswer="نعم، يتم تركيب الرخام والجرانيت للواجهات الخارجية مع مراعاة الخامة وطريقة التثبيت والمقاسات ومقاومة العوامل الجوية."
-		/>
-
-		<FaqItem
-			pQuestion="هل توفرون تقطيع وتشكيل حسب الطلب؟"
-			pAnswer="نعم، نقدم تقطيعًا حسب المقاسات والتصاميم المطلوبة، مع تشكيل الألواح والقطع المنحنية والزخرفية حسب طبيعة المشروع."
-		/>
-
-		<FaqItem
-			pQuestion="ما البيانات المطلوبة لعرض السعر؟"
-			pAnswer="نحتاج نوع الاستخدام، صور المكان، المقاسات التقريبية، المدينة أو المنطقة، نوع الخامة المفضل، وهل المطلوب توريد فقط أم توريد وتركيب وتشطيب."
-		/>
-
-	</EmoFaq>
-
-
-
-
-
-
-
-	<ReadAlso>
-
-		<ReadAlsoItem pTitle="توريد وتركيب رخام" pDesc="رخام مصري ومستورد للأرضيات والسلالم والمداخل والحوائط والديكور الداخلي." pHref="/emostone/marble" />
-
-		<ReadAlsoItem pTitle="توريد وتركيب جرانيت" pDesc="جرانيت مصري ومستورد للمطابخ والسلالم والواجهات والأرضيات عالية الحركة." pHref="/emostone/granit" />
-
-		<ReadAlsoItem pTitle="توريد وتركيب كوارتز" pDesc="كوارتز للمطابخ والحمامات والجزيرات والأسطح الحديثة." pHref="/emostone/quartz" />
-
-		<ReadAlsoItem pTitle="توريد وتركيب حجر طبيعي" pDesc="حجر طبيعي للواجهات والأسوار والديكورات الخارجية والداخلية." pHref="/emostone/stone" />
-
-	</ReadAlso>
-
-
-
-
-
-
-
-	<RelServices>
-
-		<RelServiceItem pTitle="تشطيب شقق وفلل" pDesc="تنسيق خامات الأرضيات والحوائط والسلالم والمطابخ ضمن خطة التشطيب الكاملة." pHref="/emocrete/finishing" />
-
-		<RelServiceItem
-			pTitle="تشطيب محل تجاري"
-			pDesc="اختيار خامة واجهة وأرضيات تناسب هوية المحل وحركة العملاء والتنظيف اليومي."
-			pHref="/emocrete/finishing/retail"
-		/>
-
-		<RelServiceItem pTitle="إشراف على التشطيب" pDesc="مراجعة المقاسات والاستلام وجودة التركيب قبل ضياع قيمة الخامة." pHref="/emocrete/supervision/finishing" />
-
-	</RelServices>
+	<StoneRequestBuilder
+		pSourcePage="صفحة الرخام والجرانيت"
+		pTitle="سجل طلباتك من الرخام أو الجرانيت"
+		pDesc="أضف كل صنف ومقاس على حدة، واحفظ الطلب واستكمله لاحقًا."
+	/>
 
 
 
