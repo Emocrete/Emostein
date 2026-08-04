@@ -25,6 +25,7 @@ interface SchemaImageSpec {
 export interface SchemaPrimaryImageMeta {
 	Url: string;
 	Alt: string;
+	Type: string;
 	Width?: number;
 	Height?: number;
 }
@@ -98,7 +99,6 @@ export class Schema {
 		{ FileName: "Schema-16x9-1200.webp", Width: 1200, Height: 675 },
 		{ FileName: "HeroL.webp", Width: 1920, Height: 911 },
 		{ FileName: "HeroP.webp", Width: 360, Height: 680 },
-		{ FileName: "Share.webp", Width: 1200, Height: 630 },
 		{ FileName: "Share.jpg", Width: 1200, Height: 630 }
 	];
 
@@ -406,22 +406,45 @@ export class Schema {
 
 
 
-	public static GetPrimaryImageMeta( pTitle: string , pDescr: string , pUrl: string , pOptions: ServiceSchemaOptions | SectionSchemaOptions | CollectionSchemaOptions | ArticleSchemaOptions | OrganizationSchemaOptions = {} ) : SchemaPrimaryImageMeta
-		{
+public static GetPrimaryImageMeta( pTitle: string , pDescr: string , pUrl: string , pOptions: ServiceSchemaOptions | SectionSchemaOptions | CollectionSchemaOptions | ArticleSchemaOptions | OrganizationSchemaOptions = {} ) : SchemaPrimaryImageMeta
+	{
 
-			pUrl = SeoText.NormalizePageUrl(pUrl);
+		pUrl = SeoText.NormalizePageUrl(pUrl);
 
-			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
-			const cImage = cImages[0];
+		const cHeroFolder = Schema.GetSchemaHeroFolder(pUrl, pOptions.pHeroFolder);
+		const cFolders = [cHeroFolder, ...Schema.GetFallbackHeroFolders(cHeroFolder)];
+		const cImages: SchemaObject[] = [];
+		const cUsedUrls = new Set<string>();
+		const cPreviewSpecs: SchemaImageSpec[] = [
+			Schema.GetImageSpecByName("Share.jpg"),
+			Schema.GetImageSpecByName("Schema-16x9-1200.webp"),
+			Schema.GetImageSpecByName("HeroL.webp")
+		];
 
-			return {
-				Url: Schema.GetImageUrl(cImage),
-				Alt: SeoText.GetImageAlt(pTitle, pDescr),
-				Width: Schema.GetNumberValue(cImage?.["width"]),
-				Height: Schema.GetNumberValue(cImage?.["height"])
-			};
+		for (const cFolder of cFolders) {
+			for (const cSpec of cPreviewSpecs) {
+				Schema.AddImageObjects(cImages, cUsedUrls, pUrl, pTitle, pDescr, [cSpec], cFolder, true);
 
+				if (cImages.length > 0) { break; }
+			}
+
+			if (cImages.length > 0) { break; }
 		}
+
+		const cImage = cImages[0];
+		const cImageUrl = Schema.GetImageUrl(cImage);
+
+		if (!cImageUrl) { throw new Error(`No rectangular preview image was found for ${pUrl}. Expected Share.jpg, Schema-16x9-1200.webp, or HeroL.`); }
+
+		return {
+			Url: cImageUrl,
+			Alt: SeoText.GetImageAlt(pTitle, pDescr),
+			Type: Schema.GetImageMimeType(cImageUrl),
+			Width: Schema.GetNumberValue(cImage?.["width"]),
+			Height: Schema.GetNumberValue(cImage?.["height"])
+		};
+
+	}
 
 
 
@@ -766,8 +789,7 @@ export class Schema {
 				.map((pFile) => pFile.name)
 				.filter((pFoundFileName) => pFoundFileName.toLowerCase().endsWith(cFileName))
 				.sort((pFirst, pSecond) => {
-					return Schema.GetFileSuffixPriority(pFirst, cFileName) - Schema.GetFileSuffixPriority(pSecond, cFileName)
-						|| pFirst.localeCompare(pSecond);
+					return Schema.GetFileSuffixPriority(pFirst, cFileName) - Schema.GetFileSuffixPriority(pSecond, cFileName) || pFirst.localeCompare(pSecond);
 				});
 
 			return cFiles[0] ?? "";
@@ -869,6 +891,24 @@ export class Schema {
 			return typeof cUrl === "string" ? cUrl : "";
 
 		}
+
+
+
+		private static GetImageMimeType( pUrl: string ) : string
+			{
+
+				const cPath = pUrl.split(/[?#]/, 1)[0].toLowerCase();
+
+				if (cPath.endsWith(".jpg") || cPath.endsWith(".jpeg")) { return "image/jpeg"; }
+				if (cPath.endsWith(".webp")) { return "image/webp"; }
+				if (cPath.endsWith(".png")) { return "image/png"; }
+				if (cPath.endsWith(".avif")) { return "image/avif"; }
+				if (cPath.endsWith(".gif")) { return "image/gif"; }
+				if (cPath.endsWith(".svg")) { return "image/svg+xml"; }
+
+				throw new Error(`Unsupported preview image type: ${pUrl}`);
+
+			}
 
 
 

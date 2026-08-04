@@ -143,21 +143,6 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!doctype html>
 
 	<html lang="ar" dir="rtl">
@@ -172,11 +157,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 			<link rel="canonical" href={cCanonical} />
 
-			<link
-				rel="icon"
-				type="image/svg+xml"
-				href="/Media/EmoLogo.svg"
-			/>
+			<link rel="icon" type="image/svg+xml" href="/Media/EmoLogo.svg" />
 
 			<link rel="stylesheet" href="/Styles/Site.css" />
 
@@ -213,6 +194,14 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 				
 				
 					<meta property="og:image" content={cPreviewImageUrl} />
+				
+				
+				
+				
+				
+				
+				
+					<meta property="og:image:type" content={cPreviewImageMeta.Type} />
 				
 				
 				
@@ -285,10 +274,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 				</>
 			) }
 
-			{ cSchema && (
-
-				<script type="application/ld+json" set:html={cSchema} />
-			) }
+			{ cSchema && ( <script type="application/ld+json" set:html={cSchema} /> ) }
 
 			<meta name="google-site-verification" content="5mv4GuAj1jxBUrKh0glnhAlWEouDCWg3nC51R_WqmzY" />
 
@@ -445,21 +431,6 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
 
 
@@ -591,21 +562,6 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
 
 
@@ -717,57 +673,80 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script is:inline>
-	(() => {
-	const cFloatContact = document.querySelector(".FloatContact");
-	if (!cFloatContact) return;
 
-	const cMobileQuery = window.matchMedia("(hover: none), (pointer: coarse), (max-width: 700px)");
-	let fIdleTimer = 0;
 
-	function IsMobileMode() {
-	return cMobileQuery.matches;
-	}
 
-	function HideMobileContact() {
-	if (!IsMobileMode()) {
-	cFloatContact.classList.remove("IsMobileIdleVisible");
-	return;
-	}
+	(() =>
+	{
 
-	cFloatContact.classList.remove("IsMobileIdleVisible");
-	}
+		// ==================== Definitions: Variables & Methods ====================
 
-	function ShowMobileContactAfterIdle() {
-	if (!IsMobileMode()) return;
-	cFloatContact.classList.add("IsMobileIdleVisible");
-	}
+		const cFloatContact = document.querySelector(".FloatContact");
 
-	function QueueIdleShow() {
-	window.clearTimeout(fIdleTimer);
-	HideMobileContact();
-	fIdleTimer = window.setTimeout(ShowMobileContactAfterIdle, 2000);
-	}
+		const cMobileQuery = window.matchMedia("(hover: none), (pointer: coarse), (max-width: 700px)");
 
-	window.addEventListener("scroll", QueueIdleShow, { passive: true });
-	window.addEventListener("resize", HideMobileContact, { passive: true });
-	cMobileQuery.addEventListener?.("change", HideMobileContact);
-	HideMobileContact();
+		let fIdleTimer = 0;
+
+
+
+
+
+		function IsMobileMode()
+		{
+			return cMobileQuery.matches;
+		}
+
+
+
+
+
+		function HideMobileContact()
+		{
+			if (!IsMobileMode())
+			{
+				cFloatContact.classList.remove("IsMobileIdleVisible");
+				return;
+			}
+			cFloatContact.classList.remove("IsMobileIdleVisible");
+		}
+
+
+
+
+
+		function ShowMobileContactAfterIdle()
+		{
+			if (!IsMobileMode()) return;
+			cFloatContact.classList.add("IsMobileIdleVisible");
+		}
+
+
+
+
+
+		function QueueIdleShow()
+		{
+			window.clearTimeout(fIdleTimer);
+			HideMobileContact();
+			fIdleTimer = window.setTimeout(ShowMobileContactAfterIdle, 2000);
+		}
+
+
+
+
+
+		// ==================== Execution Logic ====================
+
+		if (!cFloatContact) return;
+
+		window.addEventListener("scroll", QueueIdleShow, { passive: true });
+
+		window.addEventListener("resize", HideMobileContact, { passive: true });
+
+		cMobileQuery.addEventListener?.("change", HideMobileContact);
+
+		HideMobileContact();
 	})();
 </script>
 
@@ -789,5 +768,16 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 
 <script is:inline>
+
+
+
+	// ==================== Definitions: Variables & Methods ====================
+
+
+
+
+
+	// ==================== Execution Logic ====================
+
 	document.documentElement.classList.add("js");
 </script>
