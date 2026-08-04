@@ -1,7 +1,7 @@
 ---
 import BLayout from "@/Layout.astro";
 import { Badge, EmoCall, Emograph, VrStack } from "@/Widgets/Comp";
-import { Hero } from "@/Widgets/Sections";
+import { EmoSec, Hero } from "@/Widgets/Sections";
 import { Loc, NumPer, Size, Text } from "@/TypesLib";
 ---
 
@@ -9,26 +9,7 @@ import { Loc, NumPer, Size, Text } from "@/TypesLib";
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<BLayout
-	pSchemaType="Service"
-	pTitle="توريد وتركيب حجر طبيعي"
-	pDescr="توريد وتركيب حجر طبيعي"
->
+<BLayout pSchemaType="Service" pTitle="توريد وتركيب حجر طبيعي" pDescr="توريد وتركيب حجر طبيعي">
 
 
 
@@ -38,22 +19,15 @@ import { Loc, NumPer, Size, Text } from "@/TypesLib";
 
 	<Hero>
 
-		<VrStack
-			pSize={new Size(new NumPer("40%","95%"))}
-			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("20%","20%"))}
-			pHzAlign={"Center"}
-		>
+		<VrStack pSize={new Size(new NumPer("40%","95%"))} pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("20%","20%"))} pHzAlign={"Center"}>
 
 			<Emograph pTitle={Text.H1.Centered.OfText("توريد وتركيب حجر طبيعي")} pText={Text.Body.Centered.OfText("توريد وتركيب حجر طبيعي")} />
 
 			<Badge
 				pLandOnly
-				pYears={15}
-				pYearsText="سنوات الخبرة"
 				pQualityText="فرز أول"
-				pWorks={7}
-				pWorksText="سابقة الأعمال"
 				pMobMaxCols={2}
+				pScopeText="القاهرة والجيزة"
 			/>
 
 			<EmoCall BlackSky pText="اطلب عرض سعر" />
@@ -61,6 +35,25 @@ import { Loc, NumPer, Size, Text } from "@/TypesLib";
 		</VrStack>
 
 	</Hero>
+
+
+
+
+
+
+
+	<EmoSec pPortOnly>
+
+		<Badge
+			pPortOnly
+			pQualityText="فرز أول"
+			pMobMaxCols={2}
+			pScopeText="القاهرة والجيزة"
+			pTextPos="Top"
+			pImgSize={new Size(new NumPer(100,100))}
+		/>
+
+	</EmoSec>
 
 
 
