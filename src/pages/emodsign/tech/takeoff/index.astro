@@ -1,27 +1,12 @@
 ---
 import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
-import { EmoBtn, EmoCall, Emograph, EmoList, HzStack, SecTitle } from "@/Widgets/Comp";
+import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
 import { RespImg } from "@/Widgets/Media";
-import { EmoFaq, EmoSec, FaqItem, Hero, IndexSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { EmoStr } from "@/Widgets/Strips";
-import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -31,13 +16,6 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 	pSchemaType="CollectionPage"
 	pTitle="حصر كميات"
 	pDescr="صفحة توزيع خدمات حصر الكميات داخل المكتب، تربط بين حصر كميات أعمال البناء والهيكل الخرساني وحصر كميات التشطيبات، مع شرح الفرق بينهما ومتى يحتاج العميل كل خدمة وكيف تتحول الرسومات إلى جداول كميات قابلة للتسعير والمراجعة ومقارنة عروض المقاولين."
-	pSchemaImages={[
-		"/Media/Emodsign/Tech/Takeoff/HeroL.webp",
-		"/Media/Emodsign/Tech/Takeoff/Construction/HeroL.webp",
-		"/Media/Emodsign/Tech/Takeoff/Finishing/HeroL.webp",
-		"https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&fm=jpg&q=70&w=1600",
-		"https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&fm=jpg&q=70&w=1600"
-	]}
 >
 
 
@@ -46,98 +24,20 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<Hero
-		pImgF="/Media/Emodsign/Tech/Takeoff/"
-		pTitle="حصر كميات"
-		pDesc="اختيار خدمة الحصر المناسبة لمشروعك: حصر أعمال البناء والهيكل الخرساني، أو حصر التشطيبات، أو ملف موحد يربط المرحلتين قبل التسعير والتعاقد وشراء الخامات."
-		pTitleClr="#F4E5C4"
-		pDescClr="#FFFFFF"
-		pHzAlign="right"
-		pVrAlign="right"
-		pPosL="18% 50% 12% 8%"
-		pPosP="12% 8% 44% 8%"
-		pBlurL="on"
-		pBlurP="on"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="اطلب حصر الكميات" />
+		<VrStack pSize={new Size(new NumPer("40%","95%"))} pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))} pHzAlign={"Center"}>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("حصر كميات أعمال البناء")}
+				pText={Text.Body.Centered.OfText("خدمة حصر كميات أعمال البناء والهيكل الخرساني من الرسومات المعمارية والإنشائية، تشمل الحفر والخرسانة العادية والمسلحة والشدات والحديد والمباني والبنود المرتبطة، مع إعداد جداول كميات واضحة للتسعير والمقايسة ومقارنة عروض المقاولين.")}
+			/>
+
+			<EmoCall BlackSky />
+
+		</VrStack>
 
 	</Hero>
-
-
-
-
-
-
-
-	<IndexSec
-		pMedia={new EmoMediaData("Img", "/Media/Emodsign/Tech/Takeoff/", "HeroL.webp")}
-		pTitleClr="#ffffff"
-		pBlurL="on"
-		pBlurP="on"
-	>
-
-		<EmoBtn
-			pText="اختيار نوع الحصر"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#ffffff"
-			pTextColorHover="#111318"
-			pWidth="250px"
-			pHeight="44px"
-			onclick="location.href='#choose-takeoff'"
-		/>
-
-		<EmoBtn
-			pText="حصر البناء"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#ffffff"
-			pTextColorHover="#111318"
-			pWidth="250px"
-			pHeight="44px"
-			onclick="location.href='#construction-takeoff'"
-		/>
-
-		<EmoBtn
-			pText="حصر التشطيبات"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#ffffff"
-			pTextColorHover="#111318"
-			pWidth="250px"
-			pHeight="44px"
-			onclick="location.href='#finishing-takeoff'"
-		/>
-
-		<EmoBtn
-			pText="مخرجات الحصر"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#ffffff"
-			pTextColorHover="#111318"
-			pWidth="250px"
-			pHeight="44px"
-			onclick="location.href='#deliverables'"
-		/>
-
-		<EmoBtn
-			pText="روابط التوزيع"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#ffffff"
-			pTextColorHover="#111318"
-			pWidth="250px"
-			pHeight="44px"
-			onclick="location.href='#distribution-links'"
-		/>
-
-		<EmoBtn
-			pText="الأسئلة الشائعة"
-			pBgImg="/Media/IndexBtn.webp"
-			pTextColor="#ffffff"
-			pTextColorHover="#111318"
-			pWidth="250px"
-			pHeight="44px"
-			onclick="location.href='#faq'"
-		/>
-
-	</IndexSec>
 
 
 
@@ -187,11 +87,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#0E1118")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#0E1118")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -334,11 +230,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -441,11 +333,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -539,11 +427,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -626,11 +510,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -662,11 +542,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -761,11 +637,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -797,11 +669,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -855,11 +723,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#0E1118")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#0E1118")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -889,11 +753,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #F7F1E6 "
@@ -925,11 +785,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -975,11 +831,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1009,11 +861,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1045,11 +893,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1147,11 +991,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1183,11 +1023,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1237,11 +1073,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1271,11 +1103,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1314,11 +1142,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1350,11 +1174,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1402,11 +1222,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1436,11 +1252,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1472,11 +1284,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1530,11 +1338,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1566,11 +1370,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1616,11 +1416,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1650,11 +1446,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1684,11 +1476,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1720,11 +1508,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1774,11 +1558,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1808,11 +1588,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #E7D3A1 "
@@ -1842,11 +1618,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = " --StripBg : #0E1118 "
@@ -1946,10 +1718,7 @@ import { Align, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Top
 			pAnswer="نعم، لكن في الأنشطة التجارية يجب الانتباه إلى الكهرباء والتهوية والسباكة والتشطيبات الخاصة لأن التكلفة لا ترتبط بالمساحة فقط."
 		/>
 
-		<FaqItem
-			pQuestion="هل يتم حساب الهالك؟"
-			pAnswer="يمكن إضافة الهالك عند طلب قائمة شراء، ويختلف حسب نوع الخامة والمقاس وطريقة التركيب ودرجة التقطيع."
-		/>
+		<FaqItem pQuestion="هل يتم حساب الهالك؟" pAnswer="يمكن إضافة الهالك عند طلب قائمة شراء، ويختلف حسب نوع الخامة والمقاس وطريقة التركيب ودرجة التقطيع." />
 
 		<FaqItem
 			pQuestion="هل الحصر يصلح للتعاقد مع المقاول مباشرة؟"
