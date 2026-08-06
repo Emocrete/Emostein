@@ -592,7 +592,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 
 	@media (hover: none), (pointer: coarse), (max-width: 700px) {
-		.FloatContact {
+		html:not(.EmoReplayDesktop) .FloatContact {
 			left: 0;
 			right: 0;
 			bottom: max(14px, env(safe-area-inset-bottom));
@@ -610,13 +610,13 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 			pointer-events: none;
 		}
 
-		.FloatContact.IsMobileIdleVisible {
+		html:not(.EmoReplayDesktop) .FloatContact.IsMobileIdleVisible {
 			opacity: 1;
 			transform: translateY(0);
 			pointer-events: auto;
 		}
 
-		.FloatContactLink {
+		html:not(.EmoReplayDesktop) .FloatContactLink {
 			position: relative;
 			left: auto;
 			top: auto;
@@ -630,18 +630,18 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 			transition: none;
 		}
 
-		.FloatContactLink.IsWhatsapp {
+		html:not(.EmoReplayDesktop) .FloatContactLink.IsWhatsapp {
 			top: auto;
 			order: 1;
 		}
 
-		.FloatContactLink.IsCall {
+		html:not(.EmoReplayDesktop) .FloatContactLink.IsCall {
 			order: 2;
 		}
 
-		.FloatContactIcon,
-		.FloatContactArrow,
-		.FloatContactText
+		html:not(.EmoReplayDesktop) .FloatContactIcon,
+		html:not(.EmoReplayDesktop) .FloatContactArrow,
+		html:not(.EmoReplayDesktop) .FloatContactText
 		{
 			position: static;
 			width: auto;
@@ -650,16 +650,16 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 			transform: none;
 		}
 
-		.FloatContactIcon {
+		html:not(.EmoReplayDesktop) .FloatContactIcon {
 			width: 25px;
 			height: 25px;
 		}
 
-		.FloatContactArrow {
+		html:not(.EmoReplayDesktop) .FloatContactArrow {
 			display: none;
 		}
 
-		.FloatContactText {
+		html:not(.EmoReplayDesktop) .FloatContactText {
 			display: flex;
 			font-size: 14px;
 		}
@@ -694,7 +694,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 		function IsMobileMode()
 		{
-			return cMobileQuery.matches;
+			return !document.documentElement.classList.contains("EmoReplayDesktop") && cMobileQuery.matches;
 		}
 
 

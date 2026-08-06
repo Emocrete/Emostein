@@ -13,6 +13,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 	const cRawWidth = Math.round(Number(cParams.get("emoReplayWidth")) || 0);
 	const cRawHeight = Math.round(Number(cParams.get("emoReplayHeight")) || 0);
 	const cRawInitialScale = Number(cParams.get("emoReplayInitialScale"));
+	const cDesktop = cParams.get("emoReplayDesktop") === "1";
 	const cWidth = cRawWidth > 0 ? Math.max(240, cRawWidth) : 0;
 	const cHeight = cRawHeight > 0 ? Math.max(320, cRawHeight) : 0;
 	const cInitialScale = Number.isFinite(cRawInitialScale) && cRawInitialScale > 0
@@ -23,8 +24,14 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 	let fReplayTouchCursor = null;
 	let fPendingTouchFrame = null;
 	let fTouchRenderRaf = 0;
+	let fReplayReadOutline = null;
+	let fReplayReadTarget = null;
+	let fReadOutlineRaf = 0;
 
 	document.documentElement.dataset.emoReplayMode = "true";
+	document.documentElement.dataset.emoReplayDevice = cDesktop ? "desktop" : "mobile";
+	document.documentElement.classList.toggle("EmoReplayDesktop", cDesktop);
+	document.documentElement.classList.toggle("EmoReplayMobile", !cDesktop);
 	if (cWidth > 0) {
 		let Viewport = document.querySelector('meta[name="viewport"]');
 		if (!Viewport) {
@@ -151,6 +158,11 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		if (!Candidates.length && Str(Data.name)) {
 			try { Candidates = Array.from(document.querySelectorAll(`[name="${CssEscape(Data.name)}"]`)); } catch {}
 		}
+		if (!Candidates.length && Str(Data.label)) {
+			try {
+				Candidates = Array.from(document.querySelectorAll("[id], section, article, main, h1, h2, h3, h4, p, li")).filter((Elem) => CandidateText(Elem) === CleanText(Data.label)).slice(0, 80);
+			} catch {}
+		}
 		let Best = null;
 		let BestScore = -Infinity;
 		for (const Candidate of Candidates) {
@@ -220,6 +232,71 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		if (fReplayTouchCursor) fReplayTouchCursor.style.display = "none";
 		return true;
 	}
+	function EnsureReadOutline() {
+		if (fReplayReadOutline) return fReplayReadOutline;
+		const Layer = document.createElement("emo-replay-read-layer");
+		Layer.style.position = "fixed";
+		Layer.style.inset = "0";
+		Layer.style.zIndex = "2147483645";
+		Layer.style.pointerEvents = "none";
+		Layer.style.overflow = "visible";
+		Layer.style.contain = "layout style paint";
+		const Shadow = Layer.attachShadow({ mode: "closed" });
+		const Outline = document.createElement("span");
+		Outline.style.position = "fixed";
+		Outline.style.left = "0";
+		Outline.style.top = "0";
+		Outline.style.boxSizing = "border-box";
+		Outline.style.border = "3px dashed #000000";
+		Outline.style.background = "transparent";
+		Outline.style.pointerEvents = "none";
+		Outline.style.display = "none";
+		Outline.style.willChange = "transform,width,height";
+		Shadow.appendChild(Outline);
+		document.documentElement.appendChild(Layer);
+		fReplayReadOutline = Outline;
+		return Outline;
+	}
+	function CommitReadOutline() {
+		fReadOutlineRaf = 0;
+		const Outline = EnsureReadOutline();
+		const Target = fReplayReadTarget;
+		if (!(Target instanceof Element) || !Target.isConnected) {
+			Outline.style.display = "none";
+			return;
+		}
+		const Bounds = Target.getBoundingClientRect();
+		if (Bounds.width <= 0 || Bounds.height <= 0 || Bounds.bottom < 0 || Bounds.right < 0 || Bounds.top > innerHeight || Bounds.left > innerWidth) {
+			Outline.style.display = "none";
+			return;
+		}
+		Outline.style.display = "block";
+		Outline.style.width = `${Math.max(1, Bounds.width)}px`;
+		Outline.style.height = `${Math.max(1, Bounds.height)}px`;
+		Outline.style.transform = `translate3d(${Bounds.left}px, ${Bounds.top}px, 0)`;
+	}
+	function RenderReadOutline(pData) {
+		fReplayReadTarget = FindTarget(pData);
+		if (!fReplayReadTarget) return HideReadOutline();
+		if (!fReadOutlineRaf) fReadOutlineRaf = requestAnimationFrame(CommitReadOutline);
+		return true;
+	}
+	function HideReadOutline() {
+		fReplayReadTarget = null;
+		if (fReadOutlineRaf) {
+			cancelAnimationFrame(fReadOutlineRaf);
+			fReadOutlineRaf = 0;
+		}
+		if (fReplayReadOutline) fReplayReadOutline.style.display = "none";
+		return true;
+	}
+	window.addEventListener("scroll", () => {
+		if (fReplayReadTarget && !fReadOutlineRaf) fReadOutlineRaf = requestAnimationFrame(CommitReadOutline);
+	}, { passive: true });
+	window.addEventListener("resize", () => {
+		if (fReplayReadTarget && !fReadOutlineRaf) fReadOutlineRaf = requestAnimationFrame(CommitReadOutline);
+	}, { passive: true });
+
 	function ApplyAction(pAction) {
 		const Action = pAction && typeof pAction === "object" ? pAction : {};
 		const Type = Str(Action.type).replace(/^system\./, "");
@@ -266,6 +343,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 	function StopPage() {
 		document.documentElement.dataset.emoReplayStarted = "false";
 		HideTouchFrame();
+		HideReadOutline();
 		return true;
 	}
 	function PageInfo() {
@@ -292,7 +370,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		Promise.resolve(Fonts).catch(() => {}).finally(() => requestAnimationFrame(() => requestAnimationFrame(Send)));
 	}
 
-	window.EmoReplayRuntime = { ApplyAction, StartPage, StopPage, PageInfo, FindTarget, RenderTouchFrame, HideTouchFrame };
+	window.EmoReplayRuntime = { ApplyAction, StartPage, StopPage, PageInfo, FindTarget, RenderTouchFrame, HideTouchFrame, RenderReadOutline, HideReadOutline };
 	if (!window.EmoReplayAndroid?.OnPageReady) StartPage(0);
 
 	window.open = function(pUrl) {

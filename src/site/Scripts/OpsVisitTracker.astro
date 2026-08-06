@@ -920,7 +920,11 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			const ReadEventData = {
 				readTitle: ReadTitle,
 				readableText: ReadableText,
-				readable: IsReadableBoundary(pState.Elem)
+				readable: IsReadableBoundary(pState.Elem),
+				id: String(pState.Elem?.id || ""),
+				selector: GetReplaySelector(pState.Elem),
+				tag: String(pState.Elem?.tagName || "").toLowerCase(),
+				label: ReadTitle
 			};
 			if (BodyText)
 			{

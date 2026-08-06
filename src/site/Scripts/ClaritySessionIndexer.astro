@@ -12,6 +12,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 	const cEndpoint = "/api/ops/clarity";
 	let fLastKey = "";
 	let fRegistered = false;
+	const fPendingKeys = new Set();
 
 	function Str(pValue) { return String(pValue ?? "").trim(); }
 	function Ids() {
@@ -23,19 +24,21 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 		};
 	}
 
-	async function Publish(pMetadata, pPlayback) {
+	async function Publish(pMetadata, pPlayback, pAttempt = 0) {
 		const Visit = Ids();
-		const ProjectId = Str(pMetadata?.projectId);
-		const UserId = Str(pMetadata?.userId);
-		const ClaritySessionId = Str(pMetadata?.sessionId);
+		const ProjectId = Str(pMetadata?.projectId || pMetadata?.project);
+		const UserId = Str(pMetadata?.userId || pMetadata?.user);
+		const ClaritySessionId = Str(pMetadata?.sessionId || pMetadata?.session);
+		const PageNumberValue = Number(pMetadata?.pageNum || pMetadata?.page || 1);
+		const PageNumber = Number.isFinite(PageNumberValue) && PageNumberValue > 0 ? Math.trunc(PageNumberValue) : 1;
 		if (!Visit.sessionId || !ProjectId || !UserId || !ClaritySessionId) return;
 		if (pPlayback === false) return;
 		const Key = `${Visit.sessionId}|${ProjectId}|${UserId}|${ClaritySessionId}`;
-		if (Key === fLastKey) return;
-		fLastKey = Key;
-		const ClarityUrl = `https://clarity.microsoft.com/player/${encodeURIComponent(ProjectId)}/${encodeURIComponent(UserId)}/${encodeURIComponent(ClaritySessionId)}`;
+		if (Key === fLastKey || fPendingKeys.has(Key)) return;
+		fPendingKeys.add(Key);
+		const ClarityUrl = `https://clarity.microsoft.com/player/${encodeURIComponent(ProjectId)}/${encodeURIComponent(UserId)}/${encodeURIComponent(ClaritySessionId)}/${PageNumber}`;
 		try {
-			await fetch(cEndpoint, {
+			const Response = await fetch(cEndpoint, {
 				method: "POST",
 				headers: { "content-type": "application/json" },
 				body: JSON.stringify({
@@ -45,12 +48,19 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 					clarityProjectId: ProjectId,
 					clarityUserId: UserId,
 					claritySessionId: ClaritySessionId,
+					clarityPageNumber: PageNumber,
 					clarityUrl: ClarityUrl,
 					indexedAt: new Date().toISOString()
 				}),
 				keepalive: true
 			});
-		} catch {}
+			if (!Response.ok) throw new Error(`HTTP ${Response.status}`);
+			fLastKey = Key;
+		} catch {
+			if (pAttempt < 5) window.setTimeout(() => Publish(pMetadata, pPlayback, pAttempt + 1), 2000 * (pAttempt + 1));
+		} finally {
+			fPendingKeys.delete(Key);
+		}
 	}
 
 	function Register() {

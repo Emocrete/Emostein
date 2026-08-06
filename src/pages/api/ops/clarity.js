@@ -68,6 +68,7 @@ export async function POST({ request }) {
 		const ProjectId = Str(Body.clarityProjectId);
 		const UserId = Str(Body.clarityUserId);
 		const ClaritySessionId = Str(Body.claritySessionId);
+		const ClarityPageNumber = Math.max(1, Math.trunc(Number(Body.clarityPageNumber) || 1));
 		const ClarityUrl = Str(Body.clarityUrl);
 		if (!ValidId(SessionId, "s") || !ValidId(VisitorId, "v") || !ValidId(PageInstanceId, "p"))
 			return Json({ ok: false, error: "Invalid visit IDs" }, 400);
@@ -100,6 +101,7 @@ export async function POST({ request }) {
 				clarityProjectId: ProjectId,
 				clarityUserId: UserId,
 				claritySessionId: ClaritySessionId,
+				clarityPageNumber: ClarityPageNumber,
 				indexedAt: Str(Body.indexedAt) || new Date().toISOString()
 			}
 		};
@@ -139,7 +141,7 @@ export async function GET({ request }) {
 			const Url = Str(P.clarityUrl);
 			if (!Url.startsWith("https://clarity.microsoft.com/player/")) continue;
 			Seen.add(SessionId);
-			Matches.push({ sessionId: SessionId, clarityUrl: Url, indexedAt: Str(P.indexedAt || Row.created_at) });
+			Matches.push({ sessionId: SessionId, clarityUrl: Url, indexedAt: Str(P.indexedAt || Row.created_at), ready: true, status: "ready" });
 		}
 		return Json({ ok: true, matches: Matches });
 	} catch (Ex) {
