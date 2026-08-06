@@ -20,13 +20,29 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		? Math.max(0.05, Math.min(4, cRawInitialScale))
 		: 1 / Math.max(1, window.devicePixelRatio || 1);
 	const cGeneratedId = /^(.+?)-(\d{6})-(\d{6})-(\d{3})-(\d{3})$/;
+	const cReplayHoverAttribute = "data-emo-replay-hover";
+	const cTrailLifetimeMs = 2000;
+	const cClickPulseLifetimeMs = 1000;
 	const fBuildOffsets = [];
+	const fPointerTrail = [];
+	const fClickPulses = [];
 	let fReplayTouchCursor = null;
 	let fPendingTouchFrame = null;
 	let fTouchRenderRaf = 0;
 	let fReplayReadOutline = null;
 	let fReplayReadTarget = null;
 	let fReadOutlineRaf = 0;
+	let fReplayPointerCanvas = null;
+	let fReplayPointerContext = null;
+	let fReplayPointerDpr = 1;
+	let fPointerEffectsRaf = 0;
+	let fReplayHoverStyle = null;
+	let fHoverStyleTimer = 0;
+	let fHoveredElements = [];
+	let fLastHoverTarget = null;
+	let fLastPointerX = -1;
+	let fLastPointerY = -1;
+	let fLastPointerType = "";
 
 	document.documentElement.dataset.emoReplayMode = "true";
 	document.documentElement.dataset.emoReplayDevice = cDesktop ? "desktop" : "mobile";
@@ -50,6 +66,335 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 	function CssEscape(pValue) {
 		if (window.CSS?.escape) return window.CSS.escape(Str(pValue));
 		return Str(pValue).replace(/[^a-zA-Z0-9_-]/g, (Char) => `\\${Char}`);
+	}
+
+	function EnsurePointerEffectsLayer() {
+		if (fReplayPointerCanvas && fReplayPointerContext) return fReplayPointerCanvas;
+		const Layer = document.createElement("emo-replay-pointer-effects");
+		Layer.style.position = "fixed";
+		Layer.style.inset = "0";
+		Layer.style.zIndex = "2147483646";
+		Layer.style.pointerEvents = "none";
+		Layer.style.overflow = "hidden";
+		Layer.style.contain = "layout style paint";
+		const Shadow = Layer.attachShadow({ mode: "closed" });
+		const Canvas = document.createElement("canvas");
+		Canvas.style.position = "absolute";
+		Canvas.style.inset = "0";
+		Canvas.style.width = "100%";
+		Canvas.style.height = "100%";
+		Canvas.style.pointerEvents = "none";
+		Shadow.appendChild(Canvas);
+		document.documentElement.appendChild(Layer);
+		fReplayPointerCanvas = Canvas;
+		fReplayPointerContext = Canvas.getContext("2d");
+		ResizePointerEffectsLayer();
+		return Canvas;
+	}
+	function ResizePointerEffectsLayer() {
+		if (!fReplayPointerCanvas || !fReplayPointerContext) return;
+		const Width = Math.max(1, Math.round(innerWidth));
+		const Height = Math.max(1, Math.round(innerHeight));
+		const Dpr = Math.max(1, Math.min(3, Number(window.devicePixelRatio) || 1));
+		const PixelWidth = Math.max(1, Math.round(Width * Dpr));
+		const PixelHeight = Math.max(1, Math.round(Height * Dpr));
+		if (fReplayPointerCanvas.width !== PixelWidth) fReplayPointerCanvas.width = PixelWidth;
+		if (fReplayPointerCanvas.height !== PixelHeight) fReplayPointerCanvas.height = PixelHeight;
+		fReplayPointerDpr = Dpr;
+	}
+	function SchedulePointerEffects() {
+		EnsurePointerEffectsLayer();
+		if (!fPointerEffectsRaf) fPointerEffectsRaf = requestAnimationFrame(DrawPointerEffects);
+	}
+	function DrawPointerEffects(pNow) {
+		fPointerEffectsRaf = 0;
+		if (!fReplayPointerCanvas || !fReplayPointerContext) return;
+		const Context = fReplayPointerContext;
+		Context.setTransform(1, 0, 0, 1, 0, 0);
+		Context.clearRect(0, 0, fReplayPointerCanvas.width, fReplayPointerCanvas.height);
+		Context.setTransform(fReplayPointerDpr, 0, 0, fReplayPointerDpr, 0, 0);
+		while (fPointerTrail.length && pNow - fPointerTrail[0].at > cTrailLifetimeMs) fPointerTrail.shift();
+		while (fClickPulses.length && pNow - fClickPulses[0].at > cClickPulseLifetimeMs) fClickPulses.shift();
+		for (let Index = 1; Index < fPointerTrail.length; Index++) {
+			const Start = fPointerTrail[Index - 1];
+			const End = fPointerTrail[Index];
+			if (End.breakBefore) continue;
+			const Age = Math.max(0, pNow - End.at);
+			const Life = Math.max(0, 1 - Age / cTrailLifetimeMs);
+			if (Life <= 0) continue;
+			Context.beginPath();
+			Context.moveTo(Start.x, Start.y);
+			Context.lineTo(End.x, End.y);
+			Context.lineCap = "round";
+			Context.lineJoin = "round";
+			Context.lineWidth = 2.5 + Life * 1.5;
+			Context.strokeStyle = `rgba(255, 112, 0, ${Math.min(.92, Life * .92)})`;
+			Context.stroke();
+		}
+		for (const Pulse of fClickPulses) {
+			const Age = Math.max(0, pNow - Pulse.at);
+			const BaseProgress = Age / cClickPulseLifetimeMs;
+			for (let RingIndex = 0; RingIndex < 3; RingIndex++) {
+				const Delay = RingIndex * .12;
+				const Progress = (BaseProgress - Delay) / Math.max(.01, 1 - Delay);
+				if (Progress < 0 || Progress > 1) continue;
+				const Ease = 1 - Math.pow(1 - Progress, 3);
+				const Alpha = Math.max(0, (1 - Progress) * (.9 - RingIndex * .16));
+				Context.beginPath();
+				Context.arc(Pulse.x, Pulse.y, 9 + Ease * (28 + RingIndex * 8), 0, Math.PI * 2);
+				Context.lineWidth = Math.max(1.2, 3.2 - Progress * 2);
+				Context.strokeStyle = `rgba(255, 92, 45, ${Alpha})`;
+				Context.stroke();
+			}
+		}
+		if (fPointerTrail.length || fClickPulses.length) fPointerEffectsRaf = requestAnimationFrame(DrawPointerEffects);
+	}
+	function AddTrailPoint(pX, pY) {
+		const X = Num(pX, -1);
+		const Y = Num(pY, -1);
+		if (X < 0 || Y < 0) return;
+		const Now = performance.now();
+		const Last = fPointerTrail[fPointerTrail.length - 1];
+		if (Last && Math.abs(Last.x - X) < .5 && Math.abs(Last.y - Y) < .5 && Now - Last.at < 70) return;
+		const Distance = Last ? Math.hypot(X - Last.x, Y - Last.y) : 0;
+		const BreakBefore = !Last || Now - Last.at > 550 || Distance > Math.max(innerWidth, innerHeight) * .75;
+		fPointerTrail.push({ x: X, y: Y, at: Now, breakBefore: BreakBefore });
+		SchedulePointerEffects();
+	}
+	function AddClickPulse(pX, pY) {
+		const X = Num(pX, fLastPointerX);
+		const Y = Num(pY, fLastPointerY);
+		if (X < 0 || Y < 0) return;
+		fClickPulses.push({ x: X, y: Y, at: performance.now() });
+		SchedulePointerEffects();
+	}
+	function ClearPointerEffects() {
+		fPointerTrail.length = 0;
+		fClickPulses.length = 0;
+		if (fPointerEffectsRaf) {
+			cancelAnimationFrame(fPointerEffectsRaf);
+			fPointerEffectsRaf = 0;
+		}
+		if (fReplayPointerCanvas && fReplayPointerContext) {
+			fReplayPointerContext.setTransform(1, 0, 0, 1, 0, 0);
+			fReplayPointerContext.clearRect(0, 0, fReplayPointerCanvas.width, fReplayPointerCanvas.height);
+		}
+	}
+	function HoverSelector(pSelector) {
+		return Str(pSelector).replace(/:hover\b/gi, `[${cReplayHoverAttribute}]`);
+	}
+	function CleanReplayMediaCondition(pCondition) {
+		const Parts = Str(pCondition).split(",");
+		const Result = [];
+		let AlwaysMatches = false;
+		for (let Part of Parts) {
+			let Include = true;
+			Part = Part.replace(/\(\s*((?:any-)?hover|(?:any-)?pointer)\s*:\s*([^)]+)\)/gi, (Match, Feature, RawValue) => {
+				const Name = Str(Feature).toLowerCase();
+				const Value = Str(RawValue).toLowerCase();
+				if (Name.includes("hover") && Value === "none") Include = false;
+				if (Name.includes("pointer") && (Value === "coarse" || Value === "none")) Include = false;
+				return "";
+			});
+			if (!Include) continue;
+			Part = Part
+				.replace(/^\s*and\s+/i, "")
+				.replace(/\s+and\s*$/i, "")
+				.replace(/\s+and\s+and\s+/gi, " and ")
+				.replace(/\s{2,}/g, " ")
+				.trim();
+			if (!Part || /^(?:not|only)$/i.test(Part)) AlwaysMatches = true;
+			else Result.push(Part);
+		}
+		if (AlwaysMatches) return "";
+		return Result.length ? Result.join(", ") : null;
+	}
+	function HoverRuleText(pRule) {
+		try {
+			if (pRule.type === CSSRule.STYLE_RULE) {
+				const Selector = Str(pRule.selectorText);
+				if (!/:hover\b/i.test(Selector)) return "";
+				return `${HoverSelector(Selector)}{${pRule.style.cssText}}`;
+			}
+			if (pRule.type === CSSRule.IMPORT_RULE && pRule.styleSheet?.cssRules) {
+				return Array.from(pRule.styleSheet.cssRules).map(HoverRuleText).filter(Boolean).join("\n");
+			}
+			if (!pRule.cssRules) return "";
+			const Children = Array.from(pRule.cssRules).map(HoverRuleText).filter(Boolean).join("\n");
+			if (!Children) return "";
+			if (pRule.type === CSSRule.MEDIA_RULE) {
+				const Condition = CleanReplayMediaCondition(pRule.conditionText);
+				if (Condition === null) return "";
+				return Condition ? `@media ${Condition}{${Children}}` : Children;
+			}
+			const CssText = Str(pRule.cssText);
+			const OpenIndex = CssText.indexOf("{");
+			const Header = OpenIndex > 0 ? CssText.slice(0, OpenIndex).trim() : "";
+			if (!Header || /^@(?:-webkit-)?keyframes\b/i.test(Header)) return "";
+			return `${Header}{${Children}}`;
+		} catch {
+			return "";
+		}
+	}
+	function EnsureReplayHoverStyle() {
+		if (fReplayHoverStyle?.isConnected) return fReplayHoverStyle;
+		const Style = document.createElement("style");
+		Style.dataset.emoReplayHoverRules = "true";
+		document.head.appendChild(Style);
+		fReplayHoverStyle = Style;
+		return Style;
+	}
+	function RebuildReplayHoverStyles() {
+		fHoverStyleTimer = 0;
+		const Style = EnsureReplayHoverStyle();
+		const Rules = [];
+		for (const Sheet of Array.from(document.styleSheets)) {
+			if (Sheet.ownerNode === Style || Sheet.ownerNode?.dataset?.emoReplayHoverRules === "true") continue;
+			try {
+				for (const Rule of Array.from(Sheet.cssRules || [])) {
+					const Text = HoverRuleText(Rule);
+					if (Text) Rules.push(Text);
+				}
+			} catch {}
+		}
+		Style.textContent = Rules.join("\n");
+	}
+	function ScheduleReplayHoverStyleBuild() {
+		if (fHoverStyleTimer) clearTimeout(fHoverStyleTimer);
+		fHoverStyleTimer = window.setTimeout(RebuildReplayHoverStyles, 60);
+	}
+	function DeepElementFromPoint(pX, pY) {
+		let Target = document.elementFromPoint(Num(pX), Num(pY));
+		let Depth = 0;
+		while (Target?.shadowRoot && Depth < 8) {
+			const Inner = Target.shadowRoot.elementFromPoint?.(Num(pX), Num(pY));
+			if (!(Inner instanceof Element) || Inner === Target) break;
+			Target = Inner;
+			Depth++;
+		}
+		return Target instanceof Element ? Target : null;
+	}
+	function HoverChain(pTarget) {
+		const Result = [];
+		let Current = pTarget;
+		while (Current instanceof Element) {
+			Result.push(Current);
+			if (Current.parentElement) Current = Current.parentElement;
+			else Current = Current.getRootNode()?.host instanceof Element ? Current.getRootNode().host : null;
+		}
+		return Result;
+	}
+	function DispatchReplayPointerEvent(pTarget, pType, pX, pY, pRelatedTarget = null, pBubbles = true) {
+		if (!(pTarget instanceof Element)) return;
+		const Init = {
+			bubbles: pBubbles,
+			cancelable: true,
+			composed: true,
+			clientX: Num(pX),
+			clientY: Num(pY),
+			screenX: Num(pX),
+			screenY: Num(pY),
+			button: 0,
+			buttons: 0,
+			relatedTarget: pRelatedTarget
+		};
+		try {
+			if (/^pointer/.test(pType) && window.PointerEvent) {
+				pTarget.dispatchEvent(new PointerEvent(pType, { ...Init, pointerId: 1, pointerType: "mouse", isPrimary: true }));
+			} else pTarget.dispatchEvent(new MouseEvent(pType, Init));
+		} catch {}
+	}
+	function ClearReplayHover(pDispatchLeave = true) {
+		const OldTarget = fLastHoverTarget;
+		if (pDispatchLeave && OldTarget) {
+			DispatchReplayPointerEvent(OldTarget, "pointerout", fLastPointerX, fLastPointerY, null, true);
+			DispatchReplayPointerEvent(OldTarget, "mouseout", fLastPointerX, fLastPointerY, null, true);
+		}
+		for (const Elem of fHoveredElements) {
+			Elem.removeAttribute(cReplayHoverAttribute);
+			if (pDispatchLeave) {
+				DispatchReplayPointerEvent(Elem, "pointerleave", fLastPointerX, fLastPointerY, null, false);
+				DispatchReplayPointerEvent(Elem, "mouseleave", fLastPointerX, fLastPointerY, null, false);
+			}
+		}
+		fHoveredElements = [];
+		fLastHoverTarget = null;
+	}
+	function UpdateReplayHover(pX, pY, pPointerType = "mouse", pDispatchMove = true, pDispatchTransitions = true) {
+		const PointerType = Str(pPointerType).toLowerCase() || "mouse";
+		if (PointerType === "touch") {
+			ClearReplayHover();
+			return null;
+		}
+		const Target = DeepElementFromPoint(pX, pY);
+		const NewChain = HoverChain(Target);
+		const OldChain = fHoveredElements;
+		const OldSet = new Set(OldChain);
+		const NewSet = new Set(NewChain);
+		if (Target !== fLastHoverTarget) {
+			if (pDispatchTransitions && fLastHoverTarget) {
+				DispatchReplayPointerEvent(fLastHoverTarget, "pointerout", pX, pY, Target, true);
+				DispatchReplayPointerEvent(fLastHoverTarget, "mouseout", pX, pY, Target, true);
+			}
+			for (const Elem of OldChain) {
+				if (NewSet.has(Elem)) continue;
+				Elem.removeAttribute(cReplayHoverAttribute);
+				if (pDispatchTransitions) {
+					DispatchReplayPointerEvent(Elem, "pointerleave", pX, pY, Target, false);
+					DispatchReplayPointerEvent(Elem, "mouseleave", pX, pY, Target, false);
+				}
+			}
+			for (const Elem of [...NewChain].reverse()) {
+				if (OldSet.has(Elem)) continue;
+				Elem.setAttribute(cReplayHoverAttribute, "");
+				if (pDispatchTransitions) {
+					DispatchReplayPointerEvent(Elem, "pointerenter", pX, pY, fLastHoverTarget, false);
+					DispatchReplayPointerEvent(Elem, "mouseenter", pX, pY, fLastHoverTarget, false);
+				}
+			}
+			if (pDispatchTransitions && Target) {
+				DispatchReplayPointerEvent(Target, "pointerover", pX, pY, fLastHoverTarget, true);
+				DispatchReplayPointerEvent(Target, "mouseover", pX, pY, fLastHoverTarget, true);
+			}
+			fHoveredElements = NewChain;
+			fLastHoverTarget = Target;
+		} else {
+			for (const Elem of NewChain) Elem.setAttribute(cReplayHoverAttribute, "");
+		}
+		if (Target && pDispatchMove) {
+			DispatchReplayPointerEvent(Target, "pointermove", pX, pY, null, true);
+			DispatchReplayPointerEvent(Target, "mousemove", pX, pY, null, true);
+		}
+		return Target;
+	}
+	function RenderReplayPointer(pData, pType = "pointer_move", pVisual = true) {
+		const Data = pData && typeof pData === "object" ? pData : {};
+		const PointerType = Str(Data.pointerType || fLastPointerType || "mouse").toLowerCase();
+		const X = Num(Data.x, fLastPointerX);
+		const Y = Num(Data.y, fLastPointerY);
+		if (X >= 0) fLastPointerX = X;
+		if (Y >= 0) fLastPointerY = Y;
+		fLastPointerType = PointerType;
+		if (pType === "pointer_cancel" || PointerType === "touch") {
+			ClearReplayHover();
+			return true;
+		}
+		if (X < 0 || Y < 0) return false;
+		if (pVisual) AddTrailPoint(X, Y);
+		UpdateReplayHover(X, Y, PointerType, pVisual && pType === "pointer_move", pVisual);
+		return true;
+	}
+	function RefreshReplayHover(pDispatchTransitions = true) {
+		if (fLastPointerX < 0 || fLastPointerY < 0 || fLastPointerType === "touch") return;
+		UpdateReplayHover(fLastPointerX, fLastPointerY, fLastPointerType, false, pDispatchTransitions);
+	}
+	function ClearPointerVisuals() {
+		ClearReplayHover(false);
+		ClearPointerEffects();
+		fLastPointerX = -1;
+		fLastPointerY = -1;
+		fLastPointerType = "";
+		return true;
 	}
 	function ParseGeneratedId(pId) {
 		const Match = Str(pId).match(cGeneratedId);
@@ -294,20 +639,51 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		if (fReplayReadTarget && !fReadOutlineRaf) fReadOutlineRaf = requestAnimationFrame(CommitReadOutline);
 	}, { passive: true });
 	window.addEventListener("resize", () => {
+		ResizePointerEffectsLayer();
+		requestAnimationFrame(RefreshReplayHover);
 		if (fReplayReadTarget && !fReadOutlineRaf) fReadOutlineRaf = requestAnimationFrame(CommitReadOutline);
 	}, { passive: true });
+	if (document.head) {
+		new MutationObserver((Mutations) => {
+			if (Mutations.every((Mutation) => Mutation.target === fReplayHoverStyle || fReplayHoverStyle?.contains(Mutation.target))) return;
+			ScheduleReplayHoverStyleBuild();
+		}).observe(document.head, { childList: true, subtree: true, attributes: true, attributeFilter: ["href", "media", "disabled"] });
+	}
 
 	function ApplyAction(pAction) {
 		const Action = pAction && typeof pAction === "object" ? pAction : {};
 		const Type = Str(Action.type).replace(/^system\./, "");
 		const Data = Action.data && typeof Action.data === "object" ? Action.data : {};
-		if (Type === "touch_frame") return true;
-		if (Type === "scroll") {
-			window.scrollTo(Num(Data.scrollX), Num(Data.scrollY));
+		const Visual = Action.visual !== false;
+		if (Type === "touch_frame") {
+			ClearReplayHover();
 			return true;
 		}
-		if (["page_ready", "resize", "pointer_move", "pointer_down", "pointer_up", "pointer_cancel", "focus", "blur", "visibility", "page_hide"].includes(Type)) return true;
-		const Target = FindTarget(Data);
+		if (Type === "scroll") {
+			window.scrollTo(Num(Data.scrollX), Num(Data.scrollY));
+			if (Visual) requestAnimationFrame(RefreshReplayHover);
+			return true;
+		}
+		if (["pointer_move", "pointer_down", "pointer_up", "pointer_cancel"].includes(Type)) return RenderReplayPointer(Data, Type, Visual);
+		if (Type === "resize") {
+			ResizePointerEffectsLayer();
+			if (Visual) requestAnimationFrame(RefreshReplayHover);
+			return true;
+		}
+		if (["blur", "visibility", "page_hide"].includes(Type)) {
+			ClearReplayHover();
+			return true;
+		}
+		if (Type === "focus") {
+			requestAnimationFrame(RefreshReplayHover);
+			return true;
+		}
+		if (Type === "page_ready") return true;
+		if (Type === "click") {
+			RenderReplayPointer(Data, Type, Visual);
+			if (Visual) AddClickPulse(Data.x, Data.y);
+		}
+		const Target = FindTarget(Data) || (Type === "click" ? DeepElementFromPoint(Data.x, Data.y) : null);
 		if (!Target) return false;
 		if (Type === "click") {
 			try { Target.click(); } catch { Dispatch(Target, "click"); }
@@ -336,6 +712,8 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		for (const Elem of document.querySelectorAll(".SiteIntro, .SiteIntroBase, .SiteIntroSweep, .SiteIntroLogoWrap")) {
 			Elem.style.animationDelay = `${-ElapsedMs}ms`;
 		}
+		EnsurePointerEffectsLayer();
+		ScheduleReplayHoverStyleBuild();
 		document.documentElement.dataset.emoReplayStarted = "true";
 		window.dispatchEvent(new CustomEvent("emo:replay-start", { detail: { elapsedMs: ElapsedMs } }));
 		return true;
@@ -344,6 +722,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		document.documentElement.dataset.emoReplayStarted = "false";
 		HideTouchFrame();
 		HideReadOutline();
+		ClearPointerVisuals();
 		return true;
 	}
 	function PageInfo() {
@@ -363,6 +742,8 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 	}
 	function NotifyReady() {
 		const Send = () => {
+			RebuildReplayHoverStyles();
+			EnsurePointerEffectsLayer();
 			try { window.EmoReplayAndroid?.OnPageReady(JSON.stringify(PageInfo())); } catch {}
 			window.dispatchEvent(new CustomEvent("emo:replay-ready", { detail: PageInfo() }));
 		};
@@ -370,7 +751,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		Promise.resolve(Fonts).catch(() => {}).finally(() => requestAnimationFrame(() => requestAnimationFrame(Send)));
 	}
 
-	window.EmoReplayRuntime = { ApplyAction, StartPage, StopPage, PageInfo, FindTarget, RenderTouchFrame, HideTouchFrame, RenderReadOutline, HideReadOutline };
+	window.EmoReplayRuntime = { ApplyAction, StartPage, StopPage, PageInfo, FindTarget, RenderTouchFrame, HideTouchFrame, RenderReadOutline, HideReadOutline, ClearPointerVisuals, RefreshPointerHover: RefreshReplayHover };
 	if (!window.EmoReplayAndroid?.OnPageReady) StartPage(0);
 
 	window.open = function(pUrl) {
