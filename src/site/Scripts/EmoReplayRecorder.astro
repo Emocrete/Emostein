@@ -2,6 +2,7 @@
 const cEnabled = import.meta.env.PUBLIC_EMO_OPS_ENABLED !== "false" && import.meta.env.EMO_DEPLOY_MODE !== "replay";
 const cPointerEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_POINTER_EVERY_MS ?? "250");
 const cScrollEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_SCROLL_EVERY_MS ?? "200");
+const cTouchFrameEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_TOUCH_FRAME_EVERY_MS ?? "50");
 const cFlushEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_FLUSH_EVERY_MS ?? "1500");
 const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? "160");
 ---
@@ -12,7 +13,7 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 
 { cEnabled && (
 
-	<script is:inline define:vars={{ cPointerEveryMs, cScrollEveryMs, cFlushEveryMs, cNetworkBatch }} NoMove>
+	<script is:inline define:vars={{ cPointerEveryMs, cScrollEveryMs, cTouchFrameEveryMs, cFlushEveryMs, cNetworkBatch }} NoMove>
 	
 	
 	
@@ -31,7 +32,27 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 	
 			let fLastScrollAt = 0;
 	
-			let fTouchFallback = false;
+			let fLastPointerType = "mouse";
+	
+			let fTouchActive = false;
+	
+			let fTouchGestureId = 0;
+	
+			let fTouchPointerId = -1;
+	
+			let fTouchIdentifier = -1;
+	
+			let fTouchClientX = -1;
+	
+			let fTouchClientY = -1;
+	
+			let fTouchTarget = null;
+	
+			let fTouchFrameRaf = 0;
+	
+			let fTouchFrameTimer = 0;
+	
+			let fLastTouchFrameAt = 0;
 	
 			let fUnloading = false;
 	
@@ -283,10 +304,158 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 	
 	
 	
+			function SetTouchPoint(pPoint, pTarget = null)
+			{
+				if (!pPoint) return;
+				const X = Number(pPoint.clientX);
+				const Y = Number(pPoint.clientY);
+				if (Number.isFinite(X)) fTouchClientX = X;
+				if (Number.isFinite(Y)) fTouchClientY = Y;
+				if (pTarget instanceof Element) fTouchTarget = pTarget;
+			}
+	
+	
+	
+	
+	
+			function TouchFrameData(pPhase)
+			{
+				const Scroll = ScrollData();
+				const X = Math.round(Math.max(0, fTouchClientX));
+				const Y = Math.round(Math.max(0, fTouchClientY));
+				return {
+					gestureId: fTouchGestureId,
+					phase: pPhase,
+					x: X,
+					y: Y,
+					pageX: X + Scroll.scrollX,
+					pageY: Y + Scroll.scrollY,
+					scrollX: Scroll.scrollX,
+					scrollY: Scroll.scrollY,
+					pointerType: "touch",
+					pointerId: fTouchPointerId,
+					touchIdentifier: fTouchIdentifier,
+					...(pPhase === "start" ? TargetData(fTouchTarget) : {})
+				};
+			}
+	
+	
+	
+	
+	
+			function CaptureTouchFrame(pPhase)
+			{
+				if (!fTouchActive) return;
+				Capture("touch_frame", TouchFrameData(pPhase));
+				fLastTouchFrameAt = performance.now();
+			}
+	
+	
+	
+	
+	
+			function FlushTouchMove()
+			{
+				fTouchFrameRaf = 0;
+				if (!fTouchActive) return;
+				CaptureTouchFrame("move");
+			}
+	
+	
+	
+	
+	
+			function ScheduleTouchMove()
+			{
+				if (!fTouchActive || fTouchFrameRaf || fTouchFrameTimer) return;
+				const Interval = Math.max(16, Number(cTouchFrameEveryMs) || 50);
+				const Remaining = Math.max(0, Interval - (performance.now() - fLastTouchFrameAt));
+				const StartFrame = () =>
+				{
+					if (!fTouchActive || fTouchFrameRaf) return;
+					fTouchFrameRaf = requestAnimationFrame(FlushTouchMove);
+				};
+				if (Remaining <= 1)
+				{
+					StartFrame();
+					return;
+				}
+				fTouchFrameTimer = window.setTimeout(() =>
+					{
+						fTouchFrameTimer = 0;
+						StartFrame();
+					}, Remaining);
+			}
+	
+	
+	
+	
+	
+			function BeginTouch(pPoint, pTarget, pPointerId = -1, pIdentifier = -1)
+			{
+				if (fTouchActive) return false;
+				fTouchActive = true;
+				fTouchGestureId++;
+				fTouchPointerId = Number.isFinite(Number(pPointerId)) ? Number(pPointerId) : -1;
+				fTouchIdentifier = Number.isFinite(Number(pIdentifier)) ? Number(pIdentifier) : -1;
+				fTouchTarget = pTarget instanceof Element ? pTarget : null;
+				SetTouchPoint(pPoint, pTarget);
+				CaptureTouchFrame("start");
+				return true;
+			}
+	
+	
+	
+	
+	
+			function EndTouch(pPoint, pPhase = "end")
+			{
+				if (!fTouchActive) return;
+				SetTouchPoint(pPoint);
+				if (fTouchFrameTimer)
+				{
+					clearTimeout(fTouchFrameTimer);
+					fTouchFrameTimer = 0;
+				}
+				if (fTouchFrameRaf)
+				{
+					cancelAnimationFrame(fTouchFrameRaf);
+					fTouchFrameRaf = 0;
+				}
+				CaptureTouchFrame(pPhase);
+				fTouchActive = false;
+				fTouchPointerId = -1;
+				fTouchIdentifier = -1;
+				fTouchClientX = -1;
+				fTouchClientY = -1;
+				fTouchTarget = null;
+			}
+	
+	
+	
+	
+	
+			function ActiveTouchFromList(pTouches)
+			{
+				if (!pTouches?.length) return null;
+				if (fTouchIdentifier < 0) return pTouches[0] || null;
+				for (const Touch of pTouches) if (Number(Touch.identifier) === fTouchIdentifier) return Touch;
+				return null;
+			}
+	
+	
+	
+	
+	
 			function WireEvents()
 			{
 				window.addEventListener("scroll", () =>
 					{
+						if (fTouchActive)
+						{
+							ScheduleTouchMove();
+							return;
+						}
 						const Now = performance.now();
 						if (Now - fLastScrollAt < Math.max(80, Number(cScrollEveryMs) || 200)) return;
 						fLastScrollAt = Now;
@@ -295,69 +464,115 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 				window.addEventListener("resize", () => Capture("resize", ViewportData()), { passive: true });
 				document.addEventListener("pointermove", (Event) =>
 					{
+						const PointerType = Event.pointerType || "mouse";
+						fLastPointerType = PointerType;
+						if (PointerType === "touch")
+						{
+							if (!fTouchActive) BeginTouch(Event, Event.target, Event.pointerId, -1);
+							if (fTouchPointerId >= 0 && Number(Event.pointerId) !== fTouchPointerId) return;
+							SetTouchPoint(Event, Event.target);
+							ScheduleTouchMove();
+							return;
+						}
 						const Now = performance.now();
 						if (Now - fLastPointerAt < Math.max(100, Number(cPointerEveryMs) || 250)) return;
 						fLastPointerAt = Now;
 						Capture(
 							"pointer_move",
-							{ x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), pointerType: Event.pointerType || "mouse" }
+							{ x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), pointerType: PointerType }
 						);
 					}, true);
-				for (const [DomType, ReplayType] of [[
-							"pointerdown",
-							"pointer_down"
-						], [
-							"pointerup",
-							"pointer_up"
-				]]) {
-					document.addEventListener(
-						DomType,
-						(Event) => Capture(
-							ReplayType,
-							{ x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button, pointerType: Event.pointerType || "mouse",...TargetData(Event.target) }
-						),
-						true
-					);
-				}
+				document.addEventListener("pointerdown", (Event) =>
+					{
+						const PointerType = Event.pointerType || "mouse";
+						fLastPointerType = PointerType;
+						if (PointerType === "touch")
+						{
+							if (!fTouchActive) BeginTouch(Event, Event.target, Event.pointerId, -1);
+							else
+							{
+								if (fTouchPointerId < 0) fTouchPointerId = Number(Event.pointerId);
+								SetTouchPoint(Event, Event.target);
+							}
+							return;
+						}
+						Capture(
+							"pointer_down",
+							{ x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button, pointerType: PointerType,...TargetData(Event.target) }
+						);
+					}, true);
+				document.addEventListener("pointerup", (Event) =>
+					{
+						const PointerType = Event.pointerType || fLastPointerType || "mouse";
+						fLastPointerType = PointerType;
+						if (PointerType === "touch")
+						{
+							if (fTouchPointerId < 0 || Number(Event.pointerId) === fTouchPointerId) EndTouch(Event, "end");
+							return;
+						}
+						Capture(
+							"pointer_up",
+							{ x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button, pointerType: PointerType,...TargetData(Event.target) }
+						);
+					}, true);
 				document.addEventListener("pointercancel", (Event) =>
 					{
-						if ((Event.pointerType || "") === "touch") fTouchFallback = true;
+						const PointerType = Event.pointerType || fLastPointerType || "mouse";
+						fLastPointerType = PointerType;
+						if (PointerType === "touch")
+						{
+							if (fTouchActive && (fTouchPointerId < 0 || Number(Event.pointerId) === fTouchPointerId))
+							{
+								SetTouchPoint(Event, Event.target);
+								fTouchPointerId = -1;
+								ScheduleTouchMove();
+							}
+							return;
+						}
 						Capture(
 							"pointer_cancel",
-							{ x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button, pointerType: Event.pointerType || "mouse",...TargetData(Event.target) }
+							{ x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button, pointerType: PointerType,...TargetData(Event.target) }
 						);
 					}, true);
-				document.addEventListener("touchmove", (Event) =>
+				document.addEventListener("touchstart", (Event) =>
 					{
-						if (!fTouchFallback) return;
 						const Touch = Event.touches?.[0] || Event.changedTouches?.[0];
 						if (!Touch) return;
-						const Now = performance.now();
-						if (Now - fLastPointerAt < Math.max(100, Number(cPointerEveryMs) || 250)) return;
-						fLastPointerAt = Now;
-						Capture(
-							"pointer_move",
-							{ x: Math.round(Touch.clientX), y: Math.round(Touch.clientY), pageX: Math.round(Touch.pageX), pageY: Math.round(Touch.pageY), pointerType: "touch", touchFallback: true }
-						);
-					}, { passive: true, capture: true });
-				for (const TouchEndType of ["touchend", "touchcancel"])
-				{
-					document.addEventListener(TouchEndType, (Event) =>
+						fLastPointerType = "touch";
+						if (!fTouchActive) BeginTouch(Touch, Event.target, -1, Touch.identifier);
+						else
 						{
-							if (!fTouchFallback) return;
-							const Touch = Event.changedTouches?.[0];
-							if (Touch) Capture(
-								"pointer_up",
-								{ x: Math.round(Touch.clientX), y: Math.round(Touch.clientY), pageX: Math.round(Touch.pageX), pageY: Math.round(Touch.pageY), pointerType: "touch", touchFallback: true }
-							);
-							fTouchFallback = false;
-						}, { passive: true, capture: true });
-				}
+							if (fTouchIdentifier < 0) fTouchIdentifier = Number(Touch.identifier);
+							SetTouchPoint(Touch, Event.target);
+						}
+					}, { passive: true, capture: true });
+				document.addEventListener("touchmove", (Event) =>
+					{
+						if (!fTouchActive) return;
+						const Touch = ActiveTouchFromList(Event.touches) || ActiveTouchFromList(Event.changedTouches);
+						if (!Touch) return;
+						SetTouchPoint(Touch, Event.target);
+						ScheduleTouchMove();
+					}, { passive: true, capture: true });
+				document.addEventListener("touchend", (Event) =>
+					{
+						if (!fTouchActive) return;
+						const Touch = ActiveTouchFromList(Event.changedTouches);
+						if (!Touch) return;
+						EndTouch(Touch, "end");
+					}, { passive: true, capture: true });
+				document.addEventListener("touchcancel", (Event) =>
+					{
+						if (!fTouchActive) return;
+						const Touch = ActiveTouchFromList(Event.changedTouches);
+						if (!Touch) return;
+						EndTouch(Touch, "cancel");
+					}, { passive: true, capture: true });
 				document.addEventListener(
 					"click",
 					(Event) => Capture(
 						"click",
-						{ x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button,...TargetData(Event.target) }
+						{ x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button, pointerType: Event.pointerType || fLastPointerType || "mouse",...TargetData(Event.target) }
 					),
 					true
 				);
@@ -372,11 +587,13 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 				window.addEventListener("blur", () => Capture("blur", { state: "away" }), true);
 				window.addEventListener("pagehide", () =>
 					{
+						if (fTouchActive) EndTouch(null, "cancel");
 						fUnloading = true;
 						Capture("page_hide", { persisted: false,...ViewportData() }, true);
 						Flush();
 				});
 			}
+
 	
 	
 	

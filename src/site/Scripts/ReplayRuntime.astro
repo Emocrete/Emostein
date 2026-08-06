@@ -20,6 +20,9 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		: 1 / Math.max(1, window.devicePixelRatio || 1);
 	const cGeneratedId = /^(.+?)-(\d{6})-(\d{6})-(\d{3})-(\d{3})$/;
 	const fBuildOffsets = [];
+	let fReplayTouchCursor = null;
+	let fPendingTouchFrame = null;
+	let fTouchRenderRaf = 0;
 
 	document.documentElement.dataset.emoReplayMode = "true";
 	if (cWidth > 0) {
@@ -160,10 +163,68 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 	function Dispatch(pElem, pType) {
 		try { pElem.dispatchEvent(new Event(pType, { bubbles: true, cancelable: true })); } catch {}
 	}
+	function EnsureTouchCursor() {
+		if (fReplayTouchCursor) return fReplayTouchCursor;
+		const Layer = document.createElement("emo-replay-touch-layer");
+		Layer.style.position = "fixed";
+		Layer.style.inset = "0";
+		Layer.style.zIndex = "2147483647";
+		Layer.style.pointerEvents = "none";
+		Layer.style.overflow = "visible";
+		Layer.style.contain = "layout style paint";
+		const Shadow = Layer.attachShadow({ mode: "closed" });
+		const Cursor = document.createElement("span");
+		Cursor.style.position = "absolute";
+		Cursor.style.left = "0";
+		Cursor.style.top = "0";
+		Cursor.style.width = "14px";
+		Cursor.style.height = "14px";
+		Cursor.style.boxSizing = "border-box";
+		Cursor.style.borderRadius = "50%";
+		Cursor.style.background = "#ff3b30";
+		Cursor.style.boxShadow = "0 0 0 3px #ffffff";
+		Cursor.style.pointerEvents = "none";
+		Cursor.style.display = "none";
+		Cursor.style.willChange = "transform";
+		Shadow.appendChild(Cursor);
+		document.documentElement.appendChild(Layer);
+		fReplayTouchCursor = Cursor;
+		return Cursor;
+	}
+	function CommitTouchFrame() {
+		fTouchRenderRaf = 0;
+		const Frame = fPendingTouchFrame;
+		fPendingTouchFrame = null;
+		if (!Frame) return;
+		window.scrollTo(Num(Frame.scrollX), Num(Frame.scrollY));
+		const Cursor = EnsureTouchCursor();
+		if (!Frame.visible) Cursor.style.display = "none";
+		else {
+			Cursor.style.display = "block";
+			Cursor.style.transform = `translate3d(${Num(Frame.x)}px, ${Num(Frame.y)}px, 0) translate(-50%, -50%)`;
+		}
+		if (fPendingTouchFrame && !fTouchRenderRaf) fTouchRenderRaf = requestAnimationFrame(CommitTouchFrame);
+	}
+	function RenderTouchFrame(pFrame) {
+		fPendingTouchFrame = pFrame && typeof pFrame === "object" ? pFrame : null;
+		if (!fPendingTouchFrame || fTouchRenderRaf) return true;
+		fTouchRenderRaf = requestAnimationFrame(CommitTouchFrame);
+		return true;
+	}
+	function HideTouchFrame() {
+		fPendingTouchFrame = null;
+		if (fTouchRenderRaf) {
+			cancelAnimationFrame(fTouchRenderRaf);
+			fTouchRenderRaf = 0;
+		}
+		if (fReplayTouchCursor) fReplayTouchCursor.style.display = "none";
+		return true;
+	}
 	function ApplyAction(pAction) {
 		const Action = pAction && typeof pAction === "object" ? pAction : {};
 		const Type = Str(Action.type).replace(/^system\./, "");
 		const Data = Action.data && typeof Action.data === "object" ? Action.data : {};
+		if (Type === "touch_frame") return true;
 		if (Type === "scroll") {
 			window.scrollTo(Num(Data.scrollX), Num(Data.scrollY));
 			return true;
@@ -204,6 +265,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 	}
 	function StopPage() {
 		document.documentElement.dataset.emoReplayStarted = "false";
+		HideTouchFrame();
 		return true;
 	}
 	function PageInfo() {
@@ -230,7 +292,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		Promise.resolve(Fonts).catch(() => {}).finally(() => requestAnimationFrame(() => requestAnimationFrame(Send)));
 	}
 
-	window.EmoReplayRuntime = { ApplyAction, StartPage, StopPage, PageInfo, FindTarget };
+	window.EmoReplayRuntime = { ApplyAction, StartPage, StopPage, PageInfo, FindTarget, RenderTouchFrame, HideTouchFrame };
 	if (!window.EmoReplayAndroid?.OnPageReady) StartPage(0);
 
 	window.open = function(pUrl) {
