@@ -1173,6 +1173,55 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 
 
+		function IsFocusLifecycleDebugEvent(pEventType)
+		{
+			const Type = String(pEventType || "").trim().toLowerCase();
+			return Type === "page_focus_away"
+			|| Type === "page_focus_return"
+			|| Type === "page_exit";
+		}
+
+
+
+
+
+		function FocusLifecycleTrackerState()
+		{
+			return {
+				pageOpenSent: fPageOpenSent,
+				pageExitSent: fPageExitSent,
+				pageInstanceId: fPageInstanceId,
+				awayStartedAt: fAwayStartedAt,
+				awayReason: fAwayReason,
+				externalActionUntil: fExternalActionUntil,
+				pageElapsedMs: Math.round(GetPageElapsedMs()),
+				sessionElapsedMs: Math.round(GetSessionElapsedMs()),
+				retryQueueCount: ReadRetryQueue().length
+			};
+		}
+
+
+
+
+
+		function ReportFocusLifecycleDebug(pEventType, pEventData, pNativeEvent, pStage, pResult = null)
+		{
+			if (!window.EmoFocusLifecycleDebug?.Enabled) return "";
+			return window.EmoFocusLifecycleDebug.Report({
+				source: "OpsVisitTracker",
+				eventType: pEventType,
+				stage: pStage,
+				eventData: pEventData,
+				nativeEvent: pNativeEvent,
+				trackerState: FocusLifecycleTrackerState(),
+				result: pResult
+			});
+		}
+
+
+
+
+
 		function IsLifecycleEvent(pEventType)
 		{
 			const Type = String(pEventType || "").trim().toLowerCase();
@@ -1415,17 +1464,42 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		function TrackOpsEvent(pEventType, pOptions =
 			{
-		}) {
+			}) {
 			const EventType = String(pEventType || "").trim();
+			const DebugLifecycle = IsFocusLifecycleDebugEvent(EventType);
+			const NativeEvent = pOptions.focusDebugEvent || null;
 			if (!EventType) return Promise.resolve({ ok: false, error: "Missing event type" });
-			if (IsSyntheticTraffic()) return Promise.resolve({ ok: true, skipped: true, reason: "synthetic_traffic", signal: BotSignal() });
-			if (EventType !== "page_open" && !fPageOpenSent && !BoolValue(pOptions.allowBeforeOpen)) return Promise.resolve({ ok: true, skipped: true, reason: "page_not_visible_yet" });
+			if (IsSyntheticTraffic())
+			{
+				const Result = { ok: true, skipped: true, reason: "synthetic_traffic", signal: BotSignal() };
+				if (DebugLifecycle) ReportFocusLifecycleDebug(EventType, pOptions, NativeEvent, "skipped", Result);
+				return Promise.resolve(Result);
+			}
+			if (EventType !== "page_open" && !fPageOpenSent && !BoolValue(pOptions.allowBeforeOpen))
+			{
+				const Result = { ok: true, skipped: true, reason: "page_not_visible_yet" };
+				if (DebugLifecycle) ReportFocusLifecycleDebug(EventType, pOptions, NativeEvent, "skipped", Result);
+				return Promise.resolve(Result);
+			}
 			const Body = BuildOpsPayload(EventType, pOptions);
 			const IsHiddenNow = document.hidden || document.visibilityState !== "visible";
 			const PreferBeacon = BoolValue(pOptions.useBeacon) || (IsHiddenNow && IsLifecycleEvent(EventType)) || EventType === "page_exit";
-			return SendOpsPayload(Body, PreferBeacon);
+			const DebugId = DebugLifecycle ? ReportFocusLifecycleDebug(EventType, Body, NativeEvent, "sending") : "";
+			const Request = SendOpsPayload(Body, PreferBeacon);
+			if (!DebugId) return Request;
+			return Request.then(
+				(Result) =>
+				{
+					window.EmoFocusLifecycleDebug?.Complete(DebugId, Result);
+					return Result;
+				},
+				(Error) =>
+				{
+					window.EmoFocusLifecycleDebug?.Complete(DebugId, { ok: false, error: String(Error?.message || Error) });
+					throw Error;
+				}
+			);
 		}
-
 
 
 
@@ -1952,7 +2026,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 
 
-		function MarkPageAway(pReason)
+		function MarkPageAway(pReason, pNativeEvent = null)
 		{
 			if (!fPageOpenSent || fPageExitSent) return;
 			if (fAwayStartedAt) return;
@@ -1969,7 +2043,8 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 					useBeacon: true,
 					important: false,
 					notifyMobile: false,
-					sound: false
+					sound: false,
+					focusDebugEvent: pNativeEvent
 			});
 		}
 
@@ -1977,7 +2052,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 
 
-		function TrackPageReturn(pReason)
+		function TrackPageReturn(pReason, pNativeEvent = null)
 		{
 			if (fPageExitSent) return;
 			fExternalActionUntil = 0;
@@ -2004,7 +2079,8 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 					useBeacon: true,
 					important: false,
 					notifyMobile: false,
-					sound: false
+					sound: false,
+					focusDebugEvent: pNativeEvent
 			});
 		}
 
@@ -2014,8 +2090,8 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		function InitFocusAwayEvents()
 		{
-			window.addEventListener("blur", () => MarkPageAway("blur"));
-			window.addEventListener("focus", () => TrackPageReturn("focus"));
+			window.addEventListener("blur", (pEvent) => MarkPageAway("blur", pEvent));
+			window.addEventListener("focus", (pEvent) => TrackPageReturn("focus", pEvent));
 		}
 
 
@@ -2050,14 +2126,14 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 
 
-		function TrackPageExit(pReason)
+		function TrackPageExit(pReason, pNativeEvent = null)
 		{
 			if (!fPageOpenSent) return;
 			if (fPageExitSent) return;
 			const Reason = String(pReason || "pagehide");
 			if (Date.now() < fExternalActionUntil && (Reason === "pagehide" || Reason === "beforeunload"))
 			{
-				MarkPageAway("external_action");
+				MarkPageAway("external_action", pNativeEvent);
 				return;
 			}
 			FlushPendingReadEvents();
@@ -2078,7 +2154,8 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 					awayReason: String(pReason || "pagehide"),
 					focusState: "closed",
 					allowBeforeOpen: true,
-					useBeacon: true
+					useBeacon: true,
+					focusDebugEvent: pNativeEvent
 			});
 		}
 
@@ -2090,8 +2167,8 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 		{
 			if (fPagePingTimer) clearInterval(fPagePingTimer);
 			fPagePingTimer = window.setInterval(TrackPageAlive, cPagePingMs);
-			window.addEventListener("pagehide", () => TrackPageExit("pagehide"));
-			window.addEventListener("beforeunload", () => TrackPageExit("beforeunload"));
+			window.addEventListener("pagehide", (pEvent) => TrackPageExit("pagehide", pEvent));
+			window.addEventListener("beforeunload", (pEvent) => TrackPageExit("beforeunload", pEvent));
 			window.addEventListener("pageshow", (pEvent) =>
 				{
 					fExternalActionUntil = 0;
@@ -2099,14 +2176,14 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 					fPageExitSent = false;
 					fAwayStartedAt = Date.now() - cFocusAwayMinMs;
 					fAwayReason = "pagehide";
-					TrackPageReturn("pageshow");
+					TrackPageReturn("pageshow", pEvent);
 					if (fPagePingTimer) clearInterval(fPagePingTimer);
 					fPagePingTimer = window.setInterval(TrackPageAlive, cPagePingMs);
 					TrackPageAlive();
 			});
-			window.addEventListener("freeze", () =>
+			window.addEventListener("freeze", (pEvent) =>
 				{
-					MarkPageAway("freeze");
+					MarkPageAway("freeze", pEvent);
 					TrackPageAlive();
 			});
 			setTimeout(TrackPageAlive, 1000);

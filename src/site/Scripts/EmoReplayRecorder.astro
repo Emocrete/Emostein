@@ -61,6 +61,8 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 			let fFlushTimer = 0;
 	
 			const fQueue = [];
+
+			const fFocusDebugIds = new WeakMap();
 	
 	
 	
@@ -234,39 +236,106 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 	
 	
 	
+			function IsReplayFocusLifecycle(pType)
+			{
+				const Type = Str(pType).toLowerCase();
+				return Type === "focus" || Type === "blur" || Type === "page_hide";
+			}
+
+
+
+
+
+			function ReplayFocusTrackerState()
+			{
+				return {
+					queueLength: fQueue.length,
+					flushing: fFlushing,
+					unloading: fUnloading,
+					pageElapsedMs: Math.max(0, Date.now() - cPageStartedAt),
+					sessionElapsedMs: Math.max(0, Date.now() - SessionStartedAt()),
+					pageOpened: window.__EMO_OPS_PAGE_OPENED__ === true
+				};
+			}
+
+
+
+
+
+			function ReportReplayFocusLifecycle(pItem, pNativeEvent)
+			{
+				if (!window.EmoFocusLifecycleDebug?.Enabled || !pItem) return "";
+				return window.EmoFocusLifecycleDebug.Report({
+					source: "EmoReplayRecorder",
+					eventType: pItem.eventType,
+					stage: "queued",
+					eventData: pItem,
+					nativeEvent: pNativeEvent,
+					trackerState: ReplayFocusTrackerState()
+				});
+			}
+
+
+
+
+
+			function CompleteReplayFocusLifecycle(pItems, pResult)
+			{
+				if (!window.EmoFocusLifecycleDebug?.Enabled || !Array.isArray(pItems)) return;
+				for (const Item of pItems)
+				{
+					const DebugId = fFocusDebugIds.get(Item);
+					if (DebugId) window.EmoFocusLifecycleDebug.Complete(DebugId, pResult);
+				}
+			}
+
+
+
+
+
 			function QueueCapture(pType, pData =
 				{
 				}, pUseBeacon = false, pTiming = {}) {
 				const Now = Date.now();
-				fQueue.push({
-						eventType: `system.${pType}`,
-						eventSource: "site",
-						eventOn: "replay",
-						label: `Replay ${pType}`,
-						notifyMobile: false,
-						sound: false,
-						important: false,
-						useBeacon: pUseBeacon,
-						pageElapsedMs: Number.isFinite(Number(pTiming.pageElapsedMs)) ? Number(pTiming.pageElapsedMs) : Math.max(0, Now - cPageStartedAt),
-						sessionElapsedMs: Number.isFinite(Number(pTiming.sessionElapsedMs)) ? Number(pTiming.sessionElapsedMs) : Math.max(0, Now - SessionStartedAt()),
-						createdAtClient: Str(pTiming.createdAtClient || new Date(Now).toISOString()),
-						eventData: pData
-				});
+				const Item = {
+					eventType: `system.${pType}`,
+					eventSource: "site",
+					eventOn: "replay",
+					label: `Replay ${pType}`,
+					notifyMobile: false,
+					sound: false,
+					important: false,
+					useBeacon: pUseBeacon,
+					pageElapsedMs: Number.isFinite(Number(pTiming.pageElapsedMs)) ? Number(pTiming.pageElapsedMs) : Math.max(0, Now - cPageStartedAt),
+					sessionElapsedMs: Number.isFinite(Number(pTiming.sessionElapsedMs)) ? Number(pTiming.sessionElapsedMs) : Math.max(0, Now - SessionStartedAt()),
+					createdAtClient: Str(pTiming.createdAtClient || new Date(Now).toISOString()),
+					eventData: pData
+				};
+				fQueue.push(Item);
 				if (pUseBeacon || fQueue.length >= Math.max(20, Number(cNetworkBatch) || 160)) Flush();
+				return Item;
 			}
-	
-	
-	
-	
-	
+
+
+
+
+
 			function Capture(pType, pData =
 				{
-				}, pUseBeacon = false) { QueueCapture(pType, pData, pUseBeacon); }
-	
-	
-	
-	
-	
+				}, pUseBeacon = false, pNativeEvent = null) {
+				const Item = QueueCapture(pType, pData, pUseBeacon);
+				if (IsReplayFocusLifecycle(pType))
+				{
+					const DebugId = ReportReplayFocusLifecycle(Item, pNativeEvent);
+					if (DebugId) fFocusDebugIds.set(Item, DebugId);
+				}
+				return Item;
+			}
+
+
+
+
+
 			async function Flush()
 			{
 				if (fFlushing || !fQueue.length || typeof window.TrackOpsEventBatch !== "function" || !window.__EMO_OPS_PAGE_OPENED__) return;
@@ -275,19 +344,24 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 				try
 				{
 					const Result = await window.TrackOpsEventBatch(Batch);
+					CompleteReplayFocusLifecycle(Batch, Result);
 					if (!Result?.ok && !Result?.queued) fQueue.unshift(...Batch);
-				} catch { fQueue.unshift(...Batch); }
+				} catch (Error)
+				{
+					CompleteReplayFocusLifecycle(Batch, { ok: false, error: String(Error?.message || Error) });
+					fQueue.unshift(...Batch);
+				}
 				finally
 				{
 					fFlushing = false;
 					if (fQueue.length && !fUnloading) setTimeout(Flush, 100);
 				}
 			}
-	
-	
-	
-	
-	
+
+
+
+
+
 			function InputValue(pElem)
 			{
 				if (!(pElem instanceof Element)) return { value: "", private: true };
@@ -583,13 +657,13 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 				);
 				document.addEventListener("submit", (Event) => Capture("submit", TargetData(Event.target), true), true);
 				document.addEventListener("toggle", (Event) => Capture("widget_state", {...TargetData(Event.target), open: !!Event.target?.open }), true);
-				window.addEventListener("focus", () => Capture("focus", { state: "visible" }), true);
-				window.addEventListener("blur", () => Capture("blur", { state: "away" }), true);
-				window.addEventListener("pagehide", () =>
+				window.addEventListener("focus", (pEvent) => Capture("focus", { state: "visible" }, false, pEvent), true);
+				window.addEventListener("blur", (pEvent) => Capture("blur", { state: "away" }, false, pEvent), true);
+				window.addEventListener("pagehide", (pEvent) =>
 					{
 						if (fTouchActive) EndTouch(null, "cancel");
 						fUnloading = true;
-						Capture("page_hide", { persisted: false,...ViewportData() }, true);
+						Capture("page_hide", { persisted: Boolean(pEvent.persisted),...ViewportData() }, true, pEvent);
 						Flush();
 				});
 			}

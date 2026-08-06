@@ -1,0 +1,442 @@
+<script is:inline NoMove>
+
+
+
+	(() =>
+	{
+
+		// ==================== Definitions: Variables & Methods ====================
+
+		const cEnabledKey = "emo_focus_lifecycle_debug_enabled_v1";
+
+		const cLogKey = "emo_focus_lifecycle_debug_log_v1";
+
+		const cCarryKey = "emo_focus_lifecycle_debug_carry_v1";
+
+		const cMaxRecords = 30;
+
+		const cParam = new URLSearchParams(location.search).get("emoFocusDebug");
+
+		if (cParam === "1") localStorage.setItem(cEnabledKey, "1");
+
+		if (cParam === "0") localStorage.removeItem(cEnabledKey);
+
+		const cEnabled = localStorage.getItem(cEnabledKey) === "1";
+
+		let fHost = null;
+
+		let fTitle = null;
+
+		let fStatus = null;
+
+		let fState = null;
+
+		let fCopyButton = null;
+
+		let fCurrentRecordId = "";
+
+
+
+
+		function SafeValue(pValue)
+		{
+			if (pValue === undefined) return "[undefined]";
+			if (pValue === null) return null;
+			if (typeof pValue === "string" || typeof pValue === "number" || typeof pValue === "boolean") return pValue;
+			if (Array.isArray(pValue)) return pValue.map(SafeValue);
+			if (typeof pValue === "object")
+			{
+				const Result = {};
+				for (const Key of Object.keys(pValue))
+				{
+					try { Result[Key] = SafeValue(pValue[Key]); }
+					catch { Result[Key] = "[unreadable]"; }
+				}
+				return Result;
+			}
+			return String(pValue);
+		}
+
+
+
+
+		function NativeEventData(pEvent)
+		{
+			if (!pEvent) return null;
+			return {
+				type: String(pEvent.type || ""),
+				isTrusted: Boolean(pEvent.isTrusted),
+				timeStamp: Number.isFinite(Number(pEvent.timeStamp)) ? Number(pEvent.timeStamp) : "",
+				eventPhase: Number.isFinite(Number(pEvent.eventPhase)) ? Number(pEvent.eventPhase) : "",
+				bubbles: Boolean(pEvent.bubbles),
+				cancelable: Boolean(pEvent.cancelable),
+				composed: Boolean(pEvent.composed),
+				persisted: "persisted" in pEvent ? Boolean(pEvent.persisted) : "",
+				returnValue: "returnValue" in pEvent ? SafeValue(pEvent.returnValue) : "",
+				target: pEvent.target instanceof Element
+					? {
+						tag: pEvent.target.tagName.toLowerCase(),
+						id: pEvent.target.id || "",
+						className: String(pEvent.target.className || "")
+					}
+					: ""
+			};
+		}
+
+
+
+
+		function ActiveElementData()
+		{
+			const Elem = document.activeElement;
+			if (!(Elem instanceof Element)) return "";
+			return {
+				tag: Elem.tagName.toLowerCase(),
+				id: Elem.id || "",
+				className: String(Elem.className || ""),
+				name: Elem.getAttribute("name") || "",
+				role: Elem.getAttribute("role") || ""
+			};
+		}
+
+
+
+
+		function NavigationType()
+		{
+			try
+			{
+				return performance.getEntriesByType("navigation")[0]?.type || "";
+			} catch { return ""; }
+		}
+
+
+
+
+		function BrowserState()
+		{
+			return {
+				url: location.href,
+				path: `${location.pathname}${location.search}${location.hash}`,
+				title: document.title,
+				referrer: document.referrer || "",
+				visibilityState: document.visibilityState,
+				hidden: Boolean(document.hidden),
+				hasFocus: document.hasFocus(),
+				readyState: document.readyState,
+				prerendering: Boolean(document.prerendering),
+				wasDiscarded: Boolean(document.wasDiscarded),
+				onLine: navigator.onLine,
+				activeElement: ActiveElementData(),
+				userActivation: navigator.userActivation
+					? {
+						isActive: Boolean(navigator.userActivation.isActive),
+						hasBeenActive: Boolean(navigator.userActivation.hasBeenActive)
+					}
+					: "",
+				navigationType: NavigationType(),
+				historyLength: history.length,
+				scrollX: Math.round(window.scrollX || window.pageXOffset || 0),
+				scrollY: Math.round(window.scrollY || window.pageYOffset || 0),
+				viewportWidth: window.innerWidth || document.documentElement.clientWidth || 0,
+				viewportHeight: window.innerHeight || document.documentElement.clientHeight || 0,
+				screenWidth: window.screen.width || 0,
+				screenHeight: window.screen.height || 0,
+				performanceNow: Math.round(performance.now())
+			};
+		}
+
+
+
+
+		function ReadLog()
+		{
+			try
+			{
+				const Value = JSON.parse(localStorage.getItem(cLogKey) || "[]");
+				return Array.isArray(Value) ? Value : [];
+			} catch { return []; }
+		}
+
+
+
+
+		function SaveLog(pLog)
+		{
+			try
+			{
+				localStorage.setItem(cLogKey, JSON.stringify((pLog || []).slice(- cMaxRecords)));
+			} catch {}
+		}
+
+
+
+
+		function FindRecord(pRecordId)
+		{
+			return ReadLog().find((Item) => Item?.id === pRecordId) || null;
+		}
+
+
+
+
+		function EventName(pEventType)
+		{
+			const Type = String(pEventType || "").toLowerCase();
+			if (Type === "system.blur" || Type === "page_focus_away") return "عدم الفوكس";
+			if (Type === "system.focus" || Type === "page_focus_return") return "الرجوع للفوكس";
+			if (Type === "system.page_hide" || Type === "page_exit") return "مغادرة الصفحة";
+			return pEventType || "حدث فوكس";
+		}
+
+
+
+
+		function EventBorder(pEventType)
+		{
+			const Type = String(pEventType || "").toLowerCase();
+			if (Type === "system.focus" || Type === "page_focus_return") return "#38d16a";
+			if (Type === "system.blur" || Type === "page_focus_away") return "#ffb020";
+			return "#ff4d5d";
+		}
+
+
+
+
+		function StatusText(pRecord)
+		{
+			const Result = pRecord?.result || null;
+			if (!Result) return pRecord?.stage === "queued" ? "اتسجل في طابور الريبلاي ولم يُرسل بعد" : "تم إطلاق الحدث وجارٍ إرساله";
+			if (Result.skipped) return `لم يُرسل: ${Result.reason || "skipped"}`;
+			if (Result.beacon) return "تم إرساله بواسطة sendBeacon";
+			if (Result.queued) return "فشل الإرسال الفوري واتحط في Retry Queue";
+			if (Result.ok) return "تم إرساله بنجاح";
+			return `فشل الإرسال${Result.status ? ` — HTTP ${Result.status}` : ""}`;
+		}
+
+
+
+
+		function EnsurePanel()
+		{
+			if (fHost) return;
+
+			fHost = document.createElement("div");
+			fHost.setAttribute("data-emo-focus-debug", "true");
+			fHost.style.position = "fixed";
+			fHost.style.inset = "0";
+			fHost.style.zIndex = "2147483647";
+			fHost.style.pointerEvents = "none";
+
+			const Shadow = fHost.attachShadow({ mode: "closed" });
+			const Panel = document.createElement("section");
+			Panel.dir = "rtl";
+			Panel.style.position = "fixed";
+			Panel.style.left = "50%";
+			Panel.style.top = "50%";
+			Panel.style.transform = "translate(-50%, -50%)";
+			Panel.style.width = "min(92vw, 430px)";
+			Panel.style.maxHeight = "72vh";
+			Panel.style.overflow = "auto";
+			Panel.style.boxSizing = "border-box";
+			Panel.style.padding = "16px";
+			Panel.style.border = "3px solid #ffb020";
+			Panel.style.borderRadius = "16px";
+			Panel.style.background = "rgba(12, 16, 24, 0.97)";
+			Panel.style.color = "#ffffff";
+			Panel.style.boxShadow = "0 18px 60px rgba(0, 0, 0, 0.55)";
+			Panel.style.fontFamily = "Cairo, system-ui, sans-serif";
+			Panel.style.pointerEvents = "auto";
+
+			fTitle = document.createElement("strong");
+			fTitle.style.display = "block";
+			fTitle.style.fontSize = "20px";
+			fTitle.style.lineHeight = "1.5";
+
+			fStatus = document.createElement("div");
+			fStatus.style.marginTop = "8px";
+			fStatus.style.fontSize = "15px";
+			fStatus.style.lineHeight = "1.6";
+			fStatus.style.color = "#f3f5f7";
+
+			fState = document.createElement("pre");
+			fState.style.margin = "12px 0";
+			fState.style.padding = "10px";
+			fState.style.borderRadius = "10px";
+			fState.style.background = "rgba(255, 255, 255, 0.08)";
+			fState.style.color = "#dce7f2";
+			fState.style.font = "12px/1.7 Consolas, monospace";
+			fState.style.whiteSpace = "pre-wrap";
+			fState.style.direction = "ltr";
+			fState.style.textAlign = "left";
+
+			const Actions = document.createElement("div");
+			Actions.style.display = "grid";
+			Actions.style.gridTemplateColumns = "1fr 1fr";
+			Actions.style.gap = "8px";
+
+			fCopyButton = document.createElement("button");
+			fCopyButton.type = "button";
+			fCopyButton.textContent = "نسخ الداتا";
+			fCopyButton.style.minHeight = "44px";
+			fCopyButton.style.border = "0";
+			fCopyButton.style.borderRadius = "10px";
+			fCopyButton.style.background = "#268cff";
+			fCopyButton.style.color = "#ffffff";
+			fCopyButton.style.font = "700 15px Cairo, system-ui, sans-serif";
+			fCopyButton.style.cursor = "pointer";
+			fCopyButton.addEventListener("click", async () =>
+				{
+					const Current = FindRecord(fCurrentRecordId);
+					const Data = {
+						current: Current,
+						recentFocusLifecycleLog: ReadLog()
+					};
+					const Text = JSON.stringify(Data, null, 2);
+					let Copied = false;
+					try
+					{
+						await navigator.clipboard.writeText(Text);
+						Copied = true;
+					} catch {}
+					if (!Copied)
+					{
+						const Input = document.createElement("textarea");
+						Input.value = Text;
+						Input.style.position = "fixed";
+						Input.style.opacity = "0";
+						document.body.appendChild(Input);
+						Input.select();
+						Copied = document.execCommand("copy");
+						Input.remove();
+					}
+					fCopyButton.textContent = Copied ? "تم النسخ" : "فشل النسخ";
+					setTimeout(() => { if (fCopyButton) fCopyButton.textContent = "نسخ الداتا"; }, 1500);
+				});
+
+			const CloseButton = document.createElement("button");
+			CloseButton.type = "button";
+			CloseButton.textContent = "إغلاق";
+			CloseButton.style.minHeight = "44px";
+			CloseButton.style.border = "1px solid rgba(255, 255, 255, 0.28)";
+			CloseButton.style.borderRadius = "10px";
+			CloseButton.style.background = "rgba(255, 255, 255, 0.08)";
+			CloseButton.style.color = "#ffffff";
+			CloseButton.style.font = "700 15px Cairo, system-ui, sans-serif";
+			CloseButton.style.cursor = "pointer";
+			CloseButton.addEventListener("click", () => { fHost.style.display = "none"; });
+
+			Actions.append(fCopyButton, CloseButton);
+			Panel.append(fTitle, fStatus, fState, Actions);
+			Shadow.appendChild(Panel);
+			document.documentElement.appendChild(fHost);
+			fHost.__Panel = Panel;
+		}
+
+
+
+
+		function ShowRecord(pRecord)
+		{
+			if (!cEnabled || !pRecord) return;
+			EnsurePanel();
+			fCurrentRecordId = pRecord.id;
+			fHost.style.display = "block";
+			fHost.__Panel.style.borderColor = EventBorder(pRecord.eventType);
+			fTitle.textContent = `${EventName(pRecord.eventType)} — ${pRecord.source}`;
+			fStatus.textContent = `${StatusText(pRecord)}\n${pRecord.recordedAtClient}`;
+			const State = pRecord.browserState || {};
+			fState.textContent = [
+				`eventType: ${pRecord.eventType}`,
+				`stage: ${pRecord.stage || ""}`,
+				`eventOn: ${pRecord.eventData?.eventOn || pRecord.eventData?.eventData?.state || ""}`,
+				`visibilityState: ${State.visibilityState}`,
+				`hidden: ${State.hidden}`,
+				`hasFocus: ${State.hasFocus}`,
+				`nativeEvent: ${pRecord.nativeEvent?.type || "none"}`,
+				`persisted: ${pRecord.nativeEvent?.persisted ?? ""}`,
+				`url: ${State.path || ""}`
+			].join("\n");
+		}
+
+
+
+
+		function Report(pDetails = {})
+		{
+			if (!cEnabled) return "";
+			const Now = Date.now();
+			const Record = {
+				id: String(pDetails.id || `focus_${Now.toString(36)}_${Math.random().toString(36).slice(2, 8)}`),
+				recordedAtClient: new Date(Now).toISOString(),
+				source: String(pDetails.source || "Astro"),
+				eventType: String(pDetails.eventType || "focus_event"),
+				stage: String(pDetails.stage || "sending"),
+				eventData: SafeValue(pDetails.eventData || {}),
+				nativeEvent: NativeEventData(pDetails.nativeEvent),
+				browserState: BrowserState(),
+				trackerState: SafeValue(pDetails.trackerState || {}),
+				result: pDetails.result ? SafeValue(pDetails.result) : null
+			};
+			const Log = ReadLog();
+			Log.push(Record);
+			SaveLog(Log);
+			if (["system.page_hide", "page_exit"].includes(Record.eventType.toLowerCase()))
+			{
+				try { localStorage.setItem(cCarryKey, Record.id); } catch {}
+			}
+			ShowRecord(Record);
+			return Record.id;
+		}
+
+
+
+
+		function Complete(pRecordId, pResult)
+		{
+			if (!cEnabled || !pRecordId) return;
+			const Log = ReadLog();
+			const Index = Log.findIndex((Item) => Item?.id === pRecordId);
+			if (Index < 0) return;
+			Log[Index].stage = "completed";
+			Log[Index].completedAtClient = new Date().toISOString();
+			Log[Index].result = SafeValue(pResult || {});
+			SaveLog(Log);
+			if (fCurrentRecordId === pRecordId) ShowRecord(Log[Index]);
+		}
+
+
+
+
+		function Clear()
+		{
+			localStorage.removeItem(cLogKey);
+			if (fHost) fHost.style.display = "none";
+		}
+
+
+
+
+		// ==================== Execution Logic ====================
+
+		if (window.EmoFocusLifecycleDebug) return;
+
+		window.EmoFocusLifecycleDebug = { Enabled: cEnabled, Report, Complete, ReadLog, Clear };
+
+		if (cEnabled)
+		{
+			let CarryId = "";
+			try
+			{
+				CarryId = localStorage.getItem(cCarryKey) || "";
+				if (CarryId) localStorage.removeItem(cCarryKey);
+			} catch {}
+			const Last = CarryId ? FindRecord(CarryId) : ReadLog().at(- 1);
+			if (Last && Last.eventType && (CarryId || Last.browserState?.url !== location.href)) setTimeout(() => ShowRecord(Last), 0);
+		}
+
+	})();
+
+
+
+</script>

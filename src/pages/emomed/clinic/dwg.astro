@@ -1,25 +1,10 @@
 ---
 import BLayout from "@/Layout.astro";
 import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
-import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoSec, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { EmoStr } from "@/Widgets/Strips";
-import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -37,18 +22,18 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text } from "@/
 
 
 
-	<Hero
-		pTitle="رسم هندسي لعيادة"
-		pDesc="إعداد رسم واضح لمقر العيادة يوضح توزيع الفراغات والتجهيزات والخدمات بما يساعد على تجهيز ملف الترخيص ومراجعة المكان قبل المعاينة"
-		pHzAlign="center"
-		pVrAlign="center"
-		pBlurL="on"
-		pBlurP="on"
-		pPosL="45% 12% 35% 50%"
-		pPosP="55% 3% 6% 3%"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="اطلب رسم عيادة" />
+		<VrStack pSize={new Size(new NumPer("40%","95%"))} pLoc={new Loc(new NumPer("45%","2.5%"),new NumPer("30%","45%"))} pHzAlign={"Center"}>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("رسم هندسي لعيادة")}
+				pText={Text.Body.Centered.OfText("خدمة إعداد الرسم الهندسي والكروكي المطلوب ضمن ملف ترخيص عيادة خاصة، شامل رفع المقاسات، توزيع الفراغات، توضيح غرفة الكشف والانتظار والخدمات، ومراجعة الرسم قبل تقديمه ضمن ملف الترخيص أو قبل معاينة العيادة.")}
+			/>
+
+			<EmoCall BlackSky />
+
+		</VrStack>
 
 	</Hero>
 
@@ -58,55 +43,7 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text } from "@/
 
 
 
-	<EmoSec
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
-			pTitle="الرسم الهندسي للعيادة ليس مجرد كروكي"
-			pDesc="الرسم المطلوب لترخيص العيادة يربط بين بيانات المكان وحالة التشطيب وتوزيع الفراغات وطبيعة النشاط الطبي، لذلك يجب أن يكون واضحًا ومقروءًا ومطابقًا للواقع قبل تقديمه ضمن ملف الترخيص"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<Emograph
-					pTitle={Text.H3.OfText("ما وظيفة الرسم في ملف ترخيص العيادة؟")}
-					pText={Text.Body.OfText("الرسم يوضح حدود العيادة ومساحتها وتوزيع غرفها وعلاقتها بالخدمات والمداخل والفتحات. وهو يساعد جهة الفحص أو لجنة المعاينة على فهم المكان بسرعة، ومقارنة الواقع بالمستندات المقدمة بدل الاعتماد على وصف شفهي غير دقيق.")}
-					pSize={new Size(new NumPer(600, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.OfText("متى تحتاج إلى رسم جديد؟")}
-					pText={Text.Body.OfText("تحتاج إلى رسم جديد عند فتح عيادة لأول مرة، أو نقل العيادة إلى مقر آخر، أو تعديل توزيع الفراغات، أو تجهيز مقر قائم قبل التقديم، أو عند طلب استيفاء رسم أو كروكي أو بيان أوضح من الإدارة المختصة.")}
-					pSize={new Size(new NumPer(600, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.Gray5};`}
@@ -114,11 +51,7 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text } from "@/
 			pDesc="العناصر التالية تجعل الرسم قابلًا للقراءة والمراجعة وتقلل ملاحظات الملف أثناء الفحص أو المعاينة"
 		/>
 
-		<EmoStr
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+		<EmoStr pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(20, 15)} pPad={new Pixel(30, 15)}>
 
@@ -154,11 +87,7 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text } from "@/
 
 
 
-	<EmoSec
-		pBg={new ElemBg(Colors.Creamy)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -166,11 +95,7 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text } from "@/
 			pDesc="نبدأ من واقع المكان، وليس من تصور نظري، لأن الرسم الذي لا يطابق الواقع يسبب ملاحظات أثناء المعاينة"
 		/>
 
-		<EmoStr
-			pBg={new ElemBg(Colors.Creamy)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+		<EmoStr pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -220,159 +145,7 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text } from "@/
 
 
 
-	<EmoSec
-		pBg={new ElemBg(Colors.Gray5)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="حالات تحتاج رسم عيادة مضبوط قبل التقديم"
-			pDesc="ليست كل العيادات تحتاج نفس مستوى التفصيل، لذلك نحدد المطلوب حسب حالة المكان ومرحلة الترخيص"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg(Colors.Gray5)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(20, 15)} pPad={new Pixel(30, 15)}>
-
-				<Emograph
-					pTitle={Text.H4.Centered.White.OfText("عيادة جديدة")}
-					pText={Text.Body.Centered.White.OfText("إعداد رسم أولي للمقر قبل تقديم ملف الترخيص، مع توضيح التوزيع المقترح للفراغات والخدمات.")}
-				/>
-
-				<Emograph
-					pTitle={Text.H4.Centered.White.OfText("عيادة قائمة")}
-					pText={Text.Body.Centered.White.OfText("رفع الحالة الفعلية للمكان وتجهيز رسم مطابق للواقع عند الحاجة إلى ترخيص أو تعديل أو استيفاء.")}
-				/>
-
-				<Emograph
-					pTitle={Text.H4.Centered.White.OfText("مقر تحت التجهيز")}
-					pText={Text.Body.Centered.White.OfText("مراجعة التوزيع قبل تنفيذ التشطيبات حتى لا يتم تنفيذ أعمال يصعب قبولها أو تعديلها لاحقًا.")}
-				/>
-
-				<Emograph
-					pTitle={Text.H4.Centered.White.OfText("طلب استيفاء")}
-					pText={Text.Body.Centered.White.OfText("إعادة تنظيم الرسم أو توضيح عناصر ناقصة إذا طلبت الإدارة المختصة رسمًا أوضح أو بيانات إضافية.")}
-				/>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
-			pTitle="خطوات تنفيذ رسم هندسي لعيادة"
-			pDesc="تسلسل العمل مصمم لتقليل الأخطاء بين المقاس المرفوع والرسم المسلم وحالة المكان وقت المعاينة"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<EmoList
-				pWidth={new RespString("1200px", "100%")}
-				pTitle={Text.H3.Centered.OfText("طريقة العمل")}
-				pDesc={Text.Body.Centered.OfText("كل خطوة مرتبطة بنتيجة محددة حتى يكون الرسم جاهزًا للاستخدام داخل ملف الترخيص")}
-				pHeadBg={new ElemBg(Colors.SkyLite)}
-				pItemsBg={new ElemBg(Colors.WhiteOff)}
-				pNumbered={true}
-				pItems={[
-					{ Title: "مراجعة بيانات العيادة", Items: ["نراجع عنوان المقر، نوع التخصص، حالة المكان، وسبب إعداد الرسم: ترخيص جديد، تعديل، نقل، أو استيفاء.", "هذه الخطوة تحدد مستوى التفصيل المطلوب في الرسم."] },
-					{ Title: "رفع المقاسات أو مراجعة الأبعاد", Items: ["نرفع أبعاد المكان فعليًا أو نراجع الأبعاد المرسلة إذا كان العمل يتم عن بعد.", "يتم التركيز على الفراغات والخدمات والفتحات والعناصر الثابتة المؤثرة."] },
-					{ Title: "إعداد المسقط وتسمية الفراغات", Items: ["يتم تحويل القياسات إلى مسقط واضح، مع كتابة أسماء الفراغات وتحديد العلاقات بينها.", "نراجع توزيع غرفة الكشف والانتظار والخدمات بطريقة مناسبة لطبيعة العيادة."] },
-					{ Title: "مراجعة الملاحظات قبل التسليم", Items: ["نفحص الرسم للتأكد من وضوح الأبعاد والبيانات وعدم وجود تعارض بين النص والرسم.", "إذا كان المكان يحتاج تعديلًا قبل المعاينة نوضح ذلك قبل استخدام الرسم في الملف."] },
-					{ Title: "تسليم الرسم للطباعة أو الإرفاق", Items: ["يتم تسليم الرسم بصيغة مناسبة للطباعة أو المراجعة أو الإرسال ضمن مستندات ملف الترخيص.", "يمكن تعديل الرسم عند ظهور ملاحظة رسمية محددة من جهة الفحص."] }
-				]}
-			/>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="أخطاء شائعة في رسومات العيادات"
-			pDesc="هذه الأخطاء لا تظهر دائمًا عند الرسم على الورق، لكنها تظهر سريعًا عند مراجعة الملف أو مطابقة الرسم على الطبيعة"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(20, 15)} pPad={new Pixel(30, 15)}>
-
-				<Emograph
-					pTitle={Text.H4.Centered.OfText("رسم غير مطابق للواقع")}
-					pText={Text.Body.Centered.OfText("اختلاف أبعاد الغرف أو مواقع الأبواب أو الخدمات بين الرسم والحالة الفعلية داخل العيادة.")}
-				/>
-
-				<Emograph
-					pTitle={Text.H4.Centered.OfText("فراغات غير مسماة")}
-					pText={Text.Body.Centered.OfText("وجود غرف أو مناطق داخل الرسم دون توضيح وظيفتها، مما يصعب قراءة النشاط الفعلي للمكان.")}
-				/>
-
-				<Emograph
-					pTitle={Text.H4.Centered.OfText("إغفال الخدمات")}
-					pText={Text.Body.Centered.OfText("عدم توضيح دورة المياه أو مصادر المياه والصرف أو عناصر التهوية أو التجهيزات الأساسية.")}
-				/>
-
-				<Emograph
-					pTitle={Text.H4.Centered.OfText("غياب بيانات الرسم")}
-					pText={Text.Body.Centered.OfText("عدم كتابة العنوان أو المقياس أو اسم صاحب الطلب أو الملاحظات اللازمة لفهم الرسم.")}
-				/>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		pBg={new ElemBg(Colors.Creamy)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.SkyLite};`}
@@ -380,11 +153,7 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text } from "@/
 			pDesc="الرسم الجيد لا يبالغ في التفاصيل غير المطلوبة، ولا يختصر العناصر التي تحتاجها المعاينة لفهم المقر"
 		/>
 
-		<EmoStr
-			pBg={new ElemBg(Colors.Creamy)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+		<EmoStr pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
 
@@ -418,142 +187,18 @@ import { Align, Colors, ElemBg, NumPer, Pixel, RespString, Size, Text } from "@/
 
 
 
-	<EmoSec
-		id="cta"
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="اطلب إعداد رسم هندسي لعيادتك"
-			pDesc="أرسل موقع العيادة وصور المكان وأي أبعاد متاحة، وسنوضح لك المطلوب لإعداد الرسم المناسب لملف الترخيص أو المعاينة"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<Emograph
-					pTitle={Text.H3.OfText("البيانات المطلوبة لبدء الرسم")}
-					pText={Text.Body.OfText("يفضل إرسال عنوان العيادة، صور واضحة من الداخل، صورة أو وصف لتوزيع الغرف الحالي، وأي مقاسات متاحة إن وجدت. إذا كانت العيادة ما زالت تحت التجهيز، يمكن مراجعة التوزيع المقترح قبل تنفيذ التشطيبات.")}
-					pSize={new Size(new NumPer(700, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<VrStack
-					pWidth={new Pixel(360, 320)}
-					pGap={new Pixel(15, 10)}
-					pPad={new Pixel(25, 20)}
-					pBgColor={new ElemBg(Colors.Creamy)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("تواصل مباشر")}
-						pText={Text.Body.Centered.OfText("المراجعة الأولى تساعد على تحديد هل المطلوب رسم فقط، أم مراجعة توزيع وتجهيزات قبل المعاينة.")}
-						pSize={new Size(new NumPer(320, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<EmoCall BlackSky pText="اتصل الآن" />
-
-				</VrStack>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoFaq>
-
-		<FaqItem
-			pQuestion="هل الرسم الهندسي للعيادة هو نفسه رسم ترخيص الصيدلية؟"
-			pAnswer="لا. رسم العيادة يركز على توزيع الفراغات الطبية والخدمات والتجهيزات المرتبطة بالعيادة، بينما رسم الصيدلية له عناصر وشروط مختلفة مثل المساحة والارتفاع والمسافة حسب طبيعة ترخيص الصيدليات."
-		/>
-
-		<FaqItem
-			pQuestion="هل يمكن إعداد الرسم من صور فقط؟"
-			pAnswer="يمكن عمل مراجعة مبدئية من الصور، لكن الرسم الدقيق يحتاج أبعادًا واضحة. إذا لم تكن المقاسات متاحة، يكون رفع المقاسات من الموقع هو الحل الأفضل لتقليل أخطاء المعاينة."
-		/>
-
-		<FaqItem
-			pQuestion="هل الرسم يحدد إن كانت العيادة صالحة للترخيص؟"
-			pAnswer="الرسم يساعد على قراءة المكان وتوضيح حالته، لكنه لا يغني عن فحص الملف كاملًا أو قرار الجهة المختصة. عند وجود مشكلة ظاهرة في التوزيع أو الخدمات يتم التنبيه إليها قبل التقديم."
-		/>
-
-		<FaqItem
-			pQuestion="هل أحتاج رسمًا قبل تشطيب العيادة؟"
-			pAnswer="نعم، في كثير من الحالات يكون الرسم قبل التشطيب مفيدًا لأنه يوضح التوزيع الصحيح قبل تنفيذ أعمال يصعب تعديلها بعد ذلك، خصوصًا في أماكن الكشف والانتظار والخدمات."
-		/>
-
-		<FaqItem
-			pQuestion="هل يمكن تعديل الرسم بعد ملاحظات العلاج الحر؟"
-			pAnswer="يمكن تعديل الرسم إذا كانت الملاحظة واضحة ومحددة، سواء كانت تخص تسمية فراغ أو توضيح خدمة أو مطابقة أبعاد أو إعادة تنظيم بعض البيانات داخل اللوحة."
-		/>
-
-		<FaqItem
-			pQuestion="هل خدمة الرسم تشمل استخراج الترخيص؟"
-			pAnswer="خدمة الرسم تركز على إعداد المخطط المطلوب للملف. متابعة استخراج ترخيص العيادة خدمة منفصلة يمكن طلبها إذا كنت تريد تجهيز الملف ومتابعته أمام الجهة المختصة."
-		/>
-
-	</EmoFaq>
-
-
-
-
-
-
-
-	<ReadAlso
-		pTitle={Text.H2.Centered.OfText("اقرأ أيضًا")}
-		pDesc={Text.Body.Centered.OfText("صفحة مرتبطة مباشرة بملف ترخيص العيادة")}
-		pHeadBg={new ElemBg(Colors.SkyLite)}
-		pBodyBg={new ElemBg(Colors.Creamy)}
-	>
-
-		<ReadAlsoItem
-			pTitle="ترخيص عيادة خاصة"
-			pDesc="تجهيز ومتابعة ملف ترخيص العيادة بداية من المستندات والرسم الكروكي حتى التقديم والمعاينة."
-			pHref="/emomed/clinic"
-		/>
-
-	</ReadAlso>
-
-
-
-
-
-
-
-	<RelServices
-		pTitle={Text.H2.Centered.White.OfText("خدمات ذات علاقة")}
-		pDesc={Text.Body.Centered.White.OfText("خدمات مساعدة مرتبطة مباشرة بتجهيز العيادة للترخيص والمعاينة")}
-		pHeadBg={new ElemBg(Colors.Gray5)}
-		pBodyBg={new ElemBg(Colors.WhiteOff)}
-	>
+	<RelServices>
 
 		<RelServiceItem
 			pTitle="استخراج ترخيص عيادة خاصة"
 			pDesc="تجهيز ومتابعة ملف ترخيص العيادة أمام الجهة المختصة بعد إعداد الرسم والمستندات المطلوبة."
 			pHref="/emomed/clinic"
-			pBtnText="افتح الخدمة"
 		/>
 
 		<RelServiceItem
-			pTitle="تشطيب وتجهيز عيادة للمعاينة"
+			pTitle="تشطيب وتجهيز عيادة"
 			pDesc="دراسة التعديلات والتجهيزات التي يحتاجها المكان قبل تقديم الملف أو قبل معاينة الترخيص."
 			pHref="/emocrete/finishing"
-			pBtnText="افتح الخدمة"
 		/>
 
 	</RelServices>
