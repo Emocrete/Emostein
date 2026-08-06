@@ -55,6 +55,10 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 			let fLastTouchFrameAt = 0;
 	
 			let fUnloading = false;
+
+			let fReplayFocusState = document.visibilityState === "visible" && !document.hidden && document.hasFocus() ? "visible" : "away";
+
+			let fReplayFocusTimer = 0;
 	
 			let fFlushing = false;
 	
@@ -240,6 +244,98 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 			{
 				const Type = Str(pType).toLowerCase();
 				return Type === "focus" || Type === "blur" || Type === "page_hide";
+			}
+
+
+
+
+
+			function CurrentReplayFocusState()
+			{
+				return document.visibilityState === "visible" && !document.hidden && document.hasFocus()
+					? "visible"
+					: "away";
+			}
+
+
+
+
+
+			function CommitReplayFocusState(pNativeEvent, pReason)
+			{
+				fReplayFocusTimer = 0;
+
+				if (fUnloading) return;
+
+				const State = CurrentReplayFocusState();
+
+				if (State === fReplayFocusState) return;
+
+				fReplayFocusState = State;
+
+				Capture(
+					State === "visible" ? "focus" : "blur",
+					{
+						state: State,
+						reason: Str(pReason),
+						visibilityState: document.visibilityState,
+						hidden: document.hidden,
+						hasFocus: document.hasFocus()
+					},
+					false,
+					pNativeEvent
+				);
+			}
+
+
+
+
+
+			function ScheduleReplayFocusState(pNativeEvent, pReason, pDelayMs = 0)
+			{
+				if (fUnloading) return;
+
+				if (fReplayFocusTimer)
+				{
+					clearTimeout(fReplayFocusTimer);
+					fReplayFocusTimer = 0;
+				}
+
+				fReplayFocusTimer = window.setTimeout(
+					() => CommitReplayFocusState(pNativeEvent, pReason),
+					Math.max(0, Number(pDelayMs) || 0)
+				);
+			}
+
+
+
+
+
+			function OnWindowFocus(pEvent)
+			{
+				if (pEvent.target !== window) return;
+
+				ScheduleReplayFocusState(pEvent, "window_focus");
+			}
+
+
+
+
+
+			function OnWindowBlur(pEvent)
+			{
+				if (pEvent.target !== window) return;
+
+				ScheduleReplayFocusState(pEvent, "window_blur", 100);
+			}
+
+
+
+
+
+			function OnVisibilityChange(pEvent)
+			{
+				ScheduleReplayFocusState(pEvent, "visibility_change");
 			}
 
 
@@ -657,11 +753,19 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 				);
 				document.addEventListener("submit", (Event) => Capture("submit", TargetData(Event.target), true), true);
 				document.addEventListener("toggle", (Event) => Capture("widget_state", {...TargetData(Event.target), open: !!Event.target?.open }), true);
-				window.addEventListener("focus", (pEvent) => Capture("focus", { state: "visible" }, false, pEvent), true);
-				window.addEventListener("blur", (pEvent) => Capture("blur", { state: "away" }, false, pEvent), true);
+				window.addEventListener("focus", OnWindowFocus);
+				window.addEventListener("blur", OnWindowBlur);
+				document.addEventListener("visibilitychange", OnVisibilityChange);
 				window.addEventListener("pagehide", (pEvent) =>
 					{
 						if (fTouchActive) EndTouch(null, "cancel");
+
+						if (fReplayFocusTimer)
+						{
+							clearTimeout(fReplayFocusTimer);
+							fReplayFocusTimer = 0;
+						}
+
 						fUnloading = true;
 						Capture("page_hide", { persisted: Boolean(pEvent.persisted),...ViewportData() }, true, pEvent);
 						Flush();
