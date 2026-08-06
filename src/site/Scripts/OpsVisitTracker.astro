@@ -7,21 +7,6 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 { cEnabled && (
 
 	<script is:inline NoMove>
@@ -43,21 +28,6 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 		})();
 	</script>
 ) }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2040,12 +2010,6 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		function InitFocusAwayEvents()
 		{
-			document.addEventListener("visibilitychange", () =>
-				{
-					if (document.hidden) MarkPageAway("hidden");
-					else if (!fPageOpenSent) TrackPageOpen();
-					else TrackPageReturn("visible");
-			});
 			window.addEventListener("blur", () => MarkPageAway("blur"));
 			window.addEventListener("focus", () => TrackPageReturn("focus"));
 		}
@@ -2057,10 +2021,10 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 		function TrackPageAlive()
 		{
 			if (!fPageOpenSent || fPageExitSent) return;
-			const Hidden = document.hidden || document.visibilityState !== "visible";
+			const Hidden = !document.hasFocus();
 			if (Hidden)
 			{
-				if (!fAwayStartedAt) MarkPageAway("hidden_ping");
+				if (!fAwayStartedAt) MarkPageAway("focus_ping");
 				return;
 			}
 			TrackOpsEvent("page_alive", {
@@ -2152,7 +2116,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 		{
 			if (fPageOpenSent || fPageOpenPromise) return fPageOpenPromise;
 			if (IsSyntheticTraffic()) return Promise.resolve({ ok: true, skipped: true });
-			if (document.hidden || document.visibilityState === "prerender") return Promise.resolve({ ok: true, skipped: true });
+			if (!document.hasFocus()) return Promise.resolve({ ok: true, skipped: true });
 			fPageOpenPromise = TrackOpsEventOnce("page_open", "page_open", {
 					eventOn: "load",
 					widget: "Page",

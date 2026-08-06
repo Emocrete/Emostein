@@ -6,225 +6,418 @@ const cFlushEveryMs = Number(import.meta.env.PUBLIC_EMO_REPLAY_FLUSH_EVERY_MS ??
 const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? "160");
 ---
 
-{cEnabled && (
-<script is:inline define:vars={{ cPointerEveryMs, cScrollEveryMs, cFlushEveryMs, cNetworkBatch }}>
-(() => {
-	if (window.__EMO_REPLAY_RECORDER__) return;
-	window.__EMO_REPLAY_RECORDER__ = true;
-	window.__EMO_REPLAY_CAPTURE_ENABLED__ = true;
 
-	const cPageStartedAt = Date.now();
-	const cPageStartedIso = new Date(cPageStartedAt).toISOString();
-	const cGeneratedId = /^(.+?)-(\d{6})-(\d{6})-(\d{3})-(\d{3})$/;
-	let fLastPointerAt = 0;
-	let fLastScrollAt = 0;
-	let fTouchFallback = false;
-	let fUnloading = false;
-	let fFlushing = false;
-	let fFlushTimer = 0;
-	const fQueue = [];
 
-	function Str(pValue) { return String(pValue ?? "").trim(); }
-	function Shorten(pValue, pMax = 160) { return Str(pValue).replace(/\s+/g, " ").slice(0, pMax); }
-	function CssEscape(pValue) {
-		if (window.CSS?.escape) return window.CSS.escape(Str(pValue));
-		return Str(pValue).replace(/[^a-zA-Z0-9_-]/g, (Char) => `\\${Char}`);
-	}
-	function SessionStartedAt() {
-		try {
-			const Value = Number(sessionStorage.getItem("emo_ops_session_started_at_v1") || 0);
-			return Number.isFinite(Value) && Value > 0 ? Value : cPageStartedAt;
-		} catch { return cPageStartedAt; }
-	}
-	function ParseGeneratedId(pId) {
-		const Match = Str(pId).match(cGeneratedId);
-		if (!Match) return null;
-		const DatePart = Match[2];
-		const TimePart = Match[3];
-		const Stamp = Date.UTC(
-			2000 + Number(DatePart.slice(0, 2)),
-			Number(DatePart.slice(2, 4)) - 1,
-			Number(DatePart.slice(4, 6)),
-			Number(TimePart.slice(0, 2)),
-			Number(TimePart.slice(2, 4)),
-			Number(TimePart.slice(4, 6)),
-			Number(Match[4])
-		);
-		return { prefix: Match[1], stampMs: Stamp, count: Number(Match[5]) };
-	}
-	function StructuralPath(pElem) {
-		if (!(pElem instanceof Element)) return "";
-		const Parts = [];
-		let Current = pElem;
-		while (Current && Current !== document.documentElement && Parts.length < 14) {
-			let Part = Current.tagName.toLowerCase();
-			const Parent = Current.parentElement;
-			if (Parent) {
-				const Same = Array.from(Parent.children).filter((Elem) => Elem.tagName === Current.tagName);
-				if (Same.length > 1) Part += `:nth-of-type(${Same.indexOf(Current) + 1})`;
+
+
+{ cEnabled && (
+
+	<script is:inline define:vars={{ cPointerEveryMs, cScrollEveryMs, cFlushEveryMs, cNetworkBatch }} NoMove>
+	
+	
+	
+		(() =>
+		{
+	
+			// ==================== Definitions: Variables & Methods ====================
+	
+			const cPageStartedAt = Date.now();
+	
+			const cPageStartedIso = new Date(cPageStartedAt).toISOString();
+	
+			const cGeneratedId = /^(.+?)-(\d{6})-(\d{6})-(\d{3})-(\d{3})$/;
+	
+			let fLastPointerAt = 0;
+	
+			let fLastScrollAt = 0;
+	
+			let fTouchFallback = false;
+	
+			let fUnloading = false;
+	
+			let fFlushing = false;
+	
+			let fFlushTimer = 0;
+	
+			const fQueue = [];
+	
+	
+	
+	
+	
+			function Str(pValue)
+			{
+				return String(pValue ?? "").trim();
 			}
-			Parts.unshift(Part);
-			Current = Parent;
-		}
-		return Parts.join(" > ");
-	}
-	function SamePrefixIndex(pElem, pPrefix) {
-		if (!(pElem instanceof Element) || !pPrefix) return -1;
-		const Matches = Array.from(document.querySelectorAll("[id]")).filter((Elem) => ParseGeneratedId(Elem.id)?.prefix === pPrefix);
-		return Matches.indexOf(pElem);
-	}
-	function ExactSelector(pElem) {
-		if (!(pElem instanceof Element)) return "";
-		if (pElem.id) return `#${CssEscape(pElem.id)}`;
-		const ReplayId = pElem.getAttribute("data-replay-id");
-		if (ReplayId) return `[data-replay-id="${CssEscape(ReplayId)}"]`;
-		const OpsId = pElem.getAttribute("data-ops-id");
-		if (OpsId) return `[data-ops-id="${CssEscape(OpsId)}"]`;
-		return StructuralPath(pElem);
-	}
-	function TargetData(pTarget) {
-		const Elem = pTarget instanceof Element ? pTarget : null;
-		if (!Elem) return { selector: "", structuralPath: "", tag: "", label: "", name: "", id: "" };
-		const Generated = ParseGeneratedId(Elem.id);
-		return {
-			selector: ExactSelector(Elem),
-			structuralPath: StructuralPath(Elem),
-			tag: Elem.tagName.toLowerCase(),
-			label: Shorten(Elem.getAttribute("aria-label") || Elem.getAttribute("title") || Elem.textContent || "", 180),
-			name: Str(Elem.getAttribute("name")),
-			id: Str(Elem.id),
-			idPrefix: Generated?.prefix || "",
-			autoIdStampMs: Generated?.stampMs || 0,
-			autoIdCount: Generated?.count || 0,
-			samePrefixIndex: Generated ? SamePrefixIndex(Elem, Generated.prefix) : -1
-		};
-	}
-	function ScrollData() {
-		return {
-			scrollX: Math.round(window.scrollX || window.pageXOffset || 0),
-			scrollY: Math.round(window.scrollY || window.pageYOffset || 0)
-		};
-	}
-	function ViewportData() {
-		return {
-			viewportWidth: window.innerWidth || document.documentElement.clientWidth || 0,
-			viewportHeight: window.innerHeight || document.documentElement.clientHeight || 0,
-			documentWidth: Math.max(document.documentElement.scrollWidth, document.body?.scrollWidth || 0),
-			documentHeight: Math.max(document.documentElement.scrollHeight, document.body?.scrollHeight || 0),
-			screenWidth: window.screen.width || 0,
-			screenHeight: window.screen.height || 0,
-			devicePixelRatio: window.devicePixelRatio || 1,
-			orientation: window.matchMedia("(orientation: portrait)").matches ? "portrait" : "landscape",
-			...ScrollData(),
-			pageUrl: `${location.pathname}${location.search}${location.hash}`
-		};
-	}
-	function QueueCapture(pType, pData = {}, pUseBeacon = false, pTiming = {}) {
-		const Now = Date.now();
-		fQueue.push({
-			eventType: `system.${pType}`,
-			eventSource: "site",
-			eventOn: "replay",
-			label: `Replay ${pType}`,
-			notifyMobile: false,
-			sound: false,
-			important: false,
-			useBeacon: pUseBeacon,
-			pageElapsedMs: Number.isFinite(Number(pTiming.pageElapsedMs)) ? Number(pTiming.pageElapsedMs) : Math.max(0, Now - cPageStartedAt),
-			sessionElapsedMs: Number.isFinite(Number(pTiming.sessionElapsedMs)) ? Number(pTiming.sessionElapsedMs) : Math.max(0, Now - SessionStartedAt()),
-			createdAtClient: Str(pTiming.createdAtClient || new Date(Now).toISOString()),
-			eventData: pData
-		});
-		if (pUseBeacon || fQueue.length >= Math.max(20, Number(cNetworkBatch) || 160)) Flush();
-	}
-	function Capture(pType, pData = {}, pUseBeacon = false) { QueueCapture(pType, pData, pUseBeacon); }
-	async function Flush() {
-		if (fFlushing || !fQueue.length || typeof window.TrackOpsEventBatch !== "function" || !window.__EMO_OPS_PAGE_OPENED__) return;
-		fFlushing = true;
-		const Batch = fQueue.splice(0, Math.max(20, Number(cNetworkBatch) || 160));
-		try {
-			const Result = await window.TrackOpsEventBatch(Batch);
-			if (!Result?.ok && !Result?.queued) fQueue.unshift(...Batch);
-		} catch { fQueue.unshift(...Batch); }
-		finally {
-			fFlushing = false;
-			if (fQueue.length && !fUnloading) setTimeout(Flush, 100);
-		}
-	}
-	function InputValue(pElem) {
-		if (!(pElem instanceof Element)) return { value: "", private: true };
-		const Allowed = pElem.getAttribute("data-replay-capture") === "value" && pElem.getAttribute("data-replay-private") !== "true";
-		if (!Allowed) return { value: "", private: true };
-		if (pElem instanceof HTMLInputElement && ["checkbox", "radio"].includes(pElem.type)) return { value: "", checked: pElem.checked, private: false };
-		return { value: Str(pElem.value), private: false };
-	}
-	function WireEvents() {
-		window.addEventListener("scroll", () => {
-			const Now = performance.now();
-			if (Now - fLastScrollAt < Math.max(80, Number(cScrollEveryMs) || 200)) return;
-			fLastScrollAt = Now;
-			Capture("scroll", ScrollData());
-		}, { passive: true });
-		window.addEventListener("resize", () => Capture("resize", ViewportData()), { passive: true });
-		document.addEventListener("pointermove", (Event) => {
-			const Now = performance.now();
-			if (Now - fLastPointerAt < Math.max(100, Number(cPointerEveryMs) || 250)) return;
-			fLastPointerAt = Now;
-			Capture("pointer_move", { x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), pointerType: Event.pointerType || "mouse" });
-		}, true);
-		for (const [DomType, ReplayType] of [["pointerdown", "pointer_down"], ["pointerup", "pointer_up"]]) {
-			document.addEventListener(DomType, (Event) => Capture(ReplayType, { x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button, pointerType: Event.pointerType || "mouse", ...TargetData(Event.target) }), true);
-		}
-		document.addEventListener("pointercancel", (Event) => {
-			if ((Event.pointerType || "") === "touch") fTouchFallback = true;
-			Capture("pointer_cancel", { x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button, pointerType: Event.pointerType || "mouse", ...TargetData(Event.target) });
-		}, true);
-		document.addEventListener("touchmove", (Event) => {
-			if (!fTouchFallback) return;
-			const Touch = Event.touches?.[0] || Event.changedTouches?.[0];
-			if (!Touch) return;
-			const Now = performance.now();
-			if (Now - fLastPointerAt < Math.max(100, Number(cPointerEveryMs) || 250)) return;
-			fLastPointerAt = Now;
-			Capture("pointer_move", { x: Math.round(Touch.clientX), y: Math.round(Touch.clientY), pageX: Math.round(Touch.pageX), pageY: Math.round(Touch.pageY), pointerType: "touch", touchFallback: true });
-		}, { passive: true, capture: true });
-		for (const TouchEndType of ["touchend", "touchcancel"]) {
-			document.addEventListener(TouchEndType, (Event) => {
-				if (!fTouchFallback) return;
-				const Touch = Event.changedTouches?.[0];
-				if (Touch) Capture("pointer_up", { x: Math.round(Touch.clientX), y: Math.round(Touch.clientY), pageX: Math.round(Touch.pageX), pageY: Math.round(Touch.pageY), pointerType: "touch", touchFallback: true });
-				fTouchFallback = false;
-			}, { passive: true, capture: true });
-		}
-		document.addEventListener("click", (Event) => Capture("click", { x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button, ...TargetData(Event.target) }), true);
-		for (const Type of ["input", "change"]) document.addEventListener(Type, (Event) => Capture(Type, { ...TargetData(Event.target), ...InputValue(Event.target) }), true);
-		document.addEventListener("submit", (Event) => Capture("submit", TargetData(Event.target), true), true);
-		document.addEventListener("toggle", (Event) => Capture("widget_state", { ...TargetData(Event.target), open: !!Event.target?.open }), true);
-		window.addEventListener("focus", () => Capture("focus", { state: "visible" }), true);
-		window.addEventListener("blur", () => Capture("blur", { state: "away" }), true);
-		document.addEventListener("visibilitychange", () => Capture("visibility", { state: document.visibilityState }, document.hidden));
-		window.addEventListener("pagehide", () => {
-			fUnloading = true;
-			Capture("page_hide", { persisted: false, ...ViewportData() }, true);
-			Flush();
-		});
-	}
-	function OnOpsReady() { Flush(); }
-
-	WireEvents();
-	QueueCapture("page_ready", { readyState: document.readyState, ...ViewportData() }, false, {
-		pageElapsedMs: 0,
-		sessionElapsedMs: Math.max(0, cPageStartedAt - SessionStartedAt()),
-		createdAtClient: cPageStartedIso
-	});
-	QueueCapture("scroll", { scrollX: 0, scrollY: 0 }, false, {
-		pageElapsedMs: 0,
-		sessionElapsedMs: Math.max(0, cPageStartedAt - SessionStartedAt()),
-		createdAtClient: cPageStartedIso
-	});
-	fFlushTimer = window.setInterval(Flush, Math.max(500, Number(cFlushEveryMs) || 1500));
-	window.addEventListener("emo:ops-page-open", OnOpsReady);
-	if (window.__EMO_OPS_PAGE_OPENED__) OnOpsReady();
-})();
-</script>
-)}
+	
+	
+	
+	
+	
+			function Shorten(pValue, pMax = 160)
+			{
+				return Str(pValue).replace(/\s+/g, " ").slice(0, pMax);
+			}
+	
+	
+	
+	
+	
+			function CssEscape(pValue)
+			{
+				if (window.CSS?.escape) return window.CSS.escape(Str(pValue));
+				return Str(pValue).replace(/[^a-zA-Z0-9_-]/g, (Char) => `\\${Char}`);
+			}
+	
+	
+	
+	
+	
+			function SessionStartedAt()
+			{
+				try
+				{
+					const Value = Number(sessionStorage.getItem("emo_ops_session_started_at_v1") || 0);
+					return Number.isFinite(Value) && Value > 0 ? Value : cPageStartedAt;
+				} catch { return cPageStartedAt; }
+			}
+	
+	
+	
+	
+	
+			function ParseGeneratedId(pId)
+			{
+				const Match = Str(pId).match(cGeneratedId);
+				if (!Match) return null;
+				const DatePart = Match[2];
+				const TimePart = Match[3];
+				const Stamp = Date.UTC(
+					2000 + Number(DatePart.slice(0, 2)),
+					Number(DatePart.slice(2, 4)) - 1,
+					Number(DatePart.slice(4, 6)),
+					Number(TimePart.slice(0, 2)),
+					Number(TimePart.slice(2, 4)),
+					Number(TimePart.slice(4, 6)),
+					Number(Match[4])
+				);
+				return { prefix: Match[1], stampMs: Stamp, count: Number(Match[5]) };
+			}
+	
+	
+	
+	
+	
+			function StructuralPath(pElem)
+			{
+				if (!(pElem instanceof Element)) return "";
+				const Parts = [];
+				let Current = pElem;
+				while (Current && Current !== document.documentElement && Parts.length < 14)
+				{
+					let Part = Current.tagName.toLowerCase();
+					const Parent = Current.parentElement;
+					if (Parent)
+					{
+						const Same = Array.from(Parent.children).filter((Elem) => Elem.tagName === Current.tagName);
+						if (Same.length > 1) Part += `:nth-of-type(${Same.indexOf(Current) + 1})`;
+					}
+					Parts.unshift(Part);
+					Current = Parent;
+				}
+				return Parts.join(" > ");
+			}
+	
+	
+	
+	
+	
+			function SamePrefixIndex(pElem, pPrefix)
+			{
+				if (!(pElem instanceof Element) || !pPrefix) return - 1;
+				const Matches = Array.from(document.querySelectorAll("[id]")).filter((Elem) => ParseGeneratedId(Elem.id)?.prefix === pPrefix);
+				return Matches.indexOf(pElem);
+			}
+	
+	
+	
+	
+	
+			function ExactSelector(pElem)
+			{
+				if (!(pElem instanceof Element)) return "";
+				if (pElem.id) return `#${CssEscape(pElem.id)}`;
+				const ReplayId = pElem.getAttribute("data-replay-id");
+				if (ReplayId) return `[data-replay-id="${CssEscape(ReplayId)}"]`;
+				const OpsId = pElem.getAttribute("data-ops-id");
+				if (OpsId) return `[data-ops-id="${CssEscape(OpsId)}"]`;
+				return StructuralPath(pElem);
+			}
+	
+	
+	
+	
+	
+			function TargetData(pTarget)
+			{
+				const Elem = pTarget instanceof Element ? pTarget : null;
+				if (!Elem) return { selector: "", structuralPath: "", tag: "", label: "", name: "", id: "" };
+				const Generated = ParseGeneratedId(Elem.id);
+				return {
+					selector: ExactSelector(Elem),
+					structuralPath: StructuralPath(Elem),
+					tag: Elem.tagName.toLowerCase(),
+					label: Shorten(Elem.getAttribute("aria-label") || Elem.getAttribute("title") || Elem.textContent || "", 180),
+					name: Str(Elem.getAttribute("name")),
+					id: Str(Elem.id),
+					idPrefix: Generated?.prefix || "",
+					autoIdStampMs: Generated?.stampMs || 0,
+					autoIdCount: Generated?.count || 0,
+					samePrefixIndex: Generated ? SamePrefixIndex(Elem, Generated.prefix) : -1
+				};
+			}
+	
+	
+	
+	
+	
+			function ScrollData()
+			{
+				return {
+					scrollX: Math.round(window.scrollX || window.pageXOffset || 0),
+					scrollY: Math.round(window.scrollY || window.pageYOffset || 0)
+				};
+			}
+	
+	
+	
+	
+	
+			function ViewportData()
+			{
+				return {
+					viewportWidth: window.innerWidth || document.documentElement.clientWidth || 0,
+					viewportHeight: window.innerHeight || document.documentElement.clientHeight || 0,
+					documentWidth: Math.max(document.documentElement.scrollWidth, document.body?.scrollWidth || 0),
+					documentHeight: Math.max(document.documentElement.scrollHeight, document.body?.scrollHeight || 0),
+					screenWidth: window.screen.width || 0,
+					screenHeight: window.screen.height || 0,
+					devicePixelRatio: window.devicePixelRatio || 1,
+					orientation: window.matchMedia("(orientation: portrait)").matches ? "portrait" : "landscape",
+					...ScrollData(),
+					pageUrl: `${location.pathname}${location.search}${location.hash}`
+				};
+			}
+	
+	
+	
+	
+	
+			function QueueCapture(pType, pData =
+				{
+				}, pUseBeacon = false, pTiming = {}) {
+				const Now = Date.now();
+				fQueue.push({
+						eventType: `system.${pType}`,
+						eventSource: "site",
+						eventOn: "replay",
+						label: `Replay ${pType}`,
+						notifyMobile: false,
+						sound: false,
+						important: false,
+						useBeacon: pUseBeacon,
+						pageElapsedMs: Number.isFinite(Number(pTiming.pageElapsedMs)) ? Number(pTiming.pageElapsedMs) : Math.max(0, Now - cPageStartedAt),
+						sessionElapsedMs: Number.isFinite(Number(pTiming.sessionElapsedMs)) ? Number(pTiming.sessionElapsedMs) : Math.max(0, Now - SessionStartedAt()),
+						createdAtClient: Str(pTiming.createdAtClient || new Date(Now).toISOString()),
+						eventData: pData
+				});
+				if (pUseBeacon || fQueue.length >= Math.max(20, Number(cNetworkBatch) || 160)) Flush();
+			}
+	
+	
+	
+	
+	
+			function Capture(pType, pData =
+				{
+				}, pUseBeacon = false) { QueueCapture(pType, pData, pUseBeacon); }
+	
+	
+	
+	
+	
+			async function Flush()
+			{
+				if (fFlushing || !fQueue.length || typeof window.TrackOpsEventBatch !== "function" || !window.__EMO_OPS_PAGE_OPENED__) return;
+				fFlushing = true;
+				const Batch = fQueue.splice(0, Math.max(20, Number(cNetworkBatch) || 160));
+				try
+				{
+					const Result = await window.TrackOpsEventBatch(Batch);
+					if (!Result?.ok && !Result?.queued) fQueue.unshift(...Batch);
+				} catch { fQueue.unshift(...Batch); }
+				finally
+				{
+					fFlushing = false;
+					if (fQueue.length && !fUnloading) setTimeout(Flush, 100);
+				}
+			}
+	
+	
+	
+	
+	
+			function InputValue(pElem)
+			{
+				if (!(pElem instanceof Element)) return { value: "", private: true };
+				const Allowed = pElem.getAttribute("data-replay-capture") === "value" && pElem.getAttribute("data-replay-private") !== "true";
+				if (!Allowed) return { value: "", private: true };
+				if (pElem instanceof HTMLInputElement && [
+						"checkbox",
+						"radio"
+					].includes(pElem.type)) return { value: "", checked: pElem.checked, private: false };
+				return { value: Str(pElem.value), private: false };
+			}
+	
+	
+	
+	
+	
+			function WireEvents()
+			{
+				window.addEventListener("scroll", () =>
+					{
+						const Now = performance.now();
+						if (Now - fLastScrollAt < Math.max(80, Number(cScrollEveryMs) || 200)) return;
+						fLastScrollAt = Now;
+						Capture("scroll", ScrollData());
+					}, { passive: true });
+				window.addEventListener("resize", () => Capture("resize", ViewportData()), { passive: true });
+				document.addEventListener("pointermove", (Event) =>
+					{
+						const Now = performance.now();
+						if (Now - fLastPointerAt < Math.max(100, Number(cPointerEveryMs) || 250)) return;
+						fLastPointerAt = Now;
+						Capture(
+							"pointer_move",
+							{ x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), pointerType: Event.pointerType || "mouse" }
+						);
+					}, true);
+				for (const [DomType, ReplayType] of [[
+							"pointerdown",
+							"pointer_down"
+						], [
+							"pointerup",
+							"pointer_up"
+				]]) {
+					document.addEventListener(
+						DomType,
+						(Event) => Capture(
+							ReplayType,
+							{ x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button, pointerType: Event.pointerType || "mouse",...TargetData(Event.target) }
+						),
+						true
+					);
+				}
+				document.addEventListener("pointercancel", (Event) =>
+					{
+						if ((Event.pointerType || "") === "touch") fTouchFallback = true;
+						Capture(
+							"pointer_cancel",
+							{ x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button, pointerType: Event.pointerType || "mouse",...TargetData(Event.target) }
+						);
+					}, true);
+				document.addEventListener("touchmove", (Event) =>
+					{
+						if (!fTouchFallback) return;
+						const Touch = Event.touches?.[0] || Event.changedTouches?.[0];
+						if (!Touch) return;
+						const Now = performance.now();
+						if (Now - fLastPointerAt < Math.max(100, Number(cPointerEveryMs) || 250)) return;
+						fLastPointerAt = Now;
+						Capture(
+							"pointer_move",
+							{ x: Math.round(Touch.clientX), y: Math.round(Touch.clientY), pageX: Math.round(Touch.pageX), pageY: Math.round(Touch.pageY), pointerType: "touch", touchFallback: true }
+						);
+					}, { passive: true, capture: true });
+				for (const TouchEndType of ["touchend", "touchcancel"])
+				{
+					document.addEventListener(TouchEndType, (Event) =>
+						{
+							if (!fTouchFallback) return;
+							const Touch = Event.changedTouches?.[0];
+							if (Touch) Capture(
+								"pointer_up",
+								{ x: Math.round(Touch.clientX), y: Math.round(Touch.clientY), pageX: Math.round(Touch.pageX), pageY: Math.round(Touch.pageY), pointerType: "touch", touchFallback: true }
+							);
+							fTouchFallback = false;
+						}, { passive: true, capture: true });
+				}
+				document.addEventListener(
+					"click",
+					(Event) => Capture(
+						"click",
+						{ x: Math.round(Event.clientX), y: Math.round(Event.clientY), pageX: Math.round(Event.pageX), pageY: Math.round(Event.pageY), button: Event.button,...TargetData(Event.target) }
+					),
+					true
+				);
+				for (const Type of ["input", "change"]) document.addEventListener(
+					Type,
+					(Event) => Capture(Type, {...TargetData(Event.target),...InputValue(Event.target) }),
+					true
+				);
+				document.addEventListener("submit", (Event) => Capture("submit", TargetData(Event.target), true), true);
+				document.addEventListener("toggle", (Event) => Capture("widget_state", {...TargetData(Event.target), open: !!Event.target?.open }), true);
+				window.addEventListener("focus", () => Capture("focus", { state: "visible" }), true);
+				window.addEventListener("blur", () => Capture("blur", { state: "away" }), true);
+				window.addEventListener("pagehide", () =>
+					{
+						fUnloading = true;
+						Capture("page_hide", { persisted: false,...ViewportData() }, true);
+						Flush();
+				});
+			}
+	
+	
+	
+	
+	
+			function OnOpsReady()
+			{
+				Flush();
+			}
+	
+	
+	
+	
+	
+			// ==================== Execution Logic ====================
+	
+			if (window.__EMO_REPLAY_RECORDER__) return;
+	
+			window.__EMO_REPLAY_RECORDER__ = true;
+	
+			window.__EMO_REPLAY_CAPTURE_ENABLED__ = true;
+	
+			WireEvents();
+	
+			QueueCapture("page_ready", { readyState: document.readyState,...ViewportData() }, false, {
+					pageElapsedMs: 0,
+					sessionElapsedMs: Math.max(0, cPageStartedAt - SessionStartedAt()),
+					createdAtClient: cPageStartedIso
+			});
+	
+			QueueCapture("scroll", { scrollX: 0, scrollY: 0 }, false, {
+					pageElapsedMs: 0,
+					sessionElapsedMs: Math.max(0, cPageStartedAt - SessionStartedAt()),
+					createdAtClient: cPageStartedIso
+			});
+	
+			fFlushTimer = window.setInterval(Flush, Math.max(500, Number(cFlushEveryMs) || 1500));
+	
+			window.addEventListener("emo:ops-page-open", OnOpsReady);
+	
+			if (window.__EMO_OPS_PAGE_OPENED__) OnOpsReady();
+		})();
+	</script>
+) }
