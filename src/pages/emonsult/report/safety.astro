@@ -1,25 +1,10 @@
 ---
 import BLayout from "@/Layout.astro";
-import { EmoBtn, Emograph, HzStack, VrStack } from "@/Widgets/Comp";
+import { EmoBtn, EmoCall, Emograph, EmoLine, HzStack, TotalGraph, VrStack } from "@/Widgets/Comp";
 import { RespImg } from "@/Widgets/Media";
 import { EmoSec, Hero } from "@/Widgets/Sections";
-import { Pixel, Text } from "@/TypesLib";
+import { Loc, NumPer, Pixel, Size, Text } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -27,7 +12,7 @@ import { Pixel, Text } from "@/TypesLib";
 
 <BLayout
 	pSchemaType="Service"
-	pTitle="تقرير هندسي لحالة وسلامة المبنى"
+	pTitle="تقرير السلامة الإنشائية من مهندس نقابي"
 	pDescr="استخراج تقرير هندسي استشاري عن حالة وسلامة المبنى في القاهرة والجيزة، مع إمكانية اعتماد التقرير من مهندس استشاري فقط أو من مهندس استشاري ونقابة المهندسين."
 >
 
@@ -37,22 +22,25 @@ import { Pixel, Text } from "@/TypesLib";
 
 
 
-	<Hero
-		pTitle="تقرير هندسي لحالة وسلامة المبنى"
-		pDesc="مهندس استشاري إنشائي معتمد"
-		pTitleClr="#ffffff"
-		pDescClr="#bdf9e7"
-		pHzAlign="center"
-		pVrAlign="center"
-		pPosL="25% 45% 45% 10%"
-		pPosP="15% 3% 50% 3%"
-		pBlurL="on"
-		pBlurP="on"
-	>
+	<Hero>
 
-		<VrStack>
+		<VrStack pSize={new Size(new NumPer("40%","98%"))} pLoc={new Loc(new NumPer("5%","1%"),new NumPer("15%","8%"))} pHzAlign={"Center"}>
 
-			<Emograph pTitle={Text.Body.Centered.Red.OfText("في نطاق محافظتي القاهرة والجيزة فقط")} />
+			<TotalGraph>
+
+				<Emograph pTitle={Text.H1.Centered.White.OfText("تقرير سلامة إنشائية")} />
+
+				<EmoLine />
+
+				<Emograph pTitle={Text.H1.Centered.White.OfText("من مهندس استشاري إنشائي")} />
+
+			</TotalGraph>
+
+			<Emograph
+				pText={Text.Body.Centered.White.OfText("استخراج تقرير هندسي استشاري عن حالة وسلامة المبنى مع إمكانية اعتماد التقرير من مهندس استشاري فقط أو من مهندس استشاري ونقابة المهندسين.")}
+			/>
+
+			<EmoCall OrangeBlack />
 
 		</VrStack>
 

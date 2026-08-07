@@ -94,7 +94,13 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		let fPageInstanceId = "";
 
-		const cPageStartedAt = Date.now();
+		const cTrackerLoadedAt = Date.now();
+
+		let fPageStartedAt = cTrackerLoadedAt;
+
+		let fTrafficGateDiagnostics = null;
+
+		let fClientDiagnostics = null;
 
 		const cFocusAwayMinMs = 1500;
 
@@ -182,6 +188,77 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 
 
+		async function CollectClientDiagnostics()
+		{
+			const Connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection || null;
+			const NavEntry = performance.getEntriesByType?.("navigation")?.[0] || null;
+			let UserAgentData = null;
+			try
+			{
+				if (navigator.userAgentData)
+				{
+					let High = {};
+					if (typeof navigator.userAgentData.getHighEntropyValues === "function")
+					{
+						try
+						{
+							High = await navigator.userAgentData.getHighEntropyValues(["architecture", "bitness", "formFactors", "fullVersionList", "model", "platformVersion", "uaFullVersion", "wow64"]);
+						} catch {}
+					}
+					UserAgentData = {
+						brands: Array.from(navigator.userAgentData.brands || []),
+						mobile: navigator.userAgentData.mobile === true,
+						platform: String(navigator.userAgentData.platform || ""),
+						...High
+					};
+				}
+			} catch {}
+
+			let WebGl = null;
+			try
+			{
+				const Canvas = document.createElement("canvas");
+				const Gl = Canvas.getContext("webgl") || Canvas.getContext("experimental-webgl");
+				if (Gl)
+				{
+					const Debug = Gl.getExtension("WEBGL_debug_renderer_info");
+					WebGl = {
+						vendor: String(Debug ? Gl.getParameter(Debug.UNMASKED_VENDOR_WEBGL) : Gl.getParameter(Gl.VENDOR) || ""),
+						renderer: String(Debug ? Gl.getParameter(Debug.UNMASKED_RENDERER_WEBGL) : Gl.getParameter(Gl.RENDERER) || "")
+					};
+				}
+			} catch {}
+
+			return {
+				userAgent: navigator.userAgent || "",
+				platform: navigator.platform || "",
+				vendor: navigator.vendor || "",
+				language: navigator.language || "",
+				languages: Array.from(navigator.languages || []),
+				webdriver: navigator.webdriver === true,
+				hardwareConcurrency: navigator.hardwareConcurrency || 0,
+				deviceMemory: navigator.deviceMemory || 0,
+				maxTouchPoints: navigator.maxTouchPoints || 0,
+				cookieEnabled: navigator.cookieEnabled === true,
+				doNotTrack: String(navigator.doNotTrack || ""),
+				pluginsLength: navigator.plugins?.length || 0,
+				mimeTypesLength: navigator.mimeTypes?.length || 0,
+				userAgentData: UserAgentData,
+				connection: Connection ? { effectiveType: String(Connection.effectiveType || ""), rtt: Number(Connection.rtt) || 0, downlink: Number(Connection.downlink) || 0, saveData: Connection.saveData === true } : null,
+				screen: { width: screen.width || 0, height: screen.height || 0, availWidth: screen.availWidth || 0, availHeight: screen.availHeight || 0, colorDepth: screen.colorDepth || 0, pixelDepth: screen.pixelDepth || 0, devicePixelRatio: window.devicePixelRatio || 1 },
+				window: { innerWidth: window.innerWidth || 0, innerHeight: window.innerHeight || 0, outerWidth: window.outerWidth || 0, outerHeight: window.outerHeight || 0 },
+				document: { visibilityState: document.visibilityState, hidden: document.hidden, hasFocus: document.hasFocus(), readyState: document.readyState },
+				timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
+				timezoneOffsetMinutes: new Date().getTimezoneOffset(),
+				navigation: NavEntry ? { type: String(NavEntry.type || ""), domInteractiveMs: Math.round(NavEntry.domInteractive || 0), domContentLoadedMs: Math.round(NavEntry.domContentLoadedEventEnd || 0), loadEventEndMs: Math.round(NavEntry.loadEventEnd || 0), responseStartMs: Math.round(NavEntry.responseStart || 0), responseEndMs: Math.round(NavEntry.responseEnd || 0), transferSize: Number(NavEntry.transferSize) || 0, encodedBodySize: Number(NavEntry.encodedBodySize) || 0, decodedBodySize: Number(NavEntry.decodedBodySize) || 0 } : null,
+				webgl: WebGl
+			};
+		}
+
+
+
+
+
 		function GetStoredId(pStorage, pKey, pPrefix)
 		{
 			let Id = pStorage.getItem(pKey);
@@ -241,12 +318,40 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		async function TrafficAllowed()
 		{
+			const StartedAt = Date.now();
+			window.__EMO_OPS_TRAFFIC_GATE__ = { status: "pending", startedAtClient: new Date(StartedAt).toISOString() };
 			try
 			{
 				const Res = await fetch(cTrafficGateUrl, { method: "GET", headers: { accept: "application/json" }, cache: "no-store" });
 				const Data = await Res.json();
+				const CompletedAt = Date.now();
+				fTrafficGateDiagnostics = {
+					status: Res.ok && Data?.track === true ? "allowed" : "denied",
+					startedAtClient: new Date(StartedAt).toISOString(),
+					completedAtClient: new Date(CompletedAt).toISOString(),
+					durationMs: Math.max(0, CompletedAt - StartedAt),
+					httpStatus: Res.status,
+					track: Data?.track === true,
+					reason: String(Data?.reason || "").trim(),
+					server: Data?.diagnostics && typeof Data.diagnostics === "object" ? Data.diagnostics : null
+				};
+				window.__EMO_OPS_TRAFFIC_GATE__ = fTrafficGateDiagnostics;
 				return Res.ok && Data && Data.track === true;
-			} catch { return false; }
+			} catch (Error)
+			{
+				const CompletedAt = Date.now();
+				fTrafficGateDiagnostics = {
+					status: "error",
+					startedAtClient: new Date(StartedAt).toISOString(),
+					completedAtClient: new Date(CompletedAt).toISOString(),
+					durationMs: Math.max(0, CompletedAt - StartedAt),
+					track: false,
+					reason: "traffic_gate_error",
+					error: String(Error?.message || Error || "")
+				};
+				window.__EMO_OPS_TRAFFIC_GATE__ = fTrafficGateDiagnostics;
+				return false;
+			}
 		}
 
 
@@ -255,7 +360,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		function GetPageElapsedMs()
 		{
-			return Math.max(0, Date.now() - cPageStartedAt);
+			return Math.max(0, Date.now() - fPageStartedAt);
 		}
 
 
@@ -1466,7 +1571,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 				clientEventSeq: ClientEventSeq,
 				clientEventUid: ClientEventUid,
 				createdAtClient: String(pOptions.createdAtClient || new Date().toISOString()),
-				pageStartedAt: new Date(cPageStartedAt).toISOString(),
+				pageStartedAt: new Date(fPageStartedAt).toISOString(),
 				eventData: pOptions.eventData && typeof pOptions.eventData === "object" ? pOptions.eventData : {}
 			};
 		}
@@ -2211,6 +2316,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			if (fPageOpenSent || fPageOpenPromise) return fPageOpenPromise;
 			if (IsSyntheticTraffic()) return Promise.resolve({ ok: true, skipped: true });
 			if (!document.hasFocus()) return Promise.resolve({ ok: true, skipped: true });
+			fPageStartedAt = Date.now();
 			fPageOpenPromise = TrackOpsEventOnce("page_open", "page_open", {
 					eventOn: "load",
 					widget: "Page",
@@ -2219,10 +2325,17 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 					notifyMobile: true,
 					sound: true,
 					eventData: {
-						replayAvailable: window.__EMO_REPLAY_CAPTURE_ENABLED__ === true,
+						replayAvailable: window.__EMO_REPLAY_RECORDER__ === true,
 						viewportWidth: window.innerWidth || document.documentElement.clientWidth || 0,
 						viewportHeight: window.innerHeight || document.documentElement.clientHeight || 0,
-						pageUrl: `${location.pathname}${location.search}${location.hash}`
+						pageUrl: `${location.pathname}${location.search}${location.hash}`,
+						trafficGateDelayMs: Math.max(0, Number(fTrafficGateDiagnostics?.durationMs) || 0),
+						preTrackingDelayMs: Math.max(0, fPageStartedAt - cTrackerLoadedAt),
+						trackerLoadedAtClient: new Date(cTrackerLoadedAt).toISOString(),
+						trackingStartedAtClient: new Date(fPageStartedAt).toISOString(),
+						replayCaptureStartsAfterPageOpen: true,
+						clientDiagnostics: fClientDiagnostics,
+						trafficGate: fTrafficGateDiagnostics
 					}
 			}).then((Result) =>
 				{
@@ -2368,10 +2481,13 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 		{
 			if (IsSyntheticTraffic()) return;
 			if (!(await TrafficAllowed())) return;
-			PublishVisitIds();
+			fClientDiagnostics = await CollectClientDiagnostics();
+			fPageStartedAt = Date.now();
 			GetVisitorId();
 			GetSessionId();
 			GetPageInstanceId();
+			GetSessionStartedAt();
+			PublishVisitIds();
 			InitClarityIdentifiers();
 			window.addEventListener("online", FlushRetryQueue);
 			setTimeout(FlushRetryQueue, 1500);
@@ -2379,6 +2495,9 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			window.TrackOpsEventBatch = TrackOpsEventBatch;
 			window.TrackOpsEventOnce = TrackOpsEventOnce;
 			window.EmoOpsTrackEvent = TrackOpsEvent;
+			window.__EMO_OPS_TRAFFIC_ALLOWED__ = true;
+			window.__EMO_OPS_TRACKING_STARTED_AT__ = fPageStartedAt;
+			window.dispatchEvent(new CustomEvent("emo:ops-traffic-ready", { detail: { ids: window.__EmoOpsIds, trafficGate: fTrafficGateDiagnostics, trackingStartedAt: fPageStartedAt } }));
 			InitViewObserver();
 			InitDeclarativeEvents();
 			InitToggleEvents();

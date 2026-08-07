@@ -22,9 +22,9 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 	
 			// ==================== Definitions: Variables & Methods ====================
 	
-			const cPageStartedAt = Date.now();
-	
-			const cPageStartedIso = new Date(cPageStartedAt).toISOString();
+			let fCaptureStartedAt = 0;
+
+			let fCaptureStartedIso = "";
 	
 			const cGeneratedId = /^(.+?)-(\d{6})-(\d{6})-(\d{3})-(\d{3})$/;
 	
@@ -56,9 +56,6 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 	
 			let fUnloading = false;
 
-			let fReplayFocusState = document.visibilityState === "visible" && !document.hidden && document.hasFocus() ? "visible" : "away";
-
-			let fReplayFocusTimer = 0;
 	
 			let fFlushing = false;
 	
@@ -66,7 +63,6 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 	
 			const fQueue = [];
 
-			const fFocusDebugIds = new WeakMap();
 	
 	
 	
@@ -105,8 +101,9 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 				try
 				{
 					const Value = Number(sessionStorage.getItem("emo_ops_session_started_at_v1") || 0);
-					return Number.isFinite(Value) && Value > 0 ? Value : cPageStartedAt;
-				} catch { return cPageStartedAt; }
+					const Fallback = fCaptureStartedAt > 0 ? fCaptureStartedAt : Date.now();
+					return Number.isFinite(Value) && Value > 0 ? Value : Fallback;
+				} catch { return fCaptureStartedAt > 0 ? fCaptureStartedAt : Date.now(); }
 			}
 	
 	
@@ -240,151 +237,6 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 	
 	
 	
-			function IsReplayFocusLifecycle(pType)
-			{
-				const Type = Str(pType).toLowerCase();
-				return Type === "focus" || Type === "blur" || Type === "page_hide";
-			}
-
-
-
-
-
-			function CurrentReplayFocusState()
-			{
-				return document.visibilityState === "visible" && !document.hidden && document.hasFocus()
-					? "visible"
-					: "away";
-			}
-
-
-
-
-
-			function CommitReplayFocusState(pNativeEvent, pReason)
-			{
-				fReplayFocusTimer = 0;
-
-				if (fUnloading) return;
-
-				const State = CurrentReplayFocusState();
-
-				if (State === fReplayFocusState) return;
-
-				fReplayFocusState = State;
-
-				Capture(
-					State === "visible" ? "focus" : "blur",
-					{
-						state: State,
-						reason: Str(pReason),
-						visibilityState: document.visibilityState,
-						hidden: document.hidden,
-						hasFocus: document.hasFocus()
-					},
-					false,
-					pNativeEvent
-				);
-			}
-
-
-
-
-
-			function ScheduleReplayFocusState(pNativeEvent, pReason, pDelayMs = 0)
-			{
-				if (fUnloading) return;
-
-				if (fReplayFocusTimer)
-				{
-					clearTimeout(fReplayFocusTimer);
-					fReplayFocusTimer = 0;
-				}
-
-				fReplayFocusTimer = window.setTimeout(
-					() => CommitReplayFocusState(pNativeEvent, pReason),
-					Math.max(0, Number(pDelayMs) || 0)
-				);
-			}
-
-
-
-
-
-			function OnWindowFocus(pEvent)
-			{
-				if (pEvent.target !== window) return;
-
-				ScheduleReplayFocusState(pEvent, "window_focus");
-			}
-
-
-
-
-
-			function OnWindowBlur(pEvent)
-			{
-				if (pEvent.target !== window) return;
-
-				ScheduleReplayFocusState(pEvent, "window_blur", 100);
-			}
-
-
-
-
-
-			function OnVisibilityChange(pEvent)
-			{
-				ScheduleReplayFocusState(pEvent, "visibility_change");
-			}
-
-
-
-
-
-			function ReplayFocusTrackerState()
-			{
-				return {
-					queueLength: fQueue.length,
-					flushing: fFlushing,
-					unloading: fUnloading,
-					pageElapsedMs: Math.max(0, Date.now() - cPageStartedAt),
-					sessionElapsedMs: Math.max(0, Date.now() - SessionStartedAt()),
-					pageOpened: window.__EMO_OPS_PAGE_OPENED__ === true
-				};
-			}
-
-
-
-
-
-			function ReportReplayFocusLifecycle(pItem, pNativeEvent)
-			{
-				if (!window.EmoFocusLifecycleDebug?.Enabled || !pItem) return "";
-				return window.EmoFocusLifecycleDebug.Report({
-					source: "EmoReplayRecorder",
-					eventType: pItem.eventType,
-					stage: "queued",
-					eventData: pItem,
-					nativeEvent: pNativeEvent,
-					trackerState: ReplayFocusTrackerState()
-				});
-			}
-
-
-
-
-
-			function CompleteReplayFocusLifecycle(pItems, pResult)
-			{
-				if (!window.EmoFocusLifecycleDebug?.Enabled || !Array.isArray(pItems)) return;
-				for (const Item of pItems)
-				{
-					const DebugId = fFocusDebugIds.get(Item);
-					if (DebugId) window.EmoFocusLifecycleDebug.Complete(DebugId, pResult);
-				}
-			}
-
 
 
 
@@ -402,7 +254,7 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 					sound: false,
 					important: false,
 					useBeacon: pUseBeacon,
-					pageElapsedMs: Number.isFinite(Number(pTiming.pageElapsedMs)) ? Number(pTiming.pageElapsedMs) : Math.max(0, Now - cPageStartedAt),
+					pageElapsedMs: Number.isFinite(Number(pTiming.pageElapsedMs)) ? Number(pTiming.pageElapsedMs) : Math.max(0, Now - fCaptureStartedAt),
 					sessionElapsedMs: Number.isFinite(Number(pTiming.sessionElapsedMs)) ? Number(pTiming.sessionElapsedMs) : Math.max(0, Now - SessionStartedAt()),
 					createdAtClient: Str(pTiming.createdAtClient || new Date(Now).toISOString()),
 					eventData: pData
@@ -418,14 +270,8 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 
 			function Capture(pType, pData =
 				{
-				}, pUseBeacon = false, pNativeEvent = null) {
-				const Item = QueueCapture(pType, pData, pUseBeacon);
-				if (IsReplayFocusLifecycle(pType))
-				{
-					const DebugId = ReportReplayFocusLifecycle(Item, pNativeEvent);
-					if (DebugId) fFocusDebugIds.set(Item, DebugId);
-				}
-				return Item;
+				}, pUseBeacon = false) {
+				return QueueCapture(pType, pData, pUseBeacon);
 			}
 
 
@@ -440,11 +286,9 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 				try
 				{
 					const Result = await window.TrackOpsEventBatch(Batch);
-					CompleteReplayFocusLifecycle(Batch, Result);
 					if (!Result?.ok && !Result?.queued) fQueue.unshift(...Batch);
 				} catch (Error)
 				{
-					CompleteReplayFocusLifecycle(Batch, { ok: false, error: String(Error?.message || Error) });
 					fQueue.unshift(...Batch);
 				}
 				finally
@@ -753,21 +597,12 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 				);
 				document.addEventListener("submit", (Event) => Capture("submit", TargetData(Event.target), true), true);
 				document.addEventListener("toggle", (Event) => Capture("widget_state", {...TargetData(Event.target), open: !!Event.target?.open }), true);
-				window.addEventListener("focus", OnWindowFocus);
-				window.addEventListener("blur", OnWindowBlur);
-				document.addEventListener("visibilitychange", OnVisibilityChange);
 				window.addEventListener("pagehide", (pEvent) =>
 					{
 						if (fTouchActive) EndTouch(null, "cancel");
 
-						if (fReplayFocusTimer)
-						{
-							clearTimeout(fReplayFocusTimer);
-							fReplayFocusTimer = 0;
-						}
-
 						fUnloading = true;
-						Capture("page_hide", { persisted: Boolean(pEvent.persisted),...ViewportData() }, true, pEvent);
+						Capture("page_hide", { persisted: Boolean(pEvent.persisted),...ViewportData() }, true);
 						Flush();
 				});
 			}
@@ -789,30 +624,43 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 			// ==================== Execution Logic ====================
 	
 			if (window.__EMO_REPLAY_RECORDER__) return;
-	
+
 			window.__EMO_REPLAY_RECORDER__ = true;
-	
-			window.__EMO_REPLAY_CAPTURE_ENABLED__ = true;
-	
-			WireEvents();
-	
-			QueueCapture("page_ready", { readyState: document.readyState,...ViewportData() }, false, {
+
+			window.__EMO_REPLAY_CAPTURE_ENABLED__ = false;
+
+			let fStarted = false;
+
+			function StartReplayCapture()
+			{
+				if (fStarted || window.__EMO_OPS_PAGE_OPENED__ !== true) return;
+				fStarted = true;
+				fCaptureStartedAt = Date.now();
+				fCaptureStartedIso = new Date(fCaptureStartedAt).toISOString();
+				window.__EMO_REPLAY_CAPTURE_ENABLED__ = true;
+				WireEvents();
+				const Gate = window.__EMO_OPS_TRAFFIC_GATE__ || null;
+				QueueCapture("page_ready", {
+					readyState: document.readyState,
+					trafficGateDelayMs: Math.max(0, Number(Gate?.durationMs) || 0),
+					...ViewportData()
+				}, false, {
 					pageElapsedMs: 0,
-					sessionElapsedMs: Math.max(0, cPageStartedAt - SessionStartedAt()),
-					createdAtClient: cPageStartedIso
-			});
-	
-			QueueCapture("scroll", { scrollX: 0, scrollY: 0 }, false, {
+					sessionElapsedMs: Math.max(0, fCaptureStartedAt - SessionStartedAt()),
+					createdAtClient: fCaptureStartedIso
+				});
+				QueueCapture("scroll", { scrollX: 0, scrollY: 0 }, false, {
 					pageElapsedMs: 0,
-					sessionElapsedMs: Math.max(0, cPageStartedAt - SessionStartedAt()),
-					createdAtClient: cPageStartedIso
-			});
-	
-			fFlushTimer = window.setInterval(Flush, Math.max(500, Number(cFlushEveryMs) || 1500));
-	
-			window.addEventListener("emo:ops-page-open", OnOpsReady);
-	
-			if (window.__EMO_OPS_PAGE_OPENED__) OnOpsReady();
+					sessionElapsedMs: Math.max(0, fCaptureStartedAt - SessionStartedAt()),
+					createdAtClient: fCaptureStartedIso
+				});
+				fFlushTimer = window.setInterval(Flush, Math.max(500, Number(cFlushEveryMs) || 1500));
+				OnOpsReady();
+			}
+
+			window.addEventListener("emo:ops-page-open", StartReplayCapture, { once: true });
+
+			if (window.__EMO_OPS_PAGE_OPENED__ === true) StartReplayCapture();
 		})();
 	</script>
 ) }

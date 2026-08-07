@@ -51,6 +51,52 @@ function Header(pRequest, ...pNames) {
 	return "";
 }
 
+function ClientIp(pRequest) {
+	const Forwarded = Header(pRequest, "x-forwarded-for").split(",")[0].trim();
+	return Forwarded || Header(pRequest, "x-real-ip") || Header(pRequest, "cf-connecting-ip");
+}
+
+function BuildRequestDiagnostics(pRequest) {
+	let Url;
+	try { Url = new URL(pRequest.url); } catch { Url = null; }
+	return {
+		serverReceivedAt: new Date().toISOString(),
+		method: Str(pRequest.method),
+		requestPath: Url ? `${Url.pathname}${Url.search}` : "",
+		clientIp: ClientIp(pRequest),
+		forwardedFor: Header(pRequest, "x-forwarded-for"),
+		realIp: Header(pRequest, "x-real-ip"),
+		cfConnectingIp: Header(pRequest, "cf-connecting-ip"),
+		host: Header(pRequest, "host"),
+		forwardedHost: Header(pRequest, "x-forwarded-host"),
+		forwardedProto: Header(pRequest, "x-forwarded-proto"),
+		referer: Header(pRequest, "referer"),
+		userAgent: Header(pRequest, "user-agent"),
+		accept: Header(pRequest, "accept"),
+		acceptLanguage: Header(pRequest, "accept-language"),
+		acceptEncoding: Header(pRequest, "accept-encoding"),
+		purpose: Header(pRequest, "purpose", "sec-purpose", "x-purpose"),
+		secChUa: Header(pRequest, "sec-ch-ua"),
+		secChUaPlatform: Header(pRequest, "sec-ch-ua-platform"),
+		secChUaMobile: Header(pRequest, "sec-ch-ua-mobile"),
+		secFetchSite: Header(pRequest, "sec-fetch-site"),
+		secFetchMode: Header(pRequest, "sec-fetch-mode"),
+		secFetchDest: Header(pRequest, "sec-fetch-dest"),
+		secFetchUser: Header(pRequest, "sec-fetch-user"),
+		vercel: {
+			id: Header(pRequest, "x-vercel-id"),
+			country: Header(pRequest, "x-vercel-ip-country"),
+			region: Header(pRequest, "x-vercel-ip-country-region", "x-vercel-ip-region"),
+			city: Header(pRequest, "x-vercel-ip-city"),
+			latitude: Header(pRequest, "x-vercel-ip-latitude"),
+			longitude: Header(pRequest, "x-vercel-ip-longitude"),
+			timezone: Header(pRequest, "x-vercel-ip-timezone"),
+			postalCode: Header(pRequest, "x-vercel-ip-postal-code")
+		},
+		cloudflare: { ray: Header(pRequest, "cf-ray"), country: Header(pRequest, "cf-ipcountry") }
+	};
+}
+
 function DecodeHeaderText(pValue) {
 	const Value = Str(pValue);
 	if (!Value) return "";
@@ -154,7 +200,10 @@ function NormalizeEvent(pInput, pRequest) {
 	if (!IsValidClientId(PageInstanceId, "p")) throw new Error("Invalid pageInstanceId");
 	if (!ClientEventUid || ClientEventUid.length > 240) throw new Error("Invalid clientEventUid");
 
-	const EventData = Event.eventData && typeof Event.eventData === "object" ? Event.eventData : {};
+	const RawEventData = Event.eventData && typeof Event.eventData === "object" ? Event.eventData : {};
+	const EventData = EventType === "page_open" && EventSource !== "emolive"
+		? { ...RawEventData, visitRequest: BuildRequestDiagnostics(pRequest) }
+		: RawEventData;
 	const OccurredAt = Str(Event.createdAtClient ?? Event.occurredAt ?? Event.occurred_at) || new Date().toISOString();
 	const SessionSeq = Math.max(0, Math.trunc(Num(Event.sessionSeq ?? Event.session_seq)));
 	const PageElapsedMs = Math.max(0, Math.trunc(Num(Event.pageElapsedMs ?? Event.page_elapsed_ms ?? Event.elapsedMs)));
