@@ -114,9 +114,21 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		let fLocationEnrichmentDiagnostics = null;
 
+		let fServerLocationResolution = null;
+
+		let fLocationEnrichmentAttempt = 0;
+
+		let fLocationEnrichmentTimer = 0;
+
+		let fLocationEnrichmentHistory = [];
+
+		let fPendingLocationUpdateReason = "";
+
 		let fDeviceGeoDiagnostics = { attempted: false, status: "not_started", permission: "unknown" };
 
-		const cGeoSourceWeights = { vercel: 0.9, ipapi: 1, ipwho: 1, freeipapi: 1.05, iplocationinfo: 0.95, ipinfo: 1.15, maxmind: 1.2, bigdatacloud_ip: 1.1 };
+		const cGeoSourceWeights = { vercel: 0.65, ipapi: 1, ipwho: 1, freeipapi: 1.1, iplocationinfo: 1, ipinfo: 1.2, maxmind: 1.25, bigdatacloud_ip: 0.35 };
+
+		const cInvalidGeoTextPattern = /\b(atlantic|pacific|indian ocean|ocean|sea|gulf of|mediterranean|red sea|arabian sea)\b|المحيط|البحر/i;
 
 		const cArabCountryCodes = new Set(["EG", "SA", "AE", "KW", "QA", "BH", "OM", "YE", "JO", "LB", "SY", "IQ", "PS", "MA", "DZ", "TN", "LY", "SD", "SO", "DJ", "KM", "MR"]);
 
@@ -230,21 +242,62 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 
 
-		function ClassifyResolvedLocation(pCountryCode, pRegion, pCity)
+		function CanonicalEgyptGovernorate(pRegion, pRegionCode, pCity)
+		{
+			const Region = String(pRegion || "").trim();
+			const Code = String(pRegionCode || "").trim().toUpperCase();
+			const All = `${Region} ${pCity || ""}`;
+			if (Code === "C" || Code === "CAI" || HasGeoWord(All, ["cairo", "cairo governorate", "al qahirah", "القاهرة", "القاهره"])) return "Cairo";
+			if (Code === "GZ" || Code === "GIZ" || HasGeoWord(All, ["giza", "giza governorate", "al jizah", "jizah", "الجيزة", "الجيزه"])) return "Giza";
+			if (HasGeoWord(All, ["qalyubia", "qalubia", "القليوبية", "القليوبيه"])) return "Qalyubia";
+			if (HasGeoWord(All, ["alexandria", "الاسكندرية", "الإسكندرية"])) return "Alexandria";
+			return Region;
+		}
+
+
+
+
+
+		function ClassifyResolvedLocation(pCountryCode, pGovernorate, pCity, pArea = "")
 		{
 			const CountryCode = String(pCountryCode || "").trim().toUpperCase();
-			const Region = String(pRegion || "").trim();
+			const Governorate = String(pGovernorate || "").trim();
 			const City = String(pCity || "").trim();
-			const All = `${City} ${Region}`;
+			const Area = String(pArea || "").trim();
 			if (CountryCode === "EG")
 			{
-				if (HasGeoWord(All, ["c", "cai", "cairo", "al qahirah", "القاهرة", "القاهره", "محافظة القاهرة", "qahira"])) return { band: "cairo", label: City || Region || "Cairo", borderColor: "#00C853" };
-				if (HasGeoWord(All, ["gz", "giza", "al jizah", "jizah", "6th of october", "6 october", "october", "sheikh zayed", "الجيزة", "الجيزه", "اكتوبر", "السادس من اكتوبر", "الشيخ زايد"])) return { band: "giza", label: City || Region || "Giza", borderColor: "#00D5FF" };
-				return { band: "egypt", label: City || Region || "Egypt", borderColor: "#FFD740" };
+				const Gov = GeoNorm(Governorate);
+				if (Gov === "cairo") return { band: "cairo", label: City || Governorate || "Cairo", borderColor: "#00C853" };
+				if (Gov === "giza") return { band: "giza", label: City || Governorate || "Giza", borderColor: "#00D5FF" };
+				const All = `${City} ${Area}`;
+				if (HasGeoWord(All, ["cairo", "al qahirah", "القاهرة", "القاهره"])) return { band: "cairo", label: City || Area || "Cairo", borderColor: "#00C853" };
+				if (HasGeoWord(All, ["giza", "6th of october", "6 october", "october", "sheikh zayed", "الجيزة", "الجيزه", "اكتوبر", "السادس من اكتوبر", "الشيخ زايد"])) return { band: "giza", label: City || Area || "Giza", borderColor: "#00D5FF" };
+				return { band: "egypt", label: City || Governorate || Area || "Egypt", borderColor: "#FFD740" };
 			}
-			if (cArabCountryCodes.has(CountryCode)) return { band: "arab", label: City || CountryCode || "Arab country", borderColor: "#FF8A00" };
-			return { band: "world", label: City || CountryCode || "Outside Arab region", borderColor: "#FF3B30" };
+			if (cArabCountryCodes.has(CountryCode)) return { band: "arab", label: City || Governorate || CountryCode || "Arab country", borderColor: "#FF8A00" };
+			return { band: "world", label: City || Governorate || CountryCode || "Outside Arab region", borderColor: "#FF3B30" };
 		}
+
+
+
+
+
+		function IsInvalidGeoSource(pSource)
+		{
+			if (!pSource || typeof pSource !== "object") return "missing_source";
+			const Text = `${pSource.city || ""} ${pSource.locality || ""} ${pSource.area || ""} ${pSource.region || ""}`.trim();
+			if (cInvalidGeoTextPattern.test(Text)) return "waterbody_or_non_city_label";
+			const Latitude = Number(pSource.latitude);
+			const Longitude = Number(pSource.longitude);
+			if (Number.isFinite(Latitude) && Number.isFinite(Longitude))
+			{
+				if (Math.abs(Latitude) < 0.000001 && Math.abs(Longitude) < 0.000001) return "zero_coordinates";
+				if (Math.abs(Latitude) > 90 || Math.abs(Longitude) > 180) return "invalid_coordinates";
+			}
+			if (!String(pSource.countryCode || "").trim() && !String(pSource.country || "").trim() && (pSource.city || pSource.locality || pSource.area || pSource.region)) return "missing_country";
+			return "";
+		}
+
 
 
 
@@ -254,15 +307,23 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			if (!pSource || typeof pSource !== "object") return null;
 			const Latitude = Number(pSource.latitude);
 			const Longitude = Number(pSource.longitude);
+			const CountryCode = String(pSource.countryCode || "").trim().toUpperCase();
+			const Region = String(pSource.region || pSource.governorate || "").trim();
+			const RegionCode = String(pSource.regionCode || "").trim();
+			const City = String(pSource.city || "").trim();
+			const RejectionReason = String(pSource.rejectionReason || IsInvalidGeoSource(pSource)).trim();
 			return {
 				source: String(pSource.source || "").trim(),
 				type: String(pSource.type || "ip").trim(),
-				countryCode: String(pSource.countryCode || "").trim().toUpperCase(),
+				countryCode: CountryCode,
 				country: String(pSource.country || "").trim(),
-				region: String(pSource.region || "").trim(),
-				regionCode: String(pSource.regionCode || "").trim(),
-				city: String(pSource.city || "").trim(),
+				region: Region,
+				governorate: String(pSource.governorate || (CountryCode === "EG" ? CanonicalEgyptGovernorate(Region, RegionCode, City) : Region)).trim(),
+				regionCode: RegionCode,
+				city: City,
 				locality: String(pSource.locality || "").trim(),
+				area: String(pSource.area || "").trim(),
+				areaType: String(pSource.areaType || "").trim(),
 				postal: String(pSource.postal || "").trim(),
 				latitude: Number.isFinite(Latitude) ? Latitude : null,
 				longitude: Number.isFinite(Longitude) ? Longitude : null,
@@ -275,129 +336,54 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 				networkType: String(pSource.networkType || "").trim(),
 				isMobile: pSource.isMobile === true,
 				isHosting: pSource.isHosting === true,
-				isAnonymous: pSource.isAnonymous === true
+				isAnonymous: pSource.isAnonymous === true,
+				voteEligible: pSource.voteEligible === false ? false : !RejectionReason,
+				rejectionReason: RejectionReason
 			};
 		}
 
 
 
 
-		function GeoVoteWeight(pSource)
-		{
-			let Weight = cGeoSourceWeights[pSource?.source] || 1;
-			const BrowserTimezone = String(fClientDiagnostics?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone || "").trim();
-			const SourceTimezone = String(pSource?.timezone || "").trim();
-			if (BrowserTimezone && SourceTimezone && BrowserTimezone === SourceTimezone) Weight *= 1.25;
-			return Weight;
-		}
-
-
-
-
-		function BestGeoVotes(pSources, pField, pCountryCode = "")
-		{
-			const Votes = new Map();
-			for (const Source of pSources)
-			{
-				if (!Source || Source.type === "device") continue;
-				if (pCountryCode && Source.countryCode && Source.countryCode !== pCountryCode) continue;
-				const Raw = String(Source[pField] || "").trim();
-				const Key = pField === "countryCode" ? Raw.toUpperCase() : GeoNorm(Raw);
-				if (!Key) continue;
-				const Existing = Votes.get(Key) || { value: Raw, score: 0, sources: [] };
-				Existing.score += GeoVoteWeight(Source);
-				Existing.sources.push(Source.source);
-				Votes.set(Key, Existing);
-			}
-			return Array.from(Votes.values()).sort((A, B) => B.score - A.score || B.sources.length - A.sources.length);
-		}
-
-
-
-
-		function IsLowCityReliabilitySource(pSource)
-		{
-			if (!pSource) return false;
-			if (pSource.isMobile) return true;
-			const Text = `${pSource.org || ""} ${pSource.hostname || ""} ${pSource.networkType || ""}`.toLowerCase();
-			return /(starlink|spacex|satellite|oneweb|viasat|hughes)/i.test(Text);
-		}
-
-
-
 
 		function ResolveIpLocationClient()
 		{
-			const Sources = fLocationSources.filter((Item) => Item && Item.type !== "device");
-			if (!Sources.length) return null;
-			const CountryVotes = BestGeoVotes(Sources, "countryCode");
-			const CountryVote = CountryVotes[0] || null;
-			const CandidateCountryCode = String(CountryVote?.value || "").trim().toUpperCase();
-			const RegionVotes = BestGeoVotes(Sources, "region", CandidateCountryCode);
-			const CityVotes = BestGeoVotes(Sources, "city", CandidateCountryCode);
-			const RegionVote = RegionVotes[0] || null;
-			const CityVote = CityVotes[0] || null;
-			const CountrySources = CountryVote?.sources || [];
-			const CitySources = CityVote?.sources || [];
-			const IndependentCountrySources = CountrySources.filter((Name) => Name !== "vercel").length;
-			const IndependentCitySources = CitySources.filter((Name) => Name !== "vercel").length;
-			const CountryVerified = CountrySources.length >= 2 && IndependentCountrySources >= 1;
-			const CityVerified = CountryVerified && CitySources.length >= 2 && IndependentCitySources >= 1;
-			const BrowserTimezone = String(fClientDiagnostics?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone || "").trim();
-			const WinnerSources = Sources.filter((Source) => Source.countryCode === CandidateCountryCode);
-			const TimezoneSupportSources = WinnerSources.filter((Source) => BrowserTimezone && Source.timezone === BrowserTimezone).map((Source) => Source.source);
-			const TimezoneConflictSources = WinnerSources.filter((Source) => BrowserTimezone && Source.timezone && Source.timezone !== BrowserTimezone).map((Source) => Source.source);
-			const LowCityReliabilitySources = WinnerSources.filter(IsLowCityReliabilitySource).map((Source) => Source.source);
-
-			if (!CountryVerified)
+			const Sources = fLocationSources.filter((Item) => Item && Item.type !== "device").map(GeoSourceView).filter(Boolean);
+			if (fServerLocationResolution && typeof fServerLocationResolution === "object")
 			{
-				return {
-					method: "ip_unverified",
-					sourceType: "ip",
-					confidence: "low",
-					countryCode: "", region: "", city: "", band: "", label: "", borderColor: "",
-					candidateCountryCode: CandidateCountryCode,
-					candidateRegion: String(RegionVote?.value || "").trim(),
-					candidateCity: String(CityVote?.value || "").trim(),
-					countryCandidates: CountryVotes.slice(0, 5),
-					regionCandidates: RegionVotes.slice(0, 5),
-					cityCandidates: CityVotes.slice(0, 5),
-					timezone: BrowserTimezone,
-					timezoneSupportSources: TimezoneSupportSources,
-					timezoneConflictSources: TimezoneConflictSources,
-					sources: Sources.map(GeoSourceView).filter(Boolean),
-					note: "Single or conflicting IP source: location is kept for diagnostics but is not displayed as verified visitor location"
-				};
+				const Result = { ...fServerLocationResolution };
+				Result.governorate = String(Result.governorate || Result.region || "").trim();
+				Result.region = Result.governorate;
+				Result.area = String(Result.area || "").trim();
+				Result.areaType = String(Result.areaType || "").trim();
+				Result.sources = Sources;
+				return Result;
 			}
-
-			const Region = String(RegionVote?.value || "").trim();
-			const City = CityVerified ? String(CityVote?.value || "").trim() : "";
-			const Classified = ClassifyResolvedLocation(CandidateCountryCode, Region, City);
-			let Confidence = CityVerified ? (CitySources.length >= 3 ? "medium" : "medium_low") : "country_only";
-			if (LowCityReliabilitySources.length && City) Confidence = "low";
-			if (TimezoneConflictSources.length > TimezoneSupportSources.length && City) Confidence = "low";
+			if (!Sources.length) return null;
+			const First = Sources.find((Item) => Item.voteEligible !== false) || Sources[0];
 			return {
-				method: "ip_consensus",
+				method: "ip_unverified",
 				sourceType: "ip",
-				confidence: Confidence,
-				countryCode: CandidateCountryCode,
-				region: Region,
-				city: City,
-				band: Classified.band,
-				label: Classified.label,
-				borderColor: Classified.borderColor,
-				countryAgreementSources: CountrySources,
-				regionAgreementSources: RegionVote?.sources || [],
-				cityAgreementSources: CitySources,
-				countryCandidates: CountryVotes.slice(0, 5),
-				regionCandidates: RegionVotes.slice(0, 5),
-				cityCandidates: CityVotes.slice(0, 5),
-				timezone: BrowserTimezone,
-				timezoneSupportSources: TimezoneSupportSources,
-				timezoneConflictSources: TimezoneConflictSources,
-				lowCityReliabilitySources: LowCityReliabilitySources,
-				sources: Sources.map(GeoSourceView).filter(Boolean),
-				note: City ? "IP city is a multi-provider estimate of network egress; satellite/mobile networks can still be physically far from this city" : "Country is corroborated, but city was not independently corroborated"
+				confidence: "low",
+				countryConfidence: "low",
+				governorateConfidence: "none",
+				cityConfidence: "none",
+				areaConfidence: "none",
+				countryCode: "",
+				governorate: "",
+				region: "",
+				city: "",
+				area: "",
+				areaType: "",
+				band: "",
+				label: "",
+				borderColor: "",
+				candidateCountryCode: String(First?.countryCode || "").trim(),
+				candidateGovernorate: String(First?.governorate || First?.region || "").trim(),
+				candidateRegion: String(First?.governorate || First?.region || "").trim(),
+				candidateCity: String(First?.city || "").trim(),
+				sources: Sources,
+				note: "Single or conflicting IP source: location is kept for diagnostics but is not displayed as verified visitor location"
 			};
 		}
 
@@ -419,13 +405,13 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		function ResolveFinalLocation()
 		{
-			const DeviceSources = fLocationSources.filter((Item) => Item && Item.type === "device");
+			const DeviceSources = fLocationSources.filter((Item) => Item && Item.type === "device" && Item.voteEligible !== false);
 			const RawDevice = DeviceSources.find((Item) => Item.source === "browser_geolocation_raw") || DeviceSources[0] || null;
-			const LabeledDeviceSources = DeviceSources.filter((Item) => Item.countryCode || Item.region || Item.city || Item.locality);
+			const LabeledDeviceSources = DeviceSources.filter((Item) => Item.countryCode || Item.governorate || Item.region || Item.city || Item.locality || Item.area);
 			const Device = LabeledDeviceSources.sort((A, B) =>
 				{
-					const AScore = (A.locality ? 4 : 0) + (A.city ? 3 : 0) + (A.region ? 2 : 0) + (A.countryCode ? 1 : 0) + (A.source === "browser_geolocation_nominatim" ? 0.25 : 0);
-					const BScore = (B.locality ? 4 : 0) + (B.city ? 3 : 0) + (B.region ? 2 : 0) + (B.countryCode ? 1 : 0) + (B.source === "browser_geolocation_nominatim" ? 0.25 : 0);
+					const AScore = (A.area ? 5 : 0) + (A.locality ? 4 : 0) + (A.city ? 3 : 0) + (A.governorate || A.region ? 2 : 0) + (A.countryCode ? 1 : 0) + (A.source === "browser_geolocation_nominatim" ? 0.25 : 0);
+					const BScore = (B.area ? 5 : 0) + (B.locality ? 4 : 0) + (B.city ? 3 : 0) + (B.governorate || B.region ? 2 : 0) + (B.countryCode ? 1 : 0) + (B.source === "browser_geolocation_nominatim" ? 0.25 : 0);
 					return BScore - AScore;
 				})[0] || null;
 			const Accuracy = Number(RawDevice?.accuracyMeters ?? Device?.accuracyMeters);
@@ -435,16 +421,25 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 				const Longitude = Number(RawDevice?.longitude ?? Device?.longitude);
 				if (Device)
 				{
-					const City = String(Device.locality || Device.city || "").trim();
-					const Classified = ClassifyResolvedLocation(Device.countryCode, Device.region, City);
+					const Governorate = String(Device.governorate || Device.region || "").trim();
+					const City = String(Device.city || "").trim();
+					const Area = String(Device.area || Device.locality || "").trim();
+					const Classified = ClassifyResolvedLocation(Device.countryCode, Governorate, City, Area);
 					return {
 						method: "device_geolocation",
 						sourceType: "device",
 						sourceName: Device.source,
 						confidence: DeviceConfidence(Accuracy),
+						countryConfidence: "very_high",
+						governorateConfidence: DeviceConfidence(Accuracy),
+						cityConfidence: City ? DeviceConfidence(Accuracy) : "none",
+						areaConfidence: Area ? DeviceConfidence(Accuracy) : "none",
 						countryCode: Device.countryCode,
-						region: Device.region,
+						governorate: Governorate,
+						region: Governorate,
 						city: City,
+						area: Area,
+						areaType: String(Device.areaType || (Area ? "locality" : "")).trim(),
 						band: Classified.band,
 						label: Classified.label,
 						borderColor: Classified.borderColor,
@@ -454,7 +449,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 						permission: fGeoPermission,
 						deviceReverseSources: LabeledDeviceSources.map((Item) => Item.source),
 						sources: fLocationSources.map(GeoSourceView).filter(Boolean),
-						note: "Browser/device coordinates override IP estimates; locality is reverse-geocoded from the same physical coordinates"
+						note: "Browser/device coordinates override IP estimates; city and area are reverse-geocoded from the same physical coordinates"
 					};
 				}
 				const IpFallback = ResolveIpLocationClient();
@@ -477,11 +472,10 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 
 
-
 		function LocationSignature(pLocation)
 		{
 			if (!pLocation) return "";
-			return [pLocation.method, pLocation.sourceName, pLocation.countryCode, pLocation.region, pLocation.city, pLocation.band, pLocation.confidence, Math.round(Number(pLocation.latitude) * 100000) || 0, Math.round(Number(pLocation.longitude) * 100000) || 0, Math.round(Number(pLocation.accuracyMeters) || 0)].join("|");
+			return [pLocation.method, pLocation.sourceName, pLocation.countryCode, pLocation.governorate || pLocation.region, pLocation.city, pLocation.area, pLocation.areaType, pLocation.band, pLocation.confidence, Math.round(Number(pLocation.latitude) * 100000) || 0, Math.round(Number(pLocation.longitude) * 100000) || 0, Math.round(Number(pLocation.accuracyMeters) || 0)].join("|");
 		}
 
 
@@ -579,32 +573,90 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 
 
+		function LocationResolutionStrength(pResolution)
+		{
+			if (!pResolution || typeof pResolution !== "object") return 0;
+			if (pResolution.method === "device_geolocation") return 100;
+			if (pResolution.method !== "ip_consensus") return 10;
+			let Score = 40;
+			if (pResolution.governorateVerified) Score += 20;
+			if (pResolution.cityVerified) Score += 20;
+			if (pResolution.area) Score += 5;
+			return Score;
+		}
+
+
+
+
+
+		function ScheduleLocationEnrichmentRetry()
+		{
+			if (fLocationEnrichmentAttempt >= 3 || fLocationEnrichmentTimer) return;
+			const Delay = fLocationEnrichmentAttempt <= 1 ? 700 : fLocationEnrichmentAttempt === 2 ? 1800 : 3500;
+			fLocationEnrichmentTimer = window.setTimeout(() =>
+				{
+					fLocationEnrichmentTimer = 0;
+					CollectServerIpSources();
+				}, Delay);
+		}
+
+
+
+
+
 		async function CollectServerIpSources()
 		{
+			const Attempt = ++fLocationEnrichmentAttempt;
 			const StartedAt = Date.now();
 			try
 			{
-				const Res = await fetch(cLocationEnrichmentUrl, { method: "GET", headers: { accept: "application/json" }, cache: "no-store" });
-				const Data = await Res.json();
+				const Res = await fetch(cLocationEnrichmentUrl, { method: "GET", headers: { accept: "application/json" }, cache: "no-store", keepalive: true });
+				let Data = {};
+				try { Data = await Res.json(); } catch {}
 				const CompletedAt = Date.now();
-				fLocationEnrichmentDiagnostics = {
+				const Server = Data?.diagnostics && typeof Data.diagnostics === "object" ? Data.diagnostics : null;
+				const AttemptDiagnostics = {
+					attempt: Attempt,
 					status: Res.ok ? "completed" : "http_error",
 					httpStatus: Res.status,
 					durationMs: Math.max(0, CompletedAt - StartedAt),
 					reason: String(Data?.reason || "").trim(),
-					server: Data?.diagnostics && typeof Data.diagnostics === "object" ? Data.diagnostics : null
+					startedAtClient: new Date(StartedAt).toISOString(),
+					completedAtClient: new Date(CompletedAt).toISOString(),
+					server: Server
 				};
-				const ServerSources = Array.isArray(fLocationEnrichmentDiagnostics?.server?.geoSources) ? fLocationEnrichmentDiagnostics.server.geoSources : [];
+				fLocationEnrichmentHistory = [...fLocationEnrichmentHistory, AttemptDiagnostics].slice(-3);
+				fLocationEnrichmentDiagnostics = { ...AttemptDiagnostics, attempts: fLocationEnrichmentHistory };
+				if (!Res.ok || !Server) throw new Error(`location_enrichment_http_${Res.status}`);
+
+				const ServerSources = Array.isArray(Server.geoSources) ? Server.geoSources : [];
+				const ServerResolution = Server.resolvedIpLocation && typeof Server.resolvedIpLocation === "object" ? Server.resolvedIpLocation : null;
+				if (LocationResolutionStrength(ServerResolution) >= LocationResolutionStrength(fServerLocationResolution)) fServerLocationResolution = ServerResolution;
+
 				let Changed = false;
 				for (const Item of ServerSources) Changed = AddOrReplaceLocationSource({ ...Item, type: "ip" }, "server_ip_enrichment") || Changed;
-				ApplyLocationResolution("server_ip_enrichment_complete");
+				Changed = ApplyLocationResolution("server_ip_enrichment_complete") || Changed;
 				if (fLocationResolution) EmitLocationUpdate(Changed ? "server_ip_enrichment" : "server_ip_diagnostics");
+
+				const IndependentValidSources = ServerSources.filter((Item) => Item && Item.source !== "vercel" && Item.voteEligible !== false).length;
+				if (IndependentValidSources < 1 || fServerLocationResolution?.method !== "ip_consensus") ScheduleLocationEnrichmentRetry();
 			} catch (Error)
 			{
-				fLocationEnrichmentDiagnostics = { status: "error", durationMs: Math.max(0, Date.now() - StartedAt), error: String(Error?.message || Error || "") };
+				const CompletedAt = Date.now();
+				const Failed = {
+					attempt: Attempt,
+					status: "error",
+					durationMs: Math.max(0, CompletedAt - StartedAt),
+					error: String(Error?.message || Error || ""),
+					startedAtClient: new Date(StartedAt).toISOString(),
+					completedAtClient: new Date(CompletedAt).toISOString()
+				};
+				fLocationEnrichmentHistory = [...fLocationEnrichmentHistory, Failed].slice(-3);
+				fLocationEnrichmentDiagnostics = { ...Failed, attempts: fLocationEnrichmentHistory };
+				if (fLocationResolution) EmitLocationUpdate("server_ip_enrichment_failed");
+				ScheduleLocationEnrichmentRetry();
 			}
 		}
-
 
 
 
@@ -688,16 +740,19 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 					const ReverseSources = [];
 					if (BigData)
 					{
-						const Source = { source: "browser_geolocation_bigdatacloud", type: "device", countryCode: BigData.countryCode, country: BigData.countryName, region: BigData.principalSubdivision, regionCode: BigData.principalSubdivisionCode, city: BigData.city || BigData.locality, locality: BigData.locality || BigData.city, postal: BigData.postcode, latitude: Latitude, longitude: Longitude, accuracyMeters: Accuracy, timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "" };
+						const BigCity = String(BigData.city || "").trim();
+						const BigLocality = String(BigData.locality || "").trim();
+						const Source = { source: "browser_geolocation_bigdatacloud", type: "device", countryCode: BigData.countryCode, country: BigData.countryName, region: BigData.principalSubdivision, regionCode: BigData.principalSubdivisionCode, city: BigCity || BigLocality, locality: BigLocality, area: BigLocality && GeoNorm(BigLocality) !== GeoNorm(BigCity) ? BigLocality : "", areaType: BigLocality && GeoNorm(BigLocality) !== GeoNorm(BigCity) ? "locality" : "", postal: BigData.postcode, latitude: Latitude, longitude: Longitude, accuracyMeters: Accuracy, timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "" };
 						ReverseSources.push(Source.source);
 						Changed = AddOrReplaceLocationSource(Source, "device_bigdatacloud") || Changed;
 					}
 					if (Nominatim)
 					{
 						const Address = Nominatim.address && typeof Nominatim.address === "object" ? Nominatim.address : {};
-						const Locality = String(Address.city || Address.town || Address.village || Address.municipality || Address.suburb || Address.city_district || "").trim();
+						const City = String(Address.city || Address.town || Address.village || Address.municipality || "").trim();
+						const Area = String(Address.neighbourhood || Address.suburb || Address.city_district || Address.quarter || "").trim();
 						const Region = String(Address.state || Address.governorate || Address.county || "").trim();
-						const Source = { source: "browser_geolocation_nominatim", type: "device", countryCode: String(Address.country_code || "").toUpperCase(), country: Address.country || "", region: Region, city: Locality, locality: Locality, postal: Address.postcode || "", latitude: Latitude, longitude: Longitude, accuracyMeters: Accuracy, timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "" };
+						const Source = { source: "browser_geolocation_nominatim", type: "device", countryCode: String(Address.country_code || "").toUpperCase(), country: Address.country || "", region: Region, city: City, locality: Area, area: Area, areaType: Area ? (Address.neighbourhood ? "neighbourhood" : Address.suburb ? "suburb" : Address.city_district ? "district" : "quarter") : "", postal: Address.postcode || "", latitude: Latitude, longitude: Longitude, accuracyMeters: Accuracy, timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "" };
 						ReverseSources.push(Source.source);
 						Changed = AddOrReplaceLocationSource(Source, "device_nominatim") || Changed;
 					}
@@ -723,7 +778,12 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		function EmitLocationUpdate(pReason)
 		{
-			if (!fPageOpenSent || fPageExitSent || !fLocationResolution) return;
+			if (!fLocationResolution) return;
+			if (!fPageOpenSent)
+			{
+				fPendingLocationUpdateReason = String(pReason || "location_pending_before_page_open").trim();
+				return;
+			}
 			TrackOpsEvent("page_alive", {
 				eventOn: "location_update",
 				widget: "Page",
@@ -913,6 +973,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 				};
 				window.__EMO_OPS_TRAFFIC_GATE__ = fTrafficGateDiagnostics;
 				const ServerSources = Array.isArray(fTrafficGateDiagnostics?.server?.geoSources) ? fTrafficGateDiagnostics.server.geoSources : [];
+				fServerLocationResolution = fTrafficGateDiagnostics?.server?.resolvedIpLocation && typeof fTrafficGateDiagnostics.server.resolvedIpLocation === "object" ? fTrafficGateDiagnostics.server.resolvedIpLocation : null;
 				fLocationSources = ServerSources.map((Item) => GeoSourceView({ ...Item, type: "ip" })).filter(Boolean);
 				ApplyLocationResolution("traffic_gate_ip_sources");
 				return !ExplicitDenied;
@@ -1962,7 +2023,8 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		function EnqueueRetry(pBody)
 		{
-			if (!pBody || pBody.eventType === "page_alive") return false;
+			if (!pBody) return false;
+			if (pBody.eventType === "page_alive" && !(pBody.eventData && pBody.eventData.locationUpdate === true)) return false;
 			if (fQueueFlushRunning)
 			{
 				if (!fRetryDuringFlush.some((Item) => Item?.clientEventUid === pBody.clientEventUid)) fRetryDuringFlush.push(pBody);
@@ -2113,8 +2175,11 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 				language: navigator.language || "",
 				timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
 				locationCountryCode: String(fLocationResolution?.countryCode || "").trim(),
-				locationRegion: String(fLocationResolution?.region || "").trim(),
+				locationGovernorate: String(fLocationResolution?.governorate || fLocationResolution?.region || "").trim(),
+				locationRegion: String(fLocationResolution?.governorate || fLocationResolution?.region || "").trim(),
 				locationCity: String(fLocationResolution?.city || "").trim(),
+				locationArea: String(fLocationResolution?.area || "").trim(),
+				locationAreaType: String(fLocationResolution?.areaType || "").trim(),
 				locationBand: String(fLocationResolution?.band || "").trim(),
 				locationLabel: String(fLocationResolution?.label || "").trim(),
 				locationBorderColor: String(fLocationResolution?.borderColor || "").trim(),
@@ -2925,6 +2990,12 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 					{
 						fPageOpenSent = true;
 						window.__EMO_OPS_PAGE_OPENED__ = true;
+						if (fPendingLocationUpdateReason)
+						{
+							const PendingReason = fPendingLocationUpdateReason;
+							fPendingLocationUpdateReason = "";
+							EmitLocationUpdate(PendingReason);
+						}
 						window.dispatchEvent(new CustomEvent("emo:ops-page-open", { detail: window.__EmoOpsIds }));
 						StartLocationEnhancement();
 					}

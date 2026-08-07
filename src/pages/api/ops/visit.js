@@ -235,6 +235,16 @@ function NormalizeEvent(pInput, pRequest) {
 		const Geo = EventSource === "emolive"
 			? { countryCode: "", region: "", city: "", band: "", label: "", borderColor: "" }
 			: BuildGeo(pRequest, Event);
+		const Resolution = EventData.locationResolution && typeof EventData.locationResolution === "object" ? EventData.locationResolution : null;
+		const HasCanonicalResolution = !!Resolution;
+		const LocationCountryCode = HasCanonicalResolution ? Str(Resolution.countryCode) : (Str(Event.locationCountryCode) || Geo.countryCode);
+		const LocationGovernorate = HasCanonicalResolution ? Str(Resolution.governorate || Resolution.region) : Str(Event.locationGovernorate || Event.locationRegion || Geo.region);
+		const LocationCity = HasCanonicalResolution ? Str(Resolution.city) : (Str(Event.locationCity) || Geo.city);
+		const LocationArea = HasCanonicalResolution ? Str(Resolution.area) : Str(Event.locationArea);
+		const LocationAreaType = HasCanonicalResolution ? Str(Resolution.areaType) : Str(Event.locationAreaType);
+		const LocationBand = HasCanonicalResolution ? Str(Resolution.band) : (Str(Event.locationBand) || Geo.band);
+		const LocationLabel = HasCanonicalResolution ? Str(Resolution.label) : (Str(Event.locationLabel) || Geo.label);
+		const LocationBorderColor = HasCanonicalResolution ? Str(Resolution.borderColor) : (Str(Event.locationBorderColor) || Geo.borderColor);
 		UserAgent = EventSource === "emolive"
 			? Str(Event.userAgentClient || Event.userAgent)
 			: Str(pRequest.headers.get("user-agent") || Event.userAgentClient || Event.userAgent);
@@ -254,12 +264,15 @@ function NormalizeEvent(pInput, pRequest) {
 			createdAtClient: OccurredAt,
 			focusState: FocusState,
 			eventData: EventData,
-			locationCountryCode: Str(Event.locationCountryCode) || Geo.countryCode,
-			locationRegion: Str(Event.locationRegion) || Geo.region,
-			locationCity: Str(Event.locationCity) || Geo.city,
-			locationBand: Str(Event.locationBand) || Geo.band,
-			locationLabel: Str(Event.locationLabel) || Geo.label,
-			locationBorderColor: Str(Event.locationBorderColor) || Geo.borderColor,
+			locationCountryCode: LocationCountryCode,
+			locationGovernorate: LocationGovernorate,
+			locationRegion: LocationGovernorate,
+			locationCity: LocationCity,
+			locationArea: LocationArea,
+			locationAreaType: LocationAreaType,
+			locationBand: LocationBand,
+			locationLabel: LocationLabel,
+			locationBorderColor: LocationBorderColor,
 			userAgentClient: UserAgent
 		};
 	}
