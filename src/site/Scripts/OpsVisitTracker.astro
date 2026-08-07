@@ -357,6 +357,19 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 
 
+		function TrackedPageTitle()
+		{
+			const Title = String(document.title || "").trim();
+			const Missing = Title.includes("الرابط المطلوب غير موجود") || Title.includes("رابط غير موجود") || /page\s+not\s+found/i.test(Title);
+			if (!Missing) return Title;
+			const Requested = `${location.pathname}${location.search}${location.hash}`;
+			return Requested && !Title.includes(Requested) ? `${Title} — ${Requested}` : Title;
+		}
+
+
+
+
+
 		function CleanText(pText)
 		{
 			return String(pText || "")
@@ -1379,7 +1392,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 				pageElapsedMs: PageElapsedMs,
 				sessionElapsedMs: SessionElapsedMs,
 				pagePath: location.pathname,
-				pageTitle: document.title,
+				pageTitle: TrackedPageTitle(),
 				focusState: String(pOptions.focusState || (IsHiddenNow ? "hidden" : "visible")).trim(),
 				clientEventSeq: ClientEventSeq,
 				clientEventUid: ClientEventUid,
@@ -1397,7 +1410,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 				pageElapsedMs: PageElapsedMs,
 				sessionElapsedMs: SessionElapsedMs,
 				pagePath: location.pathname,
-				pageTitle: document.title,
+				pageTitle: TrackedPageTitle(),
 				pageTitleShort: CleanText(document.title),
 				referrer: document.referrer || "",
 				screen: `${window.screen.width}x${window.screen.height}`,
