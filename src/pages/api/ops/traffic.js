@@ -121,14 +121,14 @@ export async function GET({ request }) {
 	const LookupMs = Date.now() - LookupStartedAt;
 	const Diagnostics = RequestDiagnostics(request, Ip, Network, StartedAt, LookupMs);
 	const NetworkText = `${Network?.org || ""} ${Network?.hostname || ""}`;
-	if (Network && cDataCenterPattern.test(NetworkText)) {
-		return Json({ ok: true, track: false, reason: "automated_network", diagnostics: Diagnostics });
-	}
+	const NetworkAutomationHint = Boolean(Network && cDataCenterPattern.test(NetworkText));
+	Diagnostics.networkAutomationHint = NetworkAutomationHint;
+	Diagnostics.networkDecision = "observe_only";
 
 	return Json({
 		ok: true,
 		track: true,
-		reason: Network ? "accepted_network" : "network_lookup_unavailable",
+		reason: NetworkAutomationHint ? "observed_automation_network" : (Network ? "accepted_network" : "network_lookup_unavailable"),
 		diagnostics: Diagnostics
 	});
 }

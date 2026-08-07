@@ -146,7 +146,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		let fActiveReadState = null;
 
-		const cPagePingMs = 30000;
+		const cPagePingMs = 1500;
 
 		const cBotUserAgentPattern = /(bot|crawl|spider|slurp|googlebot|googleother|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb)/i;
 
@@ -2220,11 +2220,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 		{
 			if (!fPageOpenSent || fPageExitSent) return;
 			const Hidden = !document.hasFocus();
-			if (Hidden)
-			{
-				if (!fAwayStartedAt) MarkPageAway("focus_ping");
-				return;
-			}
+			if (Hidden && !fAwayStartedAt) MarkPageAway("focus_ping");
 			TrackOpsEvent("page_alive", {
 					eventOn: Hidden ? "heartbeat_hidden" : "heartbeat",
 					widget: "Page",
