@@ -102,6 +102,18 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		let fClientDiagnostics = null;
 
+		let fLocationResolution = null;
+
+		let fLocationSources = [];
+
+		let fGeoPermission = "unknown";
+
+		let fLocationEnhancementStarted = false;
+
+		const cGeoSourceWeights = { vercel: 1, ipapi: 1, ipwho: 1, ipinfo: 1.15, maxmind: 1.2, bigdatacloud_ip: 1.1 };
+
+		const cArabCountryCodes = new Set(["EG", "SA", "AE", "KW", "QA", "BH", "OM", "YE", "JO", "LB", "SY", "IQ", "PS", "MA", "DZ", "TN", "LY", "SD", "SO", "DJ", "KM", "MR"]);
+
 		const cFocusAwayMinMs = 1500;
 
 		const cObservedViewElems = new Set();
@@ -188,8 +200,383 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 
 
+		function GeoNorm(pValue)
+		{
+			return String(pValue || "").toLowerCase()
+				.normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
+				.replace(/[\u064B-\u065F\u0670]/g, "").replace(/[إأآ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه")
+				.replace(/[^a-z0-9ا-ي]+/g, " ").replace(/\s+/g, " ").trim();
+		}
+
+
+
+
+		function HasGeoWord(pText, pWords)
+		{
+			const Text = ` ${GeoNorm(pText)} `;
+			return pWords.some((pWord) =>
+				{
+					const Word = GeoNorm(pWord);
+					return Word && (Text.includes(` ${Word} `) || (Word.length > 2 && Text.includes(Word)));
+		});
+		}
+
+
+
+
+		function ClassifyResolvedLocation(pCountryCode, pRegion, pCity)
+		{
+			const CountryCode = String(pCountryCode || "").trim().toUpperCase();
+			const Region = String(pRegion || "").trim();
+			const City = String(pCity || "").trim();
+			const All = `${City} ${Region}`;
+			if (CountryCode === "EG")
+			{
+				if (HasGeoWord(All, ["c", "cai", "cairo", "al qahirah", "القاهرة", "القاهره", "محافظة القاهرة", "qahira"])) return { band: "cairo", label: City || Region || "Cairo", borderColor: "#00C853" };
+				if (HasGeoWord(All, ["gz", "giza", "al jizah", "jizah", "6th of october", "6 october", "october", "sheikh zayed", "الجيزة", "الجيزه", "اكتوبر", "السادس من اكتوبر", "الشيخ زايد"])) return { band: "giza", label: City || Region || "Giza", borderColor: "#00D5FF" };
+				return { band: "egypt", label: City || Region || "Egypt", borderColor: "#FFD740" };
+			}
+			if (cArabCountryCodes.has(CountryCode)) return { band: "arab", label: City || CountryCode || "Arab country", borderColor: "#FF8A00" };
+			return { band: "world", label: City || CountryCode || "Outside Arab region", borderColor: "#FF3B30" };
+		}
+
+
+
+
+		function GeoSourceView(pSource)
+		{
+			if (!pSource || typeof pSource !== "object") return null;
+			const Latitude = Number(pSource.latitude);
+			const Longitude = Number(pSource.longitude);
+			return {
+				source: String(pSource.source || "").trim(),
+				type: String(pSource.type || "ip").trim(),
+				countryCode: String(pSource.countryCode || "").trim().toUpperCase(),
+				country: String(pSource.country || "").trim(),
+				region: String(pSource.region || "").trim(),
+				regionCode: String(pSource.regionCode || "").trim(),
+				city: String(pSource.city || "").trim(),
+				locality: String(pSource.locality || "").trim(),
+				postal: String(pSource.postal || "").trim(),
+				latitude: Number.isFinite(Latitude) ? Latitude : null,
+				longitude: Number.isFinite(Longitude) ? Longitude : null,
+				accuracyMeters: Number.isFinite(Number(pSource.accuracyMeters)) ? Math.max(0, Number(pSource.accuracyMeters)) : null,
+				accuracyRadiusKm: Number.isFinite(Number(pSource.accuracyRadiusKm)) ? Math.max(0, Number(pSource.accuracyRadiusKm)) : null,
+				timezone: String(pSource.timezone || "").trim(),
+				asn: String(pSource.asn || "").trim(),
+				org: String(pSource.org || "").trim()
+			};
+		}
+
+
+
+
+		function BestGeoVote(pSources, pField, pCountryCode = "")
+		{
+			const Votes = new Map();
+			for (const Source of pSources)
+			{
+				if (!Source || Source.type === "device") continue;
+				if (pCountryCode && Source.countryCode && Source.countryCode !== pCountryCode) continue;
+				const Raw = String(Source[pField] || "").trim();
+				const Key = pField === "countryCode" ? Raw.toUpperCase() : GeoNorm(Raw);
+				if (!Key) continue;
+				const Weight = cGeoSourceWeights[Source.source] || 1;
+				const Existing = Votes.get(Key) || { value: Raw, score: 0, sources: [] };
+				Existing.score += Weight;
+				Existing.sources.push(Source.source);
+				Votes.set(Key, Existing);
+			}
+			return Array.from(Votes.values()).sort((A, B) => B.score - A.score || B.sources.length - A.sources.length)[0] || null;
+		}
+
+
+
+
+		function ResolveIpLocationClient()
+		{
+			const Sources = fLocationSources.filter((Item) => Item && Item.type !== "device");
+			if (!Sources.length) return null;
+			const CountryVote = BestGeoVote(Sources, "countryCode");
+			const CountryCode = String(CountryVote?.value || "").trim().toUpperCase();
+			const RegionVote = BestGeoVote(Sources, "region", CountryCode);
+			const CityVote = BestGeoVote(Sources, "city", CountryCode);
+			const CityAgreement = CityVote?.sources?.length || 0;
+			const Classified = ClassifyResolvedLocation(CountryCode, RegionVote?.value || "", CityVote?.value || "");
+			return {
+				method: "ip_consensus",
+				sourceType: "ip",
+				confidence: CityAgreement >= 3 ? "medium" : CityAgreement >= 2 ? "medium_low" : "low",
+				countryCode: CountryCode,
+				region: String(RegionVote?.value || "").trim(),
+				city: String(CityVote?.value || "").trim(),
+				band: Classified.band,
+				label: Classified.label,
+				borderColor: Classified.borderColor,
+				countryAgreementSources: CountryVote?.sources || [],
+				regionAgreementSources: RegionVote?.sources || [],
+				cityAgreementSources: CityVote?.sources || [],
+				sources: Sources.map(GeoSourceView).filter(Boolean),
+				note: "IP-derived city is an estimate of the public network egress, not verified physical device location"
+			};
+		}
+
+
+
+
+		function DeviceConfidence(pAccuracyMeters)
+		{
+			const Accuracy = Number(pAccuracyMeters);
+			if (!Number.isFinite(Accuracy)) return "low";
+			if (Accuracy <= 500) return "very_high";
+			if (Accuracy <= 2000) return "high";
+			if (Accuracy <= 10000) return "medium";
+			return "low";
+		}
+
+
+
+
+		function ResolveFinalLocation()
+		{
+			const DeviceSources = fLocationSources.filter((Item) => Item && Item.type === "device");
+			const Device = DeviceSources.sort((A, B) => (Number(A.accuracyMeters) || Number.MAX_SAFE_INTEGER) - (Number(B.accuracyMeters) || Number.MAX_SAFE_INTEGER))[0] || null;
+			if (Device && Number.isFinite(Number(Device.accuracyMeters)) && Number(Device.accuracyMeters) <= 50000 && (Device.city || Device.locality || Device.region || Device.countryCode))
+			{
+				const City = String(Device.locality || Device.city || "").trim();
+				const Classified = ClassifyResolvedLocation(Device.countryCode, Device.region, City);
+				return {
+					method: "device_geolocation",
+					sourceType: "device",
+					sourceName: Device.source,
+					confidence: DeviceConfidence(Device.accuracyMeters),
+					countryCode: Device.countryCode,
+					region: Device.region,
+					city: City,
+					band: Classified.band,
+					label: Classified.label,
+					borderColor: Classified.borderColor,
+					latitude: Device.latitude,
+					longitude: Device.longitude,
+					accuracyMeters: Device.accuracyMeters,
+					permission: fGeoPermission,
+					sources: fLocationSources.map(GeoSourceView).filter(Boolean),
+					note: "Browser/device location overrides IP estimates because it represents the device position; permission was already granted before collection"
+				};
+			}
+			return ResolveIpLocationClient();
+		}
+
+
+
+
+		function LocationSignature(pLocation)
+		{
+			if (!pLocation) return "";
+			return [pLocation.method, pLocation.countryCode, pLocation.region, pLocation.city, pLocation.band, pLocation.confidence, Math.round(Number(pLocation.accuracyMeters) || 0)].join("|");
+		}
+
+
+
+
+		function ApplyLocationResolution(pReason = "")
+		{
+			const Previous = LocationSignature(fLocationResolution);
+			const Next = ResolveFinalLocation();
+			if (!Next) return false;
+			Next.updatedAtClient = new Date().toISOString();
+			Next.updateReason = String(pReason || "").trim();
+			fLocationResolution = Next;
+			window.__EMO_OPS_LOCATION__ = fLocationResolution;
+			const Changed = Previous !== LocationSignature(Next);
+			if (Changed) window.dispatchEvent(new CustomEvent("emo:ops-location", { detail: fLocationResolution }));
+			return Changed;
+		}
+
+
+
+
+		function AddOrReplaceLocationSource(pSource, pReason = "")
+		{
+			const Source = GeoSourceView(pSource);
+			if (!Source || !Source.source) return false;
+			const ExistingIndex = fLocationSources.findIndex((Item) => Item?.source === Source.source && Item?.type === Source.type);
+			if (ExistingIndex >= 0) fLocationSources[ExistingIndex] = Source;
+			else fLocationSources.push(Source);
+			return ApplyLocationResolution(pReason || Source.source);
+		}
+
+
+
+
+		async function GetGeolocationPermissionState()
+		{
+			if (!("geolocation" in navigator)) return "unsupported";
+			if (!navigator.permissions || typeof navigator.permissions.query !== "function") return "unknown";
+			try
+			{
+				const Status = await navigator.permissions.query({ name: "geolocation" });
+				return String(Status?.state || "unknown").trim() || "unknown";
+			} catch { return "unknown"; }
+		}
+
+
+
+
+		async function FetchBigDataCloudLocation(pLatitude = null, pLongitude = null)
+		{
+			try
+			{
+				const Params = new URLSearchParams();
+				if (Number.isFinite(Number(pLatitude)) && Number.isFinite(Number(pLongitude)))
+				{
+					Params.set("latitude", String(Number(pLatitude)));
+					Params.set("longitude", String(Number(pLongitude)));
+				}
+				Params.set("localityLanguage", "en");
+				const Res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?${Params.toString()}`, { headers: { accept: "application/json" }, cache: "no-store" });
+				if (!Res.ok) return null;
+				const Data = await Res.json();
+				return Data && typeof Data === "object" ? Data : null;
+			} catch { return null; }
+		}
+
+
+
+
+		async function CollectBigDataCloudIpSource()
+		{
+			const Data = await FetchBigDataCloudLocation();
+			if (!Data) return;
+			const Source = {
+				source: "bigdatacloud_ip",
+				type: "ip",
+				countryCode: Data.countryCode,
+				country: Data.countryName,
+				region: Data.principalSubdivision,
+				regionCode: Data.principalSubdivisionCode,
+				city: Data.city || Data.locality,
+				locality: Data.locality,
+				postal: Data.postcode,
+				latitude: Data.latitude,
+				longitude: Data.longitude,
+				timezone: ""
+			};
+			const Changed = AddOrReplaceLocationSource(Source, "bigdatacloud_ip");
+			if (Changed) EmitLocationUpdate("bigdatacloud_ip");
+		}
+
+
+
+
+		function GetCurrentDevicePosition()
+		{
+			return new Promise((Resolve) =>
+				{
+					if (!("geolocation" in navigator)) return Resolve(null);
+					navigator.geolocation.getCurrentPosition(
+						(Position) => Resolve(Position || null),
+						() => Resolve(null),
+						{ enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
+					);
+		});
+		}
+
+
+
+
+		async function CollectDeviceLocationIfAlreadyGranted()
+		{
+			if (!("geolocation" in navigator) || !navigator.permissions || typeof navigator.permissions.query !== "function") return;
+			let Status;
+			try { Status = await navigator.permissions.query({ name: "geolocation" }); }
+			catch { return; }
+			fGeoPermission = String(Status?.state || "unknown").trim() || "unknown";
+			if (fClientDiagnostics?.geolocation) fClientDiagnostics.geolocation.permission = fGeoPermission;
+
+			const TryCollect = async () =>
+				{
+					fGeoPermission = String(Status?.state || "unknown").trim() || "unknown";
+					if (fClientDiagnostics?.geolocation) fClientDiagnostics.geolocation.permission = fGeoPermission;
+					if (fGeoPermission !== "granted") return;
+					const Position = await GetCurrentDevicePosition();
+					if (!Position?.coords) return;
+					const Latitude = Number(Position.coords.latitude);
+					const Longitude = Number(Position.coords.longitude);
+					const Accuracy = Math.max(0, Number(Position.coords.accuracy) || 0);
+					const Data = await FetchBigDataCloudLocation(Latitude, Longitude);
+					const Source = {
+						source: "browser_geolocation_bigdatacloud",
+						type: "device",
+						countryCode: Data?.countryCode || "",
+						country: Data?.countryName || "",
+						region: Data?.principalSubdivision || "",
+						regionCode: Data?.principalSubdivisionCode || "",
+						city: Data?.city || "",
+						locality: Data?.locality || Data?.city || "",
+						postal: Data?.postcode || "",
+						latitude: Latitude,
+						longitude: Longitude,
+						accuracyMeters: Accuracy,
+						timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || ""
+					};
+					const Changed = AddOrReplaceLocationSource(Source, "device_geolocation");
+					if (Changed) EmitLocationUpdate("device_geolocation");
+			};
+
+			if (fGeoPermission === "granted") TryCollect();
+			try
+			{
+				Status.addEventListener?.("change", () =>
+					{
+						fGeoPermission = String(Status?.state || "unknown").trim() || "unknown";
+						if (fGeoPermission === "granted") TryCollect();
+			});
+			} catch {}
+		}
+
+
+
+
+		function EmitLocationUpdate(pReason)
+		{
+			if (!fPageOpenSent || fPageExitSent || !fLocationResolution) return;
+			TrackOpsEvent("page_alive", {
+				eventOn: "location_update",
+				widget: "Page",
+				label: "تحديث دقة الموقع الجغرافي",
+				durationMs: Math.round(GetPageElapsedMs()),
+				focusState: document.hidden ? "away" : "visible",
+				allowBeforeOpen: true,
+				notifyMobile: false,
+				sound: false,
+				eventData: {
+					locationUpdate: true,
+					locationUpdateReason: String(pReason || "").trim(),
+					locationResolution: fLocationResolution,
+					geolocationPermission: fGeoPermission
+				}
+			});
+		}
+
+
+
+
+		function StartLocationEnhancement()
+		{
+			if (fLocationEnhancementStarted) return;
+			fLocationEnhancementStarted = true;
+			CollectBigDataCloudIpSource();
+			CollectDeviceLocationIfAlreadyGranted();
+		}
+
+
+
+
+
 		async function CollectClientDiagnostics()
 		{
+			fGeoPermission = await GetGeolocationPermissionState();
 			const Connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection || null;
 			const NavEntry = performance.getEntriesByType?.("navigation")?.[0] || null;
 			let UserAgentData = null;
@@ -251,6 +638,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 				timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
 				timezoneOffsetMinutes: new Date().getTimezoneOffset(),
 				navigation: NavEntry ? { type: String(NavEntry.type || ""), domInteractiveMs: Math.round(NavEntry.domInteractive || 0), domContentLoadedMs: Math.round(NavEntry.domContentLoadedEventEnd || 0), loadEventEndMs: Math.round(NavEntry.loadEventEnd || 0), responseStartMs: Math.round(NavEntry.responseStart || 0), responseEndMs: Math.round(NavEntry.responseEnd || 0), transferSize: Number(NavEntry.transferSize) || 0, encodedBodySize: Number(NavEntry.encodedBodySize) || 0, decodedBodySize: Number(NavEntry.decodedBodySize) || 0 } : null,
+				geolocation: { supported: "geolocation" in navigator, permissionsApi: !!(navigator.permissions && typeof navigator.permissions.query === "function"), permission: fGeoPermission, automaticPolicy: "collect only when permission is already granted; never trigger a permission prompt" },
 				webgl: WebGl
 			};
 		}
@@ -336,6 +724,9 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 					server: Data?.diagnostics && typeof Data.diagnostics === "object" ? Data.diagnostics : null
 				};
 				window.__EMO_OPS_TRAFFIC_GATE__ = fTrafficGateDiagnostics;
+				const ServerSources = Array.isArray(fTrafficGateDiagnostics?.server?.geoSources) ? fTrafficGateDiagnostics.server.geoSources : [];
+				fLocationSources = ServerSources.map((Item) => GeoSourceView({ ...Item, type: "ip" })).filter(Boolean);
+				ApplyLocationResolution("traffic_gate_ip_sources");
 				return Res.ok && Data && Data.track === true;
 			} catch (Error)
 			{
@@ -1533,6 +1924,12 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 				targetText: Shorten(pOptions.targetText || "", 80),
 				language: navigator.language || "",
 				timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
+				locationCountryCode: String(fLocationResolution?.countryCode || "").trim(),
+				locationRegion: String(fLocationResolution?.region || "").trim(),
+				locationCity: String(fLocationResolution?.city || "").trim(),
+				locationBand: String(fLocationResolution?.band || "").trim(),
+				locationLabel: String(fLocationResolution?.label || "").trim(),
+				locationBorderColor: String(fLocationResolution?.borderColor || "").trim(),
 				widget: String(pOptions.widget || "").trim(),
 				label: Shorten(pOptions.label || "", pOptions.labelMax || 190),
 				value: pOptions.value ?? "",
@@ -2331,7 +2728,8 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 						trackingStartedAtClient: new Date(fPageStartedAt).toISOString(),
 						replayCaptureStartsAfterPageOpen: true,
 						clientDiagnostics: fClientDiagnostics,
-						trafficGate: fTrafficGateDiagnostics
+						trafficGate: fTrafficGateDiagnostics,
+						locationResolution: fLocationResolution
 					}
 			}).then((Result) =>
 				{
@@ -2340,6 +2738,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 						fPageOpenSent = true;
 						window.__EMO_OPS_PAGE_OPENED__ = true;
 						window.dispatchEvent(new CustomEvent("emo:ops-page-open", { detail: window.__EmoOpsIds }));
+						StartLocationEnhancement();
 					}
 					return Result;
 			}).finally(() =>

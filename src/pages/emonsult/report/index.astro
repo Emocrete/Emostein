@@ -1,15 +1,20 @@
 ---
 import BLayout from "@/Layout.astro";
-import { EmoCall, Emograph, VrStack } from "@/Widgets/Comp";
-import { Hero } from "@/Widgets/Sections";
-import { Loc, NumPer, Size, Text } from "@/TypesLib";
+import { EmoCall, Emograph, SecTitle, VrStack } from "@/Widgets/Comp";
+import { DivCol, DivStr, EmoSec, Hero } from "@/Widgets/Sections";
+import { BadgeFrame, BlurBlob, CircleGlow, FloatingPanel, GlassCard, LinePath, SvgDots, WaveBottom } from "@/Widgets/Shapes";
+import { ElemBg, Loc, NumPer, Pixel, Size, Text } from "@/TypesLib";
 ---
 
 
 
 
 
-<BLayout pSchemaType="CollectionPage" pTitle="تقارير هندسية" pDescr="تقارير هندسية">
+<BLayout
+	pSchemaType="CollectionPage"
+	pTitle="تقارير هندسية"
+	pDescr="تقارير هندسية للمباني والمنشآت تشمل السلامة الإنشائية، تقارير التربة والجسات، المعاينات الفنية، وتقارير الحماية المدنية والحريق."
+>
 
 
 
@@ -21,13 +26,254 @@ import { Loc, NumPer, Size, Text } from "@/TypesLib";
 
 		<VrStack pSize={new Size(new NumPer("40%","95%"))} pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","10%"))} pHzAlign={"Center"}>
 
-			<Emograph pTitle={Text.H1.Centered.OfText("تقارير هندسية")} pText={Text.Body.Centered.OfText("تقارير هندسية")} />
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("تقارير هندسية")}
+				pText={Text.Body.Centered.OfText("تقارير هندسية للمباني والمنشآت تشمل السلامة الإنشائية، تقارير التربة والجسات، المعاينات الفنية، وتقارير الحماية المدنية والحريق.")}
+			/>
 
 			<EmoCall OrangeBlack />
 
 		</VrStack>
 
 	</Hero>
+
+
+
+
+
+
+
+	<EmoSec
+		style = "
+				overflow : hidden ;
+				background : radial-gradient(circle at 76% 28%,rgba(50,143,232,.18),transparent 32%),radial-gradient(circle at 18% 72%,rgba(217,164,86,.13),transparent 30%),linear-gradient(145deg,#0b1520 0%,#132337 58%,#0e1925 100%)
+			"
+		id="secHero"
+		pBg={new ElemBg("#0E1925")}
+		pMinH={new NumPer("72svh", "80svh")}
+		pPad={new Pixel(72, 24)}
+		pHzAlign="Center"
+		pVrAlign="Center"
+	>
+
+		<BlurBlob
+			pLoc={new Loc(new NumPer("66%", "55%"), new NumPer("8%", "7%"))}
+			pSize={new Size(new NumPer("430px", "260px"), new NumPer("310px", "210px"))}
+			pColor="rgba(50,143,232,.24)"
+			pColor2="rgba(95,180,210,.12)"
+			pBlur={32}
+			pZ={0}
+		/>
+
+		<CircleGlow
+			pLoc={new Loc(new NumPer("4%", "-8%"), new NumPer("50%", "64%"))}
+			pSize={new Size(new NumPer("300px", "220px"), new NumPer("300px", "220px"))}
+			pColor="rgba(216,160,79,.16)"
+			pColor2="rgba(255,209,130,.08)"
+			pBlur={34}
+			pZ={0}
+		/>
+
+		<SvgDots
+			pLoc={new Loc(new NumPer("70%", "58%"), new NumPer("54%", "57%"))}
+			pSize={new Size(new NumPer("420px", "210px"), new NumPer("250px", "190px"))}
+			pColor="rgba(255,255,255,.14)"
+			pGap={24}
+			pDot={2}
+			pZ={1}
+		/>
+
+		<LinePath
+			pLoc={new Loc(new NumPer("3%", "-30%"), new NumPer("15%", "20%"))}
+			pSize={new Size(new NumPer("62%", "150%"), new NumPer("150px", "120px"))}
+			pStroke="rgba(255,255,255,.16)"
+			pDot="#D9A456"
+			pWidth={2}
+			pAnimate={false}
+			pZ={1}
+		/>
+
+		<GlassCard
+			style = " position : relative ; z-index : 3 "
+			pSize={new Size(new NumPer("760px", "calc(100% - 20px)"), new NumPer("auto", "auto"))}
+			pBg="rgba(10,18,28,.76)"
+			pBorder="rgba(255,255,255,.16)"
+			pRadius={30}
+			pBlur={12}
+			pHzAlign="Right"
+		>
+
+			<Emograph
+				pTitle={Text.H1.White.AtRight.OfText("تقارير هندسية")}
+				pText={Text.Body.White.AtRight.OfSize(21, 15).OfText("تقارير فنية للمباني والمنشآت تجمع بين توصيف الحالة الهندسية ومتطلبات الترخيص أو التشغيل؛ من السلامة الإنشائية والتربة والمعاينات حتى تقارير الحماية المدنية والحريق.")}
+			/>
+
+		</GlassCard>
+
+		<WaveBottom
+			pLoc={new Loc(new NumPer("0%", "0%"), new NumPer("calc(100% - 96px)", "calc(100% - 68px)"))}
+			pSize={new Size(new NumPer("100%", "100%"), new NumPer("96px", "68px"))}
+			pFill="#F4F6F8"
+			pFill2="rgba(244,246,248,.42)"
+			pStroke="transparent"
+			pZ={1}
+		/>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		id="StructuralSoilReports"
+		pBg={new ElemBg("#F4F6F8")}
+		pPad={new Pixel(68, 28)}
+		pGap={new Pixel(34, 22)}
+		pHzAlign="Center"
+		pVrAlign="Center"
+	>
+
+		<SecTitle SkyLite pTitle="تقارير التراخيص الإنشائية والتربة" pDesc="هذه التقارير إلزامية في مراحل ما قبل البناء أو عند تقنين الأوضاع." />
+
+		<DivStr
+			pContentSize={new Size(new NumPer("1180px", "calc(100% - 20px)"))}
+			pGap={new Pixel(22, 18)}
+			pPad={new Pixel(26, 6)}
+			pHzAlign="Center"
+			pVrAlign="Stretch"
+		>
+
+			<DivCol pPad={new Pixel(0)} pHzAlign="Stretch" pVrAlign="Stretch">
+
+				<BadgeFrame
+					style = " height : 100% ; border : 1px solid rgba(15,30,46,.08) ; box-shadow : 0 20px 44px rgba(15,30,46,.10) "
+					pBadge="01"
+					pBg="#FFFFFF"
+					pBadgeBg="#328FE8"
+					pColor="#101820"
+					pHzAlign="Right"
+					pVrAlign="Top"
+				>
+
+					<Emograph
+						pTitle={Text.H3.AtRight.WithColor("#142437").OfText("تقرير فني عن السلامة الإنشائية")}
+						pText={Text.Body.AtRight.WithColor("#455261").OfSize(18, 14).OfText("يستخدم في قانون التصالح وقانون البناء وتراخيص المحلات التجارية في المباني المنشأة قبل إصدار قانون البناء الموحد أو المباني غير المرخصة، ويصدر من مهندس نقابي أو استشاري لتقييم حالة المبنى وقدرته على تحمل الأحمال.")}
+					/>
+
+				</BadgeFrame>
+
+			</DivCol>
+
+			<DivCol pPad={new Pixel(0)} pHzAlign="Stretch" pVrAlign="Stretch">
+
+				<BadgeFrame
+					style = " height : 100% ; border : 1px solid rgba(15,30,46,.08) ; box-shadow : 0 20px 44px rgba(15,30,46,.10) "
+					pBadge="02"
+					pBg="#FFFFFF"
+					pBadgeBg="#B98A45"
+					pColor="#101820"
+					pHzAlign="Right"
+					pVrAlign="Top"
+				>
+
+					<Emograph
+						pTitle={Text.H3.AtRight.WithColor("#142437").OfText("تقرير التربة (تقرير فحص التربة / الجسات)")}
+						pText={Text.Body.AtRight.WithColor("#455261").OfSize(18, 14).OfText("معتمد من استشاري ميكانيكا تربة وأساسات. وهو متطلب رسمي في الكود المصري واشتراطات هيئة التنمية الصناعية لإصدار تراخيص البناء للمصانع والمنشآت.")}
+					/>
+
+				</BadgeFrame>
+
+			</DivCol>
+
+			<DivCol pPad={new Pixel(0)} pHzAlign="Stretch" pVrAlign="Stretch">
+
+				<BadgeFrame
+					style = " height : 100% ; border : 1px solid rgba(15,30,46,.08) ; box-shadow : 0 20px 44px rgba(15,30,46,.10) "
+					pBadge="03"
+					pBg="#FFFFFF"
+					pBadgeBg="#4E7B78"
+					pColor="#101820"
+					pHzAlign="Right"
+					pVrAlign="Top"
+				>
+
+					<Emograph
+						pTitle={Text.H3.AtRight.WithColor("#142437").OfText("تقرير المعاينة الفنية")}
+						pText={Text.Body.AtRight.WithColor("#455261").OfSize(18, 14).OfText("تقرير يصدره المهندس الاستشاري لإبداء الرأي الفني في النواحي الهندسية لمنشأ قائم، وتوصيف حالته وحجم الأضرار أو الشروخ به إن وجدت وطرق علاجها.")}
+					/>
+
+				</BadgeFrame>
+
+			</DivCol>
+
+		</DivStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		style = "
+				overflow : hidden ;
+				background : radial-gradient(circle at 82% 22%,rgba(240,122,72,.13),transparent 30%),linear-gradient(145deg,#101923 0%,#172433 100%)
+			"
+		id="FireSafetyReports"
+		pBg={new ElemBg("#121B26")}
+		pPad={new Pixel(72, 30)}
+		pGap={new Pixel(36, 24)}
+		pHzAlign="Center"
+		pVrAlign="Center"
+	>
+
+		<BlurBlob
+			pLoc={new Loc(new NumPer("70%", "60%"), new NumPer("15%", "12%"))}
+			pSize={new Size(new NumPer("360px", "220px"), new NumPer("260px", "180px"))}
+			pColor="rgba(240,122,72,.16)"
+			pColor2="rgba(255,188,116,.07)"
+			pBlur={36}
+			pZ={0}
+		/>
+
+		<SvgDots
+			pLoc={new Loc(new NumPer("6%", "-8%"), new NumPer("55%", "62%"))}
+			pSize={new Size(new NumPer("360px", "220px"), new NumPer("220px", "180px"))}
+			pColor="rgba(255,255,255,.10)"
+			pGap={25}
+			pDot={2}
+			pZ={0}
+		/>
+
+		<SecTitle
+			style = " position : relative ; z-index : 2 "
+			OrangeLite
+			pTitle="تقارير الأمن والسلامة (الحماية المدنية)"
+			pDesc="تقارير ضرورية لاستخراج تراخيص التشغيل للمصانع والمراكز التجارية والمنشآت الكبرى."
+		/>
+
+		<FloatingPanel
+			style = " width : min(980px,calc(100% - 24px)) ; position : relative ; z-index : 2 "
+			pBg="rgba(12,20,29,.88)"
+			pBorder="rgba(255,255,255,.15)"
+			pAccent="#F07A48"
+			pHzAlign="Right"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H3.White.AtRight.OfText("تقرير استشاري هندسي (تخصص حريق)")}
+				pText={Text.Body.White.AtRight.OfSize(19, 14).OfText("وهو التقرير الرسمي المطلوب تقديمه لإدارة الحماية المدنية، ويوضح تفصيلًا مصادر الخطورة بالمشروع وأنظمة الإطفاء والإنذار المتوافقة مع الكود المصري لوقاية المنشآت من أخطار الحريق.")}
+			/>
+
+		</FloatingPanel>
+
+	</EmoSec>
 
 
 
