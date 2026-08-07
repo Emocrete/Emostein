@@ -5,7 +5,7 @@ const cCacheMs = 6 * 60 * 60 * 1000;
 const cLookupTimeoutMs = 2500;
 const cBotPattern = /(bot|crawl|spider|slurp|googlebot|googleother|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb|chatgpt-user|gptbot|oai-searchbot|claudebot|anthropic-ai|perplexitybot|bytespider|amazonbot|applebot|ccbot)/i;
 const cDataCenterPattern = /(amazon|amazonaws|aws|google cloud|google llc|microsoft|azure|digitalocean|hetzner|ovh|oracle cloud|linode|akamai|cloudflare|fastly|vultr|contabo|leaseweb|choopa|quadranet|hostinger|hosting|data ?center|datacentre|server|colo|vpn|proxy)/i;
-const cSourceWeights = { vercel: 1, ipapi: 1, ipwho: 1, ipinfo: 1.15, maxmind: 1.2 };
+const cSourceWeights = { vercel: 0.9, ipapi: 1, ipwho: 1, freeipapi: 1.05, iplocationinfo: 0.95, ipinfo: 1.15, maxmind: 1.2 };
 
 function Json(pBody, pStatus = 200) {
 	return new Response(JSON.stringify(pBody), {
@@ -21,7 +21,9 @@ function Env(pName) {
 
 function Str(pValue) { return String(pValue ?? "").trim(); }
 function Num(pValue) {
-	const Value = Number(pValue);
+	const Text = Str(pValue);
+	if (!Text) return null;
+	const Value = Number(Text);
 	return Number.isFinite(Value) ? Value : null;
 }
 function Header(pRequest, pName) { return Str(pRequest.headers.get(pName)); }
@@ -160,6 +162,51 @@ async function LookupIpWho(pIp) {
 	});
 }
 
+async function LookupFreeIpApi(pIp) {
+	if (!pIp) return null;
+	return await CachedLookup(`freeipapi:${pIp}`, async () => {
+		const Data = await FetchJson(`https://free.freeipapi.com/api/json/${encodeURIComponent(pIp)}`);
+		if (!Data || !Data.countryCode) return null;
+		const Timezones = Array.isArray(Data.timeZones) ? Data.timeZones : [];
+		return GeoSource("freeipapi", {
+			countryCode: Data.countryCode,
+			country: Data.countryName,
+			region: Data.regionName,
+			regionCode: Data.regionCode,
+			city: Data.cityName,
+			postal: Data.zipCode,
+			latitude: Data.latitude,
+			longitude: Data.longitude,
+			timezone: Timezones.length === 1 ? Timezones[0] : "",
+			asn: Data.asn ? `AS${String(Data.asn).replace(/^AS/i, "")}` : "",
+			org: Data.asnOrganization,
+			isAnonymous: Data.isProxy === true
+		});
+	});
+}
+
+async function LookupIpLocationInfo(pIp) {
+	if (!pIp) return null;
+	return await CachedLookup(`iplocationinfo:${pIp}`, async () => {
+		const Data = await FetchJson(`https://iplocation.info/${encodeURIComponent(pIp)}`);
+		if (!Data || !Data.country_code) return null;
+		return GeoSource("iplocationinfo", {
+			countryCode: Data.country_code,
+			country: Data.country,
+			region: Data.region,
+			regionCode: Data.region_code,
+			city: Data.city,
+			postal: Data.postal_code,
+			latitude: Data.lat,
+			longitude: Data.lon,
+			timezone: Data.timezone,
+			asn: Data.asn,
+			org: Data.organization || Data.isp,
+			hostname: Data.hostname
+		});
+	});
+}
+
 async function LookupIpInfo(pIp) {
 	const Token = Env("IPINFO_TOKEN");
 	if (!pIp || !Token) return null;
@@ -254,47 +301,99 @@ function WeightedCoordinate(pSources, pCountryCode) {
 	return { latitude: Lat / WeightTotal, longitude: Lon / WeightTotal, sources: Used };
 }
 
+function VoteList(pSources, pField, pFilter = null) {
+	const Votes = new Map();
+	for (const Source of pSources) {
+		if (!Source || (pFilter && !pFilter(Source))) continue;
+		const Raw = Str(Source[pField]);
+		const Key = pField === "countryCode" ? Raw.toUpperCase() : GeoNorm(Raw);
+		if (!Key) continue;
+		const Weight = cSourceWeights[Source.source] || 1;
+		const Existing = Votes.get(Key) || { key: Key, value: Raw, score: 0, sources: [] };
+		Existing.score += Weight;
+		Existing.sources.push(Source.source);
+		Votes.set(Key, Existing);
+	}
+	return Array.from(Votes.values()).sort((A, B) => B.score - A.score || B.sources.length - A.sources.length);
+}
+
 function ResolveIpLocation(pSources) {
 	const Sources = (pSources || []).filter(Boolean);
 	if (!Sources.length) return null;
-	const CountryVote = BestVote(Sources, "countryCode");
+	const CountryVotes = VoteList(Sources, "countryCode");
+	const CountryVote = CountryVotes[0] || null;
 	const CountryCode = Str(CountryVote?.value).toUpperCase();
 	const MatchingCountry = (Source) => !CountryCode || Source.countryCode === CountryCode;
-	const RegionVote = BestVote(Sources, "region", MatchingCountry);
-	const CityVote = BestVote(Sources, "city", MatchingCountry);
+	const RegionVotes = VoteList(Sources, "region", MatchingCountry);
+	const CityVotes = VoteList(Sources, "city", MatchingCountry);
+	const RegionVote = RegionVotes[0] || null;
+	const CityVote = CityVotes[0] || null;
 	const Coordinates = WeightedCoordinate(Sources, CountryCode);
-	const CityAgreement = CityVote?.sources?.length || 0;
 	const CountryAgreement = CountryVote?.sources?.length || 0;
+	const CityAgreement = CityVote?.sources?.length || 0;
+	const IndependentCountrySources = (CountryVote?.sources || []).filter((Name) => Name !== "vercel").length;
+	const IndependentCitySources = (CityVote?.sources || []).filter((Name) => Name !== "vercel").length;
+	const CountryConflict = CountryVotes.length > 1;
+	const CityConflict = CityVotes.length > 1;
+	const CountryVerified = CountryAgreement >= 2 && IndependentCountrySources >= 1;
+	const CityVerified = CityAgreement >= 2 && IndependentCitySources >= 1;
 	return {
-		method: "ip_consensus",
-		confidence: CityAgreement >= 3 ? "medium" : CityAgreement >= 2 ? "medium_low" : "low",
-		countryConfidence: CountryAgreement >= 2 ? "high" : "medium",
+		method: CountryVerified ? "ip_consensus" : "ip_unverified",
+		verified: CountryVerified,
+		confidence: CityVerified ? (CityAgreement >= 3 ? "medium" : "medium_low") : "low",
+		countryConfidence: CountryVerified ? (CountryAgreement >= 3 && !CountryConflict ? "high" : "medium") : "low",
 		countryCode: CountryCode,
 		region: Str(RegionVote?.value),
 		city: Str(CityVote?.value),
 		latitude: Coordinates.latitude,
 		longitude: Coordinates.longitude,
 		sourceCount: Sources.length,
+		independentCountrySourceCount: IndependentCountrySources,
+		independentCitySourceCount: IndependentCitySources,
+		countryConflict: CountryConflict,
+		cityConflict: CityConflict,
+		countryCandidates: CountryVotes.slice(0, 5),
+		regionCandidates: RegionVotes.slice(0, 5),
+		cityCandidates: CityVotes.slice(0, 5),
 		countryAgreementSources: CountryVote?.sources || [],
 		regionAgreementSources: RegionVote?.sources || [],
 		cityAgreementSources: CityVote?.sources || [],
 		coordinateSources: Coordinates.sources,
-		note: "IP-derived city is an estimate of the public network egress, not verified physical device location"
+		note: CountryVerified ? "IP-derived location is a multi-provider estimate of the public network egress, not verified physical device location" : "Only one or conflicting IP geolocation sources were available; do not treat this as verified physical location"
 	};
 }
 
-async function LookupIpSources(pRequest, pIp) {
-	const Vercel = VercelGeoSource(pRequest);
-	const [IpApi, IpWho, IpInfo, MaxMind] = await Promise.all([
-		LookupIpApi(pIp),
-		LookupIpWho(pIp),
-		LookupIpInfo(pIp),
-		LookupMaxMind(pIp)
-	]);
-	return [Vercel, IpApi, IpWho, IpInfo, MaxMind].filter(Boolean);
+
+async function RunProvider(pName, pLoader) {
+	const StartedAt = Date.now();
+	try {
+		const Source = await pLoader();
+		return { source: pName, ok: !!Source, durationMs: Math.max(0, Date.now() - StartedAt), result: Source || null };
+	} catch (Error) {
+		return { source: pName, ok: false, durationMs: Math.max(0, Date.now() - StartedAt), error: Str(Error?.message || Error), result: null };
+	}
 }
 
-function RequestDiagnostics(pRequest, pIp, pSources, pResolved, pStartedAt, pLookupMs) {
+async function LookupIpSources(pRequest, pIp, pFull = true) {
+	const Vercel = VercelGeoSource(pRequest);
+	const ProviderStatus = [{ source: "vercel", ok: !!Vercel, durationMs: 0, configured: true }];
+	if (!pFull) return { sources: [Vercel].filter(Boolean), providers: ProviderStatus };
+	const Results = await Promise.all([
+		RunProvider("ipapi", () => LookupIpApi(pIp)),
+		RunProvider("ipwho", () => LookupIpWho(pIp)),
+		RunProvider("freeipapi", () => LookupFreeIpApi(pIp)),
+		RunProvider("iplocationinfo", () => LookupIpLocationInfo(pIp)),
+		RunProvider("ipinfo", () => LookupIpInfo(pIp)),
+		RunProvider("maxmind", () => LookupMaxMind(pIp))
+	]);
+	for (const Result of Results) {
+		ProviderStatus.push({ source: Result.source, ok: Result.ok, durationMs: Result.durationMs, configured: Result.source === "ipinfo" ? !!Env("IPINFO_TOKEN") : Result.source === "maxmind" ? (!!Env("MAXMIND_ACCOUNT_ID") && !!Env("MAXMIND_LICENSE_KEY")) : true, error: Result.error || "" });
+	}
+	return { sources: [Vercel, ...Results.map((Item) => Item.result)].filter(Boolean), providers: ProviderStatus };
+}
+
+
+function RequestDiagnostics(pRequest, pIp, pSources, pResolved, pStartedAt, pLookupMs, pProviderStatus = []) {
 	let Url;
 	try { Url = new URL(pRequest.url); } catch { Url = null; }
 	const Network = (pSources || []).find((Item) => Item?.org || Item?.asn || Item?.hostname) || null;
@@ -341,11 +440,14 @@ function RequestDiagnostics(pRequest, pIp, pSources, pResolved, pStartedAt, pLoo
 		},
 		network: Network,
 		geoSources: pSources || [],
+		geoProviderStatus: pProviderStatus || [],
 		resolvedIpLocation: pResolved,
 		geoProviderConfiguration: {
 			vercel: true,
 			ipapi: true,
 			ipwho: true,
+			freeipapi: true,
+			iplocationinfo: true,
 			ipinfo: !!Env("IPINFO_TOKEN"),
 			maxmind: !!Env("MAXMIND_ACCOUNT_ID") && !!Env("MAXMIND_LICENSE_KEY"),
 			browserBigDataCloud: true,
@@ -357,20 +459,32 @@ function RequestDiagnostics(pRequest, pIp, pSources, pResolved, pStartedAt, pLoo
 export async function GET({ request }) {
 	const StartedAt = Date.now();
 	const Ip = ClientIp(request);
+	const Url = new URL(request.url);
+	const Phase = Str(Url.searchParams.get("phase") || "gate").toLowerCase();
 	const HeaderBlock = HeaderReason(request);
 	if (HeaderBlock) return Json({
 		ok: true,
 		track: false,
 		reason: HeaderBlock,
-		diagnostics: RequestDiagnostics(request, Ip, [], null, StartedAt, 0)
+		phase: Phase,
+		diagnostics: RequestDiagnostics(request, Ip, [], null, StartedAt, 0, [])
 	});
 
+	if (Phase !== "location") {
+		const Quick = await LookupIpSources(request, Ip, false);
+		const Resolved = ResolveIpLocation(Quick.sources);
+		const Diagnostics = RequestDiagnostics(request, Ip, Quick.sources, Resolved, StartedAt, 0, Quick.providers);
+		Diagnostics.networkAutomationHint = false;
+		Diagnostics.networkDecision = "observe_only";
+		return Json({ ok: true, track: true, phase: "gate", reason: "accepted_headers", diagnostics: Diagnostics });
+	}
+
 	const LookupStartedAt = Date.now();
-	const Sources = await LookupIpSources(request, Ip);
+	const Lookup = await LookupIpSources(request, Ip, true);
 	const LookupMs = Date.now() - LookupStartedAt;
-	const Resolved = ResolveIpLocation(Sources);
-	const Diagnostics = RequestDiagnostics(request, Ip, Sources, Resolved, StartedAt, LookupMs);
-	const NetworkText = Sources.map((Item) => `${Item?.org || ""} ${Item?.hostname || ""} ${Item?.networkType || ""}`).join(" ");
+	const Resolved = ResolveIpLocation(Lookup.sources);
+	const Diagnostics = RequestDiagnostics(request, Ip, Lookup.sources, Resolved, StartedAt, LookupMs, Lookup.providers);
+	const NetworkText = Lookup.sources.map((Item) => `${Item?.org || ""} ${Item?.hostname || ""} ${Item?.networkType || ""}`).join(" ");
 	const NetworkAutomationHint = Boolean(NetworkText && cDataCenterPattern.test(NetworkText));
 	Diagnostics.networkAutomationHint = NetworkAutomationHint;
 	Diagnostics.networkDecision = "observe_only";
@@ -378,7 +492,9 @@ export async function GET({ request }) {
 	return Json({
 		ok: true,
 		track: true,
-		reason: NetworkAutomationHint ? "observed_automation_network" : (Sources.length ? "accepted_network" : "network_lookup_unavailable"),
+		phase: "location",
+		reason: NetworkAutomationHint ? "observed_automation_network" : (Lookup.sources.length > 1 ? "location_enriched" : "location_sources_limited"),
 		diagnostics: Diagnostics
 	});
 }
+
