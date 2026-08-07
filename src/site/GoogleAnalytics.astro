@@ -9,12 +9,26 @@
 
 		const cGAId = "G-ZGW6SNPV2X";
 		const cMaxEventNameLength = 40;
+		const cNetworkClassificationWaitMs = 3000;
+		const cCloudObservationMs = 5000;
+		const cStartedAt = Date.now();
 		const cMobileQuery = window.matchMedia("(hover: none), (pointer: coarse), (max-width: 700px)");
 		const cGeneratedWidgetIdPattern = /^[A-Za-z][A-Za-z0-9]*-\d{6}-\d{6}-\d{3}-\d{3}$/;
-
-		window.dataLayer = window.dataLayer || [];
+		const fPendingCommands = [];
+		let fTransportReady = false;
+		let fAnalyticsBlocked = false;
+		let fClassificationResolved = false;
+		let fCloudObservationPending = false;
+		let fHumanIntent = false;
+		let fClassificationTimer = 0;
+		let fCloudTimer = 0;
 
 		function gtag() {
+			if (fAnalyticsBlocked) return;
+			if (!fTransportReady) {
+				fPendingCommands.push(Array.from(arguments));
+				return;
+			}
 			window.dataLayer.push(arguments);
 		}
 
@@ -83,6 +97,78 @@
 			gtag("event", cEventName);
 		}
 
+		function ClearTimers() {
+			if (fClassificationTimer) window.clearTimeout(fClassificationTimer);
+			if (fCloudTimer) window.clearTimeout(fCloudTimer);
+			fClassificationTimer = 0;
+			fCloudTimer = 0;
+		}
+
+		function BlockAnalytics(pReason) {
+			if (fTransportReady || fAnalyticsBlocked) return;
+			fAnalyticsBlocked = true;
+			fCloudObservationPending = false;
+			fPendingCommands.length = 0;
+			ClearTimers();
+			window.__EMO_GA_STATE__ = { status: "blocked", reason: String(pReason || "automation_suspect") };
+		}
+
+		function StartAnalyticsTransport(pReason) {
+			if (fTransportReady || fAnalyticsBlocked) return;
+			fTransportReady = true;
+			fCloudObservationPending = false;
+			ClearTimers();
+			window.dataLayer = window.dataLayer || [];
+
+			const cScript = document.createElement("script");
+			cScript.async = true;
+			cScript.src = `https://www.googletagmanager.com/gtag/js?id=${cGAId}`;
+			document.head.appendChild(cScript);
+
+			gtag("js", new Date());
+			gtag("config", cGAId);
+			TrackTemplate("V");
+
+			const cQueued = fPendingCommands.splice(0);
+			for (const cCommand of cQueued) gtag(...cCommand);
+			window.__EMO_GA_STATE__ = { status: "active", reason: String(pReason || "network_clear") };
+		}
+
+		function CompleteCloudObservation() {
+			if (!fCloudObservationPending || fTransportReady || fAnalyticsBlocked) return;
+			if (document.hidden || document.visibilityState !== "visible") return;
+			StartAnalyticsTransport(fHumanIntent ? "cloud_network_human_intent" : "cloud_network_survived_observation");
+		}
+
+		function BeginCloudObservation() {
+			if (fTransportReady || fAnalyticsBlocked) return;
+			fCloudObservationPending = true;
+			const cRemaining = Math.max(0, cCloudObservationMs - (Date.now() - cStartedAt));
+			if (fHumanIntent) {
+				StartAnalyticsTransport("cloud_network_human_intent");
+				return;
+			}
+			fCloudTimer = window.setTimeout(CompleteCloudObservation, cRemaining);
+			window.__EMO_GA_STATE__ = { status: "observing", reason: "cloud_network_without_human_evidence" };
+		}
+
+		function ResolveClassification(pDetail, pReason = "network_classified") {
+			if (fClassificationResolved || fTransportReady || fAnalyticsBlocked) return;
+			fClassificationResolved = true;
+			if (fClassificationTimer) window.clearTimeout(fClassificationTimer);
+			fClassificationTimer = 0;
+			if (pDetail?.automationSuspect === true) {
+				BeginCloudObservation();
+				return;
+			}
+			StartAnalyticsTransport(pReason);
+		}
+
+		function RegisterHumanIntent() {
+			fHumanIntent = true;
+			if (fCloudObservationPending) StartAnalyticsTransport("cloud_network_human_intent");
+		}
+
 		window.gtag = gtag;
 		window.EmoAnalytics = {
 			ToPascal,
@@ -91,6 +177,16 @@
 			BuildEventName,
 			TrackTemplate
 		};
+
+		document.addEventListener("pointerdown", RegisterHumanIntent, { capture: true, passive: true, once: true });
+		document.addEventListener("touchstart", RegisterHumanIntent, { capture: true, passive: true, once: true });
+		document.addEventListener("keydown", RegisterHumanIntent, { capture: true, once: true });
+		window.addEventListener("pagehide", () => {
+			if (fCloudObservationPending && !fHumanIntent && !fTransportReady) BlockAnalytics("short_cloud_network_visit_without_human_evidence");
+		}, { once: true });
+		document.addEventListener("visibilitychange", () => {
+			if (!document.hidden && fCloudObservationPending && Date.now() - cStartedAt >= cCloudObservationMs) CompleteCloudObservation();
+		});
 
 		document.addEventListener("click", (pEvent) => {
 			const cEventTarget = pEvent.target;
@@ -117,13 +213,21 @@
 			TrackTemplate(cPrefix, cItemName);
 		});
 
-		const cScript = document.createElement("script");
-		cScript.async = true;
-		cScript.src = `https://www.googletagmanager.com/gtag/js?id=${cGAId}`;
-		document.head.appendChild(cScript);
+		window.addEventListener("emo:ops-tracking-decision", (pEvent) => {
+			if (pEvent?.detail?.allowed === false) BlockAnalytics(pEvent.detail.reason || "ops_tracking_denied");
+		}, { once: true });
+		const cExistingTrackingDecision = window.__EMO_OPS_TRACKING_DECISION__;
+		if (cExistingTrackingDecision?.allowed === false) {
+			BlockAnalytics(cExistingTrackingDecision.reason || "ops_tracking_denied_before_ga");
+			return;
+		}
 
-		gtag("js", new Date());
-		gtag("config", cGAId);
-		TrackTemplate("V");
+		window.addEventListener("emo:ops-network-classified", (pEvent) => ResolveClassification(pEvent?.detail || {}, "network_classified"), { once: true });
+		const cExistingClassification = window.__EMO_OPS_NETWORK_CLASSIFICATION__;
+		if (cExistingClassification && typeof cExistingClassification === "object") ResolveClassification(cExistingClassification, "network_classified_before_ga");
+		else {
+			fClassificationTimer = window.setTimeout(() => ResolveClassification({}, "network_classification_timeout"), cNetworkClassificationWaitMs);
+			window.__EMO_GA_STATE__ = { status: "waiting", reason: "network_classification" };
+		}
 	})();
 </script>

@@ -94,6 +94,10 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		const cReadTickMs = 250;
 
+		let fVisitorId = "";
+
+		let fSessionId = "";
+
 		let fPageInstanceId = "";
 
 		const cTrackerLoadedAt = Date.now();
@@ -113,6 +117,8 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 		let fLocationEnhancementStarted = false;
 
 		let fLocationEnrichmentDiagnostics = null;
+
+		let fNetworkAutomationHint = false;
 
 		let fServerLocationResolution = null;
 
@@ -604,6 +610,35 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 
 
+		function PublishTrackingDecision(pAllowed, pReason)
+		{
+			const Detail = {
+				allowed: pAllowed === true,
+				reason: String(pReason || (pAllowed ? "allowed" : "blocked")),
+				atClient: new Date().toISOString()
+			};
+			window.__EMO_OPS_TRACKING_DECISION__ = Detail;
+			window.dispatchEvent(new CustomEvent("emo:ops-tracking-decision", { detail: Detail }));
+		}
+
+
+
+
+		function PublishNetworkClassification(pStatus = "completed")
+		{
+			const Detail = {
+				status: String(pStatus || "completed"),
+				automationSuspect: fNetworkAutomationHint === true,
+				attempt: fLocationEnrichmentAttempt,
+				completedAtClient: new Date().toISOString()
+			};
+			window.__EMO_OPS_NETWORK_CLASSIFICATION__ = Detail;
+			window.dispatchEvent(new CustomEvent("emo:ops-network-classified", { detail: Detail }));
+		}
+
+
+
+
 		async function CollectServerIpSources()
 		{
 			const Attempt = ++fLocationEnrichmentAttempt;
@@ -615,6 +650,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 				try { Data = await Res.json(); } catch {}
 				const CompletedAt = Date.now();
 				const Server = Data?.diagnostics && typeof Data.diagnostics === "object" ? Data.diagnostics : null;
+				if (Server?.networkAutomationHint === true) fNetworkAutomationHint = true;
 				const AttemptDiagnostics = {
 					attempt: Attempt,
 					status: Res.ok ? "completed" : "http_error",
@@ -628,6 +664,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 				fLocationEnrichmentHistory = [...fLocationEnrichmentHistory, AttemptDiagnostics].slice(-3);
 				fLocationEnrichmentDiagnostics = { ...AttemptDiagnostics, attempts: fLocationEnrichmentHistory };
 				if (!Res.ok || !Server) throw new Error(`location_enrichment_http_${Res.status}`);
+				PublishNetworkClassification("completed");
 
 				const ServerSources = Array.isArray(Server.geoSources) ? Server.geoSources : [];
 				const ServerResolution = Server.resolvedIpLocation && typeof Server.resolvedIpLocation === "object" ? Server.resolvedIpLocation : null;
@@ -910,7 +947,8 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		function GetVisitorId()
 		{
-			return GetStoredId(localStorage, cVisitorKey, "v");
+			if (!fVisitorId) fVisitorId = GetStoredId(localStorage, cVisitorKey, "v");
+			return fVisitorId;
 		}
 
 
@@ -919,7 +957,8 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		function GetSessionId()
 		{
-			return GetStoredId(sessionStorage, cSessionKey, "s");
+			if (!fSessionId) fSessionId = GetStoredId(sessionStorage, cSessionKey, "s");
+			return fSessionId;
 		}
 
 
@@ -2118,6 +2157,8 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			const ClientEventSeq = ++fSeq;
 			const SessionSeq = NextSessionSeq();
 			const ClientEventUid = `${GetSessionId()}:${SessionSeq}:${GetPageInstanceId()}:${ClientEventSeq}`;
+			const EventData = pOptions.eventData && typeof pOptions.eventData === "object" ? { ...pOptions.eventData } : {};
+			if (fNetworkAutomationHint) EventData.networkAutomationHint = true;
 			const IsContactEvent = EventType === "call_click" || EventType === "whatsapp_click";
 			const IsReplayEvent = EventType.startsWith("system.") && EventType !== "system.clarity_session_index";
 			const PageElapsedMs = Number.isFinite(Number(pOptions.pageElapsedMs)) ? Math.max(
@@ -2143,7 +2184,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 				clientEventSeq: ClientEventSeq,
 				clientEventUid: ClientEventUid,
 				createdAtClient: String(pOptions.createdAtClient || new Date().toISOString()),
-				eventData: pOptions.eventData && typeof pOptions.eventData === "object" ? pOptions.eventData : {}
+				eventData: EventData
 			};
 			return {
 				eventType: EventType,
@@ -2204,7 +2245,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 				clarityAvailableAfter: String(pOptions.clarityAvailableAfter || "").trim(),
 				clarityStatus: String(pOptions.clarityStatus || "").trim(),
 				videoUrl: String(pOptions.videoUrl || "").trim(),
-				trafficKind: "human",
+				trafficKind: fNetworkAutomationHint ? "automation_suspect" : "human",
 				botSignal: "",
 				userAgentClient: navigator.userAgent || "",
 				clientFingerprint: [
@@ -2222,7 +2263,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 				clientEventUid: ClientEventUid,
 				createdAtClient: String(pOptions.createdAtClient || new Date().toISOString()),
 				pageStartedAt: new Date(fPageStartedAt).toISOString(),
-				eventData: pOptions.eventData && typeof pOptions.eventData === "object" ? pOptions.eventData : {}
+				eventData: EventData
 			};
 		}
 
@@ -3133,8 +3174,17 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		async function InitOps()
 		{
-			if (IsSyntheticTraffic()) return;
-			if (!(await TrafficAllowed())) return;
+			if (IsSyntheticTraffic())
+			{
+				PublishTrackingDecision(false, "client_synthetic_traffic");
+				return;
+			}
+			if (!(await TrafficAllowed()))
+			{
+				PublishTrackingDecision(false, "traffic_gate_denied");
+				return;
+			}
+			PublishTrackingDecision(true, "traffic_gate_allowed");
 			fClientDiagnostics = await CollectClientDiagnostics();
 			StartLocationEnhancement();
 			fPageStartedAt = Date.now();

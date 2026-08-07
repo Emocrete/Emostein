@@ -31,7 +31,9 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 	let fTouchRenderRaf = 0;
 	let fReplayReadOutline = null;
 	let fReplayReadTarget = null;
+	let fReplayReadMode = "full";
 	let fReadOutlineRaf = 0;
+	let fReplayBaseline = null;
 	let fReplayPointerCanvas = null;
 	let fReplayPointerContext = null;
 	let fReplayPointerDpr = 1;
@@ -592,7 +594,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		Outline.style.left = "0";
 		Outline.style.top = "0";
 		Outline.style.boxSizing = "border-box";
-		Outline.style.border = "3px dashed #000000";
+		Outline.style.border = "9px dashed #000000";
 		Outline.style.background = "transparent";
 		Outline.style.pointerEvents = "none";
 		Outline.style.display = "none";
@@ -610,6 +612,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 			Outline.style.display = "none";
 			return;
 		}
+		Outline.style.border = `9px dashed ${fReplayReadMode === "quick" ? "#808080" : "#000000"}`;
 		const Bounds = Target.getBoundingClientRect();
 		if (Bounds.width <= 0 || Bounds.height <= 0 || Bounds.bottom < 0 || Bounds.right < 0 || Bounds.top > innerHeight || Bounds.left > innerWidth) {
 			Outline.style.display = "none";
@@ -621,6 +624,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		Outline.style.transform = `translate3d(${Bounds.left}px, ${Bounds.top}px, 0)`;
 	}
 	function RenderReadOutline(pData) {
+		fReplayReadMode = Str(pData?.__emoReadMode).toLowerCase() === "quick" ? "quick" : "full";
 		fReplayReadTarget = FindTarget(pData);
 		if (!fReplayReadTarget) return HideReadOutline();
 		if (!fReadOutlineRaf) fReadOutlineRaf = requestAnimationFrame(CommitReadOutline);
@@ -648,6 +652,71 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 			if (Mutations.every((Mutation) => Mutation.target === fReplayHoverStyle || fReplayHoverStyle?.contains(Mutation.target))) return;
 			ScheduleReplayHoverStyleBuild();
 		}).observe(document.head, { childList: true, subtree: true, attributes: true, attributeFilter: ["href", "media", "disabled"] });
+	}
+
+	function ReplayBaselineExcluded(pElem) {
+		if (!(pElem instanceof Element)) return true;
+		if (pElem.closest("emo-replay-pointer-layer, emo-replay-touch-layer, emo-replay-read-layer")) return true;
+		return pElem.matches(".SiteIntro, .SiteIntroBase, .SiteIntroSweep, .SiteIntroLogoWrap") || !!pElem.closest(".SiteIntro, .SiteIntroBase, .SiteIntroSweep, .SiteIntroLogoWrap");
+	}
+	function AttributeSnapshot(pElem, pName) {
+		return pElem.hasAttribute(pName) ? pElem.getAttribute(pName) : null;
+	}
+	function RestoreAttribute(pElem, pName, pValue) {
+		if (pValue === null) pElem.removeAttribute(pName);
+		else pElem.setAttribute(pName, pValue);
+	}
+	function CaptureReplayBaseline() {
+		const Items = [];
+		for (const Elem of document.querySelectorAll("*")) {
+			if (ReplayBaselineExcluded(Elem)) continue;
+			const Item = {
+				elem: Elem,
+				className: AttributeSnapshot(Elem, "class"),
+				style: AttributeSnapshot(Elem, "style"),
+				hidden: Elem.hidden === true,
+				open: "open" in Elem ? Elem.open === true : null,
+				ariaExpanded: AttributeSnapshot(Elem, "aria-expanded"),
+				ariaSelected: AttributeSnapshot(Elem, "aria-selected"),
+				ariaChecked: AttributeSnapshot(Elem, "aria-checked"),
+				ariaPressed: AttributeSnapshot(Elem, "aria-pressed")
+			};
+			if (Elem instanceof HTMLInputElement || Elem instanceof HTMLTextAreaElement) {
+				Item.value = Elem.value;
+				if (Elem instanceof HTMLInputElement) Item.checked = Elem.checked;
+			}
+			if (Elem instanceof HTMLSelectElement) Item.selectedIndex = Elem.selectedIndex;
+			if (Elem.isContentEditable) Item.editableHtml = Elem.innerHTML;
+			Items.push(Item);
+		}
+		fReplayBaseline = Items;
+		return true;
+	}
+	function ResetPageState() {
+		if (!Array.isArray(fReplayBaseline)) CaptureReplayBaseline();
+		for (const Item of fReplayBaseline || []) {
+			const Elem = Item?.elem;
+			if (!(Elem instanceof Element) || !Elem.isConnected) continue;
+			RestoreAttribute(Elem, "class", Item.className);
+			RestoreAttribute(Elem, "style", Item.style);
+			Elem.hidden = Item.hidden === true;
+			if (Item.open !== null && "open" in Elem) Elem.open = Item.open === true;
+			RestoreAttribute(Elem, "aria-expanded", Item.ariaExpanded);
+			RestoreAttribute(Elem, "aria-selected", Item.ariaSelected);
+			RestoreAttribute(Elem, "aria-checked", Item.ariaChecked);
+			RestoreAttribute(Elem, "aria-pressed", Item.ariaPressed);
+			if ("value" in Item && (Elem instanceof HTMLInputElement || Elem instanceof HTMLTextAreaElement)) Elem.value = Item.value;
+			if ("checked" in Item && Elem instanceof HTMLInputElement) Elem.checked = Item.checked === true;
+			if ("selectedIndex" in Item && Elem instanceof HTMLSelectElement) Elem.selectedIndex = Item.selectedIndex;
+			if ("editableHtml" in Item && Elem.isContentEditable) Elem.innerHTML = Item.editableHtml;
+		}
+		try { if (document.activeElement instanceof HTMLElement) document.activeElement.blur(); } catch {}
+		window.scrollTo(0, 0);
+		HideTouchFrame();
+		HideReadOutline();
+		ClearPointerVisuals();
+		ClearReplayHover();
+		return true;
 	}
 
 	function ApplyAction(pAction) {
@@ -744,6 +813,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		const Send = () => {
 			RebuildReplayHoverStyles();
 			EnsurePointerEffectsLayer();
+			CaptureReplayBaseline();
 			try { window.EmoReplayAndroid?.OnPageReady(JSON.stringify(PageInfo())); } catch {}
 			window.dispatchEvent(new CustomEvent("emo:replay-ready", { detail: PageInfo() }));
 		};
@@ -751,7 +821,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		Promise.resolve(Fonts).catch(() => {}).finally(() => requestAnimationFrame(() => requestAnimationFrame(Send)));
 	}
 
-	window.EmoReplayRuntime = { ApplyAction, StartPage, StopPage, PageInfo, FindTarget, RenderTouchFrame, HideTouchFrame, RenderReadOutline, HideReadOutline, ClearPointerVisuals, RefreshPointerHover: RefreshReplayHover };
+	window.EmoReplayRuntime = { ApplyAction, StartPage, StopPage, ResetPageState, PageInfo, FindTarget, RenderTouchFrame, HideTouchFrame, RenderReadOutline, HideReadOutline, ClearPointerVisuals, RefreshPointerHover: RefreshReplayHover };
 	if (!window.EmoReplayAndroid?.OnPageReady) StartPage(0);
 
 	window.open = function(pUrl) {
