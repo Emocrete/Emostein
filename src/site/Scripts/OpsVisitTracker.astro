@@ -86,9 +86,9 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		const cReadWordsPerMinute = 200;
 
-		const cReadFocusTopRatio = 0.25;
+		const cReadFocusTopRatio = 0.10;
 
-		const cReadFocusBottomRatio = 0.75;
+		const cReadFocusBottomRatio = 0.90;
 
 		const cReadFocusMinRatio = 0.5;
 
@@ -98,7 +98,6 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		let fReadDebugRoot = null;
 
-		let fReadDebugPanel = null;
 
 		let fReadDebugFrame = 0;
 
@@ -197,6 +196,8 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 		let fLastReadTickAt = Date.now();
 
 		let fActiveReadState = null;
+
+		let fFocusedFaqReadState = null;
 
 		const cPagePingMs = 1500;
 
@@ -1578,7 +1579,39 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 				fReadStates.delete(State.Elem);
 				cReadTargets.splice(Index, 1);
 			}
-			cReadTargets.forEach((pState, pIndex) => pState.Order = pIndex);
+			SortReadTargetsByDomOrder();
+		}
+
+
+
+
+
+		function IsFaqReadState(pState)
+		{
+			return pState?.Elem?.matches?.("details.FaqItem") === true;
+		}
+
+
+
+
+
+		function GetFaqQuestionText(pDetails)
+		{
+			const Summary = pDetails?.querySelector?.(":scope > summary") || pDetails?.querySelector?.("summary");
+			return CleanText(Summary?.querySelector?.(".FaqQuestionText")?.textContent || Summary?.textContent || "");
+		}
+
+
+
+
+
+		function GetFaqAnswerText(pDetails)
+		{
+			const Answer = pDetails?.querySelector?.(":scope > .FaqAnswer") || pDetails?.querySelector?.(".FaqAnswer");
+			if (!Answer) return "";
+			const Clone = Answer.cloneNode(true);
+			Clone.querySelectorAll?.("script, style, svg, img, nav, form, button, summary, [hidden]").forEach((pNode) => pNode.remove());
+			return CleanText(Clone.textContent || "");
 		}
 
 
@@ -1587,8 +1620,16 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		function PrepareReadStateText(pState)
 		{
-			pState.Label = BuildViewLabel(pState.Elem);
-			pState.Text = GetReadableBlocksText(pState.Elem);
+			if (IsFaqReadState(pState))
+			{
+				const Question = GetFaqQuestionText(pState.Elem);
+				const Answer = pState.Elem.open ? GetFaqAnswerText(pState.Elem) : "";
+				pState.Label = Shorten(Question || BuildViewLabel(pState.Elem), 190);
+				pState.Text = pState.Elem.open ? (Answer || Question) : Question;
+			} else {
+				pState.Label = BuildViewLabel(pState.Elem);
+				pState.Text = GetReadableBlocksText(pState.Elem);
+			}
 			pState.WordCount = CountWords(pState.Text);
 			pState.FullMs = GetReadFullMs(pState.Elem, pState.WordCount);
 			pState.QuickMs = pState.FullMs / 2;
@@ -1692,8 +1733,38 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 
 
+		function SortReadTargetsByDomOrder()
+		{
+			cReadTargets.sort(CompareDomOrder);
+			cReadTargets.forEach((pState, pIndex) => pState.Order = pIndex);
+		}
+
+
+
+
+
+		function GetOpenFaqReadStateInFocus()
+		{
+			const OpenFaqs = cReadTargets
+			.filter((pState) => IsFaqReadState(pState) && pState.Elem.open && pState.InFocus)
+			.sort(CompareDomOrder);
+			if (!OpenFaqs.length) return null;
+			if (fFocusedFaqReadState && OpenFaqs.includes(fFocusedFaqReadState)) return fFocusedFaqReadState;
+			return OpenFaqs[0];
+		}
+
+
+
+
+
 		function GetReadableLeavesInFocus()
 		{
+			const OpenFaq = GetOpenFaqReadStateInFocus();
+			if (OpenFaq)
+			{
+				if (OpenFaq.Done || OpenFaq.Children.length > 0 || OpenFaq.FullMs <= 0 || OpenFaq.WordCount <= 0) return [];
+				return [OpenFaq];
+			}
 			return cReadTargets
 			.filter((pState) => pState.InFocus && !pState.Done && pState.Children.length === 0 && pState.FullMs > 0 && pState.WordCount > 0)
 			.sort(CompareDomOrder);
@@ -1749,11 +1820,20 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			FillFull.className = "emo-read-debug-fill emo-read-debug-fill-full";
 			const QuickMark = document.createElement("div");
 			QuickMark.className = "emo-read-debug-quick-mark";
-			Progress.append(FillQuick, FillFull, QuickMark);
+			const QuickTime = document.createElement("div");
+			QuickTime.className = "emo-read-debug-time emo-read-debug-time-quick";
+			const FullTime = document.createElement("div");
+			FullTime.className = "emo-read-debug-time emo-read-debug-time-full";
+			const CurrentTime = document.createElement("div");
+			CurrentTime.className = "emo-read-debug-time emo-read-debug-time-current";
+			Progress.append(FillQuick, FillFull, QuickMark, QuickTime, FullTime, CurrentTime);
 			Box.append(Caption, Progress);
 			Box.__emoCaption = Caption;
 			Box.__emoFillQuick = FillQuick;
 			Box.__emoFillFull = FillFull;
+			Box.__emoQuickTime = QuickTime;
+			Box.__emoFullTime = FullTime;
+			Box.__emoCurrentTime = CurrentTime;
 			fReadDebugRoot?.appendChild(Box);
 			fReadDebugBoxes.set(pState, Box);
 			return Box;
@@ -1813,10 +1893,12 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 				return;
 			}
 			pBox.hidden = false;
-			const Left = Math.max(0, Rect.left);
-			const Top = Math.max(0, Rect.top);
-			const Right = Math.min(window.innerWidth, Rect.right);
-			const Bottom = Math.min(window.innerHeight, Rect.bottom);
+			const BoxPadX = 3;
+			const BoxPadY = 6;
+			const Left = Math.max(0, Rect.left - BoxPadX);
+			const Top = Math.max(0, Rect.top - BoxPadY);
+			const Right = Math.min(window.innerWidth, Rect.right + BoxPadX);
+			const Bottom = Math.min(window.innerHeight, Rect.bottom + BoxPadY);
 			pBox.style.left = `${Left}px`;
 			pBox.style.top = `${Top}px`;
 			pBox.style.width = `${Math.max(1, Right - Left)}px`;
@@ -1849,32 +1931,22 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			pBox.__emoFillFull.style.left = "50%";
 			pBox.__emoFillFull.style.width = `${FullWidth}%`;
 			const QueueText = pQueueIndex >= 0 ? `Q${pQueueIndex + 1}` : "";
-			const Percent = Math.round(Progress * 100);
 			const AccumSeconds = (AccumMs / 1000).toFixed(1);
 			const QuickSeconds = (Number(pState.QuickMs || 0) / 1000).toFixed(1);
 			const FullSeconds = (Number(pState.FullMs || 0) / 1000).toFixed(1);
-			pBox.__emoCaption.textContent = `${Status}${QueueText ? ` · ${QueueText}` : ""} · #${pState.Order + 1} · ${Percent}% · ${AccumSeconds}s / Q${QuickSeconds}s / F${FullSeconds}s · ${ReadDebugTitle(pState)}`;
+			pBox.__emoCaption.textContent = `${Status}${QueueText ? ` · ${QueueText}` : ""} · #${pState.Order + 1} · ${ReadDebugTitle(pState)}`;
+			pBox.__emoQuickTime.textContent = `Q ${QuickSeconds}s`;
+			pBox.__emoFullTime.textContent = `F ${FullSeconds}s`;
+			pBox.__emoCurrentTime.textContent = `${AccumSeconds}/${FullSeconds}s`;
 		}
 
 
 
 
-		function UpdateReadDebugPanel(pLeaves)
+		function UpdateReadDebugPanel()
 		{
-			if (!fReadDebugPanel) return;
-			const ActiveIndex = fActiveReadState ? pLeaves.indexOf(fActiveReadState) : -1;
-			const ActiveText = fActiveReadState ? `Q${ActiveIndex + 1}/${pLeaves.length} · #${fActiveReadState.Order + 1} · ${ReadDebugTitle(fActiveReadState)}` : `NONE · ${pLeaves.length} eligible in focus`;
-			const Lines = ["READ DEBUG · ?d", `ACTIVE ${ActiveText}`, `Tracked ${cReadTargets.length} · Focus queue ${pLeaves.length}`];
-			pLeaves.slice(0, 7).forEach((pState, pIndex) =>
-				{
-					const Mark = fActiveReadState === pState ? ">" : "-";
-					const Percent = Math.round(GetReadDebugProgress(pState) * 100);
-					Lines.push(`${Mark} Q${pIndex + 1} · #${pState.Order + 1} · ${Percent}% · ${ReadDebugTitle(pState)}`);
-			});
-			if (fReadDebugEvents.length) Lines.push("EVENTS");
-			fReadDebugEvents.slice(0, 7).forEach((pEvent) => Lines.push(`#${pEvent.Index} ${pEvent.Type} ${pEvent.Mode || ""} OPS×${pEvent.OpsRecords} · ${pEvent.Title}`));
-			fReadDebugPanel.textContent = Lines.join("\n");
 		}
+
 
 
 
@@ -1895,7 +1967,6 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 				if (!ShowStates.has(State)) Box.hidden = true;
 			}
 			ShowStates.forEach((pState) => PositionReadDebugBox(pState, GetReadDebugBox(pState), QueueIndex.has(pState) ? QueueIndex.get(pState) : -1, pNow));
-			UpdateReadDebugPanel(Leaves);
 		}
 
 
@@ -1921,37 +1992,26 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			Style.id = "emo-read-debug-style";
 			Style.textContent = `
 				#emo-read-debug-root{position:fixed;inset:0;z-index:2147483646;pointer-events:none;font-family:Consolas,monospace;direction:ltr}
-				.emo-read-debug-zone-top,.emo-read-debug-zone-bottom{position:fixed;left:0;right:0;height:0;border-top:2px dotted #808080;box-sizing:border-box}
-				.emo-read-debug-zone-top{top:${cReadFocusTopRatio * 100}vh}
-				.emo-read-debug-zone-bottom{top:${cReadFocusBottomRatio * 100}vh}
-				.emo-read-debug-zone-label{position:fixed;left:4px;top:calc(${cReadFocusTopRatio * 100}vh + 4px);background:#fff;color:#000;border:1px solid #808080;padding:2px 5px;font:11px/1.2 Consolas,monospace}
 				.emo-read-debug-box{position:fixed;box-sizing:border-box;border:3px dotted #808080;pointer-events:none;overflow:visible}
 				.emo-read-debug-waiting{border-width:2px;opacity:.48}
 				.emo-read-debug-active{border-width:5px;opacity:1}
 				.emo-read-debug-active-quick{border-width:7px;opacity:1}
 				.emo-read-debug-quick{border:7px dotted #808080;opacity:1}
 				.emo-read-debug-full{border:9px dotted #000;opacity:1}
-				.emo-read-debug-caption{position:absolute;left:0;top:0;max-width:min(780px,92vw);transform:translateY(-100%);background:rgba(255,255,255,.96);color:#000;padding:2px 5px;font:11px/1.25 Consolas,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:1px solid #808080}
-				.emo-read-debug-progress{position:absolute;left:0;right:0;bottom:0;height:12px;background:rgba(255,255,255,.92);border-top:1px solid #808080;overflow:hidden}
+				.emo-read-debug-caption{position:absolute;left:0;right:0;bottom:calc(100% + 17px);background:rgba(255,255,255,.96);color:#000;padding:2px 6px;font:700 12px/1.25 Consolas,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:1px solid #808080;box-sizing:border-box}
+				.emo-read-debug-progress{position:absolute;left:0;right:0;bottom:calc(100% + 1px);height:15px;background:rgba(255,255,255,.94);border:1px solid #808080;overflow:hidden;box-sizing:border-box}
 				.emo-read-debug-fill{position:absolute;top:0;bottom:0;width:0;transition:width ${cReadTickMs}ms linear}
 				.emo-read-debug-fill-quick{left:0;background:#808080}
 				.emo-read-debug-fill-full{background:#000}
 				.emo-read-debug-quick-mark{position:absolute;top:0;bottom:0;left:50%;width:2px;background:#fff;box-shadow:0 0 0 1px #000}
-				.emo-read-debug-panel{position:fixed;top:8px;right:8px;max-width:min(760px,84vw);max-height:40vh;overflow:hidden;background:rgba(255,255,255,.96);color:#000;border:2px solid #000;padding:7px 9px;font:12px/1.45 Consolas,monospace;white-space:pre;box-shadow:0 2px 10px rgba(0,0,0,.24)}
+				.emo-read-debug-time{position:absolute;top:1px;z-index:2;background:rgba(255,255,255,.82);color:#000;padding:0 2px;font:700 9px/11px Consolas,monospace;white-space:nowrap}
+				.emo-read-debug-time-quick{left:48%;transform:translateX(-100%)}
+				.emo-read-debug-time-full{right:74px}
+				.emo-read-debug-time-current{right:2px}
 			`;
 			document.head.appendChild(Style);
 			fReadDebugRoot = document.createElement("div");
 			fReadDebugRoot.id = "emo-read-debug-root";
-			const ZoneTop = document.createElement("div");
-			ZoneTop.className = "emo-read-debug-zone-top";
-			const ZoneBottom = document.createElement("div");
-			ZoneBottom.className = "emo-read-debug-zone-bottom";
-			const ZoneLabel = document.createElement("div");
-			ZoneLabel.className = "emo-read-debug-zone-label";
-			ZoneLabel.textContent = `READ FOCUS ${Math.round(cReadFocusTopRatio * 100)}%-${Math.round(cReadFocusBottomRatio * 100)}% · min element visible ${Math.round(cReadFocusMinRatio * 100)}%`;
-			fReadDebugPanel = document.createElement("div");
-			fReadDebugPanel.className = "emo-read-debug-panel";
-			fReadDebugRoot.append(ZoneTop, ZoneBottom, ZoneLabel, fReadDebugPanel);
 			document.body.appendChild(fReadDebugRoot);
 			window.addEventListener("scroll", QueueReadDebugOverlayUpdate, { passive: true });
 			window.addEventListener("resize", QueueReadDebugOverlayUpdate, { passive: true });
@@ -2098,9 +2158,10 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		function SelectActiveReadState()
 		{
-			if (fActiveReadState && fActiveReadState.InFocus && !fActiveReadState.Done) return fActiveReadState;
 			const Leaves = GetReadableLeavesInFocus();
-			fActiveReadState = Leaves.length ? Leaves[0] : null;
+			const NextState = Leaves.length ? Leaves[0] : null;
+			if (fActiveReadState && fActiveReadState !== NextState) fActiveReadState.Active = false;
+			fActiveReadState = NextState;
 			if (fActiveReadState) fActiveReadState.Active = true;
 			return fActiveReadState;
 		}
@@ -2149,6 +2210,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 		function CheckViewElement(pElem)
 		{
 			if (pElem) RegisterReadElement(pElem, GetWidgetName(pElem));
+			SortReadTargetsByDomOrder();
 			BuildReadHierarchy();
 			CheckReading();
 		}
@@ -2959,6 +3021,46 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 
 
+		function HandleFaqReadToggle(pElem)
+		{
+			if (!pElem) return;
+			const Now = Date.now();
+			const State = EnsureReadState(pElem, "FaqItem");
+			SortReadTargetsByDomOrder();
+			BuildReadHierarchy();
+			if (pElem.open)
+			{
+				fFocusedFaqReadState = State;
+				cReadTargets.forEach((pOther) =>
+					{
+						if (pOther === State || !pOther.InFocus || pOther.Done) return;
+						pOther.Active = false;
+						pOther.AccumMs = 0;
+						pOther.QuickCandidate = false;
+					});
+				if (fActiveReadState && fActiveReadState !== State) fActiveReadState.Active = false;
+				fActiveReadState = null;
+				PrepareReadStateText(State);
+				State.InFocus = IsReadableVisible(State.Elem);
+				StartReadCycle(State, Now);
+			} else {
+				if (fFocusedFaqReadState === State) fFocusedFaqReadState = null;
+				if (fActiveReadState === State)
+				{
+					FinishReadCycleOnExit(State, Now);
+					fActiveReadState = null;
+				}
+				PrepareReadStateText(State);
+				State.InFocus = IsReadableVisible(State.Elem);
+			}
+			SelectActiveReadState();
+			QueueReadDebugOverlayUpdate();
+		}
+
+
+
+
+
 		function InitToggleEvents()
 		{
 			document.querySelectorAll("details.FaqItem").forEach((pElem, pIndex) =>
@@ -2966,6 +3068,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 					if (pElem.dataset.opsAuto === "off") return;
 					pElem.addEventListener("toggle", () =>
 						{
+							HandleFaqReadToggle(pElem);
 							if (!pElem.open) return;
 							TrackFromElementOnce(pElem, "faq_open", "toggle-open", `faq_open_${pElem.id || pIndex}`, {
 									widget: "FaqItem",
