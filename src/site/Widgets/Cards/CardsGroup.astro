@@ -186,21 +186,6 @@ const CardCssVar = [
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <div
 	class = {`MainBox ${cPlace.Class} ${pGivenClass}`.trim()}
 	style = {cPlace.Style}
@@ -221,7 +206,8 @@ const CardCssVar = [
 	{ cTopics.length > 0 && (
 
 		<Stack
-			class = " MainBox "
+			class = " CardsStack "
+			pWidth="100%"
 			pDir={pStackDir}
 			pGap={new Pixel(30,10)}
 			pFlipNarrow={true}
@@ -269,21 +255,6 @@ const CardCssVar = [
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
 
 
@@ -319,21 +290,6 @@ const CardCssVar = [
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
 
 
@@ -352,55 +308,55 @@ const CardCssVar = [
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script is:inline define:vars={{ WidgetID }}>
+
+
+
+	// ==================== Definitions: Variables & Methods ====================
+
 	const cRoot = document.getElementById(WidgetID);
-	const cGroup = cRoot?.querySelector(".MainBox");
+
+	const cGroup = cRoot?.querySelector(".CardsStack");
+
+
+
+
+
+	function SyncCardsLayout()
+	{
+		if (!cGroup) return;
+		const cTitleWraps = Array.from(cGroup.querySelectorAll(".TopicTitlePart"));
+		const cCards = Array.from(cGroup.querySelectorAll(".CardsGrCard"));
+		cGroup.style.removeProperty("--pCardTitleRowHeight");
+		cGroup.style.removeProperty("--pCardHeight");
+		let cMaxTitleHeight = 0;
+		for (const cTitleWrap of cTitleWraps)
+		{
+			cMaxTitleHeight = Math.max(cMaxTitleHeight, cTitleWrap.scrollHeight);
+		}
+		cGroup.style.setProperty("--pCardTitleRowHeight", `${cMaxTitleHeight}px`);
+		let cMaxCardHeight = 0;
+		for (const cCard of cCards)
+		{
+			cMaxCardHeight = Math.max(cMaxCardHeight, cCard.scrollHeight);
+		}
+		cGroup.style.setProperty("--pCardHeight", `${cMaxCardHeight}px`);
+	}
+
+
+
+
+
+	// ==================== Execution Logic ====================
 
 	window.addEventListener("load", SyncCardsLayout);
+
 	window.addEventListener("resize", SyncCardsLayout);
 
 	SyncCardsLayout();
 
-	if (document.fonts) {
-	document.fonts.ready.then(SyncCardsLayout);
-	}
-
-	function SyncCardsLayout() {
-	if (!cGroup) return;
-
-	const cTitleWraps = Array.from(cGroup.querySelectorAll(".TopicTitlePart"));
-	const cCards = Array.from(cGroup.querySelectorAll(".CardsGrCard"));
-
-	cGroup.style.removeProperty("--pCardTitleRowHeight");
-	cGroup.style.removeProperty("--pCardHeight");
-
-	let cMaxTitleHeight = 0;
-	for (const cTitleWrap of cTitleWraps) {
-	cMaxTitleHeight = Math.max(cMaxTitleHeight, cTitleWrap.scrollHeight);
-	}
-
-	cGroup.style.setProperty("--pCardTitleRowHeight", `${cMaxTitleHeight}px`);
-
-	let cMaxCardHeight = 0;
-	for (const cCard of cCards) {
-	cMaxCardHeight = Math.max(cMaxCardHeight, cCard.scrollHeight);
-	}
-
-	cGroup.style.setProperty("--pCardHeight", `${cMaxCardHeight}px`);
+	if (document.fonts)
+	{
+		document.fonts.ready.then(SyncCardsLayout);
 	}
 </script>
