@@ -801,6 +801,10 @@ function SetFrameSource(pFrame, pSource) {
 				const cOpenMode = GetCopyButtonOpenMode(pEvent);
 				const cCopyValue = GetCopyButtonCopyValue(cOpenMode, cSource);
 
+				if (cOpenMode) {
+					OpenCopyButtonTarget(cOpenMode, cSource);
+				}
+
 				if (!cCopyValue) {
 					ShowCopyButtonFeedback(false);
 					return;
@@ -817,12 +821,6 @@ function SetFrameSource(pFrame, pSource) {
 				}
 
 				ShowCopyButtonFeedback(cCopied);
-
-				if (!cCopied) {
-					return;
-				}
-
-				OpenCopyButtonTarget(cOpenMode, cSource);
 			}
 
 			function GetCopyButtonOpenMode(pEvent) {
@@ -882,15 +880,18 @@ function SetFrameSource(pFrame, pSource) {
 				return "";
 			}
 
-			function OpenUrlInChrome(pUrl) {
+			async function OpenUrlInChrome(pUrl) {
 				if (!pUrl) {
 					return;
 				}
 
 				try {
 					if (typeof window.EmoPreviewOpenChrome === "function") {
-						window.EmoPreviewOpenChrome(pUrl);
-						return;
+						const cOpened = await window.EmoPreviewOpenChrome(pUrl);
+
+						if (cOpened) {
+							return;
+						}
 					}
 				}
 				catch {

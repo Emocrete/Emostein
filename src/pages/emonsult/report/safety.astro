@@ -1,9 +1,10 @@
 ---
 import BLayout from "@/Layout.astro";
-import { EmoBtn, EmoCall, Emograph, EmoLine, HzStack, TotalGraph, VrStack } from "@/Widgets/Comp";
-import { RespImg } from "@/Widgets/Media";
-import { EmoSec, Hero } from "@/Widgets/Sections";
-import { Loc, NumPer, Pixel, Size, Text } from "@/TypesLib";
+import { EmoCall, Emograph, EmoLine, SecTitle, TotalGraph, VrStack } from "@/Widgets/Comp";
+import { ShadowImg } from "@/Widgets/Media";
+import { PriceCard1 } from "@/Widgets/Prices";
+import { DivCol, DivStr, EmoSec, Hero } from "@/Widgets/Sections";
+import { Loc, NumPer, Size, Text } from "@/TypesLib";
 ---
 
 
@@ -54,66 +55,37 @@ import { Loc, NumPer, Pixel, Size, Text } from "@/TypesLib";
 
 	<EmoSec>
 
-		<HzStack id="stkAll">
+		<SecTitle SkyLite pTitle="تكلفة تقرير سلامة مبنى" />
 
-			<VrStack id="stkMain" pWidth={new Pixel(1200)}>
+		<DivStr>
 
-				<Emograph pTitle={Text.H2.Centered.OfText("تكلفة تقرير سلامة مبنى")} />
+			<DivCol>
 
-				<HzStack id="stkOffers">
+				<VrStack pHzAlign={"Center"}>
 
-					<VrStack id="stkOffer1">
+					<PriceCard1 pCaption={Text.H3.Centered.OfSize(18,16).OfText("تقرير معتمد من مهندس استشاري فقط")} pPrice="3000" pPriceFnt={Text.Body.Bold.OfSize(70,50)} />
 
-						<Emograph pTitle={Text.H3.Centered.OfText("تقرير معتمد من مهندس استشاري فقط")} />
+					<PriceCard1
+						pCaption={Text.H3.Centered.OfSize(18,16).OfText("تقرير معتمد من مهندس استشاري ونقابة المهندسين")}
+						pPrice="4000"
+						pPriceFnt={Text.Body.Bold.OfSize(70,50)}
+					/>
 
-						<Emograph pTitle={Text.Body.Centered.OfText("يبدأ من 2000 جنيه")} />
+					<EmoCall BlackBistage />
 
-					</VrStack>
+				</VrStack>
 
-					<VrStack id="stkOffer2">
+			</DivCol>
 
-						<Emograph pTitle={Text.H3.Centered.OfText("تقرير معتمد من مهندس استشاري ونقابة المهندسين")} />
+			<DivCol>
 
-						<Emograph pTitle={Text.Body.Centered.OfText("يبدأ من 3000 جنيه")} />
+				<ShadowImg pImg="/Media/Emonsult/Report/Safety/Safety_Report_Sample.webp" />
 
-					</VrStack>
+				<EmoCall BlackBistage />
 
-				</HzStack>
+			</DivCol>
 
-				<EmoBtn
-					style = " transform : rotate(-8deg) ; box-shadow : 0 10px 18px rgba(0,0,0,.24) "
-					id="requestSafetyReport"
-					pText="للطلب والاستفسار ☎"
-					pWidth="260px"
-					pHeight="58px"
-					pRadius="0"
-					pBgColor="#33283f"
-					pBgColorHover="#328fe8"
-					pTextColor="#ffffff"
-					pFontSize="24px"
-					onclick="location.href='tel:01014490054'"
-				/>
-
-			</VrStack>
-
-			<VrStack id="stkSample" pWidth={new Pixel(300)}>
-
-				<RespImg />
-
-				<EmoBtn
-					pText="تحميل"
-					pWidth="150px"
-					pHeight="44px"
-					pRadius="0"
-					pBgColor="#164363"
-					pBgColorHover="#328fe8"
-					pTextColor="#ffffff"
-					pFontSize="18px"
-				/>
-
-			</VrStack>
-
-		</HzStack>
+		</DivStr>
 
 	</EmoSec>
 

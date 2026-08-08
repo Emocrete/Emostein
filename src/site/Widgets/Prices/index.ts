@@ -27,6 +27,114 @@ import PriceCardIndexExport from "./PriceCard.astro";
  */
 export const PriceCard = PriceCardIndexExport;
 
+import PriceCard1IndexExport from "./PriceCard1.astro";
+
+/**
+ * @pCaption as Text
+ * @pStart as Text
+ * @pPrice as string | number
+ * @pPriceFnt as Text
+ * @pCurrency as Text
+ * @data-own-size as boolean | string
+ */
+export const PriceCard1 = PriceCard1IndexExport;
+
+import PriceCard2IndexExport from "./PriceCard2.astro";
+
+/**
+ * @pCaption as Text
+ * @pStart as Text
+ * @pPrice as string | number
+ * @pPriceFnt as Text
+ * @pCurrency as Text
+ * @data-own-size as boolean | string
+ */
+export const PriceCard2 = PriceCard2IndexExport;
+
+import PriceCard3IndexExport from "./PriceCard3.astro";
+
+/**
+ * @pCaption as Text
+ * @pStart as Text
+ * @pPrice as string | number
+ * @pPriceFnt as Text
+ * @pCurrency as Text
+ * @data-own-size as boolean | string
+ */
+export const PriceCard3 = PriceCard3IndexExport;
+
+import PriceCard4IndexExport from "./PriceCard4.astro";
+
+/**
+ * @pCaption as Text
+ * @pStart as Text
+ * @pPrice as string | number
+ * @pPriceFnt as Text
+ * @pCurrency as Text
+ * @data-own-size as boolean | string
+ */
+export const PriceCard4 = PriceCard4IndexExport;
+
+import PriceCard5IndexExport from "./PriceCard5.astro";
+
+/**
+ * @pCaption as Text
+ * @pStart as Text
+ * @pPrice as string | number
+ * @pPriceFnt as Text
+ * @pCurrency as Text
+ * @data-own-size as boolean | string
+ */
+export const PriceCard5 = PriceCard5IndexExport;
+
+import PriceCard6IndexExport from "./PriceCard6.astro";
+
+/**
+ * @pCaption as Text
+ * @pStart as Text
+ * @pPrice as string | number
+ * @pPriceFnt as Text
+ * @pCurrency as Text
+ * @data-own-size as boolean | string
+ */
+export const PriceCard6 = PriceCard6IndexExport;
+
+import PriceCard7IndexExport from "./PriceCard7.astro";
+
+/**
+ * @pCaption as Text
+ * @pStart as Text
+ * @pPrice as string | number
+ * @pPriceFnt as Text
+ * @pCurrency as Text
+ * @data-own-size as boolean | string
+ */
+export const PriceCard7 = PriceCard7IndexExport;
+
+import PriceCard8IndexExport from "./PriceCard8.astro";
+
+/**
+ * @pCaption as Text
+ * @pStart as Text
+ * @pPrice as string | number
+ * @pPriceFnt as Text
+ * @pCurrency as Text
+ * @data-own-size as boolean | string
+ */
+export const PriceCard8 = PriceCard8IndexExport;
+
+import PriceCard9IndexExport from "./PriceCard9.astro";
+
+/**
+ * @pCaption as Text
+ * @pStart as Text
+ * @pPrice as string | number
+ * @pPriceFnt as Text
+ * @pCurrency as Text
+ * @data-own-size as boolean | string
+ */
+export const PriceCard9 = PriceCard9IndexExport;
+
 import ThemedPriceCardHzIndexExport from "./ThemedPriceCardHz.astro";
 
 /**

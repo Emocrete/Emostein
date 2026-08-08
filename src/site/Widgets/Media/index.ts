@@ -160,6 +160,13 @@ import RespImgIndexExport from "./RespImage.astro";
  */
 export const RespImg = RespImgIndexExport;
 
+import ShadowImgIndexExport from "./ShadowImg.astro";
+
+/**
+ * @pImg as string (Default: "/Media/ErrorImg.webp")
+ */
+export const ShadowImg = ShadowImgIndexExport;
+
 import YouTubeIndexExport from "./YouTube.astro";
 
 /**

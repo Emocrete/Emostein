@@ -1,0 +1,122 @@
+---
+import { NumPer, Place, type PlaceProps, Size, Text } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends DebugOutlineProps, HTMLAttributes<"article">, PlaceProps {
+	pCaption?: Text;
+	pStart?: Text;
+	pPrice?: string | number;
+	pPriceFnt?: Text;
+	pCurrency?: Text;
+	"data-own-size"?: boolean | string;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+const {
+	pCaption = Text.H6.OfSize(17, 12).Bold.OfText("تقرير معتمد من مهندس استشاري ونقابة المهندسين"),
+	pStart = Text.H3.OfSize(28, 20).Bold.OfText("يبدأ من"),
+	pPrice = 3000,
+	pPriceFnt = Text.H3.OfSize(31, 22).Bold,
+	pCurrency = Text.H3.OfSize(24, 18).Bold.OfText("جنيه"),
+	pSize = new Size(new NumPer(440, 320), new NumPer(230, 167)),
+	pLoc,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+	id: pGivenID = GetWidgetId("PriceCard1"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	"data-own-size": pOwnSize = false,
+	...RemAttr
+} = cProps;
+
+const cOwnSize = pOwnSize === true || pOwnSize === "" || pOwnSize === "true";
+const cStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cPlace = new Place({
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+} as PlaceProps, cStyle);
+---
+
+<article class={`PriceCard1 ${cPlace.Class} ${pGivenClass}`.trim()} style={cPlace.Style} id={pGivenID} data-own-size={cOwnSize ? "true" : undefined} {...RemAttr}>
+<svg viewBox="0 0 440 230" role="img" aria-label={`${pCaption.text ?? ""} — ${pStart.text ?? ""} ${pPrice} ${pCurrency.text ?? ""}`}>
+<defs>
+<linearGradient id={`${pGivenID}_g1`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f6eb9"/><stop offset="1" stop-color="#438de0"/></linearGradient>
+<filter id={`${pGivenID}_sh1`} x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="7" stdDeviation="6" flood-color="#15283b" flood-opacity=".24"/></filter>
+<filter id={`${pGivenID}_shIcon1`} x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#0e315d" flood-opacity=".34"/></filter>
+</defs>
+<rect x="1" y="1" width="438" height="220" rx="25" fill="#d9ebfa" stroke="#6aa0d0" stroke-opacity=".18" filter={`url(#${pGivenID}_sh1)`}/>
+<path d="M25 1H415Q439 1 439 25V169L372 214H25Q1 214 1 190V25Q1 1 25 1Z" fill={`url(#${pGivenID}_g1)`}/>
+<path d="M16 79H424Q431 79 431 86V167L365 209H16Q9 209 9 202V86Q9 79 16 79Z" fill="#fff"/>
+<path d="M365 209L431 167V190Q431 199 421 203L365 218Z" fill="#245fa4" opacity=".48"/>
+<foreignObject x="55" y="12" width="330" height="56"><div xmlns="http://www.w3.org/1999/xhtml" class="Caption" style={`${pCaption.GetStyle()} color:#fff; line-height:1.35;`}>{pCaption.text}</div></foreignObject>
+<foreignObject x="68" y="113" width="320" height="64"><div xmlns="http://www.w3.org/1999/xhtml" class="PriceLine"><span class="Start" style={pStart.GetStyle()}>{pStart.text}</span><span class="Price" dir="ltr" style={`${pPriceFnt.GetStyle()} color:#347ecf;`}>{pPrice}</span><span class="Currency" style={pCurrency.GetStyle()}>{pCurrency.text}</span></div></foreignObject>
+<circle cx="45" cy="194" r="36" fill="#2b6ab6" filter={`url(#${pGivenID}_shIcon1)`}/>
+<g transform="translate(24 170)" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h17l9 9v27H8z"/><path d="M25 2v10h9"/><path d="M13 18h13M13 24h11M13 30h8"/><path d="M27 31l4 4 8-10"/></g>
+</svg></article>
+
+<style>
+	.PriceCard1 { position: relative; display: block; width: 440px; height: 230px; max-width: 100%; direction: rtl; box-sizing: border-box; overflow: visible; --TextSize: var(--TextSizeL); }
+	.PriceCard1 > svg { display: block; width: 100%; height: 100%; overflow: visible; }
+	.PriceCard1 .Caption { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; text-align: center; direction: rtl; font-family: inherit; white-space: normal; overflow: hidden; }
+	.PriceCard1 .PriceLine { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; direction: rtl; font-family: inherit; white-space: nowrap; }
+	.PriceCard1 .Start { color:#16191d; }
+	.PriceCard1 .Price { color:#347ecf; unicode-bidi: isolate; }
+	.PriceCard1 .Currency { color:#16191d; }
+	.PriceCard1.PlaceSized { width: var(--PlaceWidthL); height: var(--PlaceHeightL); }
+	.PriceCard1.IsPlaced { position: absolute; left: var(--PlaceXL); top: var(--PlaceYL); width: var(--PlaceWidthL); height: var(--PlaceHeightL); z-index: var(--PlaceZ, 1); opacity: var(--PlaceOpacityL, 100%); transform: rotate(var(--PlaceRotateL, 0deg)); transform-origin: var(--PlaceOrigin, center center); pointer-events: var(--PlaceClickable, auto); min-width: 0; box-sizing: border-box; }
+	@media (orientation: portrait) {
+		.PriceCard1 { --TextSize: var(--TextSizeP); }
+		.PriceCard1.PlaceSized, .PriceCard1.IsPlaced { width: var(--PlaceWidthP); height: var(--PlaceHeightP); }
+		.PriceCard1.IsPlaced { left: var(--PlaceXP); top: var(--PlaceYP); opacity: var(--PlaceOpacityP, var(--PlaceOpacityL, 100%)); transform: rotate(var(--PlaceRotateP, var(--PlaceRotateL, 0deg))); }
+	}
+</style>

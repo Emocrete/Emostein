@@ -1,0 +1,191 @@
+---
+import { Place, type PlaceProps } from "@/TypesLib";
+
+interface Props extends DebugOutlineProps, PlaceProps {
+	pImg?: string;
+}
+
+const { pImg = "/Media/ErrorImg.webp" } = Astro.props as Props;
+const cPlace = new Place(Astro.props as PlaceProps);
+const cId = GetWidgetId("ShadowImg");
+---
+
+
+
+
+
+<div
+	class = {`ShadowImg ${cPlace.Class}`.trim()}
+	style = {cPlace.Style}
+	id={cId}
+	Readable={Astro.props.Readable}
+	Debug={Astro.props.Debug}
+	DebugF={Astro.props.DebugF}
+	DebugG={Astro.props.DebugG}
+	data-debug={Astro.props["data-debug"]}
+	data-debugF={Astro.props["data-debugF"]}
+	data-debugG={Astro.props["data-debugG"]}
+>
+
+
+
+
+
+
+
+	<img
+		class = " ShadowImgImage "
+		src={pImg}
+		alt=""
+		loading="eager"
+		decoding="async"
+	/>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+<style>
+
+
+
+	.ShadowImg {
+		position: relative;
+		display: inline-block;
+		max-width: 100%;
+		line-height: 0;
+		vertical-align: top;
+		box-sizing: border-box;
+	}
+
+	.ShadowImg::before {
+		left: -20px;
+		background-position: left top;
+	}
+
+	.ShadowImg::after {
+		right: -20px;
+		background-position: right top;
+	}
+
+
+	.ShadowImgImage {
+		display: block;
+		width: auto;
+		height: auto;
+		max-width: 100%;
+		border-radius: 3px;
+		background-color: #d8d8d8;
+		box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+	}
+
+
+
+	.ShadowImg.PlaceSized {
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+	.ShadowImg.PlaceSized .ShadowImgImage {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+
+	.ShadowImg.PlaceStyled:not(.IsPlaced) {
+		z-index: var(--PlaceZ, 1);
+		opacity: var(--PlaceOpacityL, 100%);
+		transform: rotate(var(--PlaceRotateL, 0deg));
+		transform-origin: var(--PlaceOrigin, center center);
+		pointer-events: var(--PlaceClickable, auto);
+	}
+
+
+	.ShadowImg.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+		z-index: var(--PlaceZ, 1);
+		opacity: var(--PlaceOpacityL, 100%);
+		transform: rotate(var(--PlaceRotateL, 0deg));
+		transform-origin: var(--PlaceOrigin, center center);
+		pointer-events: var(--PlaceClickable, auto);
+		min-width: 0;
+		box-sizing: border-box;
+	}
+
+
+
+	.ShadowImg::before,
+	.ShadowImg::after
+	{
+		content: "";
+		position: absolute;
+		bottom: -26px;
+		width: 50%;
+		height: 26px;
+		background-image: url("data:image/png;base64,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");
+		background-repeat: no-repeat;
+		background-size: 200% 100%;
+		pointer-events: none;
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: landscape) {
+		.ShadowImg.PlaceHideLand {
+			display: none;
+		}
+	}
+
+
+
+	@media (orientation: portrait) {
+		.ShadowImg.PlaceSized,
+		.ShadowImg.IsPlaced
+		{
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.ShadowImg.PlaceStyled:not(.IsPlaced) {
+			opacity: var(--PlaceOpacityP, var(--PlaceOpacityL, 100%));
+			transform: rotate(var(--PlaceRotateP, var(--PlaceRotateL, 0deg)));
+		}
+
+		.ShadowImg.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+			opacity: var(--PlaceOpacityP, var(--PlaceOpacityL, 100%));
+			transform: rotate(var(--PlaceRotateP, var(--PlaceRotateL, 0deg)));
+		}
+
+		.ShadowImg.PlaceHidePort {
+			display: none;
+		}
+	}
+
+
+
+</style>
