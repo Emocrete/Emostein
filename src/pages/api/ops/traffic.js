@@ -4,7 +4,7 @@ const cCache = new Map();
 const cCacheMs = 6 * 60 * 60 * 1000;
 const cLookupTimeoutMs = 2500;
 const cBotPattern = /(bot|crawl|spider|slurp|googlebot|googleother|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb|chatgpt-user|gptbot|oai-searchbot|claudebot|anthropic-ai|perplexitybot|bytespider|amazonbot|applebot|ccbot)/i;
-const cDataCenterPattern = /(amazon|amazonaws|aws|google cloud|google llc|microsoft|azure|digitalocean|hetzner|ovh|oracle cloud|linode|akamai|cloudflare|fastly|vultr|contabo|leaseweb|choopa|quadranet|hostinger|huawei|hwclouds|compute|hosting|data ?center|datacentre|server|colo|vpn|proxy)/i;
+const cDataCenterPattern = /(amazon|amazonaws|aws|google cloud|google llc|microsoft|azure|digitalocean|hetzner|ovh|oracle cloud|linode|akamai|cloudflare|fastly|vultr|contabo|leaseweb|choopa|quadranet|hostinger|hosting|data ?center|datacentre|server|colo|vpn|proxy)/i;
 const cSourceWeights = { vercel: 0.65, ipapi: 1, ipwho: 1, freeipapi: 1.1, iplocationinfo: 1, ipinfo: 1.2, maxmind: 1.25 };
 const cCorrelatedRadiusKm = 3;
 const cInvalidGeoTextPattern = /\b(atlantic|pacific|indian ocean|ocean|sea|gulf of|mediterranean|red sea|arabian sea)\b|المحيط|البحر/i;
@@ -501,6 +501,7 @@ function LocationBand(pCountryCode, pGovernorate, pCity) {
 	const CountryCode = Str(pCountryCode).toUpperCase();
 	const Governorate = Str(pGovernorate);
 	const City = Str(pCity);
+	if (!CountryCode) return { band: "", borderColor: "" };
 	if (CountryCode === "EG") {
 		const GovKey = GeoNorm(Governorate);
 		if (GovKey === "cairo") return { band: "cairo", borderColor: "#00C853" };

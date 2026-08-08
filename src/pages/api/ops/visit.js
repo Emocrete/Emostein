@@ -123,6 +123,7 @@ function ClassifyGeo(pCountryCode, pRegion, pCity) {
 	const Region = DecodeHeaderText(pRegion);
 	const City = DecodeHeaderText(pCity);
 	const All = `${City} ${Region}`;
+	if (!CountryCode) return { band: "", label: "", borderColor: "" };
 	if (CountryCode === "EG") {
 		if (HasGeoWord(All, ["c", "cai", "cairo", "al qahirah", "القاهرة", "القاهره", "محافظة القاهرة", "qahira"])) return { band: "cairo", label: City || Region || "Cairo", borderColor: "#00C853" };
 		if (HasGeoWord(All, ["gz", "giza", "al jizah", "jizah", "6th of october", "october", "sheikh zayed", "الجيزة", "الجيزه", "اكتوبر", "السادس من اكتوبر", "الشيخ زايد"])) return { band: "giza", label: City || Region || "Giza", borderColor: "#00D5FF" };
@@ -141,6 +142,22 @@ function BuildGeo(pRequest, pEvent = {}) {
 	return { countryCode: CountryCode, region: DecodeHeaderText(Region), city: DecodeHeaderText(City), ...Classified };
 }
 
+function BrowserAutomationReason(pEvent = {}) {
+	const EventData = pEvent?.eventData && typeof pEvent.eventData === "object" ? pEvent.eventData : {};
+	const Diagnostics = EventData.clientDiagnostics && typeof EventData.clientDiagnostics === "object" ? EventData.clientDiagnostics : null;
+	if (!Diagnostics) return "";
+	const Hardware = Num(Diagnostics.hardwareConcurrency, 0);
+	const Renderer = Str(Diagnostics.webgl?.renderer).toLowerCase();
+	const Platform = Str(Diagnostics.platform || Diagnostics.userAgentData?.platform).toLowerCase();
+	const Desktop = Diagnostics.userAgentData?.mobile !== true && Num(Diagnostics.maxTouchPoints, 0) === 0;
+	const EmptyBrowserSurface = Num(Diagnostics.pluginsLength, 0) === 0 && Num(Diagnostics.mimeTypesLength, 0) === 0;
+	if (Diagnostics.webdriver === true) return "webdriver";
+	if (Hardware >= 256) return "hardware_concurrency_extreme";
+	if (Hardware >= 128 && Renderer.includes("swiftshader")) return "swiftshader_high_concurrency";
+	if (Hardware >= 128 && Desktop && Platform.includes("linux") && EmptyBrowserSurface) return "linux_virtual_browser_surface";
+	return "";
+}
+
 function SyntheticTrafficReason(pRequest, pEvent = {}) {
 	const UserAgent = Str(pRequest.headers.get("user-agent") || pEvent.userAgentClient || pEvent.userAgent);
 	const Purpose = Str(pRequest.headers.get("purpose") || pRequest.headers.get("sec-purpose") || pRequest.headers.get("x-purpose")).toLowerCase();
@@ -150,6 +167,8 @@ function SyntheticTrafficReason(pRequest, pEvent = {}) {
 	if (cSyntheticUserAgentPattern.test(UserAgent)) Reasons.push("ua_bot");
 	if (Purpose.includes("prefetch") || Purpose.includes("preview")) Reasons.push("prefetch");
 	if (Bool(pEvent.synthetic ?? pEvent.isSynthetic)) Reasons.push("client_synthetic");
+	const BrowserReason = BrowserAutomationReason(pEvent);
+	if (BrowserReason) Reasons.push(`browser_${BrowserReason}`);
 	if (BodySignal) Reasons.push(`client_${BodySignal}`);
 	if (["bot", "crawler", "synthetic"].includes(TrafficKind)) Reasons.push(`kind_${TrafficKind}`);
 	return Reasons.join(",");

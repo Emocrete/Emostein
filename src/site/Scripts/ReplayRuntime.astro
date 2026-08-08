@@ -31,9 +31,12 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 	let fTouchRenderRaf = 0;
 	let fReplayReadOutline = null;
 	let fReplayReadTarget = null;
-	let fReplayReadMode = "full";
+	let fReplayContactLayer = null;
+	let fReplayContactIcon = null;
+	let fContactQueue = [];
+	let fContactAnimating = false;
+	let fContactAnimationGeneration = 0;
 	let fReadOutlineRaf = 0;
-	let fReplayBaseline = null;
 	let fReplayPointerCanvas = null;
 	let fReplayPointerContext = null;
 	let fReplayPointerDpr = 1;
@@ -129,7 +132,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 			Context.lineTo(End.x, End.y);
 			Context.lineCap = "round";
 			Context.lineJoin = "round";
-			Context.lineWidth = 2.5 + Life * 1.5;
+			Context.lineWidth = 5 + Life * 3;
 			Context.strokeStyle = `rgba(255, 112, 0, ${Math.min(.92, Life * .92)})`;
 			Context.stroke();
 		}
@@ -559,8 +562,11 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		const Cursor = EnsureTouchCursor();
 		if (!Frame.visible) Cursor.style.display = "none";
 		else {
+			const X = Num(Frame.x);
+			const Y = Num(Frame.y);
+			AddTrailPoint(X, Y);
 			Cursor.style.display = "block";
-			Cursor.style.transform = `translate3d(${Num(Frame.x)}px, ${Num(Frame.y)}px, 0) translate(-50%, -50%)`;
+			Cursor.style.transform = `translate3d(${X}px, ${Y}px, 0) translate(-50%, -50%)`;
 		}
 		if (fPendingTouchFrame && !fTouchRenderRaf) fTouchRenderRaf = requestAnimationFrame(CommitTouchFrame);
 	}
@@ -579,6 +585,77 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		if (fReplayTouchCursor) fReplayTouchCursor.style.display = "none";
 		return true;
 	}
+	function EnsureContactLayer() {
+		if (fReplayContactLayer && fReplayContactIcon) return fReplayContactLayer;
+		const Layer = document.createElement("emo-replay-contact-layer");
+		Layer.style.position = "fixed";
+		Layer.style.inset = "0";
+		Layer.style.zIndex = "2147483647";
+		Layer.style.pointerEvents = "none";
+		Layer.style.display = "grid";
+		Layer.style.placeItems = "center";
+		Layer.style.overflow = "hidden";
+		const Shadow = Layer.attachShadow({ mode: "closed" });
+		const Icon = document.createElement("div");
+		Icon.style.width = "25vmin";
+		Icon.style.height = "25vmin";
+		Icon.style.maxWidth = "25%";
+		Icon.style.maxHeight = "25%";
+		Icon.style.minWidth = "72px";
+		Icon.style.minHeight = "72px";
+		Icon.style.borderRadius = "50%";
+		Icon.style.display = "grid";
+		Icon.style.placeItems = "center";
+		Icon.style.background = "rgba(0,0,0,.72)";
+		Icon.style.color = "#fff";
+		Icon.style.font = "700 10vmin/1 sans-serif";
+		Icon.style.transform = "scale(0)";
+		Icon.style.opacity = "0";
+		Icon.style.willChange = "transform,opacity";
+		Shadow.appendChild(Icon);
+		document.documentElement.appendChild(Layer);
+		fReplayContactLayer = Layer;
+		fReplayContactIcon = Icon;
+		return Layer;
+	}
+	function RunNextContactEvent() {
+		if (fContactAnimating || !fContactQueue.length) return;
+		fContactAnimating = true;
+		const Generation = ++fContactAnimationGeneration;
+		EnsureContactLayer();
+		const Kind = Str(fContactQueue.shift()).toLowerCase();
+		fReplayContactIcon.textContent = Kind === "whatsapp" ? "W" : "☎";
+		fReplayContactIcon.style.transition = "none";
+		fReplayContactIcon.style.transform = "scale(0)";
+		fReplayContactIcon.style.opacity = "1";
+		requestAnimationFrame(() => requestAnimationFrame(() => {
+			fReplayContactIcon.style.transition = "transform 420ms cubic-bezier(.2,.8,.2,1), opacity 720ms ease-out";
+			fReplayContactIcon.style.transform = "scale(1)";
+			fReplayContactIcon.style.opacity = "0";
+		}));
+		setTimeout(() => {
+			if (Generation !== fContactAnimationGeneration) return;
+			fContactAnimating = false;
+			RunNextContactEvent();
+		}, 760);
+	}
+	function ShowContactEvent(pKind) {
+		fContactQueue.push(Str(pKind).toLowerCase() === "whatsapp" ? "whatsapp" : "call");
+		RunNextContactEvent();
+		return true;
+	}
+	function ClearContactEvents() {
+		fContactQueue.length = 0;
+		fContactAnimating = false;
+		fContactAnimationGeneration++;
+		if (fReplayContactIcon) {
+			fReplayContactIcon.style.transition = "none";
+			fReplayContactIcon.style.transform = "scale(0)";
+			fReplayContactIcon.style.opacity = "0";
+		}
+		return true;
+	}
+
 	function EnsureReadOutline() {
 		if (fReplayReadOutline) return fReplayReadOutline;
 		const Layer = document.createElement("emo-replay-read-layer");
@@ -594,7 +671,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		Outline.style.left = "0";
 		Outline.style.top = "0";
 		Outline.style.boxSizing = "border-box";
-		Outline.style.border = "9px dashed #000000";
+		Outline.style.border = "3px dashed #000000";
 		Outline.style.background = "transparent";
 		Outline.style.pointerEvents = "none";
 		Outline.style.display = "none";
@@ -612,7 +689,6 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 			Outline.style.display = "none";
 			return;
 		}
-		Outline.style.border = `9px dashed ${fReplayReadMode === "quick" ? "#808080" : "#000000"}`;
 		const Bounds = Target.getBoundingClientRect();
 		if (Bounds.width <= 0 || Bounds.height <= 0 || Bounds.bottom < 0 || Bounds.right < 0 || Bounds.top > innerHeight || Bounds.left > innerWidth) {
 			Outline.style.display = "none";
@@ -624,7 +700,6 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		Outline.style.transform = `translate3d(${Bounds.left}px, ${Bounds.top}px, 0)`;
 	}
 	function RenderReadOutline(pData) {
-		fReplayReadMode = Str(pData?.__emoReadMode).toLowerCase() === "quick" ? "quick" : "full";
 		fReplayReadTarget = FindTarget(pData);
 		if (!fReplayReadTarget) return HideReadOutline();
 		if (!fReadOutlineRaf) fReadOutlineRaf = requestAnimationFrame(CommitReadOutline);
@@ -652,71 +727,6 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 			if (Mutations.every((Mutation) => Mutation.target === fReplayHoverStyle || fReplayHoverStyle?.contains(Mutation.target))) return;
 			ScheduleReplayHoverStyleBuild();
 		}).observe(document.head, { childList: true, subtree: true, attributes: true, attributeFilter: ["href", "media", "disabled"] });
-	}
-
-	function ReplayBaselineExcluded(pElem) {
-		if (!(pElem instanceof Element)) return true;
-		if (pElem.closest("emo-replay-pointer-layer, emo-replay-touch-layer, emo-replay-read-layer")) return true;
-		return pElem.matches(".SiteIntro, .SiteIntroBase, .SiteIntroSweep, .SiteIntroLogoWrap") || !!pElem.closest(".SiteIntro, .SiteIntroBase, .SiteIntroSweep, .SiteIntroLogoWrap");
-	}
-	function AttributeSnapshot(pElem, pName) {
-		return pElem.hasAttribute(pName) ? pElem.getAttribute(pName) : null;
-	}
-	function RestoreAttribute(pElem, pName, pValue) {
-		if (pValue === null) pElem.removeAttribute(pName);
-		else pElem.setAttribute(pName, pValue);
-	}
-	function CaptureReplayBaseline() {
-		const Items = [];
-		for (const Elem of document.querySelectorAll("*")) {
-			if (ReplayBaselineExcluded(Elem)) continue;
-			const Item = {
-				elem: Elem,
-				className: AttributeSnapshot(Elem, "class"),
-				style: AttributeSnapshot(Elem, "style"),
-				hidden: Elem.hidden === true,
-				open: "open" in Elem ? Elem.open === true : null,
-				ariaExpanded: AttributeSnapshot(Elem, "aria-expanded"),
-				ariaSelected: AttributeSnapshot(Elem, "aria-selected"),
-				ariaChecked: AttributeSnapshot(Elem, "aria-checked"),
-				ariaPressed: AttributeSnapshot(Elem, "aria-pressed")
-			};
-			if (Elem instanceof HTMLInputElement || Elem instanceof HTMLTextAreaElement) {
-				Item.value = Elem.value;
-				if (Elem instanceof HTMLInputElement) Item.checked = Elem.checked;
-			}
-			if (Elem instanceof HTMLSelectElement) Item.selectedIndex = Elem.selectedIndex;
-			if (Elem.isContentEditable) Item.editableHtml = Elem.innerHTML;
-			Items.push(Item);
-		}
-		fReplayBaseline = Items;
-		return true;
-	}
-	function ResetPageState() {
-		if (!Array.isArray(fReplayBaseline)) CaptureReplayBaseline();
-		for (const Item of fReplayBaseline || []) {
-			const Elem = Item?.elem;
-			if (!(Elem instanceof Element) || !Elem.isConnected) continue;
-			RestoreAttribute(Elem, "class", Item.className);
-			RestoreAttribute(Elem, "style", Item.style);
-			Elem.hidden = Item.hidden === true;
-			if (Item.open !== null && "open" in Elem) Elem.open = Item.open === true;
-			RestoreAttribute(Elem, "aria-expanded", Item.ariaExpanded);
-			RestoreAttribute(Elem, "aria-selected", Item.ariaSelected);
-			RestoreAttribute(Elem, "aria-checked", Item.ariaChecked);
-			RestoreAttribute(Elem, "aria-pressed", Item.ariaPressed);
-			if ("value" in Item && (Elem instanceof HTMLInputElement || Elem instanceof HTMLTextAreaElement)) Elem.value = Item.value;
-			if ("checked" in Item && Elem instanceof HTMLInputElement) Elem.checked = Item.checked === true;
-			if ("selectedIndex" in Item && Elem instanceof HTMLSelectElement) Elem.selectedIndex = Item.selectedIndex;
-			if ("editableHtml" in Item && Elem.isContentEditable) Elem.innerHTML = Item.editableHtml;
-		}
-		try { if (document.activeElement instanceof HTMLElement) document.activeElement.blur(); } catch {}
-		window.scrollTo(0, 0);
-		HideTouchFrame();
-		HideReadOutline();
-		ClearPointerVisuals();
-		ClearReplayHover();
-		return true;
 	}
 
 	function ApplyAction(pAction) {
@@ -764,7 +774,18 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		}
 		if (Type === "input" || Type === "change") {
 			if ("checked" in Data && "checked" in Target) Target.checked = !!Data.checked;
-			if (!Data.private && "value" in Data && "value" in Target) Target.value = Str(Data.value);
+			if (Data.contentEditable && Target instanceof Element) Target.textContent = String(Data.value ?? "");
+			else if ("value" in Data && "value" in Target) {
+				if (Target instanceof HTMLInputElement && Target.type === "password") {
+					try { Target.type = "text"; } catch {}
+					try { Target.style.webkitTextSecurity = "none"; } catch {}
+				}
+				Target.value = String(Data.value ?? "");
+				try {
+					if (Number.isFinite(Number(Data.selectionStart)) && Number.isFinite(Number(Data.selectionEnd)) && typeof Target.setSelectionRange === "function")
+						Target.setSelectionRange(Number(Data.selectionStart), Number(Data.selectionEnd), Str(Data.selectionDirection || "none"));
+				} catch {}
+			}
 			Dispatch(Target, Type);
 			return true;
 		}
@@ -782,6 +803,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 			Elem.style.animationDelay = `${-ElapsedMs}ms`;
 		}
 		EnsurePointerEffectsLayer();
+		ClearContactEvents();
 		ScheduleReplayHoverStyleBuild();
 		document.documentElement.dataset.emoReplayStarted = "true";
 		window.dispatchEvent(new CustomEvent("emo:replay-start", { detail: { elapsedMs: ElapsedMs } }));
@@ -791,6 +813,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		document.documentElement.dataset.emoReplayStarted = "false";
 		HideTouchFrame();
 		HideReadOutline();
+		ClearContactEvents();
 		ClearPointerVisuals();
 		return true;
 	}
@@ -813,7 +836,6 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		const Send = () => {
 			RebuildReplayHoverStyles();
 			EnsurePointerEffectsLayer();
-			CaptureReplayBaseline();
 			try { window.EmoReplayAndroid?.OnPageReady(JSON.stringify(PageInfo())); } catch {}
 			window.dispatchEvent(new CustomEvent("emo:replay-ready", { detail: PageInfo() }));
 		};
@@ -821,7 +843,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 		Promise.resolve(Fonts).catch(() => {}).finally(() => requestAnimationFrame(() => requestAnimationFrame(Send)));
 	}
 
-	window.EmoReplayRuntime = { ApplyAction, StartPage, StopPage, ResetPageState, PageInfo, FindTarget, RenderTouchFrame, HideTouchFrame, RenderReadOutline, HideReadOutline, ClearPointerVisuals, RefreshPointerHover: RefreshReplayHover };
+	window.EmoReplayRuntime = { ApplyAction, StartPage, StopPage, PageInfo, FindTarget, RenderTouchFrame, HideTouchFrame, RenderReadOutline, HideReadOutline, ShowContactEvent, ClearContactEvents, ClearPointerVisuals, RefreshPointerHover: RefreshReplayHover };
 	if (!window.EmoReplayAndroid?.OnPageReady) StartPage(0);
 
 	window.open = function(pUrl) {

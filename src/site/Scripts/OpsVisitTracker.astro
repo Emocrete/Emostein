@@ -287,6 +287,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			const Governorate = String(pGovernorate || "").trim();
 			const City = String(pCity || "").trim();
 			const Area = String(pArea || "").trim();
+			if (!CountryCode) return { band: "", label: "", borderColor: "" };
 			if (CountryCode === "EG")
 			{
 				const Gov = GeoNorm(Governorate);
@@ -1114,6 +1115,28 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 
 
+		function BrowserAutomationSignal()
+		{
+			const Diagnostics = fClientDiagnostics;
+			if (!Diagnostics || typeof Diagnostics !== "object") return "";
+			const Hardware = Number(Diagnostics.hardwareConcurrency || 0);
+			const Renderer = String(Diagnostics.webgl?.renderer || "").toLowerCase();
+			const Platform = String(Diagnostics.platform || Diagnostics.userAgentData?.platform || "").toLowerCase();
+			const Desktop = Diagnostics.userAgentData?.mobile !== true && Number(Diagnostics.maxTouchPoints || 0) === 0;
+			const SwiftShader = Renderer.includes("swiftshader");
+			const EmptyBrowserSurface = Number(Diagnostics.pluginsLength || 0) === 0 && Number(Diagnostics.mimeTypesLength || 0) === 0;
+
+			const Reasons = [];
+			if (Diagnostics.webdriver === true) Reasons.push("webdriver");
+			if (Hardware >= 256) Reasons.push("hardware_concurrency_extreme");
+			if (Hardware >= 128 && SwiftShader) Reasons.push("swiftshader_high_concurrency");
+			if (Hardware >= 128 && Desktop && Platform.includes("linux") && EmptyBrowserSurface) Reasons.push("linux_virtual_browser_surface");
+			return Reasons.join(",");
+		}
+
+
+
+
 		function BotSignal()
 		{
 			const UserAgent = String(navigator.userAgent || "");
@@ -1122,6 +1145,8 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			if (navigator.webdriver) Reasons.push("webdriver");
 			if (window.callPhantom || window._phantom || window.__nightmare) Reasons.push("headless_marker");
 			if (document.visibilityState === "prerender") Reasons.push("prerender");
+			const BrowserSignal = BrowserAutomationSignal();
+			if (BrowserSignal) Reasons.push(BrowserSignal);
 			return Reasons.join(",");
 		}
 
@@ -3586,6 +3611,11 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			}
 			PublishTrackingDecision(true, "traffic_gate_allowed");
 			fClientDiagnostics = await CollectClientDiagnostics();
+			if (IsSyntheticTraffic())
+			{
+				PublishTrackingDecision(false, "client_synthetic_fingerprint");
+				return;
+			}
 			StartLocationEnhancement();
 			fPageStartedAt = Date.now();
 			GetVisitorId();
