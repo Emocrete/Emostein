@@ -1,0 +1,287 @@
+---
+import { GetHzAlignCss, GetVrAlignCss, type HzAlignValue, Place, type PlaceProps, RespString, type VrAlignValue } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import { GetLayoutBackground, GetLayoutPair, GetRootAttributes, GetStyleText, type LayoutBackground, type LayoutValue } from "./LayoutUtils";
+
+type SplitEdge = "None" | "DiagonalStart" | "DiagonalEnd" | "Chevron" | "Arch";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps {
+  pBg?: LayoutBackground;
+  pColor?: string;
+  pPad?: LayoutValue;
+  pGap?: LayoutValue;
+  pRadius?: LayoutValue;
+  pMinHeight?: LayoutValue;
+  pEdge?: SplitEdge;
+  pEdgeP?: SplitEdge;
+  pHzAlign?: HzAlignValue;
+  pVrAlign?: VrAlignValue;
+  pOverflow?: "visible" | "hidden" | "clip";
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+const {
+  pBg = "linear-gradient(145deg, #18242f, #2f4858)",
+  pColor = "#f8fbfd",
+  pPad = new RespString("54px", "28px"),
+  pGap = new RespString("18px", "12px"),
+  pRadius = new RespString("0px", "18px"),
+  pMinHeight = new RespString("280px", "220px"),
+  pEdge = "None",
+  pEdgeP = "None",
+  pHzAlign = "Stretch",
+  pVrAlign = "Center",
+  pOverflow = "hidden",
+  id: pGivenID = GetWidgetId("SplitPane"),
+  class: pGivenClass = "",
+  style: pGivenStyle = "",
+} = cProps;
+
+const cPad = GetLayoutPair(pPad, "54px");
+const cGap = GetLayoutPair(pGap, "18px");
+const cRadius = GetLayoutPair(pRadius, "0px");
+const cMinHeight = GetLayoutPair(pMinHeight, "280px");
+const cHasSlot = Astro.slots.has("default");
+
+const cCoreStyle = [
+  `--SplitPaneBg:${GetLayoutBackground(pBg)};`,
+  `--SplitPaneColor:${pColor};`,
+  `--SplitPanePadL:${cPad.Landscape};`,
+  `--SplitPanePadP:${cPad.Portrait};`,
+  `--SplitPaneGapL:${cGap.Landscape};`,
+  `--SplitPaneGapP:${cGap.Portrait};`,
+  `--SplitPaneRadiusL:${cRadius.Landscape};`,
+  `--SplitPaneRadiusP:${cRadius.Portrait};`,
+  `--SplitPaneMinHeightL:${cMinHeight.Landscape};`,
+  `--SplitPaneMinHeightP:${cMinHeight.Portrait};`,
+  `--SplitPaneHz:${GetHzAlignCss(pHzAlign)};`,
+  `--SplitPaneVr:${GetVrAlignCss(pVrAlign)};`,
+  `--SplitPaneOverflow:${pOverflow};`,
+  GetStyleText(pGivenStyle),
+]
+  .filter(Boolean)
+  .join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cCoreStyle);
+const cRootAttrs = GetRootAttributes(cProps, [
+  "pBg",
+  "pColor",
+  "pPad",
+  "pGap",
+  "pRadius",
+  "pMinHeight",
+  "pEdge",
+  "pEdgeP",
+  "pHzAlign",
+  "pVrAlign",
+  "pOverflow",
+]);
+---
+
+
+
+
+
+<section
+	style = {cPlace.Style}
+	class:list={["SplitPane", `EdgeL${pEdge}`, `EdgeP${pEdgeP}`, cPlace.Class, pGivenClass]}
+	id={pGivenID}
+	{...cRootAttrs}
+>
+
+	{ cHasSlot ? (
+
+		<slot />
+	) : (
+
+		<>
+		
+		
+		
+		
+		
+		
+		
+			<small class = " SplitPaneKicker ">
+		
+				SplitPane
+		
+			</small>
+		
+		
+		
+		
+		
+		
+		
+			<h3 class = " SplitPaneTitle ">
+				جزء مستقل داخل المشهد
+			</h3>
+		
+		
+		
+		
+		
+		
+		
+			<p class = " SplitPaneText ">
+				يمكن تغيير الخلفية، اتجاه القص، المحاذاة والمقاسات من خصائص التاج.
+			</p>
+		
+		
+		
+		
+		
+		
+		
+		</>
+	) }
+
+</section>
+
+
+
+
+
+<style>
+
+
+
+	.SplitPane {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: var(--SplitPaneHz);
+		justify-content: var(--SplitPaneVr);
+		box-sizing: border-box;
+		min-width: 0;
+		min-height: var(--SplitPaneMinHeightL);
+		padding: var(--SplitPanePadL);
+		gap: var(--SplitPaneGapL);
+		border-radius: var(--SplitPaneRadiusL);
+		background: var(--SplitPaneBg);
+		color: var(--SplitPaneColor);
+		overflow: var(--SplitPaneOverflow);
+	}
+
+
+	.SplitPaneKicker {
+		font-size: 13px;
+		font-weight: 900;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		opacity: 0.7;
+	}
+
+
+	.SplitPaneTitle {
+		font-size: clamp(28px, 4vw, 52px);
+		line-height: 1.15;
+	}
+
+
+	.SplitPaneText {
+		max-width: 42ch;
+		font-size: 17px;
+		line-height: 1.85;
+		opacity: 0.78;
+	}
+
+
+
+	.SplitPane.EdgeLDiagonalStart {
+		clip-path: polygon(9% 0, 100% 0, 100% 100%, 0 100%);
+	}
+
+
+	.SplitPane.EdgeLDiagonalEnd {
+		clip-path: polygon(0 0, 100% 0, 91% 100%, 0 100%);
+	}
+
+
+	.SplitPane.EdgeLChevron {
+		clip-path: polygon(0 0, 92% 0, 100% 50%, 92% 100%, 0 100%, 8% 50%);
+	}
+
+
+	.SplitPane.EdgeLArch {
+		clip-path: ellipse(86% 100% at 50% 50%);
+	}
+
+
+	.SplitPane.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+	}
+
+
+
+	.SplitPaneKicker,
+	.SplitPaneTitle,
+	.SplitPaneText
+	{
+		margin: 0;
+	}
+
+
+	.SplitPane.PlaceSized:not(.IsPlaced),
+	.SplitPane.IsPlaced
+	{
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.SplitPane {
+			min-height: var(--SplitPaneMinHeightP);
+			padding: var(--SplitPanePadP);
+			gap: var(--SplitPaneGapP);
+			border-radius: var(--SplitPaneRadiusP);
+			clip-path: none;
+		}
+
+		.SplitPane.EdgePDiagonalStart {
+			clip-path: polygon(0 7%, 100% 0, 100% 100%, 0 100%);
+		}
+
+		.SplitPane.EdgePDiagonalEnd {
+			clip-path: polygon(0 0, 100% 7%, 100% 100%, 0 100%);
+		}
+
+		.SplitPane.EdgePChevron {
+			clip-path: polygon(0 0, 100% 0, 100% 92%, 50% 100%, 0 92%);
+		}
+
+		.SplitPane.EdgePArch {
+			clip-path: ellipse(100% 88% at 50% 50%);
+		}
+
+		.SplitPane.PlaceSized:not(.IsPlaced),
+		.SplitPane.IsPlaced
+		{
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.SplitPane.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+		}
+	}
+
+
+
+</style>

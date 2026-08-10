@@ -1,0 +1,476 @@
+---
+import { Pixel, Place, type PlaceProps, RespString } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import { GetLayoutBackground, GetLayoutPair, GetRootAttributes, GetStyleText, type LayoutBackground, type LayoutValue } from "./LayoutUtils";
+
+type StickySide = "Start" | "End";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
+  pVisualShare?: number;
+  pGap?: LayoutValue;
+  pPad?: LayoutValue;
+  pMaxWidth?: LayoutValue;
+  pMinHeight?: LayoutValue;
+  pBg?: LayoutBackground;
+  pVisualBg?: LayoutBackground;
+  pStickyTop?: Pixel;
+  pSide?: StickySide;
+  pCollapsePortrait?: boolean;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+const {
+  pVisualShare = 50,
+  pGap = new RespString("34px", "18px"),
+  pPad = new RespString("34px", "14px"),
+  pMaxWidth = new RespString("1200px", "100%"),
+  pMinHeight = new RespString("980px", "720px"),
+  pBg = "#f1eee8",
+  pVisualBg = "linear-gradient(145deg, #12202b, #395465)",
+  pStickyTop = new Pixel(90, 0),
+  pSide = "Start",
+  pCollapsePortrait = true,
+  id: pGivenID = GetWidgetId("StickyStory"),
+  class: pGivenClass = "",
+  style: pGivenStyle = "",
+} = cProps;
+
+const cShare = Math.min(72, Math.max(28, Number(pVisualShare) || 50));
+const cGap = GetLayoutPair(pGap, "34px");
+const cPad = GetLayoutPair(pPad, "34px");
+const cMaxWidth = GetLayoutPair(pMaxWidth, "1200px");
+const cMinHeight = GetLayoutPair(pMinHeight, "980px");
+const cHasVisual = Astro.slots.has("visual");
+const cHasContent = Astro.slots.has("default");
+
+const cCoreStyle = [
+  `--StickyVisualShare:${cShare}fr;`,
+  `--StickyContentShare:${100 - cShare}fr;`,
+  `--StickyGapL:${cGap.Landscape};`,
+  `--StickyGapP:${cGap.Portrait};`,
+  `--StickyPadL:${cPad.Landscape};`,
+  `--StickyPadP:${cPad.Portrait};`,
+  `--StickyMaxWidthL:${cMaxWidth.Landscape};`,
+  `--StickyMaxWidthP:${cMaxWidth.Portrait};`,
+  `--StickyMinHeightL:${cMinHeight.Landscape};`,
+  `--StickyMinHeightP:${cMinHeight.Portrait};`,
+  `--StickyStoryBg:${GetLayoutBackground(pBg)};`,
+  `--StickyVisualBg:${GetLayoutBackground(pVisualBg)};`,
+  `--StickyTopL:${pStickyTop.Landscape};`,
+  `--StickyTopP:${pStickyTop.Portrait};`,
+  GetStyleText(pGivenStyle),
+]
+  .filter(Boolean)
+  .join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cCoreStyle);
+const cRootAttrs = GetRootAttributes(cProps, [
+  "pVisualShare",
+  "pGap",
+  "pPad",
+  "pMaxWidth",
+  "pMinHeight",
+  "pBg",
+  "pVisualBg",
+  "pStickyTop",
+  "pSide",
+  "pCollapsePortrait",
+]);
+---
+
+
+
+
+
+<div
+	style = {cPlace.Style}
+	class:list={["StickyStory", `Visual${pSide}`, pCollapsePortrait && "CollapsePortrait", cPlace.Class, pGivenClass]}
+	id={pGivenID}
+	data-emo-auto-container="true"
+	data-emo-empty-height="980"
+	{...cRootAttrs}
+>
+
+
+
+
+
+
+
+	<aside class = " StickyStoryVisual ">
+
+		{ cHasVisual ? (
+
+			<slot name="visual" />
+		) : (
+
+			<>
+			
+			
+			
+			
+			
+			
+			
+				<div class = " StickyVisualFrame " />
+			
+			
+			
+			
+			
+			
+			
+				<small>
+			
+					STICKY VISUAL
+			
+				</small>
+			
+			
+			
+			
+			
+			
+			
+				<strong>
+			
+					صورة واحدة
+			
+					<br />
+			
+					ترافق القصة
+			
+				</strong>
+			
+			
+			
+			
+			
+			
+			
+			</>
+		) }
+
+	</aside>
+
+
+
+
+
+
+
+	<div class = " StickyStoryContent ">
+
+		{ cHasContent ? (
+
+			<slot />
+		) : (
+
+			<>
+			
+			
+			
+			
+			
+			
+			
+				<section>
+			
+					<>
+			
+						<small>
+			
+							01 / البداية
+			
+						</small>
+			
+						<h3>
+							عرّف المشهد
+						</h3>
+			
+						<p>
+							تظل الصورة ثابتة بينما تتغير طبقات المعلومات بجوارها.
+						</p>
+			
+					</>
+			
+				</section>
+			
+			
+			
+			
+			
+			
+			
+				<section>
+			
+					<>
+			
+						<small>
+			
+							02 / التعمق
+			
+						</small>
+			
+						<h3>
+							اشرح التفاصيل
+						</h3>
+			
+						<p>
+							مناسب للمشروعات والمنتجات والعمليات التي تحتاج سردًا طويلًا.
+						</p>
+			
+					</>
+			
+				</section>
+			
+			
+			
+			
+			
+			
+			
+				<section>
+			
+					<>
+			
+						<small>
+			
+							03 / الإجراء
+			
+						</small>
+			
+						<h3>
+							اختم بالقرار
+						</h3>
+			
+						<p>
+							كل مقطع مستقل ويمكن أن يحمل أي ودجات محتوى موجودة.
+						</p>
+			
+					</>
+			
+				</section>
+			
+			
+			
+			
+			
+			
+			
+			</>
+		) }
+
+	</div>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+<style>
+
+
+
+	.StickyStory {
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(0, var(--StickyVisualShare)) minmax(0, var(--StickyContentShare));
+		align-items: start;
+		box-sizing: border-box;
+		width: min(100%, var(--StickyMaxWidthL));
+		min-height: var(--StickyMinHeightL);
+		margin-inline: auto;
+		padding: var(--StickyPadL);
+		gap: var(--StickyGapL);
+		background: var(--StickyStoryBg);
+		overflow: visible;
+	}
+
+
+	.StickyStoryVisual {
+		position: sticky;
+		top: var(--StickyTopL);
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: flex-end;
+		box-sizing: border-box;
+		min-width: 0;
+		height: min(72vh, 700px);
+		min-height: 520px;
+		padding: clamp(28px, 5vw, 58px);
+		gap: 10px;
+		border-radius: 32px;
+		background: var(--StickyVisualBg);
+		color: #f8fafc;
+		overflow: hidden;
+		isolation: isolate;
+	}
+
+	.StickyStoryVisual > small {
+		font-weight: 900;
+		letter-spacing: 0.14em;
+		opacity: 0.62;
+	}
+
+	.StickyStoryVisual > strong {
+		font-size: clamp(34px, 5vw, 68px);
+		line-height: 1.08;
+	}
+
+
+	.StickyVisualFrame {
+		position: absolute;
+		z-index: -1;
+		right: 12%;
+		top: 10%;
+		width: 58%;
+		height: 58%;
+		border: 24px solid #caff3d;
+		border-radius: 8px;
+		opacity: 0.9;
+	}
+
+
+	.StickyStoryContent {
+		display: flex;
+		flex-direction: column;
+		box-sizing: border-box;
+		min-width: 0;
+		gap: 26px;
+	}
+
+	.StickyStoryContent > :global(*) {
+		max-width: 100%;
+	}
+
+	.StickyStoryContent > section {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		box-sizing: border-box;
+		min-height: 360px;
+		padding: clamp(28px, 5vw, 58px);
+		gap: 10px;
+		border-radius: 28px;
+		background: #ffffff;
+		color: #17212a;
+	}
+
+	.StickyStoryContent h3 {
+		font-size: clamp(30px, 5vw, 56px);
+		line-height: 1.12;
+	}
+
+	.StickyStoryContent p {
+		max-width: 44ch;
+		line-height: 1.85;
+		opacity: 0.72;
+	}
+
+	.StickyStoryContent small {
+		font-weight: 900;
+		opacity: 0.5;
+	}
+
+
+
+	.StickyStory.VisualEnd {
+		grid-template-columns: minmax(0, var(--StickyContentShare)) minmax(0, var(--StickyVisualShare));
+	}
+
+	.StickyStory.VisualEnd .StickyStoryVisual {
+		order: 2;
+	}
+
+
+	.StickyStory.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+		margin: 0;
+	}
+
+
+
+	.StickyStoryContent h3,
+	.StickyStoryContent p
+	{
+		margin: 0;
+	}
+
+
+	.StickyStory.PlaceSized:not(.IsPlaced),
+	.StickyStory.IsPlaced
+	{
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.StickyStory {
+			width: min(100%, var(--StickyMaxWidthP));
+			min-height: var(--StickyMinHeightP);
+			padding: var(--StickyPadP);
+			gap: var(--StickyGapP);
+		}
+
+		.StickyStory.CollapsePortrait {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.StickyStory.CollapsePortrait.VisualEnd .StickyStoryVisual {
+			order: initial;
+		}
+
+		.StickyStoryVisual {
+			top: var(--StickyTopP);
+			height: 58vh;
+			min-height: 360px;
+		}
+
+		.StickyStory.CollapsePortrait .StickyStoryVisual {
+			position: relative;
+			top: auto;
+		}
+
+		.StickyStoryContent > section {
+			min-height: 280px;
+		}
+
+		.StickyStory.PlaceSized:not(.IsPlaced),
+		.StickyStory.IsPlaced
+		{
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.StickyStory.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+		}
+	}
+
+
+
+</style>

@@ -1,0 +1,576 @@
+---
+import { Place, type PlaceProps, RespString } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import { GetLayoutBackground, GetLayoutPair, GetRootAttributes, GetStyleText, type LayoutBackground, type LayoutValue } from "./LayoutUtils";
+
+type StoryAxis = "Vertical" | "Horizontal";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
+  pAxis?: StoryAxis;
+  pAxisP?: StoryAxis;
+  pGap?: LayoutValue;
+  pPad?: LayoutValue;
+  pMaxWidth?: LayoutValue;
+  pBg?: LayoutBackground;
+  pTrackColor?: string;
+  pAccent?: string;
+  pAlternate?: boolean;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+const {
+  pAxis = "Vertical",
+  pAxisP = "Vertical",
+  pGap = new RespString("28px", "18px"),
+  pPad = new RespString("36px", "14px"),
+  pMaxWidth = new RespString("1100px", "100%"),
+  pBg = "#111923",
+  pTrackColor = "rgba(255,255,255,.22)",
+  pAccent = "#caff3d",
+  pAlternate = true,
+  id: pGivenID = GetWidgetId("StoryRail"),
+  class: pGivenClass = "",
+  style: pGivenStyle = "",
+} = cProps;
+
+const cGap = GetLayoutPair(pGap, "28px");
+const cPad = GetLayoutPair(pPad, "36px");
+const cMaxWidth = GetLayoutPair(pMaxWidth, "1100px");
+const cHasSlot = Astro.slots.has("default");
+
+const cCoreStyle = [
+  `--StoryRailGapL:${cGap.Landscape};`,
+  `--StoryRailGapP:${cGap.Portrait};`,
+  `--StoryRailPadL:${cPad.Landscape};`,
+  `--StoryRailPadP:${cPad.Portrait};`,
+  `--StoryRailMaxWidthL:${cMaxWidth.Landscape};`,
+  `--StoryRailMaxWidthP:${cMaxWidth.Portrait};`,
+  `--StoryRailBg:${GetLayoutBackground(pBg)};`,
+  `--StoryRailTrack:${pTrackColor};`,
+  `--StoryRailAccent:${pAccent};`,
+  GetStyleText(pGivenStyle),
+]
+  .filter(Boolean)
+  .join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cCoreStyle);
+const cRootAttrs = GetRootAttributes(cProps, [
+  "pAxis",
+  "pAxisP",
+  "pGap",
+  "pPad",
+  "pMaxWidth",
+  "pBg",
+  "pTrackColor",
+  "pAccent",
+  "pAlternate",
+]);
+---
+
+
+
+
+
+<div
+	style = {cPlace.Style}
+	class:list={["StoryRail", `AxisL${pAxis}`, `AxisP${pAxisP}`, pAlternate && "IsAlternating", cPlace.Class, pGivenClass]}
+	id={pGivenID}
+	data-emo-auto-container="true"
+	data-emo-empty-height="620"
+	{...cRootAttrs}
+>
+
+	{ cHasSlot ? (
+
+		<slot />
+	) : (
+
+		<>
+		
+		
+		
+		
+		
+		
+		
+			<article class = " StoryFallback ">
+		
+				<>
+		
+					<i>
+		
+						01
+		
+					</i>
+		
+					<div>
+		
+						<>
+		
+							<small>
+		
+								البداية
+		
+							</small>
+		
+							<b>
+		
+								تعريف المهمة
+		
+							</b>
+		
+							<span>
+								بطاقات موزعة حول مسار بصري واحد.
+							</span>
+		
+						</>
+		
+					</div>
+		
+				</>
+		
+			</article>
+		
+		
+		
+		
+		
+		
+		
+			<article class = " StoryFallback ">
+		
+				<>
+		
+					<i>
+		
+						02
+		
+					</i>
+		
+					<div>
+		
+						<>
+		
+							<small>
+		
+								الوسط
+		
+							</small>
+		
+							<b>
+		
+								تنفيذ المرحلة
+		
+							</b>
+		
+							<span>
+								يتناوب الاتجاه من الأب بدون تكرار التنسيق.
+							</span>
+		
+						</>
+		
+					</div>
+		
+				</>
+		
+			</article>
+		
+		
+		
+		
+		
+		
+		
+			<article class = " StoryFallback ">
+		
+				<>
+		
+					<i>
+		
+						03
+		
+					</i>
+		
+					<div>
+		
+						<>
+		
+							<small>
+		
+								النهاية
+		
+							</small>
+		
+							<b>
+		
+								تسليم النتيجة
+		
+							</b>
+		
+							<span>
+								ويتحول على الموبايل إلى مسار رأسي بسيط.
+							</span>
+		
+						</>
+		
+					</div>
+		
+				</>
+		
+			</article>
+		
+		
+		
+		
+		
+		
+		
+		</>
+	) }
+
+</div>
+
+
+
+
+
+<style>
+
+
+
+	.StoryRail {
+		position: relative;
+		box-sizing: border-box;
+		width: min(100%, var(--StoryRailMaxWidthL));
+		margin-inline: auto;
+		padding: var(--StoryRailPadL);
+		gap: var(--StoryRailGapL);
+		background: var(--StoryRailBg);
+		counter-reset: StoryStep;
+		overflow: hidden;
+	}
+
+
+	.StoryFallback {
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 68px minmax(0, 1fr);
+		align-items: center;
+		box-sizing: border-box;
+		min-height: 190px;
+		color: #f8fafc;
+	}
+
+	.StoryFallback i {
+		position: relative;
+		z-index: 1;
+		grid-column: 2;
+		display: grid;
+		place-items: center;
+		box-sizing: border-box;
+		width: 54px;
+		height: 54px;
+		justify-self: center;
+		border: 8px solid var(--StoryRailBg);
+		border-radius: 50%;
+		background: var(--StoryRailAccent);
+		color: #111923;
+		font-style: normal;
+		font-weight: 900;
+	}
+
+	.StoryFallback div {
+		grid-column: 3;
+		display: flex;
+		flex-direction: column;
+		box-sizing: border-box;
+		padding: 26px;
+		gap: 8px;
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		border-radius: 20px;
+		background: rgba(255, 255, 255, 0.06);
+	}
+
+	.StoryFallback small {
+		opacity: 0.56;
+	}
+
+	.StoryFallback b {
+		font-size: 26px;
+	}
+
+	.StoryFallback span {
+		line-height: 1.75;
+		opacity: 0.75;
+	}
+
+
+
+	.StoryRail.AxisLVertical {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.StoryRail.AxisLVertical::before {
+		content: "";
+		position: absolute;
+		left: 50%;
+		top: var(--StoryRailPadL);
+		bottom: var(--StoryRailPadL);
+		width: 1px;
+		background: var(--StoryRailTrack);
+	}
+
+
+	.StoryRail.AxisLHorizontal {
+		display: grid;
+		grid-auto-flow: column;
+		grid-auto-columns: minmax(230px, 1fr);
+		overflow-x: auto;
+		scroll-snap-type: x proximity;
+	}
+
+	.StoryRail.AxisLHorizontal::before {
+		content: "";
+		position: absolute;
+		left: var(--StoryRailPadL);
+		right: var(--StoryRailPadL);
+		top: calc(var(--StoryRailPadL) + 27px);
+		height: 1px;
+		background: var(--StoryRailTrack);
+	}
+
+	.StoryRail.AxisLHorizontal > :global(.StoryStep) {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: flex-start;
+		min-width: 0;
+		padding-top: 74px;
+		scroll-snap-align: start;
+	}
+
+	.StoryRail.AxisLHorizontal > :global(.StoryStep .StoryStepMarker) {
+		position: absolute;
+		left: 18px;
+		top: 0;
+	}
+
+	.StoryRail.AxisLHorizontal > :global(.StoryStep .StoryStepContent) {
+		width: 100%;
+		text-align: start;
+	}
+
+	.StoryRail.AxisLHorizontal > .StoryFallback {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		justify-content: flex-start;
+		min-width: 230px;
+		padding-top: 74px;
+	}
+
+	.StoryRail.AxisLHorizontal > .StoryFallback i {
+		position: absolute;
+		left: 18px;
+		top: 0;
+		grid-column: auto;
+	}
+
+
+	.StoryRail.IsAlternating .StoryFallback:nth-child(even) div {
+		grid-column: 1;
+	}
+
+
+	.StoryRail.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+		margin: 0;
+	}
+
+
+
+	.StoryRail.IsAlternating.AxisLVertical > :global(.StoryStep.AutoSide:nth-child(even) .StoryStepContent) {
+		grid-column: 1;
+		text-align: left;
+	}
+
+
+
+	.StoryRail.AxisLHorizontal > .StoryFallback div,
+	.StoryRail.IsAlternating.AxisLHorizontal > .StoryFallback:nth-child(even) div
+	{
+		grid-column: auto;
+		width: 100%;
+		flex: 1;
+	}
+
+
+	.StoryRail.PlaceSized:not(.IsPlaced),
+	.StoryRail.IsPlaced
+	{
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.StoryRail {
+			width: min(100%, var(--StoryRailMaxWidthP));
+			padding: var(--StoryRailPadP);
+			gap: var(--StoryRailGapP);
+		}
+
+		.StoryRail.AxisPVertical {
+			display: flex;
+			flex-direction: column;
+			overflow: hidden;
+		}
+
+		.StoryRail.AxisPVertical::before {
+			content: "";
+			position: absolute;
+			left: auto;
+			right: calc(var(--StoryRailPadP) + 27px);
+			top: var(--StoryRailPadP);
+			bottom: var(--StoryRailPadP);
+			width: 1px;
+			height: auto;
+			background: var(--StoryRailTrack);
+		}
+
+		.StoryRail.AxisPVertical > :global(.StoryStep) {
+			display: grid;
+			grid-template-columns: 58px minmax(0, 1fr);
+			padding-top: 0;
+		}
+
+		.StoryRail.AxisPVertical > :global(.StoryStep .StoryStepMarker) {
+			position: relative;
+			left: auto;
+			top: auto;
+			grid-column: 1;
+		}
+
+		.StoryRail.AxisPVertical > :global(.StoryStep .StoryStepContent) {
+			grid-column: 2;
+			width: auto;
+			text-align: start;
+		}
+
+		.StoryRail.AxisPVertical > .StoryFallback {
+			display: grid;
+			grid-template-columns: 58px minmax(0, 1fr);
+			min-width: 0;
+			padding-top: 0;
+		}
+
+		.StoryRail.AxisPVertical > .StoryFallback i {
+			position: relative;
+			left: auto;
+			top: auto;
+			grid-column: 1;
+		}
+
+		.StoryRail.AxisPVertical > .StoryFallback div,
+		.StoryRail.IsAlternating.AxisPVertical > .StoryFallback:nth-child(even) div
+		{
+			grid-column: 2;
+			width: auto;
+			flex: initial;
+		}
+
+		.StoryRail.AxisPHorizontal {
+			display: grid;
+			grid-auto-flow: column;
+			grid-auto-columns: minmax(230px, 82vw);
+			overflow-x: auto;
+			scroll-snap-type: x proximity;
+		}
+
+		.StoryRail.AxisPHorizontal::before {
+			content: "";
+			position: absolute;
+			left: var(--StoryRailPadP);
+			right: var(--StoryRailPadP);
+			top: calc(var(--StoryRailPadP) + 27px);
+			bottom: auto;
+			width: auto;
+			height: 1px;
+		}
+
+		.StoryRail.AxisPHorizontal > :global(.StoryStep) {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			justify-content: flex-start;
+			min-width: 0;
+			padding-top: 74px;
+			scroll-snap-align: start;
+		}
+
+		.StoryRail.AxisPHorizontal > :global(.StoryStep .StoryStepMarker) {
+			position: absolute;
+			left: 18px;
+			top: 0;
+		}
+
+		.StoryRail.AxisPHorizontal > :global(.StoryStep .StoryStepContent) {
+			width: 100%;
+			text-align: start;
+		}
+
+		.StoryRail.AxisPHorizontal > .StoryFallback {
+			display: flex;
+			flex-direction: column;
+			align-items: stretch;
+			justify-content: flex-start;
+			min-width: 230px;
+			padding-top: 74px;
+			scroll-snap-align: start;
+		}
+
+		.StoryRail.AxisPHorizontal > .StoryFallback i {
+			position: absolute;
+			left: 18px;
+			top: 0;
+			grid-column: auto;
+		}
+
+		.StoryRail.AxisPHorizontal > .StoryFallback div,
+		.StoryRail.IsAlternating.AxisPHorizontal > .StoryFallback:nth-child(even) div
+		{
+			grid-column: auto;
+			width: 100%;
+			flex: 1;
+		}
+
+		.StoryRail.PlaceSized:not(.IsPlaced),
+		.StoryRail.IsPlaced
+		{
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.StoryRail.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+		}
+	}
+
+
+
+</style>

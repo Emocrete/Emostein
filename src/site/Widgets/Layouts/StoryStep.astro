@@ -1,0 +1,316 @@
+---
+import { Place, type PlaceProps, RespString } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import { GetLayoutBackground, GetLayoutPair, GetRootAttributes, GetStyleText, type LayoutBackground, type LayoutValue } from "./LayoutUtils";
+
+type StorySide = "Auto" | "Start" | "End";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"article">, PlaceProps {
+  pKicker?: string;
+  pTitle?: string;
+  pText?: string;
+  pNumber?: string | number;
+  pSide?: StorySide;
+  pBg?: LayoutBackground;
+  pColor?: string;
+  pAccent?: string;
+  pRadius?: LayoutValue;
+  pPad?: LayoutValue;
+  pMinHeight?: LayoutValue;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+const {
+  pKicker = "خطوة",
+  pTitle = "عنوان المرحلة",
+  pText = "وصف مختصر يوضح ما يحدث في هذه النقطة من المسار.",
+  pNumber,
+  pSide = "Auto",
+  pBg = "rgba(255,255,255,.07)",
+  pColor = "#f8fafc",
+  pAccent = "var(--StoryRailAccent, #caff3d)",
+  pRadius = new RespString("22px", "18px"),
+  pPad = new RespString("28px", "20px"),
+  pMinHeight = new RespString("170px", "150px"),
+  id: pGivenID = GetWidgetId("StoryStep"),
+  class: pGivenClass = "",
+  style: pGivenStyle = "",
+} = cProps;
+
+const cRadius = GetLayoutPair(pRadius, "22px");
+const cPad = GetLayoutPair(pPad, "28px");
+const cMinHeight = GetLayoutPair(pMinHeight, "170px");
+const cHasSlot = Astro.slots.has("default");
+const cCustomNumber = pNumber !== undefined && `${pNumber}`.trim() !== "";
+
+const cCoreStyle = [
+  `--StoryStepBg:${GetLayoutBackground(pBg)};`,
+  `--StoryStepColor:${pColor};`,
+  `--StoryStepAccent:${pAccent};`,
+  `--StoryStepRadiusL:${cRadius.Landscape};`,
+  `--StoryStepRadiusP:${cRadius.Portrait};`,
+  `--StoryStepPadL:${cPad.Landscape};`,
+  `--StoryStepPadP:${cPad.Portrait};`,
+  `--StoryStepMinHeightL:${cMinHeight.Landscape};`,
+  `--StoryStepMinHeightP:${cMinHeight.Portrait};`,
+  GetStyleText(pGivenStyle),
+]
+  .filter(Boolean)
+  .join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cCoreStyle);
+const cRootAttrs = GetRootAttributes(cProps, [
+  "pKicker",
+  "pTitle",
+  "pText",
+  "pNumber",
+  "pSide",
+  "pBg",
+  "pColor",
+  "pAccent",
+  "pRadius",
+  "pPad",
+  "pMinHeight",
+]);
+---
+
+
+
+
+
+<article
+	style = {cPlace.Style}
+	class:list={["StoryStep", `${pSide}Side`, cCustomNumber && "HasCustomNumber", cPlace.Class, pGivenClass]}
+	id={pGivenID}
+	{...cRootAttrs}
+>
+
+
+
+
+
+
+
+	<span class = " StoryStepMarker ">
+		{cCustomNumber ? pNumber : null}
+	</span>
+
+
+
+
+
+
+
+	<div class = " StoryStepContent ">
+
+		{ cHasSlot ? (
+
+			<slot />
+		) : (
+
+			<>
+			
+			
+			
+			
+			
+			
+			
+				<small>
+			
+					{pKicker}
+			
+				</small>
+			
+			
+			
+			
+			
+			
+			
+				<h3>
+					{pTitle}
+				</h3>
+			
+			
+			
+			
+			
+			
+			
+				<p>
+					{pText}
+				</p>
+			
+			
+			
+			
+			
+			
+			
+			</>
+		) }
+
+	</div>
+
+
+
+
+
+
+
+</article>
+
+
+
+
+
+<style>
+
+
+
+	.StoryStep {
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 68px minmax(0, 1fr);
+		align-items: center;
+		box-sizing: border-box;
+		min-width: 0;
+		min-height: var(--StoryStepMinHeightL);
+		color: var(--StoryStepColor);
+		counter-increment: StoryStep;
+	}
+
+	.StoryStep:not(.HasCustomNumber) .StoryStepMarker::before {
+		content: counter(StoryStep, decimal-leading-zero);
+	}
+
+
+	.StoryStepMarker {
+		position: relative;
+		z-index: 2;
+		grid-column: 2;
+		display: grid;
+		place-items: center;
+		box-sizing: border-box;
+		width: 54px;
+		height: 54px;
+		justify-self: center;
+		border: 8px solid var(--StoryRailBg, #111923);
+		border-radius: 50%;
+		background: var(--StoryStepAccent);
+		color: #111923;
+		font-weight: 900;
+	}
+
+
+	.StoryStepContent {
+		grid-column: 3;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		box-sizing: border-box;
+		min-width: 0;
+		min-height: var(--StoryStepMinHeightL);
+		padding: var(--StoryStepPadL);
+		gap: 8px;
+		border: 1px solid color-mix(in srgb, var(--StoryStepColor) 14%, transparent);
+		border-radius: var(--StoryStepRadiusL);
+		background: var(--StoryStepBg);
+		color: var(--StoryStepColor);
+	}
+
+	.StoryStepContent > small {
+		font-weight: 900;
+		opacity: 0.56;
+	}
+
+	.StoryStepContent > h3 {
+		font-size: clamp(24px, 3vw, 38px);
+		line-height: 1.2;
+	}
+
+	.StoryStepContent > p {
+		line-height: 1.75;
+		opacity: 0.74;
+	}
+
+
+
+	.StoryStep.EndSide .StoryStepContent {
+		grid-column: 1;
+		text-align: left;
+	}
+
+
+	.StoryStep.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+	}
+
+
+
+	.StoryStepContent > small,
+	.StoryStepContent > h3,
+	.StoryStepContent > p
+	{
+		margin: 0;
+	}
+
+
+	.StoryStep.PlaceSized:not(.IsPlaced),
+	.StoryStep.IsPlaced
+	{
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.StoryStep {
+			grid-template-columns: 58px minmax(0, 1fr);
+			min-height: var(--StoryStepMinHeightP);
+		}
+
+		.StoryStepMarker {
+			grid-column: 1;
+		}
+
+		.StoryStepContent,
+		.StoryStep.EndSide .StoryStepContent
+		{
+			grid-column: 2;
+			min-height: var(--StoryStepMinHeightP);
+			padding: var(--StoryStepPadP);
+			border-radius: var(--StoryStepRadiusP);
+			text-align: start;
+		}
+
+		.StoryStep.PlaceSized:not(.IsPlaced),
+		.StoryStep.IsPlaced
+		{
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.StoryStep.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+		}
+	}
+
+
+
+</style>

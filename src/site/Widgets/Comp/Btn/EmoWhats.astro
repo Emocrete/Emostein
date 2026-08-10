@@ -1,7 +1,7 @@
 ---
-import { Colors, Place, type PlaceProps, HoverColors, HoverImg } from "@/TypesLib";
+import { Colors, HoverColors, HoverImg, Place, type PlaceProps } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
-import { CreateButtonPreset, GetBoolAttr, GetButtonPreset, GetButtonTitleColors, type ButtonColorPreset, type ButtonPresetProps } from "./ButtonPresets";
+import { type ButtonColorPreset, type ButtonPresetProps, CreateButtonPreset, GetBoolAttr, GetButtonPreset, GetButtonTitleColors } from "./ButtonPresets";
 
 export interface Props extends HTMLAttributes<"a">, PlaceProps, ButtonPresetProps {
 	/** النص الظاهر داخل زر الواتساب. */
@@ -140,14 +140,14 @@ const {
 } = Astro.props as Props;
 
 const cWhatsappPresets: Record<string, ButtonColorPreset> = {
-	Green: CreateButtonPreset("#25D366", "#128C7E"),
+	Green: CreateButtonPreset("#25d467", "#7d7d7d"),
 	GreenDark: CreateButtonPreset("#128C7E", "#075E54"),
 	Sky: CreateButtonPreset(Colors.Sky, Colors.SkyDark),
 	Bistage: CreateButtonPreset(Colors.Bistage, Colors.BistageDark),
 };
 
 const cPreset = GetPreset();
-const cText = pText ?? "واتساب مباشر";
+const cText = pText ?? "أرسل واتساب";
 const cPhoneText = pPhone;
 const cWhatsappNumber = GetWhatsappNumber(pPhone);
 const cWhatsappHref = GetWhatsappHref(cWhatsappNumber, pMessage);
@@ -280,6 +280,10 @@ function GetCssName(pName: string) {
 }
 ---
 
+
+
+
+
 <a
 	class = {`WhatsBtn ${cLayoutClass} ${cHasIcon ? "hasIcon" : "noIcon"} ${cPlace.Class} ${pClass}`.trim()}
 	style = {cPlace.Style}
@@ -296,10 +300,7 @@ function GetCssName(pName: string) {
 	{...cAttrs}
 >
 
-	{ cHasIcon && (
-
-		<span class = " BtnIcon " />
-	) }
+	{ cHasIcon && ( <span class = " BtnIcon " /> ) }
 
 	{ cText && (
 
@@ -312,21 +313,25 @@ function GetCssName(pName: string) {
 		{cPhoneText}
 	</span>
 
+
+
+
+
+
+
 </a>
 
-<span
-	class = " WhatsQrOverlay "
-	data-whats-overlay="true"
-	popover="manual"
->
+<span class = " WhatsQrOverlay " data-whats-overlay="true" popover="manual">
+
+
+
+
+
+
 
 	<span class = " WhatsQrBox ">
 
-		<button
-			class = " WhatsQrClose "
-			type="button"
-			data-whats-close="true"
-		>
+		<button class = " WhatsQrClose " type="button" data-whats-close="true">
 
 			إغلاق
 
@@ -363,9 +368,22 @@ function GetCssName(pName: string) {
 
 	</span>
 
+
+
+
+
+
+
 </span>
 
+
+
+
+
 <style>
+
+
+
 	.WhatsBtn {
 		display: inline-flex;
 		align-items: center;
@@ -420,6 +438,7 @@ function GetCssName(pName: string) {
 		background-image: var(--btn-icon-active);
 	}
 
+
 	.BtnIcon {
 		flex: 0 0 auto;
 		width: var(--btn-icon-size);
@@ -429,6 +448,7 @@ function GetCssName(pName: string) {
 		background-repeat: no-repeat;
 		background-size: contain;
 	}
+
 
 	.BtnText {
 		display: block;
@@ -441,14 +461,12 @@ function GetCssName(pName: string) {
 		text-decoration: none;
 	}
 
-	.WhatsBtn.noIcon .BtnText {
-		width: 100%;
-	}
 
 	.BtnTextPhone {
 		display: none;
 		direction: ltr;
 	}
+
 
 	.WhatsQrOverlay {
 		position: fixed;
@@ -481,6 +499,7 @@ function GetCssName(pName: string) {
 		background: transparent;
 	}
 
+
 	.WhatsQrBox {
 		display: flex;
 		flex-direction: column;
@@ -495,6 +514,7 @@ function GetCssName(pName: string) {
 		box-sizing: border-box;
 	}
 
+
 	.WhatsQrClose {
 		align-self: flex-start;
 		border: 0;
@@ -508,6 +528,7 @@ function GetCssName(pName: string) {
 		cursor: pointer;
 	}
 
+
 	.WhatsQrTitle {
 		margin-top: 14px;
 		color: #222222;
@@ -515,6 +536,7 @@ function GetCssName(pName: string) {
 		font-weight: 800;
 		line-height: 1.45;
 	}
+
 
 	.WhatsQrImg {
 		display: block;
@@ -525,6 +547,7 @@ function GetCssName(pName: string) {
 		border-radius: 12px;
 	}
 
+
 	.WhatsQrPhone {
 		margin-top: 14px;
 		color: #111111;
@@ -532,6 +555,7 @@ function GetCssName(pName: string) {
 		font-weight: 900;
 		direction: ltr;
 	}
+
 
 	.WhatsQrWebLink {
 		display: inline-flex;
@@ -547,23 +571,35 @@ function GetCssName(pName: string) {
 		text-decoration: none;
 	}
 
+
+
+	.WhatsBtn.noIcon .BtnText {
+		width: 100%;
+	}
+
+
 	.WhatsBtn.IsPlaced {
 		width: var(--PlaceWidthL);
 		height: var(--PlaceHeightL);
 		min-height: var(--PlaceHeightL);
 	}
 
+
 	.WhatsBtn.isIconLeft {
 		flex-direction: row-reverse;
 	}
+
 
 	.WhatsBtn.isIconTop {
 		flex-direction: column;
 	}
 
+
 	.WhatsBtn.isIconBottom {
 		flex-direction: column-reverse;
 	}
+
+
 
 	.WhatsBtn.hasIcon.isIconRight .BtnIcon {
 		right: 20px;
@@ -574,6 +610,7 @@ function GetCssName(pName: string) {
 		padding-left: 15px;
 	}
 
+
 	.WhatsBtn.hasIcon.isIconLeft .BtnIcon {
 		left: 20px;
 	}
@@ -583,23 +620,40 @@ function GetCssName(pName: string) {
 		padding-right: 15px;
 	}
 
+
+
 	.WhatsBtn.hasIcon.isIconRight .BtnIcon,
-	.WhatsBtn.hasIcon.isIconLeft .BtnIcon {
+	.WhatsBtn.hasIcon.isIconLeft .BtnIcon
+	{
 		position: absolute;
 	}
 
+
 	.WhatsBtn.hasIcon.isIconTop,
-	.WhatsBtn.hasIcon.isIconBottom {
+	.WhatsBtn.hasIcon.isIconBottom
+	{
 		gap: 5px;
 	}
 
+
 	.WhatsBtn.hasIcon.isIconTop .BtnText,
-	.WhatsBtn.hasIcon.isIconBottom .BtnText {
+	.WhatsBtn.hasIcon.isIconBottom .BtnText
+	{
 		padding: 0;
 	}
+
+
+
 </style>
 
+
+
+
+
 <style>
+
+
+
 	@media (hover: hover) and (pointer: fine) {
 		.WhatsBtn:hover .BtnTextNormal {
 			display: none;
@@ -610,6 +664,8 @@ function GetCssName(pName: string) {
 		}
 	}
 
+
+
 	@media (orientation: portrait) {
 		.WhatsBtn.IsPlaced {
 			width: var(--PlaceWidthP);
@@ -617,7 +673,14 @@ function GetCssName(pName: string) {
 			min-height: var(--PlaceHeightP);
 		}
 	}
+
+
+
 </style>
+
+
+
+
 
 <script>
 	const cWhatsButtons = document.querySelectorAll<HTMLElement>("[data-whats-btn='true']");
@@ -627,90 +690,90 @@ function GetCssName(pName: string) {
 	window.addEventListener("keydown", HandleWindowKeyDown);
 
 	function SetupWhatsButton(pButton: HTMLElement): void {
-		if (pButton.dataset.whatsReady === "true") return;
+	if (pButton.dataset.whatsReady === "true") return;
 
-		const cOverlay = pButton.nextElementSibling;
+	const cOverlay = pButton.nextElementSibling;
 
-		if (!(cOverlay instanceof HTMLElement)) return;
-		if (cOverlay.dataset.whatsOverlay !== "true") return;
+	if (!(cOverlay instanceof HTMLElement)) return;
+	if (cOverlay.dataset.whatsOverlay !== "true") return;
 
-		MoveOverlayToBody(cOverlay);
-		pButton.dataset.whatsReady = "true";
+	MoveOverlayToBody(cOverlay);
+	pButton.dataset.whatsReady = "true";
 
-		pButton.addEventListener("click", function HandleWhatsButtonClick(pEvent: MouseEvent): void {
-			if (IsMobileDevice()) return;
+	pButton.addEventListener("click", function HandleWhatsButtonClick(pEvent: MouseEvent): void {
+	if (IsMobileDevice()) return;
 
-			pEvent.preventDefault();
-			ShowWhatsOverlay(cOverlay);
-		});
+	pEvent.preventDefault();
+	ShowWhatsOverlay(cOverlay);
+	});
 
-		cOverlay.addEventListener("click", function HandleWhatsOverlayClick(pEvent: MouseEvent): void {
-			const cTarget = pEvent.target;
+	cOverlay.addEventListener("click", function HandleWhatsOverlayClick(pEvent: MouseEvent): void {
+	const cTarget = pEvent.target;
 
-			if (!(cTarget instanceof Element)) return;
+	if (!(cTarget instanceof Element)) return;
 
-			if (cTarget === cOverlay || cTarget.closest("[data-whats-close='true']")) {
-				HideWhatsOverlay(cOverlay);
-			}
-		});
+	if (cTarget === cOverlay || cTarget.closest("[data-whats-close='true']")) {
+	HideWhatsOverlay(cOverlay);
+	}
+	});
 	}
 
 	function MoveOverlayToBody(pOverlay: HTMLElement): void {
-		if (pOverlay.parentElement === document.body) return;
+	if (pOverlay.parentElement === document.body) return;
 
-		document.body.appendChild(pOverlay);
+	document.body.appendChild(pOverlay);
 	}
 
 	function HandleWindowKeyDown(pEvent: KeyboardEvent): void {
-		if (pEvent.key !== "Escape") return;
+	if (pEvent.key !== "Escape") return;
 
-		document
-			.querySelectorAll<HTMLElement>("[data-whats-overlay='true']:popover-open")
-			.forEach(HideWhatsOverlay);
+	document
+	.querySelectorAll<HTMLElement>("[data-whats-overlay='true']:popover-open")
+	.forEach(HideWhatsOverlay);
 	}
 
 	type PopoverElement = HTMLElement & {
-		showPopover?: () => void;
-		hidePopover?: () => void;
+	showPopover?: () => void;
+	hidePopover?: () => void;
 	};
 
 	function ShowWhatsOverlay(pOverlay: HTMLElement): void {
-		const cOverlay = pOverlay as PopoverElement;
+	const cOverlay = pOverlay as PopoverElement;
 
-		if (typeof cOverlay.showPopover !== "function") {
-			cOverlay.style.display = "flex";
-			return;
-		}
+	if (typeof cOverlay.showPopover !== "function") {
+	cOverlay.style.display = "flex";
+	return;
+	}
 
-		if (cOverlay.matches(":popover-open")) return;
+	if (cOverlay.matches(":popover-open")) return;
 
-		cOverlay.showPopover();
+	cOverlay.showPopover();
 	}
 
 	function HideWhatsOverlay(pOverlay: HTMLElement): void {
-		const cOverlay = pOverlay as PopoverElement;
+	const cOverlay = pOverlay as PopoverElement;
 
-		if (typeof cOverlay.hidePopover !== "function") {
-			cOverlay.style.display = "none";
-			return;
-		}
+	if (typeof cOverlay.hidePopover !== "function") {
+	cOverlay.style.display = "none";
+	return;
+	}
 
-		if (!cOverlay.matches(":popover-open")) return;
+	if (!cOverlay.matches(":popover-open")) return;
 
-		cOverlay.hidePopover();
+	cOverlay.hidePopover();
 	}
 
 	function IsMobileDevice(): boolean {
-		const cNavigator = navigator as Navigator & {
-			userAgentData?: {
-				mobile?: boolean;
-			};
-		};
+	const cNavigator = navigator as Navigator & {
+	userAgentData?: {
+	mobile?: boolean;
+	};
+	};
 
-		const cUserAgent = navigator.userAgent || "";
-		const cByUserAgentData = cNavigator.userAgentData?.mobile === true;
-		const cByUserAgent = /Android|iPhone|iPad|iPod|IEMobile|Opera Mini|Mobile/i.test(cUserAgent);
+	const cUserAgent = navigator.userAgent || "";
+	const cByUserAgentData = cNavigator.userAgentData?.mobile === true;
+	const cByUserAgent = /Android|iPhone|iPad|iPod|IEMobile|Opera Mini|Mobile/i.test(cUserAgent);
 
-		return cByUserAgentData || cByUserAgent;
+	return cByUserAgentData || cByUserAgent;
 	}
 </script>

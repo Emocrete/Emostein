@@ -1,0 +1,288 @@
+---
+import { Place, type PlaceProps, RespString } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import { GetLayoutBackground, GetLayoutPair, GetRootAttributes, GetStyleText, type LayoutBackground, type LayoutValue } from "./LayoutUtils";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
+  pAspect?: LayoutValue;
+  pMinHeight?: LayoutValue;
+  pMaxWidth?: LayoutValue;
+  pPad?: LayoutValue;
+  pBg?: LayoutBackground;
+  pRadius?: LayoutValue;
+  pOverflow?: "visible" | "hidden" | "clip";
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+const {
+  pAspect = new RespString("16 / 9", "4 / 5"),
+  pMinHeight = new RespString("440px", "480px"),
+  pMaxWidth = new RespString("1200px", "100%"),
+  pPad = new RespString("28px", "16px"),
+  pBg = "linear-gradient(145deg, #dbe4ea, #f7f9fa)",
+  pRadius = new RespString("38px", "24px"),
+  pOverflow = "hidden",
+  id: pGivenID = GetWidgetId("LayerDeck"),
+  class: pGivenClass = "",
+  style: pGivenStyle = "",
+} = cProps;
+
+const cAspect = GetLayoutPair(pAspect, "16 / 9", "");
+const cMinHeight = GetLayoutPair(pMinHeight, "440px");
+const cMaxWidth = GetLayoutPair(pMaxWidth, "1200px");
+const cPad = GetLayoutPair(pPad, "28px");
+const cRadius = GetLayoutPair(pRadius, "38px");
+const cHasSlot = Astro.slots.has("default");
+
+const cCoreStyle = [
+  `--LayerDeckAspectL:${cAspect.Landscape};`,
+  `--LayerDeckAspectP:${cAspect.Portrait};`,
+  `--LayerDeckMinHeightL:${cMinHeight.Landscape};`,
+  `--LayerDeckMinHeightP:${cMinHeight.Portrait};`,
+  `--LayerDeckMaxWidthL:${cMaxWidth.Landscape};`,
+  `--LayerDeckMaxWidthP:${cMaxWidth.Portrait};`,
+  `--LayerDeckPadL:${cPad.Landscape};`,
+  `--LayerDeckPadP:${cPad.Portrait};`,
+  `--LayerDeckRadiusL:${cRadius.Landscape};`,
+  `--LayerDeckRadiusP:${cRadius.Portrait};`,
+  `--LayerDeckBg:${GetLayoutBackground(pBg)};`,
+  `--LayerDeckOverflow:${pOverflow};`,
+  GetStyleText(pGivenStyle),
+]
+  .filter(Boolean)
+  .join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cCoreStyle);
+const cRootAttrs = GetRootAttributes(cProps, ["pAspect", "pMinHeight", "pMaxWidth", "pPad", "pBg", "pRadius", "pOverflow"]);
+---
+
+
+
+
+
+<div
+	style = {cPlace.Style}
+	class:list={["LayerDeck", cPlace.Class, pGivenClass]}
+	id={pGivenID}
+	data-emo-auto-container="true"
+	data-emo-empty-height="440"
+	{...cRootAttrs}
+>
+
+	{ cHasSlot ? (
+
+		<slot />
+	) : (
+
+		<>
+		
+		
+		
+		
+		
+		
+		
+			<div class = " LayerFallback LayerFallbackBack " />
+		
+		
+		
+		
+		
+		
+		
+			<div class = " LayerFallback LayerFallbackFrame " />
+		
+		
+		
+		
+		
+		
+		
+			<div class = " LayerFallback LayerFallbackCard ">
+		
+				<small>
+		
+					LayerDeck
+		
+				</small>
+		
+				<strong>
+					تكوين متراكب بدون هيرو
+				</strong>
+		
+				<span>
+					كل طبقة تظل عنصرًا مستقلًا قابلًا للتموضع والحركة.
+				</span>
+		
+			</div>
+		
+		
+		
+		
+		
+		
+		
+		</>
+	) }
+
+</div>
+
+
+
+
+
+<style>
+
+
+
+	.LayerDeck {
+		position: relative;
+		display: grid;
+		grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+		box-sizing: border-box;
+		width: min(100%, var(--LayerDeckMaxWidthL));
+		min-height: var(--LayerDeckMinHeightL);
+		aspect-ratio: var(--LayerDeckAspectL);
+		margin-inline: auto;
+		padding: var(--LayerDeckPadL);
+		border-radius: var(--LayerDeckRadiusL);
+		background: var(--LayerDeckBg);
+		overflow: var(--LayerDeckOverflow);
+		isolation: isolate;
+	}
+
+	.LayerDeck > :global(:not(.IsPlaced)) {
+		grid-area: 1 / 1;
+		min-width: 0;
+	}
+
+
+	.LayerFallback {
+		position: relative;
+		grid-area: 1 / 1;
+		box-sizing: border-box;
+	}
+
+
+	.LayerFallbackBack {
+		width: 68%;
+		height: 78%;
+		align-self: center;
+		justify-self: start;
+		border-radius: 36px;
+		background: linear-gradient(135deg, #111c27, #284152);
+	}
+
+
+	.LayerFallbackFrame {
+		width: 48%;
+		height: 62%;
+		align-self: start;
+		justify-self: end;
+		margin: 4% 3% 0 0;
+		border: 22px solid #caff3d;
+		border-radius: 10px;
+	}
+
+
+	.LayerFallbackCard {
+		display: flex;
+		flex-direction: column;
+		align-self: end;
+		justify-self: center;
+		box-sizing: border-box;
+		width: min(58%, 560px);
+		margin-bottom: 5%;
+		padding: clamp(24px, 4vw, 48px);
+		gap: 10px;
+		border-radius: 26px;
+		background: rgba(255, 255, 255, 0.9);
+		color: #14202b;
+		box-shadow: 0 28px 70px rgba(16, 32, 46, 0.22);
+	}
+
+	.LayerFallbackCard small {
+		font-weight: 900;
+		letter-spacing: 0.12em;
+	}
+
+	.LayerFallbackCard strong {
+		font-size: clamp(25px, 4vw, 50px);
+		line-height: 1.15;
+	}
+
+	.LayerFallbackCard span {
+		line-height: 1.8;
+	}
+
+
+
+	.LayerDeck.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+		margin: 0;
+	}
+
+
+
+	.LayerDeck.PlaceSized:not(.IsPlaced),
+	.LayerDeck.IsPlaced
+	{
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+		aspect-ratio: auto;
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.LayerDeck {
+			width: min(100%, var(--LayerDeckMaxWidthP));
+			min-height: var(--LayerDeckMinHeightP);
+			aspect-ratio: var(--LayerDeckAspectP);
+			padding: var(--LayerDeckPadP);
+			border-radius: var(--LayerDeckRadiusP);
+		}
+
+		.LayerFallbackBack {
+			width: 86%;
+			height: 70%;
+		}
+
+		.LayerFallbackFrame {
+			width: 66%;
+			height: 54%;
+			border-width: 14px;
+		}
+
+		.LayerFallbackCard {
+			width: 88%;
+		}
+
+		.LayerDeck.PlaceSized:not(.IsPlaced),
+		.LayerDeck.IsPlaced
+		{
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.LayerDeck.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+		}
+	}
+
+
+
+</style>

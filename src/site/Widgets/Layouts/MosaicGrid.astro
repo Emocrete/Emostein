@@ -1,0 +1,366 @@
+---
+import { Place, type PlaceProps, RespString } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import { ClampInt, GetLayoutBackground, GetLayoutPair, GetRootAttributes, GetStyleText, type LayoutBackground, type LayoutValue } from "./LayoutUtils";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
+  pColumns?: number;
+  pColumnsP?: number;
+  pAutoRows?: LayoutValue;
+  pGap?: LayoutValue;
+  pPad?: LayoutValue;
+  pMinHeight?: LayoutValue;
+  pMaxWidth?: LayoutValue;
+  pBg?: LayoutBackground;
+  pRadius?: LayoutValue;
+  pDense?: boolean;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+const {
+  pColumns = 12,
+  pColumnsP = 4,
+  pAutoRows = new RespString("84px", "72px"),
+  pGap = new RespString("22px", "12px"),
+  pPad = new RespString("22px", "12px"),
+  pMinHeight = new RespString("420px", "360px"),
+  pMaxWidth = new RespString("1200px", "100%"),
+  pBg = "linear-gradient(135deg, #eef2f4, #dce5ea)",
+  pRadius = new RespString("34px", "22px"),
+  pDense = true,
+  id: pGivenID = GetWidgetId("MosaicGrid"),
+  class: pGivenClass = "",
+  style: pGivenStyle = "",
+} = cProps;
+
+const cRows = GetLayoutPair(pAutoRows, "84px");
+const cGap = GetLayoutPair(pGap, "22px");
+const cPad = GetLayoutPair(pPad, "22px");
+const cMinHeight = GetLayoutPair(pMinHeight, "420px");
+const cMaxWidth = GetLayoutPair(pMaxWidth, "1200px");
+const cRadius = GetLayoutPair(pRadius, "34px");
+const cHasSlot = Astro.slots.has("default");
+
+const cCoreStyle = [
+  `--MosaicColumnsL:${ClampInt(pColumns, 12)};`,
+  `--MosaicColumnsP:${ClampInt(pColumnsP, 4)};`,
+  `--MosaicRowsL:${cRows.Landscape};`,
+  `--MosaicRowsP:${cRows.Portrait};`,
+  `--MosaicGapL:${cGap.Landscape};`,
+  `--MosaicGapP:${cGap.Portrait};`,
+  `--MosaicPadL:${cPad.Landscape};`,
+  `--MosaicPadP:${cPad.Portrait};`,
+  `--MosaicMinHeightL:${cMinHeight.Landscape};`,
+  `--MosaicMinHeightP:${cMinHeight.Portrait};`,
+  `--MosaicMaxWidthL:${cMaxWidth.Landscape};`,
+  `--MosaicMaxWidthP:${cMaxWidth.Portrait};`,
+  `--MosaicRadiusL:${cRadius.Landscape};`,
+  `--MosaicRadiusP:${cRadius.Portrait};`,
+  `--MosaicBg:${GetLayoutBackground(pBg)};`,
+  GetStyleText(pGivenStyle),
+]
+  .filter(Boolean)
+  .join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cCoreStyle);
+const cRootAttrs = GetRootAttributes(cProps, [
+  "pColumns",
+  "pColumnsP",
+  "pAutoRows",
+  "pGap",
+  "pPad",
+  "pMinHeight",
+  "pMaxWidth",
+  "pBg",
+  "pRadius",
+  "pDense",
+]);
+---
+
+
+
+
+
+<div
+	style = {cPlace.Style}
+	class:list={["MosaicGrid", pDense && "IsDense", cPlace.Class, pGivenClass]}
+	id={pGivenID}
+	data-emo-auto-container="true"
+	data-emo-empty-height="360"
+	{...cRootAttrs}
+>
+
+	{ cHasSlot ? (
+
+		<slot />
+	) : (
+
+		<>
+		
+		
+		
+		
+		
+		
+		
+			<div class = " MosaicFallback MosaicFallbackLead ">
+		
+				<>
+		
+					<b>
+		
+						01
+		
+					</b>
+		
+					<span>
+						مساحة رئيسية
+					</span>
+		
+				</>
+		
+			</div>
+		
+		
+		
+		
+		
+		
+		
+			<div class = " MosaicFallback MosaicFallbackTall ">
+		
+				<>
+		
+					<b>
+		
+						02
+		
+					</b>
+		
+					<span>
+						عنصر رأسي
+					</span>
+		
+				</>
+		
+			</div>
+		
+		
+		
+		
+		
+		
+		
+			<div class = " MosaicFallback MosaicFallbackSmall ">
+		
+				<>
+		
+					<b>
+		
+						03
+		
+					</b>
+		
+					<span>
+						تفصيلة
+					</span>
+		
+				</>
+		
+			</div>
+		
+		
+		
+		
+		
+		
+		
+			<div class = " MosaicFallback MosaicFallbackWide ">
+		
+				<>
+		
+					<b>
+		
+						04
+		
+					</b>
+		
+					<span>
+						شريط داعم
+					</span>
+		
+				</>
+		
+			</div>
+		
+		
+		
+		
+		
+		
+		
+		</>
+	) }
+
+</div>
+
+
+
+
+
+<style>
+
+
+
+	.MosaicGrid {
+		position: relative;
+		display: grid;
+		grid-template-columns: repeat(var(--MosaicColumnsL), minmax(0, 1fr));
+		grid-auto-rows: var(--MosaicRowsL);
+		grid-auto-flow: row;
+		box-sizing: border-box;
+		width: min(100%, var(--MosaicMaxWidthL));
+		min-height: var(--MosaicMinHeightL);
+		margin-inline: auto;
+		padding: var(--MosaicPadL);
+		gap: var(--MosaicGapL);
+		border-radius: var(--MosaicRadiusL);
+		background: var(--MosaicBg);
+		overflow: hidden;
+		isolation: isolate;
+	}
+
+
+	.MosaicFallback {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		box-sizing: border-box;
+		min-width: 0;
+		padding: 24px;
+		border: 1px solid rgba(255, 255, 255, 0.55);
+		border-radius: 22px;
+		background: rgba(255, 255, 255, 0.68);
+		color: #15202b;
+		box-shadow: 0 20px 45px rgba(25, 45, 60, 0.09);
+	}
+
+	.MosaicFallback b {
+		font-size: clamp(30px, 5vw, 72px);
+		font-weight: 300;
+		line-height: 1;
+	}
+
+	.MosaicFallback span {
+		font-size: 18px;
+		font-weight: 800;
+	}
+
+
+	.MosaicFallbackLead {
+		grid-column: span 7;
+		grid-row: span 3;
+		background: linear-gradient(135deg, #111b25, #334554);
+		color: #f7fafc;
+	}
+
+
+	.MosaicFallbackTall {
+		grid-column: span 5;
+		grid-row: span 2;
+		background: linear-gradient(145deg, #c9ff3f, #91c900);
+	}
+
+
+	.MosaicFallbackSmall {
+		grid-column: span 3;
+		grid-row: span 2;
+	}
+
+
+	.MosaicFallbackWide {
+		grid-column: span 9;
+		grid-row: span 1;
+		background: #ff6b46;
+	}
+
+
+
+	.MosaicGrid.IsDense {
+		grid-auto-flow: dense;
+	}
+
+
+	.MosaicGrid.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+		margin: 0;
+	}
+
+
+
+	.MosaicGrid.PlaceSized:not(.IsPlaced),
+	.MosaicGrid.IsPlaced
+	{
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.MosaicGrid {
+			grid-template-columns: repeat(var(--MosaicColumnsP), minmax(0, 1fr));
+			grid-auto-rows: var(--MosaicRowsP);
+			width: min(100%, var(--MosaicMaxWidthP));
+			min-height: var(--MosaicMinHeightP);
+			padding: var(--MosaicPadP);
+			gap: var(--MosaicGapP);
+			border-radius: var(--MosaicRadiusP);
+		}
+
+		.MosaicFallbackLead {
+			grid-column: span 4;
+			grid-row: span 3;
+		}
+
+		.MosaicFallbackTall {
+			grid-column: span 2;
+		}
+
+		.MosaicFallbackSmall {
+			grid-column: span 2;
+		}
+
+		.MosaicFallbackWide {
+			grid-column: span 4;
+			grid-row: span 2;
+		}
+
+		.MosaicGrid.PlaceSized:not(.IsPlaced),
+		.MosaicGrid.IsPlaced
+		{
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.MosaicGrid.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+		}
+	}
+
+
+
+</style>

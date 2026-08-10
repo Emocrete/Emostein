@@ -1,0 +1,203 @@
+---
+import { Place, type PlaceProps, RespString } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import { GetLayoutBackground, GetLayoutPair, GetRootAttributes, GetStyleText, type LayoutBackground, type LayoutValue } from "./LayoutUtils";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"article">, PlaceProps {
+  pTitle?: string;
+  pText?: string;
+  pBg?: LayoutBackground;
+  pColor?: string;
+  pAccent?: string;
+  pWidth?: LayoutValue;
+  pMinHeight?: LayoutValue;
+  pRadius?: LayoutValue;
+  pPad?: LayoutValue;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+const {
+  pTitle = "ميزة",
+  pText = "وصف قصير",
+  pBg = "#ffffff",
+  pColor = "#17212a",
+  pAccent = "var(--RadialAccent, #caff3d)",
+  pWidth = new RespString("166px", "100%"),
+  pMinHeight = new RespString("92px", "84px"),
+  pRadius = new RespString("18px", "16px"),
+  pPad = new RespString("16px", "14px"),
+  id: pGivenID = GetWidgetId("RadialItem"),
+  class: pGivenClass = "",
+  style: pGivenStyle = "",
+} = cProps;
+
+const cWidth = GetLayoutPair(pWidth, "166px");
+const cMinHeight = GetLayoutPair(pMinHeight, "92px");
+const cRadius = GetLayoutPair(pRadius, "18px");
+const cPad = GetLayoutPair(pPad, "16px");
+const cHasSlot = Astro.slots.has("default");
+
+const cCoreStyle = [
+  `--RadialItemBg:${GetLayoutBackground(pBg)};`,
+  `--RadialItemColor:${pColor};`,
+  `--RadialItemAccent:${pAccent};`,
+  `--RadialItemWidthL:${cWidth.Landscape};`,
+  `--RadialItemWidthP:${cWidth.Portrait};`,
+  `--RadialItemMinHeightL:${cMinHeight.Landscape};`,
+  `--RadialItemMinHeightP:${cMinHeight.Portrait};`,
+  `--RadialItemRadiusL:${cRadius.Landscape};`,
+  `--RadialItemRadiusP:${cRadius.Portrait};`,
+  `--RadialItemPadL:${cPad.Landscape};`,
+  `--RadialItemPadP:${cPad.Portrait};`,
+  GetStyleText(pGivenStyle),
+]
+  .filter(Boolean)
+  .join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cCoreStyle);
+const cRootAttrs = GetRootAttributes(cProps, ["pTitle", "pText", "pBg", "pColor", "pAccent", "pWidth", "pMinHeight", "pRadius", "pPad"]);
+---
+
+
+
+
+
+<article
+	style = {cPlace.Style}
+	class:list={["RadialItem", cPlace.Class, pGivenClass]}
+	id={pGivenID}
+	{...cRootAttrs}
+>
+
+	{ cHasSlot ? (
+
+		<slot />
+	) : (
+
+		<>
+		
+		
+		
+		
+		
+		
+		
+			<b>
+		
+				{pTitle}
+		
+			</b>
+		
+		
+		
+		
+		
+		
+		
+			<span>
+				{pText}
+			</span>
+		
+		
+		
+		
+		
+		
+		
+		</>
+	) }
+
+</article>
+
+
+
+
+
+<style>
+
+
+
+	.RadialItem {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		box-sizing: border-box;
+		width: var(--RadialItemWidthL);
+		min-height: var(--RadialItemMinHeightL);
+		padding: var(--RadialItemPadL);
+		gap: 4px;
+		border: 1px solid color-mix(in srgb, var(--RadialItemAccent) 55%, transparent);
+		border-radius: var(--RadialItemRadiusL);
+		background: var(--RadialItemBg);
+		color: var(--RadialItemColor);
+		text-align: center;
+		box-shadow: 0 14px 34px rgba(24, 38, 50, 0.13);
+	}
+
+	.RadialItem > b {
+		font-size: 18px;
+		line-height: 1.2;
+	}
+
+	.RadialItem > span {
+		font-size: 13px;
+		line-height: 1.5;
+		opacity: 0.64;
+	}
+
+
+
+	.RadialItem.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+		translate: none;
+	}
+
+
+
+	.RadialItem.PlaceSized:not(.IsPlaced),
+	.RadialItem.IsPlaced
+	{
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.RadialItem {
+			width: var(--RadialItemWidthP);
+			min-height: var(--RadialItemMinHeightP);
+			padding: var(--RadialItemPadP);
+			border-radius: var(--RadialItemRadiusP);
+		}
+
+		.RadialItem.PlaceSized:not(.IsPlaced),
+		.RadialItem.IsPlaced
+		{
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.RadialItem.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+		}
+	}
+
+
+
+</style>

@@ -1,0 +1,356 @@
+---
+import { Place, type PlaceProps, RespString } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import { GetLayoutBackground, GetLayoutPair, GetRootAttributes, GetStyleText, type LayoutBackground, type LayoutValue } from "./LayoutUtils";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
+  pItemWidth?: LayoutValue;
+  pGap?: LayoutValue;
+  pPad?: LayoutValue;
+  pMaxWidth?: LayoutValue;
+  pBg?: LayoutBackground;
+  pEdgeFade?: boolean;
+  pSnap?: "mandatory" | "proximity" | "none";
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+const {
+  pItemWidth = new RespString("340px", "82vw"),
+  pGap = new RespString("22px", "14px"),
+  pPad = new RespString("28px", "14px"),
+  pMaxWidth = new RespString("1200px", "100%"),
+  pBg = "#eef2f4",
+  pEdgeFade = true,
+  pSnap = "proximity",
+  id: pGivenID = GetWidgetId("ScrollShelf"),
+  class: pGivenClass = "",
+  style: pGivenStyle = "",
+} = cProps;
+
+const cItemWidth = GetLayoutPair(pItemWidth, "340px");
+const cGap = GetLayoutPair(pGap, "22px");
+const cPad = GetLayoutPair(pPad, "28px");
+const cMaxWidth = GetLayoutPair(pMaxWidth, "1200px");
+const cHasSlot = Astro.slots.has("default");
+
+const cCoreStyle = [
+  `--ScrollShelfItemWidthL:${cItemWidth.Landscape};`,
+  `--ScrollShelfItemWidthP:${cItemWidth.Portrait};`,
+  `--ScrollShelfGapL:${cGap.Landscape};`,
+  `--ScrollShelfGapP:${cGap.Portrait};`,
+  `--ScrollShelfPadL:${cPad.Landscape};`,
+  `--ScrollShelfPadP:${cPad.Portrait};`,
+  `--ScrollShelfMaxWidthL:${cMaxWidth.Landscape};`,
+  `--ScrollShelfMaxWidthP:${cMaxWidth.Portrait};`,
+  `--ScrollShelfBg:${GetLayoutBackground(pBg)};`,
+  `--ScrollShelfSnap:${pSnap === "none" ? "none" : `x ${pSnap}`};`,
+  GetStyleText(pGivenStyle),
+]
+  .filter(Boolean)
+  .join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cCoreStyle);
+const cRootAttrs = GetRootAttributes(cProps, ["pItemWidth", "pGap", "pPad", "pMaxWidth", "pBg", "pEdgeFade", "pSnap"]);
+---
+
+
+
+
+
+<div
+	style = {cPlace.Style}
+	class:list={["ScrollShelf", pEdgeFade && "HasEdgeFade", cPlace.Class, pGivenClass]}
+	id={pGivenID}
+	data-emo-auto-container="true"
+	data-emo-empty-height="360"
+	{...cRootAttrs}
+>
+
+	{ cHasSlot ? (
+
+		<slot />
+	) : (
+
+		<>
+		
+		
+		
+		
+		
+		
+		
+			<article class = " ShelfFallback ShelfFallbackOne ">
+		
+				<>
+		
+					<small>
+		
+						01
+		
+					</small>
+		
+					<b>
+		
+						عنصر أول
+		
+					</b>
+		
+					<span>
+						رف أفقي طبيعي
+					</span>
+		
+				</>
+		
+			</article>
+		
+		
+		
+		
+		
+		
+		
+			<article class = " ShelfFallback ShelfFallbackTwo ">
+		
+				<>
+		
+					<small>
+		
+						02
+		
+					</small>
+		
+					<b>
+		
+						عنصر ثانٍ
+		
+					</b>
+		
+					<span>
+						Snap عند التمرير
+					</span>
+		
+				</>
+		
+			</article>
+		
+		
+		
+		
+		
+		
+		
+			<article class = " ShelfFallback ShelfFallbackThree ">
+		
+				<>
+		
+					<small>
+		
+						03
+		
+					</small>
+		
+					<b>
+		
+						عنصر ثالث
+		
+					</b>
+		
+					<span>
+						جاهز للموبايل
+					</span>
+		
+				</>
+		
+			</article>
+		
+		
+		
+		
+		
+		
+		
+			<article class = " ShelfFallback ShelfFallbackFour ">
+		
+				<>
+		
+					<small>
+		
+						04
+		
+					</small>
+		
+					<b>
+		
+						عنصر رابع
+		
+					</b>
+		
+					<span>
+						بدون مكتبة Carousel
+					</span>
+		
+				</>
+		
+			</article>
+		
+		
+		
+		
+		
+		
+		
+		</>
+	) }
+
+</div>
+
+
+
+
+
+<style>
+
+
+
+	.ScrollShelf {
+		position: relative;
+		display: grid;
+		grid-auto-flow: column;
+		grid-auto-columns: minmax(0, var(--ScrollShelfItemWidthL));
+		box-sizing: border-box;
+		width: min(100%, var(--ScrollShelfMaxWidthL));
+		margin-inline: auto;
+		padding: var(--ScrollShelfPadL);
+		gap: var(--ScrollShelfGapL);
+		background: var(--ScrollShelfBg);
+		overflow-x: auto;
+		overflow-y: hidden;
+		scroll-snap-type: var(--ScrollShelfSnap);
+		scroll-padding-inline: var(--ScrollShelfPadL);
+		overscroll-behavior-inline: contain;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.ScrollShelf::-webkit-scrollbar {
+		height: 8px;
+	}
+
+	.ScrollShelf::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	.ScrollShelf::-webkit-scrollbar-thumb {
+		border-radius: 999px;
+		background: rgba(20, 33, 44, 0.28);
+	}
+
+
+	.ShelfFallback {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		box-sizing: border-box;
+		min-height: 320px;
+		padding: 26px;
+		gap: 8px;
+		border-radius: 26px;
+		background: #ffffff;
+		color: #17212a;
+		scroll-snap-align: start;
+	}
+
+	.ShelfFallback small {
+		margin-bottom: auto;
+		font-size: 54px;
+		font-weight: 250;
+		opacity: 0.45;
+	}
+
+	.ShelfFallback b {
+		font-size: 27px;
+	}
+
+	.ShelfFallback span {
+		opacity: 0.65;
+	}
+
+
+	.ShelfFallbackOne {
+		background: linear-gradient(145deg, #14212c, #354e5e);
+		color: #ffffff;
+	}
+
+
+	.ShelfFallbackTwo {
+		background: linear-gradient(145deg, #caff3d, #96cf00);
+	}
+
+
+	.ShelfFallbackThree {
+		background: linear-gradient(145deg, #ff7653, #ffb49f);
+	}
+
+
+
+	.ScrollShelf.HasEdgeFade {
+		mask-image: linear-gradient(to left, transparent 0, #000 5%, #000 95%, transparent 100%);
+	}
+
+
+	.ScrollShelf.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+		margin: 0;
+	}
+
+
+
+	.ScrollShelf.PlaceSized:not(.IsPlaced),
+	.ScrollShelf.IsPlaced
+	{
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.ScrollShelf {
+			grid-auto-columns: minmax(0, var(--ScrollShelfItemWidthP));
+			width: min(100%, var(--ScrollShelfMaxWidthP));
+			padding: var(--ScrollShelfPadP);
+			gap: var(--ScrollShelfGapP);
+			scroll-padding-inline: var(--ScrollShelfPadP);
+		}
+
+		.ScrollShelf.HasEdgeFade {
+			mask-image: linear-gradient(to left, transparent 0, #000 2%, #000 98%, transparent 100%);
+		}
+
+		.ScrollShelf.PlaceSized:not(.IsPlaced),
+		.ScrollShelf.IsPlaced
+		{
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.ScrollShelf.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+		}
+	}
+
+
+
+</style>

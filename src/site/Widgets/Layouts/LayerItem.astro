@@ -1,0 +1,254 @@
+---
+import { GetHzAlignCss, GetVrAlignCss, type HzAlignValue, Place, type PlaceProps, RespString, type VrAlignValue } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import { GetLayoutBackground, GetLayoutPair, GetRootAttributes, GetStyleText, type LayoutBackground, type LayoutValue } from "./LayoutUtils";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
+  pWidth?: LayoutValue;
+  pHeight?: LayoutValue;
+  pOffsetX?: LayoutValue;
+  pOffsetY?: LayoutValue;
+  pHzAlign?: HzAlignValue;
+  pVrAlign?: VrAlignValue;
+  pBg?: LayoutBackground;
+  pColor?: string;
+  pPad?: LayoutValue;
+  pRadius?: LayoutValue;
+  pShadow?: string;
+  pBlend?: string;
+  pOverflow?: "visible" | "hidden" | "clip";
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+const {
+  pWidth = new RespString("62%", "86%"),
+  pHeight = new RespString("auto", "auto"),
+  pOffsetX = new RespString("0px", "0px"),
+  pOffsetY = new RespString("0px", "0px"),
+  pHzAlign = "Center",
+  pVrAlign = "Center",
+  pBg = "rgba(255, 255, 255, .9)",
+  pColor = "#14202b",
+  pPad = new RespString("28px", "20px"),
+  pRadius = new RespString("24px", "18px"),
+  pShadow = "0 24px 60px rgba(15, 30, 44, .18)",
+  pBlend = "normal",
+  pOverflow = "hidden",
+  id: pGivenID = GetWidgetId("LayerItem"),
+  class: pGivenClass = "",
+  style: pGivenStyle = "",
+} = cProps;
+
+const cWidth = GetLayoutPair(pWidth, "62%");
+const cHeight = GetLayoutPair(pHeight, "auto");
+const cOffsetX = GetLayoutPair(pOffsetX, "0px");
+const cOffsetY = GetLayoutPair(pOffsetY, "0px");
+const cPad = GetLayoutPair(pPad, "28px");
+const cRadius = GetLayoutPair(pRadius, "24px");
+const cHasSlot = Astro.slots.has("default");
+const cHzAlign = GetHzAlignCss(pHzAlign);
+const cVrAlign = GetVrAlignCss(pVrAlign);
+const cGridHzAlign = cHzAlign === "flex-start" ? "start" : cHzAlign === "flex-end" ? "end" : cHzAlign;
+const cGridVrAlign = cVrAlign === "flex-start" ? "start" : cVrAlign === "flex-end" ? "end" : cVrAlign;
+
+const cCoreStyle = [
+  `--LayerItemWidthL:${cWidth.Landscape};`,
+  `--LayerItemWidthP:${cWidth.Portrait};`,
+  `--LayerItemHeightL:${cHeight.Landscape};`,
+  `--LayerItemHeightP:${cHeight.Portrait};`,
+  `--LayerItemOffsetXL:${cOffsetX.Landscape};`,
+  `--LayerItemOffsetXP:${cOffsetX.Portrait};`,
+  `--LayerItemOffsetYL:${cOffsetY.Landscape};`,
+  `--LayerItemOffsetYP:${cOffsetY.Portrait};`,
+  `--LayerItemHz:${cHzAlign};`,
+  `--LayerItemVr:${cVrAlign};`,
+  `--LayerItemGridHz:${cGridHzAlign};`,
+  `--LayerItemGridVr:${cGridVrAlign};`,
+  `--LayerItemBg:${GetLayoutBackground(pBg)};`,
+  `--LayerItemColor:${pColor};`,
+  `--LayerItemPadL:${cPad.Landscape};`,
+  `--LayerItemPadP:${cPad.Portrait};`,
+  `--LayerItemRadiusL:${cRadius.Landscape};`,
+  `--LayerItemRadiusP:${cRadius.Portrait};`,
+  `--LayerItemShadow:${pShadow};`,
+  `--LayerItemBlend:${pBlend};`,
+  `--LayerItemOverflow:${pOverflow};`,
+  GetStyleText(pGivenStyle),
+]
+  .filter(Boolean)
+  .join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cCoreStyle);
+const cRootAttrs = GetRootAttributes(cProps, [
+  "pWidth",
+  "pHeight",
+  "pOffsetX",
+  "pOffsetY",
+  "pHzAlign",
+  "pVrAlign",
+  "pBg",
+  "pColor",
+  "pPad",
+  "pRadius",
+  "pShadow",
+  "pBlend",
+  "pOverflow",
+]);
+---
+
+
+
+
+
+<div
+	style = {cPlace.Style}
+	class:list={["LayerItem", cPlace.Class, pGivenClass]}
+	id={pGivenID}
+	{...cRootAttrs}
+>
+
+	{ cHasSlot ? (
+
+		<slot />
+	) : (
+
+		<span class = " LayerItemFallback ">
+		
+		
+		
+		
+		
+		
+		
+			<b>
+		
+				طبقة مستقلة
+		
+			</b>
+		
+		
+		
+		
+		
+		
+		
+			<small>
+		
+				غيّر المحاذاة والإزاحة والمقاس وحرّكها بخصائص Place.
+		
+			</small>
+		
+		
+		
+		
+		
+		
+		
+		</span>
+	) }
+
+</div>
+
+
+
+
+
+<style>
+
+
+
+	.LayerItem {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: var(--LayerItemHz);
+		justify-content: var(--LayerItemVr);
+		align-self: var(--LayerItemGridVr);
+		justify-self: var(--LayerItemGridHz);
+		box-sizing: border-box;
+		width: var(--LayerItemWidthL);
+		height: var(--LayerItemHeightL);
+		min-height: 140px;
+		left: var(--LayerItemOffsetXL);
+		top: var(--LayerItemOffsetYL);
+		padding: var(--LayerItemPadL);
+		border-radius: var(--LayerItemRadiusL);
+		background: var(--LayerItemBg);
+		color: var(--LayerItemColor);
+		box-shadow: var(--LayerItemShadow);
+		mix-blend-mode: var(--LayerItemBlend);
+		overflow: var(--LayerItemOverflow);
+	}
+
+
+	.LayerItemFallback {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.LayerItemFallback b {
+		font-size: clamp(23px, 3vw, 38px);
+	}
+
+	.LayerItemFallback small {
+		font-size: 14px;
+		line-height: 1.7;
+		opacity: 0.72;
+	}
+
+
+
+	.LayerItem.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+	}
+
+
+
+	.LayerItem.PlaceSized:not(.IsPlaced),
+	.LayerItem.IsPlaced
+	{
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.LayerItem {
+			width: var(--LayerItemWidthP);
+			height: var(--LayerItemHeightP);
+			left: var(--LayerItemOffsetXP);
+			top: var(--LayerItemOffsetYP);
+			padding: var(--LayerItemPadP);
+			border-radius: var(--LayerItemRadiusP);
+		}
+
+		.LayerItem.PlaceSized:not(.IsPlaced),
+		.LayerItem.IsPlaced
+		{
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.LayerItem.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+		}
+	}
+
+
+
+</style>

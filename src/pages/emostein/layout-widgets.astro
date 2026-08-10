@@ -1,11 +1,9 @@
 ---
 import BLayout from "@/Layout.astro";
-import { CardsGr } from "@/Widgets/Cards";
-import { Badge, EmoCall, EmoCountdown, Emograph, EmoList, SecTitle, VrStack } from "@/Widgets/Comp";
-import { AngleBand, LayerDeck, LayerItem, MosaicGrid, MosaicItem, RadialItem, RadialLayout, ScrollShelf, ShelfItem, SideRail, SplitPane, SplitScene, StickyStory, StickyStoryItem, StoryRail, StoryStep, ZigzagItem, ZigzagStory } from "@/Widgets/Layouts";
+import { Emograph, SecTitle, VrStack } from "@/Widgets/Comp";
 import { EmoSec, Hero } from "@/Widgets/Sections";
-import { EmoStr } from "@/Widgets/Strips";
-import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { AngleBand, LayerDeck, LayerItem, MosaicGrid, MosaicItem, RadialItem, RadialLayout, ScrollShelf, ShelfItem, SideRail, SplitPane, SplitScene, StickyStory, StickyStoryItem, StoryRail, StoryStep, ZigzagItem, ZigzagStory } from "../../site/Widgets/Layouts";
+import { Pixel, RespString, Text } from "@/TypesLib";
 
 const cSectionPad = new Pixel(72, 28);
 const cExampleGap = new Pixel(44, 24);
@@ -20,9 +18,10 @@ const cDarkBody = (pText: string) => Text.Body.Centered.OfText(pText);
 
 
 <BLayout
-	pSchemaType="Service"
-	pTitle="تقرير السلامة الإنشائية والشهادة المؤمنة للتصالح في مخالفات البناء"
-	pDescr="خدمة هندسية متخصصة لإعداد تقرير السلامة الإنشائية لملفات التصالح في مصر واستخراج الشهادة المؤمنة من نقابة المهندسين المصرية و إعداد الرسومات والتقرير الهندسي."
+	pTitle="مكتبة ودجات اللايوت الحديثة"
+	pDescr="ثلاثة أمثلة عملية لكل ودجت لايوت جديد داخل Emostein"
+	pSchemaType="CollectionPage"
+	pIntro={false}
 >
 
 
@@ -31,209 +30,7 @@ const cDarkBody = (pText: string) => Text.Body.Centered.OfText(pText);
 
 
 
-	<Hero pImgAlt="عمارات سكنية مخالفة تم تسوية وضعها القانوني وعمل تقارير السلامة الإنشائية للتصالح">
-
-		<VrStack
-			pHzAlign="Center"
-			pVrAlign="Center"
-			pSize={new Size(new NumPer("55%","95%"))}
-			pLoc={new Loc(new NumPer("7%","2.5%"),new NumPer("20%","15%"))}
-			pBgOpacity={new Percent(60)}
-			pBgColor={new ElemBg(Colors.Black)}
-		>
-
-			<Emograph pTitle={Text.H1.Centered.White.OfText("تقرير السلامة الإنشائية والشهادة المؤمنة للتصالح في مخالفات البناء")} />
-
-			<EmoCall data-own-size BlackSky pText="للطلب والاستفسار" />
-
-		</VrStack>
-
-		<VrStack
-			pLandOnly
-			pSize={new Size(new NumPer("60%","95%"))}
-			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("70%","60%"))}
-			data-own-size
-			pBgOpacity={new Percent(75)}
-			pBgColor={new ElemBg(Colors.Black)}
-		>
-
-			<Badge
-				pYears={6}
-				pWorks={40}
-				pDuration={24}
-				pDurationText="خلال يوم واحد"
-				pColor="white"
-			/>
-
-		</VrStack>
-
-	</Hero>
-
-
-
-
-
-
-
-	<EmoSec
-		id="reconcile-update"
-		pBg={new ElemBg(Colors.BlackOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-		data-ops-event="ReconcileUpdate"
-		data-ops-on="view"
-		data-ops-label="آخر تحديث تنظيمي"
-	>
-
-		<SecTitle Yellow pTitle="آخر موعد لتقديم طلبات التصالح في 5 نوفمبر 2026" pDesc="طبقا لقرار مجلس الوزراء رقم 1098 لسنة 2026" />
-
-		<EmoCountdown pDeadline="2026-11-05T23:59:59+02:00" pSize={new Size(new NumPer("1120px", "94%"))} />
-
-		<EmoStr pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		id="secReport"
-		pBg={new ElemBg(Colors.BlackOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			Bistage
-			pTitle="تقرير السلامة الإنشائية للتصالح والشهادة المؤمنة"
-			pDesc="خدمة هندسية لتجهيز تقرير السلامة الإنشائية المطلوب في ملف التصالح ، مع متابعة إصدار الشهادة المؤمنة من نقابة المهندسين"
-		/>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		id="reconcile-scope"
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-		data-ops-event="ReconcileScope"
-		data-ops-on="view"
-		data-ops-label="نطاق خدمة التصالح"
-	>
-
-		<SecTitle
-			Bistage
-			pTitle="ما الذي نجهزه في ملف التصالح؟"
-			pDesc="الصفحة موجهة لصاحب ملف التصالح الذي يحتاج مستندًا هندسيًا واضحًا: رسم معماري للوضع القائم، تقرير سلامة إنشائية، شهادة قيد مؤمنة، أو ملف رقمي قابل للتقديم والمتابعة."
-		/>
-
-		<EmoStr pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
-
-			<CardsGr
-				pCardBg={new ElemBg(Colors.Gray1)}
-				pCardTitleFnt={Text.H3.Centered}
-				pCardBodyFnt={Text.Body.Centered}
-				pStackDir="Row"
-				pSpacing={20}
-				pTopic1={new Topic("رسومات الوضع القائم", "إعداد الرسومات المعمارية للأعمال المخالفة المنفذة على الطبيعة، بدل تقديم رسومات عامة لا تعبّر عن الحالة الفعلية للعقار.")}
-				pTopic2={new Topic("تقرير السلامة الإنشائية", "تجهيز التقرير الهندسي عن سلامة المبنى أو الجزء المخالف بالصيغة المناسبة للحالة والجهة المصدرة المطلوبة.")}
-				pTopic3={new Topic("الشهادة المؤمنة", "مراجعة احتياج الملف إلى شهادة القيد المؤمنة للمهندس مصدر التقرير وتجهيزها ضمن ترتيب الملف الفني.")}
-				pTopic4={new Topic("نسخة رقمية منظمة", "تجميع المستندات الفنية في صورة واضحة ومهيأة للتقديم من خلال المركز التكنولوجي أو المنظومة الإلكترونية.")}
-			/>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		id="reconcile-documents"
-		pBg={new ElemBg(Colors.Gray1)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-		data-ops-event="ReconcileDocuments"
-		data-ops-on="view"
-		data-ops-label="المستندات الأساسية"
-	>
-
-		<SecTitle
-			Sky
-			pTitle="المستندات الفنية الأساسية في ملف التصالح"
-			pDesc="لا نعرض قائمة أوراق إدارية طويلة فقط، لكن نرتب المستندات الفنية التي تؤثر فعليًا على قبول وفحص الملف."
-		/>
-
-		<EmoStr pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
-
-			<EmoList
-				pWidth={new RespString("1180px", "100%")}
-				pTitle={Text.H3.Centered.OfText("محتويات الملف الفني")}
-				pDesc={Text.Body.Centered.OfText("الصورة الأساسية للملف تدور حول الرسومات، التقرير الإنشائي، شهادة القيد المؤمنة، ومستندات الترخيص أو النسخة الرقمية متى كانت متاحة أو مطلوبة.")}
-				pHeadBg={new ElemBg(Colors.SkyLite)}
-				pItemsBg={new ElemBg(Colors.WhiteOff)}
-				pItems={[
-					{ Title: "الرسومات المعمارية", Items: ["نسختان من الرسومات المعمارية للأعمال المخالفة المنفذة على الطبيعة، موضح بهما الوضع القائم والمساحات والعناصر المؤثرة في الفحص."] },
-					{ Title: "تقرير السلامة الإنشائية", Items: ["تقرير هندسي يوضح حالة السلامة الإنشائية للمبنى أو للأعمال محل التصالح، وفق النموذج والجهة المصدرة المناسبة للحالة."] },
-					{ Title: "شهادة القيد المؤمنة", Items: ["شهادة تخص المهندس مصدر التقرير، وتُرفق عندما تكون مطلوبة ضمن مستندات الملف بحسب نطاق الحالة والجهة المختصة."] },
-					{ Title: "النسخة الرقمية", Items: ["تجهيز نسخة رقمية منظمة من المستندات الفنية والمساندة لتسهيل الرفع والمتابعة عبر الجهة المختصة أو المنصة الإلكترونية."] },
-					{ Title: "مستندات الصفة والسداد", Items: ["ما يثبت صفة مقدم الطلب، وإيصال سداد رسم الفحص، ومقابل جدية التصالح، بحسب ما يقدمه صاحب الشأن ضمن ملفه الإداري."] }
-				]}
-			/>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		id="reconcile-deliverables"
-		pBg={new ElemBg(Colors.Gray1)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-		data-ops-event="ReconcileDeliverables"
-		data-ops-on="view"
-		data-ops-label="مخرجات التسليم"
-	>
-
-		<SecTitle SkyDark pTitle="مخرجات التسليم من خدمة التصالح" />
-
-		<EmoStr pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
-
-			<CardsGr
-				pCardBg={new ElemBg(Colors.WhiteOff)}
-				pCardTitleFnt={Text.H3}
-				pCardBodyFnt={Text.Body}
-				pStackDir="Row"
-				pSpacing={20}
-				pTopic1={new Topic("ملف رسومات", "رسومات هندسية معتمدة للوضع القائم والأعمال المخالفة محل التصالح، منظمة بحسب الغرض من التقديم.")}
-				pTopic2={new Topic("تقرير سلامة", "تقرير هندسي عن السلامة الإنشائية وفق النموذج الواجب التطبيق للحالة والجهة المصدرة المناسبة.")}
-				pTopic3={new Topic("شهادة مؤمنة", "شهادة القيد المؤمنة للمهندس مصدر التقرير إذا كانت مطلوبة ضمن حالة الملف.")}
-				pTopic4={new Topic("نسخة رقمية", "ملفات رقمية مرتبة للمستندات الفنية والمساندة لتسهيل التقديم والمتابعة والاستيفاء.")}
-			/>
-
-		</EmoStr>
-
-	</EmoSec>
+	<Hero pImgF="/Media/Home/" />
 
 
 

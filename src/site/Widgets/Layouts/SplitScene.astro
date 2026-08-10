@@ -1,0 +1,284 @@
+---
+import { Place, type PlaceProps, RespString } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import { GetLayoutBackground, GetLayoutPair, GetRootAttributes, GetStyleText, type LayoutBackground, type LayoutValue } from "./LayoutUtils";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
+  pColumns?: LayoutValue;
+  pGap?: LayoutValue;
+  pPad?: LayoutValue;
+  pMinHeight?: LayoutValue;
+  pMaxWidth?: LayoutValue;
+  pBg?: LayoutBackground;
+  pRadius?: LayoutValue;
+  pReverse?: boolean;
+  pReverseP?: boolean;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+const {
+  pColumns = new RespString("minmax(0, 5fr) minmax(0, 7fr)", "minmax(0, 1fr)"),
+  pGap = new RespString("0px", "14px"),
+  pPad = new RespString("0px", "0px"),
+  pMinHeight = new RespString("480px", "520px"),
+  pMaxWidth = new RespString("1200px", "100%"),
+  pBg = "#eef1f3",
+  pRadius = new RespString("34px", "22px"),
+  pReverse = false,
+  pReverseP = false,
+  id: pGivenID = GetWidgetId("SplitScene"),
+  class: pGivenClass = "",
+  style: pGivenStyle = "",
+} = cProps;
+
+const cColumns = GetLayoutPair(pColumns, "minmax(0, 5fr) minmax(0, 7fr)", "");
+const cGap = GetLayoutPair(pGap, "0px");
+const cPad = GetLayoutPair(pPad, "0px");
+const cMinHeight = GetLayoutPair(pMinHeight, "480px");
+const cMaxWidth = GetLayoutPair(pMaxWidth, "1200px");
+const cRadius = GetLayoutPair(pRadius, "34px");
+const cHasSlot = Astro.slots.has("default");
+
+const cCoreStyle = [
+  `--SplitColumnsL:${cColumns.Landscape};`,
+  `--SplitColumnsP:${cColumns.Portrait};`,
+  `--SplitGapL:${cGap.Landscape};`,
+  `--SplitGapP:${cGap.Portrait};`,
+  `--SplitPadL:${cPad.Landscape};`,
+  `--SplitPadP:${cPad.Portrait};`,
+  `--SplitMinHeightL:${cMinHeight.Landscape};`,
+  `--SplitMinHeightP:${cMinHeight.Portrait};`,
+  `--SplitMaxWidthL:${cMaxWidth.Landscape};`,
+  `--SplitMaxWidthP:${cMaxWidth.Portrait};`,
+  `--SplitRadiusL:${cRadius.Landscape};`,
+  `--SplitRadiusP:${cRadius.Portrait};`,
+  `--SplitBg:${GetLayoutBackground(pBg)};`,
+  GetStyleText(pGivenStyle),
+]
+  .filter(Boolean)
+  .join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cCoreStyle);
+const cRootAttrs = GetRootAttributes(cProps, [
+  "pColumns",
+  "pGap",
+  "pPad",
+  "pMinHeight",
+  "pMaxWidth",
+  "pBg",
+  "pRadius",
+  "pReverse",
+  "pReverseP",
+]);
+---
+
+
+
+
+
+<div
+	style = {cPlace.Style}
+	class:list={["SplitScene", pReverse && "ReverseL", pReverseP && "ReverseP", cPlace.Class, pGivenClass]}
+	id={pGivenID}
+	data-emo-auto-container="true"
+	data-emo-empty-height="480"
+	{...cRootAttrs}
+>
+
+	{ cHasSlot ? (
+
+		<slot />
+	) : (
+
+		<>
+		
+		
+		
+		
+		
+		
+		
+			<section class = " SplitFallback SplitFallbackMedia ">
+		
+				<span>
+					مساحة بصرية
+				</span>
+		
+			</section>
+		
+		
+		
+		
+		
+		
+		
+			<section class = " SplitFallback SplitFallbackContent ">
+		
+				<small>
+		
+					تقسيم غير متماثل
+		
+				</small>
+		
+				<h3>
+					مشهدان داخل تكوين واحد
+				</h3>
+		
+				<p>
+					الودجت يظهر بتكوين كامل حتى من غير أي معطيات.
+				</p>
+		
+			</section>
+		
+		
+		
+		
+		
+		
+		
+		</>
+	) }
+
+</div>
+
+
+
+
+
+<style>
+
+
+
+	.SplitScene {
+		position: relative;
+		display: grid;
+		grid-template-columns: var(--SplitColumnsL);
+		box-sizing: border-box;
+		width: min(100%, var(--SplitMaxWidthL));
+		min-height: var(--SplitMinHeightL);
+		margin-inline: auto;
+		padding: var(--SplitPadL);
+		gap: var(--SplitGapL);
+		border-radius: var(--SplitRadiusL);
+		background: var(--SplitBg);
+		overflow: hidden;
+		isolation: isolate;
+	}
+
+
+	.SplitFallback {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		box-sizing: border-box;
+		min-width: 0;
+		padding: clamp(28px, 5vw, 72px);
+	}
+
+
+	.SplitFallbackMedia {
+		align-items: center;
+		background: radial-gradient(circle at 34% 40%, rgba(207, 255, 76, 0.9) 0 14%, transparent 15%), linear-gradient(145deg, #17222d, #344b5a);
+		color: #f7fbff;
+		clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
+	}
+
+	.SplitFallbackMedia span {
+		font-size: clamp(24px, 4vw, 54px);
+		font-weight: 300;
+	}
+
+
+	.SplitFallbackContent {
+		align-items: flex-start;
+		color: #121a22;
+	}
+
+	.SplitFallbackContent h3 {
+		margin: 10px 0;
+		font-size: clamp(30px, 4vw, 58px);
+		line-height: 1.12;
+	}
+
+
+
+	.SplitScene.ReverseL > :global(:first-child) {
+		order: 2;
+	}
+
+
+	.SplitScene.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+		margin: 0;
+	}
+
+
+
+	.SplitFallbackContent p,
+	.SplitFallbackContent small
+	{
+		margin: 0;
+		line-height: 1.8;
+	}
+
+
+	.SplitScene.PlaceSized:not(.IsPlaced),
+	.SplitScene.IsPlaced
+	{
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.SplitScene {
+			grid-template-columns: var(--SplitColumnsP);
+			width: min(100%, var(--SplitMaxWidthP));
+			min-height: var(--SplitMinHeightP);
+			padding: var(--SplitPadP);
+			gap: var(--SplitGapP);
+			border-radius: var(--SplitRadiusP);
+		}
+
+		.SplitScene.ReverseL > :global(:first-child) {
+			order: initial;
+		}
+
+		.SplitScene.ReverseP > :global(:first-child) {
+			order: 2;
+		}
+
+		.SplitFallbackMedia {
+			min-height: 240px;
+			clip-path: none;
+		}
+
+		.SplitScene.PlaceSized:not(.IsPlaced),
+		.SplitScene.IsPlaced
+		{
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.SplitScene.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+		}
+	}
+
+
+
+</style>

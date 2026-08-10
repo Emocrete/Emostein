@@ -1,0 +1,222 @@
+---
+import { Place, type PlaceProps, RespString } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import { GetLayoutBackground, GetLayoutPair, GetRootAttributes, GetStyleText, type LayoutBackground, type LayoutValue } from "./LayoutUtils";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps {
+  pKicker?: string;
+  pTitle?: string;
+  pText?: string;
+  pBg?: LayoutBackground;
+  pColor?: string;
+  pAccent?: string;
+  pPad?: LayoutValue;
+  pRadius?: LayoutValue;
+  pMinHeight?: LayoutValue;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+const {
+  pKicker = "فصل",
+  pTitle = "عنوان جزء القصة",
+  pText = "نص يشرح هذه المرحلة ويستفيد من بقاء المشهد البصري ثابتًا بجواره.",
+  pBg = "#ffffff",
+  pColor = "#17212a",
+  pAccent = "#caff3d",
+  pPad = new RespString("46px", "26px"),
+  pRadius = new RespString("28px", "20px"),
+  pMinHeight = new RespString("360px", "280px"),
+  id: pGivenID = GetWidgetId("StickyStoryItem"),
+  class: pGivenClass = "",
+  style: pGivenStyle = "",
+} = cProps;
+
+const cPad = GetLayoutPair(pPad, "46px");
+const cRadius = GetLayoutPair(pRadius, "28px");
+const cMinHeight = GetLayoutPair(pMinHeight, "360px");
+const cHasSlot = Astro.slots.has("default");
+
+const cCoreStyle = [
+  `--StickyItemBg:${GetLayoutBackground(pBg)};`,
+  `--StickyItemColor:${pColor};`,
+  `--StickyItemAccent:${pAccent};`,
+  `--StickyItemPadL:${cPad.Landscape};`,
+  `--StickyItemPadP:${cPad.Portrait};`,
+  `--StickyItemRadiusL:${cRadius.Landscape};`,
+  `--StickyItemRadiusP:${cRadius.Portrait};`,
+  `--StickyItemMinHeightL:${cMinHeight.Landscape};`,
+  `--StickyItemMinHeightP:${cMinHeight.Portrait};`,
+  GetStyleText(pGivenStyle),
+]
+  .filter(Boolean)
+  .join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cCoreStyle);
+const cRootAttrs = GetRootAttributes(cProps, ["pKicker", "pTitle", "pText", "pBg", "pColor", "pAccent", "pPad", "pRadius", "pMinHeight"]);
+---
+
+
+
+
+
+<section
+	style = {cPlace.Style}
+	class:list={["StickyStoryItem", cPlace.Class, pGivenClass]}
+	id={pGivenID}
+	{...cRootAttrs}
+>
+
+	{ cHasSlot ? (
+
+		<slot />
+	) : (
+
+		<>
+		
+		
+		
+		
+		
+		
+		
+			<small>
+		
+				{pKicker}
+		
+			</small>
+		
+		
+		
+		
+		
+		
+		
+			<h3>
+				{pTitle}
+			</h3>
+		
+		
+		
+		
+		
+		
+		
+			<p>
+				{pText}
+			</p>
+		
+		
+		
+		
+		
+		
+		
+		</>
+	) }
+
+</section>
+
+
+
+
+
+<style>
+
+
+
+	.StickyStoryItem {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: center;
+		box-sizing: border-box;
+		min-width: 0;
+		min-height: var(--StickyItemMinHeightL);
+		padding: var(--StickyItemPadL);
+		gap: 10px;
+		border-inline-start: 5px solid var(--StickyItemAccent);
+		border-radius: var(--StickyItemRadiusL);
+		background: var(--StickyItemBg);
+		color: var(--StickyItemColor);
+		box-shadow: 0 18px 48px rgba(25, 39, 51, 0.08);
+	}
+
+	.StickyStoryItem > small {
+		font-weight: 900;
+		letter-spacing: 0.08em;
+		opacity: 0.5;
+	}
+
+	.StickyStoryItem > h3 {
+		max-width: 18ch;
+		font-size: clamp(30px, 5vw, 56px);
+		line-height: 1.12;
+	}
+
+	.StickyStoryItem > p {
+		max-width: 44ch;
+		line-height: 1.85;
+		opacity: 0.72;
+	}
+
+
+
+	.StickyStoryItem.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+	}
+
+
+
+	.StickyStoryItem > small,
+	.StickyStoryItem > h3,
+	.StickyStoryItem > p
+	{
+		margin: 0;
+	}
+
+
+	.StickyStoryItem.PlaceSized:not(.IsPlaced),
+	.StickyStoryItem.IsPlaced
+	{
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.StickyStoryItem {
+			min-height: var(--StickyItemMinHeightP);
+			padding: var(--StickyItemPadP);
+			border-radius: var(--StickyItemRadiusP);
+		}
+
+		.StickyStoryItem.PlaceSized:not(.IsPlaced),
+		.StickyStoryItem.IsPlaced
+		{
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.StickyStoryItem.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+		}
+	}
+
+
+
+</style>

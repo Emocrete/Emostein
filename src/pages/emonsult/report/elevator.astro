@@ -1,25 +1,10 @@
 ---
 import BLayout from "@/Layout.astro";
-import { EmoBtn, EmoCall, Emograph, EmoList, HzStack, VrStack } from "@/Widgets/Comp";
-import { EmoSec } from "@/Widgets/Sections";
-import { EmoStr } from "@/Widgets/Strips";
-import { Colors, ElemBg, Loc, NumPer, Size, Text } from "@/TypesLib";
+import { EmoBtn, EmoCall, Emograph, EmoList, EmoWhats, HzStack, ListItem, SecTitle, VrStack } from "@/Widgets/Comp";
+import { ShadowImg } from "@/Widgets/Media";
+import { DivCol, DivStr, EmoSec, Hero } from "@/Widgets/Sections";
+import { Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -37,20 +22,26 @@ import { Colors, ElemBg, Loc, NumPer, Size, Text } from "@/TypesLib";
 
 
 
-	<EmoSec data-hero pImgAlt="ساكن يطلب مصعد تم عمل تقرير سلامة انشائية وسلامة تشغيل له">
+	<Hero pImgAlt="ساكن يطلب مصعد تم عمل تقرير سلامة انشائية وسلامة تشغيل له">
 
-		<VrStack pSize={new Size(new NumPer("35%","95%"))} pLoc={new Loc(new NumPer("65%","2.5%"),new NumPer("5%","10%"))}>
+		<VrStack pSize={new Size(new NumPer("35%","95%"))} pLoc={new Loc(new NumPer("65%","2.5%"),new NumPer("5%","10%"))} pHzAlign={"Center"}>
 
 			<Emograph
 				pTitle={Text.H1.Centered.OfText("تقرير استشاري هندسي لترخيص مصعد")}
 				pText={Text.Body.Centered.OfText("تقرير هندسي استشاري لترخيص تركيب أو تشغيل مصعد في نطاق محافظتي القاهرة والجيزة، مع إمكانية اعتماد التقرير من مهندس استشاري فقط أو من مهندس استشاري ونقابة المهندسين.")}
 			/>
 
-			<EmoCall BlackSky pText="للطلب والاستفسار" />
+			<HzStack pGap={new Pixel(30,10)} pForceHz={true}>
+
+				<EmoCall BlackSky />
+
+				<EmoWhats />
+
+			</HzStack>
 
 		</VrStack>
 
-	</EmoSec>
+	</Hero>
 
 
 
@@ -60,100 +51,27 @@ import { Colors, ElemBg, Loc, NumPer, Size, Text } from "@/TypesLib";
 
 	<EmoSec id="secDetails">
 
-		<EmoStr pBg={new ElemBg(Colors.Sky)}>
+		<SecTitle id="sectDetails" Sky pTitle="التقارير الهندسية المطلوبة لترخيص المصعد" />
 
-			<Emograph pTitle={Text.H2.Centered.OfText("تفاصيل التقارير الهندسية المطلوبة لترخيص المصعد")} />
+		<DivStr id="strInstall" pBg={new ElemBg(Colors.Gray1)}>
 
-		</EmoStr>
+			<DivCol id="colInstallInfo">
 
-		<EmoStr>
+				<Emograph
+					pTitle={Text.H3.Centered.OfText("أولا: تقرير استشاري هندسي لترخيص تركيب مصعد")}
+					pText={Text.Body.Centered.OfText("تقرير استشاري هندسي يتم إعداده من مهندس استشاري إنشائي معتمد يفيد بمعاينة وسلامة حالة المبنى وقدرته على تحمل تركيب مصعد وتحمل الأوزان الإضافية والاهتزازات الميكانيكية الناتجة عنه بدون حدوث عيوب بالمبنى تشكل خطورة على الأرواح والممتلكات.")}
+				/>
 
-			<HzStack>
+				<Emograph
+					pTitle={Text.H4.DarkSky.Centered.OfText("استخدامات التقرير الهندسي المطلوب لترخيص تركيب مصعد")}
+					pText={Text.Body.Centered.OfText("يقدم ضمن المستندات المطلوبة من قبل الجهة الإدارية المعنية، مثل رئاسة الحي أو جهاز المدينة، لترخيص تركيب مصعد جديد لأول مرة.")}
+				/>
 
-				<VrStack>
+				<DivStr id="strInstallCost">
 
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("ما هو التقرير الهندسي المطلوب لترخيص تركيب مصعد ؟")}
-						pText={Text.Body.Centered.OfText("تقرير استشاري هندسي يتم إعداده من مهندس استشاري إنشائي معتمد يفيد بمعاينة وسلامة حالة المبنى وقدرته على تحمل تركيب مصعد وتحمل الأوزان الإضافية والاهتزازات الميكانيكية الناتجة عنه بدون حدوث عيوب بالمبنى تشكل خطورة على الأرواح والممتلكات.")}
-					/>
+					<Emograph pTitle={Text.H4.Centered.OfText("تكلفة أتعاب اعتماد تقرير تركيب مصعد")} />
 
-					<Emograph
-						pTitle={Text.H3.DarkSky.Centered.OfText("استخدامات التقرير الهندسي المطلوب لترخيص تركيب مصعد ؟")}
-						pText={Text.Body.Centered.OfText("هو أحد المستندات المطلوبة من قبل الجهة الإدارية المعنية، مثل رئاسة الحي أو جهاز المدينة، لترخيص تركيب مصعد جديد لأول مرة.")}
-					/>
-
-					<Emograph pTitle={Text.H3.Centered.OfText("نماذج تقرير تركيب مصعد")} pText={Text.Body.Centered.OfText("( إنشائي )")} />
-
-					<EmoBtn
-						pText="تحميل"
-						pWidth="150px"
-						pHeight="42px"
-						pRadius="0"
-						pBgColor="#164363"
-						pBgColorHover="#328fe8"
-						pTextColor="#ffffff"
-						pFontSize="17px"
-					/>
-
-				</VrStack>
-
-				<VrStack>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("ما هو التقرير الهندسي المطلوب لترخيص تشغيل مصعد ؟")}
-						pText={Text.Body.Centered.OfText("تقرير استشاري هندسي يتم إعداده من مهندس استشاري ميكانيكا معتمد يفيد بمعاينة وسلامة حالة المصعد وسلامة وصحة التركيب وكفاءة الأجزاء الميكانيكية الفعالة ومطابقتها للمواصفات الفنية المعتمدة في تركيب وتشغيل المصاعد سواء من ناحية جودة الخامات أو سلامة التركيبات والصلاحية للتشغيل.")}
-					/>
-
-					<Emograph
-						pTitle={Text.H3.Centered.DarkSky.OfText("استخدامات التقرير الهندسي المطلوب لترخيص تشغيل مصعد ؟")}
-						pText={Text.Body.Centered.OfText("هو أحد المستندات المطلوبة من قبل الجهة الإدارية المعنية، مثل رئاسة الحي أو جهاز المدينة، لترخيص تشغيل مصعد جديد لأول مرة.")}
-					/>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("نماذج تقرير تشغيل مصعد").WithColor("#302c3c")}
-						pText={Text.Body.Centered.OfText("( ميكانيكا )")}
-					/>
-
-					<EmoBtn
-						pText="تحميل"
-						pWidth="150px"
-						pHeight="42px"
-						pRadius="0"
-						pBgColor="#164363"
-						pBgColorHover="#328fe8"
-						pTextColor="#ffffff"
-						pFontSize="17px"
-					/>
-
-				</VrStack>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec id="secInstallingCost">
-
-		<EmoStr pBg={new ElemBg(Colors.Sky)}>
-
-			<Emograph pTitle={Text.H2.Centered.OfText("تكلفة أتعاب اعتماد تقرير تركيب مصعد")} />
-
-		</EmoStr>
-
-		<EmoStr>
-
-			<VrStack pSize={new Size(new NumPer("100%"))}>
-
-				<HzStack>
-
-					<VrStack>
+					<DivCol id="colInstallCostEngOnly">
 
 						<Emograph pTitle={Text.H3.Centered.OfText("تقرير تركيب مصعد معتمد من مهندس استشاري إنشائي فقط")} />
 
@@ -163,15 +81,18 @@ import { Colors, ElemBg, Loc, NumPer, Size, Text } from "@/TypesLib";
 							pTitle={Text.Body.OfText("يتم تسليم الآتي :")}
 							pNumbered={false}
 							pItemFnt={Text.Body}
-							pItems={[
-									"نسخة من التقرير الذي تم إعداده طبقاً للبيانات المقدمة من العميل عن المبنى والمصعد الذي سيتم ترخيصه معتمدة بختم المهندس الاستشاري.",
-									"نسخة مصورة من مستندات المهندس الاستشاري الذي اعتمد التقرير بختمه وهي الشهادة الاستشارية، كارنيه النقابة، والسجل الهندسي."
-								]}
-						/>
+							pWidth={new RespString("100%","100%")}
+						>
 
-					</VrStack>
+							<ListItem pText="نسخة من التقرير الذي تم إعداده طبقاً للبيانات المقدمة من العميل عن المبنى والمصعد الذي سيتم ترخيصه معتمدة بختم المهندس الاستشاري." />
 
-					<VrStack>
+							<ListItem pText="نسخة مصورة من مستندات المهندس الاستشاري الذي اعتمد التقرير بختمه وهي الشهادة الاستشارية، كارنيه النقابة، والسجل الهندسي." />
+
+						</EmoList>
+
+					</DivCol>
+
+					<DivCol id="colInstallCostEng">
 
 						<Emograph pTitle={Text.H3.Centered.OfText("تقرير تركيب مصعد معتمد من مهندس استشاري إنشائي ونقابة المهندسين")} />
 
@@ -184,45 +105,65 @@ import { Colors, ElemBg, Loc, NumPer, Size, Text } from "@/TypesLib";
 							pTitle={Text.Body.OfText("يتم تسليم الآتي :")}
 							pNumbered={false}
 							pItemFnt={Text.Body}
-							pItems={[
-							"نسخة مغلفة بالعلامة المائية من التقرير الذي تم إعداده طبقاً للبيانات المقدمة من العميل عن المبنى والمصعد الذي سيتم ترخيصه معتمدة بختم المهندس الاستشاري وختم نقابة المهندسين.",
-							"نسخة مصورة من مستندات المهندس الاستشاري الذي اعتمد التقرير بختمه وهي الشهادة الاستشارية، كارنيه النقابة، والسجل الهندسي."
-						]}
-						/>
+							pWidth={new RespString("100%","100%")}
+						>
 
-					</VrStack>
+							<ListItem
+								pText="نسخة مغلفة بالعلامة المائية من التقرير الذي تم إعداده طبقاً للبيانات المقدمة من العميل عن المبنى والمصعد الذي سيتم ترخيصه معتمدة بختم المهندس الاستشاري وختم نقابة المهندسين."
+							/>
 
-				</HzStack>
+							<ListItem pText="نسخة مصورة من مستندات المهندس الاستشاري الذي اعتمد التقرير بختمه وهي الشهادة الاستشارية، كارنيه النقابة، والسجل الهندسي." />
 
-				<EmoCall BlackSky pText="للطلب والاستفسار" />
+						</EmoList>
 
-			</VrStack>
+					</DivCol>
 
-		</EmoStr>
+					<EmoCall id="btnInstallCall" BlackSky pText="للطلب والاستفسار" />
 
-	</EmoSec>
+				</DivStr>
 
+			</DivCol>
 
+			<DivCol id="colInstallSample">
 
+				<Emograph pTitle={Text.H4.Centered.OfText("نموذج تقرير تركيب مصعد")} pText={Text.Body.Centered.OfText("( إنشائي )")} />
 
+				<ShadowImg />
 
+				<EmoBtn
+					pText="تحميل"
+					pWidth="150px"
+					pHeight="42px"
+					pRadius="0"
+					pBgColor="#164363"
+					pBgColorHover="#328fe8"
+					pTextColor="#ffffff"
+					pFontSize="17px"
+				/>
 
+			</DivCol>
 
-	<EmoSec id="secOperationCost">
+		</DivStr>
 
-		<EmoStr pBg={new ElemBg(Colors.Sky)}>
+		<DivStr id="strRun" pBg={new ElemBg(Colors.Gray2)}>
 
-			<Emograph pTitle={Text.H2.Centered.OfText("تكلفة أتعاب اعتماد تقرير تشغيل مصعد")} />
+			<DivCol id="colRunInfo">
 
-		</EmoStr>
+				<Emograph
+					pTitle={Text.H3.Centered.OfText("ثانيا: تقرير استشاري هندسي لترخيص تشغيل مصعد")}
+					pText={Text.Body.Centered.OfText("تقرير استشاري هندسي يتم إعداده من مهندس استشاري ميكانيكا معتمد يفيد بمعاينة وسلامة حالة المصعد وسلامة وصحة التركيب وكفاءة الأجزاء الميكانيكية الفعالة ومطابقتها للمواصفات الفنية المعتمدة في تركيب وتشغيل المصاعد سواء من ناحية جودة الخامات أو سلامة التركيبات والصلاحية للتشغيل.")}
+				/>
 
-		<EmoStr>
+				<Emograph
+					pTitle={Text.H4.Centered.DarkSky.OfText("استخدامات التقرير الهندسي المطلوب لترخيص تشغيل مصعد ؟")}
+					pText={Text.Body.Centered.OfText("يقدم ضمن المستندات المطلوبة من قبل الجهة الإدارية المعنية، مثل رئاسة الحي أو جهاز المدينة، لترخيص تشغيل مصعد جديد لأول مرة.")}
+				/>
 
-			<VrStack pSize={new Size(new NumPer("100%"))}>
+				<DivStr id="strRunCost">
 
-				<HzStack>
+					<Emograph pTitle={Text.H4.Centered.OfText("تكلفة أتعاب اعتماد تقرير تشغيل مصعد")} />
 
-					<VrStack>
+					<DivCol id="colRunCostEngOnly">
 
 						<Emograph pTitle={Text.H3.Centered.OfText("تقرير معتمد من مهندس استشاري ميكانيكا فقط")} />
 
@@ -232,15 +173,18 @@ import { Colors, ElemBg, Loc, NumPer, Size, Text } from "@/TypesLib";
 							pTitle={Text.Body.OfText("يتم تسليم الآتي :")}
 							pNumbered={false}
 							pItemFnt={Text.Body}
-							pItems={[
-								"نسخة من التقرير الذي تم إعداده طبقاً للبيانات المقدمة من العميل عن المبنى والمصعد الذي سيتم ترخيصه معتمدة بختم المهندس الاستشاري.",
-								"نسخة مصورة من مستندات المهندس الاستشاري الذي اعتمد التقرير بختمه وهي الشهادة الاستشارية، كارنيه النقابة، والسجل الهندسي."
-							]}
-						/>
+							pWidth={new RespString("100%","100%")}
+						>
 
-					</VrStack>
+							<ListItem pText="نسخة من التقرير الذي تم إعداده طبقاً للبيانات المقدمة من العميل عن المبنى والمصعد الذي سيتم ترخيصه معتمدة بختم المهندس الاستشاري." />
 
-					<VrStack>
+							<ListItem pText="نسخة مصورة من مستندات المهندس الاستشاري الذي اعتمد التقرير بختمه وهي الشهادة الاستشارية، كارنيه النقابة، والسجل الهندسي." />
+
+						</EmoList>
+
+					</DivCol>
+
+					<DivCol id="colRunCostEng">
 
 						<Emograph pTitle={Text.H3.Centered.OfText("تقرير معتمد من مهندس استشاري ميكانيكا ونقابة المهندسين")} />
 
@@ -253,21 +197,45 @@ import { Colors, ElemBg, Loc, NumPer, Size, Text } from "@/TypesLib";
 							pTitle={Text.Body.OfText("يتم تسليم الآتي :")}
 							pNumbered={false}
 							pItemFnt={Text.Body}
-							pItems={[
-								"نسخة مغلفة بالعلامة المائية من التقرير الذي تم إعداده طبقاً للبيانات المقدمة من العميل عن المبنى والمصعد الذي سيتم ترخيصه معتمدة بختم المهندس الاستشاري وختم نقابة المهندسين.",
-								"نسخة مصورة من مستندات المهندس الاستشاري الذي اعتمد التقرير بختمه وهي الشهادة الاستشارية، كارنيه النقابة، والسجل الهندسي."
-							]}
-						/>
+							pWidth={new RespString("100%","100%")}
+						>
 
-					</VrStack>
+							<ListItem
+								pText="نسخة مغلفة بالعلامة المائية من التقرير الذي تم إعداده طبقاً للبيانات المقدمة من العميل عن المبنى والمصعد الذي سيتم ترخيصه معتمدة بختم المهندس الاستشاري وختم نقابة المهندسين."
+							/>
 
-				</HzStack>
+							<ListItem pText="نسخة مصورة من مستندات المهندس الاستشاري الذي اعتمد التقرير بختمه وهي الشهادة الاستشارية، كارنيه النقابة، والسجل الهندسي." />
 
-				<EmoCall BlackSky pText="للطلب والاستفسار" />
+						</EmoList>
 
-			</VrStack>
+					</DivCol>
 
-		</EmoStr>
+					<EmoCall id="btnRunCall" BlackSky pText="للطلب والاستفسار" />
+
+				</DivStr>
+
+			</DivCol>
+
+			<DivCol id="colRunSample">
+
+				<Emograph pTitle={Text.H4.Centered.OfText("نماذج تقرير تشغيل مصعد").WithColor("#302c3c")} pText={Text.Body.Centered.OfText("( ميكانيكا )")} />
+
+				<ShadowImg />
+
+				<EmoBtn
+					pText="تحميل"
+					pWidth="150px"
+					pHeight="42px"
+					pRadius="0"
+					pBgColor="#164363"
+					pBgColorHover="#328fe8"
+					pTextColor="#ffffff"
+					pFontSize="17px"
+				/>
+
+			</DivCol>
+
+		</DivStr>
 
 	</EmoSec>
 

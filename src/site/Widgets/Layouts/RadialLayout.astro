@@ -1,0 +1,421 @@
+---
+import { Place, type PlaceProps, RespString } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import { ClampInt, GetLayoutBackground, GetLayoutPair, GetRootAttributes, GetStyleText, type LayoutBackground, type LayoutValue } from "./LayoutUtils";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
+  pCount?: number;
+  pDiameter?: LayoutValue;
+  pOrbit?: LayoutValue;
+  pCenterSize?: LayoutValue;
+  pBg?: LayoutBackground;
+  pCenterBg?: LayoutBackground;
+  pCenterColor?: string;
+  pRingColor?: string;
+  pAccent?: string;
+  pCenterTitle?: string;
+  pCenterText?: string;
+  pStackPortrait?: boolean;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+const {
+  pCount = 6,
+  pDiameter = new RespString("760px", "100%"),
+  pOrbit = new RespString("38%", "38%"),
+  pCenterSize = new RespString("34%", "42%"),
+  pBg = "radial-gradient(circle, #f8fafb 0 44%, #e7ecef 45% 100%)",
+  pCenterBg = "#111b25",
+  pCenterColor = "#f8fafc",
+  pRingColor = "rgba(24,38,50,.2)",
+  pAccent = "#caff3d",
+  pCenterTitle = "المركز",
+  pCenterText = "الفكرة أو المنتج",
+  pStackPortrait = true,
+  id: pGivenID = GetWidgetId("RadialLayout"),
+  class: pGivenClass = "",
+  style: pGivenStyle = "",
+} = cProps;
+
+const cCount = ClampInt(pCount, 6, 1, 12);
+const cDiameter = GetLayoutPair(pDiameter, "760px");
+const cOrbit = GetLayoutPair(pOrbit, "38%", "%");
+const cCenterSize = GetLayoutPair(pCenterSize, "34%", "%");
+const cHasSlot = Astro.slots.has("default");
+const cFallbackItems = Array.from({ length: cCount }, (_, pIndex) => ({
+  Index: pIndex,
+  Label: `${pIndex + 1}`.padStart(2, "0"),
+}));
+
+const cCoreStyle = [
+  `--RadialCount:${cCount};`,
+  `--RadialDiameterL:${cDiameter.Landscape};`,
+  `--RadialDiameterP:${cDiameter.Portrait};`,
+  `--RadialOrbitL:${cOrbit.Landscape};`,
+  `--RadialOrbitP:${cOrbit.Portrait};`,
+  `--RadialCenterSizeL:${cCenterSize.Landscape};`,
+  `--RadialCenterSizeP:${cCenterSize.Portrait};`,
+  `--RadialBg:${GetLayoutBackground(pBg)};`,
+  `--RadialCenterBg:${GetLayoutBackground(pCenterBg)};`,
+  `--RadialCenterColor:${pCenterColor};`,
+  `--RadialRing:${pRingColor};`,
+  `--RadialAccent:${pAccent};`,
+  GetStyleText(pGivenStyle),
+]
+  .filter(Boolean)
+  .join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cCoreStyle);
+const cRootAttrs = GetRootAttributes(cProps, [
+  "pCount",
+  "pDiameter",
+  "pOrbit",
+  "pCenterSize",
+  "pBg",
+  "pCenterBg",
+  "pCenterColor",
+  "pRingColor",
+  "pAccent",
+  "pCenterTitle",
+  "pCenterText",
+  "pStackPortrait",
+]);
+---
+
+
+
+
+
+<div
+	style = {cPlace.Style}
+	class:list={["RadialLayout", pStackPortrait && "StackPortrait", cPlace.Class, pGivenClass]}
+	id={pGivenID}
+	data-emo-auto-container="true"
+	data-emo-empty-height="760"
+	{...cRootAttrs}
+>
+
+	{ cHasSlot ? (
+
+		<slot />
+
+		) : (
+			cFallbackItems.map((cItem) => (
+
+				<div class = " RadialFallback " style = {`--RadialIndex:${cItem.Index}`}>
+
+					<b>
+
+						{cItem.Label}
+
+					</b>
+
+					<span>
+						ميزة
+					</span>
+
+				</div>
+
+			))) }
+
+	<div class = " RadialCenter ">
+
+		<small>
+
+			{pCenterTitle}
+
+		</small>
+
+		<strong>
+			{pCenterText}
+		</strong>
+
+	</div>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+<style>
+
+
+
+	.RadialLayout {
+		position: relative;
+		box-sizing: border-box;
+		width: min(100%, var(--RadialDiameterL));
+		height: auto;
+		min-height: 0;
+		aspect-ratio: 1;
+		margin-inline: auto;
+		border-radius: 50%;
+		background: var(--RadialBg);
+		overflow: hidden;
+		isolation: isolate;
+	}
+
+	.RadialLayout::before {
+		width: calc(var(--RadialOrbitL) * 2);
+		height: calc(var(--RadialOrbitL) * 2);
+	}
+
+	.RadialLayout::after {
+		width: calc(var(--RadialOrbitL) * 1.25);
+		height: calc(var(--RadialOrbitL) * 1.25);
+		border-style: dashed;
+	}
+
+	.RadialLayout > :global(.RadialItem:nth-child(1)) {
+		--RadialIndex: 0;
+	}
+
+	.RadialLayout > :global(.RadialItem:nth-child(2)) {
+		--RadialIndex: 1;
+	}
+
+	.RadialLayout > :global(.RadialItem:nth-child(3)) {
+		--RadialIndex: 2;
+	}
+
+	.RadialLayout > :global(.RadialItem:nth-child(4)) {
+		--RadialIndex: 3;
+	}
+
+	.RadialLayout > :global(.RadialItem:nth-child(5)) {
+		--RadialIndex: 4;
+	}
+
+	.RadialLayout > :global(.RadialItem:nth-child(6)) {
+		--RadialIndex: 5;
+	}
+
+	.RadialLayout > :global(.RadialItem:nth-child(7)) {
+		--RadialIndex: 6;
+	}
+
+	.RadialLayout > :global(.RadialItem:nth-child(8)) {
+		--RadialIndex: 7;
+	}
+
+	.RadialLayout > :global(.RadialItem:nth-child(9)) {
+		--RadialIndex: 8;
+	}
+
+	.RadialLayout > :global(.RadialItem:nth-child(10)) {
+		--RadialIndex: 9;
+	}
+
+	.RadialLayout > :global(.RadialItem:nth-child(11)) {
+		--RadialIndex: 10;
+	}
+
+	.RadialLayout > :global(.RadialItem:nth-child(12)) {
+		--RadialIndex: 11;
+	}
+
+
+	.RadialCenter {
+		position: absolute;
+		z-index: 3;
+		left: 50%;
+		top: 50%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		box-sizing: border-box;
+		width: var(--RadialCenterSizeL);
+		aspect-ratio: 1;
+		translate: -50% -50%;
+		padding: 24px;
+		gap: 8px;
+		border: 10px solid color-mix(in srgb, var(--RadialAccent) 72%, transparent);
+		border-radius: 50%;
+		background: var(--RadialCenterBg);
+		color: var(--RadialCenterColor);
+		text-align: center;
+		box-shadow: 0 24px 60px rgba(17, 29, 40, 0.22);
+	}
+
+	.RadialCenter small {
+		font-weight: 900;
+		opacity: 0.55;
+	}
+
+	.RadialCenter strong {
+		font-size: clamp(22px, 4vw, 42px);
+		line-height: 1.1;
+	}
+
+
+	.RadialFallback {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		box-sizing: border-box;
+		width: 132px;
+		height: 84px;
+		border-radius: 18px;
+		background: #ffffff;
+		color: #17212a;
+		box-shadow: 0 16px 36px rgba(25, 40, 52, 0.14);
+	}
+
+	.RadialFallback b {
+		font-size: 22px;
+	}
+
+	.RadialFallback span {
+		font-size: 13px;
+		opacity: 0.6;
+	}
+
+
+
+	.RadialLayout.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+		margin: 0;
+	}
+
+
+
+	.RadialLayout::before,
+	.RadialLayout::after
+	{
+		content: "";
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		translate: -50% -50%;
+		box-sizing: border-box;
+		border: 1px solid var(--RadialRing);
+		border-radius: 50%;
+		pointer-events: none;
+	}
+
+
+	.RadialLayout > :global(.RadialItem:not(.IsPlaced)),
+	.RadialFallback
+	{
+		position: absolute;
+		z-index: 2;
+		left: calc(50% + cos(calc((360deg / var(--RadialCount)) * var(--RadialIndex) - 90deg)) * var(--RadialOrbitL));
+		top: calc(50% + sin(calc((360deg / var(--RadialCount)) * var(--RadialIndex) - 90deg)) * var(--RadialOrbitL));
+		translate: -50% -50%;
+	}
+
+
+	.RadialLayout.PlaceSized:not(.IsPlaced),
+	.RadialLayout.IsPlaced
+	{
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+		min-height: 0;
+		aspect-ratio: auto;
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.RadialLayout {
+			width: min(100%, var(--RadialDiameterP));
+			height: auto;
+			min-height: 0;
+		}
+
+		.RadialLayout::before {
+			width: calc(var(--RadialOrbitP) * 2);
+			height: calc(var(--RadialOrbitP) * 2);
+		}
+
+		.RadialLayout::after {
+			width: calc(var(--RadialOrbitP) * 1.25);
+			height: calc(var(--RadialOrbitP) * 1.25);
+		}
+
+		.RadialLayout > :global(.RadialItem:not(.IsPlaced)),
+		.RadialFallback
+		{
+			left: calc(50% + cos(calc((360deg / var(--RadialCount)) * var(--RadialIndex) - 90deg)) * var(--RadialOrbitP));
+			top: calc(50% + sin(calc((360deg / var(--RadialCount)) * var(--RadialIndex) - 90deg)) * var(--RadialOrbitP));
+		}
+
+		.RadialCenter {
+			width: var(--RadialCenterSizeP);
+		}
+
+		.RadialLayout.StackPortrait {
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			height: auto;
+			min-height: 0;
+			aspect-ratio: auto;
+			padding: 16px;
+			gap: 12px;
+			border-radius: 24px;
+		}
+
+		.RadialLayout.StackPortrait::before,
+		.RadialLayout.StackPortrait::after
+		{
+			display: none;
+		}
+
+		.RadialLayout.StackPortrait > :global(.RadialItem:not(.IsPlaced)),
+		.RadialLayout.StackPortrait .RadialFallback
+		{
+			position: relative;
+			left: auto;
+			top: auto;
+			width: 100%;
+			translate: none;
+		}
+
+		.RadialLayout.StackPortrait .RadialCenter {
+			position: relative;
+			left: auto;
+			top: auto;
+			order: -1;
+			width: min(68vw, 260px);
+			margin: 12px auto 20px;
+			translate: none;
+		}
+
+		.RadialLayout.PlaceSized:not(.IsPlaced),
+		.RadialLayout.IsPlaced
+		{
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.RadialLayout.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+		}
+	}
+
+
+
+</style>

@@ -1,0 +1,329 @@
+---
+import { Place, type PlaceProps, RespString } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import { GetLayoutBackground, GetLayoutPair, GetRootAttributes, GetStyleText, type LayoutBackground, type LayoutValue } from "./LayoutUtils";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"article">, PlaceProps {
+  pBg?: LayoutBackground;
+  pColor?: string;
+  pAccent?: string;
+  pRadius?: LayoutValue;
+  pPad?: LayoutValue;
+  pMinHeight?: LayoutValue;
+  pMediaHeight?: LayoutValue;
+  pShadow?: string;
+  pSnapAlign?: "start" | "center" | "end";
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+const {
+  pBg = "#ffffff",
+  pColor = "#17212a",
+  pAccent = "#caff3d",
+  pRadius = new RespString("26px", "20px"),
+  pPad = new RespString("22px", "18px"),
+  pMinHeight = new RespString("320px", "300px"),
+  pMediaHeight = new RespString("150px", "132px"),
+  pShadow = "0 18px 44px rgba(24, 38, 50, .1)",
+  pSnapAlign = "start",
+  id: pGivenID = GetWidgetId("ShelfItem"),
+  class: pGivenClass = "",
+  style: pGivenStyle = "",
+} = cProps;
+
+const cRadius = GetLayoutPair(pRadius, "26px");
+const cPad = GetLayoutPair(pPad, "22px");
+const cMinHeight = GetLayoutPair(pMinHeight, "320px");
+const cMediaHeight = GetLayoutPair(pMediaHeight, "150px");
+const cHasMedia = Astro.slots.has("media");
+const cHasContent = Astro.slots.has("default");
+
+const cCoreStyle = [
+  `--ShelfItemBg:${GetLayoutBackground(pBg)};`,
+  `--ShelfItemColor:${pColor};`,
+  `--ShelfItemAccent:${pAccent};`,
+  `--ShelfItemRadiusL:${cRadius.Landscape};`,
+  `--ShelfItemRadiusP:${cRadius.Portrait};`,
+  `--ShelfItemPadL:${cPad.Landscape};`,
+  `--ShelfItemPadP:${cPad.Portrait};`,
+  `--ShelfItemMinHeightL:${cMinHeight.Landscape};`,
+  `--ShelfItemMinHeightP:${cMinHeight.Portrait};`,
+  `--ShelfItemMediaHeightL:${cMediaHeight.Landscape};`,
+  `--ShelfItemMediaHeightP:${cMediaHeight.Portrait};`,
+  `--ShelfItemShadow:${pShadow};`,
+  `--ShelfItemSnap:${pSnapAlign};`,
+  GetStyleText(pGivenStyle),
+]
+  .filter(Boolean)
+  .join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cCoreStyle);
+const cRootAttrs = GetRootAttributes(cProps, [
+  "pBg",
+  "pColor",
+  "pAccent",
+  "pRadius",
+  "pPad",
+  "pMinHeight",
+  "pMediaHeight",
+  "pShadow",
+  "pSnapAlign",
+]);
+---
+
+
+
+
+
+<article
+	style = {cPlace.Style}
+	class:list={["ShelfItem", cPlace.Class, pGivenClass]}
+	id={pGivenID}
+	{...cRootAttrs}
+>
+
+
+
+
+
+
+
+	<div class = " ShelfItemMedia ">
+
+		{ cHasMedia ?
+
+			<slot name="media" />
+
+			:
+
+			<span>
+				VISUAL
+			</span>
+
+		}
+
+	</div>
+
+
+
+
+
+
+
+	<div class = " ShelfItemBody ">
+
+		{ cHasContent ? (
+
+			<slot />
+		) : (
+
+			<>
+			
+			
+			
+			
+			
+			
+			
+				<small>
+			
+					عنصر رف
+			
+				</small>
+			
+			
+			
+			
+			
+			
+			
+				<h3>
+					عنوان البطاقة
+				</h3>
+			
+			
+			
+			
+			
+			
+			
+				<p>
+					كيان افتراضي صالح للاستخدام من أول كتابة للتاج.
+				</p>
+			
+			
+			
+			
+			
+			
+			
+			</>
+		) }
+
+	</div>
+
+
+
+
+
+
+
+</article>
+
+
+
+
+
+<style>
+
+
+
+	.ShelfItem {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		box-sizing: border-box;
+		min-width: 0;
+		min-height: var(--ShelfItemMinHeightL);
+		padding: var(--ShelfItemPadL);
+		gap: 18px;
+		border-radius: var(--ShelfItemRadiusL);
+		background: var(--ShelfItemBg);
+		color: var(--ShelfItemColor);
+		box-shadow: var(--ShelfItemShadow);
+		scroll-snap-align: var(--ShelfItemSnap);
+		overflow: hidden;
+		transition: top 0.22s ease,
+      box-shadow 0.22s ease;
+	}
+
+
+	.ShelfItemMedia {
+		position: relative;
+		display: grid;
+		place-items: center;
+		box-sizing: border-box;
+		width: 100%;
+		height: var(--ShelfItemMediaHeightL);
+		border-radius: var(--ShelfItemRadiusL);
+		background: linear-gradient(135deg, transparent 44%, color-mix(in srgb, var(--ShelfItemAccent) 86%, transparent) 45% 58%, transparent 59%),
+      linear-gradient(145deg, #17232e, #3c5666);
+		color: rgba(255, 255, 255, 0.82);
+		overflow: hidden;
+	}
+
+	.ShelfItemMedia > :global(*) {
+		max-width: 100%;
+		max-height: 100%;
+	}
+
+	.ShelfItemMedia > span {
+		font-size: 30px;
+		font-weight: 250;
+		letter-spacing: 0.15em;
+	}
+
+
+	.ShelfItemBody {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 8px;
+	}
+
+	.ShelfItemBody > small {
+		font-weight: 900;
+		opacity: 0.52;
+	}
+
+	.ShelfItemBody > h3 {
+		font-size: 27px;
+		line-height: 1.2;
+	}
+
+	.ShelfItemBody > p {
+		line-height: 1.75;
+		opacity: 0.7;
+	}
+
+
+
+	.ShelfItem.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+	}
+
+
+
+	.ShelfItem:hover,
+	.ShelfItem:focus-within
+	{
+		top: -6px;
+		box-shadow: 0 26px 58px rgba(24, 38, 50, 0.18);
+	}
+
+
+	.ShelfItemBody > small,
+	.ShelfItemBody > h3,
+	.ShelfItemBody > p
+	{
+		margin: 0;
+	}
+
+
+	.ShelfItem.PlaceSized:not(.IsPlaced),
+	.ShelfItem.IsPlaced
+	{
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	@media (prefers-reduced-motion: reduce) {
+		.ShelfItem {
+			transition: none;
+		}
+	}
+
+
+
+	@media (orientation: portrait) {
+		.ShelfItem {
+			min-height: var(--ShelfItemMinHeightP);
+			padding: var(--ShelfItemPadP);
+			border-radius: var(--ShelfItemRadiusP);
+		}
+
+		.ShelfItemMedia {
+			height: var(--ShelfItemMediaHeightP);
+			border-radius: var(--ShelfItemRadiusP);
+		}
+
+		.ShelfItem.PlaceSized:not(.IsPlaced),
+		.ShelfItem.IsPlaced
+		{
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.ShelfItem.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+		}
+	}
+
+
+
+</style>

@@ -1,0 +1,328 @@
+---
+import { Place, type PlaceProps, RespString } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import { GetLayoutBackground, GetLayoutPair, GetRootAttributes, GetStyleText, type LayoutBackground, type LayoutValue } from "./LayoutUtils";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
+  pGap?: LayoutValue;
+  pPad?: LayoutValue;
+  pMaxWidth?: LayoutValue;
+  pBg?: LayoutBackground;
+  pAlternate?: boolean;
+  pOverlap?: LayoutValue;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+const {
+  pGap = new RespString("70px", "24px"),
+  pPad = new RespString("42px", "16px"),
+  pMaxWidth = new RespString("1200px", "100%"),
+  pBg = "#f4f1ec",
+  pAlternate = true,
+  pOverlap = new RespString("0px", "0px"),
+  id: pGivenID = GetWidgetId("ZigzagStory"),
+  class: pGivenClass = "",
+  style: pGivenStyle = "",
+} = cProps;
+
+const cGap = GetLayoutPair(pGap, "70px");
+const cPad = GetLayoutPair(pPad, "42px");
+const cMaxWidth = GetLayoutPair(pMaxWidth, "1200px");
+const cOverlap = GetLayoutPair(pOverlap, "0px");
+const cHasSlot = Astro.slots.has("default");
+
+const cCoreStyle = [
+  `--ZigzagGapL:${cGap.Landscape};`,
+  `--ZigzagGapP:${cGap.Portrait};`,
+  `--ZigzagPadL:${cPad.Landscape};`,
+  `--ZigzagPadP:${cPad.Portrait};`,
+  `--ZigzagMaxWidthL:${cMaxWidth.Landscape};`,
+  `--ZigzagMaxWidthP:${cMaxWidth.Portrait};`,
+  `--ZigzagOverlapL:${cOverlap.Landscape};`,
+  `--ZigzagOverlapP:${cOverlap.Portrait};`,
+  `--ZigzagBg:${GetLayoutBackground(pBg)};`,
+  GetStyleText(pGivenStyle),
+]
+  .filter(Boolean)
+  .join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cCoreStyle);
+const cRootAttrs = GetRootAttributes(cProps, ["pGap", "pPad", "pMaxWidth", "pBg", "pAlternate", "pOverlap"]);
+---
+
+
+
+
+
+<div
+	style = {cPlace.Style}
+	class:list={["ZigzagStory", pAlternate && "IsAlternating", cPlace.Class, pGivenClass]}
+	id={pGivenID}
+	data-emo-auto-container="true"
+	data-emo-empty-height="640"
+	{...cRootAttrs}
+>
+
+	{ cHasSlot ? (
+
+		<slot />
+	) : (
+
+		<>
+		
+		
+		
+		
+		
+		
+		
+			<article class = " ZigzagFallback ">
+		
+				<div class = " ZigzagFallbackMedia ">
+		
+					01
+		
+				</div>
+		
+				<div class = " ZigzagFallbackContent ">
+		
+					<>
+		
+						<small>
+		
+							مرحلة أولى
+		
+						</small>
+		
+						<b>
+		
+							صورة تقود إلى النص
+		
+						</b>
+		
+						<span>
+							تكوين افتراضي كامل للودجت.
+						</span>
+		
+					</>
+		
+				</div>
+		
+			</article>
+		
+		
+		
+		
+		
+		
+		
+			<article class = " ZigzagFallback ">
+		
+				<div class = " ZigzagFallbackMedia ">
+		
+					02
+		
+				</div>
+		
+				<div class = " ZigzagFallbackContent ">
+		
+					<>
+		
+						<small>
+		
+							مرحلة ثانية
+		
+						</small>
+		
+						<b>
+		
+							ثم ينعكس الإيقاع
+		
+						</b>
+		
+						<span>
+							التناوب يحدث تلقائيًا من الأب.
+						</span>
+		
+					</>
+		
+				</div>
+		
+			</article>
+		
+		
+		
+		
+		
+		
+		
+		</>
+	) }
+
+</div>
+
+
+
+
+
+<style>
+
+
+
+	.ZigzagStory {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		box-sizing: border-box;
+		width: min(100%, var(--ZigzagMaxWidthL));
+		margin-inline: auto;
+		padding: var(--ZigzagPadL);
+		gap: var(--ZigzagGapL);
+		background: var(--ZigzagBg);
+		overflow: visible;
+	}
+
+	.ZigzagStory > :global(.ZigzagItem + .ZigzagItem) {
+		margin-top: calc(0px - var(--ZigzagOverlapL));
+	}
+
+
+	.ZigzagFallback {
+		display: grid;
+		grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+		box-sizing: border-box;
+		min-height: 340px;
+		border-radius: 28px;
+		background: #ffffff;
+		overflow: hidden;
+	}
+
+	.ZigzagFallback:nth-child(even) .ZigzagFallbackMedia {
+		order: 2;
+	}
+
+
+	.ZigzagFallbackMedia {
+		align-items: center;
+		background: linear-gradient(145deg, #12202b, #385161);
+		color: #caff3e;
+		font-size: clamp(70px, 10vw, 150px);
+		font-weight: 200;
+	}
+
+
+	.ZigzagFallbackContent {
+		align-items: flex-start;
+		gap: 10px;
+		color: #17212a;
+	}
+
+	.ZigzagFallbackContent small {
+		font-weight: 900;
+		opacity: 0.55;
+	}
+
+	.ZigzagFallbackContent b {
+		font-size: clamp(28px, 4vw, 48px);
+		line-height: 1.15;
+	}
+
+	.ZigzagFallbackContent span {
+		line-height: 1.8;
+	}
+
+
+
+	.ZigzagStory.IsAlternating > :global(.ZigzagItem.AutoSide:nth-child(even) .ZigzagItemMedia) {
+		order: 2;
+	}
+
+	.ZigzagStory.IsAlternating > :global(.ZigzagItem.AutoSide:nth-child(even) .ZigzagItemContent) {
+		order: 1;
+	}
+
+
+	.ZigzagStory.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+		margin: 0;
+	}
+
+
+
+	.ZigzagFallbackMedia,
+	.ZigzagFallbackContent
+	{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		box-sizing: border-box;
+		padding: clamp(28px, 5vw, 64px);
+	}
+
+
+	.ZigzagStory.PlaceSized:not(.IsPlaced),
+	.ZigzagStory.IsPlaced
+	{
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.ZigzagStory {
+			width: min(100%, var(--ZigzagMaxWidthP));
+			padding: var(--ZigzagPadP);
+			gap: var(--ZigzagGapP);
+		}
+
+		.ZigzagStory > :global(.ZigzagItem + .ZigzagItem) {
+			margin-top: calc(0px - var(--ZigzagOverlapP));
+		}
+
+		.ZigzagStory.IsAlternating > :global(.ZigzagItem.AutoSide:nth-child(even) .ZigzagItemMedia),
+		.ZigzagStory.IsAlternating > :global(.ZigzagItem.AutoSide:nth-child(even) .ZigzagItemContent)
+		{
+			order: initial;
+		}
+
+		.ZigzagFallback {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.ZigzagFallback:nth-child(even) .ZigzagFallbackMedia {
+			order: initial;
+		}
+
+		.ZigzagFallbackMedia {
+			min-height: 220px;
+		}
+
+		.ZigzagStory.PlaceSized:not(.IsPlaced),
+		.ZigzagStory.IsPlaced
+		{
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.ZigzagStory.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+		}
+	}
+
+
+
+</style>

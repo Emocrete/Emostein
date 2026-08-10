@@ -1,0 +1,260 @@
+---
+import { GetHzAlignCss, GetVrAlignCss, type HzAlignValue, Place, type PlaceProps, RespString, type VrAlignValue } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import { ClampInt, GetGridLine, GetLayoutBackground, GetLayoutPair, GetRootAttributes, GetStyleText, type LayoutBackground, type LayoutValue } from "./LayoutUtils";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"article">, PlaceProps {
+  pColumn?: number | string;
+  pColumnP?: number | string;
+  pRow?: number | string;
+  pRowP?: number | string;
+  pColSpan?: number;
+  pColSpanP?: number;
+  pRowSpan?: number;
+  pRowSpanP?: number;
+  pBg?: LayoutBackground;
+  pColor?: string;
+  pRadius?: LayoutValue;
+  pPad?: LayoutValue;
+  pMinHeight?: LayoutValue;
+  pClip?: string;
+  pClipP?: string;
+  pHzAlign?: HzAlignValue;
+  pVrAlign?: VrAlignValue;
+  pOverflow?: "visible" | "hidden" | "clip";
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+const {
+  pColumn,
+  pColumnP,
+  pRow,
+  pRowP,
+  pColSpan = 4,
+  pColSpanP = 2,
+  pRowSpan = 2,
+  pRowSpanP = 2,
+  pBg = "linear-gradient(145deg, #ffffff, #eef2f5)",
+  pColor = "#17202a",
+  pRadius = new RespString("24px", "18px"),
+  pPad = new RespString("26px", "18px"),
+  pMinHeight = new RespString("150px", "130px"),
+  pClip = "none",
+  pClipP = "none",
+  pHzAlign = "Stretch",
+  pVrAlign = "Center",
+  pOverflow = "hidden",
+  id: pGivenID = GetWidgetId("MosaicItem"),
+  class: pGivenClass = "",
+  style: pGivenStyle = "",
+} = cProps;
+
+const cRadius = GetLayoutPair(pRadius, "24px");
+const cPad = GetLayoutPair(pPad, "26px");
+const cMinHeight = GetLayoutPair(pMinHeight, "150px");
+const cColSpan = ClampInt(pColSpan, 4, 1, 24);
+const cColSpanP = ClampInt(pColSpanP, 2, 1, 24);
+const cRowSpan = ClampInt(pRowSpan, 2, 1, 24);
+const cRowSpanP = ClampInt(pRowSpanP, 2, 1, 24);
+const cHasSlot = Astro.slots.has("default");
+
+const cCoreStyle = [
+  `--MosaicItemColumnL:${GetGridLine(pColumn, cColSpan)};`,
+  `--MosaicItemColumnP:${GetGridLine(pColumnP ?? pColumn, cColSpanP)};`,
+  `--MosaicItemRowL:${GetGridLine(pRow, cRowSpan)};`,
+  `--MosaicItemRowP:${GetGridLine(pRowP ?? pRow, cRowSpanP)};`,
+  `--MosaicItemBg:${GetLayoutBackground(pBg)};`,
+  `--MosaicItemColor:${pColor};`,
+  `--MosaicItemRadiusL:${cRadius.Landscape};`,
+  `--MosaicItemRadiusP:${cRadius.Portrait};`,
+  `--MosaicItemPadL:${cPad.Landscape};`,
+  `--MosaicItemPadP:${cPad.Portrait};`,
+  `--MosaicItemMinHeightL:${cMinHeight.Landscape};`,
+  `--MosaicItemMinHeightP:${cMinHeight.Portrait};`,
+  `--MosaicItemClipL:${pClip};`,
+  `--MosaicItemClipP:${pClipP};`,
+  `--MosaicItemHz:${GetHzAlignCss(pHzAlign)};`,
+  `--MosaicItemVr:${GetVrAlignCss(pVrAlign)};`,
+  `--MosaicItemOverflow:${pOverflow};`,
+  GetStyleText(pGivenStyle),
+]
+  .filter(Boolean)
+  .join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cCoreStyle);
+const cRootAttrs = GetRootAttributes(cProps, [
+  "pColumn",
+  "pColumnP",
+  "pRow",
+  "pRowP",
+  "pColSpan",
+  "pColSpanP",
+  "pRowSpan",
+  "pRowSpanP",
+  "pBg",
+  "pColor",
+  "pRadius",
+  "pPad",
+  "pMinHeight",
+  "pClip",
+  "pClipP",
+  "pHzAlign",
+  "pVrAlign",
+  "pOverflow",
+]);
+---
+
+
+
+
+
+<article
+	style = {cPlace.Style}
+	class:list={["MosaicItem", cPlace.Class, pGivenClass]}
+	id={pGivenID}
+	{...cRootAttrs}
+>
+
+	{ cHasSlot ? (
+
+		<slot />
+	) : (
+
+		<span class = " MosaicItemFallback ">
+		
+		
+		
+		
+		
+		
+		
+			<b>
+		
+				عنصر موزاييك
+		
+			</b>
+		
+		
+		
+		
+		
+		
+		
+			<small>
+		
+				يعمل منفردًا ويأخذ مكانه داخل الشبكة عند وضعه في MosaicGrid
+		
+			</small>
+		
+		
+		
+		
+		
+		
+		
+		</span>
+	) }
+
+</article>
+
+
+
+
+
+<style>
+
+
+
+	.MosaicItem {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: var(--MosaicItemHz);
+		justify-content: var(--MosaicItemVr);
+		box-sizing: border-box;
+		grid-column: var(--MosaicItemColumnL);
+		grid-row: var(--MosaicItemRowL);
+		min-width: 0;
+		min-height: var(--MosaicItemMinHeightL);
+		padding: var(--MosaicItemPadL);
+		border-radius: var(--MosaicItemRadiusL);
+		background: var(--MosaicItemBg);
+		color: var(--MosaicItemColor);
+		clip-path: var(--MosaicItemClipL);
+		overflow: var(--MosaicItemOverflow);
+		box-shadow: 0 18px 42px rgba(22, 35, 48, 0.11);
+	}
+
+
+	.MosaicItemFallback {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		max-width: 38ch;
+	}
+
+	.MosaicItemFallback b {
+		font-size: 24px;
+	}
+
+	.MosaicItemFallback small {
+		font-size: 14px;
+		line-height: 1.75;
+		opacity: 0.72;
+	}
+
+
+
+	.MosaicItem.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+	}
+
+
+
+	.MosaicItem.PlaceSized:not(.IsPlaced),
+	.MosaicItem.IsPlaced
+	{
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.MosaicItem {
+			grid-column: var(--MosaicItemColumnP);
+			grid-row: var(--MosaicItemRowP);
+			min-height: var(--MosaicItemMinHeightP);
+			padding: var(--MosaicItemPadP);
+			border-radius: var(--MosaicItemRadiusP);
+			clip-path: var(--MosaicItemClipP);
+		}
+
+		.MosaicItem.PlaceSized:not(.IsPlaced),
+		.MosaicItem.IsPlaced
+		{
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.MosaicItem.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+		}
+	}
+
+
+
+</style>

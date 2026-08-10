@@ -1,0 +1,474 @@
+---
+import { Pixel, Place, type PlaceProps, RespString } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import { GetLayoutBackground, GetLayoutPair, GetRootAttributes, GetStyleText, type LayoutBackground, type LayoutValue } from "./LayoutUtils";
+
+type RailSide = "Start" | "End";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
+  pRailWidth?: LayoutValue;
+  pGap?: LayoutValue;
+  pPad?: LayoutValue;
+  pMinHeight?: LayoutValue;
+  pMaxWidth?: LayoutValue;
+  pBg?: LayoutBackground;
+  pRailBg?: LayoutBackground;
+  pRailColor?: string;
+  pSticky?: boolean;
+  pStickyTop?: Pixel;
+  pSide?: RailSide;
+  pCollapsePortrait?: boolean;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+const {
+  pRailWidth = new RespString("240px", "100%"),
+  pGap = new RespString("36px", "18px"),
+  pPad = new RespString("28px", "14px"),
+  pMinHeight = new RespString("520px", "420px"),
+  pMaxWidth = new RespString("1200px", "100%"),
+  pBg = "#f2f4f5",
+  pRailBg = "#111b24",
+  pRailColor = "#f8fafb",
+  pSticky = true,
+  pStickyTop = new Pixel(90, 0),
+  pSide = "Start",
+  pCollapsePortrait = true,
+  id: pGivenID = GetWidgetId("SideRail"),
+  class: pGivenClass = "",
+  style: pGivenStyle = "",
+} = cProps;
+
+const cRailWidth = GetLayoutPair(pRailWidth, "240px");
+const cGap = GetLayoutPair(pGap, "36px");
+const cPad = GetLayoutPair(pPad, "28px");
+const cMinHeight = GetLayoutPair(pMinHeight, "520px");
+const cMaxWidth = GetLayoutPair(pMaxWidth, "1200px");
+const cHasRail = Astro.slots.has("rail");
+const cHasContent = Astro.slots.has("default");
+
+const cCoreStyle = [
+  `--SideRailWidthL:${cRailWidth.Landscape};`,
+  `--SideRailWidthP:${cRailWidth.Portrait};`,
+  `--SideRailGapL:${cGap.Landscape};`,
+  `--SideRailGapP:${cGap.Portrait};`,
+  `--SideRailPadL:${cPad.Landscape};`,
+  `--SideRailPadP:${cPad.Portrait};`,
+  `--SideRailMinHeightL:${cMinHeight.Landscape};`,
+  `--SideRailMinHeightP:${cMinHeight.Portrait};`,
+  `--SideRailMaxWidthL:${cMaxWidth.Landscape};`,
+  `--SideRailMaxWidthP:${cMaxWidth.Portrait};`,
+  `--SideRailBg:${GetLayoutBackground(pBg)};`,
+  `--SideRailPanelBg:${GetLayoutBackground(pRailBg)};`,
+  `--SideRailPanelColor:${pRailColor};`,
+  `--SideRailStickyTopL:${pStickyTop.Landscape};`,
+  `--SideRailStickyTopP:${pStickyTop.Portrait};`,
+  GetStyleText(pGivenStyle),
+]
+  .filter(Boolean)
+  .join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cCoreStyle);
+const cRootAttrs = GetRootAttributes(cProps, [
+  "pRailWidth",
+  "pGap",
+  "pPad",
+  "pMinHeight",
+  "pMaxWidth",
+  "pBg",
+  "pRailBg",
+  "pRailColor",
+  "pSticky",
+  "pStickyTop",
+  "pSide",
+  "pCollapsePortrait",
+]);
+---
+
+
+
+
+
+<div
+	style = {cPlace.Style}
+	class:list={["SideRail", `Rail${pSide}`, pSticky && "IsSticky", pCollapsePortrait && "CollapsePortrait", cPlace.Class, pGivenClass]}
+	id={pGivenID}
+	data-emo-auto-container="true"
+	data-emo-empty-height="520"
+	{...cRootAttrs}
+>
+
+
+
+
+
+
+
+	<aside class = " SideRailPanel ">
+
+		{ cHasRail ? (
+
+			<slot name="rail" />
+		) : (
+
+			<>
+			
+			
+			
+			
+			
+			
+			
+				<small>
+			
+					INDEX / 01
+			
+				</small>
+			
+			
+			
+			
+			
+			
+			
+				<strong>
+					عمود جانبي
+				</strong>
+			
+			
+			
+			
+			
+			
+			
+				<span>
+					يمكن أن يحمل عنوانًا أو تنقلًا أو ملخصًا ثابتًا.
+				</span>
+			
+			
+			
+			
+			
+			
+			
+			</>
+		) }
+
+	</aside>
+
+
+
+
+
+
+
+	<div class = " SideRailContent ">
+
+		{ cHasContent ? (
+
+			<slot />
+		) : (
+
+			<>
+			
+			
+			
+			
+			
+			
+			
+				<section>
+			
+					<>
+			
+						<small>
+			
+							المحتوى الرئيسي
+			
+						</small>
+			
+						<h3>
+							العمود ثابت والسرد يكمل
+						</h3>
+			
+						<p>
+							هذا هو الكيان الافتراضي للودجت من دون أي معطيات.
+						</p>
+			
+					</>
+			
+				</section>
+			
+			
+			
+			
+			
+			
+			
+				<section>
+			
+					<>
+			
+						<b>
+			
+							01
+			
+						</b>
+			
+						<span>
+							مناسب للفهرس الرأسي، الـcase studies وصفحات المشاريع الطويلة.
+						</span>
+			
+					</>
+			
+				</section>
+			
+			
+			
+			
+			
+			
+			
+				<section>
+			
+					<>
+			
+						<b>
+			
+							02
+			
+						</b>
+			
+						<span>
+							يتحول تلقائيًا في وضع Portrait إلى تكوين رأسي طبيعي.
+						</span>
+			
+					</>
+			
+				</section>
+			
+			
+			
+			
+			
+			
+			
+			</>
+		) }
+
+	</div>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+<style>
+
+
+
+	.SideRail {
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(0, var(--SideRailWidthL)) minmax(0, 1fr);
+		box-sizing: border-box;
+		width: min(100%, var(--SideRailMaxWidthL));
+		min-height: var(--SideRailMinHeightL);
+		margin-inline: auto;
+		padding: var(--SideRailPadL);
+		gap: var(--SideRailGapL);
+		background: var(--SideRailBg);
+		overflow: visible;
+	}
+
+
+	.SideRailPanel {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		align-self: start;
+		box-sizing: border-box;
+		min-width: 0;
+		min-height: 360px;
+		padding: 30px;
+		gap: 12px;
+		border-radius: 26px;
+		background: var(--SideRailPanelBg);
+		color: var(--SideRailPanelColor);
+	}
+
+	.SideRailPanel > small {
+		font-weight: 900;
+		letter-spacing: 0.14em;
+		opacity: 0.6;
+	}
+
+	.SideRailPanel > strong {
+		margin-top: auto;
+		font-size: clamp(28px, 4vw, 46px);
+		line-height: 1.1;
+	}
+
+	.SideRailPanel > span {
+		line-height: 1.8;
+		opacity: 0.72;
+	}
+
+
+	.SideRailContent {
+		display: flex;
+		flex-direction: column;
+		box-sizing: border-box;
+		min-width: 0;
+		gap: 18px;
+	}
+
+	.SideRailContent > :global(*) {
+		max-width: 100%;
+	}
+
+	.SideRailContent > section {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		box-sizing: border-box;
+		min-height: 230px;
+		padding: clamp(28px, 5vw, 62px);
+		gap: 10px;
+		border-radius: 26px;
+		background: #ffffff;
+		color: #17212a;
+	}
+
+	.SideRailContent h3 {
+		font-size: clamp(30px, 5vw, 60px);
+		line-height: 1.12;
+	}
+
+	.SideRailContent b {
+		font-size: 54px;
+		font-weight: 250;
+	}
+
+
+
+	.SideRail.RailEnd {
+		grid-template-columns: minmax(0, 1fr) minmax(0, var(--SideRailWidthL));
+	}
+
+	.SideRail.RailEnd .SideRailPanel {
+		order: 2;
+	}
+
+
+	.SideRail.IsSticky .SideRailPanel {
+		position: sticky;
+		top: var(--SideRailStickyTopL);
+	}
+
+
+	.SideRail.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+		margin: 0;
+	}
+
+
+
+	.SideRailPanel > small,
+	.SideRailPanel > strong,
+	.SideRailPanel > span
+	{
+		margin: 0;
+	}
+
+
+	.SideRailContent h3,
+	.SideRailContent p
+	{
+		margin: 0;
+	}
+
+
+	.SideRailContent p,
+	.SideRailContent span
+	{
+		max-width: 54ch;
+		line-height: 1.8;
+	}
+
+
+	.SideRail.PlaceSized:not(.IsPlaced),
+	.SideRail.IsPlaced
+	{
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation: portrait) {
+		.SideRail {
+			width: min(100%, var(--SideRailMaxWidthP));
+			min-height: var(--SideRailMinHeightP);
+			padding: var(--SideRailPadP);
+			gap: var(--SideRailGapP);
+		}
+
+		.SideRail.CollapsePortrait {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.SideRail.CollapsePortrait.RailEnd .SideRailPanel {
+			order: initial;
+		}
+
+		.SideRail.IsSticky .SideRailPanel {
+			top: var(--SideRailStickyTopP);
+		}
+
+		.SideRail.CollapsePortrait.IsSticky .SideRailPanel {
+			position: relative;
+			top: auto;
+		}
+
+		.SideRailPanel {
+			width: var(--SideRailWidthP);
+			min-height: 200px;
+		}
+
+		.SideRail.PlaceSized:not(.IsPlaced),
+		.SideRail.IsPlaced
+		{
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.SideRail.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+		}
+	}
+
+
+
+</style>
