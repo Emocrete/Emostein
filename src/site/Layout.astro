@@ -593,75 +593,18 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 	@media (hover: none), (pointer: coarse), (max-width: 700px) {
 		html:not(.EmoReplayDesktop) .FloatContact {
-			left: 0;
-			right: 0;
-			bottom: max(14px, env(safe-area-inset-bottom));
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 12px;
-			width: 100%;
-			height: 58px;
-			padding-inline: 14px;
-			box-sizing: border-box;
 			opacity: 0;
-			transform: translateY(calc(100% + 28px));
+			transform: translateX(calc(-100% - 12px));
 			transition: transform 0.24s ease, opacity 0.24s ease;
+		}
+
+		html:not(.EmoReplayDesktop) .FloatContact:not(.IsMobileIdleVisible) .FloatContactLink {
 			pointer-events: none;
 		}
 
 		html:not(.EmoReplayDesktop) .FloatContact.IsMobileIdleVisible {
 			opacity: 1;
-			transform: translateY(0);
-			pointer-events: auto;
-		}
-
-		html:not(.EmoReplayDesktop) .FloatContactLink {
-			position: relative;
-			left: auto;
-			top: auto;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 7px;
-			width: min(44vw, 166px);
-			height: 52px;
-			border-radius: 16px;
-			transition: none;
-		}
-
-		html:not(.EmoReplayDesktop) .FloatContactLink.IsWhatsapp {
-			top: auto;
-			order: 1;
-		}
-
-		html:not(.EmoReplayDesktop) .FloatContactLink.IsCall {
-			order: 2;
-		}
-
-		html:not(.EmoReplayDesktop) .FloatContactIcon,
-		html:not(.EmoReplayDesktop) .FloatContactArrow,
-		html:not(.EmoReplayDesktop) .FloatContactText
-		{
-			position: static;
-			width: auto;
-			height: auto;
-			opacity: 1;
-			transform: none;
-		}
-
-		html:not(.EmoReplayDesktop) .FloatContactIcon {
-			width: 25px;
-			height: 25px;
-		}
-
-		html:not(.EmoReplayDesktop) .FloatContactArrow {
-			display: none;
-		}
-
-		html:not(.EmoReplayDesktop) .FloatContactText {
-			display: flex;
-			font-size: 14px;
+			transform: translateX(0);
 		}
 	}
 
