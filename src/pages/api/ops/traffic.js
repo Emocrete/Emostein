@@ -559,11 +559,35 @@ function ResolveIpLocation(pSources) {
 	const AreaVotes = VoteList(Eligible, "area", MatchingGovernorate, true);
 	const AreaVote = AreaVotes[0] || null;
 
+	// City/area providers do not all describe the same hierarchy. Once the governorate is
+	// agreed, a value that merely repeats the governorate is only a fallback. Any different
+	// city/area value is a more detailed third-level location and must take precedence.
+	const GovernorateKey = GeoNorm(Governorate);
+	const GovernorateSources = Eligible.filter((Source) => MatchingCountry(Source) && GeoNorm(Source.governorate));
+	const GovernorateUnanimous = !!GovernorateKey && GovernorateSources.length > 0 && GovernorateSources.every((Source) => GeoNorm(Source.governorate) === GovernorateKey);
+	const ThirdLevelSources = Eligible.map((Source) => {
+		if (!MatchingGovernorate(Source)) return Source;
+		const Area = Str(Source.area);
+		const City = Str(Source.city);
+		const AreaKey = GeoNorm(Area);
+		const CityKey = GeoNorm(City);
+		const ThirdLevel = Area && AreaKey !== GovernorateKey
+			? Area
+			: City && CityKey !== GovernorateKey
+				? City
+				: "";
+		return { ...Source, thirdLevel: ThirdLevel };
+	});
+	const ThirdLevelVotes = VoteList(ThirdLevelSources, "thirdLevel", MatchingGovernorate, true);
+	const ThirdLevelVote = ThirdLevelVotes[0] || null;
+
 	const CountryAgreement = CountryVote?.sources?.length || 0;
 	const IndependentCountrySources = (CountryVote?.sources || []).filter((Name) => Name !== "vercel").length;
 	const CountryVerified = CountryAgreement >= 2 && IndependentCountrySources >= 1;
 	const GovernorateVerified = CountryVerified && (GovernorateVote?.sources?.length || 0) >= 2;
-	const CityVerified = GovernorateVerified && (CityVote?.sources?.length || 0) >= 2;
+	const UseThirdLevelPriority = GovernorateVerified && GovernorateUnanimous && !!ThirdLevelVote;
+	const EffectiveCityVote = UseThirdLevelPriority ? ThirdLevelVote : CityVote;
+	const CityVerified = GovernorateVerified && (EffectiveCityVote?.sources?.length || 0) >= 2;
 
 	if (!CountryVerified) {
 		return {
@@ -600,21 +624,20 @@ function ResolveIpLocation(pSources) {
 		};
 	}
 
-	let City = CityVerified ? Str(CityVote?.value) : "";
+	const ThirdLevel = UseThirdLevelPriority ? Str(ThirdLevelVote?.value) : "";
+	let City = UseThirdLevelPriority ? ThirdLevel : (CityVerified ? Str(CityVote?.value) : "");
 	if (!City && GovernorateVerified) City = Governorate;
 
-	let Area = GovernorateVerified ? Str(AreaVote?.value) : "";
+	let Area = UseThirdLevelPriority ? "" : (GovernorateVerified ? Str(AreaVote?.value) : "");
 	let AreaType = "";
-	let AreaAgreementSources = AreaVote?.sources || [];
-	let AreaConfidenceVote = AreaVote;
+	let AreaAgreementSources = UseThirdLevelPriority ? [] : (AreaVote?.sources || []);
+	let AreaConfidenceVote = UseThirdLevelPriority ? null : AreaVote;
 	const AreaSource = Eligible.find((Source) => Source.source === AreaVote?.sources?.[0] && GeoNorm(Source.area) === GeoNorm(Area));
 	if (Area) AreaType = Str(AreaSource?.areaType || "locality");
 
-	// Preserve a useful sub-governorate place even when providers disagree on the exact city.
-	// Example: Giza is verified as the governorate while one provider says Sheikh Zayed and another says Giza.
-	// The card can then show Giza as the parent classification and Sheikh Zayed as the extra locality box.
+	// Outside the unanimous-governorate rule, keep the previous candidate fallback unchanged.
 	const CandidateCity = Str(CityVote?.value);
-	if (!Area && GovernorateVerified && !CityVerified && CandidateCity && GeoNorm(CandidateCity) !== GeoNorm(Governorate)) {
+	if (!UseThirdLevelPriority && !Area && GovernorateVerified && !CityVerified && CandidateCity && GeoNorm(CandidateCity) !== GovernorateKey) {
 		Area = CandidateCity;
 		AreaType = "locality_candidate";
 		AreaAgreementSources = CityVote?.sources || [];
@@ -625,7 +648,7 @@ function ResolveIpLocation(pSources) {
 	const Band = LocationBand(CountryCode, GovernorateVerified ? Governorate : "", City);
 
 	const GovernorateConfidence = GovernorateVerified ? ConfidenceFromVote(GovernorateVote) : "low";
-	const CityConfidence = CityVerified ? ConfidenceFromVote(CityVote) : "low";
+	const CityConfidence = EffectiveCityVote ? ConfidenceFromVote(EffectiveCityVote, 2) : "none";
 	const AreaConfidence = Area ? ConfidenceFromVote(AreaConfidenceVote, 2) : "none";
 	const OverallConfidence = CityVerified ? CityConfidence : GovernorateVerified ? GovernorateConfidence : "country_only";
 
@@ -655,12 +678,14 @@ function ResolveIpLocation(pSources) {
 		countryCandidates: CountryVotes.slice(0, 5),
 		governorateCandidates: GovernorateVotes.slice(0, 5),
 		regionCandidates: GovernorateVotes.slice(0, 5),
-		cityCandidates: CityVotes.slice(0, 5),
+		cityCandidates: UseThirdLevelPriority ? ThirdLevelVotes.slice(0, 5) : CityVotes.slice(0, 5),
+		rawCityCandidates: CityVotes.slice(0, 5),
 		areaCandidates: AreaVotes.slice(0, 5),
+		thirdLevelCandidates: ThirdLevelVotes.slice(0, 5),
 		countryAgreementSources: CountryVote?.sources || [],
 		governorateAgreementSources: GovernorateVote?.sources || [],
 		regionAgreementSources: GovernorateVote?.sources || [],
-		cityAgreementSources: CityVote?.sources || [],
+		cityAgreementSources: EffectiveCityVote?.sources || [],
 		areaAgreementSources: AreaAgreementSources,
 		coordinateSources: Coordinates.sources,
 		rejectedSources: Sources.filter((Source) => Source.voteEligible === false).map((Source) => ({ source: Source.source, reason: Source.rejectionReason })),
