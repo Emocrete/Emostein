@@ -1,7 +1,7 @@
 ---
 import BLayout from "@/Layout.astro";
 import { EmoCall, Emograph, EmoList, EmoWhats } from "@/Widgets/Comp";
-import { RespImg } from "@/Widgets";
+import { RespImg } from "@/Widgets/Media";
 import { DivCol, DivStr, EmoSec } from "@/Widgets/Sections";
 import { ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
 
@@ -16,113 +16,1134 @@ const cMedia = "/Media/Emostone/Granit/Eg/";
 const Image = (pFile: string, pAlt: string, pWidth = "100%", pHeight = "100%") => new EmoMediaData("Img", cMedia, pFile, false, pAlt, new Size(new NumPer(pWidth, "100%"), new NumPer(pHeight, "auto")));
 ---
 
-<BLayout pSchemaType="Service" pTitle="توريد وتركيب جرانيت مصري للمشروعات" pDescr="تسعير وتوريد وتركيب الجرانيت المصري للمشروعات من مراجعة المقايسة والاعتماد حتى التصنيع والتوريد والتركيب والتسليم.">
 
-	<EmoSec id="GraniteProjectsHero" Service data-hero pBg={new ElemBg(cInk)} pMinH={new NumPer("820px", "760px")} class="granite-hero" pHzAlign="Center" pVrAlign="Center">
-		<DivStr pBox={new Size(new NumPer("1280px", "100%"))} pMinH={new NumPer("820px", "760px")} pGap={new Pixel(0)} class="hero-grid">
-			<DivCol pSize={new Size(new NumPer("56%", "100%"))} pPad={new Pixel(90, 28)} pGap={new Pixel(30, 22)} pHzAlign="Start" pVrAlign="Center" class="hero-copy">
-				<p class="eyebrow">EGYPTIAN GRANITE / PROJECT SUPPLY</p>
-				<Emograph pTitle={Text.H1.WithColor(cWhite).OfText("جرانيت مصري\nيبدأ من المقايسة\nولا ينتهي عند التوريد")} pText={Text.H3.WithColor(cMist).OfText("حزمة هندسية وتجارية تربط الـBOQ بالخامة والتصنيع والبرنامج التنفيذي، حتى تصبح كل قطعة قابلة للتسعير والتتبع والاستلام.")} />
-				<div class="hero-actions"><EmoWhats BlackGreen pText="أرسل ملف المقايسة" pMessage="أرغب في إرسال مقايسة جرانيت مصري للتسعير الفني والمالي." pWidth="230px" pHeight="58px" pRadius="0px" /><EmoCall WhiteBlack pText="ناقش نطاق المشروع" pWidth="230px" pHeight="58px" pRadius="0px" /></div>
-				<p class="audience">للمقاولين · المطورين · الاستشاريين · المكاتب الفنية · المشتريات</p>
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="توريد وتركيب جرانيت مصري للمشروعات"
+	pDescr="تسعير وتوريد وتركيب الجرانيت المصري للمشروعات من مراجعة المقايسة والاعتماد حتى التصنيع والتوريد والتركيب والتسليم."
+>
+
+
+
+
+
+
+
+	<EmoSec
+		class = " granite-hero "
+		id="GraniteProjectsHero"
+		Service
+		data-hero
+		pBg={new ElemBg(cInk)}
+		pMinH={new NumPer("820px", "760px")}
+		pHzAlign="Center"
+		pVrAlign="Center"
+	>
+
+		<DivStr
+			class = " hero-grid "
+			pBox={new Size(new NumPer("1280px", "100%"))}
+			pMinH={new NumPer("820px", "760px")}
+			pGap={new Pixel(0)}
+		>
+
+			<DivCol
+				class = " hero-copy "
+				pSize={new Size(new NumPer("56%", "100%"))}
+				pPad={new Pixel(90, 28)}
+				pGap={new Pixel(30, 22)}
+				pHzAlign="Start"
+				pVrAlign="Center"
+			>
+
+				<p class = " eyebrow ">
+					EGYPTIAN GRANITE / PROJECT SUPPLY
+				</p>
+
+				<Emograph
+					pTitle={Text.H1.WithColor(cWhite).OfText("جرانيت مصري\nيبدأ من المقايسة\nولا ينتهي عند التوريد")}
+					pText={Text.H3.WithColor(cMist).OfText("حزمة هندسية وتجارية تربط الـBOQ بالخامة والتصنيع والبرنامج التنفيذي، حتى تصبح كل قطعة قابلة للتسعير والتتبع والاستلام.")}
+				/>
+
+				<div class = " hero-actions ">
+
+					<EmoWhats
+						BlackGreen
+						pText="أرسل ملف المقايسة"
+						pMessage="أرغب في إرسال مقايسة جرانيت مصري للتسعير الفني والمالي."
+						pWidth="230px"
+						pHeight="58px"
+						pRadius="0px"
+					/>
+
+					<EmoCall
+						WhiteBlack
+						pText="ناقش نطاق المشروع"
+						pWidth="230px"
+						pHeight="58px"
+						pRadius="0px"
+					/>
+
+				</div>
+
+				<p class = " audience ">
+					للمقاولين · المطورين · الاستشاريين · المكاتب الفنية · المشتريات
+				</p>
+
 			</DivCol>
-			<DivCol pSize={new Size(new NumPer("44%", "100%"))} pPad={new Pixel(0)} class="hero-visual">
+
+			<DivCol class = " hero-visual " pSize={new Size(new NumPer("44%", "100%"))} pPad={new Pixel(0)}>
+
 				<RespImg pImg={Image("quarry.webp", "كتل جرانيت مصري ضخمة داخل محجر", "100%", "820px")} />
-				<div class="hero-stat"><strong>من الخام</strong><span>إلى كود القطعة المركبة</span></div>
+
+				<div class = " hero-stat ">
+
+					<strong>
+						من الخام
+					</strong>
+
+					<span>
+						إلى كود القطعة المركبة
+					</span>
+
+				</div>
+
 			</DivCol>
+
 		</DivStr>
+
 	</EmoSec>
 
-	<EmoSec id="GraniteScope" Service pBg={new ElemBg(cIce)} pHzAlign="Center" pVrAlign="Center" pPad={new Pixel(110, 22)} class="editorial-section">
-		<DivStr pBox={new Size(new NumPer("1180px", "100%"))} pGap={new Pixel(48, 26)} class="scope-layout">
+
+
+
+
+
+
+	<EmoSec
+		class = " editorial-section "
+		id="GraniteScope"
+		Service
+		pBg={new ElemBg(cIce)}
+		pHzAlign="Center"
+		pVrAlign="Center"
+		pPad={new Pixel(110, 22)}
+	>
+
+		<DivStr class = " scope-layout " pBox={new Size(new NumPer("1180px", "100%"))} pGap={new Pixel(48, 26)}>
+
 			<DivCol pSize={new Size(new NumPer("42%", "100%"))} pPad={new Pixel(0)} pHzAlign="Start">
-				<p class="section-index">01 / النطاق</p>
-				<Emograph pTitle={Text.H2.WithColor(cInk).OfText("توريد وتركيب جرانيت مصري للمشروعات والمقايسات")} pText={Text.Body.WithColor(cSteel).OfText("نحوّل جدول الكميات والمواصفات والرسومات إلى حزمة قابلة للتسعير والتعاقد والتنفيذ. تتاح كتوريد فقط أو توريد وتركيب كامل، وفق نظام التعاقد والبرنامج التنفيذي.")} />
+
+				<p class = " section-index ">
+					01 / النطاق
+				</p>
+
+				<Emograph
+					pTitle={Text.H2.WithColor(cInk).OfText("توريد وتركيب جرانيت مصري للمشروعات والمقايسات")}
+					pText={Text.Body.WithColor(cSteel).OfText("نحوّل جدول الكميات والمواصفات والرسومات إلى حزمة قابلة للتسعير والتعاقد والتنفيذ. تتاح كتوريد فقط أو توريد وتركيب كامل، وفق نظام التعاقد والبرنامج التنفيذي.")}
+				/>
+
 			</DivCol>
-			<DivCol pSize={new Size(new NumPer("58%", "100%"))} pPad={new Pixel(0)} pHzAlign="Start" class="scope-list">
-				<EmoList pWidth={new RespString("100%", "100%")} pItemsBg={new ElemBg("transparent")} pItemFnt={Text.H4.WithColor(cInk)} pNumbered={true} pItems={["أرضيات ودرج وبسطات ووزرات وجلسات وعتبات.","مداخل ومصاعد وكسوات حوائط وواجهات.","لاندسكيب ومشايات وبلدورات وأغطية أسوار.","قطع خاصة وCut-to-Size طبقًا للرسومات."]} />
-				<p class="scope-note">أعمال حجر مرتبطة بالمشروع، لا بيع خامة منفصلة.</p>
+
+			<DivCol
+				class = " scope-list "
+				pSize={new Size(new NumPer("58%", "100%"))}
+				pPad={new Pixel(0)}
+				pHzAlign="Start"
+			>
+
+				<EmoList
+					pWidth={new RespString("100%", "100%")}
+					pItemsBg={new ElemBg("transparent")}
+					pItemFnt={Text.H4.WithColor(cInk)}
+					pNumbered={true}
+					pItems={["أرضيات ودرج وبسطات ووزرات وجلسات وعتبات.","مداخل ومصاعد وكسوات حوائط وواجهات.","لاندسكيب ومشايات وبلدورات وأغطية أسوار.","قطع خاصة وCut-to-Size طبقًا للرسومات."]}
+				/>
+
+				<p class = " scope-note ">
+					أعمال حجر مرتبطة بالمشروع، لا بيع خامة منفصلة.
+				</p>
+
 			</DivCol>
+
 		</DivStr>
+
 	</EmoSec>
 
-	<EmoSec id="GraniteBoq" Service pBg={new ElemBg(cMist)} pHzAlign="Center" pVrAlign="Center" pPad={new Pixel(110, 22)} class="boq-section">
-		<DivStr pBox={new Size(new NumPer("1180px", "100%"))} pGap={new Pixel(0)} class="boq-frame">
-			<DivCol pSize={new Size(new NumPer("39%", "100%"))} pBg={new ElemBg(cInk)} pPad={new Pixel(58, 28)} pGap={new Pixel(28, 18)} pHzAlign="Start">
-				<p class="section-index lime">02 / التسعير</p>
-				<Emograph pTitle={Text.H2.WithColor(cWhite).OfText("السعر لا يبدأ من المتر؛ يبدأ من المستند")} pText={Text.Body.WithColor(cMist).OfText("تدخل المقايسة مع الرسومات والمواصفات وجدول التشطيبات والبرنامج. نراجع التعارضات والبيانات الناقصة ونثبت افتراضات التسعير وحدود المسؤولية داخل العرض.")} />
-				<div class="doc-stack"><span>BOQ</span><span>DRAWINGS</span><span>SPECIFICATIONS</span><span>FINISH SCHEDULE</span></div>
+
+
+
+
+
+
+	<EmoSec
+		class = " boq-section "
+		id="GraniteBoq"
+		Service
+		pBg={new ElemBg(cMist)}
+		pHzAlign="Center"
+		pVrAlign="Center"
+		pPad={new Pixel(110, 22)}
+	>
+
+		<DivStr class = " boq-frame " pBox={new Size(new NumPer("1180px", "100%"))} pGap={new Pixel(0)}>
+
+			<DivCol
+				pSize={new Size(new NumPer("39%", "100%"))}
+				pBg={new ElemBg(cInk)}
+				pPad={new Pixel(58, 28)}
+				pGap={new Pixel(28, 18)}
+				pHzAlign="Start"
+			>
+
+				<p class = " section-index lime ">
+					02 / التسعير
+				</p>
+
+				<Emograph
+					pTitle={Text.H2.WithColor(cWhite).OfText("السعر لا يبدأ من المتر؛ يبدأ من المستند")}
+					pText={Text.Body.WithColor(cMist).OfText("تدخل المقايسة مع الرسومات والمواصفات وجدول التشطيبات والبرنامج. نراجع التعارضات والبيانات الناقصة ونثبت افتراضات التسعير وحدود المسؤولية داخل العرض.")}
+				/>
+
+				<div class = " doc-stack ">
+
+					<span>
+						BOQ
+					</span>
+
+					<span>
+						DRAWINGS
+					</span>
+
+					<span>
+						SPECIFICATIONS
+					</span>
+
+					<span>
+						FINISH SCHEDULE
+					</span>
+
+				</div>
+
 			</DivCol>
-			<DivCol pSize={new Size(new NumPer("61%", "100%"))} pPad={new Pixel(58, 30)} pGap={new Pixel(30, 20)} pHzAlign="Start" class="price-side">
-				<Emograph pTitle={Text.H2.WithColor(cInk).OfText("ما الذي يدخل في تكوين السعر؟")} pText={Text.Body.WithColor(cSteel).OfText("كل بند يُربط بالخامة والسمك وتشطيب السطح والأبعاد والحواف وطريقة التصنيع والتركيب وموقع التنفيذ.")} />
-				<EmoList pWidth={new RespString("100%", "100%")} pItemsBg={new ElemBg("transparent")} pItemFnt={Text.Body.WithColor(cInk)} pNumbered={true} pItems={["الخام ونسب الهالك والقص والتجهيز.","الحليات والمجارير والفتحات والترقيم والتعبئة.","النقل والرفع ومستلزمات التركيب والجلي والتشطيب.","الحماية حتى الاستلام بحسب نطاق كل بند."]} />
-				<p class="highlight-line">يمكن تقسيم العرض حسب المبنى أو المنطقة أو الدور أو مرحلة التسليم.</p>
+
+			<DivCol
+				class = " price-side "
+				pSize={new Size(new NumPer("61%", "100%"))}
+				pPad={new Pixel(58, 30)}
+				pGap={new Pixel(30, 20)}
+				pHzAlign="Start"
+			>
+
+				<Emograph
+					pTitle={Text.H2.WithColor(cInk).OfText("ما الذي يدخل في تكوين السعر؟")}
+					pText={Text.Body.WithColor(cSteel).OfText("كل بند يُربط بالخامة والسمك وتشطيب السطح والأبعاد والحواف وطريقة التصنيع والتركيب وموقع التنفيذ.")}
+				/>
+
+				<EmoList
+					pWidth={new RespString("100%", "100%")}
+					pItemsBg={new ElemBg("transparent")}
+					pItemFnt={Text.Body.WithColor(cInk)}
+					pNumbered={true}
+					pItems={["الخام ونسب الهالك والقص والتجهيز.","الحليات والمجارير والفتحات والترقيم والتعبئة.","النقل والرفع ومستلزمات التركيب والجلي والتشطيب.","الحماية حتى الاستلام بحسب نطاق كل بند."]}
+				/>
+
+				<p class = " highlight-line ">
+					يمكن تقسيم العرض حسب المبنى أو المنطقة أو الدور أو مرحلة التسليم.
+				</p>
+
 			</DivCol>
+
 		</DivStr>
+
 	</EmoSec>
 
-	<EmoSec id="EgyptianGraniteMaterials" Service pBg={new ElemBg(cIce)} pHzAlign="Center" pVrAlign="Center" pPad={new Pixel(120, 22)} class="material-section">
-		<DivStr pBox={new Size(new NumPer("1180px", "100%"))} pGap={new Pixel(54, 28)} class="material-grid">
-			<DivCol pSize={new Size(new NumPer("54%", "100%"))} pPad={new Pixel(0)} pGap={new Pixel(22, 16)} pHzAlign="Start">
-				<div class="image-window"><RespImg pImg={Image("samples.webp", "عينات جرانيت مصري مع رسومات وأداة قياس", "100%", "620px")} /><span class="image-label">MATERIAL APPROVAL</span></div>
+
+
+
+
+
+
+	<EmoSec
+		class = " material-section "
+		id="EgyptianGraniteMaterials"
+		Service
+		pBg={new ElemBg(cIce)}
+		pHzAlign="Center"
+		pVrAlign="Center"
+		pPad={new Pixel(120, 22)}
+	>
+
+		<DivStr class = " material-grid " pBox={new Size(new NumPer("1180px", "100%"))} pGap={new Pixel(54, 28)}>
+
+			<DivCol
+				pSize={new Size(new NumPer("54%", "100%"))}
+				pPad={new Pixel(0)}
+				pGap={new Pixel(22, 16)}
+				pHzAlign="Start"
+			>
+
+				<div class = " image-window ">
+
+					<RespImg pImg={Image("samples.webp", "عينات جرانيت مصري مع رسومات وأداة قياس", "100%", "620px")} />
+
+					<span class = " image-label ">
+						MATERIAL APPROVAL
+					</span>
+
+				</div>
+
 			</DivCol>
-			<DivCol pSize={new Size(new NumPer("46%", "100%"))} pPad={new Pixel(20, 0)} pGap={new Pixel(28, 18)} pHzAlign="Start" pVrAlign="Center">
-				<p class="section-index">03 / الخامات</p>
-				<Emograph pTitle={Text.H2.WithColor(cInk).OfText("الخامة ليست اسمًا تجاريًا؛ إنها قرار داخل جدول التشطيبات")} pText={Text.Body.WithColor(cSteel).OfText("نيو حلايب وحلايب ورمادي الشركة، جندولا وروزا هودي وروزا النصر، فيردي وفيردي غزال، بلاك أسوان وأحمر أسوان وفرسان. كل خامة تُربط بالبند والاستخدام والتشطيب والسمك والمقاس والكمية.")} />
-				<div class="material-chips"><span>فاتح / رمادي</span><span>وردي / أخضر</span><span>داكن / أحمر</span></div>
-				<Emograph pTitle={Text.H3.WithColor(cInk).OfText("Value Engineering واضح الأثر")} pText={Text.Body.WithColor(cSteel).OfText("بدائل تحقق التصميم ومستهدف التكلفة والمدة، مع بيان أثر كل بديل على سعر البند والتوفر والتوريد.")} />
+
+			<DivCol
+				pSize={new Size(new NumPer("46%", "100%"))}
+				pPad={new Pixel(20, 0)}
+				pGap={new Pixel(28, 18)}
+				pHzAlign="Start"
+				pVrAlign="Center"
+			>
+
+				<p class = " section-index ">
+					03 / الخامات
+				</p>
+
+				<Emograph
+					pTitle={Text.H2.WithColor(cInk).OfText("الخامة ليست اسمًا تجاريًا؛ إنها قرار داخل جدول التشطيبات")}
+					pText={Text.Body.WithColor(cSteel).OfText("نيو حلايب وحلايب ورمادي الشركة، جندولا وروزا هودي وروزا النصر، فيردي وفيردي غزال، بلاك أسوان وأحمر أسوان وفرسان. كل خامة تُربط بالبند والاستخدام والتشطيب والسمك والمقاس والكمية.")}
+				/>
+
+				<div class = " material-chips ">
+
+					<span>
+						فاتح / رمادي
+					</span>
+
+					<span>
+						وردي / أخضر
+					</span>
+
+					<span>
+						داكن / أحمر
+					</span>
+
+				</div>
+
+				<Emograph
+					pTitle={Text.H3.WithColor(cInk).OfText("Value Engineering واضح الأثر")}
+					pText={Text.Body.WithColor(cSteel).OfText("بدائل تحقق التصميم ومستهدف التكلفة والمدة، مع بيان أثر كل بديل على سعر البند والتوفر والتوريد.")}
+				/>
+
 			</DivCol>
+
 		</DivStr>
+
 	</EmoSec>
 
-	<EmoSec id="GraniteApproval" Service pBg={new ElemBg(cInk)} pHzAlign="Center" pVrAlign="Center" pPad={new Pixel(120, 22)} class="process-section">
-		<div class="process-shell">
-			<p class="section-index lime">04 / من الاعتماد إلى الموقع</p>
-			<Emograph pTitle={Text.H2.WithColor(cWhite).OfText("مسار واحد. أربع نقاط تحكم. قطعة يمكن تتبعها.")} pText={Text.Body.WithColor(cMist).OfText("لا تنفصل العينة المعتمدة عن التشغيل والتصنيع والتوريد والتنفيذ.")} />
-			<div class="process-rail">
-				<article><b>01</b><h3>اعتماد الخامة</h3><p>Material Submittal، عينة، بيانات فنية، اختبارات وMockup مرجعي.</p></article>
-				<article><b>02</b><h3>Shop Drawings</h3><p>أبعاد وحواف وفتحات وميول وفواصل وتفاصيل تثبيت وقوائم تقطيع.</p></article>
-				<article><b>03</b><h3>تصنيع وترقيم</h3><p>Cut-to-Size، Dry Lay، أكواد، بالات وقوائم تحميل لكل منطقة.</p></article>
-				<article><b>04</b><h3>توريد وتركيب</h3><p>دفعات مرتبطة بجاهزية الموقع، فحص، Snag List وحماية حتى التسليم.</p></article>
+
+
+
+
+
+
+	<EmoSec
+		class = " process-section "
+		id="GraniteApproval"
+		Service
+		pBg={new ElemBg(cInk)}
+		pHzAlign="Center"
+		pVrAlign="Center"
+		pPad={new Pixel(120, 22)}
+	>
+
+		<div class = " process-shell ">
+
+			<p class = " section-index lime ">
+				04 / من الاعتماد إلى الموقع
+			</p>
+
+			<Emograph
+				pTitle={Text.H2.WithColor(cWhite).OfText("مسار واحد. أربع نقاط تحكم. قطعة يمكن تتبعها.")}
+				pText={Text.Body.WithColor(cMist).OfText("لا تنفصل العينة المعتمدة عن التشغيل والتصنيع والتوريد والتنفيذ.")}
+			/>
+
+			<div class = " process-rail ">
+
+				<article>
+
+					<b>
+
+						01
+
+					</b>
+
+					<h3>
+						اعتماد الخامة
+					</h3>
+
+					<p>
+						Material Submittal، عينة، بيانات فنية، اختبارات وMockup مرجعي.
+					</p>
+
+				</article>
+
+				<article>
+
+					<b>
+
+						02
+
+					</b>
+
+					<h3>
+						Shop Drawings
+					</h3>
+
+					<p>
+						أبعاد وحواف وفتحات وميول وفواصل وتفاصيل تثبيت وقوائم تقطيع.
+					</p>
+
+				</article>
+
+				<article>
+
+					<b>
+
+						03
+
+					</b>
+
+					<h3>
+						تصنيع وترقيم
+					</h3>
+
+					<p>
+						Cut-to-Size، Dry Lay، أكواد، بالات وقوائم تحميل لكل منطقة.
+					</p>
+
+				</article>
+
+				<article>
+
+					<b>
+
+						04
+
+					</b>
+
+					<h3>
+						توريد وتركيب
+					</h3>
+
+					<p>
+						دفعات مرتبطة بجاهزية الموقع، فحص، Snag List وحماية حتى التسليم.
+					</p>
+
+				</article>
+
 			</div>
+
 		</div>
+
 	</EmoSec>
 
-	<EmoSec id="GraniteFactory" Service pBg={new ElemBg(cMist)} pHzAlign="Center" pVrAlign="Center" pPad={new Pixel(0)} class="factory-section">
-		<DivStr pBox={new Size(new NumPer("100%", "100%"))} pGap={new Pixel(0)} class="factory-grid">
-			<DivCol pSize={new Size(new NumPer("58%", "100%"))} pPad={new Pixel(0)} class="factory-image"><RespImg pImg={Image("factory.webp", "مصنع جرانيت وتجهيز ألواح على ماكينة قص رقمية", "100%", "700px")} /></DivCol>
-			<DivCol pSize={new Size(new NumPer("42%", "100%"))} pPad={new Pixel(70, 30)} pGap={new Pixel(26, 18)} pHzAlign="Start" pVrAlign="Center">
-				<p class="section-index">05 / التصنيع</p>
-				<Emograph pTitle={Text.H2.WithColor(cInk).OfText("من الرسومات إلى أمر إنتاج قابل للتتبع")} pText={Text.Body.WithColor(cSteel).OfText("تتحول الرسومات المعتمدة إلى Shop Drawings وقوائم تقطيع. تحمل كل قطعة كودًا يربطها بالمبنى والمنطقة والدور والبند وموقع التركيب.")} />
-				<EmoList pWidth={new RespString("100%", "100%")} pItemsBg={new ElemBg("transparent")} pItemFnt={Text.Body.WithColor(cInk)} pNumbered={false} pItems={["مصقول أو مطفي أو محروق أو مجلخ أو رملي.","ألواح وشرائح وترابيع وسلالم وواجهات ومقاسات خاصة.","توزيع أوامر الإنتاج على دفعات مرتبطة بأولوية الموقع."]} />
+
+
+
+
+
+
+	<EmoSec
+		class = " factory-section "
+		id="GraniteFactory"
+		Service
+		pBg={new ElemBg(cMist)}
+		pHzAlign="Center"
+		pVrAlign="Center"
+		pPad={new Pixel(0)}
+	>
+
+		<DivStr class = " factory-grid " pBox={new Size(new NumPer("100%", "100%"))} pGap={new Pixel(0)}>
+
+			<DivCol class = " factory-image " pSize={new Size(new NumPer("58%", "100%"))} pPad={new Pixel(0)}>
+
+				<RespImg pImg={Image("factory.webp", "مصنع جرانيت وتجهيز ألواح على ماكينة قص رقمية", "100%", "700px")} />
+
 			</DivCol>
-		</DivStr>
-	</EmoSec>
 
-	<EmoSec id="GraniteQuality" Service pBg={new ElemBg(cIce)} pHzAlign="Center" pVrAlign="Center" pPad={new Pixel(120, 22)} class="quality-section">
-		<DivStr pBox={new Size(new NumPer("1180px", "100%"))} pGap={new Pixel(52, 26)} class="quality-grid">
-			<DivCol pSize={new Size(new NumPer("44%", "100%"))} pPad={new Pixel(0)} pGap={new Pixel(26, 18)} pHzAlign="Start" pVrAlign="Center">
-				<p class="section-index">06 / التنفيذ</p>
-				<Emograph pTitle={Text.H2.WithColor(cInk).OfText("تركيب الجرانيت وضبط الجودة بالموقع")} pText={Text.Body.WithColor(cSteel).OfText("يبدأ التنفيذ بمراجعة جاهزية الأسطح والمناسيب والمحاور والميول والفتحات. تُثبت الطريقة في Method Statement وخطة ITP، ثم يعتمد نموذج التنفيذ الأول.")} />
-				<EmoList pWidth={new RespString("100%", "100%")} pItemsBg={new ElemBg("transparent")} pItemFnt={Text.Body.WithColor(cInk)} pNumbered={true} pItems={["مطابقة الأكواد والأبعاد والسماكات والحواف.","ضبط اللحامات والفواصل ونظام التركيب.","طلبات الفحص وإقفال الملاحظات والـSnag List.","الجلي والحماية والكميات النهائية والمستخلصات."]} />
+			<DivCol
+				pSize={new Size(new NumPer("42%", "100%"))}
+				pPad={new Pixel(70, 30)}
+				pGap={new Pixel(26, 18)}
+				pHzAlign="Start"
+				pVrAlign="Center"
+			>
+
+				<p class = " section-index ">
+					05 / التصنيع
+				</p>
+
+				<Emograph
+					pTitle={Text.H2.WithColor(cInk).OfText("من الرسومات إلى أمر إنتاج قابل للتتبع")}
+					pText={Text.Body.WithColor(cSteel).OfText("تتحول الرسومات المعتمدة إلى Shop Drawings وقوائم تقطيع. تحمل كل قطعة كودًا يربطها بالمبنى والمنطقة والدور والبند وموقع التركيب.")}
+				/>
+
+				<EmoList
+					pWidth={new RespString("100%", "100%")}
+					pItemsBg={new ElemBg("transparent")}
+					pItemFnt={Text.Body.WithColor(cInk)}
+					pNumbered={false}
+					pItems={["مصقول أو مطفي أو محروق أو مجلخ أو رملي.","ألواح وشرائح وترابيع وسلالم وواجهات ومقاسات خاصة.","توزيع أوامر الإنتاج على دفعات مرتبطة بأولوية الموقع."]}
+				/>
+
 			</DivCol>
-			<DivCol pSize={new Size(new NumPer("56%", "100%"))} pPad={new Pixel(0)} class="quality-image"><RespImg pImg={Image("installation.webp", "سلم ومدخل مشروع تجاري منفذ بالجرانيت", "100%", "680px")} /><div class="quality-caption"><strong>QUALITY IS A PROCESS</strong><span>فحص وتوثيق وإقفال لكل منطقة عمل</span></div></DivCol>
+
 		</DivStr>
+
 	</EmoSec>
 
-	<EmoSec id="GranitePackageManagement" Service pBg={new ElemBg(cMist)} pHzAlign="Center" pVrAlign="Center" pPad={new Pixel(115, 22)} class="management-section">
+
+
+
+
+
+
+	<EmoSec
+		class = " quality-section "
+		id="GraniteQuality"
+		Service
+		pBg={new ElemBg(cIce)}
+		pHzAlign="Center"
+		pVrAlign="Center"
+		pPad={new Pixel(120, 22)}
+	>
+
+		<DivStr class = " quality-grid " pBox={new Size(new NumPer("1180px", "100%"))} pGap={new Pixel(52, 26)}>
+
+			<DivCol
+				pSize={new Size(new NumPer("44%", "100%"))}
+				pPad={new Pixel(0)}
+				pGap={new Pixel(26, 18)}
+				pHzAlign="Start"
+				pVrAlign="Center"
+			>
+
+				<p class = " section-index ">
+					06 / التنفيذ
+				</p>
+
+				<Emograph
+					pTitle={Text.H2.WithColor(cInk).OfText("تركيب الجرانيت وضبط الجودة بالموقع")}
+					pText={Text.Body.WithColor(cSteel).OfText("يبدأ التنفيذ بمراجعة جاهزية الأسطح والمناسيب والمحاور والميول والفتحات. تُثبت الطريقة في Method Statement وخطة ITP، ثم يعتمد نموذج التنفيذ الأول.")}
+				/>
+
+				<EmoList
+					pWidth={new RespString("100%", "100%")}
+					pItemsBg={new ElemBg("transparent")}
+					pItemFnt={Text.Body.WithColor(cInk)}
+					pNumbered={true}
+					pItems={["مطابقة الأكواد والأبعاد والسماكات والحواف.","ضبط اللحامات والفواصل ونظام التركيب.","طلبات الفحص وإقفال الملاحظات والـSnag List.","الجلي والحماية والكميات النهائية والمستخلصات."]}
+				/>
+
+			</DivCol>
+
+			<DivCol class = " quality-image " pSize={new Size(new NumPer("56%", "100%"))} pPad={new Pixel(0)}>
+
+				<RespImg pImg={Image("installation.webp", "سلم ومدخل مشروع تجاري منفذ بالجرانيت", "100%", "680px")} />
+
+				<div class = " quality-caption ">
+
+					<strong>
+						QUALITY IS A PROCESS
+					</strong>
+
+					<span>
+						فحص وتوثيق وإقفال لكل منطقة عمل
+					</span>
+
+				</div>
+
+			</DivCol>
+
+		</DivStr>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		class = " management-section "
+		id="GranitePackageManagement"
+		Service
+		pBg={new ElemBg(cMist)}
+		pHzAlign="Center"
+		pVrAlign="Center"
+		pPad={new Pixel(115, 22)}
+	>
+
 		<DivStr pBox={new Size(new NumPer("1180px", "100%"))} pGap={new Pixel(48, 26)}>
-			<DivCol pSize={new Size(new NumPer("37%", "100%"))} pPad={new Pixel(0)} pHzAlign="Start"><p class="section-index">07 / الإدارة</p><Emograph pTitle={Text.H2.WithColor(cInk).OfText("إدارة فنية وتجارية لحزمة الجرانيت")} pText={Text.H3.WithColor(cSteel).OfText("مرجع واحد من رقم بند المقايسة إلى كود القطعة المركبة.")} /></DivCol>
-			<DivCol pSize={new Size(new NumPer("63%", "100%"))} pPad={new Pixel(0)} pHzAlign="Start"><EmoList pWidth={new RespString("100%", "100%")} pItemsBg={new ElemBg("transparent")} pItemFnt={Text.H4.WithColor(cInk)} pNumbered={true} pItems={["عرض أساسي وبدائل Value Engineering وجدول مقارنة للخامات.","تقسيم الأسعار والكميات حسب المبنى والمنطقة والمرحلة.","بيان أثر التغييرات على السعر والبرنامج والتصنيع والتوريد.","حصر البنود المستثناة أو المؤجلة لحين الاعتماد."]} /><p class="relationship">نستهدف علاقة توريد مستمرة تستوعب أكثر من مشروع وتعديلات الرسومات والكميات خلال الطرح والتنفيذ.</p></DivCol>
+
+			<DivCol pSize={new Size(new NumPer("37%", "100%"))} pPad={new Pixel(0)} pHzAlign="Start">
+
+				<p class = " section-index ">
+					07 / الإدارة
+				</p>
+
+				<Emograph
+					pTitle={Text.H2.WithColor(cInk).OfText("إدارة فنية وتجارية لحزمة الجرانيت")}
+					pText={Text.H3.WithColor(cSteel).OfText("مرجع واحد من رقم بند المقايسة إلى كود القطعة المركبة.")}
+				/>
+
+			</DivCol>
+
+			<DivCol pSize={new Size(new NumPer("63%", "100%"))} pPad={new Pixel(0)} pHzAlign="Start">
+
+				<EmoList
+					pWidth={new RespString("100%", "100%")}
+					pItemsBg={new ElemBg("transparent")}
+					pItemFnt={Text.H4.WithColor(cInk)}
+					pNumbered={true}
+					pItems={["عرض أساسي وبدائل Value Engineering وجدول مقارنة للخامات.","تقسيم الأسعار والكميات حسب المبنى والمنطقة والمرحلة.","بيان أثر التغييرات على السعر والبرنامج والتصنيع والتوريد.","حصر البنود المستثناة أو المؤجلة لحين الاعتماد."]}
+				/>
+
+				<p class = " relationship ">
+					نستهدف علاقة توريد مستمرة تستوعب أكثر من مشروع وتعديلات الرسومات والكميات خلال الطرح والتنفيذ.
+				</p>
+
+			</DivCol>
+
 		</DivStr>
+
 	</EmoSec>
 
-	<EmoSec id="GraniteBoqContact" Service pBg={new ElemBg(cInk)} pHzAlign="Center" pVrAlign="Center" pPad={new Pixel(105, 22)} class="contact-section">
-		<div class="contact-shell"><p class="section-index lime">08 / افتح قناة العمل</p><Emograph pTitle={Text.H2.WithColor(cWhite).OfText("أرسل مقايسة الجرانيت للتسعير")} pText={Text.Body.WithColor(cMist).OfText("أرسل الـBOQ بصيغة Excel أو PDF، والرسومات PDF أو DWG، والمواصفات الفنية، وجدول التشطيبات، وموقع المشروع، والبرنامج المطلوب. تبدأ المراجعة بتحديد النطاق والاستفسارات ثم إعداد العرض الفني والمالي والبدائل.")} /><div class="contact-actions"><EmoWhats BlackGreen pText="أرسل ملف المقايسة" pMessage="أرغب في إرسال مقايسة جرانيت مصري للتسعير الفني والمالي." pWidth="260px" pHeight="60px" pRadius="0px" /><EmoCall WhiteBlack pText="مناقشة نطاق المشروع" pWidth="260px" pHeight="60px" pRadius="0px" /></div><p class="contact-note">مخصص لشركات المقاولات والمطورين والمكاتب الاستشارية ومديري المشروعات والمشتريات.</p></div>
+
+
+
+
+
+
+	<EmoSec
+		class = " contact-section "
+		id="GraniteBoqContact"
+		Service
+		pBg={new ElemBg(cInk)}
+		pHzAlign="Center"
+		pVrAlign="Center"
+		pPad={new Pixel(105, 22)}
+	>
+
+		<div class = " contact-shell ">
+
+			<p class = " section-index lime ">
+				08 / افتح قناة العمل
+			</p>
+
+			<Emograph
+				pTitle={Text.H2.WithColor(cWhite).OfText("أرسل مقايسة الجرانيت للتسعير")}
+				pText={Text.Body.WithColor(cMist).OfText("أرسل الـBOQ بصيغة Excel أو PDF، والرسومات PDF أو DWG، والمواصفات الفنية، وجدول التشطيبات، وموقع المشروع، والبرنامج المطلوب. تبدأ المراجعة بتحديد النطاق والاستفسارات ثم إعداد العرض الفني والمالي والبدائل.")}
+			/>
+
+			<div class = " contact-actions ">
+
+				<EmoWhats
+					BlackGreen
+					pText="أرسل ملف المقايسة"
+					pMessage="أرغب في إرسال مقايسة جرانيت مصري للتسعير الفني والمالي."
+					pWidth="260px"
+					pHeight="60px"
+					pRadius="0px"
+				/>
+
+				<EmoCall
+					WhiteBlack
+					pText="مناقشة نطاق المشروع"
+					pWidth="260px"
+					pHeight="60px"
+					pRadius="0px"
+				/>
+
+			</div>
+
+			<p class = " contact-note ">
+				مخصص لشركات المقاولات والمطورين والمكاتب الاستشارية ومديري المشروعات والمشتريات.
+			</p>
+
+		</div>
+
 	</EmoSec>
+
+
+
+
+
+
+
 </BLayout>
 
+
+
+
+
 <style>
-	:global(body){background:#111719}.granite-hero{overflow:hidden}.hero-grid{position:relative}.hero-copy{z-index:2}.hero-copy :global(.Emograph){align-items:flex-start}.hero-copy :global(h1){font-size:clamp(56px,5.1vw,92px)!important;line-height:1.03!important;letter-spacing:-.045em;white-space:pre-line}.hero-copy :global(p){max-width:680px;line-height:1.85!important}.eyebrow,.section-index{margin:0;color:#718087;font:700 13px/1.4 system-ui;letter-spacing:.16em}.lime{color:#c8f04b}.hero-actions,.contact-actions{display:flex;flex-wrap:wrap;gap:12px}.audience{margin:0;color:#9ca7ab;font:500 14px/1.7 system-ui}.hero-visual{overflow:hidden}.hero-visual :global(.RespImg),.hero-visual :global(.RespImgPicBox),.hero-visual :global(img),.factory-image :global(.RespImg),.factory-image :global(.RespImgPicBox),.factory-image :global(img),.quality-image :global(.RespImg),.quality-image :global(.RespImgPicBox),.quality-image :global(img),.image-window :global(.RespImg),.image-window :global(.RespImgPicBox),.image-window :global(img){width:100%!important;height:100%!important;object-fit:cover}.hero-stat{position:absolute;inset-inline-start:-60px;bottom:70px;width:250px;padding:24px;background:#c8f04b;color:#111719;display:flex;flex-direction:column;gap:5px;line-height:1.4}.hero-stat strong{font-size:28px}.hero-stat span{font-size:14px}.editorial-section :global(.Emograph),.boq-section :global(.Emograph),.material-section :global(.Emograph),.factory-section :global(.Emograph),.quality-section :global(.Emograph),.management-section :global(.Emograph),.contact-section :global(.Emograph){align-items:flex-start}.editorial-section :global(h2),.boq-section :global(h2),.material-section :global(h2),.factory-section :global(h2),.quality-section :global(h2),.management-section :global(h2),.contact-section :global(h2),.process-section :global(h2){font-size:clamp(38px,4vw,66px)!important;line-height:1.15!important;letter-spacing:-.035em}.editorial-section :global(p),.boq-section :global(p),.material-section :global(p),.factory-section :global(p),.quality-section :global(p),.management-section :global(p),.contact-section :global(p),.process-section :global(p){line-height:1.9!important}.scope-list{border-inline-start:1px solid #cbd2d4}.scope-note,.highlight-line,.relationship{margin:0;padding:18px 22px;border-inline-start:4px solid #c8f04b;background:rgba(200,240,75,.13);color:#273034;font:700 16px/1.7 system-ui}.boq-frame{box-shadow:0 35px 90px rgba(17,23,25,.13)}.doc-stack{width:100%;display:grid;gap:1px;background:#354044}.doc-stack span{padding:13px 16px;background:#1b2427;color:#c8f04b;font:700 13px/1 system-ui;letter-spacing:.1em}.price-side{background:#fff}.image-window,.quality-image{position:relative;overflow:hidden;min-height:620px}.image-label{position:absolute;inset-inline-start:0;bottom:0;padding:16px 20px;background:#c8f04b;color:#111719;font:800 13px/1 system-ui;letter-spacing:.12em}.material-chips{display:flex;flex-wrap:wrap;gap:8px}.material-chips span{padding:10px 14px;border:1px solid #aeb9bd;color:#334044;font:700 13px/1 system-ui}.process-shell,.contact-shell{width:min(1180px,100%);margin:auto}.process-shell>:global(.Emograph){align-items:flex-start;max-width:850px}.process-rail{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:58px;background:#3a4447}.process-rail:before{content:"";position:absolute;inset-inline:5% 5%;top:52px;height:2px;background:#c8f04b}.process-rail article{position:relative;z-index:1;min-height:270px;padding:28px 24px;background:#171f22;color:#fff}.process-rail b{display:grid;place-items:center;width:50px;height:50px;border-radius:50%;background:#c8f04b;color:#111719}.process-rail h3{margin:34px 0 12px;font-size:22px}.process-rail p{margin:0;color:#b8c1c4;font-size:15px}.factory-image{height:700px;overflow:hidden}.quality-caption{position:absolute;inset-inline-end:0;bottom:0;padding:22px 26px;background:#111719;color:#fff;display:flex;flex-direction:column;gap:6px}.quality-caption strong{color:#c8f04b;letter-spacing:.1em}.relationship{margin-top:22px}.contact-shell{display:flex;flex-direction:column;align-items:flex-start;gap:28px}.contact-shell>:global(.Emograph){max-width:900px}.contact-actions{margin-top:8px}.contact-note{margin:0;color:#96a3a7!important;font-size:14px!important}
-	@media (orientation:portrait){.hero-grid,.scope-layout,.boq-frame,.material-grid,.factory-grid,.quality-grid{flex-direction:column!important}.hero-copy,.hero-visual,.scope-layout>:global(*),.boq-frame>:global(*),.material-grid>:global(*),.factory-grid>:global(*),.quality-grid>:global(*){width:100%!important}.hero-copy :global(h1){font-size:48px!important}.hero-visual{height:520px!important}.hero-stat{inset-inline-start:20px;bottom:20px}.scope-list{border-inline-start:0;border-top:1px solid #cbd2d4;padding-top:28px!important}.process-rail{grid-template-columns:1fr}.process-rail:before{display:none}.process-rail article{min-height:auto}.image-window,.quality-image{min-height:480px}.factory-image{height:500px}.editorial-section :global(h2),.boq-section :global(h2),.material-section :global(h2),.factory-section :global(h2),.quality-section :global(h2),.management-section :global(h2),.contact-section :global(h2),.process-section :global(h2){font-size:38px!important}.hero-actions,.contact-actions{width:100%}.hero-actions>:global(*),.contact-actions>:global(*){width:100%!important}}
+
+
+
+	.granite-hero {
+		overflow: hidden;
+	}
+
+
+	.hero-grid {
+		position: relative;
+	}
+
+
+	.hero-copy {
+		z-index: 2;
+	}
+
+	.hero-copy :global(.Emograph) {
+		align-items: flex-start;
+	}
+
+	.hero-copy :global(h1) {
+		font-size: clamp(56px,5.1vw,92px)!important;
+		line-height: 1.03!important;
+		letter-spacing: -.045em;
+		white-space: pre-line;
+	}
+
+	.hero-copy :global(p) {
+		max-width: 680px;
+		line-height: 1.85!important;
+	}
+
+
+	.lime {
+		color: #c8f04b;
+	}
+
+
+	.audience {
+		margin: 0;
+		color: #9ca7ab;
+		font: 500 14px/1.7 system-ui;
+	}
+
+
+	.hero-visual {
+		overflow: hidden;
+	}
+
+
+	.hero-stat {
+		position: absolute;
+		inset-inline-start: -60px;
+		bottom: 70px;
+		width: 250px;
+		padding: 24px;
+		background: #c8f04b;
+		color: #111719;
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		line-height: 1.4;
+	}
+
+	.hero-stat strong {
+		font-size: 28px;
+	}
+
+	.hero-stat span {
+		font-size: 14px;
+	}
+
+
+	.scope-list {
+		border-inline-start: 1px solid #cbd2d4;
+	}
+
+
+	.boq-frame {
+		box-shadow: 0 35px 90px rgba(17,23,25,.13);
+	}
+
+
+	.doc-stack {
+		width: 100%;
+		display: grid;
+		gap: 1px;
+		background: #354044;
+	}
+
+	.doc-stack span {
+		padding: 13px 16px;
+		background: #1b2427;
+		color: #c8f04b;
+		font: 700 13px/1 system-ui;
+		letter-spacing: .1em;
+	}
+
+
+	.price-side {
+		background: #fff;
+	}
+
+
+	.image-label {
+		position: absolute;
+		inset-inline-start: 0;
+		bottom: 0;
+		padding: 16px 20px;
+		background: #c8f04b;
+		color: #111719;
+		font: 800 13px/1 system-ui;
+		letter-spacing: .12em;
+	}
+
+
+	.material-chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+
+	.material-chips span {
+		padding: 10px 14px;
+		border: 1px solid #aeb9bd;
+		color: #334044;
+		font: 700 13px/1 system-ui;
+	}
+
+
+	.process-shell>:global(.Emograph) {
+		align-items: flex-start;
+		max-width: 850px;
+	}
+
+
+	.process-rail {
+		position: relative;
+		display: grid;
+		grid-template-columns: repeat(4,1fr);
+		gap: 1px;
+		margin-top: 58px;
+		background: #3a4447;
+	}
+
+	.process-rail:before {
+		content: "";
+		position: absolute;
+		inset-inline: 5% 5%;
+		top: 52px;
+		height: 2px;
+		background: #c8f04b;
+	}
+
+	.process-rail article {
+		position: relative;
+		z-index: 1;
+		min-height: 270px;
+		padding: 28px 24px;
+		background: #171f22;
+		color: #fff;
+	}
+
+	.process-rail b {
+		display: grid;
+		place-items: center;
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		background: #c8f04b;
+		color: #111719;
+	}
+
+	.process-rail h3 {
+		margin: 34px 0 12px;
+		font-size: 22px;
+	}
+
+	.process-rail p {
+		margin: 0;
+		color: #b8c1c4;
+		font-size: 15px;
+	}
+
+
+	.factory-image {
+		height: 700px;
+		overflow: hidden;
+	}
+
+
+	.quality-caption {
+		position: absolute;
+		inset-inline-end: 0;
+		bottom: 0;
+		padding: 22px 26px;
+		background: #111719;
+		color: #fff;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+
+	.quality-caption strong {
+		color: #c8f04b;
+		letter-spacing: .1em;
+	}
+
+
+	.relationship {
+		margin-top: 22px;
+	}
+
+
+	.contact-shell {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 28px;
+	}
+
+	.contact-shell>:global(.Emograph) {
+		max-width: 900px;
+	}
+
+
+	.contact-actions {
+		margin-top: 8px;
+	}
+
+
+	.contact-note {
+		margin: 0;
+		color: #96a3a7!important;
+		font-size: 14px!important;
+	}
+
+
+
+	.eyebrow,
+	.section-index
+	{
+		margin: 0;
+		color: #718087;
+		font: 700 13px/1.4 system-ui;
+		letter-spacing: .16em;
+	}
+
+
+	.hero-actions,
+	.contact-actions
+	{
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+	}
+
+
+	.hero-visual :global(.RespImg),
+	.hero-visual :global(.RespImgPicBox),
+	.hero-visual :global(img),
+	.factory-image :global(.RespImg),
+	.factory-image :global(.RespImgPicBox),
+	.factory-image :global(img),
+	.quality-image :global(.RespImg),
+	.quality-image :global(.RespImgPicBox),
+	.quality-image :global(img),
+	.image-window :global(.RespImg),
+	.image-window :global(.RespImgPicBox),
+	.image-window :global(img)
+	{
+		width: 100%!important;
+		height: 100%!important;
+		object-fit: cover;
+	}
+
+
+	.editorial-section :global(.Emograph),
+	.boq-section :global(.Emograph),
+	.material-section :global(.Emograph),
+	.factory-section :global(.Emograph),
+	.quality-section :global(.Emograph),
+	.management-section :global(.Emograph),
+	.contact-section :global(.Emograph)
+	{
+		align-items: flex-start;
+	}
+
+
+	.editorial-section :global(h2),
+	.boq-section :global(h2),
+	.material-section :global(h2),
+	.factory-section :global(h2),
+	.quality-section :global(h2),
+	.management-section :global(h2),
+	.contact-section :global(h2),
+	.process-section :global(h2)
+	{
+		font-size: clamp(38px,4vw,66px)!important;
+		line-height: 1.15!important;
+		letter-spacing: -.035em;
+	}
+
+
+	.editorial-section :global(p),
+	.boq-section :global(p),
+	.material-section :global(p),
+	.factory-section :global(p),
+	.quality-section :global(p),
+	.management-section :global(p),
+	.contact-section :global(p),
+	.process-section :global(p)
+	{
+		line-height: 1.9!important;
+	}
+
+
+	.scope-note,
+	.highlight-line,
+	.relationship
+	{
+		margin: 0;
+		padding: 18px 22px;
+		border-inline-start: 4px solid #c8f04b;
+		background: rgba(200,240,75,.13);
+		color: #273034;
+		font: 700 16px/1.7 system-ui;
+	}
+
+
+	.image-window,
+	.quality-image
+	{
+		position: relative;
+		overflow: hidden;
+		min-height: 620px;
+	}
+
+
+	.process-shell,
+	.contact-shell
+	{
+		width: min(1180px,100%);
+		margin: auto;
+	}
+
+
+
+	:global(body) {
+		background: #111719;
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	@media (orientation:portrait) {
+		.hero-grid,
+		.scope-layout,
+		.boq-frame,
+		.material-grid,
+		.factory-grid,
+		.quality-grid
+		{
+			flex-direction: column!important;
+		}
+
+		.hero-copy,
+		.hero-visual,
+		.scope-layout>:global(*),
+		.boq-frame>:global(*),
+		.material-grid>:global(*),
+		.factory-grid>:global(*),
+		.quality-grid>:global(*)
+		{
+			width: 100%!important;
+		}
+
+		.hero-copy :global(h1) {
+			font-size: 48px!important;
+		}
+
+		.hero-visual {
+			height: 520px!important;
+		}
+
+		.hero-stat {
+			inset-inline-start: 20px;
+			bottom: 20px;
+		}
+
+		.scope-list {
+			border-inline-start: 0;
+			border-top: 1px solid #cbd2d4;
+			padding-top: 28px!important;
+		}
+
+		.process-rail {
+			grid-template-columns: 1fr;
+		}
+
+		.process-rail:before {
+			display: none;
+		}
+
+		.process-rail article {
+			min-height: auto;
+		}
+
+		.image-window,
+		.quality-image
+		{
+			min-height: 480px;
+		}
+
+		.factory-image {
+			height: 500px;
+		}
+
+		.editorial-section :global(h2),
+		.boq-section :global(h2),
+		.material-section :global(h2),
+		.factory-section :global(h2),
+		.quality-section :global(h2),
+		.management-section :global(h2),
+		.contact-section :global(h2),
+		.process-section :global(h2)
+		{
+			font-size: 38px!important;
+		}
+
+		.hero-actions,
+		.contact-actions
+		{
+			width: 100%;
+		}
+
+		.hero-actions>:global(*),
+		.contact-actions>:global(*)
+		{
+			width: 100%!important;
+		}
+	}
+
+
+
 </style>

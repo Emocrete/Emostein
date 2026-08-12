@@ -107,6 +107,23 @@ import EmoCallIndexExport from "./Btn/EmoCall.astro";
  */
 export const EmoCall = EmoCallIndexExport;
 
+import EmoCallIconIndexExport from "./Btn/EmoCallIcon.astro";
+
+/**
+ * @pText as string — النص الظاهر داخل زر الاتصال.
+ * @pIconImgs as HoverImg — صور الأيقونة في الحالات الثلاث: Normal / Hover / Click.
+ * @pIconPos as "right" | "left" | "top" | "bottom" — مكان الأيقونة داخل الزر. (Default: "left")
+ * @pWidth as string (Default: "260px")
+ * @pHeight as string (Default: "58px")
+ * @pRadius as string (Default: "999px")
+ * @pBgColors as HoverColors — ألوان خلفية الزر في الحالات الثلاث: Normal / Hover / Click.
+ * @pBgImgs as HoverImg — صور خلفية الزر في الحالات الثلاث: Normal / Hover / Click.
+ * @pTitleColors as HoverColors — ألوان عنوان الزر في الحالات الثلاث: Normal / Hover / Click.
+ * @pFontSize as string (Default: "18px")
+ * @data-own-size as boolean | string — Lets button keep its internal width inside Stack / Strip instead of being stretched. (Default: true)
+ */
+export const EmoCallIcon = EmoCallIconIndexExport;
+
 import EmoCountdownIndexExport from "./EmoCountdown.astro";
 
 /**
@@ -205,6 +222,30 @@ import EmoWhatsIndexExport from "./Btn/EmoWhats.astro";
  * @data-own-size as boolean | string — Lets button keep its internal width inside Stack / Strip instead of being stretched. (Default: true)
  */
 export const EmoWhats = EmoWhatsIndexExport;
+
+import EmoWhatsIconIndexExport from "./Btn/EmoWhatsIcon.astro";
+
+/**
+ * @pText as string — النص الظاهر داخل زر الواتساب.
+ * @pPhone as string — رقم الواتساب بصيغة محلية أو دولية. (Default: cDefaultPhoneText)
+ * @pMessage as string — رسالة جاهزة اختيارية تفتح داخل محادثة واتساب. (Default: "")
+ * @pQrImg as string — صورة QR مخصصة عند الحاجة. الافتراضي مدمج للرقم الأساسي.
+ * @Green as boolean — Preset واتساب أخضر. (Default: false)
+ * @GreenDark as boolean — Preset واتساب أخضر داكن. (Default: false)
+ * @Sky as boolean — Preset سماوي قديم للتوافق. (Default: false)
+ * @Bistage as boolean — Preset بيستاج قديم للتوافق. (Default: false)
+ * @pIconImgs as HoverImg — صور الأيقونة في الحالات الثلاث: Normal / Hover / Click.
+ * @pIconPos as "right" | "left" | "top" | "bottom" — مكان الأيقونة داخل الزر. (Default: "left")
+ * @pWidth as string (Default: "260px")
+ * @pHeight as string (Default: "58px")
+ * @pRadius as string (Default: "999px")
+ * @pBgColors as HoverColors — ألوان خلفية الزر في الحالات الثلاث: Normal / Hover / Click.
+ * @pBgImgs as HoverImg — صور خلفية الزر في الحالات الثلاث: Normal / Hover / Click.
+ * @pTitleColors as HoverColors — ألوان عنوان الزر في الحالات الثلاث: Normal / Hover / Click.
+ * @pFontSize as string (Default: "18px")
+ * @data-own-size as boolean | string — Lets button keep its internal width inside Stack / Strip instead of being stretched. (Default: true)
+ */
+export const EmoWhatsIcon = EmoWhatsIconIndexExport;
 
 export { GetBoolAttr } from "./Btn/ButtonPresets";
 

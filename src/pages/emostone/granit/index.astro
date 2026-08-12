@@ -1,9 +1,9 @@
 ---
 import BLayout from "@/Layout.astro";
-import { Badge, EmoCall, Emograph, SecTitle, VrStack } from "@/Widgets/Comp";
+import { Badge, EmoCallIcon, Emograph, EmoWhatsIcon, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
 import { EmoGallery } from "@/Widgets/Media";
 import { DivCol, DivStr, EmoSec, Hero } from "@/Widgets/Sections";
-import { Align, Colors, ElemBg, Loc, NumPer, Size, Text } from "@/TypesLib";
+import { Align, Colors, ElemBg, Loc, NumPer, Pixel, Size, Text } from "@/TypesLib";
 ---
 
 
@@ -38,7 +38,13 @@ import { Align, Colors, ElemBg, Loc, NumPer, Size, Text } from "@/TypesLib";
 				pScopeText="القاهرة والجيزة"
 			/>
 
-			<EmoCall BlackSky pText="اطلب عرض سعر" />
+			<HzStack pGap={new Pixel(30,10)}>
+
+				<EmoCallIcon BlackSky />
+
+				<EmoWhatsIcon BlackSky />
+
+			</HzStack>
 
 		</VrStack>
 
@@ -80,14 +86,9 @@ import { Align, Colors, ElemBg, Loc, NumPer, Size, Text } from "@/TypesLib";
 
 		<DivStr>
 
-			<DivCol>
+			<DivCol pSize={new Size(new NumPer(200),new NumPer(30))}>
 
-				<Emograph
-					id="txtEgMarple"
-					pTitle={Text.H3.Centered.OfText("جرانيت مصري")}
-					pSize={new Size(new NumPer(200),new NumPer(30))}
-					data-own-size
-				/>
+				<Emograph id="txtEgMarple" pTitle={Text.H3.Centered.OfText("جرانيت مصري")} />
 
 			</DivCol>
 
@@ -101,9 +102,9 @@ import { Align, Colors, ElemBg, Loc, NumPer, Size, Text } from "@/TypesLib";
 
 		<DivStr>
 
-			<DivCol>
+			<DivCol pSize={new Size(new NumPer(200),new NumPer(30))}>
 
-				<Emograph pTitle={Text.H3.Centered.OfText("جرانيت مستورد")} pSize={new Size(new NumPer(200),new NumPer(30))} data-own-size />
+				<Emograph pTitle={Text.H3.Centered.OfText("جرانيت مستورد")} />
 
 			</DivCol>
 

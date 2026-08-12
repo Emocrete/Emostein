@@ -1,7 +1,7 @@
 ---
 import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
-import { EmoCall, Emograph, EmoList, EmoWhats, Grid, HzStack, ListItem, SecTitle, VrStack } from "@/Widgets/Comp";
+import { EmoCall, EmoCallIcon, Emograph, EmoList, EmoWhatsIcon, Grid, HzStack, ListItem, SecTitle, VrStack } from "@/Widgets/Comp";
 import { RespImg, YTPlayer } from "@/Widgets/Media";
 import { PharmacyWorkCard } from "@/Widgets/Pharmacy";
 import { DivCol, DivStr, EmoFaq, EmoSec, FaqItem, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
@@ -28,42 +28,31 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 	<Hero Readable>
 
-		<GlassCard
-			pMove="SlideInRight"
-			pMoveLoc={new Loc(new NumPer("45%", "2.5%"), new NumPer("50%", "45%"))}
-			pMoveBox={new Size(new NumPer("40%", "95%"), new NumPer("auto", "auto"))}
-			pMoveDuration={1000}
-			pMoveViewTarget="self"
-			pZ={4}
-			pBg="rgba(17,24,32,.74)"
-			pBorder="rgba(255,255,255,.22)"
-			pRadius={15}
-			pBlur={2}
+		<VrStack
+			pBg={new ElemBg(Colors.SkyLite)}
+			pBgOpacity={new Percent(50)}
+			pLoc={new Loc(new NumPer("50%","2.5%"),new NumPer("60%","55%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pGap={new Pixel(20, 10)}
+			pPad={new Pixel(10,5)}
+			pHzAlign="Center"
+			pVrAlign="Center"
 		>
 
-			<VrStack
-				pGap={new Pixel(20, 10)}
-				pPad={new Pixel(10,5)}
-				pHzAlign="Center"
-				pVrAlign="Center"
-			>
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("ترخيص صيدلية")}
+				pText={Text.Body.Centered.OfText("خدمات استخراج ترخيص الصيدليات وتجهيز وتقديم كافة الأوراق المطلوبة لترخيص صيدلية بهيئة الدواء المصرية ، ومتابعة الحي والجهات ذات العلاقة")}
+			/>
 
-				<Emograph
-					pTitle={Text.H1.Centered.White.OfText("ترخيص صيدلية")}
-					pText={Text.Body.Centered.White.OfText("خدمات استخراج ترخيص الصيدليات وتجهيز وتقديم كافة الأوراق المطلوبة لترخيص صيدلية بهيئة الدواء المصرية ، ومتابعة الحي والجهات ذات العلاقة")}
-				/>
+			<HzStack pGap={new Pixel(30,10)}>
 
-				<HzStack pGap={new Pixel(20, 10)} pPad={new Pixel(20,10)}>
+				<EmoCallIcon BistageBlack />
 
-					<EmoCall BlackSky pText="للطلب والاستفسار" />
+				<EmoWhatsIcon Black />
 
-					<EmoWhats BistageSky pText="أرسل رسالة" />
+			</HzStack>
 
-				</HzStack>
-
-			</VrStack>
-
-		</GlassCard>
+		</VrStack>
 
 	</Hero>
 

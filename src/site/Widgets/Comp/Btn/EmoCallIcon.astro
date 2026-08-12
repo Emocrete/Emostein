@@ -1,0 +1,717 @@
+---
+import { Colors, HoverColors, HoverImg, Place, type PlaceProps } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import { type ButtonPresetProps, GetBoolAttr, GetButtonPreset, GetButtonTitleColors } from "./ButtonPresets";
+
+export interface Props extends HTMLAttributes<"a">, PlaceProps, ButtonPresetProps {
+	/** النص الظاهر داخل زر الاتصال. */
+	pText?: string;
+
+	/** صور الأيقونة في الحالات الثلاث: Normal / Hover / Click. */
+	pIconImgs?: HoverImg;
+
+	/** مكان الأيقونة داخل الزر. */
+	pIconPos?: "right" | "left" | "top" | "bottom";
+
+	pWidth?: string;
+	pHeight?: string;
+	pRadius?: string;
+
+	/** ألوان خلفية الزر في الحالات الثلاث: Normal / Hover / Click. */
+	pBgColors?: HoverColors;
+
+	/** صور خلفية الزر في الحالات الثلاث: Normal / Hover / Click. */
+	pBgImgs?: HoverImg;
+
+	/** ألوان عنوان الزر في الحالات الثلاث: Normal / Hover / Click. */
+	pTitleColors?: HoverColors;
+
+	pFontSize?: string;
+
+	/** Lets button keep its internal width inside Stack / Strip instead of being stretched. */
+	"data-own-size"?: boolean | string;
+}
+
+const cCallPhoneText = "01014490054";
+const cCallPhoneHref = "tel:+201014490054";
+const cCallQrImg = "/Media/EmoCall.svg";
+
+
+const cCallIconNormal = BuildSvgDataUrl(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="2.7 2.3 18.6 19.4">
+	<path fill="#FFFFFF" d="M6.62 10.79a15.46 15.46 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2Z"/>
+</svg>`);
+
+const cCallIconHover = cCallIconNormal;
+
+const cDefaultCallIconImgs = new HoverImg(cCallIconNormal, cCallIconHover);
+
+const {
+	pText,
+	Black = false,
+	BlackOrange = false,
+	BlackSky = false,
+	BlackGreen = false,
+	BlackBistage = false,
+	BlackRed = false,
+	SkyBlack = false,
+	SkyBistage = false,
+	BistageBlack = false,
+	BistageSky = false,
+	BistageOrange = false,
+	OrangeBlack = false,
+	OrangeSky = false,
+	GreenBlack = false,
+	GreenSky = false,
+	GrayBlack = false,
+	GrayOrange = false,
+	CreamyBlack = false,
+	YellowBlack = false,
+	RedBlack = false,
+	WhiteBlack = false,
+	pIconImgs,
+	pIconPos = "left",
+
+	pWidth = "260px",
+	pHeight = "58px",
+	pRadius = "999px",
+
+	pBgColors,
+	pBgImgs,
+
+	pTitleColors,
+	pFontSize = "18px",
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+
+	"data-own-size": pOwnSizeValue = true,
+	id: pId = GetWidgetId("EmoCallIcon"),
+	class: pClass = "",
+	style: pStyle = "",
+	...cAttrs
+} = Astro.props as Props;
+
+const cPreset = GetButtonPreset({
+	Black,
+	BlackOrange,
+	BlackSky,
+	BlackGreen,
+	BlackBistage,
+	BlackRed,
+	SkyBlack,
+	SkyBistage,
+	BistageBlack,
+	BistageSky,
+	BistageOrange,
+	OrangeBlack,
+	OrangeSky,
+	GreenBlack,
+	GreenSky,
+	GrayBlack,
+	GrayOrange,
+	CreamyBlack,
+	YellowBlack,
+	RedBlack,
+	WhiteBlack,
+});
+const cText = pText ?? "اتصل";
+const cLayoutClass = GetLayoutClass(pIconPos);
+const cIconSize = `calc(${pHeight} - 4px)`;
+const cOwnSize = GetBoolAttr(pOwnSizeValue, true);
+
+const cBgColors = pBgColors ?? cPreset?.BgColors ?? new HoverColors(Colors.Black);
+const cTitleColors = pTitleColors ?? cPreset?.TitleColors ?? GetButtonTitleColors(cBgColors);
+const cIconImgs = pIconImgs ?? cDefaultCallIconImgs;
+const cBgImgs = pBgImgs ?? new HoverImg("");
+
+const cBgImgNormal = BuildCssUrl(cBgImgs.Normal);
+const cBgImgHover = BuildCssUrl(cBgImgs.Hover);
+const cBgImgActive = BuildCssUrl(cBgImgs.Click);
+
+const cIconNormal = BuildCssUrl(cIconImgs.Normal);
+const cIconHover = BuildCssUrl(cIconImgs.Hover);
+const cIconActive = BuildCssUrl(cIconImgs.Click);
+
+const cHasIcon = Boolean(cIconImgs.Normal);
+
+const cStyle = [
+	`--Width:${pWidth};`,
+	`--Height:${pHeight};`,
+	`--Radius:${pRadius};`,
+
+	`--BgClr:${cBgColors.Normal};`,
+	`--BgClr-hover:${cBgColors.Hover};`,
+	`--BgClr-active:${cBgColors.Click};`,
+
+	`--BgImg:${cBgImgNormal};`,
+	`--BgImg-hover:${cBgImgHover};`,
+	`--BgImg-active:${cBgImgActive};`,
+
+	`--TitleCrl:${cTitleColors.Normal};`,
+	`--TitleCrl-hover:${cTitleColors.Hover};`,
+	`--TitleCrl-active:${cTitleColors.Click};`,
+	`--TitleSize:${pFontSize};`,
+
+	`--btn-icon-size:${cIconSize};`,
+	`--IconNormal:${cIconNormal};`,
+	`--btn-icon-hover:${cIconHover};`,
+	`--btn-icon-active:${cIconActive};`,
+
+	GetStyleText(pStyle),
+].filter(Boolean).join("\n");
+
+const cPlace = new Place(Astro.props as PlaceProps, cStyle);
+
+function BuildSvgDataUrl(pSvg: string) {
+	return `data:image/svg+xml,${encodeURIComponent(pSvg.trim())}`;
+}
+
+function BuildCssUrl(pValue?: string) {
+	return pValue ? `url("${pValue}")` : "none";
+}
+
+function GetLayoutClass(pValue: "right" | "left" | "top" | "bottom") {
+	if (pValue === "left") return "isIconLeft";
+	if (pValue === "top") return "isIconTop";
+	if (pValue === "bottom") return "isIconBottom";
+	return "isIconRight";
+}
+
+function GetStyleText(pStyle: Props["style"]) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+
+	return Object.entries(pStyle)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+
+
+
+
+<a
+	class = {`CallBtn ${cLayoutClass} ${cHasIcon ? "hasIcon" : "noIcon"} ${cPlace.Class} ${pClass}`.trim()}
+	style = {cPlace.Style}
+	id={pId}
+	href={cCallPhoneHref}
+	data-call-btn="true"
+	data-ops-event="call_click"
+	data-ops-notify="true"
+	data-ops-sound="true"
+	data-ops-important="true"
+	data-own-size={cOwnSize ? "true" : undefined}
+	{...cAttrs}
+>
+
+	{ cHasIcon && ( <span class = " BtnIcon " /> ) }
+
+	{ cText && (
+
+		<span class = " BtnText BtnTextNormal ">
+			{cText}
+		</span>
+	) }
+
+	<span class = " BtnText BtnTextPhone ">
+		{cCallPhoneText}
+	</span>
+
+
+
+
+
+
+
+</a>
+
+<span class = " CallQrOverlay " data-call-overlay="true" popover="manual">
+
+
+
+
+
+
+
+	<span class = " CallQrBox ">
+
+		<button class = " CallQrClose " type="button" data-call-close="true">
+
+			إغلاق
+
+		</button>
+
+		<span class = " CallQrTitle ">
+			امسح الكود، ثم اضغط زر الاتصال من هاتفك
+		</span>
+
+		<img
+			class = " CallQrImg "
+			src={cCallQrImg}
+			alt="QR Code للاتصال بالمجموعة الهندسية"
+			loading="lazy"
+			decoding="async"
+		/>
+
+		<span class = " CallQrPhone ">
+			{cCallPhoneText}
+		</span>
+
+	</span>
+
+
+
+
+
+
+
+</span>
+
+
+
+
+
+<style>
+
+
+
+	.CallBtn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: var(--Width);
+		height: var(--Height);
+		min-height: var(--Height);
+		border: 1px solid #535353;
+		border-radius: var(--Radius);
+		background-color: var(--BgClr);
+		background-image: var(--BgImg), linear-gradient(90deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.085));
+		background-repeat: no-repeat;
+		box-shadow: 0 3px 8px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.035);
+		font-family: inherit;
+		cursor: pointer;
+		position: relative;
+		appearance: none;
+		text-decoration: none;
+		box-sizing: border-box;
+		transition: background-color 0.14s ease,
+			border-color 0.14s ease,
+			box-shadow 0.14s ease,
+			color 0.14s ease,
+			transform 0.1s ease;
+	}
+
+	.CallBtn:hover {
+		background-color: var(--BgClr-hover);
+		background-image: var(--BgImg-hover), linear-gradient(90deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.085));
+		color: var(--TitleCrl-hover);
+	}
+
+	.CallBtn:active {
+		background-color: var(--BgClr-active);
+		background-image: var(--BgImg-active), linear-gradient(90deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.06));
+		color: var(--TitleCrl-active);
+		transform: scale(0.985);
+	}
+
+	.CallBtn:hover .BtnText {
+		color: var(--TitleCrl-hover);
+	}
+
+	.CallBtn:active .BtnText {
+		color: var(--TitleCrl-active);
+	}
+
+	.CallBtn:hover .BtnIcon {
+		background-color: #328fe8;
+		background-image: var(--btn-icon-hover);
+		border-color: #328fe8;
+	}
+
+	.CallBtn:active .BtnIcon {
+		background-color: #328fe8;
+		background-image: var(--btn-icon-active);
+		border-color: #328fe8;
+		transform: scale(0.97);
+	}
+
+
+	.BtnIcon {
+		flex: 0 0 auto;
+		position: relative;
+		width: var(--btn-icon-size);
+		height: var(--btn-icon-size);
+		border: 1px solid #5f5f5f;
+		border-radius: 50%;
+		background-color: #111111;
+		background-image: var(--IconNormal), radial-gradient(circle at 34% 28%, #2f2f2f 0%, #171717 56%, #0a0a0a 100%);
+		background-position: center, center;
+		background-repeat: no-repeat, no-repeat;
+		background-size: calc(100% - 20px) calc(100% - 20px), cover;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.55),
+			inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+			inset 0 0 0 2px rgba(0, 0, 0, 0.12);
+		box-sizing: border-box;
+		transition: background-color 0.14s ease, border-color 0.14s ease, transform 0.1s ease;
+	}
+
+
+	.BtnIcon::after {
+		content: "";
+		position: absolute;
+		inset: 2px;
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		border-radius: 50%;
+		pointer-events: none;
+	}
+
+
+	.BtnText {
+		display: block;
+		line-height: 1.2;
+		white-space: nowrap;
+		color: var(--TitleCrl);
+		font-size: var(--TitleSize);
+		font-weight: 700;
+		text-align: center;
+		text-decoration: none;
+	}
+
+
+	.BtnTextPhone {
+		display: none;
+		direction: ltr;
+	}
+
+
+	.CallQrOverlay {
+		position: fixed;
+		inset: 0;
+		z-index: 2147483647;
+		width: 100vw;
+		height: 100dvh;
+		max-width: none;
+		max-height: none;
+		margin: 0;
+		padding: 20px;
+		border: 0;
+		background-color: rgba(0, 0, 0, 0.65);
+		box-sizing: border-box;
+		align-items: center;
+		justify-content: center;
+		overflow: auto;
+		overscroll-behavior: contain;
+	}
+
+	.CallQrOverlay:popover-open {
+		display: flex;
+	}
+
+	.CallQrOverlay:not(:popover-open) {
+		display: none;
+	}
+
+	.CallQrOverlay::backdrop {
+		background: transparent;
+	}
+
+
+	.CallQrBox {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: min(450px, 100%);
+		padding: 22px;
+		border-radius: 18px;
+		background-color: #ffffff;
+		box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+		text-align: center;
+		direction: rtl;
+		box-sizing: border-box;
+	}
+
+
+	.CallQrClose {
+		align-self: flex-start;
+		border: 0;
+		border-radius: 999px;
+		padding: 7px 14px;
+		background-color: #222222;
+		color: #ffffff;
+		font-family: inherit;
+		font-size: 14px;
+		font-weight: 700;
+		cursor: pointer;
+	}
+
+
+	.CallQrTitle {
+		margin-top: 14px;
+		color: #222222;
+		font-size: 19px;
+		font-weight: 800;
+		line-height: 1.45;
+	}
+
+
+	.CallQrImg {
+		display: block;
+		width: 260px;
+		max-width: 100%;
+		height: auto;
+		margin-top: 18px;
+		border-radius: 12px;
+	}
+
+
+	.CallQrPhone {
+		margin-top: 14px;
+		color: #111111;
+		font-size: 21px;
+		font-weight: 900;
+		direction: ltr;
+	}
+
+
+
+	.CallBtn.noIcon .BtnText {
+		width: 100%;
+	}
+
+
+	.CallBtn.IsPlaced {
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+		min-height: var(--PlaceHeightL);
+	}
+
+
+	.CallBtn.isIconLeft {
+		flex-direction: row-reverse;
+	}
+
+
+	.CallBtn.isIconTop {
+		flex-direction: column;
+	}
+
+
+	.CallBtn.isIconBottom {
+		flex-direction: column-reverse;
+	}
+
+
+
+	.CallBtn.hasIcon.isIconRight .BtnIcon {
+		right: 2px;
+	}
+
+	.CallBtn.hasIcon.isIconRight .BtnText {
+		margin-right: calc(var(--btn-icon-size) + 12px);
+		padding-left: 18px;
+	}
+
+
+	.CallBtn.hasIcon.isIconLeft .BtnIcon {
+		left: 2px;
+	}
+
+	.CallBtn.hasIcon.isIconLeft .BtnText {
+		padding-left: calc(var(--btn-icon-size) + 12px);
+		padding-right: 18px;
+	}
+
+
+
+	.CallBtn.hasIcon.isIconRight .BtnIcon,
+	.CallBtn.hasIcon.isIconLeft .BtnIcon
+	{
+		position: absolute;
+	}
+
+
+	.CallBtn.hasIcon.isIconTop,
+	.CallBtn.hasIcon.isIconBottom
+	{
+		gap: 5px;
+	}
+
+
+	.CallBtn.hasIcon.isIconTop .BtnText,
+	.CallBtn.hasIcon.isIconBottom .BtnText
+	{
+		padding: 0;
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
+
+	@media (hover: hover) and (pointer: fine) {
+		.CallBtn:hover .BtnTextNormal {
+			display: none;
+		}
+
+		.CallBtn:hover .BtnTextPhone {
+			display: block;
+		}
+	}
+
+
+
+	@media (orientation: portrait) {
+		.CallBtn.IsPlaced {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+			min-height: var(--PlaceHeightP);
+		}
+	}
+
+
+
+</style>
+
+
+
+
+
+<script>
+	const cCallButtons = document.querySelectorAll<HTMLElement>("[data-call-btn='true']");
+
+	cCallButtons.forEach(SetupCallButton);
+
+	window.addEventListener("keydown", HandleWindowKeyDown);
+
+	function SetupCallButton(pButton: HTMLElement): void {
+	if (pButton.dataset.callReady === "true") return;
+
+	const cOverlay = pButton.nextElementSibling;
+
+	if (!(cOverlay instanceof HTMLElement)) return;
+	if (cOverlay.dataset.callOverlay !== "true") return;
+
+	MoveOverlayToBody(cOverlay);
+	pButton.dataset.callReady = "true";
+
+	pButton.addEventListener("click", function HandleCallButtonClick(pEvent: MouseEvent): void {
+	if (IsMobileDevice()) return;
+
+	pEvent.preventDefault();
+	ShowCallOverlay(cOverlay);
+	});
+
+	cOverlay.addEventListener("click", function HandleCallOverlayClick(pEvent: MouseEvent): void {
+	const cTarget = pEvent.target;
+
+	if (!(cTarget instanceof Element)) return;
+
+	if (cTarget === cOverlay || cTarget.closest("[data-call-close='true']")) {
+	HideCallOverlay(cOverlay);
+	}
+	});
+	}
+
+	function MoveOverlayToBody(pOverlay: HTMLElement): void {
+	if (pOverlay.parentElement === document.body) return;
+
+	document.body.appendChild(pOverlay);
+	}
+
+	function HandleWindowKeyDown(pEvent: KeyboardEvent): void {
+	if (pEvent.key !== "Escape") return;
+
+	document
+	.querySelectorAll<HTMLElement>("[data-call-overlay='true']:popover-open")
+	.forEach(HideCallOverlay);
+	}
+
+	type PopoverElement = HTMLElement & {
+	showPopover?: () => void;
+	hidePopover?: () => void;
+	};
+
+	function ShowCallOverlay(pOverlay: HTMLElement): void {
+	const cOverlay = pOverlay as PopoverElement;
+
+	if (typeof cOverlay.showPopover !== "function") {
+	cOverlay.style.display = "flex";
+	return;
+	}
+
+	if (cOverlay.matches(":popover-open")) return;
+
+	cOverlay.showPopover();
+	}
+
+	function HideCallOverlay(pOverlay: HTMLElement): void {
+	const cOverlay = pOverlay as PopoverElement;
+
+	if (typeof cOverlay.hidePopover !== "function") {
+	cOverlay.style.display = "none";
+	return;
+	}
+
+	if (!cOverlay.matches(":popover-open")) return;
+
+	cOverlay.hidePopover();
+	}
+
+	function IsMobileDevice(): boolean {
+	const cNavigator = navigator as Navigator & {
+	userAgentData?: {
+	mobile?: boolean;
+	};
+	};
+
+	const cUserAgent = navigator.userAgent || "";
+	const cByUserAgentData = cNavigator.userAgentData?.mobile === true;
+	const cByUserAgent = /Android|iPhone|iPad|iPod|IEMobile|Opera Mini|Mobile/i.test(cUserAgent);
+
+	return cByUserAgentData || cByUserAgent;
+	}
+</script>
