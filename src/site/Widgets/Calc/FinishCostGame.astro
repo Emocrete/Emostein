@@ -1,0 +1,761 @@
+---
+import { Place, type PlaceProps } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import FinishCostGameNav from "./FinishCostGameNav.astro";
+import FinishCostGamePanel from "./FinishCostGamePanel.astro";
+import FinishCostGameSummary from "./FinishCostGameSummary.astro";
+import type { FinishCostItem } from "./FinishCostGame.types";
+
+interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps {
+	/** عنوان الحاسبة. */
+	pTitle?: string;
+
+	/** وصف مختصر لفكرة رفع دقة التقدير تدريجيًا. */
+	pDesc?: string;
+
+	/** مساحة الفيلا الافتراضية المستخدمة فقط قبل إدخال المستخدم بياناته. DefVal = 450 */
+	pDefaultArea?: number;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+const {
+	pTitle = "احسب تكلفة تشطيب فيلتك على مراحل",
+	pDesc = "ابدأ برقم عام، ثم زوّد التفاصيل في البند الذي يهمك. كل مستوى تضيفه يضيّق نطاق التقدير ويرفع دقة الحساب.",
+	pDefaultArea = 450,
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+
+	id: pGivenID = GetWidgetId("FinishCostGame"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = cProps;
+
+const cItems: FinishCostItem[] = [
+	{
+		Id: "civil",
+		Title: "الأعمال المدنية والتجهيز قبل التأسيس",
+		ShortTitle: "مدني وتجهيز",
+		Kicker: "البند 1 · ما قبل التأسيس",
+		BaseRate: 850,
+		Accent: "#5268d9",
+		Stages: [
+			{
+				Title: "المقاس والحالة",
+				Accuracy: 35,
+				Desc: "أقل بيانات تكفي لفتح نطاق تكلفة عام جدًا للبند.",
+				Questions: [
+					{ Key: "area", Label: "المسطح المبني المطلوب تشطيبه", Hint: "إجمالي مساحات الأدوار المغلقة تقريبًا.", Kind: "number", Unit: "م²", Min: 50, Max: 5000, Step: 10, Baseline: pDefaultArea, FactorPerUnit: 0 },
+					{ Key: "condition", Label: "حالة الفيلا عند البداية", Kind: "select", Options: [
+						{ Value: "developer", Label: "مستلمة حديثًا من مطور", Factor: .82 },
+						{ Value: "redbrick", Label: "طوب أحمر بدون تأسيس", Factor: 1 },
+						{ Value: "old", Label: "مبنى قائم يحتاج تصحيح", Factor: 1.32 },
+					] },
+				],
+			},
+			{
+				Title: "حجم التعديلات",
+				Accuracy: 55,
+				Desc: "نحدد هل البند مجرد تجهيز عادي أم فيه تكسير ومباني وتصحيح ملحوظ.",
+				Questions: [
+					{ Key: "walls", Label: "حجم تعديلات الحوائط والفتحات", Kind: "choice", Options: [
+						{ Value: "low", Label: "بسيط", Factor: .88 }, { Value: "mid", Label: "متوسط", Factor: 1 }, { Value: "high", Label: "كبير", Factor: 1.28 },
+					] },
+					{ Key: "levels", Label: "حالة المناسيب والأرضيات", Kind: "choice", Options: [
+						{ Value: "good", Label: "جيدة", Factor: .9 }, { Value: "mixed", Label: "تحتاج ضبط", Factor: 1 }, { Value: "bad", Label: "فروق ومعالجات", Factor: 1.22 },
+					] },
+					{ Key: "cracks", Label: "هل توجد شروخ أو معالجات ظاهرة؟", Kind: "choice", Options: [
+						{ Value: "no", Label: "لا", Factor: .96 }, { Value: "some", Label: "محدودة", Factor: 1.07 }, { Value: "many", Label: "متعددة", Factor: 1.2 },
+					] },
+				],
+			},
+			{
+				Title: "كميات تقريبية",
+				Accuracy: 75,
+				Desc: "ندخل أرقامًا بسيطة بدل وصف عام، فتتحرك الحسبة حسب الكميات نفسها.",
+				Questions: [
+					{ Key: "doorsMove", Label: "فتحات أبواب/شبابيك ستتغير", Kind: "number", Unit: "فتحة", Min: 0, Max: 60, Step: 1, Baseline: 3, FixedPerUnit: 6500 },
+					{ Key: "newWalls", Label: "قواطيع أو مباني جديدة تقريبًا", Kind: "number", Unit: "م² حائط", Min: 0, Max: 600, Step: 5, Baseline: 40, FixedPerUnit: 850 },
+					{ Key: "floorFix", Label: "مساحة معالجة منسوب متوقعة", Kind: "number", Unit: "م²", Min: 0, Max: 2000, Step: 10, Baseline: 80, FixedPerUnit: 420 },
+				],
+			},
+			{
+				Title: "تفاصيل التنفيذ",
+				Accuracy: 92,
+				Desc: "أعلى مستوى قبل المعاينة الفعلية؛ يراعي صعوبة التنفيذ وحالة الوصول للموقع.",
+				Questions: [
+					{ Key: "access", Label: "سهولة دخول العمالة والخامات", Kind: "choice", Options: [
+						{ Value: "easy", Label: "سهلة", Factor: .96 }, { Value: "normal", Label: "عادية", Factor: 1 }, { Value: "hard", Label: "صعبة", Factor: 1.1 },
+					] },
+					{ Key: "sequence", Label: "هل توجد أعمال قائمة يجب الحفاظ عليها؟", Kind: "choice", Options: [
+						{ Value: "none", Label: "لا", Factor: 1 }, { Value: "some", Label: "جزئيًا", Factor: 1.08 }, { Value: "many", Label: "بشكل كبير", Factor: 1.18 },
+					] },
+				],
+			},
+		],
+	},
+	{
+		Id: "electric",
+		Title: "الكهرباء والتيار الخفيف",
+		ShortTitle: "كهرباء",
+		Kicker: "البند 2 · تأسيس وتشطيب كهرباء",
+		BaseRate: 1050,
+		Accent: "#e08a1e",
+		Stages: [
+			{ Title: "المساحة والمستوى", Accuracy: 35, Desc: "نبدأ بمعدل تقريبي للمتر حسب مستوى كثافة النقاط.", Questions: [
+				{ Key: "density", Label: "كثافة نقاط الكهرباء المتوقعة", Kind: "choice", Options: [
+					{ Value: "basic", Label: "أساسية", Factor: .78 }, { Value: "normal", Label: "متوسطة", Factor: 1 }, { Value: "high", Label: "عالية", Factor: 1.32 },
+				] },
+				{ Key: "smart", Label: "مستوى الأنظمة الذكية", Kind: "choice", Options: [
+					{ Value: "none", Label: "بدون", Factor: .94 }, { Value: "some", Label: "جزئي", Factor: 1.08 }, { Value: "full", Label: "واسع", Factor: 1.35 },
+				] },
+			] },
+			{ Title: "الدوائر والأحمال", Accuracy: 55, Desc: "نميز الفيلا العادية عن فيلا ذات أحمال وتكييفات ومطابخ كثيفة.", Questions: [
+				{ Key: "acUnits", Label: "عدد وحدات التكييف المتوقع", Kind: "number", Unit: "وحدة", Min: 0, Max: 40, Baseline: 8, FixedPerUnit: 4800 },
+				{ Key: "kitchens", Label: "عدد المطابخ أو مناطق تجهيز الطعام", Kind: "number", Unit: "مطبخ", Min: 1, Max: 8, Baseline: 1, FixedPerUnit: 18000 },
+				{ Key: "panels", Label: "توزيع اللوحات", Kind: "choice", Options: [
+					{ Value: "simple", Label: "لوحة رئيسية فقط", Factor: .94 }, { Value: "floors", Label: "لوحة لكل دور", Factor: 1.05 }, { Value: "zones", Label: "لوحات ومناطق متعددة", Factor: 1.15 },
+				] },
+			] },
+			{ Title: "التيار الخفيف", Accuracy: 75, Desc: "ندخل الأنظمة التي غالبًا تُنسى من رقم المتر العام.", Questions: [
+				{ Key: "network", Label: "شبكة Data / Wi-Fi / TV", Kind: "choice", Options: [
+					{ Value: "basic", Label: "بسيطة", Factor: 1 }, { Value: "full", Label: "شبكة موزعة", Factor: 1.08 }, { Value: "rack", Label: "Rack ونقاط كثيفة", Factor: 1.16 },
+				] },
+				{ Key: "security", Label: "كاميرات وإنتركم وتحكم دخول", Kind: "choice", Options: [
+					{ Value: "none", Label: "غير مطلوب", Factor: .98 }, { Value: "some", Label: "محدود", Factor: 1.07 }, { Value: "full", Label: "متكامل", Factor: 1.18 },
+				] },
+			] },
+			{ Title: "مستوى التشطيب", Accuracy: 92, Desc: "المفاتيح واللوحات والتجهيزات النهائية تغير تكلفة البند بقوة.", Questions: [
+				{ Key: "brand", Label: "فئة المفاتيح والبرايز واللوحات", Kind: "choice", Options: [
+					{ Value: "economic", Label: "اقتصادي", Factor: .82 }, { Value: "mid", Label: "متوسط", Factor: 1 }, { Value: "premium", Label: "Premium", Factor: 1.38 },
+				] },
+			] },
+		],
+	},
+	{
+		Id: "plumbing",
+		Title: "السباكة والعزل والأدوات الصحية",
+		ShortTitle: "سباكة",
+		Kicker: "البند 3 · تغذية وصرف وعزل",
+		BaseRate: 900,
+		Accent: "#1688a8",
+		Stages: [
+			{ Title: "الحمامات", Accuracy: 35, Desc: "عدد الحمامات يعطي أفضل قفزة أولى في تقدير بند السباكة.", Questions: [
+				{ Key: "bathrooms", Label: "عدد الحمامات", Kind: "number", Unit: "حمام", Min: 1, Max: 20, Baseline: 5, FixedPerUnit: 48000 },
+				{ Key: "kitchenCount", Label: "عدد المطابخ", Kind: "number", Unit: "مطبخ", Min: 1, Max: 8, Baseline: 1, FixedPerUnit: 36000 },
+			] },
+			{ Title: "التغذية والصرف", Accuracy: 55, Desc: "نحدد تعقيد الشبكات ومصادر المياه والصرف الخارجي.", Questions: [
+				{ Key: "system", Label: "تعقيد شبكة التغذية", Kind: "choice", Options: [
+					{ Value: "simple", Label: "تقليدية", Factor: .9 }, { Value: "manifold", Label: "مجمعات لكل منطقة", Factor: 1.08 }, { Value: "zones", Label: "مناطق ومضخات متعددة", Factor: 1.22 },
+				] },
+				{ Key: "externalDrain", Label: "شبكات صرف خارجية/مطر", Kind: "choice", Options: [
+					{ Value: "low", Label: "محدودة", Factor: .96 }, { Value: "mid", Label: "متوسطة", Factor: 1.07 }, { Value: "high", Label: "واسعة", Factor: 1.18 },
+				] },
+			] },
+			{ Title: "العزل", Accuracy: 75, Desc: "العزل الحقيقي للحمامات والأسطح والمناطق الخارجية قد يغير البند كثيرًا.", Questions: [
+				{ Key: "wetArea", Label: "مساحة مناطق العزل غير الحمامات", Kind: "number", Unit: "م²", Min: 0, Max: 1500, Baseline: 120, FixedPerUnit: 520 },
+				{ Key: "roof", Label: "هل السطح ضمن نطاق العزل؟", Kind: "choice", Options: [
+					{ Value: "no", Label: "لا", Factor: .94 }, { Value: "partial", Label: "جزئي", Factor: 1.06 }, { Value: "full", Label: "كامل", Factor: 1.16 },
+				] },
+			] },
+			{ Title: "الأدوات الصحية", Accuracy: 92, Desc: "مستوى الخلاطات والأطقم الصحية هو آخر طبقة مؤثرة قبل مقايسة فعلية.", Questions: [
+				{ Key: "sanitaryLevel", Label: "فئة الأدوات والخلاطات", Kind: "choice", Options: [
+					{ Value: "economic", Label: "اقتصادي", Factor: .78 }, { Value: "mid", Label: "متوسط", Factor: 1 }, { Value: "premium", Label: "فاخر", Factor: 1.48 },
+				] },
+			] },
+		],
+	},
+	{
+		Id: "surfaces",
+		Title: "الأرضيات والكسوات والرخام",
+		ShortTitle: "أرضيات وكسوات",
+		Kicker: "البند 4 · خامات وتركيب",
+		BaseRate: 1500,
+		Accent: "#8b5bba",
+		Stages: [
+			{ Title: "المستوى العام", Accuracy: 35, Desc: "نبدأ بنسبة تقريبية لنوعية الأرضيات والكسوات المستخدمة.", Questions: [
+				{ Key: "level", Label: "المستوى الغالب للأرضيات", Kind: "choice", Options: [
+					{ Value: "economic", Label: "اقتصادي", Factor: .7 }, { Value: "mid", Label: "متوسط", Factor: 1 }, { Value: "premium", Label: "فاخر", Factor: 1.55 },
+				] },
+			] },
+			{ Title: "تقسيم الخامات", Accuracy: 55, Desc: "نفرق بين بورسلين ورخام وخشب بدل متوسط واحد على كل المساحة.", Questions: [
+				{ Key: "marbleShare", Label: "تقريبًا نسبة الرخام/الحجر من المسطح", Kind: "select", Options: [
+					{ Value: "0", Label: "أقل من 10%", Factor: .92 }, { Value: "20", Label: "حوالي 20%", Factor: 1.05 }, { Value: "40", Label: "حوالي 40%", Factor: 1.22 }, { Value: "60", Label: "أكثر من النصف", Factor: 1.42 },
+				] },
+				{ Key: "woodShare", Label: "نسبة باركيه/خشب هندسي", Kind: "select", Options: [
+					{ Value: "0", Label: "بدون", Factor: .98 }, { Value: "20", Label: "محدود", Factor: 1.04 }, { Value: "40", Label: "متوسط", Factor: 1.1 }, { Value: "60", Label: "واسع", Factor: 1.18 },
+				] },
+			] },
+			{ Title: "المقاسات والهالك", Accuracy: 75, Desc: "المقاسات الكبيرة والتقطيعات والرسومات ترفع الهالك والتركيب.", Questions: [
+				{ Key: "tileSize", Label: "المقاس الغالب للبلاطات", Kind: "choice", Options: [
+					{ Value: "small", Label: "تقليدي", Factor: .95 }, { Value: "large", Label: "Large format", Factor: 1.12 }, { Value: "slab", Label: "ألواح كبيرة", Factor: 1.3 },
+				] },
+				{ Key: "patterns", Label: "تعقيد الرسومات والتقطيع", Kind: "choice", Options: [
+					{ Value: "simple", Label: "بسيط", Factor: .96 }, { Value: "mid", Label: "متوسط", Factor: 1.08 }, { Value: "high", Label: "تفاصيل كثيرة", Factor: 1.22 },
+				] },
+			] },
+			{ Title: "تفاصيل خاصة", Accuracy: 92, Desc: "السلالم والحوائط المكسية والحليات غالبًا لا تظهر في سعر المتر العام.", Questions: [
+				{ Key: "stairs", Label: "عدد قلبات السلم تقريبًا", Kind: "number", Unit: "قلبة", Min: 0, Max: 12, Baseline: 4, FixedPerUnit: 28000 },
+				{ Key: "wallCladding", Label: "كسوات حوائط مميزة تقريبًا", Kind: "number", Unit: "م²", Min: 0, Max: 1000, Baseline: 80, FixedPerUnit: 1900 },
+			] },
+		],
+	},
+	{
+		Id: "paint",
+		Title: "المحارة والجبس والدهانات والأسقف",
+		ShortTitle: "دهانات وأسقف",
+		Kicker: "البند 5 · تشطيب الأسطح",
+		BaseRate: 1150,
+		Accent: "#b34d72",
+		Stages: [
+			{ Title: "المستوى العام", Accuracy: 35, Desc: "تقدير أولي حسب مستوى التشطيب وشكل الأسقف المتوقع.", Questions: [
+				{ Key: "ceiling", Label: "تعقيد الأسقف", Kind: "choice", Options: [
+					{ Value: "flat", Label: "بسيطة", Factor: .82 }, { Value: "mixed", Label: "جبس متوسط", Factor: 1 }, { Value: "rich", Label: "تفاصيل كثيرة", Factor: 1.36 },
+				] },
+			] },
+			{ Title: "ارتفاعات وفراغات", Accuracy: 55, Desc: "الفراغات المزدوجة والارتفاعات الكبيرة تؤثر على السقالات ومساحات الحوائط.", Questions: [
+				{ Key: "doubleHeight", Label: "مساحة فراغات Double Height تقريبًا", Kind: "number", Unit: "م² أرضية", Min: 0, Max: 600, Baseline: 40, FixedPerUnit: 900 },
+				{ Key: "highWalls", Label: "هل توجد حوائط/سلالم بارتفاعات خاصة؟", Kind: "choice", Options: [
+					{ Value: "no", Label: "لا", Factor: .97 }, { Value: "some", Label: "بعضها", Factor: 1.07 }, { Value: "many", Label: "كثير", Factor: 1.15 },
+				] },
+			] },
+			{ Title: "نوع التشطيبات", Accuracy: 75, Desc: "نميز الدهانات العادية عن المؤثرات والبدائل وورق الحائط.", Questions: [
+				{ Key: "specialPaint", Label: "نسبة الدهانات/التشطيبات الخاصة", Kind: "select", Options: [
+					{ Value: "low", Label: "أقل من 10%", Factor: .98 }, { Value: "mid", Label: "10–30%", Factor: 1.08 }, { Value: "high", Label: "أكثر من 30%", Factor: 1.2 },
+				] },
+			] },
+			{ Title: "جودة التنفيذ", Accuracy: 92, Desc: "طبقات المعجون والدهان ومستوى الاستلام النهائي تضبط آخر فرق كبير في البند.", Questions: [
+				{ Key: "quality", Label: "مستوى جودة السطح النهائي", Kind: "choice", Options: [
+					{ Value: "standard", Label: "جيد", Factor: .9 }, { Value: "high", Label: "عالي", Factor: 1 }, { Value: "premium", Label: "Premium", Factor: 1.2 },
+				] },
+			] },
+		],
+	},
+	{
+		Id: "openings",
+		Title: "الأبواب والشبابيك والنجارة والألومنيوم",
+		ShortTitle: "أبواب وشبابيك",
+		Kicker: "البند 6 · فتحات وتشطيبات ثابتة",
+		BaseRate: 760,
+		Accent: "#3b8f6b",
+		Stages: [
+			{ Title: "عدد الفتحات", Accuracy: 35, Desc: "الأعداد وحدها أفضل من تحميل هذا البند على سعر متر التشطيب.", Questions: [
+				{ Key: "doors", Label: "عدد الأبواب الداخلية", Kind: "number", Unit: "باب", Min: 0, Max: 80, Baseline: 18, FixedPerUnit: 14000 },
+				{ Key: "windows", Label: "عدد الشبابيك والفتحات الخارجية", Kind: "number", Unit: "فتحة", Min: 0, Max: 80, Baseline: 20, FixedPerUnit: 17000 },
+			] },
+			{ Title: "الخامات", Accuracy: 55, Desc: "نحدد فئة الأبواب والألومنيوم/UPVC بدل متوسط واحد.", Questions: [
+				{ Key: "doorLevel", Label: "فئة الأبواب", Kind: "choice", Options: [
+					{ Value: "economic", Label: "اقتصادي", Factor: .78 }, { Value: "mid", Label: "متوسط", Factor: 1 }, { Value: "premium", Label: "قشرة/خشب فاخر", Factor: 1.45 },
+				] },
+				{ Key: "windowLevel", Label: "فئة قطاعات الشبابيك والزجاج", Kind: "choice", Options: [
+					{ Value: "basic", Label: "أساسية", Factor: .84 }, { Value: "thermal", Label: "جيدة", Factor: 1.08 }, { Value: "premium", Label: "Thermal/Systems", Factor: 1.38 },
+				] },
+			] },
+			{ Title: "فتحات خاصة", Accuracy: 75, Desc: "الأبواب الكبيرة والزجاج الثابت والـCurtain Wall لها أثر مستقل.", Questions: [
+				{ Key: "largeOpenings", Label: "فتحات كبيرة أو زجاج ثابت", Kind: "number", Unit: "فتحة", Min: 0, Max: 30, Baseline: 3, FixedPerUnit: 42000 },
+				{ Key: "mainDoors", Label: "أبواب مداخل مميزة", Kind: "number", Unit: "باب", Min: 0, Max: 10, Baseline: 2, FixedPerUnit: 55000 },
+			] },
+			{ Title: "تفاصيل نهائية", Accuracy: 92, Desc: "الإكسسوارات والزجاج الخاص وأنظمة الفتح تضبط المستوى الأعلى للتقدير.", Questions: [
+				{ Key: "hardware", Label: "فئة الإكسسوارات والمفصلات والأقفال", Kind: "choice", Options: [
+					{ Value: "normal", Label: "متوسطة", Factor: .92 }, { Value: "high", Label: "عالية", Factor: 1.08 }, { Value: "premium", Label: "Premium", Factor: 1.25 },
+				] },
+			] },
+		],
+	},
+	{
+		Id: "external",
+		Title: "الواجهات والسطح والحديقة والسور",
+		ShortTitle: "خارجيات",
+		Kicker: "البند 7 · المساحات غير الداخلية",
+		BaseRate: 520,
+		Accent: "#65833b",
+		Stages: [
+			{ Title: "حجم الخارجيات", Accuracy: 35, Desc: "نبدأ من مساحات تقريبية بدل اعتبار الخارجيات ضمن متر الداخل.", Questions: [
+				{ Key: "garden", Label: "مساحة الحديقة/الهاردسكيب", Kind: "number", Unit: "م²", Min: 0, Max: 5000, Baseline: 300, FixedPerUnit: 1250 },
+				{ Key: "roofArea", Label: "مساحة السطح المستخدمة", Kind: "number", Unit: "م²", Min: 0, Max: 2500, Baseline: 180, FixedPerUnit: 950 },
+			] },
+			{ Title: "الواجهة", Accuracy: 55, Desc: "نحدد هل الواجهة دهان فقط أم حجر/رخام/ألواح وتفاصيل معمارية.", Questions: [
+				{ Key: "facadeLevel", Label: "مستوى معالجة الواجهة", Kind: "choice", Options: [
+					{ Value: "paint", Label: "دهان ومحارة", Factor: .75 }, { Value: "mixed", Label: "كسوات جزئية", Factor: 1.08 }, { Value: "stone", Label: "كسوات واسعة", Factor: 1.48 },
+				] },
+			] },
+			{ Title: "السور والبوابات", Accuracy: 75, Desc: "السور والبوابات عناصر مستقلة ويمكن أن تصنع فرقًا كبيرًا.", Questions: [
+				{ Key: "fence", Label: "طول السور المطلوب تشطيبه", Kind: "number", Unit: "م طولي", Min: 0, Max: 1000, Baseline: 90, FixedPerUnit: 2600 },
+				{ Key: "gates", Label: "عدد البوابات الرئيسية/الجراج", Kind: "number", Unit: "بوابة", Min: 0, Max: 12, Baseline: 2, FixedPerUnit: 85000 },
+			] },
+			{ Title: "لاندسكيب وتجهيزات", Accuracy: 92, Desc: "نضيف الزراعة والإضاءة الخارجية والعناصر الثابتة للوصول لأقرب نطاق قبل مقايسة.", Questions: [
+				{ Key: "landscape", Label: "مستوى اللاندسكيب", Kind: "choice", Options: [
+					{ Value: "simple", Label: "بسيط", Factor: .82 }, { Value: "mid", Label: "متوسط", Factor: 1 }, { Value: "rich", Label: "غني", Factor: 1.35 },
+				] },
+			] },
+		],
+	},
+];
+
+const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cPlace = new Place(cProps as PlaceProps, cGivenStyle);
+---
+
+<section
+	class={`FinishCostGame ${cPlace.Class} ${pGivenClass}`.trim()}
+	style={cPlace.Style}
+	id={pGivenID}
+	dir="rtl"
+	data-finish-cost-game="true"
+	data-default-area={pDefaultArea}
+	{...RemAttr}
+>
+	<header class="CostGameHead">
+		<div class="CostGameTitle">
+			<p class="CostGameKicker">حاسبة تدريجية · أنت تختار مستوى الدقة</p>
+			<h2>{pTitle}</h2>
+			<p>{pDesc}</p>
+		</div>
+
+		<div class="CostGameScore" data-score-box="true">
+			<span>Score</span>
+			<strong data-score="true">0</strong>
+			<small>من {cItems.length * 100}</small>
+		</div>
+	</header>
+
+	<FinishCostGameNav pItems={cItems} pActiveId={cItems[0].Id} />
+
+	{cItems.map((pItem, pIndex) => (
+		<FinishCostGamePanel pItem={pItem} pActive={pIndex === 0} />
+	))}
+
+	<FinishCostGameSummary />
+</section>
+
+<style>
+	.FinishCostGame {
+		width: min(1280px, 100%);
+		margin-inline: auto;
+		box-sizing: border-box;
+		border: 1px solid #dce3eb;
+		border-radius: 28px;
+		overflow: clip;
+		background: #fff;
+		box-shadow: 0 24px 70px rgba(15, 23, 42, .12);
+		color: #172033;
+		font-family: inherit;
+	}
+
+	.CostGameHead {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 22px;
+		align-items: center;
+		padding: 28px 30px;
+		background:
+			radial-gradient(circle at 8% 15%, rgba(109, 221, 190, .16), transparent 28%),
+			linear-gradient(135deg, #172334, #0f1724);
+		color: #fff;
+	}
+
+	.CostGameTitle {
+		display: grid;
+		gap: 7px;
+	}
+
+	.CostGameTitle p,
+	.CostGameTitle h2 {
+		margin: 0;
+	}
+
+	.CostGameKicker {
+		color: #cfe883;
+		font-size: 12px;
+		font-weight: 900;
+	}
+
+	.CostGameTitle h2 {
+		font-size: clamp(26px, 4vw, 44px);
+		line-height: 1.25;
+	}
+
+	.CostGameTitle > p:last-child {
+		max-width: 820px;
+		color: #bdc6d4;
+		font-size: 14px;
+		line-height: 1.8;
+	}
+
+	.CostGameScore {
+		display: grid;
+		place-items: center;
+		min-width: 108px;
+		min-height: 108px;
+		padding: 8px;
+		box-sizing: border-box;
+		border: 1px solid rgba(255,255,255,.15);
+		border-radius: 22px;
+		background: rgba(255,255,255,.07);
+	}
+
+	.CostGameScore span,
+	.CostGameScore small {
+		color: #9faabd;
+		font-size: 10px;
+		font-weight: 800;
+	}
+
+	.CostGameScore strong {
+		font-size: 30px;
+		line-height: 1;
+		color: #d9f08a;
+	}
+
+	@media (max-width: 620px) {
+		.FinishCostGame {
+			border-radius: 20px;
+		}
+
+		.CostGameHead {
+			grid-template-columns: minmax(0, 1fr) 82px;
+			padding: 22px 16px;
+		}
+
+		.CostGameScore {
+			min-width: 74px;
+			min-height: 82px;
+			border-radius: 16px;
+		}
+
+		.CostGameScore strong {
+			font-size: 24px;
+		}
+	}
+</style>
+
+<script is:inline>
+(function () {
+	const cRoots = document.querySelectorAll("[data-finish-cost-game='true']");
+	for (const cRoot of cRoots) Register(cRoot);
+
+	function Register(pRoot) {
+		if (!pRoot || pRoot.dataset.ready === "true") return;
+		pRoot.dataset.ready = "true";
+
+		const cPanels = Array.from(pRoot.querySelectorAll("[data-cost-panel]"));
+		const cNavButtons = Array.from(pRoot.querySelectorAll("[data-cost-item-target]"));
+		const cSummary = pRoot.querySelector("[data-cost-summary='true']");
+		let cActiveId = cPanels[0]?.dataset.costPanel || "";
+
+		pRoot.addEventListener("click", HandleClick);
+		pRoot.addEventListener("input", HandleFieldChange);
+		pRoot.addEventListener("change", HandleFieldChange);
+		RenderAll();
+
+		function HandleClick(pEvent) {
+			const cNav = pEvent.target.closest("[data-cost-item-target]");
+			if (cNav && pRoot.contains(cNav)) {
+				ShowItem(cNav.dataset.costItemTarget || "");
+				return;
+			}
+
+			const cPanel = pEvent.target.closest("[data-cost-panel]");
+			if (!cPanel) return;
+
+			const cStageJump = pEvent.target.closest("[data-stage-jump]");
+			if (cStageJump) {
+				const cIndex = Number(cStageJump.dataset.stageJump || 0);
+				const cReached = GetReachedStage(cPanel);
+				if (cIndex <= cReached + 1) ShowStage(cPanel, cIndex);
+				return;
+			}
+
+			const cAction = pEvent.target.closest("[data-action]");
+			if (!cAction) return;
+			if (cAction.dataset.action === "next-stage") NextStage(cPanel);
+			if (cAction.dataset.action === "accept-item") NextItem(cPanel.dataset.costPanel || "");
+		}
+
+		function HandleFieldChange(pEvent) {
+			if (!pEvent.target.matches("[data-cost-field='true']")) return;
+			const cPanel = pEvent.target.closest("[data-cost-panel]");
+			if (!cPanel) return;
+			UpdateReached(cPanel);
+			RenderAll();
+		}
+
+		function ShowItem(pId) {
+			if (!pId) return;
+			cActiveId = pId;
+			for (const cPanel of cPanels) cPanel.hidden = cPanel.dataset.costPanel !== pId;
+			for (const cButton of cNavButtons) {
+				const cActive = cButton.dataset.costItemTarget === pId;
+				cButton.classList.toggle("IsActive", cActive);
+				if (cActive) cButton.setAttribute("aria-current", "step");
+				else cButton.removeAttribute("aria-current");
+			}
+			RenderAll();
+		}
+
+		function ShowStage(pPanel, pIndex) {
+			const cStages = Array.from(pPanel.querySelectorAll("[data-cost-stage]"));
+			const cSafeIndex = Math.max(0, Math.min(cStages.length - 1, pIndex));
+			pPanel.dataset.activeStage = String(cSafeIndex);
+			for (const cStage of cStages) cStage.hidden = Number(cStage.dataset.costStage) !== cSafeIndex;
+			for (const cNode of pPanel.querySelectorAll("[data-stage-node]")) {
+				cNode.classList.toggle("IsActive", Number(cNode.dataset.stageNode) === cSafeIndex);
+			}
+			RenderPanelActions(pPanel);
+		}
+
+		function NextStage(pPanel) {
+			const cActive = Number(pPanel.dataset.activeStage || 0);
+			const cStages = pPanel.querySelectorAll("[data-cost-stage]");
+			if (!StageComplete(pPanel, cActive)) {
+				const cStage = pPanel.querySelector(`[data-cost-stage='${cActive}']`);
+				const cFirstEmpty = FindFirstEmpty(cStage);
+				cFirstEmpty?.focus();
+				return;
+			}
+			UpdateReached(pPanel);
+			if (cActive < cStages.length - 1) ShowStage(pPanel, cActive + 1);
+			else NextItem(pPanel.dataset.costPanel || "");
+		}
+
+		function NextItem(pId) {
+			const cIndex = cPanels.findIndex((pPanel) => pPanel.dataset.costPanel === pId);
+			const cNext = cPanels[cIndex + 1] || cPanels[0];
+			if (cNext) ShowItem(cNext.dataset.costPanel || "");
+		}
+
+		function UpdateReached(pPanel) {
+			const cStages = Array.from(pPanel.querySelectorAll("[data-cost-stage]"));
+			let cReached = -1;
+			for (let i = 0; i < cStages.length; i += 1) {
+				if (!StageComplete(pPanel, i)) break;
+				cReached = i;
+			}
+			pPanel.dataset.reachedStage = String(cReached);
+			for (const cNode of pPanel.querySelectorAll("[data-stage-node]")) {
+				cNode.classList.toggle("IsReached", Number(cNode.dataset.stageNode) <= cReached);
+			}
+		}
+
+		function GetReachedStage(pPanel) {
+			UpdateReached(pPanel);
+			return Number(pPanel.dataset.reachedStage || -1);
+		}
+
+		function StageComplete(pPanel, pIndex) {
+			const cStage = pPanel.querySelector(`[data-cost-stage='${pIndex}']`);
+			if (!cStage) return false;
+			const cFields = Array.from(cStage.querySelectorAll("[data-cost-field='true']"));
+			if (!cFields.length) return true;
+
+			const cGroups = new Map();
+			for (const cField of cFields) {
+				if (cField.type === "radio") {
+					const cName = cField.name || "radio";
+					if (!cGroups.has(cName)) cGroups.set(cName, []);
+					cGroups.get(cName).push(cField);
+				} else if (`${cField.value || ""}`.trim() === "") return false;
+			}
+			for (const cGroup of cGroups.values()) {
+				if (!cGroup.some((pField) => pField.checked)) return false;
+			}
+			return true;
+		}
+
+		function FindFirstEmpty(pStage) {
+			if (!pStage) return null;
+			for (const cField of pStage.querySelectorAll("[data-cost-field='true']")) {
+				if (cField.type === "radio") {
+					const cChecked = pStage.querySelector(`input[name='${CssEscape(cField.name)}']:checked`);
+					if (!cChecked) return cField;
+				} else if (`${cField.value || ""}`.trim() === "") return cField;
+			}
+			return null;
+		}
+
+		function RenderAll() {
+			for (const cPanel of cPanels) {
+				UpdateReached(cPanel);
+				RenderPanel(cPanel);
+				RenderPanelActions(cPanel);
+			}
+			RenderSummary();
+		}
+
+		function RenderPanel(pPanel) {
+			const cResult = CalculatePanel(pPanel);
+			const cAccuracy = cResult.accuracy;
+			const cGauge = pPanel.querySelector("[data-cost-item-gauge='true']");
+			const cAccuracyText = pPanel.querySelector("[data-cost-item-accuracy='true']");
+			const cRange = pPanel.querySelector("[data-cost-item-range='true']");
+			const cMid = pPanel.querySelector("[data-cost-item-mid='true']");
+			if (cGauge) cGauge.style.setProperty("--CostItemAccuracy", `${cAccuracy * 3.6}deg`);
+			if (cAccuracyText) cAccuracyText.textContent = `${cAccuracy}%`;
+			if (cRange) cRange.textContent = cResult.started ? `${Money(cResult.low)} – ${Money(cResult.high)} ج` : "—";
+			if (cMid) cMid.textContent = cResult.started ? `المتوسط الحالي ${Money(cResult.mid)} ج` : "أجب عن المستوى الأول لبدء الحساب";
+
+			const cNavAccuracy = pRoot.querySelector(`[data-cost-nav-accuracy='${pPanel.dataset.costPanel}']`);
+			if (cNavAccuracy) cNavAccuracy.textContent = `${cAccuracy}% دقة`;
+			const cNav = pRoot.querySelector(`[data-cost-item-target='${pPanel.dataset.costPanel}']`);
+			if (cNav) cNav.dataset.complete = cAccuracy >= 92 ? "true" : "false";
+		}
+
+		function RenderPanelActions(pPanel) {
+			const cActive = Number(pPanel.dataset.activeStage || 0);
+			const cStages = Array.from(pPanel.querySelectorAll("[data-cost-stage]"));
+			const cNext = pPanel.querySelector("[data-action='next-stage']");
+			if (!cNext) return;
+			const cComplete = StageComplete(pPanel, cActive);
+			cNext.disabled = !cComplete;
+			if (cActive >= cStages.length - 1) cNext.textContent = "اكتملت أعلى دقة · البند التالي";
+			else {
+				const cNode = pPanel.querySelector(`[data-stage-node='${cActive + 1}'] small`);
+				cNext.textContent = `زود الدقة إلى ${cNode?.textContent || "المستوى التالي"}`;
+			}
+		}
+
+		function CalculatePanel(pPanel) {
+			const cBaseRate = Number(pPanel.dataset.baseRate || 0);
+			const cArea = GetProjectArea();
+			let cFactor = 1;
+			let cFixed = 0;
+			const cReached = GetReachedStage(pPanel);
+			const cStarted = cReached >= 0;
+			const cStages = Array.from(pPanel.querySelectorAll("[data-cost-stage]"));
+			const cAccuracy = cStarted ? StageAccuracy(cStages[cReached]) : 0;
+
+			for (let i = 0; i <= cReached; i += 1) {
+				const cStage = cStages[i];
+				if (!cStage) continue;
+				for (const cField of cStage.querySelectorAll("[data-cost-field='true']")) {
+					if (cField.type === "radio" && !cField.checked) continue;
+					if (`${cField.value || ""}`.trim() === "") continue;
+					if (cField.dataset.kind === "number") {
+						if (cField.name === "area") continue;
+						const cValue = Number(cField.value || 0);
+						const cBaseline = Number(cField.dataset.baseline || 0);
+						const cFactorPerUnit = Number(cField.dataset.factorPerUnit || 0);
+						const cFixedPerUnit = Number(cField.dataset.fixedPerUnit || 0);
+						if (cFactorPerUnit) cFactor *= Math.max(.35, 1 + (cValue - cBaseline) * cFactorPerUnit);
+						if (cFixedPerUnit) cFixed += Math.max(0, cValue - cBaseline) * cFixedPerUnit;
+						continue;
+					}
+					if (cField.tagName === "SELECT") {
+						const cOption = cField.selectedOptions?.[0];
+						cFactor *= Number(cOption?.dataset.factor || 1);
+						cFixed += Number(cOption?.dataset.fixed || 0);
+						continue;
+					}
+					cFactor *= Number(cField.dataset.factor || 1);
+					cFixed += Number(cField.dataset.fixed || 0);
+				}
+			}
+
+			const cMid = Math.max(0, cArea * cBaseRate * cFactor + cFixed);
+			const cSpread = cStarted ? SpreadForAccuracy(cAccuracy) : .42;
+			return {
+				started: cStarted,
+				accuracy: cAccuracy,
+				mid: cMid,
+				low: cMid * (1 - cSpread),
+				high: cMid * (1 + cSpread),
+			};
+		}
+
+		function GetProjectArea() {
+			const cAreaField = pRoot.querySelector("[data-cost-panel='civil'] [name='area']");
+			const cValue = Number(cAreaField?.value || 0);
+			return cValue > 0 ? cValue : Number(pRoot.dataset.defaultArea || 450);
+		}
+
+		function StageAccuracy(pStage) {
+			const cText = pStage?.querySelector("legend em")?.textContent || "";
+			const cMatch = cText.match(/(\d+)\s*%/);
+			return cMatch ? Number(cMatch[1]) : 0;
+		}
+
+		function SpreadForAccuracy(pAccuracy) {
+			if (pAccuracy >= 90) return .07;
+			if (pAccuracy >= 75) return .12;
+			if (pAccuracy >= 55) return .2;
+			if (pAccuracy >= 35) return .3;
+			return .42;
+		}
+
+		function RenderSummary() {
+			if (!cSummary) return;
+			const cResults = cPanels.map(CalculatePanel);
+			const cStarted = cResults.filter((pResult) => pResult.started);
+			const cTotalMid = cResults.reduce((pSum, pResult) => pSum + pResult.mid, 0);
+			const cTotalLow = cResults.reduce((pSum, pResult) => pSum + pResult.low, 0);
+			const cTotalHigh = cResults.reduce((pSum, pResult) => pSum + pResult.high, 0);
+			const cWeight = cResults.reduce((pSum, pResult) => pSum + pResult.mid, 0);
+			const cAccuracy = cWeight > 0
+				? Math.round(cResults.reduce((pSum, pResult) => pSum + pResult.accuracy * pResult.mid, 0) / cWeight)
+				: 0;
+			const cScore = cResults.reduce((pSum, pResult) => pSum + pResult.accuracy, 0);
+
+			const cTotalRange = cSummary.querySelector("[data-total-range='true']");
+			const cTotalMidText = cSummary.querySelector("[data-total-mid='true']");
+			const cTotalAccuracy = cSummary.querySelector("[data-total-accuracy='true']");
+			const cScoreLabel = cSummary.querySelector("[data-total-score-label='true']");
+			const cBar = cSummary.querySelector("[data-total-accuracy-bar='true']");
+			const cItemTitle = cSummary.querySelector("[data-summary-item-title='true']");
+			const cItemValue = cSummary.querySelector("[data-summary-item-value='true']");
+			const cScoreBox = pRoot.querySelector("[data-score='true']");
+			const cActivePanel = cPanels.find((pPanel) => pPanel.dataset.costPanel === cActiveId);
+			const cActiveResult = cActivePanel ? CalculatePanel(cActivePanel) : null;
+
+			if (cTotalRange) cTotalRange.textContent = `${Money(cTotalLow)} – ${Money(cTotalHigh)} ج`;
+			if (cTotalMidText) cTotalMidText.textContent = cStarted.length ? `المتوسط الحالي ${Money(cTotalMid)} ج · البنود غير المبدوءة ما زالت بافتراض واسع` : `تقدير واسع جدًا قبل إدخال البيانات · المتوسط ${Money(cTotalMid)} ج`;
+			if (cTotalAccuracy) cTotalAccuracy.textContent = `${cAccuracy}%`;
+			if (cScoreLabel) cScoreLabel.textContent = `${cStarted.length} من ${cPanels.length} بنود بدأت`;
+			if (cBar) cBar.style.width = `${cAccuracy}%`;
+			if (cScoreBox) cScoreBox.textContent = String(cScore);
+			if (cItemTitle) cItemTitle.textContent = ActiveTitle(cActivePanel);
+			if (cItemValue) cItemValue.textContent = cActiveResult?.started ? `${Money(cActiveResult.mid)} ج · ${cActiveResult.accuracy}%` : "لم يبدأ بعد";
+		}
+
+		function ActiveTitle(pPanel) {
+			if (!pPanel) return "—";
+			return pPanel.querySelector(".CostPanelTitle h3")?.textContent?.trim() || "—";
+		}
+
+		function Money(pValue) {
+			return Math.round(Number(pValue || 0)).toLocaleString("ar-EG", { maximumFractionDigits: 0 });
+		}
+
+		function CssEscape(pValue) {
+			if (window.CSS?.escape) return window.CSS.escape(pValue);
+			return `${pValue}`.replace(/['\\]/g, "\\$&");
+		}
+	}
+})();
+</script>

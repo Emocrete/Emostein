@@ -1,0 +1,97 @@
+<section class="FinishCostGameSummary" data-cost-summary="true">
+	<div class="CostSummaryMain">
+		<span>التكلفة التقريبية الحالية</span>
+		<strong data-total-range="true">—</strong>
+		<small data-total-mid="true">ابدأ بأول بند ليظهر التقدير</small>
+	</div>
+
+	<div class="CostSummaryStat">
+		<span>دقة الملف</span>
+		<strong data-total-accuracy="true">0%</strong>
+		<small data-total-score-label="true">0 بنود بدأت</small>
+	</div>
+
+	<div class="CostSummaryStat">
+		<span>البند الحالي</span>
+		<strong data-summary-item-title="true">—</strong>
+		<small data-summary-item-value="true">—</small>
+	</div>
+
+	<div class="CostSummaryBar" aria-hidden="true">
+		<span data-total-accuracy-bar="true"></span>
+	</div>
+</section>
+
+<style>
+	.FinishCostGameSummary {
+		position: sticky;
+		bottom: 0;
+		z-index: 8;
+		display: grid;
+		grid-template-columns: minmax(260px, 1.7fr) minmax(130px, .7fr) minmax(180px, 1fr);
+		gap: 12px 18px;
+		align-items: center;
+		padding: 15px 18px 12px;
+		box-sizing: border-box;
+		border-top: 1px solid rgba(255,255,255,.11);
+		background: rgba(18, 27, 40, .96);
+		backdrop-filter: blur(16px);
+		color: #fff;
+		box-shadow: 0 -16px 40px rgba(10, 17, 27, .16);
+	}
+
+	.CostSummaryMain,
+	.CostSummaryStat {
+		display: grid;
+		gap: 2px;
+		min-width: 0;
+	}
+
+	.CostSummaryMain > span,
+	.CostSummaryStat > span,
+	.CostSummaryMain small,
+	.CostSummaryStat small {
+		color: #aeb8c7;
+		font-size: 10px;
+		font-weight: 750;
+	}
+
+	.CostSummaryMain strong {
+		font-size: clamp(20px, 2.5vw, 30px);
+		line-height: 1.2;
+		color: #d9f08a;
+	}
+
+	.CostSummaryStat strong {
+		font-size: 17px;
+		line-height: 1.25;
+	}
+
+	.CostSummaryBar {
+		grid-column: 1 / -1;
+		height: 5px;
+		border-radius: 999px;
+		background: rgba(255,255,255,.10);
+		overflow: hidden;
+	}
+
+	.CostSummaryBar span {
+		display: block;
+		width: 0%;
+		height: 100%;
+		border-radius: inherit;
+		background: linear-gradient(90deg, #e5f58a, #71d8b4);
+		transition: width .25s ease;
+	}
+
+	@media (max-width: 760px) {
+		.FinishCostGameSummary {
+			grid-template-columns: 1fr 1fr;
+			padding-inline: 13px;
+		}
+
+		.CostSummaryMain {
+			grid-column: 1 / -1;
+		}
+	}
+</style>

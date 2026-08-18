@@ -1,0 +1,3361 @@
+---
+import { existsSync, readdirSync, readFileSync } from "fs";
+import { basename, dirname, extname, isAbsolute, relative, resolve } from "path";
+import { fileURLToPath } from "url";
+import { Place, type PlaceProps } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+import { CreateStoneGalleryExcelImageMatcher, ReadStoneGalleryExcelFile } from "./StoneGalleryExcel";
+
+type CssValue = string | number;
+type StoneImageRole = "sample" | "slab" | "application" | "detail";
+
+export interface StoneGalleryImageInput {
+	File?: string;
+	Src?: string;
+	Alt?: string;
+	Label?: string;
+	Role?: StoneImageRole | string;
+}
+
+export interface StoneGalleryItemInput {
+	Id?: string;
+	Name?: string;
+	NameAr?: string;
+	File?: string;
+	Image?: string;
+	Src?: string;
+	Alt?: string;
+	Type?: string;
+	Kind?: string;
+	Country?: string;
+	Origin?: string;
+	Color?: string;
+	Pattern?: string;
+	Description?: string;
+	Desc?: string;
+	Uses?: string | string[];
+	Use?: string | string[];
+	Finishes?: string | string[];
+	Finish?: string | string[];
+	Available?: boolean | string;
+	Badge?: string;
+	PriceFrom?: number | string;
+	PriceTo?: number | string;
+	PriceLevel?: string;
+	Currency?: string;
+	SlabFile?: string;
+	SlabImage?: string;
+	ApplicationFile?: string;
+	ApplicationImage?: string;
+	Images?: Array<string | StoneGalleryImageInput>;
+	Tags?: string | string[];
+	[key: string]: unknown;
+}
+
+type NormalizedStoneImage = {
+	Src: string;
+	Alt: string;
+	Label: string;
+	Role: StoneImageRole;
+};
+
+type NormalizedStoneItem = {
+	Id: string;
+	Name: string;
+	Alt: string;
+	Type: string;
+	Country: string;
+	Color: string;
+	Pattern: string;
+	Description: string;
+	Uses: string[];
+	Finishes: string[];
+	Available: boolean;
+	Badge: string;
+	PriceFrom: number;
+	PriceTo: number;
+	PriceLevel: string;
+	Currency: string;
+	Images: NormalizedStoneImage[];
+	PrimaryImage: string;
+	Tags: string[];
+	SearchText: string;
+};
+
+interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps {
+	/** بيانات جاهزة مباشرة. عند تمريرها لها أولوية على Excel وJSON ومسح الفولدر. */
+	pItems?: StoneGalleryItemInput[];
+
+	/** فولدر صور الخامات داخل public. */
+	pFolder?: string;
+
+	/** ملف Excel داخل pFolder. إذا كان موجودًا تكون له أولوية على JSON ومسح الفولدر. */
+	pExcel?: string;
+
+	/** اسم ورقة بيانات الخامات داخل ملف Excel. */
+	pExcelSheet?: string;
+
+	/** إظهار تحذيرات المطابقة في طرفية البناء للملفات الناقصة أو الأسماء المكررة. */
+	pExcelWarnings?: boolean;
+
+	/** ملف بيانات اختياري داخل pFolder. يدعم array أو Stones / stones / Products / products. */
+	pJson?: string;
+
+	/** يبحث داخل الفولدرات الفرعية أثناء ربط Excel أو عند الاعتماد على الصور فقط. */
+	pRecursive?: boolean;
+
+	/** الامتدادات المقبولة عند مسح الفولدر. */
+	pExts?: string[];
+
+	pTitle?: string;
+	pDesc?: string;
+	pSearchPlaceholder?: string;
+	pEmptyText?: string;
+
+	pDefaultType?: string;
+	pDefaultCountry?: string;
+	pDefaultUses?: string | string[];
+	pDefaultFinishes?: string | string[];
+	pDefaultCurrency?: string;
+
+	pColumns?: number;
+	pColumnsP?: number;
+	pMaxCompare?: number;
+	pShowFilters?: boolean;
+	pAvailableOnly?: boolean;
+	pAllowShare?: boolean;
+	pEnableQuote?: boolean;
+	pSelectFirst?: boolean;
+
+	/** معرّف StoneRequestBuilder الذي يستقبل بيانات الخامة بعد حفظ الطلب المبدئي. */
+	pRequestBuilderId?: string;
+
+	/** رابط احتياطي بعد إطلاق حدث الطلب. يترك فارغًا للبقاء داخل الصفحة. */
+	pRequestHref?: string;
+
+	/** مفتاح حفظ القائمة المختصرة والمقارنة على جهاز الزائر. */
+	pStorageKey?: string;
+
+	pMaxWidth?: CssValue;
+	pPad?: CssValue;
+	pGap?: CssValue;
+	pRadius?: CssValue;
+	pAccent?: string;
+	pAccentSoft?: string;
+	pBgColor?: string;
+	pPanelColor?: string;
+	pTextColor?: string;
+	pMutedColor?: string;
+	pBorderColor?: string;
+
+	/** يحافظ الودجت على عرضه الداخلي داخل Stack / Strip. */
+	"data-own-size"?: boolean | string;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+
+const {
+	pItems,
+	pFolder = "",
+	pExcel = "stones.xlsx",
+	pExcelSheet = "الخامات",
+	pExcelWarnings = true,
+	pJson = "stones.json",
+	pRecursive = false,
+	pExts = [".webp", ".jpg", ".jpeg", ".png", ".avif"],
+
+	pTitle = "اختر الخامة المناسبة",
+	pDesc = "تصفّح الخامات، افحص اللوح الفعلي، وقارن اختياراتك قبل طلب السعر.",
+	pSearchPlaceholder = "ابحث باسم الخامة",
+	pEmptyText = "لا توجد خامات مطابقة للاختيارات الحالية.",
+
+	pDefaultType = "حجر طبيعي",
+	pDefaultCountry = "غير محدد",
+	pDefaultUses = [],
+	pDefaultFinishes = ["مصقول"],
+	pDefaultCurrency = "ج.م",
+
+	pColumns = 4,
+	pColumnsP = 2,
+	pMaxCompare = 3,
+	pShowFilters = true,
+	pAvailableOnly = false,
+	pAllowShare = true,
+	pEnableQuote = true,
+	pSelectFirst = false,
+
+	pRequestBuilderId = "",
+	pRequestHref = "",
+	pStorageKey = "EmoStoneGalleryV1",
+
+	pMaxWidth = "1480px",
+	pPad = "clamp(20px, 3vw, 48px)",
+	pGap = "clamp(18px, 2vw, 30px)",
+	pRadius = "26px",
+	pAccent = "#3899ec",
+	pAccentSoft = "#dceeff",
+	pBgColor = "#f8f5ef",
+	pPanelColor = "#fffdf9",
+	pTextColor = "#1f252b",
+	pMutedColor = "#68717a",
+	pBorderColor = "#ddd8cf",
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+
+	Readable: pReadableValue = true,
+	id: pGivenID = GetWidgetId("StoneGallery"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	"data-own-size": pOwnSizeValue = true,
+	...RemAttr
+} = cProps;
+
+const cAllowedExts = pExts.map(NormalizeExt);
+const cDefaultUses = ToList(pDefaultUses);
+const cDefaultFinishes = ToList(pDefaultFinishes);
+const cDataWarnings: string[] = [];
+const cPublicRoots = GetPublicRoots();
+const cRawItems = GetRawItems();
+const cUsedIds = new Set<string>();
+const cItems = cRawItems
+	.map((pItem, pIndex) => NormalizeItem(pItem, pIndex))
+	.filter((pItem): pItem is NormalizedStoneItem => pItem !== null);
+
+const cTypes = UniqueValues(cItems.map((pItem) => pItem.Type));
+const cColors = UniqueValues(cItems.map((pItem) => pItem.Color));
+const cCountries = UniqueValues(cItems.map((pItem) => pItem.Country));
+const cUses = UniqueValues(cItems.flatMap((pItem) => pItem.Uses));
+const cPriceLevels = UniqueValues(cItems.map((pItem) => pItem.PriceLevel));
+const cColumns = ClampInt(pColumns, 1, 6);
+const cColumnsP = ClampInt(pColumnsP, 1, 3);
+const cCompareCount = ClampInt(pMaxCompare, 2, 4);
+const cReadable = GetBoolAttr(pReadableValue, true);
+const cOwnSize = GetBoolAttr(pOwnSizeValue, true);
+
+const cStyle = [
+	`--StoneGalleryMaxWidth:${NormalizeCssValue(pMaxWidth)};`,
+	`--StoneGalleryPad:${NormalizeCssValue(pPad)};`,
+	`--StoneGalleryGap:${NormalizeCssValue(pGap)};`,
+	`--StoneGalleryRadius:${NormalizeCssValue(pRadius)};`,
+	`--StoneGalleryAccent:${pAccent};`,
+	`--StoneGalleryAccentSoft:${pAccentSoft};`,
+	`--StoneGalleryBg:${pBgColor};`,
+	`--StoneGalleryPanel:${pPanelColor};`,
+	`--StoneGalleryText:${pTextColor};`,
+	`--StoneGalleryMuted:${pMutedColor};`,
+	`--StoneGalleryBorder:${pBorderColor};`,
+	`--StoneGalleryColumns:${cColumns};`,
+	`--StoneGalleryColumnsP:${cColumnsP};`,
+	GetStyleText(pGivenStyle),
+].filter(Boolean).join(" ");
+
+const cPlace = new Place({
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+}, cStyle);
+
+const cDataJson = JSON.stringify(cItems).replaceAll("<", "\\u003c");
+const cQuoteLocationName = `${pGivenID}-location`;
+
+function GetRawItems(): StoneGalleryItemInput[] {
+	if (Array.isArray(pItems) && pItems.length > 0) return pItems;
+
+	const cExcelItems = ReadExcelItems();
+	if (cExcelItems !== null) return cExcelItems;
+
+	const cJsonItems = ReadJsonItems();
+	if (cJsonItems.length > 0) return cJsonItems;
+
+	return ScanFolderItems();
+}
+
+function ReadExcelItems(): StoneGalleryItemInput[] | null {
+	const cFolderPath = GetSafePublicFolderPath(pFolder);
+	if (!pExcel) return null;
+	if (!cFolderPath) {
+		AddDataWarning(`لم أجد فولدر الصور "${pFolder}" داخل public. المسارات التي تم فحصها: ${cPublicRoots.join("، ")}.`);
+		return null;
+	}
+
+	const cExcelPath = GetSafeFolderFilePath(cFolderPath, pExcel);
+	if (!cExcelPath || !existsSync(cExcelPath)) return null;
+
+	let cExcelData: ReturnType<typeof ReadStoneGalleryExcelFile>;
+	try {
+		cExcelData = ReadStoneGalleryExcelFile(cExcelPath, pExcelSheet);
+	} catch (pError) {
+		const cMessage = pError instanceof Error ? pError.message : `${pError}`;
+		throw new Error(`[StoneGallery:${pGivenID}] تعذر قراءة ملف Excel "${pExcel}": ${cMessage}`);
+	}
+	if (cExcelData.Items.length === 0) AddDataWarning(`تمت قراءة "${pExcel}" لكن ورقة "${pExcelSheet}" لا تحتوي صفوف خامات مفعلة.`);
+
+	const cImageFiles = CollectImageFiles(cFolderPath)
+		.map((pFile) => relative(cFolderPath, pFile).replaceAll("\\", "/"))
+		.sort((pA, pB) => pA.localeCompare(pB, "ar", { numeric: true }));
+	const cMatchExcelImage = CreateStoneGalleryExcelImageMatcher(cImageFiles, pFolder);
+	const cWarnings: string[] = [];
+	const cItems: StoneGalleryItemInput[] = [];
+
+	for (const [cIndex, cExcelItem] of cExcelData.Items.entries()) {
+		const cRowNumber = cExcelData.RowNumbers[cIndex] || cExcelData.HeaderRow + cIndex + 1;
+		const cRawItem = cExcelItem as Record<string, unknown>;
+		const cMainReference = ReadText(cRawItem, ["File"]);
+		const cMainMatch = cMatchExcelImage(cMainReference);
+
+		if (!cMainMatch.File) {
+			cWarnings.push(GetExcelMatchWarning(cRowNumber, "الصورة الرئيسية", cMainReference, cMainMatch.Candidates));
+			continue;
+		}
+
+		const cItem = { ...cRawItem, File: cMainMatch.File } as StoneGalleryItemInput;
+		const cSlabReference = ReadText(cRawItem, ["SlabFile"]);
+		const cApplicationReference = ReadText(cRawItem, ["ApplicationFile"]);
+		const cSlabMatch = cMatchExcelImage(cSlabReference);
+		const cApplicationMatch = cMatchExcelImage(cApplicationReference);
+
+		if (cSlabReference && !cSlabMatch.File) cWarnings.push(GetExcelMatchWarning(cRowNumber, "صورة اللوح", cSlabReference, cSlabMatch.Candidates));
+		if (cApplicationReference && !cApplicationMatch.File) cWarnings.push(GetExcelMatchWarning(cRowNumber, "صورة التنفيذ", cApplicationReference, cApplicationMatch.Candidates));
+		if (cSlabMatch.File) cItem.SlabFile = cSlabMatch.File;
+		else delete cItem.SlabFile;
+		if (cApplicationMatch.File) cItem.ApplicationFile = cApplicationMatch.File;
+		else delete cItem.ApplicationFile;
+
+		const cExtraImages = Array.isArray(cRawItem.Images) ? cRawItem.Images : ToList(cRawItem.Images);
+		const cMatchedExtraImages: string[] = [];
+		for (const cImageReference of cExtraImages) {
+			const cReference = `${cImageReference ?? ""}`.trim();
+			if (!cReference) continue;
+			const cMatch = cMatchExcelImage(cReference);
+			if (cMatch.File) cMatchedExtraImages.push(cMatch.File);
+			else cWarnings.push(GetExcelMatchWarning(cRowNumber, "صورة إضافية", cReference, cMatch.Candidates));
+		}
+		cItem.Images = cMatchedExtraImages;
+		cItems.push(cItem);
+	}
+
+	if (pExcelWarnings && cWarnings.length > 0) {
+		console.warn(`[StoneGallery:${pGivenID}] ملاحظات ربط ملف ${pExcel}:\n- ${cWarnings.join("\n- ")}`);
+	}
+	for (const cWarning of cWarnings) AddDataWarning(cWarning);
+
+	return cItems;
+}
+
+function AddDataWarning(pWarning: string) {
+	const cWarning = `${pWarning ?? ""}`.trim();
+	if (cWarning && !cDataWarnings.includes(cWarning)) cDataWarnings.push(cWarning);
+}
+
+function GetSafeFolderFilePath(pFolderPath: string, pFileValue: string) {
+	const cFilePath = resolve(pFolderPath, `${pFileValue}`.trim());
+	const cRelative = relative(pFolderPath, cFilePath);
+	if (cRelative.startsWith("..") || cRelative === ".." || isAbsolute(cRelative)) return null;
+	return cFilePath;
+}
+
+function GetExcelMatchWarning(pRowNumber: number, pRole: string, pReference: string, pCandidates: string[]) {
+	if (!pReference) return `الصف ${pRowNumber}: حقل ${pRole} فارغ، لذلك لم يتم إنشاء الكارت.`;
+	if (pCandidates.length > 1) return `الصف ${pRowNumber}: الاسم "${pReference}" في ${pRole} مكرر. اكتب المسار النسبي كاملًا: ${pCandidates.join("، ")}.`;
+	return `الصف ${pRowNumber}: لم أجد الملف "${pReference}" الخاص بـ ${pRole} داخل فولدر الصور.`;
+}
+
+function ReadJsonItems(): StoneGalleryItemInput[] {
+	const cFolderPath = GetSafePublicFolderPath(pFolder);
+	if (!cFolderPath || !pJson) return [];
+
+	const cJsonPath = resolve(cFolderPath, pJson);
+	const cRelative = relative(cFolderPath, cJsonPath);
+	if (cRelative.startsWith("..") || cRelative === ".." || isAbsolute(cRelative) || !existsSync(cJsonPath)) return [];
+
+	try {
+		const cRaw = JSON.parse(readFileSync(cJsonPath, "utf-8"));
+		const cList = Array.isArray(cRaw)
+			? cRaw
+			: Array.isArray(cRaw?.Stones)
+				? cRaw.Stones
+				: Array.isArray(cRaw?.stones)
+					? cRaw.stones
+					: Array.isArray(cRaw?.Products)
+						? cRaw.Products
+						: Array.isArray(cRaw?.products)
+							? cRaw.products
+							: [];
+
+		return cList.filter((pItem: unknown) => pItem && typeof pItem === "object") as StoneGalleryItemInput[];
+	} catch {
+		return [];
+	}
+}
+
+function ScanFolderItems(): StoneGalleryItemInput[] {
+	const cFolderPath = GetSafePublicFolderPath(pFolder);
+	if (!cFolderPath) return [];
+
+	return CollectImageFiles(cFolderPath)
+		.sort((pA, pB) => pA.localeCompare(pB, "ar", { numeric: true }))
+		.map((pFile) => ({
+			File: relative(cFolderPath, pFile).replaceAll("\\", "/"),
+			Name: StripExt(basename(pFile)).replace(/[-_]+/g, " ").trim(),
+		}));
+}
+
+function CollectImageFiles(pFolderPath: string): string[] {
+	const cFiles: string[] = [];
+
+	for (const cEntry of readdirSync(pFolderPath, { withFileTypes: true })) {
+		if (cEntry.name.startsWith(".")) continue;
+		const cFullPath = resolve(pFolderPath, cEntry.name);
+
+		if (cEntry.isDirectory()) {
+			if (pRecursive) cFiles.push(...CollectImageFiles(cFullPath));
+			continue;
+		}
+
+		if (cEntry.isFile() && cAllowedExts.includes(extname(cEntry.name).toLowerCase())) cFiles.push(cFullPath);
+	}
+
+	return cFiles;
+}
+
+function GetSafePublicFolderPath(pFolderValue: string) {
+	const cFolder = NormalizePublicFolder(pFolderValue);
+	if (!cFolder) return null;
+
+	for (const cPublicRoot of cPublicRoots) {
+		const cFolderPath = resolve(cPublicRoot, cFolder);
+		const cRelative = relative(cPublicRoot, cFolderPath);
+		if (cRelative.startsWith("..") || cRelative === ".." || isAbsolute(cRelative) || !existsSync(cFolderPath)) continue;
+		return cFolderPath;
+	}
+
+	return null;
+}
+
+function GetPublicRoots() {
+	const cRoots: string[] = [];
+	const cAddRoot = (pValue: string) => {
+		const cValue = resolve(pValue);
+		if (!cRoots.includes(cValue)) cRoots.push(cValue);
+	};
+
+	try {
+		let cFolder = dirname(fileURLToPath(import.meta.url));
+		for (let cIndex = 0; cIndex < 8; cIndex += 1) {
+			const cPublicRoot = resolve(cFolder, "public");
+			if (existsSync(cPublicRoot)) cAddRoot(cPublicRoot);
+			const cParent = resolve(cFolder, "..");
+			if (cParent === cFolder) break;
+			cFolder = cParent;
+		}
+	} catch {
+		// بعض بيئات التجميع تحول import.meta.url إلى عنوان افتراضي؛ مسار التشغيل يظل البديل.
+	}
+
+	cAddRoot(resolve(process.cwd(), "public"));
+	return cRoots;
+}
+
+function NormalizeItem(pRawValue: StoneGalleryItemInput, pIndex: number): NormalizedStoneItem | null {
+	const cRaw = pRawValue as Record<string, unknown>;
+	const cFile = ReadText(cRaw, ["File", "file", "Image", "image", "Src", "src"]);
+	const cName = ReadText(cRaw, ["Name", "name", "NameAr", "nameAr", "Title", "title"])
+		|| StripExt(basename(cFile || `خامة-${pIndex + 1}`)).replace(/[-_]+/g, " ").trim();
+	if (!cName) return null;
+
+	const cImages = NormalizeImages(cRaw, cFile, cName);
+	if (cImages.length === 0) return null;
+
+	const cRawId = ReadText(cRaw, ["Id", "id", "Slug", "slug"]);
+	const cId = GetUniqueId(cRawId || Slugify(cName) || `stone-${pIndex + 1}`);
+	const cType = ReadText(cRaw, ["Type", "type", "Kind", "kind", "Category", "category"]) || pDefaultType;
+	const cCountry = ReadText(cRaw, ["Country", "country", "Origin", "origin"]) || pDefaultCountry;
+	const cColor = ReadText(cRaw, ["Color", "color"]) || "غير محدد";
+	const cPattern = ReadText(cRaw, ["Pattern", "pattern", "Texture", "texture"]) || "غير محدد";
+	const cDescription = ReadText(cRaw, ["Description", "description", "Desc", "desc", "Body", "body"]);
+	const cUses = ToList(ReadValue(cRaw, ["Uses", "uses", "Use", "use"]));
+	const cFinishes = ToList(ReadValue(cRaw, ["Finishes", "finishes", "Finish", "finish", "SurfaceFinish", "surfaceFinish"]));
+	const cPriceFrom = ToNumber(ReadValue(cRaw, ["PriceFrom", "priceFrom", "StartPrice", "startPrice"]));
+	const cPriceTo = ToNumber(ReadValue(cRaw, ["PriceTo", "priceTo", "EndPrice", "endPrice"]));
+	const cPriceLevel = ReadText(cRaw, ["PriceLevel", "priceLevel", "Budget", "budget"]) || GetPriceLevel(cPriceFrom);
+	const cCurrency = ReadText(cRaw, ["Currency", "currency"]) || pDefaultCurrency;
+	const cTags = ToList(ReadValue(cRaw, ["Tags", "tags"]));
+	const cAvailableValue = ReadValue(cRaw, ["Available", "available", "InStock", "inStock"]);
+	const cAvailable = cAvailableValue === undefined ? true : ToBoolean(cAvailableValue);
+	const cBadge = ReadText(cRaw, ["Badge", "badge"]);
+	const cFinalUses = cUses.length > 0 ? cUses : cDefaultUses;
+	const cFinalFinishes = cFinishes.length > 0 ? cFinishes : cDefaultFinishes;
+	const cAlt = ReadText(cRaw, ["Alt", "alt"]) || `${cName} - ${cType}`;
+	const cSearchText = [cName, cType, cCountry, cColor, cPattern, cDescription, ...cFinalUses, ...cFinalFinishes, ...cTags]
+		.join(" ")
+		.toLocaleLowerCase("ar");
+
+	return {
+		Id: cId,
+		Name: cName,
+		Alt: cAlt,
+		Type: cType,
+		Country: cCountry,
+		Color: cColor,
+		Pattern: cPattern,
+		Description: cDescription,
+		Uses: cFinalUses,
+		Finishes: cFinalFinishes,
+		Available: cAvailable,
+		Badge: cBadge,
+		PriceFrom: cPriceFrom,
+		PriceTo: cPriceTo,
+		PriceLevel: cPriceLevel,
+		Currency: cCurrency,
+		Images: cImages,
+		PrimaryImage: cImages[0].Src,
+		Tags: cTags,
+		SearchText: cSearchText,
+	};
+}
+
+function NormalizeImages(pRaw: Record<string, unknown>, pMainFile: string, pName: string) {
+	const cImages: NormalizedStoneImage[] = [];
+
+	AddImage(cImages, pMainFile, ReadText(pRaw, ["Alt", "alt"]) || pName, "العينة", "sample");
+	AddImage(cImages, ReadText(pRaw, ["SlabFile", "slabFile", "SlabImage", "slabImage"]), `${pName} - اللوح الفعلي`, "اللوح الفعلي", "slab");
+	AddImage(cImages, ReadText(pRaw, ["ApplicationFile", "applicationFile", "ApplicationImage", "applicationImage", "AppliedFile", "appliedFile"]), `${pName} - تنفيذ حقيقي`, "تنفيذ حقيقي", "application");
+
+	const cExtraImages = ReadValue(pRaw, ["Images", "images"]);
+	if (Array.isArray(cExtraImages)) {
+		for (const cImageValue of cExtraImages) {
+			if (typeof cImageValue === "string") {
+				AddImage(cImages, cImageValue, pName, "تفصيل", "detail");
+				continue;
+			}
+
+			if (!cImageValue || typeof cImageValue !== "object") continue;
+			const cImage = cImageValue as Record<string, unknown>;
+			const cFile = ReadText(cImage, ["File", "file", "Src", "src"]);
+			const cRole = NormalizeImageRole(ReadText(cImage, ["Role", "role"]));
+			const cLabel = ReadText(cImage, ["Label", "label"]) || GetImageRoleLabel(cRole);
+			const cAlt = ReadText(cImage, ["Alt", "alt"]) || `${pName} - ${cLabel}`;
+			AddImage(cImages, cFile, cAlt, cLabel, cRole);
+		}
+	}
+
+	return cImages.filter((pImage, pIndex, pAll) => pAll.findIndex((pOther) => pOther.Src === pImage.Src) === pIndex);
+}
+
+function AddImage(pImages: NormalizedStoneImage[], pFile: string, pAlt: string, pLabel: string, pRole: StoneImageRole) {
+	const cSrc = ResolveImageUrl(pFile);
+	if (!cSrc) return;
+	pImages.push({ Src: cSrc, Alt: pAlt, Label: pLabel, Role: pRole });
+}
+
+function ResolveImageUrl(pValue: string) {
+	const cValue = `${pValue ?? ""}`.trim().replaceAll("\\", "/");
+	if (!cValue) return "";
+	if (/^(https?:|data:|blob:)/i.test(cValue) || cValue.startsWith("/")) return cValue;
+
+	const cFolder = NormalizePublicFolder(pFolder);
+	return JoinPublicUrl(cFolder, cValue);
+}
+
+function NormalizePublicFolder(pFolderValue: string) {
+	return `${pFolderValue ?? ""}`.trim().replaceAll("\\", "/").replace(/^public\//, "").replace(/^\/+/, "").replace(/\/+$/, "");
+}
+
+function JoinPublicUrl(pFolderValue: string, pFileValue: string) {
+	const cSegments = `${pFolderValue}/${pFileValue}`.split("/").filter(Boolean).map((pSegment) => encodeURIComponent(pSegment));
+	return `/${cSegments.join("/")}`;
+}
+
+function ReadValue(pObject: Record<string, unknown>, pNames: string[]) {
+	for (const cName of pNames) {
+		if (Object.prototype.hasOwnProperty.call(pObject, cName)) return pObject[cName];
+	}
+	return undefined;
+}
+
+function ReadText(pObject: Record<string, unknown>, pNames: string[]) {
+	const cValue = ReadValue(pObject, pNames);
+	return typeof cValue === "string" || typeof cValue === "number" ? `${cValue}`.trim() : "";
+}
+
+function ToList(pValue: unknown) {
+	if (Array.isArray(pValue)) return pValue.map((pItem) => `${pItem ?? ""}`.trim()).filter(Boolean);
+	return `${pValue ?? ""}`.split(/\r?\n|\||،|,/g).map((pItem) => pItem.trim()).filter(Boolean);
+}
+
+function ToBoolean(pValue: unknown) {
+	if (typeof pValue === "boolean") return pValue;
+	const cValue = `${pValue ?? ""}`.trim().toLowerCase();
+	return ["true", "1", "yes", "نعم", "متوفر", "متاح", "نشط", "عرض"].includes(cValue);
+}
+
+function ToNumber(pValue: unknown) {
+	const cValue = Number.parseFloat(`${pValue ?? ""}`.replaceAll(",", ""));
+	return Number.isFinite(cValue) && cValue > 0 ? cValue : 0;
+}
+
+function NormalizeImageRole(pValue: string): StoneImageRole {
+	const cValue = pValue.trim().toLowerCase();
+	if (cValue === "sample" || cValue === "عينة") return "sample";
+	if (cValue === "slab" || cValue === "لوح") return "slab";
+	if (cValue === "application" || cValue === "applied" || cValue === "تنفيذ") return "application";
+	return "detail";
+}
+
+function GetImageRoleLabel(pRole: StoneImageRole) {
+	if (pRole === "sample") return "العينة";
+	if (pRole === "slab") return "اللوح الفعلي";
+	if (pRole === "application") return "تنفيذ حقيقي";
+	return "تفصيل";
+}
+
+function GetPriceLevel(pPriceFrom: number) {
+	if (pPriceFrom <= 0) return "غير محدد";
+	if (pPriceFrom < 1200) return "اقتصادي";
+	if (pPriceFrom < 2500) return "متوسط";
+	return "فاخر";
+}
+
+function GetUniqueId(pBaseValue: string) {
+	const cBase = pBaseValue || "stone";
+	let cId = cBase;
+	let cIndex = 2;
+	while (cUsedIds.has(cId)) cId = `${cBase}-${cIndex++}`;
+	cUsedIds.add(cId);
+	return cId;
+}
+
+function Slugify(pValue: string) {
+	return pValue
+		.trim()
+		.toLocaleLowerCase("ar")
+		.replace(/[\u064B-\u065F\u0670]/g, "")
+		.replace(/[^a-z0-9\u0600-\u06ff]+/gi, "-")
+		.replace(/^-+|-+$/g, "");
+}
+
+function StripExt(pFile: string) {
+	return pFile.replace(/\.[^.]+$/, "");
+}
+
+function UniqueValues(pValues: string[]) {
+	return [...new Set(pValues.map((pValue) => pValue.trim()).filter((pValue) => pValue && pValue !== "غير محدد"))]
+		.sort((pA, pB) => pA.localeCompare(pB, "ar", { numeric: true }));
+}
+
+function NormalizeExt(pValue: string) {
+	const cValue = `${pValue ?? ""}`.trim().toLowerCase();
+	return cValue.startsWith(".") ? cValue : `.${cValue}`;
+}
+
+function NormalizeCssValue(pValue: CssValue) {
+	return typeof pValue === "number" ? `${pValue}px` : `${pValue}`;
+}
+
+function GetStyleText(pStyle: unknown) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+	if (typeof pStyle !== "object") return "";
+
+	return Object.entries(pStyle as Record<string, string | number | null | undefined>)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			const cName = pName.startsWith("--") ? pName : pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+			return `${cName}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function ClampInt(pValue: unknown, pMin: number, pMax: number) {
+	const cValue = Number.parseInt(`${pValue ?? ""}`, 10);
+	return Math.min(pMax, Math.max(pMin, Number.isFinite(cValue) ? cValue : pMin));
+}
+
+function GetBoolAttr(pValue: unknown, pDefault = false) {
+	if (pValue === undefined || pValue === null) return pDefault;
+	return pValue === true || pValue === "" || pValue === "true";
+}
+---
+
+<section
+	class={`StoneGallery ${cPlace.Class} ${pGivenClass}`.trim()}
+	style={cPlace.Style}
+	id={pGivenID}
+	dir="rtl"
+	readable={cReadable ? "" : undefined}
+	data-own-size={cOwnSize ? "true" : undefined}
+	data-stone-gallery="true"
+	data-ops-scope="true"
+	data-ops-widget="StoneGallery"
+	data-ops-title={pTitle}
+	data-max-compare={cCompareCount}
+	data-storage-key={pStorageKey}
+	data-request-builder-id={pRequestBuilderId}
+	data-request-href={pRequestHref}
+	data-allow-share={pAllowShare ? "true" : "false"}
+	data-enable-quote={pEnableQuote ? "true" : "false"}
+	data-select-first={pSelectFirst ? "true" : "false"}
+	data-empty-text={pEmptyText}
+	data-emo-auto-container="true"
+	data-emo-explicit-height="false"
+	data-emo-empty-height="620"
+	{...RemAttr}
+>
+	<header class="StoneGalleryHead">
+		<div class="StoneGalleryHeading">
+			<h2>{pTitle}</h2>
+			{pDesc && <p>{pDesc}</p>}
+		</div>
+
+		<div class="StoneGalleryHeadActions" aria-label="أدوات اختيارات الخامات">
+			<button
+				class="StoneGalleryHeadAction"
+				type="button"
+				data-action="open-shortlist"
+				data-ops-event="stone_gallery_shortlist_open"
+				data-ops-label="فتح الخامات المحفوظة"
+			>
+				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5 3.8 12.7A5.4 5.4 0 0 1 11.4 5l.6.7.6-.7a5.4 5.4 0 0 1 7.6 7.7Z" /></svg>
+				<span>المحفوظة</span>
+				<b data-shortlist-count>0</b>
+			</button>
+
+			<button
+				class="StoneGalleryHeadAction"
+				type="button"
+				data-action="open-compare"
+				data-ops-event="stone_gallery_compare_open"
+				data-ops-label="فتح مقارنة الخامات"
+			>
+				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h6M14 5h6M7 5v14M17 5v14M3 15h8M13 11h8" /></svg>
+				<span>المقارنة</span>
+				<b data-compare-count>0</b>
+			</button>
+		</div>
+	</header>
+
+	{pShowFilters && (
+		<form class="StoneGalleryFilters" data-filters-form>
+			<label class="StoneGallerySearch">
+				<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>
+				<input
+					type="search"
+					placeholder={pSearchPlaceholder}
+					aria-label={pSearchPlaceholder}
+					data-filter-search
+					data-ops-event="stone_gallery_search"
+					data-ops-on="change"
+				/>
+			</label>
+
+			<label class="StoneGalleryFilter">
+				<span>النوع</span>
+				<select data-filter-type data-ops-event="stone_gallery_filter_type" data-ops-on="change">
+					<option value="">الكل</option>
+					{cTypes.map((pValue) => <option value={pValue}>{pValue}</option>)}
+				</select>
+			</label>
+
+			<label class="StoneGalleryFilter">
+				<span>اللون</span>
+				<select data-filter-color data-ops-event="stone_gallery_filter_color" data-ops-on="change">
+					<option value="">الكل</option>
+					{cColors.map((pValue) => <option value={pValue}>{pValue}</option>)}
+				</select>
+			</label>
+
+			<label class="StoneGalleryFilter">
+				<span>الاستخدام</span>
+				<select data-filter-use data-ops-event="stone_gallery_filter_use" data-ops-on="change">
+					<option value="">الكل</option>
+					{cUses.map((pValue) => <option value={pValue}>{pValue}</option>)}
+				</select>
+			</label>
+
+			<label class="StoneGalleryFilter">
+				<span>المنشأ</span>
+				<select data-filter-country data-ops-event="stone_gallery_filter_country" data-ops-on="change">
+					<option value="">الكل</option>
+					{cCountries.map((pValue) => <option value={pValue}>{pValue}</option>)}
+				</select>
+			</label>
+
+			<label class="StoneGalleryFilter">
+				<span>السعر</span>
+				<select data-filter-price data-ops-event="stone_gallery_filter_price" data-ops-on="change">
+					<option value="">الكل</option>
+					{cPriceLevels.map((pValue) => <option value={pValue}>{pValue}</option>)}
+				</select>
+			</label>
+
+			<label class="StoneGalleryAvailable">
+				<input
+					type="checkbox"
+					checked={pAvailableOnly}
+					data-filter-available
+					data-ops-event="stone_gallery_filter_available"
+					data-ops-on="change"
+				/>
+				<span aria-hidden="true"></span>
+				<strong>المتوفر الآن</strong>
+			</label>
+
+			<button class="StoneGalleryClearFilters" type="reset" data-action="clear-filters">مسح الفلاتر</button>
+		</form>
+	)}
+
+	<div class="StoneGalleryResultBar">
+		<p>اختر خامة لعرض التفاصيل، واضغط عليها مرة ثانية لفحص صورها.</p>
+		<span><b data-result-count>{cItems.length}</b> خامة</span>
+	</div>
+
+	<div class="StoneGalleryBody">
+		<div class="StoneGalleryCatalog">
+			<div class="StoneGalleryGrid" data-gallery-grid hidden={cItems.length === 0}>
+				{cItems.map((pItem, pIndex) => (
+					<article class="StoneGalleryCard" data-stone-card data-stone-id={pItem.Id} data-index={pIndex}>
+						<button
+							class="StoneGalleryCardMain"
+							type="button"
+							aria-label={`اختيار خامة ${pItem.Name}`}
+							aria-pressed="false"
+							data-action="select-stone"
+							data-stone-id={pItem.Id}
+							data-ops-event="stone_gallery_select"
+							data-ops-label={pItem.Name}
+							data-ops-value={pItem.Id}
+						>
+							<span class="StoneGalleryCardMedia">
+								<img
+									src={pItem.PrimaryImage}
+									alt={pItem.Alt}
+									loading={pIndex < 8 ? "eager" : "lazy"}
+									decoding="async"
+								/>
+
+								{pItem.Badge && <small class="StoneGalleryCardBadge">{pItem.Badge}</small>}
+								<span class="StoneGallerySelectedMark" aria-hidden="true">✓</span>
+							</span>
+
+							<span class="StoneGalleryCardInfo">
+								<strong>{pItem.Name}</strong>
+								<small>{[pItem.Type, pItem.Country].filter(Boolean).join(" · ")}</small>
+								<span class="StoneGalleryStock" data-available={pItem.Available ? "true" : "false"}>
+									{pItem.Available ? "متوفر" : "حسب الطلب"}
+								</span>
+							</span>
+						</button>
+
+						<button
+							class="StoneGallerySave"
+							type="button"
+							aria-label={`حفظ خامة ${pItem.Name}`}
+							aria-pressed="false"
+							data-action="toggle-shortlist"
+							data-stone-id={pItem.Id}
+							data-ops-event="stone_gallery_shortlist_toggle"
+							data-ops-label={pItem.Name}
+							data-ops-value={pItem.Id}
+						>
+							<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5 3.8 12.7A5.4 5.4 0 0 1 11.4 5l.6.7.6-.7a5.4 5.4 0 0 1 7.6 7.7Z" /></svg>
+						</button>
+					</article>
+				))}
+			</div>
+
+			<div class="StoneGalleryEmpty" data-gallery-empty hidden={cItems.length !== 0}>
+				<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4M8 11h6" /></svg>
+				<strong>{pEmptyText}</strong>
+				{import.meta.env.DEV && cDataWarnings.length > 0 && (
+					<details class="StoneGalleryDataDebug" open>
+						<summary>تشخيص ملف بيانات الخامات</summary>
+						<ul>{cDataWarnings.map((pWarning) => <li>{pWarning}</li>)}</ul>
+						<small>بعد تعديل Excel احفظ الملف ثم أعد تحميل المعاينة أو احفظ صفحة Astro لإجبارها على إعادة البناء.</small>
+					</details>
+				)}
+				<button type="button" data-action="clear-filters">عرض كل الخامات</button>
+			</div>
+		</div>
+
+		<aside class="StoneGalleryDetails" data-details-panel hidden aria-live="polite">
+			<button class="StoneGalleryPanelClose" type="button" data-action="close-details" aria-label="إغلاق تفاصيل الخامة">×</button>
+
+			<button
+				class="StoneGalleryDetailMedia"
+				type="button"
+				data-action="inspect-stone"
+				data-ops-event="stone_gallery_inspect"
+				data-ops-label="فحص صور الخامة المختارة"
+			>
+				<img src="" alt="" data-detail-image />
+				<span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4M11 8v6M8 11h6" /></svg> فحص الصورة واللوح</span>
+			</button>
+
+			<div class="StoneGalleryDetailHead">
+				<h3 data-detail-name></h3>
+				<div class="StoneGalleryDetailChips">
+					<span data-detail-type></span>
+					<span data-detail-country></span>
+				</div>
+			</div>
+
+			<p class="StoneGalleryDetailDesc" data-detail-description></p>
+
+			<dl class="StoneGalleryDetailFacts">
+				<div><dt>اللون</dt><dd data-detail-color></dd></div>
+				<div><dt>العروق أو الحبيبات</dt><dd data-detail-pattern></dd></div>
+				<div><dt>أفضل استخدام</dt><dd data-detail-uses></dd></div>
+				<div><dt>التشطيب</dt><dd data-detail-finishes></dd></div>
+				<div><dt>التوفر</dt><dd data-detail-available></dd></div>
+				<div><dt>السعر الاستدلالي</dt><dd data-detail-price></dd></div>
+			</dl>
+
+			<div class="StoneGalleryDetailActions">
+				{pEnableQuote && (
+					<button
+						class="StoneGalleryPrimary"
+						type="button"
+						data-action="open-quote"
+						data-ops-event="stone_gallery_quote_open"
+						data-ops-important="true"
+					>
+						اعرف سعره لمشروعي
+					</button>
+				)}
+
+				<button
+					class="StoneGallerySecondary"
+					type="button"
+					data-action="toggle-compare"
+					data-ops-event="stone_gallery_compare_toggle"
+				>
+					<span data-compare-action-text>أضف للمقارنة</span>
+				</button>
+
+				{pAllowShare && (
+					<button
+						class="StoneGallerySecondary"
+						type="button"
+						data-action="share-stone"
+						data-ops-event="stone_gallery_share"
+					>
+						شارك الخامة
+					</button>
+				)}
+			</div>
+
+			<p class="StoneGalleryPanelStatus" data-panel-status role="status"></p>
+		</aside>
+	</div>
+
+	<div class="StoneGalleryLightbox" data-lightbox hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="فحص صور الخامة">
+		<div class="StoneGalleryOverlayBack" data-action="close-lightbox"></div>
+		<section class="StoneGalleryLightboxPanel">
+			<header>
+				<div><small>فحص الخامة</small><h3 data-lightbox-name></h3></div>
+				<button type="button" data-action="close-lightbox" aria-label="إغلاق">×</button>
+			</header>
+
+			<div class="StoneGalleryInspectStage" data-inspect-stage>
+				<button class="StoneGalleryInspectNav IsPrev" type="button" data-action="lightbox-prev" aria-label="الصورة السابقة">‹</button>
+				<img src="" alt="" data-lightbox-image />
+				<button class="StoneGalleryInspectNav IsNext" type="button" data-action="lightbox-next" aria-label="الصورة التالية">›</button>
+
+				<div class="StoneGalleryZoomTools">
+					<button type="button" data-action="zoom-out" aria-label="تصغير الصورة">−</button>
+					<button type="button" data-action="zoom-reset" aria-label="إعادة حجم الصورة">100%</button>
+					<button type="button" data-action="zoom-in" aria-label="تكبير الصورة">+</button>
+					<button type="button" data-action="fullscreen" aria-label="ملء الشاشة">⛶</button>
+				</div>
+			</div>
+
+			<div class="StoneGalleryFilm" data-lightbox-film aria-label="صور الخامة"></div>
+
+			<footer>
+				<p>طبيعة الحجر قد تختلف بين لوح وآخر؛ راجع صورة الدفعة الفعلية قبل الاعتماد النهائي.</p>
+				<div>
+					<button class="StoneGallerySecondary" type="button" data-action="toggle-compare">أضف للمقارنة</button>
+					{pEnableQuote && <button class="StoneGalleryPrimary" type="button" data-action="open-quote">اعرف سعره لمشروعي</button>}
+				</div>
+			</footer>
+		</section>
+	</div>
+
+	<div class="StoneGalleryCompare" data-compare-overlay hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="مقارنة الخامات">
+		<div class="StoneGalleryOverlayBack" data-action="close-compare"></div>
+		<section class="StoneGalleryComparePanel">
+			<header>
+				<div><small>اختياراتك</small><h3>مقارنة الخامات</h3></div>
+				<button type="button" data-action="close-compare" aria-label="إغلاق">×</button>
+			</header>
+
+			<div class="StoneGalleryCompareGrid" data-compare-grid>
+				{Array.from({ length: cCompareCount }, (_, pIndex) => (
+					<article class="StoneGalleryCompareSlot" data-compare-slot data-slot-index={pIndex} hidden>
+						<button class="StoneGalleryCompareRemove" type="button" data-action="remove-compare" aria-label="حذف من المقارنة">×</button>
+						<img src="" alt="" data-compare-image />
+						<h4 data-compare-name></h4>
+						<p data-compare-kind></p>
+						<dl>
+							<div><dt>درجة اللون</dt><dd data-compare-color></dd></div>
+							<div><dt>طبيعة العروق</dt><dd data-compare-pattern></dd></div>
+							<div><dt>أفضل استخدام</dt><dd data-compare-uses></dd></div>
+							<div><dt>التشطيب</dt><dd data-compare-finishes></dd></div>
+							<div><dt>التوفر</dt><dd data-compare-available></dd></div>
+							<div><dt>السعر</dt><dd data-compare-price></dd></div>
+						</dl>
+						<button class="StoneGallerySecondary" type="button" data-action="choose-compare">اختار هذه الخامة</button>
+					</article>
+				))}
+
+				<button class="StoneGalleryCompareEmpty" type="button" data-action="close-compare" data-compare-empty>
+					<span>＋</span>
+					<strong>أضف خامة للمقارنة</strong>
+					<small>ارجع للجاليري واختر خامة أخرى</small>
+				</button>
+			</div>
+
+			<footer>
+				{pAllowShare && <button class="StoneGallerySecondary" type="button" data-action="share-comparison">شارك المقارنة</button>}
+				{pEnableQuote && <button class="StoneGalleryPrimary" type="button" data-action="open-quote">اعرف سعر الخامات لمشروعي</button>}
+			</footer>
+		</section>
+	</div>
+
+	{pEnableQuote && (
+	<div class="StoneGalleryQuote" data-quote-overlay hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="تقدير سعر الخامة">
+		<div class="StoneGalleryOverlayBack" data-action="close-quote"></div>
+		<form
+			class="StoneGalleryQuotePanel"
+			data-quote-form
+			data-ops-event="stone_gallery_quote_submit"
+			data-ops-on="submit"
+			data-ops-important="true"
+		>
+			<header>
+				<div><small>خطوة منخفضة الالتزام</small><h3>احسب تقديرًا مبدئيًا لمشروعك</h3></div>
+				<button type="button" data-action="close-quote" aria-label="إغلاق">×</button>
+			</header>
+
+			<div class="StoneGalleryQuoteLayout">
+				<div class="StoneGalleryQuoteFields">
+					<div class="StoneGalleryQuoteStone">
+						<img src="" alt="" data-quote-image />
+						<div><small>الخامة المختارة</small><strong data-quote-name></strong><span data-quote-kind></span></div>
+					</div>
+
+					<fieldset>
+						<legend>نوع الاستخدام</legend>
+						<div class="StoneGalleryChoiceRow" data-quote-uses>
+							<label><input type="radio" name={`${pGivenID}-use`} value="أرضيات" checked /> <span>أرضيات</span></label>
+							<label><input type="radio" name={`${pGivenID}-use`} value="سلالم" /> <span>سلالم</span></label>
+							<label><input type="radio" name={`${pGivenID}-use`} value="حوائط" /> <span>حوائط</span></label>
+							<label><input type="radio" name={`${pGivenID}-use`} value="أخرى" /> <span>أخرى</span></label>
+						</div>
+					</fieldset>
+
+					<div class="StoneGalleryQuoteInline">
+						<label><span>المساحة التقريبية</span><input type="number" min="0" step="0.5" name="area" value="45" /><small>م²</small></label>
+						<label><span>الخدمة</span><select name="service"><option value="supply-install">توريد وتركيب</option><option value="supply">توريد فقط</option><option value="selection">اختيار ومعاينة</option></select></label>
+					</div>
+
+					<fieldset>
+						<legend>مكان المشروع فين؟</legend>
+						<div class="StoneGalleryLocationGrid">
+							<label><input type="radio" name={cQuoteLocationName} value="cairo-giza" checked /><span><strong>القاهرة أو الجيزة</strong><small>داخل نطاق التنفيذ الأساسي</small></span></label>
+							<label><input type="radio" name={cQuoteLocationName} value="other-egypt" /><span><strong>محافظة أخرى</strong><small>نراجع إمكانية التوريد أو التنفيذ</small></span></label>
+							<label><input type="radio" name={cQuoteLocationName} value="remote-egypt" /><span><strong>أنا خارج مصر والمشروع داخل مصر</strong><small>اختيار ومتابعة عن بُعد</small></span></label>
+							<label><input type="radio" name={cQuoteLocationName} value="outside-egypt" /><span><strong>المشروع خارج مصر</strong><small>يُراجع نطاق التوريد أولًا</small></span></label>
+						</div>
+					</fieldset>
+				</div>
+
+				<aside class="StoneGalleryEstimate">
+					<small>نطاق سعر مبدئي</small>
+					<strong data-estimate-value>يُحدد بعد اختيار البيانات</strong>
+					<p data-estimate-note>السعر يتأثر بالدفعة الفعلية والسمك والتشطيب والقياسات النهائية.</p>
+					<div><span>دقة التقدير</span><b data-estimate-accuracy>45%</b></div>
+					<progress max="100" value="45" data-estimate-progress>45%</progress>
+				</aside>
+			</div>
+
+			<footer>
+				<div><strong>بدون مكالمة إلزامية</strong><small>احفظ اختيارك الآن وأكمل بيانات التواصل عندما تكون جاهزًا.</small></div>
+				<button class="StoneGallerySecondary" type="button" data-action="close-quote">ارجع للمقارنة</button>
+				<button
+					class="StoneGalleryPrimary"
+					type="submit"
+				>
+					احفظ الطلب وأرسله
+				</button>
+			</footer>
+			<p class="StoneGalleryQuoteStatus" data-quote-status role="status"></p>
+		</form>
+	</div>
+	)}
+
+	<script type="application/json" is:inline data-stone-gallery-data set:html={cDataJson}></script>
+</section>
+
+<style>
+	.StoneGallery,
+	.StoneGallery * {
+		box-sizing: border-box;
+	}
+
+	.StoneGallery {
+		position: relative;
+		width: 100%;
+		padding: var(--StoneGalleryPad);
+		overflow: clip;
+		isolation: isolate;
+		color: var(--StoneGalleryText);
+		background:
+			radial-gradient(circle at 8% 4%, color-mix(in srgb, var(--StoneGalleryAccentSoft) 54%, transparent), transparent 31rem),
+			linear-gradient(145deg, var(--StoneGalleryBg), color-mix(in srgb, var(--StoneGalleryBg) 82%, white));
+		font-family: inherit;
+		line-height: 1.55;
+	}
+
+	.StoneGallery::before {
+		position: absolute;
+		z-index: -1;
+		inset: 0;
+		background-image: linear-gradient(112deg, transparent 32%, rgba(255, 255, 255, .52) 49%, transparent 68%);
+		content: "";
+		pointer-events: none;
+	}
+
+	.StoneGallery button,
+	.StoneGallery input,
+	.StoneGallery select {
+		font: inherit;
+	}
+
+	.StoneGallery button {
+		color: inherit;
+	}
+
+	.StoneGallery button:focus-visible,
+	.StoneGallery input:focus-visible,
+	.StoneGallery select:focus-visible {
+		outline: 3px solid color-mix(in srgb, var(--StoneGalleryAccent) 38%, transparent);
+		outline-offset: 3px;
+	}
+
+	.StoneGallery svg {
+		width: 1.2em;
+		height: 1.2em;
+		fill: none;
+		stroke: currentColor;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		stroke-width: 1.8;
+	}
+
+	.StoneGallery [hidden] {
+		display: none;
+	}
+
+	.StoneGalleryHead,
+	.StoneGalleryFilters,
+	.StoneGalleryResultBar,
+	.StoneGalleryBody {
+		width: min(var(--StoneGalleryMaxWidth), 100%);
+		margin-inline: auto;
+	}
+
+	.StoneGalleryHead {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 24px;
+		margin-bottom: clamp(20px, 2.2vw, 32px);
+	}
+
+	.StoneGalleryHeading {
+		max-width: 760px;
+	}
+
+	.StoneGalleryHeading h2 {
+		margin: 0;
+		font-size: clamp(27px, 3.2vw, 48px);
+		font-weight: 900;
+		letter-spacing: -.035em;
+		line-height: 1.12;
+	}
+
+	.StoneGalleryHeading p {
+		max-width: 670px;
+		margin: 10px 0 0;
+		color: var(--StoneGalleryMuted);
+		font-size: clamp(14px, 1.1vw, 17px);
+	}
+
+	.StoneGalleryHeadActions {
+		display: flex;
+		flex: 0 0 auto;
+		gap: 10px;
+	}
+
+	.StoneGalleryHeadAction {
+		display: grid;
+		grid-template-columns: auto auto;
+		grid-template-areas: "icon count" "label label";
+		align-items: center;
+		min-width: 92px;
+		padding: 10px 14px 8px;
+		border: 1px solid var(--StoneGalleryBorder);
+		border-radius: 16px;
+		background: color-mix(in srgb, var(--StoneGalleryPanel) 87%, transparent);
+		box-shadow: 0 9px 24px rgba(32, 42, 52, .06);
+		cursor: pointer;
+		transition: border-color .2s ease, transform .2s ease, background .2s ease;
+	}
+
+	.StoneGalleryHeadAction:hover {
+		border-color: color-mix(in srgb, var(--StoneGalleryAccent) 55%, var(--StoneGalleryBorder));
+		transform: translateY(-2px);
+	}
+
+	.StoneGalleryHeadAction.IsActive {
+		border-color: var(--StoneGalleryAccent);
+		background: var(--StoneGalleryAccentSoft);
+	}
+
+	.StoneGalleryHeadAction svg {
+		grid-area: icon;
+		font-size: 19px;
+	}
+
+	.StoneGalleryHeadAction span {
+		grid-area: label;
+		margin-top: 3px;
+		font-size: 12px;
+		font-weight: 800;
+	}
+
+	.StoneGalleryHeadAction b {
+		grid-area: count;
+		justify-self: end;
+		min-width: 23px;
+		padding: 2px 7px;
+		border-radius: 99px;
+		color: white;
+		background: var(--StoneGalleryAccent);
+		font-size: 11px;
+		line-height: 1.6;
+		text-align: center;
+	}
+
+	.StoneGalleryFilters {
+		display: grid;
+		grid-template-columns: minmax(220px, 1.7fr) repeat(5, minmax(110px, .72fr)) auto auto;
+		align-items: end;
+		gap: 10px;
+		padding: 13px;
+		border: 1px solid color-mix(in srgb, var(--StoneGalleryBorder) 85%, transparent);
+		border-radius: 19px;
+		background: color-mix(in srgb, var(--StoneGalleryPanel) 91%, transparent);
+		box-shadow: 0 14px 38px rgba(32, 42, 52, .07);
+		backdrop-filter: blur(16px);
+	}
+
+	.StoneGallerySearch,
+	.StoneGalleryFilter {
+		position: relative;
+		display: grid;
+		gap: 4px;
+	}
+
+	.StoneGalleryFilter > span {
+		padding-inline: 4px;
+		color: var(--StoneGalleryMuted);
+		font-size: 10px;
+		font-weight: 800;
+	}
+
+	.StoneGallerySearch svg {
+		position: absolute;
+		z-index: 1;
+		top: 50%;
+		right: 14px;
+		color: var(--StoneGalleryMuted);
+		transform: translateY(-50%);
+	}
+
+	.StoneGallerySearch input,
+	.StoneGalleryFilter select,
+	.StoneGalleryQuote input,
+	.StoneGalleryQuote select {
+		width: 100%;
+		min-height: 46px;
+		border: 1px solid var(--StoneGalleryBorder);
+		border-radius: 12px;
+		color: var(--StoneGalleryText);
+		background: #fff;
+	}
+
+	.StoneGallerySearch input {
+		padding: 9px 42px 9px 13px;
+	}
+
+	.StoneGalleryFilter select,
+	.StoneGalleryQuote select {
+		padding: 8px 10px;
+		cursor: pointer;
+	}
+
+	.StoneGalleryAvailable {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		min-height: 46px;
+		padding-inline: 8px;
+		white-space: nowrap;
+		cursor: pointer;
+	}
+
+	.StoneGalleryAvailable input {
+		position: absolute;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.StoneGalleryAvailable > span {
+		position: relative;
+		width: 37px;
+		height: 21px;
+		border-radius: 20px;
+		background: #cfd4d9;
+		transition: background .2s ease;
+	}
+
+	.StoneGalleryAvailable > span::after {
+		position: absolute;
+		top: 3px;
+		right: 3px;
+		width: 15px;
+		height: 15px;
+		border-radius: 50%;
+		background: white;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, .18);
+		content: "";
+		transition: transform .2s ease;
+	}
+
+	.StoneGalleryAvailable input:checked + span {
+		background: var(--StoneGalleryAccent);
+	}
+
+	.StoneGalleryAvailable input:checked + span::after {
+		transform: translateX(-16px);
+	}
+
+	.StoneGalleryAvailable strong,
+	.StoneGalleryClearFilters {
+		font-size: 12px;
+	}
+
+	.StoneGalleryClearFilters {
+		min-height: 46px;
+		padding: 8px 12px;
+		border: 0;
+		color: var(--StoneGalleryMuted);
+		background: transparent;
+		font-weight: 800;
+		white-space: nowrap;
+		cursor: pointer;
+	}
+
+	.StoneGalleryClearFilters:hover {
+		color: var(--StoneGalleryAccent);
+	}
+
+	.StoneGalleryResultBar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 15px;
+		padding: 15px 3px 12px;
+		color: var(--StoneGalleryMuted);
+		font-size: 12px;
+	}
+
+	.StoneGalleryResultBar p,
+	.StoneGalleryResultBar span {
+		margin: 0;
+	}
+
+	.StoneGalleryResultBar b {
+		color: var(--StoneGalleryText);
+	}
+
+	.StoneGalleryBody {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		align-items: start;
+		gap: var(--StoneGalleryGap);
+		transition: grid-template-columns .28s ease;
+	}
+
+	.StoneGallery.HasSelection .StoneGalleryBody {
+		grid-template-columns: minmax(0, 1fr) minmax(330px, 410px);
+	}
+
+	.StoneGalleryCatalog {
+		min-width: 0;
+	}
+
+	.StoneGalleryGrid {
+		display: grid;
+		grid-template-columns: repeat(var(--StoneGalleryColumns), minmax(0, 1fr));
+		gap: clamp(12px, 1.25vw, 19px);
+	}
+
+	.StoneGalleryCard {
+		position: relative;
+		min-width: 0;
+		border: 1px solid color-mix(in srgb, var(--StoneGalleryBorder) 88%, transparent);
+		border-radius: 18px;
+		background: var(--StoneGalleryPanel);
+		box-shadow: 0 10px 30px rgba(31, 37, 43, .07);
+		transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+	}
+
+	.StoneGalleryCard:hover {
+		border-color: color-mix(in srgb, var(--StoneGalleryAccent) 52%, var(--StoneGalleryBorder));
+		box-shadow: 0 14px 36px rgba(31, 37, 43, .11);
+		transform: translateY(-3px);
+	}
+
+	.StoneGalleryCard.IsSelected {
+		border-color: var(--StoneGalleryAccent);
+		box-shadow: 0 0 0 3px color-mix(in srgb, var(--StoneGalleryAccent) 20%, transparent), 0 14px 36px rgba(31, 37, 43, .11);
+	}
+
+	.StoneGalleryCardMain {
+		display: block;
+		width: 100%;
+		padding: 0;
+		border: 0;
+		border-radius: inherit;
+		background: transparent;
+		text-align: right;
+		cursor: pointer;
+	}
+
+	.StoneGalleryCardMedia {
+		position: relative;
+		display: block;
+		aspect-ratio: 1.42;
+		overflow: hidden;
+		border-radius: 17px 17px 9px 9px;
+		background: #e6e1d8;
+	}
+
+	.StoneGalleryCardMedia::after {
+		position: absolute;
+		inset: auto 0 0;
+		height: 28%;
+		background: linear-gradient(transparent, rgba(0, 0, 0, .25));
+		content: "";
+		pointer-events: none;
+	}
+
+	.StoneGalleryCardMedia img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform .45s cubic-bezier(.2, .8, .2, 1);
+	}
+
+	.StoneGalleryCard:hover .StoneGalleryCardMedia img {
+		transform: scale(1.04);
+	}
+
+	.StoneGalleryCardBadge {
+		position: absolute;
+		z-index: 1;
+		top: 10px;
+		right: 10px;
+		padding: 4px 8px;
+		border-radius: 99px;
+		color: #fff;
+		background: rgba(20, 27, 33, .78);
+		font-size: 9px;
+		font-weight: 800;
+		backdrop-filter: blur(8px);
+	}
+
+	.StoneGallerySelectedMark {
+		position: absolute;
+		z-index: 2;
+		bottom: 10px;
+		left: 10px;
+		display: grid;
+		place-items: center;
+		width: 26px;
+		height: 26px;
+		border: 2px solid white;
+		border-radius: 50%;
+		color: white;
+		background: var(--StoneGalleryAccent);
+		font-size: 14px;
+		font-weight: 900;
+		opacity: 0;
+		transform: scale(.65);
+		transition: opacity .2s ease, transform .2s ease;
+	}
+
+	.StoneGalleryCard.IsSelected .StoneGallerySelectedMark {
+		opacity: 1;
+		transform: scale(1);
+	}
+
+	.StoneGalleryCardInfo {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 2px 8px;
+		padding: 12px 13px 13px;
+	}
+
+	.StoneGalleryCardInfo > strong {
+		overflow: hidden;
+		font-size: clamp(13px, 1.05vw, 16px);
+		font-weight: 900;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.StoneGalleryCardInfo > small {
+		grid-column: 1;
+		overflow: hidden;
+		color: var(--StoneGalleryMuted);
+		font-size: 10px;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.StoneGalleryStock {
+		grid-row: 1 / span 2;
+		grid-column: 2;
+		align-self: center;
+		padding: 3px 7px;
+		border-radius: 99px;
+		color: #23704e;
+		background: #e2f4e9;
+		font-size: 9px;
+		font-weight: 900;
+		white-space: nowrap;
+	}
+
+	.StoneGalleryStock[data-available="false"] {
+		color: #92601a;
+		background: #fff0d5;
+	}
+
+	.StoneGallerySave {
+		position: absolute;
+		z-index: 3;
+		top: 9px;
+		left: 9px;
+		display: grid;
+		place-items: center;
+		width: 34px;
+		height: 34px;
+		padding: 0;
+		border: 1px solid rgba(255, 255, 255, .68);
+		border-radius: 50%;
+		color: white;
+		background: rgba(20, 27, 33, .38);
+		backdrop-filter: blur(9px);
+		cursor: pointer;
+		transition: background .2s ease, transform .2s ease;
+	}
+
+	.StoneGallerySave:hover {
+		transform: scale(1.07);
+	}
+
+	.StoneGallerySave.IsSaved {
+		color: #fff;
+		background: #db4b68;
+	}
+
+	.StoneGallerySave.IsSaved svg {
+		fill: currentColor;
+	}
+
+	.StoneGalleryEmpty {
+		display: grid;
+		place-items: center;
+		gap: 10px;
+		min-height: 330px;
+		padding: 35px;
+		border: 1px dashed var(--StoneGalleryBorder);
+		border-radius: var(--StoneGalleryRadius);
+		color: var(--StoneGalleryMuted);
+		background: color-mix(in srgb, var(--StoneGalleryPanel) 72%, transparent);
+		text-align: center;
+	}
+
+	.StoneGalleryEmpty svg {
+		font-size: 40px;
+	}
+
+	.StoneGalleryEmpty button {
+		padding: 9px 16px;
+		border: 1px solid var(--StoneGalleryBorder);
+		border-radius: 10px;
+		background: white;
+		font-weight: 800;
+		cursor: pointer;
+	}
+
+	.StoneGalleryDataDebug {
+		width: min(100%, 760px);
+		padding: 12px 15px;
+		border: 1px solid #e4b7a9;
+		border-radius: 12px;
+		color: #713426;
+		background: #fff3ef;
+		font-size: 12px;
+		text-align: right;
+	}
+
+	.StoneGalleryDataDebug summary {
+		font-weight: 900;
+		cursor: pointer;
+	}
+
+	.StoneGalleryDataDebug ul {
+		margin: 9px 0;
+		padding-inline-start: 22px;
+	}
+
+	.StoneGalleryDataDebug small {
+		display: block;
+		color: #8d594d;
+	}
+
+	.StoneGalleryDetails {
+		position: sticky;
+		top: 18px;
+		min-width: 0;
+		padding: 13px;
+		border: 1px solid var(--StoneGalleryBorder);
+		border-radius: var(--StoneGalleryRadius);
+		background: var(--StoneGalleryPanel);
+		box-shadow: 0 20px 55px rgba(31, 37, 43, .13);
+		animation: StoneGalleryPanelIn .28s ease both;
+	}
+
+	.StoneGalleryPanelClose {
+		position: absolute;
+		z-index: 3;
+		top: 22px;
+		left: 22px;
+		display: grid;
+		place-items: center;
+		width: 30px;
+		height: 30px;
+		padding: 0;
+		border: 1px solid rgba(255, 255, 255, .65);
+		border-radius: 50%;
+		color: white;
+		background: rgba(20, 27, 33, .42);
+		font-size: 21px;
+		line-height: 1;
+		cursor: pointer;
+		backdrop-filter: blur(8px);
+	}
+
+	.StoneGalleryDetailMedia {
+		position: relative;
+		display: block;
+		width: 100%;
+		aspect-ratio: 1.28;
+		padding: 0;
+		overflow: hidden;
+		border: 0;
+		border-radius: calc(var(--StoneGalleryRadius) - 9px);
+		background: #e6e1d8;
+		cursor: zoom-in;
+	}
+
+	.StoneGalleryDetailMedia img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.StoneGalleryDetailMedia > span {
+		position: absolute;
+		bottom: 11px;
+		right: 11px;
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 7px 10px;
+		border-radius: 99px;
+		color: white;
+		background: rgba(20, 27, 33, .66);
+		font-size: 10px;
+		font-weight: 800;
+		backdrop-filter: blur(9px);
+	}
+
+	.StoneGalleryDetailHead {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 10px;
+		padding: 17px 4px 8px;
+	}
+
+	.StoneGalleryDetailHead h3 {
+		margin: 0;
+		font-size: clamp(21px, 2vw, 29px);
+		font-weight: 900;
+		line-height: 1.2;
+	}
+
+	.StoneGalleryDetailChips {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		gap: 5px;
+	}
+
+	.StoneGalleryDetailChips span {
+		padding: 4px 8px;
+		border-radius: 99px;
+		color: color-mix(in srgb, var(--StoneGalleryAccent) 84%, #15202a);
+		background: var(--StoneGalleryAccentSoft);
+		font-size: 9px;
+		font-weight: 800;
+		white-space: nowrap;
+	}
+
+	.StoneGalleryDetailDesc {
+		margin: 0 4px 12px;
+		color: var(--StoneGalleryMuted);
+		font-size: 12px;
+	}
+
+	.StoneGalleryDetailFacts {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 8px;
+		margin: 0;
+	}
+
+	.StoneGalleryDetailFacts > div {
+		min-width: 0;
+		padding: 9px 10px;
+		border: 1px solid color-mix(in srgb, var(--StoneGalleryBorder) 72%, transparent);
+		border-radius: 11px;
+		background: color-mix(in srgb, var(--StoneGalleryBg) 58%, white);
+	}
+
+	.StoneGalleryDetailFacts dt {
+		color: var(--StoneGalleryMuted);
+		font-size: 8px;
+		font-weight: 800;
+	}
+
+	.StoneGalleryDetailFacts dd {
+		margin: 2px 0 0;
+		overflow: hidden;
+		font-size: 11px;
+		font-weight: 800;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.StoneGalleryDetailActions {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 8px;
+		margin-top: 13px;
+	}
+
+	.StoneGalleryDetailActions .StoneGalleryPrimary {
+		grid-column: 1 / -1;
+	}
+
+	.StoneGalleryPrimary,
+	.StoneGallerySecondary {
+		min-height: 44px;
+		padding: 9px 15px;
+		border-radius: 12px;
+		font-size: 12px;
+		font-weight: 900;
+		cursor: pointer;
+		transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+	}
+
+	.StoneGalleryPrimary {
+		border: 1px solid var(--StoneGalleryAccent);
+		color: white;
+		background: var(--StoneGalleryAccent);
+		box-shadow: 0 10px 25px color-mix(in srgb, var(--StoneGalleryAccent) 25%, transparent);
+	}
+
+	.StoneGallerySecondary {
+		border: 1px solid var(--StoneGalleryBorder);
+		color: var(--StoneGalleryText);
+		background: white;
+	}
+
+	.StoneGalleryPrimary:hover,
+	.StoneGallerySecondary:hover {
+		transform: translateY(-2px);
+	}
+
+	.StoneGallerySecondary.IsActive {
+		border-color: var(--StoneGalleryAccent);
+		color: var(--StoneGalleryAccent);
+		background: var(--StoneGalleryAccentSoft);
+	}
+
+	.StoneGalleryPanelStatus,
+	.StoneGalleryQuoteStatus {
+		min-height: 1.4em;
+		margin: 8px 2px 0;
+		color: var(--StoneGalleryMuted);
+		font-size: 10px;
+		font-weight: 700;
+	}
+
+	.StoneGalleryOverlayBack {
+		position: absolute;
+		inset: 0;
+		background: rgba(15, 20, 25, .72);
+		backdrop-filter: blur(13px);
+	}
+
+	.StoneGalleryLightbox,
+	.StoneGalleryCompare,
+	.StoneGalleryQuote {
+		position: fixed;
+		z-index: 1500;
+		inset: 0;
+		display: grid;
+		place-items: center;
+		padding: clamp(14px, 2.2vw, 32px);
+	}
+
+	.StoneGalleryLightboxPanel,
+	.StoneGalleryComparePanel,
+	.StoneGalleryQuotePanel {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		width: min(1180px, 100%);
+		max-height: calc(100dvh - 28px);
+		overflow: auto;
+		border: 1px solid rgba(255, 255, 255, .2);
+		border-radius: clamp(18px, 2vw, 30px);
+		background: var(--StoneGalleryPanel);
+		box-shadow: 0 35px 110px rgba(0, 0, 0, .35);
+		animation: StoneGalleryOverlayIn .24s ease both;
+	}
+
+	.StoneGalleryLightboxPanel > header,
+	.StoneGalleryComparePanel > header,
+	.StoneGalleryQuotePanel > header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 18px;
+		padding: 16px 20px;
+		border-bottom: 1px solid var(--StoneGalleryBorder);
+	}
+
+	.StoneGalleryLightboxPanel > header small,
+	.StoneGalleryComparePanel > header small,
+	.StoneGalleryQuotePanel > header small {
+		display: block;
+		color: var(--StoneGalleryAccent);
+		font-size: 9px;
+		font-weight: 900;
+	}
+
+	.StoneGalleryLightboxPanel > header h3,
+	.StoneGalleryComparePanel > header h3,
+	.StoneGalleryQuotePanel > header h3 {
+		margin: 2px 0 0;
+		font-size: clamp(19px, 2vw, 27px);
+		line-height: 1.15;
+	}
+
+	.StoneGalleryLightboxPanel > header > button,
+	.StoneGalleryComparePanel > header > button,
+	.StoneGalleryQuotePanel > header > button {
+		display: grid;
+		place-items: center;
+		width: 36px;
+		height: 36px;
+		padding: 0;
+		border: 1px solid var(--StoneGalleryBorder);
+		border-radius: 50%;
+		background: white;
+		font-size: 24px;
+		line-height: 1;
+		cursor: pointer;
+	}
+
+	.StoneGalleryInspectStage {
+		position: relative;
+		display: grid;
+		place-items: center;
+		min-height: clamp(360px, 59vh, 680px);
+		overflow: hidden;
+		background:
+			linear-gradient(45deg, #d9dde0 25%, transparent 25%, transparent 75%, #d9dde0 75%),
+			linear-gradient(45deg, #d9dde0 25%, #edf0f2 25%, #edf0f2 75%, #d9dde0 75%);
+		background-position: 0 0, 12px 12px;
+		background-size: 24px 24px;
+	}
+
+	.StoneGalleryInspectStage > img {
+		max-width: 100%;
+		max-height: min(68vh, 680px);
+		object-fit: contain;
+		transform: scale(var(--StoneGalleryZoom, 1));
+		transition: transform .2s ease;
+		user-select: none;
+	}
+
+	.StoneGalleryInspectNav {
+		position: absolute;
+		z-index: 2;
+		top: 50%;
+		display: grid;
+		place-items: center;
+		width: 42px;
+		height: 58px;
+		padding: 0;
+		border: 1px solid rgba(255, 255, 255, .72);
+		border-radius: 12px;
+		color: white;
+		background: rgba(20, 27, 33, .48);
+		font-size: 32px;
+		line-height: 1;
+		transform: translateY(-50%);
+		cursor: pointer;
+		backdrop-filter: blur(8px);
+	}
+
+	.StoneGalleryInspectNav.IsPrev {
+		right: 14px;
+	}
+
+	.StoneGalleryInspectNav.IsNext {
+		left: 14px;
+	}
+
+	.StoneGalleryZoomTools {
+		position: absolute;
+		z-index: 3;
+		bottom: 13px;
+		left: 50%;
+		display: flex;
+		overflow: hidden;
+		border: 1px solid rgba(255, 255, 255, .62);
+		border-radius: 12px;
+		background: rgba(20, 27, 33, .7);
+		transform: translateX(-50%);
+		backdrop-filter: blur(9px);
+	}
+
+	.StoneGalleryZoomTools button {
+		min-width: 39px;
+		height: 36px;
+		padding: 0 9px;
+		border: 0;
+		border-left: 1px solid rgba(255, 255, 255, .18);
+		color: white;
+		background: transparent;
+		font-size: 13px;
+		cursor: pointer;
+	}
+
+	.StoneGalleryFilm {
+		display: flex;
+		gap: 8px;
+		padding: 11px 18px;
+		overflow-x: auto;
+		border-top: 1px solid var(--StoneGalleryBorder);
+		border-bottom: 1px solid var(--StoneGalleryBorder);
+	}
+
+	.StoneGalleryFilm button {
+		position: relative;
+		flex: 0 0 94px;
+		padding: 0;
+		overflow: hidden;
+		border: 2px solid transparent;
+		border-radius: 10px;
+		background: #e7e2d8;
+		cursor: pointer;
+	}
+
+	.StoneGalleryFilm button.IsActive {
+		border-color: var(--StoneGalleryAccent);
+	}
+
+	.StoneGalleryFilm img {
+		display: block;
+		width: 100%;
+		aspect-ratio: 1.42;
+		object-fit: cover;
+	}
+
+	.StoneGalleryFilm small {
+		position: absolute;
+		inset: auto 4px 4px;
+		padding: 2px 4px;
+		border-radius: 5px;
+		color: white;
+		background: rgba(20, 27, 33, .7);
+		font-size: 7px;
+		font-weight: 800;
+	}
+
+	.StoneGalleryLightboxPanel > footer,
+	.StoneGalleryComparePanel > footer,
+	.StoneGalleryQuotePanel > footer {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 13px;
+		padding: 14px 20px;
+	}
+
+	.StoneGalleryLightboxPanel > footer p {
+		max-width: 680px;
+		margin: 0;
+		color: var(--StoneGalleryMuted);
+		font-size: 10px;
+	}
+
+	.StoneGalleryLightboxPanel > footer > div,
+	.StoneGalleryComparePanel > footer {
+		display: flex;
+		gap: 8px;
+	}
+
+	.StoneGalleryComparePanel {
+		width: min(1240px, 100%);
+	}
+
+	.StoneGalleryCompareGrid {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 12px;
+		padding: 18px;
+		overflow-x: auto;
+	}
+
+	.StoneGalleryCompareSlot {
+		position: relative;
+		min-width: 220px;
+		padding: 9px;
+		border: 1px solid var(--StoneGalleryBorder);
+		border-radius: 17px;
+		background: color-mix(in srgb, var(--StoneGalleryBg) 50%, white);
+	}
+
+	.StoneGalleryCompareSlot > img {
+		width: 100%;
+		aspect-ratio: 1.42;
+		border-radius: 11px;
+		object-fit: cover;
+	}
+
+	.StoneGalleryCompareSlot h4 {
+		margin: 10px 2px 0;
+		font-size: 17px;
+	}
+
+	.StoneGalleryCompareSlot > p {
+		margin: 1px 2px 10px;
+		color: var(--StoneGalleryMuted);
+		font-size: 10px;
+	}
+
+	.StoneGalleryCompareSlot dl {
+		margin: 0 0 10px;
+	}
+
+	.StoneGalleryCompareSlot dl > div {
+		display: grid;
+		grid-template-columns: .75fr 1.25fr;
+		gap: 7px;
+		padding: 7px 3px;
+		border-top: 1px solid var(--StoneGalleryBorder);
+		font-size: 10px;
+	}
+
+	.StoneGalleryCompareSlot dt {
+		color: var(--StoneGalleryMuted);
+	}
+
+	.StoneGalleryCompareSlot dd {
+		margin: 0;
+		font-weight: 800;
+	}
+
+	.StoneGalleryCompareSlot .StoneGallerySecondary {
+		width: 100%;
+	}
+
+	.StoneGalleryCompareRemove {
+		position: absolute;
+		z-index: 2;
+		top: 15px;
+		left: 15px;
+		display: grid;
+		place-items: center;
+		width: 28px;
+		height: 28px;
+		padding: 0;
+		border: 1px solid rgba(255, 255, 255, .55);
+		border-radius: 50%;
+		color: white;
+		background: rgba(25, 31, 38, .54);
+		font-size: 18px;
+		line-height: 1;
+		cursor: pointer;
+	}
+
+	.StoneGalleryCompareEmpty {
+		display: grid;
+		place-items: center;
+		align-content: center;
+		min-width: 220px;
+		min-height: 390px;
+		padding: 18px;
+		border: 1px dashed var(--StoneGalleryBorder);
+		border-radius: 17px;
+		color: var(--StoneGalleryMuted);
+		background: transparent;
+		cursor: pointer;
+	}
+
+	.StoneGalleryCompareEmpty > span {
+		font-size: 42px;
+		font-weight: 200;
+	}
+
+	.StoneGalleryCompareEmpty strong {
+		font-size: 13px;
+	}
+
+	.StoneGalleryCompareEmpty small {
+		font-size: 9px;
+	}
+
+	.StoneGalleryQuotePanel {
+		width: min(1100px, 100%);
+	}
+
+	.StoneGalleryQuoteLayout {
+		display: grid;
+		grid-template-columns: minmax(0, 1.55fr) minmax(260px, .75fr);
+		gap: 18px;
+		padding: 18px 20px;
+	}
+
+	.StoneGalleryQuoteFields {
+		display: grid;
+		gap: 15px;
+	}
+
+	.StoneGalleryQuoteStone {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 9px;
+		border: 1px solid var(--StoneGalleryBorder);
+		border-radius: 14px;
+		background: color-mix(in srgb, var(--StoneGalleryBg) 55%, white);
+	}
+
+	.StoneGalleryQuoteStone img {
+		width: 85px;
+		aspect-ratio: 1.35;
+		border-radius: 9px;
+		object-fit: cover;
+	}
+
+	.StoneGalleryQuoteStone div {
+		display: grid;
+	}
+
+	.StoneGalleryQuoteStone small,
+	.StoneGalleryQuoteStone span {
+		color: var(--StoneGalleryMuted);
+		font-size: 9px;
+	}
+
+	.StoneGalleryQuoteStone strong {
+		font-size: 17px;
+	}
+
+	.StoneGalleryQuote fieldset {
+		min-width: 0;
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+
+	.StoneGalleryQuote legend,
+	.StoneGalleryQuoteInline label > span {
+		margin-bottom: 7px;
+		color: var(--StoneGalleryMuted);
+		font-size: 10px;
+		font-weight: 900;
+	}
+
+	.StoneGalleryChoiceRow {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 7px;
+	}
+
+	.StoneGalleryChoiceRow label,
+	.StoneGalleryLocationGrid label {
+		position: relative;
+		cursor: pointer;
+	}
+
+	.StoneGalleryChoiceRow input,
+	.StoneGalleryLocationGrid input {
+		position: absolute;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.StoneGalleryChoiceRow span {
+		display: grid;
+		place-items: center;
+		min-height: 44px;
+		padding: 8px;
+		border: 1px solid var(--StoneGalleryBorder);
+		border-radius: 11px;
+		background: white;
+		font-size: 11px;
+		font-weight: 800;
+	}
+
+	.StoneGalleryChoiceRow input:checked + span,
+	.StoneGalleryLocationGrid input:checked + span {
+		border-color: var(--StoneGalleryAccent);
+		color: color-mix(in srgb, var(--StoneGalleryAccent) 78%, #17202a);
+		background: var(--StoneGalleryAccentSoft);
+		box-shadow: 0 0 0 2px color-mix(in srgb, var(--StoneGalleryAccent) 15%, transparent);
+	}
+
+	.StoneGalleryQuoteInline {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 10px;
+	}
+
+	.StoneGalleryQuoteInline label {
+		position: relative;
+		display: grid;
+	}
+
+	.StoneGalleryQuoteInline input {
+		padding: 8px 12px 8px 36px;
+	}
+
+	.StoneGalleryQuoteInline label > small {
+		position: absolute;
+		bottom: 13px;
+		left: 11px;
+		color: var(--StoneGalleryMuted);
+		font-size: 10px;
+	}
+
+	.StoneGalleryLocationGrid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 7px;
+	}
+
+	.StoneGalleryLocationGrid label > span {
+		display: grid;
+		min-height: 64px;
+		padding: 10px 12px;
+		border: 1px solid var(--StoneGalleryBorder);
+		border-radius: 11px;
+		background: white;
+	}
+
+	.StoneGalleryLocationGrid strong {
+		font-size: 10px;
+	}
+
+	.StoneGalleryLocationGrid small {
+		color: var(--StoneGalleryMuted);
+		font-size: 8px;
+	}
+
+	.StoneGalleryEstimate {
+		display: grid;
+		align-content: center;
+		gap: 10px;
+		min-height: 290px;
+		padding: 24px;
+		border-radius: 19px;
+		color: white;
+		background:
+			linear-gradient(145deg, rgba(255, 255, 255, .08), transparent 55%),
+			color-mix(in srgb, var(--StoneGalleryAccent) 48%, #172331);
+		box-shadow: 0 20px 48px color-mix(in srgb, var(--StoneGalleryAccent) 18%, transparent);
+	}
+
+	.StoneGalleryEstimate > small {
+		font-size: 10px;
+		font-weight: 800;
+		opacity: .78;
+	}
+
+	.StoneGalleryEstimate > strong {
+		font-size: clamp(22px, 2.5vw, 36px);
+		font-weight: 900;
+		line-height: 1.25;
+	}
+
+	.StoneGalleryEstimate > p {
+		margin: 0;
+		font-size: 9px;
+		opacity: .72;
+	}
+
+	.StoneGalleryEstimate > div {
+		display: flex;
+		justify-content: space-between;
+		margin-top: 12px;
+		font-size: 10px;
+		font-weight: 800;
+	}
+
+	.StoneGalleryEstimate progress {
+		width: 100%;
+		height: 7px;
+		border: 0;
+		border-radius: 99px;
+		overflow: hidden;
+		background: rgba(255, 255, 255, .2);
+	}
+
+	.StoneGalleryEstimate progress::-webkit-progress-bar {
+		background: rgba(255, 255, 255, .2);
+	}
+
+	.StoneGalleryEstimate progress::-webkit-progress-value {
+		background: white;
+	}
+
+	.StoneGalleryEstimate progress::-moz-progress-bar {
+		background: white;
+	}
+
+	.StoneGalleryQuotePanel > footer {
+		border-top: 1px solid var(--StoneGalleryBorder);
+	}
+
+	.StoneGalleryQuotePanel > footer > div {
+		display: grid;
+		margin-inline-end: auto;
+	}
+
+	.StoneGalleryQuotePanel > footer > div strong {
+		font-size: 11px;
+	}
+
+	.StoneGalleryQuotePanel > footer > div small {
+		color: var(--StoneGalleryMuted);
+		font-size: 9px;
+	}
+
+	.StoneGalleryQuoteStatus {
+		padding: 0 20px 13px;
+		margin: 0;
+	}
+
+	.StoneGalleryQuoteStatus[data-mode="success"] {
+		color: #177245;
+	}
+
+	.StoneGalleryQuoteStatus[data-mode="error"] {
+		color: #a9323a;
+	}
+
+	:global(html.StoneGalleryNoScroll) {
+		overflow: hidden;
+	}
+
+	@keyframes StoneGalleryPanelIn {
+		from { opacity: 0; transform: translateX(-13px); }
+		to { opacity: 1; transform: translateX(0); }
+	}
+
+	@keyframes StoneGalleryOverlayIn {
+		from { opacity: 0; transform: translateY(13px) scale(.985); }
+		to { opacity: 1; transform: translateY(0) scale(1); }
+	}
+
+	@media (max-width: 1280px) {
+		.StoneGalleryFilters {
+			grid-template-columns: minmax(220px, 2fr) repeat(3, minmax(110px, 1fr)) auto auto;
+		}
+
+		.StoneGalleryFilters .StoneGalleryFilter:nth-of-type(5),
+		.StoneGalleryFilters .StoneGalleryFilter:nth-of-type(6) {
+			display: none;
+		}
+
+	}
+
+	@media (max-width: 920px) {
+		.StoneGallery {
+			padding-inline: clamp(13px, 4vw, 28px);
+		}
+
+		.StoneGalleryHead {
+			align-items: center;
+		}
+
+		.StoneGalleryFilters {
+			grid-template-columns: minmax(0, 1fr) minmax(100px, .42fr) auto;
+			overflow-x: auto;
+		}
+
+		.StoneGalleryFilters .StoneGalleryFilter:nth-of-type(n+3),
+		.StoneGalleryAvailable {
+			display: none;
+		}
+
+		.StoneGallery.HasSelection .StoneGalleryBody {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.StoneGalleryDetails {
+			position: relative;
+			top: auto;
+			grid-row: 1;
+		}
+
+		.StoneGalleryGrid,
+		.StoneGallery.HasSelection .StoneGalleryGrid {
+			grid-template-columns: repeat(var(--StoneGalleryColumnsP), minmax(0, 1fr));
+		}
+
+		.StoneGalleryCompareGrid {
+			grid-template-columns: repeat(4, minmax(220px, 1fr));
+		}
+
+		.StoneGalleryQuoteLayout {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.StoneGalleryEstimate {
+			min-height: 220px;
+		}
+	}
+
+	@media (max-width: 620px) {
+		.StoneGalleryHead {
+			align-items: flex-start;
+			gap: 12px;
+		}
+
+		.StoneGalleryHeading h2 {
+			font-size: 27px;
+		}
+
+		.StoneGalleryHeading p {
+			font-size: 12px;
+		}
+
+		.StoneGalleryHeadAction {
+			min-width: 48px;
+			padding: 9px;
+		}
+
+		.StoneGalleryHeadAction span {
+			display: none;
+		}
+
+		.StoneGalleryFilters {
+			grid-template-columns: minmax(180px, 1fr) minmax(98px, .5fr);
+		}
+
+		.StoneGalleryClearFilters {
+			display: none;
+		}
+
+		.StoneGalleryResultBar p {
+			max-width: 76%;
+		}
+
+		.StoneGalleryCardInfo {
+			display: block;
+			padding: 9px;
+		}
+
+		.StoneGalleryCardInfo > strong,
+		.StoneGalleryCardInfo > small {
+			display: block;
+		}
+
+		.StoneGalleryStock {
+			display: inline-flex;
+			margin-top: 5px;
+		}
+
+		.StoneGalleryDetails {
+			padding: 10px;
+		}
+
+		.StoneGalleryDetailFacts {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.StoneGalleryLightbox,
+		.StoneGalleryCompare,
+		.StoneGalleryQuote {
+			padding: 0;
+		}
+
+		.StoneGalleryLightboxPanel,
+		.StoneGalleryComparePanel,
+		.StoneGalleryQuotePanel {
+			width: 100%;
+			max-height: 100dvh;
+			min-height: 100dvh;
+			border-radius: 0;
+		}
+
+		.StoneGalleryInspectStage {
+			min-height: 53vh;
+		}
+
+		.StoneGalleryLightboxPanel > footer,
+		.StoneGalleryComparePanel > footer,
+		.StoneGalleryQuotePanel > footer {
+			align-items: stretch;
+			flex-wrap: wrap;
+		}
+
+		.StoneGalleryLightboxPanel > footer p,
+		.StoneGalleryQuotePanel > footer > div {
+			width: 100%;
+		}
+
+		.StoneGalleryLightboxPanel > footer > div,
+		.StoneGalleryComparePanel > footer {
+			width: 100%;
+		}
+
+		.StoneGalleryLightboxPanel > footer button,
+		.StoneGalleryComparePanel > footer button,
+		.StoneGalleryQuotePanel > footer button {
+			flex: 1 1 0;
+		}
+
+		.StoneGalleryChoiceRow,
+		.StoneGalleryLocationGrid,
+		.StoneGalleryQuoteInline {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.StoneGallery *,
+		.StoneGallery *::before,
+		.StoneGallery *::after {
+			scroll-behavior: auto;
+			transition-duration: .01ms;
+			animation-duration: .01ms;
+			animation-iteration-count: 1;
+		}
+	}
+
+	.StoneGallery .StoneGalleryVisuallyHidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		overflow: hidden;
+		border: 0;
+		clip: rect(0 0 0 0);
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	.StoneGallery [hidden][hidden] {
+		display: none;
+	}
+</style>
+
+<script is:inline>
+	(function () {
+		const cRoots = document.querySelectorAll("[data-stone-gallery='true']");
+		for (const cRoot of cRoots) RegisterStoneGallery(cRoot);
+		document.addEventListener("astro:page-load", () => {
+			const cPageRoots = document.querySelectorAll("[data-stone-gallery='true']");
+			for (const cRoot of cPageRoots) RegisterStoneGallery(cRoot);
+		});
+
+		function RegisterStoneGallery(pRoot) {
+			if (!pRoot || pRoot.dataset.galleryReady === "true") return;
+			pRoot.dataset.galleryReady = "true";
+
+			const cDataElement = pRoot.querySelector("[data-stone-gallery-data]");
+			let cItems = [];
+			try {
+				cItems = JSON.parse(cDataElement?.textContent || "[]");
+			} catch {
+				cItems = [];
+			}
+
+			const cItemMap = new Map(cItems.map((pItem) => [pItem.Id, pItem]));
+			const cCards = Array.from(pRoot.querySelectorAll("[data-stone-card]"));
+			const cStorageKey = pRoot.dataset.storageKey || "EmoStoneGalleryV1";
+			const cMaxCompare = Math.max(2, Number(pRoot.dataset.maxCompare) || 3);
+			const cFiltersForm = pRoot.querySelector("[data-filters-form]");
+			const cDetailsPanel = pRoot.querySelector("[data-details-panel]");
+			const cLightbox = pRoot.querySelector("[data-lightbox]");
+			const cCompareOverlay = pRoot.querySelector("[data-compare-overlay]");
+			const cQuoteOverlay = pRoot.querySelector("[data-quote-overlay]");
+			const cQuoteForm = pRoot.querySelector("[data-quote-form]");
+			const cGrid = pRoot.querySelector("[data-gallery-grid]");
+			const cEmpty = pRoot.querySelector("[data-gallery-empty]");
+			const cResultCount = pRoot.querySelector("[data-result-count]");
+			const cShortlistCount = pRoot.querySelector("[data-shortlist-count]");
+			const cCompareCount = pRoot.querySelector("[data-compare-count]");
+			const cShortlistButton = pRoot.querySelector("[data-action='open-shortlist']");
+			const cDetailImage = pRoot.querySelector("[data-detail-image]");
+			const cLightboxImage = pRoot.querySelector("[data-lightbox-image]");
+			const cInspectStage = pRoot.querySelector("[data-inspect-stage]");
+			const cLightboxFilm = pRoot.querySelector("[data-lightbox-film]");
+			const cPanelStatus = pRoot.querySelector("[data-panel-status]");
+			const cQuoteStatus = pRoot.querySelector("[data-quote-status]");
+			const cPersisted = LoadPersistedState();
+			let cSelectedId = "";
+			let cShortlist = ValidIds(cPersisted.shortlist);
+			let cCompare = ValidIds(cPersisted.compare).slice(0, cMaxCompare);
+			let cShortlistOnly = false;
+			let cLightboxIndex = 0;
+			let cZoom = 1;
+			let cLastFocused = null;
+			let cLastEstimate = null;
+			const cLive = MakeLiveRegion();
+
+			pRoot.addEventListener("click", HandleClick);
+			cFiltersForm?.addEventListener("input", ApplyFilters);
+			cFiltersForm?.addEventListener("change", ApplyFilters);
+			cFiltersForm?.addEventListener("reset", () => {
+				window.setTimeout(() => {
+					cShortlistOnly = false;
+					UpdateCollections();
+					ApplyFilters();
+				}, 0);
+			});
+			cQuoteForm?.addEventListener("input", UpdateEstimate);
+			cQuoteForm?.addEventListener("change", UpdateEstimate);
+			cQuoteForm?.addEventListener("submit", SubmitQuote);
+			document.addEventListener("keydown", HandleKeyDown);
+
+			UpdateCollections();
+			ApplyFilters();
+			RestoreSelection();
+
+			function HandleClick(pEvent) {
+				const cButton = pEvent.target.closest("button[data-action]");
+				if (!cButton || !pRoot.contains(cButton)) return;
+				const cAction = cButton.dataset.action || "";
+				const cStoneId = cButton.dataset.stoneId || cButton.closest("[data-stone-id]")?.dataset.stoneId || "";
+				pEvent.preventDefault();
+
+				if (cAction === "select-stone") SelectStone(cStoneId, true);
+				else if (cAction === "toggle-shortlist") ToggleShortlist(cStoneId);
+				else if (cAction === "open-shortlist") ToggleShortlistView();
+				else if (cAction === "open-compare") OpenCompare();
+				else if (cAction === "clear-filters") ClearFilters();
+				else if (cAction === "close-details") CloseDetails();
+				else if (cAction === "inspect-stone") OpenLightbox();
+				else if (cAction === "toggle-compare") ToggleCompare(cSelectedId);
+				else if (cAction === "share-stone") ShareStone();
+				else if (cAction === "close-lightbox") CloseOverlay(cLightbox);
+				else if (cAction === "lightbox-prev") StepLightbox(-1);
+				else if (cAction === "lightbox-next") StepLightbox(1);
+				else if (cAction === "show-lightbox-image") SetLightboxImage(Number(cButton.dataset.imageIndex));
+				else if (cAction === "zoom-out") SetZoom(cZoom - .25);
+				else if (cAction === "zoom-reset") SetZoom(1);
+				else if (cAction === "zoom-in") SetZoom(cZoom + .25);
+				else if (cAction === "fullscreen") ToggleFullscreen();
+				else if (cAction === "close-compare") CloseOverlay(cCompareOverlay);
+				else if (cAction === "remove-compare") RemoveCompare(cButton.closest("[data-compare-slot]")?.dataset.stoneId || "");
+				else if (cAction === "choose-compare") ChooseComparedStone(cButton.closest("[data-compare-slot]")?.dataset.stoneId || "");
+				else if (cAction === "share-comparison") ShareComparison();
+				else if (cAction === "open-quote") OpenQuote();
+				else if (cAction === "close-quote") CloseOverlay(cQuoteOverlay);
+			}
+
+			function RestoreSelection() {
+				const cUrl = new URL(window.location.href);
+				const cUrlId = cUrl.searchParams.get("stone") || "";
+				if (cItemMap.has(cUrlId)) {
+					SelectStone(cUrlId, false);
+					return;
+				}
+				if (pRoot.dataset.selectFirst === "true" && cItems[0]) SelectStone(cItems[0].Id, false);
+			}
+
+			function SelectStone(pStoneId, pAllowReselect) {
+				const cItem = cItemMap.get(pStoneId);
+				if (!cItem) return;
+
+				if (cSelectedId === pStoneId && pAllowReselect) {
+					Emit("emo-stone-gallery-reselect", { stone: cItem, stoneId: pStoneId });
+					OpenLightbox();
+					return;
+				}
+
+				cSelectedId = pStoneId;
+				pRoot.classList.add("HasSelection");
+				if (cDetailsPanel) cDetailsPanel.hidden = false;
+				for (const cCard of cCards) {
+					const cSelected = cCard.dataset.stoneId === pStoneId;
+					cCard.classList.toggle("IsSelected", cSelected);
+					const cSelectButton = cCard.querySelector("[data-action='select-stone']");
+					cSelectButton?.setAttribute("aria-pressed", cSelected ? "true" : "false");
+				}
+
+				FillDetails(cItem);
+				UpdateSelectedUrl(pStoneId);
+				Emit("emo-stone-gallery-select", { stone: cItem, stoneId: pStoneId });
+
+				if (pAllowReselect && window.matchMedia("(max-width: 920px)").matches) {
+					cDetailsPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
+				}
+			}
+
+			function FillDetails(pItem) {
+				SetImage(cDetailImage, pItem.PrimaryImage, pItem.Alt);
+				SetText("[data-detail-name]", pItem.Name);
+				SetText("[data-detail-type]", pItem.Type);
+				SetText("[data-detail-country]", pItem.Country);
+				SetText("[data-detail-description]", pItem.Description || "افحص صور اللوح والاستخدامات قبل اعتماد الخامة النهائية.");
+				SetText("[data-detail-color]", pItem.Color || "غير محدد");
+				SetText("[data-detail-pattern]", pItem.Pattern || "غير محدد");
+				SetText("[data-detail-uses]", JoinList(pItem.Uses));
+				SetText("[data-detail-finishes]", JoinList(pItem.Finishes));
+				SetText("[data-detail-available]", pItem.Available ? "متوفر الآن" : "حسب الطلب");
+				SetText("[data-detail-price]", FormatStonePrice(pItem));
+				SetPanelStatus("");
+				UpdateCompareButtons();
+			}
+
+			function CloseDetails() {
+				cSelectedId = "";
+				pRoot.classList.remove("HasSelection");
+				if (cDetailsPanel) cDetailsPanel.hidden = true;
+				for (const cCard of cCards) {
+					cCard.classList.remove("IsSelected");
+					cCard.querySelector("[data-action='select-stone']")?.setAttribute("aria-pressed", "false");
+				}
+				UpdateSelectedUrl("");
+			}
+
+			function ApplyFilters() {
+				const cSearch = NormalizeSearch(cFiltersForm?.querySelector("[data-filter-search]")?.value || "");
+				const cType = cFiltersForm?.querySelector("[data-filter-type]")?.value || "";
+				const cColor = cFiltersForm?.querySelector("[data-filter-color]")?.value || "";
+				const cUse = cFiltersForm?.querySelector("[data-filter-use]")?.value || "";
+				const cCountry = cFiltersForm?.querySelector("[data-filter-country]")?.value || "";
+				const cPrice = cFiltersForm?.querySelector("[data-filter-price]")?.value || "";
+				const cAvailableOnly = Boolean(cFiltersForm?.querySelector("[data-filter-available]")?.checked);
+				let cVisibleCount = 0;
+
+				for (const cCard of cCards) {
+					const cItem = cItemMap.get(cCard.dataset.stoneId || "");
+					if (!cItem) continue;
+					const cVisible = (!cSearch || NormalizeSearch(cItem.SearchText).includes(cSearch))
+						&& (!cType || cItem.Type === cType)
+						&& (!cColor || cItem.Color === cColor)
+						&& (!cUse || cItem.Uses.includes(cUse))
+						&& (!cCountry || cItem.Country === cCountry)
+						&& (!cPrice || cItem.PriceLevel === cPrice)
+						&& (!cAvailableOnly || cItem.Available)
+						&& (!cShortlistOnly || cShortlist.includes(cItem.Id));
+					cCard.hidden = !cVisible;
+					if (cVisible) cVisibleCount += 1;
+				}
+
+				if (cResultCount) cResultCount.textContent = String(cVisibleCount);
+				if (cGrid) cGrid.hidden = cVisibleCount === 0;
+				if (cEmpty) cEmpty.hidden = cVisibleCount !== 0;
+			}
+
+			function ClearFilters() {
+				cShortlistOnly = false;
+				cFiltersForm?.reset();
+				UpdateCollections();
+				window.setTimeout(ApplyFilters, 0);
+			}
+
+			function ToggleShortlist(pStoneId) {
+				const cItem = cItemMap.get(pStoneId);
+				if (!cItem) return;
+				const cWasSaved = cShortlist.includes(pStoneId);
+				cShortlist = cWasSaved ? cShortlist.filter((pId) => pId !== pStoneId) : [...cShortlist, pStoneId];
+				SavePersistedState();
+				UpdateCollections();
+				if (cShortlistOnly) ApplyFilters();
+				Announce(cWasSaved ? `تم حذف ${cItem.Name} من المحفوظة.` : `تم حفظ ${cItem.Name} للرجوع إليها.`);
+				Emit("emo-stone-gallery-shortlist", { stone: cItem, stoneId: pStoneId, saved: !cWasSaved, shortlist: [...cShortlist] });
+			}
+
+			function ToggleShortlistView() {
+				if (cShortlist.length === 0 && !cShortlistOnly) {
+					Announce("لم تحفظ أي خامة بعد. استخدم علامة القلب فوق الصورة.");
+					return;
+				}
+				cShortlistOnly = !cShortlistOnly;
+				UpdateCollections();
+				ApplyFilters();
+				Announce(cShortlistOnly ? `نعرض ${cShortlist.length} خامة محفوظة فقط.` : "نعرض كل الخامات مرة أخرى.");
+			}
+
+			function ToggleCompare(pStoneId) {
+				const cItem = cItemMap.get(pStoneId);
+				if (!cItem) return;
+				const cAlreadyAdded = cCompare.includes(pStoneId);
+				if (!cAlreadyAdded && cCompare.length >= cMaxCompare) {
+					SetPanelStatus(`المقارنة تستوعب ${cMaxCompare} خامات. احذف خامة ثم أضف ${cItem.Name}.`);
+					Announce(`وصلت للحد الأقصى: ${cMaxCompare} خامات.`);
+					return;
+				}
+
+				cCompare = cAlreadyAdded ? cCompare.filter((pId) => pId !== pStoneId) : [...cCompare, pStoneId];
+				SavePersistedState();
+				UpdateCollections();
+				RenderComparison();
+				SetPanelStatus(cAlreadyAdded ? "تم حذف الخامة من المقارنة." : `تمت إضافة الخامة للمقارنة (${cCompare.length}/${cMaxCompare}).`);
+				Emit("emo-stone-gallery-compare", { stone: cItem, stoneId: pStoneId, added: !cAlreadyAdded, comparison: [...cCompare] });
+			}
+
+			function RemoveCompare(pStoneId) {
+				if (!pStoneId) return;
+				cCompare = cCompare.filter((pId) => pId !== pStoneId);
+				SavePersistedState();
+				UpdateCollections();
+				RenderComparison();
+			}
+
+			function OpenCompare() {
+				RenderComparison();
+				OpenOverlay(cCompareOverlay);
+				Emit("emo-stone-gallery-compare-open", { comparison: cCompare.map((pId) => cItemMap.get(pId)).filter(Boolean) });
+			}
+
+			function RenderComparison() {
+				const cSlots = Array.from(pRoot.querySelectorAll("[data-compare-slot]"));
+				for (let cIndex = 0; cIndex < cSlots.length; cIndex += 1) {
+					const cSlot = cSlots[cIndex];
+					const cItem = cItemMap.get(cCompare[cIndex]);
+					cSlot.hidden = !cItem;
+					cSlot.dataset.stoneId = cItem?.Id || "";
+					if (!cItem) continue;
+					SetImage(cSlot.querySelector("[data-compare-image]"), cItem.PrimaryImage, cItem.Alt);
+					SetSlotText(cSlot, "[data-compare-name]", cItem.Name);
+					SetSlotText(cSlot, "[data-compare-kind]", [cItem.Type, cItem.Country].filter(Boolean).join(" · "));
+					SetSlotText(cSlot, "[data-compare-color]", cItem.Color);
+					SetSlotText(cSlot, "[data-compare-pattern]", cItem.Pattern);
+					SetSlotText(cSlot, "[data-compare-uses]", JoinList(cItem.Uses));
+					SetSlotText(cSlot, "[data-compare-finishes]", JoinList(cItem.Finishes));
+					SetSlotText(cSlot, "[data-compare-available]", cItem.Available ? "متوفر" : "حسب الطلب");
+					SetSlotText(cSlot, "[data-compare-price]", FormatStonePrice(cItem));
+				}
+
+				const cEmptySlot = pRoot.querySelector("[data-compare-empty]");
+				if (cEmptySlot) cEmptySlot.hidden = cCompare.length >= cMaxCompare;
+			}
+
+			function ChooseComparedStone(pStoneId) {
+				if (!pStoneId) return;
+				CloseOverlay(cCompareOverlay, false);
+				SelectStone(pStoneId, false);
+				pRoot.querySelector(`[data-stone-card][data-stone-id="${EscapeSelector(pStoneId)}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+			}
+
+			function UpdateCollections() {
+				if (cShortlistCount) cShortlistCount.textContent = String(cShortlist.length);
+				if (cCompareCount) cCompareCount.textContent = String(cCompare.length);
+				cShortlistButton?.classList.toggle("IsActive", cShortlistOnly);
+				cShortlistButton?.setAttribute("aria-pressed", cShortlistOnly ? "true" : "false");
+				for (const cButton of pRoot.querySelectorAll("[data-action='toggle-shortlist']")) {
+					const cSaved = cShortlist.includes(cButton.dataset.stoneId || "");
+					cButton.classList.toggle("IsSaved", cSaved);
+					cButton.setAttribute("aria-pressed", cSaved ? "true" : "false");
+				}
+				UpdateCompareButtons();
+			}
+
+			function UpdateCompareButtons() {
+				const cCompared = Boolean(cSelectedId && cCompare.includes(cSelectedId));
+				for (const cButton of pRoot.querySelectorAll("[data-action='toggle-compare']")) {
+					cButton.classList.toggle("IsActive", cCompared);
+					cButton.setAttribute("aria-pressed", cCompared ? "true" : "false");
+					if (cButton.querySelector("[data-compare-action-text]")) {
+						cButton.querySelector("[data-compare-action-text]").textContent = cCompared ? "احذف من المقارنة" : "أضف للمقارنة";
+					} else if (!cButton.closest("[data-compare-overlay]")) {
+						cButton.textContent = cCompared ? "احذف من المقارنة" : "أضف للمقارنة";
+					}
+				}
+			}
+
+			function OpenLightbox() {
+				const cItem = cItemMap.get(cSelectedId);
+				if (!cItem || !cLightbox) return;
+				cLightboxIndex = 0;
+				SetText("[data-lightbox-name]", cItem.Name);
+				BuildFilm(cItem);
+				SetLightboxImage(0);
+				OpenOverlay(cLightbox);
+				Emit("emo-stone-gallery-inspect", { stone: cItem, stoneId: cItem.Id, images: cItem.Images.length });
+			}
+
+			function BuildFilm(pItem) {
+				if (!cLightboxFilm) return;
+				cLightboxFilm.replaceChildren();
+				for (let cIndex = 0; cIndex < pItem.Images.length; cIndex += 1) {
+					const cImage = pItem.Images[cIndex];
+					const cButton = document.createElement("button");
+					cButton.type = "button";
+					cButton.dataset.action = "show-lightbox-image";
+					cButton.dataset.imageIndex = String(cIndex);
+					cButton.setAttribute("aria-label", `عرض ${cImage.Label}`);
+					const cImg = document.createElement("img");
+					cImg.src = cImage.Src;
+					cImg.alt = cImage.Alt;
+					cImg.loading = "lazy";
+					const cLabel = document.createElement("small");
+					cLabel.textContent = cImage.Label;
+					cButton.append(cImg, cLabel);
+					cLightboxFilm.append(cButton);
+				}
+			}
+
+			function SetLightboxImage(pIndex) {
+				const cItem = cItemMap.get(cSelectedId);
+				if (!cItem || cItem.Images.length === 0) return;
+				cLightboxIndex = (Number(pIndex) + cItem.Images.length) % cItem.Images.length;
+				const cImage = cItem.Images[cLightboxIndex];
+				SetImage(cLightboxImage, cImage.Src, cImage.Alt);
+				SetZoom(1);
+				const cFilmButtons = Array.from(cLightboxFilm?.querySelectorAll("button") || []);
+				for (let cIndex = 0; cIndex < cFilmButtons.length; cIndex += 1) {
+					cFilmButtons[cIndex].classList.toggle("IsActive", cIndex === cLightboxIndex);
+					cFilmButtons[cIndex].setAttribute("aria-current", cIndex === cLightboxIndex ? "true" : "false");
+				}
+				const cNavButtons = pRoot.querySelectorAll("[data-action='lightbox-prev'], [data-action='lightbox-next']");
+				for (const cButton of cNavButtons) cButton.hidden = cItem.Images.length < 2;
+			}
+
+			function StepLightbox(pStep) {
+				SetLightboxImage(cLightboxIndex + pStep);
+			}
+
+			function SetZoom(pValue) {
+				cZoom = Math.max(.5, Math.min(3, Math.round(Number(pValue) * 100) / 100));
+				cInspectStage?.style.setProperty("--StoneGalleryZoom", String(cZoom));
+				const cResetButton = pRoot.querySelector("[data-action='zoom-reset']");
+				if (cResetButton) cResetButton.textContent = `${Math.round(cZoom * 100)}%`;
+			}
+
+			async function ToggleFullscreen() {
+				try {
+					if (document.fullscreenElement) await document.exitFullscreen();
+					else await cInspectStage?.requestFullscreen?.();
+				} catch {
+					Announce("ملء الشاشة غير متاح في هذا المتصفح.");
+				}
+			}
+
+			function OpenQuote() {
+				if (pRoot.dataset.enableQuote !== "true" || !cQuoteOverlay) return;
+				const cOpenedFromOverlay = Boolean((cLightbox && !cLightbox.hidden) || (cCompareOverlay && !cCompareOverlay.hidden));
+				if (!cSelectedId && cCompare[0]) SelectStone(cCompare[0], false);
+				const cItem = cItemMap.get(cSelectedId);
+				if (!cItem) {
+					Announce("اختر خامة أولًا حتى نحسب التقدير المبدئي.");
+					return;
+				}
+
+				SetImage(pRoot.querySelector("[data-quote-image]"), cItem.PrimaryImage, cItem.Alt);
+				SetText("[data-quote-name]", cItem.Name);
+				SetText("[data-quote-kind]", [cItem.Type, cItem.Country].filter(Boolean).join(" · "));
+				SetQuoteUse(cItem);
+				SetQuoteStatus("");
+				UpdateEstimate();
+				CloseOverlay(cLightbox, false);
+				CloseOverlay(cCompareOverlay, false);
+				OpenOverlay(cQuoteOverlay, cOpenedFromOverlay);
+				Emit("emo-stone-gallery-quote-open", { stone: cItem, stoneId: cItem.Id, comparison: [...cCompare] });
+			}
+
+			function SetQuoteUse(pItem) {
+				const cInputs = Array.from(cQuoteForm?.querySelectorAll("[data-quote-uses] input") || []);
+				const cPreferred = cInputs.find((pInput) => pItem.Uses.includes(pInput.value)) || cInputs[0];
+				if (cPreferred) cPreferred.checked = true;
+			}
+
+			function UpdateEstimate() {
+				const cItem = cItemMap.get(cSelectedId);
+				if (!cQuoteForm || !cItem) return;
+				const cData = new FormData(cQuoteForm);
+				const cArea = Math.max(0, Number(cData.get("area")) || 0);
+				const cUse = String(cData.get(`${pRoot.id}-use`) || "أرضيات");
+				const cService = String(cData.get("service") || "supply-install");
+				const cLocationName = Array.from(cQuoteForm.querySelectorAll(".StoneGalleryLocationGrid input")).find((pInput) => pInput.checked)?.name || "";
+				const cLocation = String(cLocationName ? cData.get(cLocationName) || "" : "");
+				const cUseFactor = cUse === "سلالم" ? 1.28 : cUse === "حوائط" ? 1.12 : cUse === "أخرى" ? 1.16 : 1;
+				const cServiceFactor = cService === "supply-install" ? 1.22 : cService === "supply" ? 1 : 0;
+				const cLocationFactor = cLocation === "other-egypt" ? 1.06 : cLocation === "remote-egypt" ? 1.03 : cLocation === "outside-egypt" ? 1.15 : 1;
+				const cHasPrice = cItem.PriceFrom > 0;
+				let cFrom = 0;
+				let cTo = 0;
+				if (cHasPrice && cArea > 0 && cServiceFactor > 0) {
+					cFrom = cItem.PriceFrom * cArea * cUseFactor * cServiceFactor * cLocationFactor;
+					cTo = (cItem.PriceTo || cItem.PriceFrom * 1.28) * cArea * cUseFactor * cServiceFactor * cLocationFactor;
+				}
+				const cAccuracy = Math.min(92, 25 + (cArea > 0 ? 24 : 0) + (cUse ? 10 : 0) + (cService ? 10 : 0) + (cLocation ? 10 : 0) + (cHasPrice ? 13 : 0));
+				const cValue = pRoot.querySelector("[data-estimate-value]");
+				const cNote = pRoot.querySelector("[data-estimate-note]");
+				if (cService === "selection") {
+					if (cValue) cValue.textContent = "خدمة المعاينة تُسعّر حسب الموقع";
+					if (cNote) cNote.textContent = "سنراجع مكان المشروع وطريقة عرض العينات قبل تحديد تكلفة الخدمة.";
+				} else if (!cHasPrice) {
+					if (cValue) cValue.textContent = "السعر يحتاج مراجعة الدفعة الحالية";
+					if (cNote) cNote.textContent = "تم حفظ المساحة والاستخدام؛ يُستكمل السعر بعد مراجعة اللوح والتوفر.";
+				} else if (cArea <= 0) {
+					if (cValue) cValue.textContent = "أدخل المساحة لحساب النطاق";
+					if (cNote) cNote.textContent = "يمكنك إدخال مساحة تقريبية الآن وتصحيحها عند القياس النهائي.";
+				} else {
+					if (cValue) cValue.textContent = `${FormatMoney(cFrom)} – ${FormatMoney(cTo)} ${cItem.Currency}`;
+					if (cNote) cNote.textContent = "نطاق استدلالي وليس عرض سعر نهائيًا؛ لا يشمل الأعمال غير الظاهرة أو القياسات الخاصة.";
+				}
+				SetText("[data-estimate-accuracy]", `${cAccuracy}%`);
+				const cProgress = pRoot.querySelector("[data-estimate-progress]");
+				if (cProgress) cProgress.value = cAccuracy;
+				cLastEstimate = { area: cArea, use: cUse, service: cService, location: cLocation, priceFrom: Math.round(cFrom), priceTo: Math.round(cTo), currency: cItem.Currency, accuracy: cAccuracy };
+			}
+
+			function SubmitQuote(pEvent) {
+				pEvent.preventDefault();
+				const cItem = cItemMap.get(cSelectedId);
+				if (!cItem || !cLastEstimate) {
+					SetQuoteStatus("اختر خامة وأدخل بيانات المشروع أولًا.", "error");
+					return;
+				}
+				const cDetail = {
+					version: 1,
+					stone: cItem,
+					stoneId: cItem.Id,
+					comparison: cCompare.map((pId) => cItemMap.get(pId)).filter(Boolean),
+					estimate: { ...cLastEstimate },
+					requestBuilderId: pRoot.dataset.requestBuilderId || "",
+					pageUrl: window.location.href,
+					createdAt: new Date().toISOString(),
+				};
+
+				try {
+					localStorage.setItem(`${cStorageKey}:quote`, JSON.stringify(cDetail));
+				} catch {
+					// يظل الحدث المباشر متاحًا حتى إذا منع المتصفح التخزين المحلي.
+				}
+
+				document.dispatchEvent(new CustomEvent("emo-stone-request-prefill", { detail: cDetail }));
+				Emit("emo-stone-gallery-quote-submit", cDetail);
+				const cBuilderSelector = cDetail.requestBuilderId
+					? `#${EscapeSelector(cDetail.requestBuilderId)}[data-stone-request-builder='true']`
+					: "[data-stone-request-builder='true']";
+				const cBuilder = document.querySelector(cBuilderSelector);
+				const cRequestHref = pRoot.dataset.requestHref || "";
+
+				if (cBuilder) {
+					SetQuoteStatus("تم نقل الخامة والتقدير إلى طلبك. أكمل المقاسات أو بيانات التواصل عندما تكون جاهزًا.", "success");
+					window.setTimeout(() => {
+						CloseOverlay(cQuoteOverlay, false);
+						cBuilder.scrollIntoView({ behavior: "smooth", block: "start" });
+					}, 650);
+				} else if (cRequestHref) {
+					SetQuoteStatus("تم حفظ الاختيار. جارٍ الانتقال لاستكمال الطلب…", "success");
+					window.setTimeout(() => window.location.assign(cRequestHref), 450);
+				} else {
+					SetQuoteStatus("تم حفظ الاختيار والتقدير على هذا الجهاز. أضف StoneRequestBuilder للصفحة لنقل البيانات إليه مباشرة.", "success");
+				}
+			}
+
+			async function ShareStone() {
+				const cItem = cItemMap.get(cSelectedId);
+				if (!cItem || pRoot.dataset.allowShare !== "true") return;
+				const cUrl = BuildShareUrl([cItem.Id]);
+				await Share({ title: cItem.Name, text: `شاهد خامة ${cItem.Name} وقارنها لمشروعك.`, url: cUrl });
+				Emit("emo-stone-gallery-share", { stone: cItem, stoneId: cItem.Id, url: cUrl });
+			}
+
+			async function ShareComparison() {
+				if (cCompare.length === 0) {
+					Announce("أضف خامة واحدة على الأقل قبل مشاركة المقارنة.");
+					return;
+				}
+				const cNames = cCompare.map((pId) => cItemMap.get(pId)?.Name).filter(Boolean).join("، ");
+				const cUrl = BuildShareUrl(cCompare);
+				await Share({ title: "مقارنة خامات الحجر", text: `مقارنة بين: ${cNames}`, url: cUrl });
+				Emit("emo-stone-gallery-share-comparison", { comparison: [...cCompare], url: cUrl });
+			}
+
+			async function Share(pData) {
+				try {
+					if (navigator.share) await navigator.share(pData);
+					else if (navigator.clipboard?.writeText) {
+						await navigator.clipboard.writeText(pData.url);
+						Announce("تم نسخ رابط المشاركة.");
+					} else {
+						const cInput = document.createElement("input");
+						cInput.value = pData.url;
+						document.body.append(cInput);
+						cInput.select();
+						document.execCommand("copy");
+						cInput.remove();
+						Announce("تم نسخ رابط المشاركة.");
+					}
+				} catch (pError) {
+					if (pError?.name !== "AbortError") Announce("تعذرت المشاركة الآن؛ جرّب مرة أخرى.");
+				}
+			}
+
+			function BuildShareUrl(pIds) {
+				const cUrl = new URL(window.location.href);
+				if (pIds[0]) cUrl.searchParams.set("stone", pIds[0]);
+				if (pIds.length > 1) cUrl.searchParams.set("stones", pIds.join(","));
+				else cUrl.searchParams.delete("stones");
+				return cUrl.toString();
+			}
+
+			function OpenOverlay(pOverlay, pPreserveLastFocus = false) {
+				if (!pOverlay || !pOverlay.hidden) return;
+				if (!pPreserveLastFocus) cLastFocused = document.activeElement;
+				pOverlay.hidden = false;
+				pOverlay.setAttribute("aria-hidden", "false");
+				document.documentElement.classList.add("StoneGalleryNoScroll");
+				window.setTimeout(() => pOverlay.querySelector("header button[data-action]")?.focus(), 0);
+			}
+
+			function CloseOverlay(pOverlay, pRestoreFocus = true) {
+				if (!pOverlay || pOverlay.hidden) return;
+				pOverlay.hidden = true;
+				pOverlay.setAttribute("aria-hidden", "true");
+				if (![cLightbox, cCompareOverlay, cQuoteOverlay].some((pItem) => pItem && !pItem.hidden)) {
+					document.documentElement.classList.remove("StoneGalleryNoScroll");
+				}
+				if (pRestoreFocus && cLastFocused?.focus) cLastFocused.focus();
+			}
+
+			function HandleKeyDown(pEvent) {
+				const cOpenOverlay = [cQuoteOverlay, cCompareOverlay, cLightbox].find((pItem) => pItem && !pItem.hidden);
+				if (!cOpenOverlay) return;
+				if (pEvent.key === "Escape") {
+					pEvent.preventDefault();
+					CloseOverlay(cOpenOverlay);
+					return;
+				}
+				if (pEvent.key === "Tab") {
+					const cFocusable = Array.from(cOpenOverlay.querySelectorAll("button:not([hidden]):not([disabled]), input:not([hidden]):not([disabled]), select:not([hidden]):not([disabled]), [href], [tabindex]:not([tabindex='-1'])"))
+						.filter((pElement) => pElement.getClientRects().length > 0);
+					if (cFocusable.length === 0) return;
+					const cFirst = cFocusable[0];
+					const cLast = cFocusable[cFocusable.length - 1];
+					if (pEvent.shiftKey && document.activeElement === cFirst) {
+						pEvent.preventDefault();
+						cLast.focus();
+					} else if (!pEvent.shiftKey && document.activeElement === cLast) {
+						pEvent.preventDefault();
+						cFirst.focus();
+					}
+					return;
+				}
+				if (cOpenOverlay !== cLightbox) return;
+				if (pEvent.key === "ArrowRight") StepLightbox(-1);
+				else if (pEvent.key === "ArrowLeft") StepLightbox(1);
+				else return;
+				pEvent.preventDefault();
+			}
+
+			function LoadPersistedState() {
+				try {
+					const cValue = JSON.parse(localStorage.getItem(cStorageKey) || "{}");
+					return cValue && typeof cValue === "object" ? cValue : {};
+				} catch {
+					return {};
+				}
+			}
+
+			function SavePersistedState() {
+				try {
+					localStorage.setItem(cStorageKey, JSON.stringify({ version: 1, shortlist: cShortlist, compare: cCompare }));
+				} catch {
+					// الودجت يعمل في الجلسة الحالية حتى إذا منع المتصفح التخزين المحلي.
+				}
+			}
+
+			function ValidIds(pIds) {
+				return Array.isArray(pIds) ? [...new Set(pIds.map(String).filter((pId) => cItemMap.has(pId)))] : [];
+			}
+
+			function UpdateSelectedUrl(pStoneId) {
+				try {
+					const cUrl = new URL(window.location.href);
+					if (pStoneId) cUrl.searchParams.set("stone", pStoneId);
+					else cUrl.searchParams.delete("stone");
+					history.replaceState(history.state, "", cUrl);
+				} catch {
+					// لا يمنع فشل الرابط تجربة الاختيار نفسها.
+				}
+			}
+
+			function FormatStonePrice(pItem) {
+				if (!(pItem.PriceFrom > 0)) return pItem.PriceLevel && pItem.PriceLevel !== "غير محدد" ? pItem.PriceLevel : "يُراجع حسب الدفعة";
+				if (pItem.PriceTo > pItem.PriceFrom) return `${FormatMoney(pItem.PriceFrom)} – ${FormatMoney(pItem.PriceTo)} ${pItem.Currency}/م²`;
+				return `يبدأ من ${FormatMoney(pItem.PriceFrom)} ${pItem.Currency}/م²`;
+			}
+
+			function FormatMoney(pValue) {
+				return new Intl.NumberFormat("ar-EG", { maximumFractionDigits: 0 }).format(Math.round(Number(pValue) || 0));
+			}
+
+			function JoinList(pItems) {
+				return Array.isArray(pItems) && pItems.length ? pItems.join("، ") : "غير محدد";
+			}
+
+			function NormalizeSearch(pValue) {
+				return String(pValue || "").trim().toLocaleLowerCase("ar").replace(/[أإآ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه");
+			}
+
+			function SetText(pSelector, pValue) {
+				const cElement = pRoot.querySelector(pSelector);
+				if (cElement) cElement.textContent = String(pValue ?? "");
+			}
+
+			function SetSlotText(pSlot, pSelector, pValue) {
+				const cElement = pSlot.querySelector(pSelector);
+				if (cElement) cElement.textContent = String(pValue ?? "");
+			}
+
+			function SetImage(pElement, pSrc, pAlt) {
+				if (!pElement) return;
+				pElement.src = String(pSrc || "");
+				pElement.alt = String(pAlt || "");
+			}
+
+			function SetPanelStatus(pValue) {
+				if (cPanelStatus) cPanelStatus.textContent = pValue;
+			}
+
+			function SetQuoteStatus(pValue, pMode = "") {
+				if (!cQuoteStatus) return;
+				cQuoteStatus.textContent = pValue;
+				cQuoteStatus.dataset.mode = pMode;
+			}
+
+			function MakeLiveRegion() {
+				const cElement = document.createElement("p");
+				cElement.className = "StoneGalleryVisuallyHidden";
+				cElement.setAttribute("role", "status");
+				cElement.setAttribute("aria-live", "polite");
+				pRoot.append(cElement);
+				return cElement;
+			}
+
+			function Announce(pValue) {
+				cLive.textContent = "";
+				window.setTimeout(() => { cLive.textContent = pValue; }, 15);
+			}
+
+			function EscapeSelector(pValue) {
+				if (window.CSS?.escape) return window.CSS.escape(String(pValue));
+				return String(pValue).replace(/["\\]/g, "\\$&");
+			}
+
+			function Emit(pName, pDetail) {
+				pRoot.dispatchEvent(new CustomEvent(pName, { bubbles: true, detail: { galleryId: pRoot.id, ...pDetail } }));
+			}
+		}
+	})();
+</script>

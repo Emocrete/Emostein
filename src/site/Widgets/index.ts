@@ -140,3 +140,5 @@ export { default as StoneProductStrip } from "./Stone/StoneProductStrip.astro";
 export { default as StonePricingCalc } from "./Calc/StonePricingCalc.astro";
 
 
+
+export { default as FinishCostGame } from "./Calc/FinishCostGame.astro";

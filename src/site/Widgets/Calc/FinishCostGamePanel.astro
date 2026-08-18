@@ -1,0 +1,526 @@
+---
+import type { FinishCostItem, FinishCostQuestion } from "./FinishCostGame.types";
+
+interface Props {
+	pItem: FinishCostItem;
+	pActive?: boolean;
+}
+
+const {
+	pItem,
+	pActive = false,
+} = Astro.props as Props;
+
+function GetInputId(pItemId: string, pStageIndex: number, pQuestion: FinishCostQuestion) {
+	return `${pItemId}-${pStageIndex}-${pQuestion.Key}`;
+}
+---
+
+<section
+	class="FinishCostGamePanel"
+	data-cost-panel={pItem.Id}
+	data-base-rate={pItem.BaseRate}
+	data-active-stage="0"
+	style={`--CostPanelAccent:${pItem.Accent};`}
+	hidden={!pActive}
+>
+	<header class="CostPanelHead">
+		<div class="CostPanelTitle">
+			<p>{pItem.Kicker}</p>
+			<h3>{pItem.Title}</h3>
+		</div>
+
+		<div class="CostPanelAccuracy" data-cost-item-gauge="true" style="--CostItemAccuracy:0deg;">
+			<strong data-cost-item-accuracy="true">0%</strong>
+			<span>دقة البند</span>
+		</div>
+	</header>
+
+	<ol class="CostStageRail" aria-label={`مراحل دقة ${pItem.Title}`}>
+		{pItem.Stages.map((pStage, pStageIndex) => (
+			<li class:list={["CostStageNode", pStageIndex === 0 ? "IsActive" : ""]} data-stage-node={pStageIndex}>
+				<button type="button" data-stage-jump={pStageIndex}>
+					<span>{pStageIndex + 1}</span>
+					<strong>{pStage.Title}</strong>
+					<small>{pStage.Accuracy}%</small>
+				</button>
+			</li>
+		))}
+	</ol>
+
+	{pItem.Stages.map((pStage, pStageIndex) => (
+		<fieldset class="CostStage" data-cost-stage={pStageIndex} hidden={pStageIndex !== 0}>
+			<legend>
+				<span>المستوى {pStageIndex + 1}</span>
+				<strong>{pStage.Title}</strong>
+				<em>يرفع دقة البند إلى {pStage.Accuracy}%</em>
+			</legend>
+
+			<p class="CostStageDesc">{pStage.Desc}</p>
+
+			<div class="CostQuestionGrid">
+				{pStage.Questions.map((pQuestion) => {
+					const cId = GetInputId(pItem.Id, pStageIndex, pQuestion);
+					return (
+						<div class="CostQuestion">
+							<span class="CostQuestionTitle">{pQuestion.Label}</span>
+							{pQuestion.Hint && <small>{pQuestion.Hint}</small>}
+
+							{pQuestion.Kind === "number" ? (
+								<span class="CostInputUnit">
+									<input
+										id={cId}
+										name={pQuestion.Key}
+										type="number"
+										min={pQuestion.Min}
+										max={pQuestion.Max}
+										step={pQuestion.Step ?? 1}
+										inputmode="decimal"
+										data-cost-field="true"
+										data-kind="number"
+										data-baseline={pQuestion.Baseline ?? 0}
+										data-factor-per-unit={pQuestion.FactorPerUnit ?? 0}
+										data-fixed-per-unit={pQuestion.FixedPerUnit ?? 0}
+									/>
+									{pQuestion.Unit && <b>{pQuestion.Unit}</b>}
+								</span>
+							) : pQuestion.Kind === "select" ? (
+								<select id={cId} name={pQuestion.Key} data-cost-field="true" data-kind="select">
+									<option value="">اختر…</option>
+									{pQuestion.Options?.map((pOption) => (
+										<option value={pOption.Value} data-factor={pOption.Factor ?? 1} data-fixed={pOption.Fixed ?? 0}>{pOption.Label}</option>
+									))}
+								</select>
+							) : (
+								<span class="CostChoiceGroup" id={cId}>
+									{pQuestion.Options?.map((pOption, pOptionIndex) => (
+										<label class="CostChoice">
+											<input
+												type="radio"
+												name={`${pItem.Id}-${pStageIndex}-${pQuestion.Key}`}
+												value={pOption.Value}
+												data-cost-field="true"
+												data-kind="choice"
+												data-factor={pOption.Factor ?? 1}
+												data-fixed={pOption.Fixed ?? 0}
+												id={`${cId}-${pOptionIndex}`}
+											/>
+											<span>{pOption.Label}</span>
+										</label>
+									))}
+								</span>
+							)}
+						</div>
+					);
+				})}
+			</div>
+		</fieldset>
+	))}
+
+	<footer class="CostPanelFoot">
+		<div class="CostPanelEstimate">
+			<span>تقدير البند حاليًا</span>
+			<strong data-cost-item-range="true">—</strong>
+			<small data-cost-item-mid="true">أجب عن المستوى الأول لبدء الحساب</small>
+		</div>
+
+		<div class="CostPanelActions">
+			<button type="button" class="Secondary" data-action="accept-item">كفاية كده وانتقل للبند التالي</button>
+			<button type="button" class="Primary" data-action="next-stage">زود الدقة</button>
+		</div>
+	</footer>
+</section>
+
+<style>
+	.FinishCostGamePanel {
+		display: grid;
+		gap: 18px;
+		padding: 24px;
+		background: #fff;
+		box-sizing: border-box;
+	}
+
+	.FinishCostGamePanel[hidden] {
+		display: none;
+	}
+
+	.CostPanelHead {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 18px;
+		align-items: center;
+	}
+
+	.CostPanelTitle {
+		display: grid;
+		gap: 4px;
+	}
+
+	.CostPanelTitle p,
+	.CostPanelTitle h3 {
+		margin: 0;
+	}
+
+	.CostPanelTitle p {
+		color: var(--CostPanelAccent);
+		font-size: 12px;
+		font-weight: 950;
+	}
+
+	.CostPanelTitle h3 {
+		font-size: clamp(23px, 3vw, 34px);
+		line-height: 1.25;
+		color: #101827;
+	}
+
+	.CostPanelAccuracy {
+		display: grid;
+		place-items: center;
+		width: 90px;
+		height: 90px;
+		border: 7px solid transparent;
+		border-radius: 999px;
+		background:
+			linear-gradient(#fff, #fff) padding-box,
+			conic-gradient(var(--CostPanelAccent) var(--CostItemAccuracy), #e7ebf0 0) border-box;
+		box-shadow: 0 12px 28px rgba(15, 23, 42, .08);
+	}
+
+	.CostPanelAccuracy strong {
+		font-size: 20px;
+		line-height: 1;
+		color: #111827;
+	}
+
+	.CostPanelAccuracy span {
+		margin-top: -13px;
+		font-size: 10px;
+		font-weight: 850;
+		color: #6d7787;
+	}
+
+	.CostStageRail {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 8px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.CostStageNode button {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr) auto;
+		align-items: center;
+		gap: 7px;
+		width: 100%;
+		min-height: 54px;
+		padding: 8px 10px;
+		border: 1px solid #dce3eb;
+		border-radius: 13px;
+		background: #f8fafc;
+		color: #273246;
+		font: inherit;
+		cursor: pointer;
+	}
+
+	.CostStageNode button > span {
+		display: grid;
+		place-items: center;
+		width: 25px;
+		height: 25px;
+		border-radius: 999px;
+		background: #e7edf4;
+		font-size: 11px;
+		font-weight: 950;
+	}
+
+	.CostStageNode strong {
+		font-size: 11px;
+		text-align: right;
+		white-space: nowrap;
+	}
+
+	.CostStageNode small {
+		font-size: 10px;
+		font-weight: 950;
+		color: #778398;
+	}
+
+	.CostStageNode.IsReached button {
+		border-color: color-mix(in srgb, var(--CostPanelAccent) 34%, #dce3eb);
+		background: color-mix(in srgb, var(--CostPanelAccent) 5%, white);
+	}
+
+	.CostStageNode.IsReached button > span {
+		background: color-mix(in srgb, var(--CostPanelAccent) 13%, white);
+		color: var(--CostPanelAccent);
+	}
+
+	.CostStageNode.IsActive button {
+		border-color: var(--CostPanelAccent);
+		box-shadow: 0 7px 20px color-mix(in srgb, var(--CostPanelAccent) 11%, transparent);
+	}
+
+	.CostStage {
+		display: grid;
+		gap: 16px;
+		margin: 0;
+		padding: 19px;
+		border: 1px solid #dfe5ed;
+		border-radius: 18px;
+		background: linear-gradient(145deg, #ffffff, #fafcff);
+	}
+
+	.CostStage[hidden] {
+		display: none;
+	}
+
+	.CostStage legend {
+		display: flex;
+		align-items: baseline;
+		gap: 10px;
+		padding-inline: 7px;
+		color: #1b2638;
+	}
+
+	.CostStage legend span,
+	.CostStage legend em {
+		font-size: 11px;
+		font-style: normal;
+		font-weight: 850;
+		color: #738095;
+	}
+
+	.CostStage legend strong {
+		font-size: 16px;
+	}
+
+	.CostStage legend em {
+		color: var(--CostPanelAccent);
+	}
+
+	.CostStageDesc {
+		margin: 0;
+		color: #657187;
+		font-size: 13px;
+		line-height: 1.8;
+	}
+
+	.CostQuestionGrid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 12px;
+	}
+
+	.CostQuestion {
+		display: grid;
+		align-content: start;
+		gap: 7px;
+		min-width: 0;
+		padding: 13px;
+		border: 1px solid #e0e6ed;
+		border-radius: 13px;
+		background: #fff;
+	}
+
+	.CostQuestionTitle {
+		color: #202a3a;
+		font-size: 12px;
+		font-weight: 900;
+		line-height: 1.5;
+	}
+
+	.CostQuestion > small {
+		min-height: 31px;
+		color: #7a8697;
+		font-size: 10px;
+		line-height: 1.55;
+	}
+
+	.CostQuestion input[type="number"],
+	.CostQuestion select {
+		width: 100%;
+		min-height: 42px;
+		padding: 8px 10px;
+		box-sizing: border-box;
+		border: 1px solid #cfd7e2;
+		border-radius: 9px;
+		background: #fbfcfe;
+		color: #111827;
+		font: inherit;
+		font-size: 13px;
+	}
+
+	.CostQuestion input:focus,
+	.CostQuestion select:focus {
+		outline: 2px solid color-mix(in srgb, var(--CostPanelAccent) 28%, transparent);
+		border-color: var(--CostPanelAccent);
+	}
+
+	.CostInputUnit {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: center;
+		gap: 6px;
+	}
+
+	.CostInputUnit b {
+		font-size: 11px;
+		color: #6c788c;
+	}
+
+	.CostChoiceGroup {
+		display: flex;
+		gap: 6px;
+		flex-wrap: wrap;
+	}
+
+	.CostChoice {
+		position: relative;
+		display: inline-flex;
+	}
+
+	.CostChoice input {
+		position: absolute;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.CostChoice span {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 36px;
+		padding: 6px 10px;
+		border: 1px solid #d7dee8;
+		border-radius: 999px;
+		background: #f8fafc;
+		color: #435067;
+		font-size: 11px;
+		font-weight: 850;
+		cursor: pointer;
+	}
+
+	.CostChoice input:checked + span {
+		border-color: var(--CostPanelAccent);
+		background: color-mix(in srgb, var(--CostPanelAccent) 10%, white);
+		color: var(--CostPanelAccent);
+	}
+
+	.CostPanelFoot {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: center;
+		gap: 16px;
+		padding-top: 4px;
+	}
+
+	.CostPanelEstimate {
+		display: grid;
+		gap: 3px;
+	}
+
+	.CostPanelEstimate span,
+	.CostPanelEstimate small {
+		color: #6f7c90;
+		font-size: 11px;
+	}
+
+	.CostPanelEstimate strong {
+		color: #151f31;
+		font-size: 20px;
+		line-height: 1.25;
+	}
+
+	.CostPanelActions {
+		display: flex;
+		gap: 8px;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+	}
+
+	.CostPanelActions button {
+		min-height: 43px;
+		padding: 9px 14px;
+		border-radius: 11px;
+		font: inherit;
+		font-size: 12px;
+		font-weight: 900;
+		cursor: pointer;
+	}
+
+	.CostPanelActions .Primary {
+		border: 1px solid var(--CostPanelAccent);
+		background: var(--CostPanelAccent);
+		color: #fff;
+	}
+
+	.CostPanelActions .Secondary {
+		border: 1px solid #d4dce6;
+		background: #fff;
+		color: #37445a;
+	}
+
+	.CostPanelActions button:disabled {
+		cursor: not-allowed;
+		opacity: .45;
+	}
+
+	@media (max-width: 850px) {
+		.CostQuestionGrid {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.CostStageRail {
+			display: flex;
+			overflow-x: auto;
+		}
+
+		.CostStageNode {
+			min-width: 150px;
+		}
+	}
+
+	@media (max-width: 580px) {
+		.FinishCostGamePanel {
+			padding: 17px 13px;
+		}
+
+		.CostPanelHead {
+			grid-template-columns: minmax(0, 1fr) 76px;
+		}
+
+		.CostPanelAccuracy {
+			width: 68px;
+			height: 68px;
+			border-width: 5px;
+		}
+
+		.CostPanelAccuracy strong {
+			font-size: 16px;
+		}
+
+		.CostQuestionGrid {
+			grid-template-columns: 1fr;
+		}
+
+		.CostPanelFoot {
+			grid-template-columns: 1fr;
+		}
+
+		.CostPanelActions {
+			justify-content: stretch;
+		}
+
+		.CostPanelActions button {
+			flex: 1 1 100%;
+		}
+
+		.CostStage legend {
+			align-items: flex-start;
+			flex-direction: column;
+			gap: 3px;
+		}
+	}
+</style>

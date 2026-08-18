@@ -222,6 +222,7 @@ const cPlace = new Place(cProps as PlaceProps, cStyle);
 		let cRemoteTimer = 0;
 		let cSavingRemote = false;
 		let cInitialized = false;
+		let cPendingGalleryPrefill = null;
 
 		Initialize();
 
@@ -239,6 +240,7 @@ const cPlace = new Place(cProps as PlaceProps, cStyle);
 					RenderAll();
 					SetMessage("تم استكمال الطلب المحفوظ من الخادم.", "success");
 					ResumeInterruptedEditor();
+					ApplyPendingGalleryPrefill();
 					return;
 				}
 			}
@@ -250,6 +252,7 @@ const cPlace = new Place(cProps as PlaceProps, cStyle);
 			} else {
 				RenderAll();
 			}
+			ApplyPendingGalleryPrefill();
 		}
 
 		function BindEvents() {
@@ -260,6 +263,178 @@ const cPlace = new Place(cProps as PlaceProps, cStyle);
 			cItemForm?.addEventListener("submit", SaveItemForm);
 			cAttachmentInput?.addEventListener("change", HandleAttachments);
 			document.addEventListener("keydown", HandleKeyDown);
+			document.addEventListener("emo-stone-request-prefill", HandleGalleryPrefill);
+		}
+
+		function HandleGalleryPrefill(pEvent) {
+			const cDetail = pEvent?.detail;
+			if (!cDetail || typeof cDetail !== "object" || !cDetail.stone) return;
+			const cTargetId = Clean(cDetail.requestBuilderId);
+			if (cTargetId && pRoot.id !== cTargetId) return;
+			if (!cTargetId && document.querySelector("[data-stone-request-builder='true']") !== pRoot) return;
+			if (!cInitialized) {
+				cPendingGalleryPrefill = cDetail;
+				return;
+			}
+			ApplyGalleryPrefill(cDetail);
+		}
+
+		function ApplyPendingGalleryPrefill() {
+			if (!cPendingGalleryPrefill) return;
+			const cDetail = cPendingGalleryPrefill;
+			cPendingGalleryPrefill = null;
+			ApplyGalleryPrefill(cDetail);
+		}
+
+		function ApplyGalleryPrefill(pDetail) {
+			const cStone = pDetail.stone || {};
+			const cEstimate = pDetail.estimate || {};
+			if (cPendingLocal && IsMeaningful(cPendingLocal)) {
+				cState = NormalizeDraft(cPendingLocal);
+				cPendingLocal = null;
+				if (cResumePanel) cResumePanel.hidden = true;
+				RenderAll();
+			}
+			PreserveWorkingItem();
+
+			const cItem = NewItem();
+			cItem.usageType = GalleryUsageKey(cEstimate.use || cStone.Uses?.[0]);
+			cItem.title = `${UsageLabel(cItem.usageType) || "خامة"} - ${Clean(cStone.Name) || "اختيار من الجاليري"}`;
+			cItem.location = GalleryLocationLabel(cEstimate.location);
+			cItem.services = GalleryServices(cEstimate.service);
+			cItem.description = Clean(cStone.Description) || "اختيار مبدئي من جاليري الخامات ويحتاج اعتماد صورة الدفعة أو اللوح الفعلي.";
+			cItem.material.category = GalleryMaterialCategory(cStone.Type);
+			cItem.material.origin = GalleryMaterialOrigin(cStone.Country);
+			cItem.material.name = Clean(cStone.Name);
+			cItem.material.color = Clean(cStone.Color);
+			cItem.material.pattern = GalleryPattern(cStone.Pattern);
+			cItem.material.surfaceFinish = GalleryFinish(cStone.Finishes?.[0]);
+			cItem.material.priceLevel = GalleryPriceLevel(cStone.PriceLevel);
+			cItem.material.sameBatchRequired = true;
+			cItem.referenceUrl = Clean(pDetail.pageUrl) || window.location.href;
+
+			const cArea = Math.max(0, Num(cEstimate.area));
+			if (cArea > 0) {
+				cItem.measurements = [{
+					id: Uid("measure"),
+					pieceType: GalleryPieceType(cItem.usageType),
+					description: "مساحة تقريبية من جاليري الخامات",
+					quantity: 1,
+					lengthCm: 0,
+					widthCm: 0,
+					thicknessCm: 0,
+					edgeTreatment: "",
+					areaM2: Round(cArea, 2),
+					areaManual: true,
+					visibleEdgeM: 0,
+					notes: "تُراجع المساحة بالقياس النهائي قبل التسعير.",
+				}];
+			}
+
+			if (Num(cEstimate.priceFrom) > 0) {
+				cItem.processing.notes = `تقدير الجاليري: ${FormatNumber(cEstimate.priceFrom)} إلى ${FormatNumber(cEstimate.priceTo)} ${Clean(cEstimate.currency)} — دقة ${Num(cEstimate.accuracy)}%. التقدير استدلالي وليس عرض سعر.`;
+			}
+
+			OpenItem(cItem, "");
+			SetMessage(`تم نقل خامة ${Clean(cStone.Name) || "المختارة"} والمساحة المبدئية إلى الطلب. راجع المقاسات والتجهيزات قبل الحفظ.`, "success");
+			pRoot.dispatchEvent(new CustomEvent("emo-stone-request-prefilled", { bubbles: true, detail: { item: DeepClone(cItem), source: "StoneGallery" } }));
+		}
+
+		function PreserveWorkingItem() {
+			const cWorking = cState.ui?.workingItem;
+			if (!cWorking || !GalleryItemHasData(cWorking)) return;
+			const cNormalized = NormalizeItem(DeepClone(cWorking));
+			const cEditingId = Clean(cState.ui.editingItemId);
+			if (cEditingId) {
+				const cIndex = cState.items.findIndex((pItem) => pItem.id === cEditingId);
+				if (cIndex >= 0) cState.items[cIndex] = cNormalized;
+			} else if (!cState.items.some((pItem) => pItem.id === cNormalized.id)) {
+				cState.items.push(cNormalized);
+			}
+		}
+
+		function GalleryItemHasData(pItem) {
+			return Boolean(Clean(pItem.title) || Clean(pItem.material?.name) || Clean(pItem.material?.color) || pItem.measurements?.length || pItem.attachments?.length);
+		}
+
+		function GalleryUsageKey(pValue) {
+			const cValue = Clean(pValue).toLowerCase();
+			if (cValue.includes("مطبخ") || cValue.includes("كاونتر")) return "kitchen";
+			if (cValue.includes("سلم") || cValue.includes("سلالم") || cValue.includes("درج")) return "stairs";
+			if (cValue.includes("أرض") || cValue.includes("ارض")) return "floor";
+			if (cValue.includes("حائط") || cValue.includes("حوائط") || cValue.includes("تكسية")) return "wall";
+			if (cValue.includes("واجهة") || cValue.includes("مدخل")) return "facade";
+			if (cValue.includes("جلس") || cValue.includes("عتب") || cValue.includes("وزر")) return "sills";
+			if (cValue.includes("حمام") || cValue.includes("حوض")) return "bathroom";
+			if (cValue.includes("ترابيزة") || cValue.includes("أثاث") || cValue.includes("اثاث")) return "furniture";
+			if (cValue.includes("ديكور") || cValue.includes("مدفأة") || cValue.includes("مدفاه")) return "decor";
+			return "other";
+		}
+
+		function GalleryMaterialCategory(pValue) {
+			const cValue = Clean(pValue);
+			if (cValue.includes("جرانيت")) return "جرانيت";
+			if (cValue.includes("كوارتز")) return "كوارتز صناعي";
+			if (cValue.includes("رخام")) return "رخام";
+			return "حجر طبيعي";
+		}
+
+		function GalleryMaterialOrigin(pValue) {
+			const cValue = Clean(pValue);
+			if (!cValue || cValue === "غير محدد") return "غير محدد";
+			if (cValue.includes("مصر") || cValue.includes("مصري") || cValue.toLowerCase().includes("egypt")) return "مصري";
+			return "مستورد";
+		}
+
+		function GalleryPattern(pValue) {
+			const cValue = Clean(pValue);
+			if (cValue.includes("حبيب") || cValue.includes("نقط")) return "حبيبات";
+			if (cValue.includes("قوي") || cValue.includes("واضح") || cValue.includes("عريض")) return "عروق قوية";
+			if (cValue.includes("عرق") || cValue.includes("هادئ") || cValue.includes("هادي")) return "عروق هادئة";
+			if (cValue.includes("ساد") || cValue.includes("متجانس")) return "سادة أو متجانس";
+			return "غير محدد";
+		}
+
+		function GalleryFinish(pValue) {
+			const cValue = Clean(pValue).toLowerCase();
+			if (cValue.includes("مطفي") || cValue.includes("honed")) return "مطفي Honed";
+			if (cValue.includes("محروق") || cValue.includes("flamed")) return "محروق Flamed";
+			if (cValue.includes("خشن") || cValue.includes("انزلاق")) return "خشن مضاد للانزلاق";
+			if (cValue.includes("معتق") || cValue.includes("خاص")) return "معتق أو خاص";
+			if (cValue.includes("مصقول") || cValue.includes("لامع") || cValue.includes("polished")) return "لامع مصقول";
+			return "غير محدد";
+		}
+
+		function GalleryPriceLevel(pValue) {
+			const cValue = Clean(pValue);
+			if (cValue === "اقتصادي" || cValue === "متوسط") return cValue;
+			if (cValue === "فاخر" || cValue === "مرتفع") return "مرتفع";
+			return "غير محدد";
+		}
+
+		function GalleryServices(pValue) {
+			if (Clean(pValue) === "supply") return ["توريد"];
+			if (Clean(pValue) === "selection") return ["توريد"];
+			return ["توريد", "قص وتجهيز", "نقل ورفع", "تركيب"];
+		}
+
+		function GalleryLocationLabel(pValue) {
+			if (pValue === "cairo-giza") return "القاهرة أو الجيزة";
+			if (pValue === "other-egypt") return "محافظة أخرى داخل مصر";
+			if (pValue === "remote-egypt") return "مشروع داخل مصر بمتابعة عن بُعد";
+			if (pValue === "outside-egypt") return "مشروع خارج مصر";
+			return "";
+		}
+
+		function GalleryPieceType(pUsage) {
+			if (pUsage === "stairs") return "سلم أو مجموعة درجات";
+			if (pUsage === "floor") return "منطقة أرضية";
+			if (pUsage === "wall" || pUsage === "facade") return "منطقة تكسية";
+			return "مساحة تقريبية";
+		}
+
+		function FormatNumber(pValue) {
+			return new Intl.NumberFormat("ar-EG", { maximumFractionDigits: 0 }).format(Math.round(Num(pValue)));
 		}
 
 		function HandleKeyDown(pEvent) {

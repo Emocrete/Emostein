@@ -1,0 +1,703 @@
+---
+import { Place, type PlaceProps } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps {
+	/** أتعاب الخدمة المباشرة عند اختيار القاهرة. */
+	pCairoFee: number;
+
+	/** أتعاب الخدمة المباشرة عند اختيار الجيزة. */
+	pGizaFee: number;
+}
+
+const cProps = Astro.props as Props & Record<string, unknown>;
+
+const {
+	pCairoFee,
+	pGizaFee,
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+
+	id: pGivenID = GetWidgetId("SupervisionCertificateCostCalc"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = cProps;
+
+const cStyle = [
+	"--CertificateAccent:#1687b8;",
+	"--CertificateAccentSoft:#e8f6fb;",
+	"--CertificateAccentDark:#0d5d7e;",
+	GetStyleText(pGivenStyle),
+].filter(Boolean).join(" ");
+
+const cPlace = new Place(cProps as PlaceProps, cStyle);
+const cBuildingFee = 900;
+const cStampRate = 0.0045;
+
+function GetStyleText(pStyle: unknown) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+	if (typeof pStyle !== "object") return "";
+
+	return Object.entries(pStyle as Record<string, string | number | null | undefined>)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+<section
+	class={`CertificateCostCalc SupervisionCertificateCostCalc ${cPlace.Class} ${pGivenClass}`.trim()}
+	style={cPlace.Style}
+	id={pGivenID}
+	dir="rtl"
+	data-supervision-certificate-cost="true"
+	data-cairo-fee={pCairoFee}
+	data-giza-fee={pGizaFee}
+	data-building-fee={cBuildingFee}
+	data-stamp-rate={cStampRate}
+	{...RemAttr}
+>
+
+	<header class="CertificateHead">
+
+		<div class="CertificateHeadText">
+
+			<p class="CertificateEyebrow">
+				حاسبة تكلفة تقريبية
+			</p>
+
+			<h2>
+				تكلفة شهادة الإشراف الهندسي
+			</h2>
+
+			<p>
+				احسب أتعاب الخدمة ورسوم النقابة والدمغة الهندسية المتبقية حسب بيانات رخصة البناء.
+			</p>
+
+		</div>
+
+		<div class="CertificateRateBadge" aria-label="نسبة الدمغة الهندسية 0.45 بالمائة">
+			<strong>0.45%</strong>
+			<span>دمغة هندسية من تكلفة الرخصة</span>
+		</div>
+
+	</header>
+
+	<div class="CertificateBody">
+
+		<form class="CertificateInputs" data-area="inputs">
+
+			<fieldset class="CertificateLocation">
+
+				<legend>
+					مكان إصدار الشهادة
+				</legend>
+
+				<div class="CertificateLocationButtons">
+
+					<label class="CertificateLocationButton">
+						<input type="radio" name={`${pGivenID}-location`} value="cairo" checked />
+						<span>
+							القاهرة
+						</span>
+					</label>
+
+					<label class="CertificateLocationButton">
+						<input type="radio" name={`${pGivenID}-location`} value="giza" />
+						<span>
+							الجيزة
+						</span>
+					</label>
+
+				</div>
+
+			</fieldset>
+
+			<label class="CertificateField">
+				<span>عدد المباني المدرجة في الشهادة</span>
+				<input data-field="buildings" type="number" min="1" step="1" value="1" inputmode="numeric" />
+				<small>الرسوم الأساسية: {cBuildingFee.toLocaleString("ar-EG")} جنيه لكل مبنى.</small>
+			</label>
+
+			<label class="CertificateField">
+				<span>تكلفة الأعمال المسجلة في الرخصة</span>
+				<div class="CertificateInputUnit">
+					<input data-field="licenseCost" type="number" min="0" step="1000" value="1000000" inputmode="decimal" />
+					<b>جنيه</b>
+				</div>
+				<small>تستخدم هذه القيمة في حساب الدمغة فقط، وليست القيمة السوقية للعقار.</small>
+			</label>
+
+			<label class="CertificateField">
+				<span>دمغة هندسية سبق سدادها</span>
+				<div class="CertificateInputUnit">
+					<input data-field="paidStamp" type="number" min="0" step="100" value="0" inputmode="decimal" />
+					<b>جنيه</b>
+				</div>
+				<small>اكتب صفر إذا لم يسبق سداد دمغة مثبتة بالرخصة أو بإيصال مستقل.</small>
+			</label>
+
+		</form>
+
+		<div class="CertificateResult" aria-live="polite">
+
+			<p class="CertificateResultLabel">
+				الإجمالي التقريبي المطلوب
+			</p>
+
+			<p class="CertificateTotal">
+				<strong data-out="total">0</strong>
+				<span>جنيه</span>
+			</p>
+
+			<div class="CertificateBreakdown">
+
+				<div class="CertificateRow">
+					<span>أتعاب الخدمة — <b data-out="locationName">القاهرة</b></span>
+					<strong data-out="serviceFee">0</strong>
+				</div>
+
+				<div class="CertificateRow">
+					<span>الرسوم الأساسية للنقابة</span>
+					<strong data-out="basicFee">0</strong>
+				</div>
+
+				<div class="CertificateRow">
+					<span>الدمغة الهندسية المحسوبة</span>
+					<strong data-out="grossStamp">0</strong>
+				</div>
+
+				<div class="CertificateRow Muted">
+					<span>المسدد سابقًا من الدمغة</span>
+					<strong data-out="paidStamp">0</strong>
+				</div>
+
+				<div class="CertificateRow StampDue">
+					<span>الدمغة المتبقية</span>
+					<strong data-out="stampDue">0</strong>
+				</div>
+
+			</div>
+
+			<p class="CertificateStatus" data-out="status">
+				الحسبة تشمل كامل الدمغة المستحقة وفق البيانات المدخلة.
+			</p>
+
+		</div>
+
+	</div>
+
+	<div class="CertificateFormula">
+		<span>الإجمالي</span>
+		<b>=</b>
+		<span>أتعاب الخدمة</span>
+		<b>+</b>
+		<span>{cBuildingFee} × عدد المباني</span>
+		<b>+</b>
+		<span>الدمغة المتبقية</span>
+	</div>
+
+	<p class="CertificateDisclaimer">
+		الناتج تقديري طبقًا لطريقة الحساب الموضحة بالصفحة. القيمة النهائية تعتمد على المستندات المثبتة بالرخصة وما سبق سداده فعليًا.
+	</p>
+
+	<script is:inline>
+		(() => {
+			const fRoot = document.currentScript.closest("[data-supervision-certificate-cost]");
+			if (!fRoot) return;
+
+			const fForm = fRoot.querySelector('[data-area="inputs"]');
+			if (fForm) fForm.addEventListener("submit", (pEvent) => pEvent.preventDefault());
+
+			const fBuildings = fRoot.querySelector('[data-field="buildings"]');
+			const fLicenseCost = fRoot.querySelector('[data-field="licenseCost"]');
+			const fPaidStamp = fRoot.querySelector('[data-field="paidStamp"]');
+			const fLocations = [...fRoot.querySelectorAll('input[type="radio"]')];
+			const fOut = (pName) => fRoot.querySelector(`[data-out="${pName}"]`);
+
+			const fCairoFee = fNumber(fRoot.dataset.cairoFee);
+			const fGizaFee = fNumber(fRoot.dataset.gizaFee);
+			const fBuildingFee = fNumber(fRoot.dataset.buildingFee, 900);
+			const fStampRate = fNumber(fRoot.dataset.stampRate, 0.0045);
+
+			function fArabicToEnglishDigits(pValue) {
+				return String(pValue ?? "")
+					.replace(/[٠-٩]/g, (pDigit) => String("٠١٢٣٤٥٦٧٨٩".indexOf(pDigit)))
+					.replace(/[۰-۹]/g, (pDigit) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(pDigit)))
+					.replace(/,/g, ".");
+			}
+
+			function fNumber(pValue, pFallback = 0) {
+				const fParsed = Number(fArabicToEnglishDigits(pValue));
+				return Number.isFinite(fParsed) ? fParsed : pFallback;
+			}
+
+			function fMoney(pValue) {
+				return Math.round(Math.max(0, pValue)).toLocaleString("ar-EG");
+			}
+
+			function fSet(pName, pValue) {
+				const fElement = fOut(pName);
+				if (fElement) fElement.textContent = pValue;
+			}
+
+			function fCalc() {
+				const fLocation = fRoot.querySelector('input[type="radio"]:checked')?.value || "cairo";
+				const fLocationName = fLocation === "giza" ? "الجيزة" : "القاهرة";
+				const fServiceFee = fLocation === "giza" ? fGizaFee : fCairoFee;
+				const fBuildingCount = Math.max(1, Math.floor(fNumber(fBuildings?.value, 1)));
+				const fLicense = Math.max(0, fNumber(fLicenseCost?.value));
+				const fPaid = Math.max(0, fNumber(fPaidStamp?.value));
+				const fBasicFee = fBuildingCount * fBuildingFee;
+				const fGrossStamp = fLicense * fStampRate;
+				const fStampDue = Math.max(0, fGrossStamp - fPaid);
+				const fTotal = fServiceFee + fBasicFee + fStampDue;
+
+				fSet("locationName", fLocationName);
+				fSet("serviceFee", fMoney(fServiceFee));
+				fSet("basicFee", fMoney(fBasicFee));
+				fSet("grossStamp", fMoney(fGrossStamp));
+				fSet("paidStamp", fMoney(Math.min(fPaid, fGrossStamp)));
+				fSet("stampDue", fMoney(fStampDue));
+				fSet("total", fMoney(fTotal));
+
+				if (fGrossStamp > 0 && fPaid >= fGrossStamp) {
+					fSet("status", "لا توجد دمغة متبقية وفق المبلغ المسدد الذي أدخلته.");
+				} else if (fPaid > 0) {
+					fSet("status", `تم خصم ${fMoney(Math.min(fPaid, fGrossStamp))} جنيه من الدمغة المحسوبة.`);
+				} else {
+					fSet("status", "الحسبة تشمل كامل الدمغة المستحقة وفق البيانات المدخلة.");
+				}
+			}
+
+			[fBuildings, fLicenseCost, fPaidStamp].forEach((pField) => {
+				pField?.addEventListener("input", fCalc);
+				pField?.addEventListener("change", fCalc);
+			});
+			fLocations.forEach((pField) => pField.addEventListener("change", fCalc));
+
+			fCalc();
+		})();
+	</script>
+
+</section>
+
+<style>
+	.CertificateCostCalc {
+		box-sizing: border-box;
+		width: min(1120px, calc(100% - 24px));
+		margin-inline: auto;
+		padding: clamp(18px, 3vw, 34px);
+		border: 1px solid #dce7ec;
+		border-radius: 30px;
+		background: linear-gradient(145deg, #ffffff, #f7fbfc 72%);
+		color: #20272c;
+		box-shadow: 0 18px 52px rgba(35, 68, 82, .11);
+		direction: rtl;
+	}
+
+	.CertificateCostCalc,
+	.CertificateCostCalc * {
+		box-sizing: border-box;
+	}
+
+	.CertificateCostCalc.IsPlaced {
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+	.CertificateHead {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 150px;
+		gap: 24px;
+		align-items: center;
+		margin-bottom: 24px;
+	}
+
+	.CertificateHeadText h2,
+	.CertificateHeadText p {
+		margin: 0;
+	}
+
+	.CertificateHeadText h2 {
+		font-size: clamp(25px, 3vw, 40px);
+		line-height: 1.35;
+		color: #1b2328;
+	}
+
+	.CertificateHeadText > p:last-child {
+		max-width: 72ch;
+		margin-top: 9px;
+		color: #65737b;
+		font-size: 15px;
+		line-height: 1.9;
+	}
+
+	.CertificateEyebrow {
+		width: fit-content;
+		margin-bottom: 10px;
+		padding: 6px 11px;
+		border-radius: 999px;
+		background: var(--CertificateAccentSoft);
+		color: var(--CertificateAccentDark);
+		font-size: 13px;
+		font-weight: 900;
+	}
+
+	.CertificateRateBadge {
+		min-height: 128px;
+		padding: 16px;
+		border-radius: 24px;
+		background: var(--CertificateAccentSoft);
+		color: var(--CertificateAccentDark);
+		display: grid;
+		place-items: center;
+		align-content: center;
+		gap: 8px;
+		text-align: center;
+	}
+
+	.CertificateRateBadge strong {
+		font-size: 38px;
+		line-height: 1;
+		direction: ltr;
+	}
+
+	.CertificateRateBadge span {
+		font-size: 12px;
+		font-weight: 800;
+		line-height: 1.5;
+	}
+
+	.CertificateBody {
+		display: grid;
+		grid-template-columns: minmax(300px, .95fr) minmax(330px, 1.05fr);
+		gap: 18px;
+	}
+
+	.CertificateInputs,
+	.CertificateResult {
+		padding: 18px;
+		border: 1px solid #e3eaee;
+		border-radius: 24px;
+		background: #fff;
+	}
+
+	.CertificateInputs {
+		display: grid;
+		gap: 15px;
+		align-content: start;
+	}
+
+	.CertificateLocation {
+		min-width: 0;
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+
+	.CertificateLocation legend,
+	.CertificateField > span {
+		display: block;
+		margin-bottom: 8px;
+		color: #3a474e;
+		font-size: 13px;
+		font-weight: 900;
+	}
+
+	.CertificateLocationButtons {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 8px;
+		padding: 5px;
+		border-radius: 17px;
+		background: #eef3f5;
+	}
+
+	.CertificateLocationButton {
+		position: relative;
+		min-width: 0;
+	}
+
+	.CertificateLocationButton input {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.CertificateLocationButton span {
+		display: grid;
+		place-items: center;
+		min-height: 43px;
+		padding: 8px 12px;
+		border: 1px solid transparent;
+		border-radius: 13px;
+		color: #5c6970;
+		font-size: 14px;
+		font-weight: 900;
+		cursor: pointer;
+		transition: background-color .18s ease, color .18s ease, box-shadow .18s ease;
+	}
+
+	.CertificateLocationButton input:checked + span {
+		background: #fff;
+		color: var(--CertificateAccentDark);
+		box-shadow: 0 5px 15px rgba(27, 67, 84, .12);
+	}
+
+	.CertificateLocationButton input:focus-visible + span {
+		outline: 3px solid color-mix(in srgb, var(--CertificateAccent) 28%, transparent);
+		outline-offset: 2px;
+	}
+
+	.CertificateField {
+		display: block;
+	}
+
+	.CertificateField > input,
+	.CertificateInputUnit {
+		width: 100%;
+		min-height: 48px;
+		border: 1px solid #d8e0e4;
+		border-radius: 15px;
+		background: #fbfcfd;
+		color: #20272c;
+		font-family: inherit;
+		font-size: 15px;
+		font-weight: 800;
+	}
+
+	.CertificateField > input {
+		padding: 10px 13px;
+		outline: none;
+	}
+
+	.CertificateInputUnit {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: center;
+		overflow: hidden;
+	}
+
+	.CertificateInputUnit input {
+		width: 100%;
+		min-height: 46px;
+		padding: 10px 13px;
+		border: 0;
+		background: transparent;
+		color: inherit;
+		font: inherit;
+		outline: none;
+	}
+
+	.CertificateInputUnit b {
+		padding-inline: 12px;
+		border-right: 1px solid #e2e8eb;
+		color: #7b878d;
+		font-size: 12px;
+		white-space: nowrap;
+	}
+
+	.CertificateField > input:focus,
+	.CertificateInputUnit:focus-within {
+		border-color: var(--CertificateAccent);
+		box-shadow: 0 0 0 4px color-mix(in srgb, var(--CertificateAccent) 13%, transparent);
+	}
+
+	.CertificateField small {
+		display: block;
+		margin-top: 6px;
+		color: #859198;
+		font-size: 11px;
+		font-weight: 700;
+		line-height: 1.65;
+	}
+
+	.CertificateResult {
+		display: grid;
+		gap: 14px;
+		align-content: start;
+		background: linear-gradient(160deg, #172229, #23353e);
+		color: #fff;
+	}
+
+	.CertificateResultLabel {
+		margin: 0;
+		color: rgba(255, 255, 255, .68);
+		font-size: 13px;
+		font-weight: 900;
+	}
+
+	.CertificateTotal {
+		margin: 0;
+		display: flex;
+		align-items: baseline;
+		gap: 8px;
+		color: #fff;
+	}
+
+	.CertificateTotal strong {
+		font-size: clamp(40px, 6vw, 66px);
+		line-height: 1;
+		color: #80d8fa;
+	}
+
+	.CertificateTotal span {
+		font-size: 16px;
+		font-weight: 900;
+		color: rgba(255, 255, 255, .76);
+	}
+
+	.CertificateBreakdown {
+		display: grid;
+		gap: 7px;
+	}
+
+	.CertificateRow {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 12px;
+		align-items: center;
+		min-height: 45px;
+		padding: 9px 11px;
+		border-radius: 13px;
+		background: rgba(255, 255, 255, .075);
+	}
+
+	.CertificateRow span {
+		font-size: 12px;
+		font-weight: 800;
+		color: rgba(255, 255, 255, .73);
+	}
+
+	.CertificateRow strong {
+		font-size: 15px;
+		color: #fff;
+	}
+
+	.CertificateRow.Muted {
+		opacity: .7;
+	}
+
+	.CertificateRow.StampDue {
+		background: color-mix(in srgb, var(--CertificateAccent) 20%, transparent);
+	}
+
+	.CertificateStatus {
+		margin: 0;
+		padding-top: 2px;
+		color: #b8c8d0;
+		font-size: 11px;
+		font-weight: 700;
+		line-height: 1.7;
+	}
+
+	.CertificateFormula {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		flex-wrap: wrap;
+		margin-top: 16px;
+		padding: 12px 14px;
+		border-radius: 16px;
+		background: var(--CertificateAccentSoft);
+		color: #4b5b63;
+		font-size: 12px;
+		font-weight: 900;
+	}
+
+	.CertificateFormula b {
+		color: var(--CertificateAccentDark);
+		font-size: 16px;
+	}
+
+	.CertificateDisclaimer {
+		margin: 11px 2px 0;
+		color: #849097;
+		font-size: 11px;
+		line-height: 1.7;
+	}
+
+	@media (orientation: portrait), (max-width: 760px) {
+		.CertificateCostCalc {
+			width: min(100% - 14px, 600px);
+			padding: 15px;
+			border-radius: 22px;
+		}
+
+		.CertificateCostCalc.IsPlaced {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.CertificateHead {
+			grid-template-columns: 1fr;
+			gap: 15px;
+		}
+
+		.CertificateRateBadge {
+			min-height: 82px;
+			grid-template-columns: auto minmax(0, 1fr);
+			justify-content: start;
+			text-align: right;
+		}
+
+		.CertificateRateBadge strong {
+			font-size: 30px;
+		}
+
+		.CertificateBody {
+			grid-template-columns: 1fr;
+		}
+
+		.CertificateInputs,
+		.CertificateResult {
+			padding: 14px;
+			border-radius: 18px;
+		}
+
+		.CertificateFormula {
+			justify-content: flex-start;
+		}
+	}
+</style>

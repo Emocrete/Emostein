@@ -1,3 +1,59 @@
+export { CreateStoneGalleryExcelImageMatcher } from "./StoneGalleryExcel";
+
+export { ReadStoneGalleryExcelFile } from "./StoneGalleryExcel";
+
+import StoneGalleryIndexExport from "./StoneGallery.astro";
+
+/**
+ * @pItems as StoneGalleryItemInput[] — بيانات جاهزة مباشرة. عند تمريرها لها أولوية على Excel وJSON ومسح الفولدر.
+ * @pFolder as string — فولدر صور الخامات داخل public.
+ * @pExcel as string — ملف Excel داخل pFolder. إذا كان موجودًا تكون له أولوية على JSON ومسح الفولدر.
+ * @pExcelSheet as string — اسم ورقة بيانات الخامات داخل ملف Excel.
+ * @pExcelWarnings as boolean — إظهار تحذيرات المطابقة في طرفية البناء للملفات الناقصة أو الأسماء المكررة.
+ * @pJson as string — ملف بيانات اختياري داخل pFolder. يدعم array أو Stones / stones / Products / products.
+ * @pRecursive as boolean — يبحث داخل الفولدرات الفرعية أثناء ربط Excel أو عند الاعتماد على الصور فقط.
+ * @pExts as string[] — الامتدادات المقبولة عند مسح الفولدر.
+ * @pTitle as string
+ * @pDesc as string
+ * @pSearchPlaceholder as string
+ * @pEmptyText as string
+ * @pDefaultType as string
+ * @pDefaultCountry as string
+ * @pDefaultUses as string | string[]
+ * @pDefaultFinishes as string | string[]
+ * @pDefaultCurrency as string
+ * @pColumns as number
+ * @pColumnsP as number
+ * @pMaxCompare as number
+ * @pShowFilters as boolean
+ * @pAvailableOnly as boolean
+ * @pAllowShare as boolean
+ * @pEnableQuote as boolean
+ * @pSelectFirst as boolean
+ * @pRequestBuilderId as string — معرّف StoneRequestBuilder الذي يستقبل بيانات الخامة بعد حفظ الطلب المبدئي.
+ * @pRequestHref as string — رابط احتياطي بعد إطلاق حدث الطلب. يترك فارغًا للبقاء داخل الصفحة.
+ * @pStorageKey as string — مفتاح حفظ القائمة المختصرة والمقارنة على جهاز الزائر.
+ * @pMaxWidth as CssValue
+ * @pPad as CssValue
+ * @pGap as CssValue
+ * @pRadius as CssValue
+ * @pAccent as string
+ * @pAccentSoft as string
+ * @pBgColor as string
+ * @pPanelColor as string
+ * @pTextColor as string
+ * @pMutedColor as string
+ * @pBorderColor as string
+ * @data-own-size as boolean | string — يحافظ الودجت على عرضه الداخلي داخل Stack / Strip.
+ */
+export const StoneGallery = StoneGalleryIndexExport;
+
+export type { StoneGalleryExcelImageMatch } from "./StoneGalleryExcel";
+
+export type { StoneGalleryExcelItem } from "./StoneGalleryExcel";
+
+export type { StoneGalleryExcelResult } from "./StoneGalleryExcel";
+
 import StoneInfoCardIndexExport from "./StoneInfoCard.astro";
 
 /**

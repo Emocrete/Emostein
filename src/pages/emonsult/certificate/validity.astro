@@ -1,25 +1,11 @@
 ---
 import BLayout from "@/Layout.astro";
+import { OccupancyValidityCostCalc } from "@/Widgets/Calc";
 import { EmoCall, Emograph, EmoList, HzStack, ListItem, SecTitle, VrStack } from "@/Widgets/Comp";
 import { Price } from "@/Widgets/Prices";
 import { DivCol, DivStr, EmoSec, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -56,6 +42,14 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } fro
 		</VrStack>
 
 	</Hero>
+
+
+
+
+
+
+
+	<OccupancyValidityCostCalc pServiceFee={4000} />
 
 
 
@@ -150,22 +144,14 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } fro
 		<SecTitle OrangeDark pTitle="تكلفة استخراج شهادة صلاحية المبنى للإشغال" />
 
 		<HzStack
-			style = "
-					margin-top : 50px ;
-					margin-bottom : 50px ;
-					padding : 30px
-				"
-			id="stkCostEq"
+			style = " margin-top : 50px ; margin-bottom : 50px ; padding : 30px "
+			id="stkCostEqn"
 			pBg={new ElemBg(Colors.SkyLite)}
 			pSize={new Size(new NumPer(1200))}
 			Readable
 		>
 
-			<Emograph
-				pTitle={Text.H3.Centered.OfText("التكلفة الإجمالية =")}
-				pSize={new Size(new NumPer(300))}
-				data-own-size
-			/>
+			<Emograph pTitle={Text.H3.Centered.OfText("التكلفة الإجمالية =")} pSize={new Size(new NumPer(300))} data-own-size />
 
 			<Emograph pTitle={Text.Body.Centered.OfSize(30,20).OfText("قيمة الخدمة + الرسوم الأساسية + الدمغة الهندسية")} />
 
@@ -226,10 +212,7 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } fro
 
 			<HzStack id="StkRatio" pBg={new ElemBg(Colors.WhiteOff)}>
 
-				<Emograph
-					pTitle={Text.Body.Bold.OfSize(80,30).OfText("% 0.45")}
-					pText={Text.Body.OfText("نسبة رسوم الدمغة الهندسية إلى تكلفة رخصة البناء")}
-				/>
+				<Emograph pTitle={Text.Body.Bold.OfSize(80,30).OfText("% 0.45")} pText={Text.Body.OfText("نسبة رسوم الدمغة الهندسية إلى تكلفة رخصة البناء")} />
 
 				<Emograph
 					pTitle={Text.Body.OfText("قيمة رسوم الدمغة الهندسية = 0.0045 × تكلفة الرخصة")}
