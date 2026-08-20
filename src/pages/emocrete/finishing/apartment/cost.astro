@@ -1,25 +1,9 @@
 ---
 import BLayout from "@/Layout.astro";
-import { EmoCall, Emograph, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
-import { EmoSec, Hero } from "@/Widgets/Sections";
-import { EmoStr } from "@/Widgets/Strips";
-import { Align, ElemBg, Loc, NumPer, Size, Text } from "@/TypesLib";
+import { Badge, EmoCallIcon, Emograph, EmoTable, EmoTableCell, EmoTableRow, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { Hero } from "@/Widgets/Sections";
+import { Colors, Loc, NumPer, Pixel, Size, Text } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -37,20 +21,29 @@ import { Align, ElemBg, Loc, NumPer, Size, Text } from "@/TypesLib";
 
 
 
-	<Hero>
+	<Hero pImgAlt="أواني مطعم تيفال سوداء فاخرة موضوعة على كوانتر كوريان أسود مط في مطعم تم عمل الرسم الهندسي له للترخيص">
 
-		<VrStack
-			pLoc={new Loc(new NumPer("50%","2.5%"),new NumPer("30%","55%"))}
-			pSize={new Size(new NumPer("40%","95%"))}
-			pHzAlign={"Center"}
-		>
+		<VrStack pLoc={new Loc(new NumPer("50%","2.5%"),new NumPer("25%","60%"))} pSize={new Size(new NumPer("40%","95%"))} pHzAlign={"Center"}>
 
 			<Emograph
 				pTitle={Text.H1.Centered.OfText("تكلفة تشطيب شقة")}
 				pText={Text.Body.Centered.OfText("متوسط تكلفة البنود الأساسية لتشطيب شقة سكنية مساحة 100 متر من حالة النصف تشطيب")}
 			/>
 
-			<EmoCall BlackSky />
+			<HzStack pGap={new Pixel(30,10)} pForceHz>
+
+				<EmoCallIcon BlackSky />
+
+				<EmoWhatsIcon BlackSky />
+
+			</HzStack>
+
+			<Badge
+				pLandOnly
+				pScopeText="القاهرة والجيزة"
+				pYears={15}
+				pWorks={6}
+			/>
 
 		</VrStack>
 
@@ -62,550 +55,25 @@ import { Align, ElemBg, Loc, NumPer, Size, Text } from "@/TypesLib";
 
 
 
-	<EmoSec
-		pBg={new ElemBg("#FFFDF8")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoTable>
 
-		<SecTitle
-			pTitle="افتراضات حساب تكلفة تشطيب الشقة"
-			pDesc="الحساب تقريبي ومبني على نموذج شقة سكنية متوسطة، والتكلفة النهائية تتغير حسب الرسومات والخامات وطبيعة الموقع"
-		/>
+		<EmoTableRow pBg={Colors.Sky}>
 
-		<EmoStr
-			pBg={new ElemBg("#FFFDF8")}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+			<EmoTableCell pText={Text.Body.Bold.OfText("البند")} />
 
-			<Emograph
-				pTitle={Text.H3.WithColor("#17345C").OfText("نطاق الحساب")}
-				pText={Text.Body.WithColor("#333333").OfText("هذا التقدير مخصص لشقة سكنية مساحة 100 متر تقريبا، مكونة من استقبال وطعام وغرفة كبيرة وغرفتين صغيرتين ومطبخ وحمامين، على أن تكون بداية الأعمال من حالة نصف التشطيب، أي وجود المحارة والحلوق الأساسية. الأرقام هنا تعبر عن تكلفة تقريبية للبنود الأساسية، وليست عرض سعر نهائي، لأن التكلفة الفعلية تتحدد بعد الرسومات الهندسية، ومعاينة المكان، وتحديد مستوى الخامات والبنود المطلوبة من المالك.")}
-				pSize={new Size(new NumPer(920, "100%"), new NumPer("auto", "auto"))}
-			/>
+			<EmoTableCell pText={Text.Body.Bold.OfText("القيمة")} />
 
-		</EmoStr>
+		</EmoTableRow>
 
-	</EmoSec>
+		<EmoTableRow pBg="#ffffff">
 
+			<EmoTableCell pText={Text.Body.OfText("التشطيب")} />
 
+			<EmoTableCell pBg={Colors.Yellow} pText={Text.Body.Bold.WithColor("#111111").OfText("250,000 جنيه")} />
 
+		</EmoTableCell>
 
-
-
-
-	<EmoSec
-		pBg={new ElemBg("#F6F1E8")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = " --StripBg : #17345C "
-			pTitle="ملخص التكلفة التقريبية"
-			pDesc="الأرقام التالية مبنية على متوسط أسعار الخامات والمصنعيات في يونيو 2024"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg("#F6F1E8")}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#17345C").OfText("175,000 جنيه")}
-					pText={Text.Body.WithColor("#333333").OfText("إجمالي تقريبي للبنود الأساسية قبل إضافة أتعاب الإدارة أو الإشراف أو هامش الخدمات المصاحبة.")}
-					pSize={new Size(new NumPer(340, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#17345C").OfText("25,000 جنيه")}
-					pText={Text.Body.WithColor("#333333").OfText("قيمة تقريبية تعادل حوالي 15% أتعاب على إجمالي البنود الأساسية، طبقا لطبيعة الخدمة المطلوبة ونطاق المتابعة.")}
-					pSize={new Size(new NumPer(340, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#17345C").OfText("200,000 جنيه")}
-					pText={Text.Body.WithColor("#333333").OfText("إجمالي تقريبي متوقع لتأسيس وتشطيب البنود الأساسية في الشقة محل المثال.")}
-					pSize={new Size(new NumPer(340, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = " --StripBg : #FFFDF8 "
-			pTitle="تفصيل بنود تكلفة التشطيب"
-			pDesc="توزيع تقريبي لقيمة البنود الأساسية الداخلة في حساب تكلفة شقة 100 متر"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg("#FFFFFF")}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<VrStack>
-
-				<HzStack>
-
-					<Emograph
-						pTitle={Text.H3.WithColor("#17345C").OfText("كهرباء — 20,000 جنيه")}
-						pText={Text.Body.WithColor("#333333").OfText("أسلاك السويدي أو الفرنسية، مع مفاتيح بتشينو أو ساس حسب مستوى التشطيب المطلوب.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						pTitle={Text.H3.WithColor("#17345C").OfText("سباكة — 20,000 جنيه")}
-						pText={Text.Body.WithColor("#333333").OfText("تأسيس بي آر وكيسل، وتشطيب بخامات كليوباترا أو ديورافيت حسب الاختيارات النهائية.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						pTitle={Text.H3.WithColor("#17345C").OfText("تكسيات — 30,000 جنيه")}
-						pText={Text.Body.WithColor("#333333").OfText("سيراميك من مستويات مثل كليوباترا أو الأمير أو أرت، مع اختلاف التكلفة حسب المقاسات والفرز والتصميم.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</HzStack>
-
-				<HzStack>
-
-					<Emograph
-						pTitle={Text.H3.WithColor("#17345C").OfText("دهانات — 25,000 جنيه")}
-						pText={Text.Body.WithColor("#333333").OfText("تأسيس دهانات GLC وتشطيب سايبس، مع اختلاف التكلفة حسب حالة الأسطح وعدد الطبقات المطلوبة.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						pTitle={Text.H3.WithColor("#17345C").OfText("ألوميتال — 20,000 جنيه")}
-						pText={Text.Body.WithColor("#333333").OfText("قطاع جامبو لباب بلكونة وثلاثة شبابيك غرف وثلاثة شبابيك مطبخ وحمامات في حدود المثال.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						pTitle={Text.H3.WithColor("#17345C").OfText("نجارة — 15,000 جنيه")}
-						pText={Text.Body.WithColor("#333333").OfText("باب شقة موسكي، مع أبواب غرف ومطبخ وحمام من نفس المستوى التقريبي.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</HzStack>
-
-				<HzStack>
-
-					<Emograph
-						pTitle={Text.H3.WithColor("#17345C").OfText("تكييف — 10,000 جنيه")}
-						pText={Text.Body.WithColor("#333333").OfText("تأسيس عدد 2 تكييف باستخدام نحاس جنوب أفريقي حسب المسارات المطلوبة داخل الشقة.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						pTitle={Text.H3.WithColor("#17345C").OfText("جبسيوم بورد — 10,000 جنيه")}
-						pText={Text.Body.WithColor("#333333").OfText("ديكور للاستقبال والطعام وغرفة النوم الرئيسية باستخدام خامات كناوف في حدود النموذج.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						pTitle={Text.H3.WithColor("#17345C").OfText("مصيص — 10,000 جنيه")}
-						pText={Text.Body.WithColor("#333333").OfText("ضهارة جبس للسقف مع كرانيش، حسب حالة السقف والتفاصيل الديكورية المطلوبة.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</HzStack>
-
-				<HzStack>
-
-					<Emograph
-						pTitle={Text.H3.WithColor("#17345C").OfText("نثريات — 10,000 جنيه")}
-						pText={Text.Body.WithColor("#333333").OfText("مصروفات جانبية لخدمة الموقع، والنقل، والتنظيف، والتخلص من المخلفات، والمستلزمات الصغيرة غير المصنفة كبنود رئيسية.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						pTitle={Text.H3.WithColor("#17345C").OfText("فيوتك — 5,000 جنيه")}
-						pText={Text.Body.WithColor("#333333").OfText("كرانيش للمطبخ والحمام ضمن التشطيبات الثانوية المكملة للشكل النهائي.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</HzStack>
-
-			</VrStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		pBg={new ElemBg("#F6F1E8")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = " --StripBg : #B78A25 "
-			pTitle="أعمال الكهرباء"
-			pDesc="الكهرباء من أول البنود التي يفضل تنفيذها لأنها تحتاج تكسير وتمديد خراطيم وتوزيع دوائر داخل الحوائط والأسقف"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg("#F6F1E8")}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<VrStack>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#17345C").OfText("كيفية تأسيس كهرباء شقة")}
-					pText={Text.Body.WithColor("#333333").OfText("تأسيس الكهرباء يبدأ بتحديد مسارات الخراطيم ونقاط المخارج والإنارة ولوحة الكهرباء الرئيسية ولوحة العداد. لذلك يفضل تنفيذ هذا البند قبل البنود التي يصعب الرجوع للتكسير بعدها، لأن أي تعديل متأخر في الكهرباء يسبب تكلفة إضافية وتعطيل لباقي مراحل التشطيب.")}
-					pSize={new Size(new NumPer(900, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#17345C").OfText("تصميم الدوائر الكهربائية")}
-					pText={Text.Body.WithColor("#333333").OfText("قبل التنفيذ يجب تقسيم دوائر الكهرباء بحيث تخدم كل غرفة أو غرفتين بدائرة مستقلة حسب الأحمال، وتنتهي كل دائرة بقاطع فرعي داخل اللوحة. هذا التقسيم يساعد على عزل الأعطال أو الصيانة في جزء محدد من الشقة بدون قطع الكهرباء عن كامل الوحدة.")}
-					pSize={new Size(new NumPer(900, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#17345C").OfText("جودة الخامات")}
-					pText={Text.Body.WithColor("#333333").OfText("بند الكهرباء لا يفضل التوفير فيه باستخدام خامات منخفضة الجودة، لأن الأسلاك والقواطع والمفاتيح ولوحات الكهرباء عناصر مؤثرة في الأمان والتشغيل اليومي، خاصة مع الأحمال العالية مثل التكييفات والسخانات وأجهزة المطبخ.")}
-					pSize={new Size(new NumPer(900, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</VrStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = " --StripBg : #FFFDF8 "
-			pTitle="تقدير خامات تأسيس الكهرباء"
-			pDesc="متوسط تقريبي لخامات تأسيس كهرباء شقة 100 متر مكونة من ثلاث غرف"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg("#FFFFFF")}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<VrStack>
-
-				<HzStack>
-
-					<Emograph
-						pTitle={Text.H3.WithColor("#17345C").OfText("الخراطيم والأسلاك")}
-						pText={Text.Body.WithColor("#333333").OfText("يشمل التقدير خراطيم كهرباء 16 ملم للحوائط والأسقف، وأسلاك 1.5 ملم و2 ملم و4 ملم من نوعية جيدة، مع اختلاف الكميات حسب عدد المخارج ومسارات التمديد وحجم الديكورات.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						pTitle={Text.H3.WithColor("#17345C").OfText("العلب والمفاتيح")}
-						pText={Text.Body.WithColor("#333333").OfText("يشمل البند علب ماجيك، وشاسيهات، ومفاتيح، ومخارج تغذية، ووشوش تشطيب، ومفاتيح أحمال خاصة للتكييف أو السخان حسب توزيع الأجهزة داخل الشقة.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						pTitle={Text.H3.WithColor("#17345C").OfText("القواطع واللوحات")}
-						pText={Text.Body.WithColor("#333333").OfText("يشمل التقدير قواطع فرعية داخل اللوحة، وقاطعًا ثلاثيًا رئيسيًا، ولوحة كهرباء رئيسية، ولوحة عداد، لأن تقسيم الدوائر لا يكتمل بدون لوحة منظمة وقواطع مناسبة.")}
-						pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</HzStack>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#17345C").OfText("متوسط خامات تأسيس الكهرباء")}
-					pText={Text.Body.WithColor("#333333").OfText("متوسط إجمالي خامات تأسيس كهرباء شقة 100 متر في حدود 42,000 جنيه، قبل إضافة أي فروق قد تنتج عن زيادة عدد المخارج أو تغيير نوع المفاتيح أو زيادة مسارات التكييف والأجهزة الثقيلة.")}
-					pSize={new Size(new NumPer(900, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</VrStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		pBg={new ElemBg("#F6F1E8")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = " --StripBg : #17345C "
-			pTitle="أعمال السباكة"
-			pDesc="السباكة تشمل خطوط المياه والصرف والتهوية وتركيب التجهيزات الصحية، وتحتاج تنسيقا دقيقا قبل إغلاق الحوائط والأرضيات"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg("#F6F1E8")}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#17345C").OfText("تأسيس الشبكات")}
-					pText={Text.Body.WithColor("#333333").OfText("تبدأ السباكة بتحديد مواقع التغذية والصرف والخزانات ونقاط الأجهزة، ثم اختيار نوع المواسير المناسبة مثل PPR أو PEX أو النحاس للمياه، وPVC للصرف، مع تنفيذ التمديدات داخل الحوائط أو تحت الأرضيات.")}
-					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#17345C").OfText("اختبار الضغط")}
-					pText={Text.Body.WithColor("#333333").OfText("بعد تنفيذ الخطوط يجب اختبار ضغط المياه والتأكد من عدم وجود تسريبات قبل تغطية المواسير، لأن اكتشاف الخطأ بعد السيراميك أو الدهانات يسبب تكسيرًا وتكلفة مضاعفة.")}
-					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#17345C").OfText("تكلفة السباكة")}
-					pText={Text.Body.WithColor("#333333").OfText("تتراوح تكلفة السباكة لشقة 100 متر تقريبًا بين 35,000 و45,000 جنيه حسب نوع المواسير، ومستوى الخلاطات والأدوات الصحية، وعدد الحمامات ونقاط المطبخ والغسالات.")}
-					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = " --StripBg : #FFFDF8 "
-			pTitle="أعمال السيراميك والبلاط"
-			pDesc="البلاط والسيراميك من البنود التي تظهر نتيجتها بصريا بوضوح، وأي خطأ في التوزيع أو الفواصل يصعب إخفاؤه بعد التنفيذ"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg("#FFFFFF")}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#17345C").OfText("تجهيز وتركيب")}
-					pText={Text.Body.WithColor("#333333").OfText("يشمل هذا البند تجهيز السطح وتنظيفه وتسويته، ثم توزيع البلاط بطريقة تراعي التوازن البصري وتجنب القصات الظاهرة في منتصف المساحات، ثم تثبيت البلاط وملء الفواصل بعد الجفاف.")}
-					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#17345C").OfText("متوسط التكلفة")}
-					pText={Text.Body.WithColor("#333333").OfText("تتراوح تكلفة السيراميك والبلاط لشقة 100 متر في حدود 60,000 إلى 90,000 جنيه تقريبًا، شاملة أرضيات الشقة وبلاط الحمامات والمطبخ والحوائط حسب نوع الخامة.")}
-					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#17345C").OfText("نصائح الجودة")}
-					pText={Text.Body.WithColor("#333333").OfText("يفضل اختيار سيراميك مضبوط الأبعاد وخال من التموجات، واحتساب فاقد من 5% إلى 10%، واستخدام لاصق مقاوم للرطوبة في الحمامات والمطابخ، مع ضبط الفواصل للحصول على شكل نهائي متزن.")}
-					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		pBg={new ElemBg("#F6F1E8")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = " --StripBg : #B78A25 "
-			pTitle="أعمال الدهانات"
-			pDesc="الدهانات من أكثر البنود تأثيرا على الإحساس النهائي بالشقة، لكنها تعتمد قبل اللون على جودة تجهيز السطح"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg("#F6F1E8")}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#17345C").OfText("مراحل التنفيذ")}
-					pText={Text.Body.WithColor("#333333").OfText("تبدأ الدهانات بتسوية الحوائط ومعالجة الشروخ والعيوب، ثم وضع طبقة تأسيس لتحسين الالتصاق، وبعدها تنفيذ طبقات الدهان النهائي أو الدهانات الزخرفية حسب التصميم المطلوب.")}
-					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#17345C").OfText("متوسط التكلفة")}
-					pText={Text.Body.WithColor("#333333").OfText("التكلفة الإجمالية لأعمال الدهانات في شقة متوسطة تتراوح تقريبًا بين 12,000 و25,000 جنيه حسب نوع الدهان، وعدد الطبقات، وحالة المحارة، ومساحة الأسطح الفعلية.")}
-					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#17345C").OfText("اختيار الدهانات")}
-					pText={Text.Body.WithColor("#333333").OfText("يفضل استخدام دهانات قليلة الانبعاثات، وتجنب الاكتفاء بطبقة واحدة، واختيار ألوان فاتحة في المساحات الصغيرة، مع ترك كل طبقة لتجف قبل تنفيذ الطبقة التالية.")}
-					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = " --StripBg : #FFFDF8 "
-			pTitle="النجارة والألوميتال والجبس بورد"
-			pDesc="بنود ظاهرة في الاستخدام اليومي والشكل النهائي، وتتأثر تكلفتها جدا بمستوى الخامات والتفاصيل"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg("#FFFFFF")}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#17345C").OfText("أعمال النجارة")}
-					pText={Text.Body.WithColor("#333333").OfText("تشمل الأبواب والشبابيك الخشبية ودواليب المطابخ وغرف النوم والأرفف والتشطيبات الخشبية. متوسط تكلفة النجارة لشقة 100 متر قد يتراوح بين 30,000 و80,000 جنيه حسب نوع الخشب والتصميم والتشطيب النهائي.")}
-					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#17345C").OfText("أعمال الألوميتال")}
-					pText={Text.Body.WithColor("#333333").OfText("تشمل النوافذ والأبواب الزجاجية والفواصل والبلكونات. وتتراوح تكلفة الألوميتال لشقة 100 متر تقريبًا بين 25,000 و60,000 جنيه حسب نوع القطاع والزجاج وعدد الفتحات.")}
-					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#17345C").OfText("أعمال الجبس بورد")}
-					pText={Text.Body.WithColor("#333333").OfText("تشمل الأسقف المعلقة والكرانيش والنيشات والفواصل الداخلية. وتتراوح تكلفتها لشقة 100 متر تقريبًا بين 10,000 و25,000 جنيه حسب حجم الأسقف والتفاصيل والزخارف.")}
-					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		pBg={new ElemBg("#17345C")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = " --StripBg : #102744 "
-			pTitle="النثريات والمصاريف الجانبية"
-			pDesc="بنود صغيرة ظاهريا لكنها مؤثرة في ضبط الميزانية لأنها تتكرر طوال فترة التنفيذ"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg("#17345C")}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#FFFFFF").OfText("ما الذي يدخل ضمن النثريات؟")}
-					pText={Text.Body.WithColor("#FFFFFF").OfText("تشمل النثريات مستلزمات الموقع، والنقل، والتنظيف، وحماية الأرضيات أثناء التنفيذ، والتخلص من المخلفات، وتكاليف تنقل العمال أو المشرفين، وأي احتياجات صغيرة تظهر أثناء العمل.")}
-					pSize={new Size(new NumPer(520, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.WithColor("#FFFFFF").OfText("احتياطي الطوارئ")}
-					pText={Text.Body.WithColor("#FFFFFF").OfText("يفضل احتساب احتياطي في حدود 5% إلى 10% من إجمالي تكلفة التشطيب لتغطية المصروفات الطارئة أو فروق أسعار الخامات أو أي تأخير مؤثر في البرنامج الزمني.")}
-					pSize={new Size(new NumPer(520, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
+	</EmoTable>
 
 
 

@@ -199,6 +199,30 @@ import EmoListIndexExport from "./Content/EmoList.astro";
  */
 export const EmoList = EmoListIndexExport;
 
+import EmoTableIndexExport from "./Layout/EmoTable.astro";
+
+/**
+ * @pBorderColor as string — Border color shared by all table cells. (Default: Colors.Gray2)
+ * @pBorderWidth as Pixel — Responsive border width shared by all table cells. (Default: new Pixel(1))
+ * @pCellPad as Pixel — Responsive default padding inherited by EmoTableCell children. (Default: new Pixel(12, 8))
+ */
+export const EmoTable = EmoTableIndexExport;
+
+import EmoTableCellIndexExport from "./Layout/EmoTableCell.astro";
+
+/**
+ * @pText as Text — Text format and optional text value rendered by the cell. Default slot content, when supplied, uses the same format. (Default: Text.Body)
+ * @pBg as string — Cell-specific background color. Takes priority over the parent EmoTableRow pBg.
+ */
+export const EmoTableCell = EmoTableCellIndexExport;
+
+import EmoTableRowIndexExport from "./Layout/EmoTableRow.astro";
+
+/**
+ * @pBg as string — Background color inherited by every EmoTableCell in this row unless the cell defines its own pBg.
+ */
+export const EmoTableRow = EmoTableRowIndexExport;
+
 import EmoWhatsIndexExport from "./Btn/EmoWhats.astro";
 
 /**

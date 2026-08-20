@@ -1,0 +1,75 @@
+---
+import { Text } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"td"> {
+	/** Text format and optional text value rendered by the cell. Default slot content, when supplied, uses the same format. */
+	pText?: Text;
+
+	/** Cell-specific background color. Takes priority over the parent EmoTableRow pBg. */
+	pBg?: string;
+}
+
+const {
+	pText = Text.Body,
+	pBg,
+	id: pGivenID = GetWidgetId("EmoTableCell"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cHasSlot = Astro.slots.has("default");
+const cStyle = [
+	pBg ? `--EmoTableCellBg:${pBg};` : "",
+	`--EmoTableCellFamily:${pText.family};`,
+	pText.GetStyle(),
+	GetStyleText(pGivenStyle),
+].filter(Boolean).join(" ");
+
+function GetStyleText(pStyle: unknown) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+	if (typeof pStyle !== "object") return "";
+
+	return Object.entries(pStyle as Record<string, string | number | null | undefined>)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+<td
+	class={`EmoTableCell ${pGivenClass}`.trim()}
+	style={cStyle}
+	id={pGivenID}
+	{...RemAttr}
+>
+	{cHasSlot ? <slot /> : pText.text}
+</td>
+
+<style>
+	.EmoTableCell {
+		box-sizing: border-box;
+		min-width: 0;
+		background-color: var(--EmoTableCellBg, var(--EmoTableRowBg, transparent));
+		font-family: var(--EmoTableCellFamily, inherit);
+		--TextSize: var(--TextSizeL);
+		overflow-wrap: break-word;
+		vertical-align: middle;
+	}
+
+	@media (orientation: portrait) {
+		.EmoTableCell {
+			--TextSize: var(--TextSizeP, var(--TextSizeL));
+		}
+	}
+</style>

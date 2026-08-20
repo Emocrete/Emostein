@@ -1,0 +1,49 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"tr"> {
+	/** Background color inherited by every EmoTableCell in this row unless the cell defines its own pBg. */
+	pBg?: string;
+}
+
+const {
+	pBg,
+	id: pGivenID = GetWidgetId("EmoTableRow"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cStyle = [
+	pBg ? `--EmoTableRowBg:${pBg};` : "",
+	GetStyleText(pGivenStyle),
+].filter(Boolean).join(" ");
+
+function GetStyleText(pStyle: unknown) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+	if (typeof pStyle !== "object") return "";
+
+	return Object.entries(pStyle as Record<string, string | number | null | undefined>)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+<tr
+	class={`EmoTableRow ${pGivenClass}`.trim()}
+	style={cStyle}
+	id={pGivenID}
+	{...RemAttr}
+>
+	<slot />
+</tr>

@@ -1,0 +1,172 @@
+---
+import { Colors, Pixel, Place, type PlaceProps } from "@/TypesLib";
+import type { HTMLAttributes } from "astro/types";
+
+export interface Props extends DebugOutlineProps, HTMLAttributes<"table">, PlaceProps {
+	/** Border color shared by all table cells. */
+	pBorderColor?: string;
+
+	/** Responsive border width shared by all table cells. */
+	pBorderWidth?: Pixel;
+
+	/** Responsive default padding inherited by EmoTableCell children. */
+	pCellPad?: Pixel;
+}
+
+const {
+	pBorderColor = Colors.Gray2,
+	pBorderWidth = new Pixel(1),
+	pCellPad = new Pixel(12, 8),
+
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+
+	id: pGivenID = GetWidgetId("EmoTable"),
+	class: pGivenClass = "",
+	style: pGivenStyle = "",
+	...RemAttr
+} = Astro.props as Props;
+
+const cCoreStyle = [
+	`--EmoTableBorderColor:${pBorderColor};`,
+	`--EmoTableBorderWidthL:${pBorderWidth.Landscape};`,
+	`--EmoTableBorderWidthP:${pBorderWidth.Portrait};`,
+	`--EmoTableCellPadL:${pCellPad.Landscape};`,
+	`--EmoTableCellPadP:${pCellPad.Portrait};`,
+	GetStyleText(pGivenStyle),
+].filter(Boolean).join(" ");
+
+const cPlace = new Place({
+	pLoc,
+	pSize,
+	pRotate,
+	pZ,
+	pOrigin,
+	pOpacity,
+	pClickable,
+	pLandOnly,
+	pPortOnly,
+	pMove,
+	pMoveDuration,
+	pMoveLoc,
+	pMoveBox,
+	pMoveDistance,
+	pMoveKeyPoints,
+	pMoveIntervals,
+	pMoveDelay,
+	pMoveEase,
+	pMoveLoop,
+	pMoveLoopFor,
+	pMoveLoopInterval,
+	pMoveReverse,
+	pMoveStartOnView,
+	pMoveReplayOnView,
+	pMovePauseWhenOut,
+	pMoveViewThreshold,
+	pMoveViewMargin,
+	pMoveViewTarget,
+}, cCoreStyle);
+
+function GetStyleText(pStyle: unknown) {
+	if (!pStyle) return "";
+	if (typeof pStyle === "string") return pStyle;
+	if (typeof pStyle !== "object") return "";
+
+	return Object.entries(pStyle as Record<string, string | number | null | undefined>)
+		.map(([pName, pValue]) => {
+			if (pValue === undefined || pValue === null) return "";
+			return `${GetCssName(pName)}:${pValue};`;
+		})
+		.filter(Boolean)
+		.join(" ");
+}
+
+function GetCssName(pName: string) {
+	if (pName.startsWith("--")) return pName;
+	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
+}
+---
+
+<table
+	class={`EmoTable ${cPlace.Class} ${pGivenClass}`.trim()}
+	style={cPlace.Style}
+	id={pGivenID}
+	{...RemAttr}
+>
+	<tbody>
+		<slot />
+	</tbody>
+</table>
+
+<style>
+	.EmoTable {
+		box-sizing: border-box;
+		width: 100%;
+		max-width: 100%;
+		border-collapse: collapse;
+		border-spacing: 0;
+		border: 0;
+		background: transparent;
+	}
+
+	.EmoTable :global(.EmoTableCell) {
+		border: var(--EmoTableBorderWidthL, 1px) solid var(--EmoTableBorderColor, #c9c9c9);
+		padding: var(--EmoTableCellPadL, 12px);
+	}
+
+	.EmoTable.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+	}
+
+	.EmoTable.PlaceSized:not(.IsPlaced),
+	.EmoTable.IsPlaced {
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+	@media (orientation: portrait) {
+		.EmoTable :global(.EmoTableCell) {
+			border-width: var(--EmoTableBorderWidthP, var(--EmoTableBorderWidthL, 1px));
+			padding: var(--EmoTableCellPadP, var(--EmoTableCellPadL, 12px));
+		}
+
+		.EmoTable.PlaceSized:not(.IsPlaced),
+		.EmoTable.IsPlaced {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.EmoTable.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+		}
+	}
+</style>
