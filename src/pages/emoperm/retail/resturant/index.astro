@@ -1,27 +1,12 @@
 ---
 import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
-import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { Badge, EmoCallIcon, Emograph, EmoList, EmoWhatsIcon, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
 import { RespImg } from "@/Widgets/Media";
-import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoSec, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { EmoStr } from "@/Widgets/Strips";
-import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -39,83 +24,34 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, T
 
 
 
-	<Hero
-		pTitle="ترخيص مطعم"
-		pDesc="استخراج ترخيص مطعم ومتابعة الملف أمام الجهة المختصة بداية من تجهيز المستندات وحتى استلام الرخصة"
-		pTitleClr={Colors.WhiteOff}
-		pDescClr={Colors.WhiteOff}
-		pHzAlign="center"
-		pVrAlign="center"
-		pBlurL="on"
-		pBlurP="on"
-		pPosL="42% 8% 12% 8%"
-		pPosP="45% 4% 10% 4%"
-	>
+	<Hero pImgAlt="أواني مطعم تيفال سوداء فاخرة موضوعة على كوانتر كوريان أسود مط في مطعم تم عمل الرسم الهندسي له للترخيص">
 
-		<EmoCall BlackSky pText="اطلب ترخيص مطعم" />
+		<VrStack pSize={new Size(new NumPer("40%","95%"))} pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","70%"))} pHzAlign={"Center"}>
 
-	</Hero>
+			<Emograph
+				pTitle={Text.H1.Centered.White.OfText("ترخيص مطعم")}
+				pText={Text.Body.Centered.White.OfText("استخراج ترخيص مطعم ومتابعة الملف أمام الجهة المختصة بداية من تجهيز المستندات وحتى استلام الرخصة")}
+			/>
 
+			<HzStack pGap={new Pixel(30,10)} pForceHz>
 
+				<EmoCallIcon BlackSky />
 
-
-
-
-
-	<EmoSec
-		id="Intro"
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.SkyLite};`}
-			pTitle="استخراج ترخيص مطعم"
-			pDesc="خدمة احترافية للسير في إجراءات استخراج ترخيص مطعم"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(28, 16)} pPad={new Pixel(0, 0)}>
-
-				<RespImg
-					pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp/v1/fill/w_980%2Ch_408%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_auto/308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp", false, "ترخيص مطعم", new Size(new NumPer(480, 320), new NumPer("auto", "auto")))}
-				/>
-
-				<VrStack
-					pWidth={new Pixel(700, 340)}
-					pGap={new Pixel(20, 14)}
-					pPad={new Pixel(0, 0)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.OfText("المطعم ليس محلًا تجاريًا عاديًا")}
-						pText={Text.Body.OfText("ترخيص المطعم يجمع بين ملف المحل العام واشتراطات النشاط الغذائي؛ لذلك لا يكفي تجهيز عقد الإيجار وبطاقة صاحب الطلب فقط، بل يجب النظر إلى العاملين، الشهادات الصحية، الحالة الجنائية، الرسم الهندسي، التهوية، السلامة، وتجهيزات التشغيل التي ستظهر عند المعاينة.")}
-						pSize={new Size(new NumPer(700, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<CardsGr
-						pWidth={new RespString("700px", "100%")}
-						pCardBg={new ElemBg(Colors.Gray1)}
-						pCardTitleFnt={Text.H4.Centered}
-						pCardBodyFnt={Text.Body.Centered}
-						pTopic1={new Topic("ملف إداري", "طلب الترخيص والمستندات وبيانات صاحب النشاط وسند شغل العين")}
-						pTopic2={new Topic("ملف فني", "الرسم الهندسي والمعاينة والاشتراطات التي تثبت صلاحية المكان للنشاط")}
-						pTopic3={new Topic("ملف تشغيل", "الشهادات الصحية والتأمينات والعمالة والتجهيزات المؤثرة على تشغيل المطعم")}
-					/>
-
-				</VrStack>
+				<EmoWhatsIcon BlackSky />
 
 			</HzStack>
 
-		</EmoStr>
+			<Badge
+				pLandOnly
+				pScopeText="القاهرة والجيزة"
+				pYears={6}
+				pWorks={7}
+				pColor="white"
+			/>
 
-	</EmoSec>
+		</VrStack>
+
+	</Hero>
 
 
 
@@ -131,16 +67,12 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, T
 	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
+			Gray1
 			pTitle="الاوراق المطلوبة لاستخراج رخصة مطعم"
 			pDesc="الأوراق الأساسية التي يبدأ بها ملف الترخيص قبل مراجعة الاشتراطات الخاصة بالنشاط الغذائي والمعاينة"
 		/>
 
-		<EmoStr
-			pBg={new ElemBg(Colors.Gray1)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+		<EmoStr pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("980px", "100%")}
@@ -150,6 +82,8 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, T
 				pItemsBg={new ElemBg(Colors.WhiteOff)}
 				pNumbered={true}
 				pItems={[
+					"بطاقة ضريبية",
+					"سجل تجاري",
 					"صورة عقد الملكية أو عقد إيجار المحل مع توفير أصل العقد للإطلاع",
 					"صورة بطاقة الرقم القومي لصاحب الترخيص",
 					"عدد 3 نسخ من الرسومات الهندسية للمحل حسب المواصفات المعتمدة",
@@ -171,45 +105,6 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, T
 
 
 	<EmoSec
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.GreenLite};`}
-			pTitle="مستندات يجب مراجعتها قبل التقديم"
-			pDesc="قد تختلف تفاصيل الملف حسب الحي أو الجهاز أو طبيعة النشاط، لذلك يجب مراجعة هذه النقاط قبل بدء إجراءات الترخيص"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<CardsGr
-				pWidth={new RespString("1220px", "100%")}
-				pCardBg={new ElemBg(Colors.Gray1)}
-				pCardTitleFnt={Text.H4}
-				pCardBodyFnt={Text.Body}
-				pTopic1={new Topic("السجل التجاري والبطاقة الضريبية", "وجود نشاط غذائي أو مطعم في بيانات النشاط التجاري والضريبي يقلل تعارض البيانات عند مراجعة الملف.")}
-				pTopic2={new Topic("الشهادات الصحية للعاملين", "المطاعم من الأنشطة التي تتعامل مع الأغذية والمشروبات، لذلك يجب مراجعة شهادات العاملين قبل المعاينة وليس بعدها.")}
-				pTopic3={new Topic("الحالة الجنائية", "صحيفة الحالة الجنائية تظهر في ملفات المحال العامة، ويجب تجهيزها بالصيغة والحداثة التي تقبلها الجهة المختصة.")}
-				pTopic4={new Topic("موافقات النشاط", "قد يطلب الملف موافقات أو مراجعات مرتبطة بالحماية المدنية أو البيئة أو الصرف أو التنظيم حسب حالة المطعم وموقعه وتجهيزاته.")}
-			/>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
 		id="Procedures"
 		pBg={new ElemBg(Colors.Creamy)}
 		pHzAlign={Align.Center}
@@ -217,16 +112,12 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, T
 	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.BistageDark};`}
+			BistageDark
 			pTitle="اجراءات ترخيص مطعم"
 			pDesc="يمر طلب الترخيص من تقديم الملف إلى القبول المبدئي ثم الاشتراطات والمعاينة وسداد الرسوم واستلام الترخيص"
 		/>
 
-		<EmoStr
-			pBg={new ElemBg(Colors.Creamy)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+		<EmoStr pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("980px", "100%")}
@@ -258,62 +149,6 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, T
 
 
 	<EmoSec
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.OrangeLite};`}
-			pTitle="مرحلة المعاينة في ترخيص المطعم"
-			pDesc="المعاينة هي المرحلة التي تربط بين الورق والواقع، وفي المطاعم تكون أكثر حساسية بسبب المطبخ والتهوية والحريق والصرف والتشغيل"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(28, 16)} pPad={new Pixel(0, 0)}>
-
-				<VrStack
-					pWidth={new Pixel(680, 340)}
-					pGap={new Pixel(18, 12)}
-					pPad={new Pixel(0, 0)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.OfText("ما الذي تنظر إليه الجهة عند المعاينة؟")}
-						pText={Text.Body.OfText("لا تنظر المعاينة إلى اسم النشاط فقط، بل إلى قابلية المكان لتشغيل مطعم فعليًا: مساحة التحضير، منطقة الخدمة، المداخل، التهوية، المدخنة عند الحاجة، وسائل الحماية من الحريق، الصرف، الكهرباء، نظافة مناطق تداول الغذاء، ومطابقة الرسم الهندسي للحالة القائمة.")}
-						pSize={new Size(new NumPer(680, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<Emograph
-						pTitle={Text.H3.OfText("لماذا يتعطل ملف مطعم رغم اكتمال الورق؟")}
-						pText={Text.Body.OfText("قد يكون الملف الورقي مكتملًا، لكن المطعم نفسه غير مستوفٍ فنيًا. أكثر ما يسبب التعطيل هو اختلاف الرسم عن الواقع، ضعف التهوية، غموض مسار المدخنة، عدم وضوح الصرف، أو تنفيذ تشطيب لا يراعي اشتراطات النشاط قبل طلب المعاينة.")}
-						pSize={new Size(new NumPer(680, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-				</VrStack>
-
-				<RespImg
-					pImg={new EmoMediaData("Img", "https://static.wixstatic.com/media/", "308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp/v1/fill/w_980%2Ch_408%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_auto/308dfd_e957e3279fa64915a6062abbb52ab324~mv2.webp", false, "مطعم وتجهيزات تشغيل", new Size(new NumPer(460, 320), new NumPer("auto", "auto")))}
-				/>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
 		id="Drawing"
 		pBg={new ElemBg(Colors.Gray1)}
 		pHzAlign={Align.Center}
@@ -321,16 +156,12 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, T
 	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
+			Gray1
 			pTitle="الرسم الهندسي لـترخيص مطعم"
 			pDesc="يجب أن يتضمن الرسم الهندسي للمحل التجاري عدة عناصر رئيسية لتوصيف المحل وتوضيح مدى ملاءمته للمواصفات المطلوبة للنشاط الذي سيتم له ترخيص المحل التجاري."
 		/>
 
-		<EmoStr
-			pBg={new ElemBg(Colors.Gray1)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+		<EmoStr pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("980px", "100%")}
@@ -357,29 +188,13 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, T
 
 
 
-	<EmoSec
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
-		<SecTitle
-			style = {`--StripBg:${Colors.SkyLite};`}
-			pTitle="نماذج رسم هندسي لمطعم"
-			pDesc="نماذج رسومات توضح طريقة عرض المسقط والواجهة والقطاع وكروكي الموقع ضمن ملف ترخيص المطعم"
-		/>
+		<SecTitle SkyLite pTitle="نماذج رسم هندسي لمطعم" pDesc="نماذج رسومات توضح طريقة عرض المسقط والواجهة والقطاع وكروكي الموقع ضمن ملف ترخيص المطعم" />
 
-		<EmoStr
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+		<EmoStr pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
-			<VrStack
-				pWidth={new Pixel(1120, 340)}
-				pGap={new Pixel(18, 14)}
-				pPad={new Pixel(0, 0)}
-			>
+			<VrStack pWidth={new Pixel(1120, 340)} pGap={new Pixel(18, 14)} pPad={new Pixel(0, 0)}>
 
 				<HzStack pGap={new Pixel(18, 14)} pPad={new Pixel(0, 0)}>
 
@@ -420,23 +235,11 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, T
 		pVrAlign={Align.Center}
 	>
 
-		<SecTitle
-			style = {`--StripBg:${Colors.BistageDark};`}
-			pTitle="خدمة متابعة إجراءات استخراج ترخيص مطعم"
-			pDesc="نطاق الخدمة محدد من البداية حتى يعرف صاحب المطعم ما يدخل ضمن المتابعة وما يخرج عنها"
-		/>
+		<SecTitle BistageDark pTitle="خدمة متابعة إجراءات استخراج ترخيص مطعم" />
 
-		<EmoStr
-			pBg={new ElemBg(Colors.Creamy)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+		<EmoStr pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
-			<VrStack
-				pWidth={new Pixel(1100, 340)}
-				pGap={new Pixel(22, 14)}
-				pPad={new Pixel(0, 0)}
-			>
+			<VrStack pWidth={new Pixel(1100, 340)} pGap={new Pixel(22, 14)} pPad={new Pixel(0, 0)}>
 
 				<CardsGr
 					pWidth={new RespString("900px", "100%")}
@@ -448,7 +251,6 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, T
 				/>
 
 				<CardsGr
-					pWidth={new RespString("1100px", "100%")}
 					pCardBg={new ElemBg(Colors.WhiteOff)}
 					pCardTitleFnt={Text.H4}
 					pCardBodyFnt={Text.Body}
@@ -458,7 +260,13 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, T
 					pTopic4={new Topic("استلام الترخيص", "مراجعة الحي أو الجهاز التابع له المحل إداريا لاستلام ترخيص المحل .")}
 				/>
 
-				<EmoCall BlackSky pText="اطلب الخدمة" />
+				<HzStack pGap={new Pixel(30,10)} pForceHz>
+
+					<EmoCallIcon BlackSky />
+
+					<EmoWhatsIcon BlackSky />
+
+				</HzStack>
 
 			</VrStack>
 
@@ -472,23 +280,11 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, T
 
 
 
-	<EmoSec
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
-		<SecTitle
-			style = {`--StripBg:${Colors.OrangeLite};`}
-			pTitle="الخدمة لا تشمل ما يلي"
-			pDesc="هذه البنود تحتاج اتفاقًا مستقلًا أو تسدد حسب ما تطلبه الجهات المختصة أثناء سير الملف"
-		/>
+		<SecTitle OrangeLite pTitle="الخدمة لا تشمل ما يلي" pDesc="هذه البنود تحتاج اتفاقًا مستقلًا أو تسدد حسب ما تطلبه الجهات المختصة أثناء سير الملف" />
 
-		<EmoStr
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+		<EmoStr pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("920px", "100%")}
@@ -515,23 +311,11 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, T
 
 
 
-	<EmoSec
-		pBg={new ElemBg(Colors.Gray1)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="بيان الدفعات"
-			pDesc="تقسيم الأتعاب على مراحل العمل يجعل التعاقد واضحًا ومرتبطًا بتقدم ملف الترخيص"
-		/>
+		<SecTitle Gray2 pTitle="بيان الدفعات" />
 
-		<EmoStr
-			pBg={new ElemBg(Colors.Gray1)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+		<EmoStr pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 			<CardsGr
 				pWidth={new RespString("1100px", "100%")}
@@ -553,147 +337,30 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, T
 
 
 
-	<EmoSec
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.SkyLite};`}
-			pTitle="لماذا يحتاج المطعم إلى إدارة ملف قبل التشطيب؟"
-			pDesc="القرار الصحيح في مرحلة الترخيص قد يوفر تكلفة تعديلات كبيرة بعد تنفيذ الديكور والمطبخ والتهوية"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<CardsGr
-				pWidth={new RespString("1220px", "100%")}
-				pCardBg={new ElemBg(Colors.Gray1)}
-				pCardTitleFnt={Text.H4}
-				pCardBodyFnt={Text.Body}
-				pTopic1={new Topic("التهوية والمدخنة", "المطاعم التي تعتمد على طهي أو تسخين أو شواية أو قلاية تحتاج مراجعة مسار الأبخرة والروائح والحريق قبل اعتماد التشطيب.")}
-				pTopic2={new Topic("الحماية المدنية", "تجهيزات الإطفاء والإنذار والمخارج والمسارات لا يجب أن تترك للنهاية، لأنها قد تغير توزيع الفراغات والتكلفة.")}
-				pTopic3={new Topic("الصرف والمياه", "مناطق الغسيل والتحضير والمطبخ تحتاج صرفًا واضحًا ومناسبًا لطبيعة التشغيل حتى لا تظهر ملاحظات تشغيلية أو صحية لاحقًا.")}
-				pTopic4={new Topic("مطابقة الرسم للواقع", "أي تعديل في التقسيم أو الواجهة أو المداخل بعد إعداد الرسم قد يحتاج تحديثًا قبل المعاينة أو قبل استكمال الترخيص.")}
-			/>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoFaq>
-
-		<FaqItem
-			pQuestion="هل ترخيص المطعم يختلف عن ترخيص محل تجاري عادي؟"
-			pAnswer="نعم. المطعم يدخل ضمن أنشطة تداول الأغذية والمشروبات، لذلك تظهر أهمية الشهادات الصحية للعاملين، ومراجعة التهوية والمدخنة والصرف والحماية المدنية والتجهيزات الداخلية بجانب مستندات المحل العامة."
-		/>
-
-		<FaqItem
-			pQuestion="هل الرسم الهندسي داخل خدمة متابعة الترخيص؟"
-			pAnswer="لا. خدمة متابعة الترخيص لا تشمل إعداد الرسم الهندسي إلا إذا تم الاتفاق عليه كخدمة مستقلة، لأن الرسم يحتاج معاينة ورفع أبعاد وإعداد لوحة هندسية منفصلة."
-		/>
-
-		<FaqItem
-			pQuestion="متى قد يطلب تقرير مدخنة؟"
-			pAnswer="قد يطلب تقرير المدخنة في المطاعم التي تعتمد على مدخنة لتصريف الأبخرة أو نواتج الطهي، خصوصًا إذا كان مسار المدخنة أو حالتها يحتاج إثباتًا فنيًا أمام الجهة المختصة."
-		/>
-
-		<FaqItem
-			pQuestion="هل يمكن البدء في التشطيب قبل الترخيص؟"
-			pAnswer="يمكن التفكير في التصميم مبكرًا، لكن تنفيذ التشطيب قبل فهم اشتراطات النشاط قد يؤدي إلى تعديلات مكلفة. الأفضل مراجعة المتطلبات الفنية ومسار الترخيص قبل غلق الأسقف أو تنفيذ التهوية أو تركيب واجهة نهائية."
-		/>
-
-	</EmoFaq>
-
-
-
-
-
-
-
-	<ReadAlso
-		pTitle={Text.H2.Centered.OfText("اقرأ أيضا ...")}
-		pHeadBg={new ElemBg(Colors.SkyLite)}
-		pBodyBg={new ElemBg(Colors.WhiteOff)}
-		pCardBg={new ElemBg(Colors.Gray1)}
-	>
-
-		<ReadAlsoItem
-			pTitle="ترخيص محل تجاري"
-			pDesc="الصفحة الأساسية لخدمات ترخيص المحلات التجارية، وتشمل الصورة العامة للمستندات والإجراءات والرسم الهندسي وتكلفة الترخيص."
-			pHref="/emoperm/retail/general"
-		/>
-
-		<ReadAlsoItem
-			pTitle="رسم هندسي لمطعم"
-			pDesc="تفاصيل إعداد الرسم الهندسي المطلوب لترخيص مطعم، شامل المسقط والقطاع والواجهة وكروكي الموقع العام."
-			pHref="/emoperm/retail/resturant/dwg"
-		/>
-
-		<ReadAlsoItem
-			pTitle="مستندات ترخيص محل تجاري"
-			pDesc="الأوراق الأساسية قبل التقديم، مع توضيح المستندات التي تختلف حسب النشاط أو صفة طالب الترخيص."
-			pHref="/emoperm/retail/general/doc"
-		/>
-
-		<ReadAlsoItem
-			pTitle="إجراءات ترخيص محل تجاري"
-			pDesc="خطوات تقديم الطلب والقبول المبدئي والمعاينة واستيفاء الاشتراطات وسداد الرسوم واستلام الترخيص."
-			pHref="/emoperm/retail/general/proc"
-		/>
-
-	</ReadAlso>
-
-
-
-
-
-
-
-	<RelServices
-		pTitle={Text.H2.Centered.White.OfText("خدماتنا")}
-		pHeadBg={new ElemBg(Colors.Gray5)}
-		pBodyBg={new ElemBg(Colors.Gray1)}
-		pCardBg={new ElemBg(Colors.WhiteOff)}
-	>
+	<RelServices>
 
 		<RelServiceItem
 			pTitle="رسم هندسي لمطعم"
 			pDesc="إعداد الرسم الهندسي المطلوب لترخيص مطعم بعد معاينة المكان ورفع الأبعاد وتجهيز المسقط والقطاع والواجهة وكروكي الموقع."
 			pHref="/emoperm/retail/resturant/dwg"
-			pBtnText="معرفة المزيد"
 		/>
 
 		<RelServiceItem
 			pTitle="تقرير هندسي لسلامة المبنى"
 			pDesc="إعداد تقرير هندسي عن حالة وسلامة المبنى إذا طلبته جهة الترخيص بسبب حالة العقار أو قدمه أو غموض موقفه الإنشائي."
 			pHref="/emonsult/report/safety"
-			pBtnText="معرفة المزيد"
 		/>
 
 		<RelServiceItem
 			pTitle="تقرير هندسي لمدخنة مطعم"
 			pDesc="تقرير فني عن سلامة المدخنة ومطابقتها الفنية في الحالات التي تعتمد على تصريف الأبخرة ونواتج الطهي."
 			pHref="/emonsult/report/chimney"
-			pBtnText="معرفة المزيد"
 		/>
 
 		<RelServiceItem
 			pTitle="تشطيب وتجهيز مطعم"
 			pDesc="تصميم وتنفيذ تشطيبات وفرش المطاعم بما يناسب طبيعة التشغيل والميزانية والتجهيزات المطلوبة للنشاط."
 			pHref="/emocrete/finishing/retail"
-			pBtnText="معرفة المزيد"
 		/>
 
 	</RelServices>
