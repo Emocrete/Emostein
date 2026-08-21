@@ -1,5 +1,5 @@
 ---
-import { ElemBg, GetHzAlignCss, GetVrAlignCss, type HzAlignValue, Pixel, Place, type PlaceProps, Size, type VrAlignValue } from "@/TypesLib";
+import { ElemBg, GetHzAlignCss, GetVrAlignCss, type HzAlignValue, Percent, Pixel, Place, type PlaceProps, Size, type VrAlignValue } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
 
 interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
@@ -8,6 +8,7 @@ interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
 	pPad?: Pixel;
 	pMargin?: Pixel;
 	pBg?: ElemBg;
+	pBgOpacity?: Percent;
 	pRadius?: Pixel;
 	pHzAlign?: HzAlignValue;
 	pVrAlign?: VrAlignValue;
@@ -22,6 +23,7 @@ const {
 	pPad = new Pixel(0),
 	pMargin = new Pixel(0),
 	pBg,
+	pBgOpacity = new Percent(100),
 	pRadius = new Pixel(0),
 	pHzAlign = "Start",
 	pVrAlign = "Stretch",
@@ -71,6 +73,8 @@ const cHeightL = pSize?.HeightL || "auto";
 const cHeightP = pSize?.HeightP || pSize?.HeightL || "auto";
 
 const cBgColor = pBg?.Color || "transparent";
+const cBgOpacityL = pBgOpacity.Landscape;
+const cBgOpacityP = pBgOpacity.Portrait;
 
 const cBgImgL = pBg?.Img?.LinkL || "";
 const cBgImgP = pBg?.Img?.LinkP || pBg?.Img?.LinkL || "";
@@ -102,6 +106,8 @@ const cCoreStyle = [
 	`--HzMarginL:${pMargin.Landscape};`,
 	`--HzMarginP:${pMargin.Portrait};`,
 	`--HzBgColor:${cBgColor};`,
+	`--HzBgOpacityL:${cBgOpacityL};`,
+`--HzBgOpacityP:${cBgOpacityP};`,
 	`--HzRadiusL:${pRadius.Landscape};`,
 	`--HzRadiusP:${pRadius.Portrait};`,
 	`--HzAlignItems:${cVrAlign};`,
@@ -147,21 +153,6 @@ function GetCssName(pName: string) {
 	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
 }
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -232,21 +223,6 @@ function GetCssName(pName: string) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
 
 
@@ -264,7 +240,11 @@ function GetCssName(pName: string) {
 		padding: var(--HzPadL, 0);
 		gap: var(--HzGapL, 0);
 		border-radius: var(--HzRadiusL, 0);
-		background-color: var(--HzBgColor, transparent);
+		background-color: color-mix(
+	in srgb,
+	var(--HzBgColor) var(--HzBgOpacityL),
+	transparent
+);
 		overflow: hidden;
 		align-items: var(--HzAlignItems, stretch);
 		justify-content: var(--HzJustifyContent, flex-start);
@@ -353,6 +333,17 @@ function GetCssName(pName: string) {
 	}
 
 
+
+</style>
+
+
+
+
+
+<style>
+
+
+
 	@media (orientation: portrait) {
 		.HzStack {
 			width: var(--HzWidthP, var(--HzWidthL, 100%));
@@ -361,6 +352,11 @@ function GetCssName(pName: string) {
 			padding: var(--HzPadP, var(--HzPadL, 0));
 			gap: var(--HzGapP, var(--HzGapL, 0));
 			border-radius: var(--HzRadiusP, var(--HzRadiusL, 0));
+			background-color: color-mix(
+	in srgb,
+	var(--HzBgColor) var(--HzBgOpacityP),
+	transparent
+);
 		}
 
 		.HzStack.IsPlaced {

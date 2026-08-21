@@ -303,6 +303,7 @@ import HzStackIndexExport from "./Layout/HzStack.astro";
  * @pPad as Pixel
  * @pMargin as Pixel
  * @pBg as ElemBg
+ * @pBgOpacity as Percent
  * @pRadius as Pixel
  * @pHzAlign as HzAlignValue
  * @pVrAlign as VrAlignValue
