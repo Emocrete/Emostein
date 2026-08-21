@@ -1,8 +1,8 @@
 ---
 import BLayout from "@/Layout.astro";
-import { Badge, EmoCallIcon, Emograph, EmoWhatsIcon, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { Badge, EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
 import { EmoGallery } from "@/Widgets/Media";
-import { DivCol, DivStr, EmoSec, Hero } from "@/Widgets/Sections";
+import { EmoSec, Hero } from "@/Widgets/Sections";
 import { Align, Colors, ElemBg, Loc, NumPer, Pixel, Size, Text } from "@/TypesLib";
 ---
 
@@ -84,37 +84,21 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, Size, Text } from "@/TypesLi
 
 		<SecTitle GreenLite pTitle="أنواع الجرانيت المصري والمستورد" />
 
-		<DivStr>
+		<VrStack>
 
-			<DivCol pSize={new Size(new NumPer(200),new NumPer(30))}>
+			<Emograph id="txtEgMarple" pTitle={Text.H3.Centered.AtRight.OfText("جرانيت مصري")} />
 
-				<Emograph id="txtEgMarple" pTitle={Text.H3.Centered.OfText("جرانيت مصري")} />
+			<EmoDet pHref="/emostone/granit/eg" />
 
-			</DivCol>
+			<EmoGallery pFolder="/Media/Emostone/Granit/Eg/Samples/Raw" pSize={new Size(new NumPer("100%","100%"),new NumPer(550,600))} data-own-size />
 
-			<DivCol>
+			<Emograph id="txtImpMarple" pTitle={Text.H3.Centered.AtRight.OfText("جرانيت مستورد")} />
 
-				<EmoGallery pFolder="/Media/Emostone/Granit/Eg/Samples/Raw" />
+			<EmoDet pHref="/emostone/granit/imp" />
 
-			</DivCol>
+			<EmoGallery pFolder="/Media/Emostone/Granit/Imp/Samples/Raw" pSize={new Size(new NumPer("100%","100%"),new NumPer(550,600))} data-own-size />
 
-		</DivStr>
-
-		<DivStr>
-
-			<DivCol pSize={new Size(new NumPer(200),new NumPer(30))}>
-
-				<Emograph pTitle={Text.H3.Centered.OfText("جرانيت مستورد")} />
-
-			</DivCol>
-
-			<DivCol>
-
-				<EmoGallery pFolder="/Media/Emostone/Granit/Imp/Samples/Raw" />
-
-			</DivCol>
-
-		</DivStr>
+		</VrStack>
 
 	</EmoSec>
 
