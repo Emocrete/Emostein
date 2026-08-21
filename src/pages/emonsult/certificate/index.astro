@@ -1,26 +1,11 @@
 ---
 import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
-import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { EmoCallIcon, Emograph, EmoList, EmoWhatsIcon, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
 import { EmoFaq, EmoSec, FaqItem, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { EmoStr } from "@/Widgets/Strips";
-import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -41,25 +26,24 @@ import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, T
 	<Hero>
 
 		<VrStack
-			pBlur={new Pixel(10)}
-			pBgOpacity={new Percent(50)}
-			pBgColor={new ElemBg(Colors.BlackOff)}
-			pLoc={new Loc(new NumPer("10%","5%"),new NumPer("40%","20%"))}
-			pSize={new Size(new NumPer("50%","90%"))}
+			pLoc={new Loc(new NumPer("5%","0%"),new NumPer("40%","10%"))}
+			pSize={new Size(new NumPer("45%","100%"))}
 			pHzAlign="Center"
 			pVrAlign="Center"
 		>
 
 			<Emograph
-				pTitle={Text.H1.White.OfText("شهادات هندسية")}
-				pText={Text.Body.White.OfSize(16).OfText("اعتماد شهادات هندسية من نقابة المهندسين لاستخدامها أمام الأحياء وأجهزة المدن والجهات الإدارية وشركات المرافق، مع تجهيز بيانات العقار والمالك والمهندس والسجل الهندسي حسب نوع الشهادة المطلوبة.")}
+				pTitle={Text.H1.Centered.OfText("شهادات هندسية")}
+				pText={Text.Body.Centered.OfText("اعتماد شهادات هندسية من نقابة المهندسين لاستخدامها أمام الأحياء وأجهزة المدن والجهات الإدارية وشركات المرافق، مع تجهيز بيانات العقار والمالك والمهندس والسجل الهندسي حسب نوع الشهادة المطلوبة.")}
 			/>
 
-			<EmoCall
-				data-own-size
-				BlackSky
-				pText="تواصل معنا"
-			/>
+			<HzStack pGap={new Pixel(30,10)}>
+
+				<EmoCallIcon BlackSky />
+
+				<EmoWhatsIcon BlackSky />
+
+			</HzStack>
 
 		</VrStack>
 
@@ -85,12 +69,6 @@ import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, T
 		/>
 
 		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
-
-			<Emograph
-				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
-				pTitle={Text.H3.OfText("الشهادة ليست ختمًا فقط")}
-				pText={Text.Body.OfText("قيمة الشهادة الهندسية في أنها تربط العقار أو الأعمال الهندسية بمهندس محدد وسجل هندسي محدد ومسؤولية مهنية محددة. لذلك لا يصح التعامل معها كختم منفصل عن البيانات، أو كنموذج عام يصلح لأي عقار دون معاينة أو مراجعة أو توصيف واضح.")}
-			/>
 
 			<Emograph
 				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
@@ -122,7 +100,6 @@ import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, T
 		/>
 
 		<CardsGr
-			pWidth={new RespString("1200px", "100%")}
 			pCardRadius={new Pixel(20, 16)}
 			pCardBg={new ElemBg(Colors.WhiteOff)}
 			pGrTitle={Text.H3.Centered.OfText("اختار الشهادة حسب مرحلة العقار")}
@@ -144,51 +121,6 @@ import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, T
 
 
 
-	<EmoStr
-		id="Difference"
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<EmoStr
-			pBg={new ElemBg(Colors.BistageLite)}
-			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<Emograph
-				pTitle={Text.H2.Centered.OfText("الفرق بين الشهادة والتقرير والختم والرخصة")}
-				pText={Text.Body.Centered.OfText("الخلط بين هذه المصطلحات يسبب نقصًا في الملفات وتعطيلًا أمام الجهات الإدارية. كل مستند له وظيفة مختلفة ولا يغني تلقائيًا عن غيره.")}
-				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
-			/>
-
-		</EmoStr>
-
-		<CardsGr
-			pWidth={new RespString("1200px", "100%")}
-			pCardRadius={new Pixel(20, 16)}
-			pCardBg={new ElemBg(Colors.Gray1)}
-			pCardTitleFnt={Text.H4}
-			pCardBodyFnt={Text.Body}
-			pStackDir="Row"
-			pSpacing={20}
-			pTopic1={new Topic("الشهادة الهندسية", "مستند يثبت صلاحية أو إشرافًا أو مطابقة أو واقعة فنية محددة، ويعتمد ببيانات مهندس وسجل هندسي وعقار محدد.")}
-			pTopic2={new Topic("التقرير الهندسي", "شرح فني أوسع لحالة عقار أو منشأ أو طريقة تنفيذ أو سبب مشكلة أو توصية هندسية، وقد يرفق بشهادة أو يستخدم مستقلًا.")}
-			pTopic3={new Topic("الختم الهندسي", "وسيلة اعتماد مهني لمستند أو رسم أو شهادة، لكنه لا يحول مستندًا غير صحيح أو غير مكتمل إلى مستند صالح.")}
-			pTopic4={new Topic("الرخصة الإدارية", "تصدر من الحي أو الجهاز أو الجهة المختصة وتسمح بتنفيذ أو تشغيل أو هدم أو بناء. الشهادة قد تكون مستندًا داخل ملف الرخصة لكنها ليست بديلًا عنها.")}
-		/>
-
-	</EmoStr>
-
-
-
-
-
-
-
 	<EmoSec
 		id="UseCases"
 		pBg={new ElemBg(Colors.WhiteOff)}
@@ -197,7 +129,7 @@ import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, T
 	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.SkyLite};`}
+			SkyLite
 			pTitle="استخدامات الشهادات الهندسية"
 			pDesc="تختلف صيغة الشهادة حسب الجهة والغرض. لذلك يجب تحديد الاستخدام قبل صياغة الشهادة أو اعتمادها من النقابة."
 		/>
@@ -256,7 +188,7 @@ import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, T
 	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
+			Gray2
 			pTitle="شهادة صلاحية المبنى للإشغال"
 			pDesc="هذه الشهادة تأتي بعد التنفيذ، وتستخدم لإثبات أن الأعمال المنفذة مطابقة للترخيص والكودات والرسومات المنفذة فعليًا، وهي من أهم مستندات توصيل المرافق والتشغيل."
 		/>
@@ -424,229 +356,6 @@ import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, T
 
 
 
-	<EmoSec
-		id="Process"
-		pBg={new ElemBg(Colors.Gray1)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="خطوات تنفيذ خدمة الشهادات الهندسية"
-			pDesc="نرتب الخدمة حسب نوع الشهادة والجهة التي ستستلمها، لأن شهادة الإشغال تختلف عن شهادة الإشراف، وشهادة الهدم تختلف عن تقرير المعاينة أو الصلاحية."
-		/>
-
-		<CardsGr
-			pWidth={new RespString("1200px", "100%")}
-			pCardRadius={new Pixel(20, 16)}
-			pCardBg={new ElemBg(Colors.WhiteOff)}
-			pGrTitle={Text.H3.Centered.OfText("مسار العمل")}
-			pCardTitleFnt={Text.H4}
-			pCardBodyFnt={Text.Body}
-			pStackDir="Row"
-			pSpacing={20}
-			pTopic1={new Topic("تحديد نوع الشهادة", "نحدد هل المطلوب شهادة صلاحية إشغال، إشراف بناء، إشراف هدم، شهادة معاينة، أو شهادة مرتبطة بتقرير فني.")}
-			pTopic2={new Topic("مراجعة المستندات", "نراجع الرخصة أو الطلب أو مستند الملكية أو بيانات العقار، ونحدد أي نقص قبل صياغة الشهادة.")}
-			pTopic3={new Topic("المعاينة عند الحاجة", "بعض الشهادات تحتاج معاينة فعلية أو مراجعة رسومات أو صور أو حالة تنفيذ قبل أن تكون قابلة للاعتماد.")}
-			pTopic4={new Topic("إعداد الشهادة", "تجهز الشهادة بصياغة واضحة تحتوي بيانات العقار والمالك والمهندس والسجل والغرض من الشهادة.")}
-			pTopic5={new Topic("اعتماد النقابة", "تقدم الشهادة لاعتماد نقابة المهندسين وسداد الرسوم والدمغات وختم الشهادة طبقًا للإجراءات.")}
-			pTopic6={new Topic("التسليم والتوجيه", "نسلم الشهادة ونوضح أين تقدم، وما إذا كانت تحتاج مرفقات مثل تقرير فني أو رسومات تنفيذية أو خطاب جهة إدارية.")}
-		/>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoStr
-		id="CommonMistakes"
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<EmoStr
-			pBg={new ElemBg(Colors.BistageLite)}
-			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<Emograph
-				pTitle={Text.H2.Centered.OfText("أخطاء تعطل اعتماد الشهادات الهندسية")}
-				pText={Text.Body.Centered.OfText("أغلب التعطيل لا يكون بسبب صعوبة الشهادة نفسها، بل بسبب نقص البيانات أو اختيار نوع شهادة غير مناسب للغرض المطلوب.")}
-				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
-			/>
-
-		</EmoStr>
-
-		<EmoList
-			pWidth={new RespString("1000px", "100%")}
-			pTitle={Text.H3.Centered.OfText("تجنب هذه الأخطاء قبل طلب الشهادة")}
-			pDesc={Text.Body.Centered.OfText("كل بند من هذه البنود قد يجعل الشهادة غير قابلة للتقديم أو يحتاج تعديلًا بعد الاعتماد.")}
-			pHeadBg={new ElemBg(Colors.SkyLite)}
-			pItemsBg={new ElemBg(Colors.Gray1)}
-			pItemFnt={Text.Body}
-			pNumbered={true}
-			pItems={[
-				"طلب شهادة إشراف بينما الجهة تحتاج تقرير معاينة أو شهادة صلاحية.",
-				"عدم تحديد الجهة التي ستستلم الشهادة والغرض منها.",
-				"كتابة عنوان العقار أو عدد الأدوار أو اسم المالك بصورة غير مطابقة للمستندات.",
-				"استخدام شهادة عامة لا تحتوي توصيفًا كافيًا للعقار أو الأعمال.",
-				"عدم مراجعة سريان السجل الهندسي أو ملاءمة تخصص المهندس.",
-				"إغفال الرسومات أو التقرير الفني المرفق في شهادات الإشغال أو الهدم أو الصلاحية.",
-				"الاعتماد على صور أو بيانات غير كافية في الحالات التي تحتاج معاينة فعلية.",
-				"تقديم الشهادة وحدها رغم أن الجهة تطلب رخصة أو تقريرًا أو مستندات ملكية أو مرافق."
-			]}
-		/>
-
-	</EmoStr>
-
-
-
-
-
-
-
-	<EmoSec
-		id="WhatWeNeed"
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.SkyLite};`}
-			pTitle="بيانات نحتاجها لتحديد الشهادة المناسبة"
-			pDesc="قبل إصدار أي شهادة، أرسل البيانات التالية حتى يتم تحديد نوع الشهادة والمرفقات المطلوبة والجهة التي ستقدم إليها."
-		/>
-
-		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
-
-			<EmoList
-				pWidth={new RespString("560px", "100%")}
-				pTitle={Text.H3.OfText("بيانات أولية")}
-				pDesc={Text.Body.OfText("هذه البيانات تكفي كبداية لتوجيهك إلى نوع الشهادة الصحيح.")}
-				pHeadBg={new ElemBg(Colors.BistageLite)}
-				pItemsBg={new ElemBg(Colors.Gray1)}
-				pItemFnt={Text.Body}
-				pNumbered={true}
-				pItems={[
-					"نوع الشهادة المطلوبة إن كان معروفًا.",
-					"الجهة التي طلبت الشهادة: حي، جهاز مدينة، شركة مرافق، مالك، اتحاد ملاك، أو جهة أخرى.",
-					"عنوان العقار وعدد الأدوار والاستخدام.",
-					"مرحلة العقار: قبل التنفيذ، أثناء التنفيذ، بعد التنفيذ، قبل الهدم، أو بعد معاينة مشكلة.",
-					"صورة الرخصة أو الطلب أو الخطاب الذي طلب الشهادة إن وجد."
-				]}
-			/>
-
-			<EmoList
-				pWidth={new RespString("560px", "100%")}
-				pTitle={Text.H3.OfText("مرفقات تساعد في التقييم")}
-				pDesc={Text.Body.OfText("ليست كلها مطلوبة في كل حالة، لكنها تسرع تحديد نطاق الخدمة.")}
-				pHeadBg={new ElemBg(Colors.BistageLite)}
-				pItemsBg={new ElemBg(Colors.Gray1)}
-				pItemFnt={Text.Body}
-				pNumbered={true}
-				pItems={[
-					"صورة بطاقة المالك أو مقدم الطلب.",
-					"مستند ملكية أو عقد أو توكيل عند الحاجة.",
-					"صور واضحة للعقار أو موقع الأعمال.",
-					"الرسومات المعتمدة أو الرسومات المنفذة فعليًا عند وجودها.",
-					"أي ملاحظات واردة من الجهة الإدارية أو شركة المرافق."
-				]}
-			/>
-
-		</HzStack>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		id="WhyUs"
-		pBg={new ElemBg(Colors.SkyLite)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="لماذا تطلب الشهادة من خلال مهندس متخصص؟"
-			pDesc="المشكلة في الشهادات الهندسية ليست في صياغة الورقة، بل في فهم الغرض الفني والإداري حتى لا تقدم شهادة غير مناسبة للملف."
-		/>
-
-		<CardsGr
-			pWidth={new RespString("1200px", "100%")}
-			pCardRadius={new Pixel(20, 16)}
-			pCardBg={new ElemBg(Colors.WhiteOff)}
-			pGrTitle={Text.H3.Centered.OfText("قيمة الخدمة")}
-			pCardTitleFnt={Text.H4}
-			pCardBodyFnt={Text.Body}
-			pStackDir="Row"
-			pSpacing={20}
-			pTopic1={new Topic("تحديد المستند الصحيح", "نحدد هل المطلوب شهادة، تقرير، ختم، رسم، أو استكمال رخصة، بدل إصدار مستند لا يخدم الطلب.")}
-			pTopic2={new Topic("صياغة قابلة للتقديم", "نجهز الشهادة ببيانات العقار والمالك والمهندس والغرض المطلوب بصورة واضحة ومباشرة.")}
-			pTopic3={new Topic("تقليل الرفض والاستيفاء", "نراجع النواقص قبل الاعتماد حتى لا تعود الشهادة بسبب خطأ في البيانات أو نقص مرفقات.")}
-			pTopic4={new Topic("ربطها بالملف الكامل", "نوضح هل تحتاج الشهادة تقريرًا هندسيًا أو رسومات أو رخصة أو مستندات مرافق أو إخطارًا إضافيًا.")}
-		/>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoStr
-		id="CTA"
-		pBg={new ElemBg(Colors.BistageLite)}
-		pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<EmoStr
-			pBg={new ElemBg(Colors.BistageLite)}
-			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<Emograph
-				pTitle={Text.H2.Centered.OfText("اطلب شهادة هندسية معتمدة")}
-				pText={Text.Body.Centered.OfText("أرسل نوع الشهادة أو صورة طلب الجهة الإدارية، وسنحدد لك المستند الصحيح، والمرفقات المطلوبة، وخطوات الاعتماد المناسبة لحالتك.")}
-				pSize={new Size(new NumPer(900, 320), new NumPer("auto", "auto"))}
-			/>
-
-		</EmoStr>
-
-		<HzStack pGap={new Pixel(25, 15)} pPad={new Pixel(30, 20)}>
-
-			<EmoCall BlackSky pText="اطلب الشهادة الآن" />
-
-			<EmoCall BlackSky pText="اسأل عن نوع الشهادة" />
-
-		</HzStack>
-
-	</EmoStr>
-
-
-
-
-
-
-
 	<EmoFaq>
 
 		<FaqItem
@@ -697,32 +406,16 @@ import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, T
 
 
 
-	<RelServices
-		pTitle={Text.H2.Centered.WithColor(Colors.BistageLite).OfText("خدمات أخرى")}
-		pHeadBg={new ElemBg(Colors.Gray5)}
-		pBodyBg={new ElemBg(Colors.SkyLite)}
-		pCardBg={new ElemBg(Colors.WhiteOff)}
-	>
+	<RelServices>
 
-		<RelServiceItem
-			pTitle="ختم هندسي"
-			pDesc="اعتماد رسومات أو مستندات أو تقارير هندسية بختم مهندس نقابي حسب طبيعة الملف."
-			pHref="/emonsult/stamp"
-			pBtnText="اطلب الخدمة"
-		/>
+		<RelServiceItem pTitle="ختم هندسي" pDesc="اعتماد رسومات أو مستندات أو تقارير هندسية بختم مهندس نقابي حسب طبيعة الملف." pHref="/emonsult/stamp" />
 
-		<RelServiceItem
-			pTitle="تقرير هندسي عن حالة مبنى"
-			pDesc="تقرير فني لدعم شهادة صلاحية أو ملف هدم أو معاينة عقار قائم."
-			pHref="/emonsult/report"
-			pBtnText="اطلب الخدمة"
-		/>
+		<RelServiceItem pTitle="تقرير هندسي عن حالة مبنى" pDesc="تقرير فني لدعم شهادة صلاحية أو ملف هدم أو معاينة عقار قائم." pHref="/emonsult/report" />
 
 		<RelServiceItem
 			pTitle="الإشراف الهندسي على البناء"
 			pDesc="إشراف فني على تنفيذ الأعمال طبقًا للرسومات والترخيص والمواصفات."
-			pHref="/emocrete/supervision"
-			pBtnText="اطلب الخدمة"
+			pHref="/emonsult/consulting/supervision"
 		/>
 
 	</RelServices>

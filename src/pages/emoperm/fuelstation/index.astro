@@ -2,26 +2,10 @@
 import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
 import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
-import { RespImg } from "@/Widgets/Media";
 import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { EmoStr } from "@/Widgets/Strips";
-import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -54,58 +38,11 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 				pText={Text.Body.Centered.OfSize(24,18).OfText("إعداد ملف الترخيص والمتابعة مع الجهات المختلفة حتى صدور الرخصة")}
 			/>
 
-			<EmoCall
-				data-own-size
-				BlackOrange
-				pText="التفاصيل"
-			/>
+			<EmoCall data-own-size BlackOrange pText="التفاصيل" />
 
 		</VrStack>
 
 	</Hero>
-
-
-
-
-
-
-
-	<EmoSec
-		id="station-nature"
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			Sky
-			pTitle="ترخيص محطة الوقود يبدأ من صلاحية الموقع"
-			pDesc="المحطة ليست مبنى تجاريًا فقط؛ هي موقع حركة سيارات وتخزين وقود وبيع وتشغيل ومخاطر حريق ومسافات أمان ومداخل ومخارج، لذلك يتم تقييم الأرض قبل الدخول في تكلفة التصميم والتعاقدات."
-		/>
-
-		<EmoStr
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
-
-				<RespImg
-					pImg={new EmoMediaData("Img", "/Media/Emoperm/FuelStation/", "HeroD.webp", false, "ترخيص محطة وقود ومراجعة موقع محطة تموين سيارات", new Size(new NumPer(540, 320), new NumPer(360, 210)))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.OfText("لماذا لا يكفي وجود قطعة أرض؟")}
-					pText={Text.Body.OfText(`قطعة الأرض قد تكون مملوكة ومطلة على طريق واضح، ومع ذلك لا تصلح لمحطة وقود. الفحص لا يقتصر على الملكية، بل يشمل المساحة والواجهة، علاقة الموقع بالطريق، المسافة بينه وبين المحطات القائمة على نفس الاتجاه، حركة الدخول والخروج، قربه من منشآت حساسة، إمكانية تنفيذ الخزانات والطرمبات والمظلات والمباني الخدمية، وقدرة الموقع على استيفاء اشتراطات الحماية المدنية والجهات ذات الولاية. لذلك تبدأ الخدمة بقراءة الموقع قبل إنتاج رسومات نهائية.`)}
-					pSize={new Size(new NumPer(600, 320), new NumPer("auto", "auto"))}
-				/>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
 
 
 
@@ -120,22 +57,12 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 		pVrAlign={Align.Center}
 	>
 
-		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
-			pTitle="اشتراطات موقع محطة الوقود"
-			pDesc="الموقع الجيد في التسويق قد لا يكون موقعًا صالحًا للترخيص؛ لذلك يجب مراجعة القيود الهندسية والتنظيمية قبل اعتماد الفكرة الاستثمارية."
-		/>
+		<SecTitle Gray2 pTitle="اشتراطات موقع محطة الوقود" />
 
-		<EmoStr
-			pBg={new ElemBg(Colors.BlackOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+		<EmoStr pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 			<CardsGr
-				pWidth={new RespString("1200px", "100%")}
 				pCardBg={new ElemBg(Colors.WhiteOff)}
-				pGrTitle={Text.H3.Centered.White.OfText("نقاط الفحص قبل التقديم")}
 				pCardTitleFnt={Text.H4}
 				pCardBodyFnt={Text.Body}
 				pStackDir="Row"
@@ -164,21 +91,15 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.SkyLite};`}
+			SkyLite
 			pTitle="مسار موافقات محطة الوقود"
 			pDesc="الملف يتحرك بين شركة التسويق والهيئة المختصة والجهات المحلية والفنية، ولا يصح اختزال الترخيص في رخصة مباني أو رسم هندسي فقط."
 		/>
 
-		<EmoStr
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+		<EmoStr pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 			<EmoList
 				pWidth={new RespString("1050px", "100%")}
-				pTitle={Text.H3.Centered.OfText("ترتيب العمل على ملف محطة الوقود")}
-				pDesc={Text.Body.Centered.OfText("الترتيب التالي يساعد على فصل صلاحية الموقع عن التصميم وعن رخصة التشغيل النهائية.")}
 				pHeadBg={new ElemBg(Colors.Creamy)}
 				pItemsBg={new ElemBg(Colors.Gray1)}
 				pNumbered={true}
@@ -217,11 +138,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 			pDesc="موافقة الحماية المدنية في محطة الوقود مرتبطة بتصميم الموقع نفسه: الخزانات، نقاط التموين، مصادر الكهرباء، معدات الإطفاء، مسارات الحركة، وعدم وجود مصادر خطورة غير مسموح بها."
 		/>
 
-		<EmoStr
-			pBg={new ElemBg(Colors.BlackOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+		<EmoStr pBg={new ElemBg(Colors.BlackOff)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(24, 16)} pPad={new Pixel(30, 15)}>
 
@@ -267,11 +184,7 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 
 
 
-	<EmoSec
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
+	<EmoSec pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle
 			style = {`--StripBg:${Colors.OrangeLite};`}
@@ -279,16 +192,10 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 			pDesc="الملف النهائي يتغير حسب موقع الأرض وشركة التسويق والجهات المطلوبة، لكن هذه العناصر تمثل العمود الأساسي للتحضير قبل التقديم."
 		/>
 
-		<EmoStr
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+		<EmoStr pBg={new ElemBg(Colors.WhiteOff)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 			<CardsGr
-				pWidth={new RespString("1200px", "100%")}
 				pCardBg={new ElemBg(Colors.Gray1)}
-				pGrTitle={Text.H3.Centered.OfText("الملف المطلوب قبل المتابعة الجادة")}
 				pCardTitleFnt={Text.H4}
 				pCardBodyFnt={Text.Body}
 				pStackDir="Row"
@@ -317,16 +224,12 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 	>
 
 		<SecTitle
-			style = {`--StripBg:${Colors.Gray5};`}
+			Gray2
 			pTitle="خدمة ترخيص محطة وقود"
 			pDesc="الخدمة موجهة لمالك أرض أو مستثمر يريد تقييم موقعه وتجهيز ملفه الهندسي والإداري قبل التقديم أو أثناء الاستيفاءات."
 		/>
 
-		<EmoStr
-			pBg={new ElemBg(Colors.Gray1)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+		<EmoStr pBg={new ElemBg(Colors.Gray1)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 			<HzStack pGap={new Pixel(24, 16)} pPad={new Pixel(30, 15)}>
 
@@ -374,77 +277,6 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 
 
 
-	<RelServices
-		pTitle={Text.H2.Centered.White.OfText("خدمات مرتبطة بمحطة الوقود")}
-		pDesc={Text.Body.Centered.White.OfText("هذه خدمات قد يحتاجها المستثمر عند تجهيز الأرض أو إعداد المخطط أو معالجة ملاحظات الجهات.")}
-	>
-
-		<RelServiceItem
-			pTitle="تصميم هندسي"
-			pDesc="إعداد الرسومات المعمارية والإنشائية والكهرباء والميكانيكا اللازمة للمباني والمظلات والمرافق."
-			pHref="/emodsign/des/eng"
-			pImg="/Media/Emodsign/Des/Eng/HeroL.webp"
-			pBtnText="افتح الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="إشراف هندسي"
-			pDesc="متابعة تنفيذ الأعمال أو التعديلات المطلوبة بالموقع بعد اعتماد المخطط أو أثناء الاستيفاءات."
-			pHref="/emocrete/supervision"
-			pImg="/Media/Emocrete/Supervision/HeroL.webp"
-			pBtnText="افتح الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="تقرير سلامة"
-			pDesc="تقرير أو مراجعة هندسية عند الحاجة إلى توضيح عناصر السلامة أو حالة منشآت قائمة بالموقع."
-			pHref="/emonsult/report/safety"
-			pImg="/Media/Emonsult/Report/Safety/HeroL.webp"
-			pBtnText="افتح الخدمة"
-		/>
-
-	</RelServices>
-
-
-
-
-
-
-
-	<ReadAlso
-		pTitle={Text.H2.Centered.OfText("اقرأ أيضًا")}
-		pDesc={Text.Body.Centered.OfText("صفحات قريبة من مسارات التراخيص والمراجعات الهندسية.")}
-	>
-
-		<ReadAlsoItem
-			pTitle="تراخيص إدارية"
-			pDesc="مدخل عام لخدمات التراخيص الإدارية داخل الموقع."
-			pHref="/emoperm"
-			pImg="/Media/Emoperm/HeroD.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="ترخيص مصنع"
-			pDesc="خدمة تجهيز ومتابعة ملف رخصة تشغيل مصنع أو منشأة صناعية."
-			pHref="/emoperm/factory"
-			pImg="/Media/Emoperm/Factory/HeroD.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="ترخيص بناء"
-			pDesc="خدمات تراخيص البناء والرسومات والمراجعات الهندسية للأراضي والمباني."
-			pHref="/emoperm/building"
-			pImg="/Media/Emoperm/Building/HeroD.webp"
-		/>
-
-	</ReadAlso>
-
-
-
-
-
-
-
 	<EmoFaq>
 
 		<FaqItem
@@ -468,6 +300,50 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Si
 		/>
 
 	</EmoFaq>
+
+
+
+
+
+
+
+	<ReadAlso>
+
+		<ReadAlsoItem pTitle="تراخيص إدارية" pDesc="مدخل عام لخدمات التراخيص الإدارية داخل الموقع." pHref="/emoperm" />
+
+		<ReadAlsoItem pTitle="ترخيص مصنع" pDesc="خدمة تجهيز ومتابعة ملف رخصة تشغيل مصنع أو منشأة صناعية." pHref="/emoperm/factory" />
+
+		<ReadAlsoItem pTitle="ترخيص بناء" pDesc="خدمات تراخيص البناء والرسومات والمراجعات الهندسية للأراضي والمباني." pHref="/emoperm/building" />
+
+	</ReadAlso>
+
+
+
+
+
+
+
+	<RelServices>
+
+		<RelServiceItem
+			pTitle="تصميم هندسي"
+			pDesc="إعداد الرسومات المعمارية والإنشائية والكهرباء والميكانيكا اللازمة للمباني والمظلات والمرافق."
+			pHref="/emodsign/des/eng"
+		/>
+
+		<RelServiceItem
+			pTitle="إشراف هندسي"
+			pDesc="متابعة تنفيذ الأعمال أو التعديلات المطلوبة بالموقع بعد اعتماد المخطط أو أثناء الاستيفاءات."
+			pHref="/emonsult/consulting/supervision"
+		/>
+
+		<RelServiceItem
+			pTitle="تقرير سلامة"
+			pDesc="تقرير أو مراجعة هندسية عند الحاجة إلى توضيح عناصر السلامة أو حالة منشآت قائمة بالموقع."
+			pHref="/emonsult/report/safety"
+		/>
+
+	</RelServices>
 
 
 

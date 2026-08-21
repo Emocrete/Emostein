@@ -3,7 +3,7 @@ import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
 import { EmoCall, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
 import { RespImg } from "@/Widgets/Media";
-import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoFaq, EmoSec, FaqItem, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { EmoStr } from "@/Widgets/Strips";
 import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
@@ -1738,105 +1738,42 @@ import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text
 
 
 
-	<ReadAlso
-		id="distribution-links"
-		pTitle={Text.H2.Centered.WithColor("#111318").OfText("روابط التوزيع داخل فرع الحصر")}
-		pDesc={Text.Body.Centered.WithColor("#333333").OfText("انتقل إلى الصفحة المتخصصة المناسبة بعد تحديد نوع الحصر الذي تحتاجه. الصفحتان التاليتان هما الأساس التجاري المباشر داخل هذا الفرع.")}
-		pHeadBg={new ElemBg("#E7D3A1")}
-		pBodyBg={new ElemBg("#F7F1E6")}
-		pCardBg={new ElemBg("#FFFFFF")}
-	>
-
-		<ReadAlsoItem
-			pTitle="حصر كميات أعمال البناء"
-			pDesc="تفاصيل حصر الخرسانات والحديد والشدات والحفر والردم والمباني وبنود البناء قبل تنفيذ الهيكل أو مراجعة عرض المقاول."
-			pHref="/emodsign/tech/takeoff/construction"
-			pImg="/Media/Emodsign/Tech/Takeoff/Construction/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="حصر كميات التشطيبات"
-			pDesc="تفاصيل حصر الأرضيات والحوائط والأسقف والدهانات والجبس بورد والأبواب والأدوات الصحية والكهرباء النهائية وقوائم الشراء."
-			pHref="/emodsign/tech/takeoff/finishing"
-			pImg="/Media/Emodsign/Tech/Takeoff/Finishing/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="شوب دروينج"
-			pDesc="عندما تكون الرسومات العامة غير كافية للحصر التفصيلي أو للتنفيذ داخل الموقع."
-			pHref="/emodsign/tech/shopdwg"
-			pImg="/Media/Emodsign/Tech/Shopdwg/HeroL.webp"
-		/>
-
-		<ReadAlsoItem
-			pTitle="تصميم هندسي"
-			pDesc="عندما تحتاج رسومات تصميم واضحة قبل حساب الكميات أو طلب عروض المقاولين."
-			pHref="/emodsign/des/eng"
-			pImg="/Media/Emodsign/Des/Eng/HeroL.webp"
-		/>
-
-	</ReadAlso>
-
-
-
-
-
-
-
-	<RelServices
-		pTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("خدمات مرتبطة بحصر الكميات")}
-		pDesc={Text.Body.Centered.WithColor("#F8F4EA").OfText("الحصر يرتبط بخدمات التصميم والشوب دروينج والإشراف والتشطيب، ويمكن طلبه منفردًا أو ضمن مسار عمل أكبر حسب حالة المشروع.")}
-		pHeadBg={new ElemBg("#0E1118")}
-		pBodyBg={new ElemBg("#F7F1E6")}
-		pCardBg={new ElemBg("#FFFFFF")}
-	>
+	<RelServices>
 
 		<RelServiceItem
 			pTitle="حصر أعمال البناء"
 			pDesc="تحويل رسومات الهيكل والبناء إلى كميات واضحة للخرسانة والحديد والشدات والحفر والمباني."
 			pHref="/emodsign/tech/takeoff/construction"
-			pImg="/Media/Emodsign/Tech/Takeoff/Construction/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="حصر التشطيبات"
 			pDesc="حصر خامات وبنود التشطيب للأرضيات والحوائط والأسقف والدهانات والأبواب والأدوات والكهرباء النهائية."
 			pHref="/emodsign/tech/takeoff/finishing"
-			pImg="/Media/Emodsign/Tech/Takeoff/Finishing/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="شوب دروينج معماري"
 			pDesc="تفصيل الرسومات المعمارية بما يساعد في القياس والتنفيذ ومراجعة البنود قبل التسعير."
 			pHref="/emodsign/tech/shopdwg/arch"
-			pImg="/Media/Emodsign/Tech/Shopdwg/Arch/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="تصميم داخلي"
 			pDesc="تجهيز قرارات التشطيب والخامات والتوزيع الداخلي التي تتحول لاحقًا إلى قوائم كميات وشراء."
 			pHref="/emodsign/des/cr/int"
-			pImg="/Media/Emodsign/Des/Cr/Int/HeroL.webp"
-			pBtnText="اطلب الخدمة"
 		/>
 
 		<RelServiceItem
 			pTitle="إشراف التشطيبات"
 			pDesc="متابعة تنفيذ بنود التشطيب ومراجعة الخامات والملاحظات وربط التنفيذ بالنطاق المتفق عليه."
-			pHref="/emocrete/supervision/finishing"
-			pImg="/Media/Emocrete/Supervision/Finishing/HeroL.webp"
-			pBtnText="اطلب الخدمة"
+			pHref="/emonsult/consulting/supervision/finishing"
 		/>
 
 		<RelServiceItem
 			pTitle="الإشراف الهندسي على البناء"
 			pDesc="متابعة أعمال البناء والخرسانات وفق الرسومات والمواصفات، ومراجعة الملاحظات أثناء التنفيذ."
-			pHref="/emocrete/supervision/construction"
-			pImg="/Media/Emocrete/Supervision/Construction/HeroL.webp"
-			pBtnText="اطلب الخدمة"
+			pHref="/emonsult/consulting/supervision/construction"
 		/>
 
 	</RelServices>

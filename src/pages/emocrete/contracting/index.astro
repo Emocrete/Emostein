@@ -1,34 +1,15 @@
 ---
 import BLayout from "@/Layout.astro";
-import { EmoCall, Emograph, VrStack } from "@/Widgets/Comp";
+import { EmoCallIcon, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
 import { Hero } from "@/Widgets/Sections";
-import { Loc, NumPer, Size, Text } from "@/TypesLib";
+import { Loc, NumPer, Pixel, Size, Text } from "@/TypesLib";
 ---
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<BLayout
-	pSchemaType="Service"
-	pTitle="مقاولات عامة"
-	pDescr="عمارات سكنية - فيلات - هناجر معدنية - خزانات مباني - خزانات خرسانة - حمامات سباحة"
->
+<BLayout pSchemaType="Service" pTitle="مقاولات عامة" pDescr="عمارات سكنية - فيلات - هناجر معدنية - خزانات مباني - خزانات خرسانة - حمامات سباحة">
 
 
 
@@ -38,20 +19,19 @@ import { Loc, NumPer, Size, Text } from "@/TypesLib";
 
 	<Hero>
 
-		<VrStack
-			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))}
-			pSize={new Size(new NumPer("40%","95%"))}
-			pHzAlign={"Center"}
-		>
+		<VrStack pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))} pSize={new Size(new NumPer("40%","95%"))} pHzAlign={"Center"}>
 
-			<Emograph
-				pTitle={Text.H1.Centered.OfText("مقاولات عامة")}
-				pText={Text.Body.Centered.OfText("مهندس متخصص لتنفيذ المنشآت الخرسانية والمعدنية")}
-			/>
+			<Emograph pTitle={Text.H1.Centered.OfText("مقاولات عامة")} pText={Text.Body.Centered.OfText("مهندس متخصص لتنفيذ المنشآت الخرسانية والمعدنية")} />
 
 			<Emograph pText={Text.Body.Centered.OfText("عمارات سكنية - فيلات - هناجر معدنية - خزانات مباني - خزانات خرسانة - حمامات سباحة")} />
 
-			<EmoCall BlackSky />
+			<HzStack pGap={new Pixel(30,10)}>
+
+				<EmoCallIcon BlackSky />
+
+				<EmoWhatsIcon BlackSky />
+
+			</HzStack>
 
 		</VrStack>
 
@@ -80,18 +60,6 @@ import { Loc, NumPer, Size, Text } from "@/TypesLib";
 				<p class = " Desc ">
 					نقدم خدمات مقاولات عامة للمشروعات السكنية والخدمية والإنشائية، مع متابعة دقيقة لمراحل التنفيذ، ومراجعة الأعمال بندًا بندًا، والتأكد من أن ما يتم على الطبيعة يسير وفق تصور واضح يمكن متابعته وقياسه، وليس مجرد شغل متراكم داخل الموقع.
 				</p>
-
-				<div class = " Actions ">
-
-					<a class = " Btn BtnPrimary " href="/contact">
-						اطلب دراسة مشروعك
-					</a>
-
-					<a class = " Btn BtnGhost " href="#scope">
-						تعرف على نطاق الأعمال
-					</a>
-
-				</div>
 
 			</div>
 
@@ -425,14 +393,6 @@ import { Loc, NumPer, Size, Text } from "@/TypesLib";
 					ابدأ من الرسومات المتاحة أو حتى من وصف مبدئي للمشروع، وسيتم تحديد نطاق الخدمة الأنسب وحجم الأعمال المتوقع وطريقة التنفيذ المناسبة، حتى تبدأ على أساس أوضح وأكثر تنظيمًا.
 				</p>
 
-				<div class = " Actions CenterActions ">
-
-					<a class = " Btn BtnPrimary " href="/contact">
-						ابدأ التواصل الآن
-					</a>
-
-				</div>
-
 			</div>
 
 		</div>
@@ -446,21 +406,6 @@ import { Loc, NumPer, Size, Text } from "@/TypesLib";
 
 
 </BLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -717,21 +662,6 @@ import { Loc, NumPer, Size, Text } from "@/TypesLib";
 
 
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
