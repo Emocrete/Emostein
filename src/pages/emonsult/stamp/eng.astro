@@ -1,24 +1,9 @@
 ---
 import BLayout from "@/Layout.astro";
-import { Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { EmoCallIcon, Emograph, EmoList, EmoWhatsIcon, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
 import { EmoSec, Hero } from "@/Widgets/Sections";
-import { Colors, ElemBg, RespString, Text } from "@/TypesLib";
+import { Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -36,29 +21,37 @@ import { Colors, ElemBg, RespString, Text } from "@/TypesLib";
 
 
 
-	<Hero
-		pTitle="ختم مهندس نقابي"
-		pDesc="خدمة ختم واعتماد الرسومات والتقارير الهندسية من مهندس نقابي معتمد"
-		pTitleClr={Colors.Gray5}
-		pDescClr={Colors.Gray5}
-		pPosL="40% 5% 20% 50%"
-		pPosP="20% 5% 50% 5%"
-		pBlurL="off"
-		pBlurP="off"
-	>
+	<Hero>
 
-		<EmoList
-			data-land-only
-			pTitle={Text.Body.OfText("الخدمة موجهة لـ :")}
-			pWidth={new RespString("700px", "100%")}
-			pNumbered={false}
-			pItems={[
+		<VrStack pSize={new Size(new NumPer("40%","95%"))} pLoc={new Loc(new NumPer("55%","2.5%"),new NumPer("20%","20%"))} pHzAlign={"Center"}>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("ختم مهندس نقابي")}
+				pText={Text.Body.Centered.OfText("خدمة ختم واعتماد الرسومات والتقارير الهندسية من مهندس نقابي معتمد")}
+			/>
+
+			<EmoList
+				data-land-only
+				pTitle={Text.Body.OfText("الخدمة موجهة لـ :")}
+				pWidth={new RespString("700px", "100%")}
+				pNumbered={false}
+				pItems={[
 				"أصحاب المحلات التجارية لغرض ختم الرسم الهندسي للترخيص .",
 				"الصيادلة لغرض ختم الرسم الهندسي للترخيص .",
 				"أصحاب المعامل الطبية لغرض ختم الرسم الهندسي للترخيص .",
 				"كل من يحتاج ختمًا نقابيًا مقبولًا لدى جهات الترخيص والجهات الإدارية ."
 			]}
-		/>
+			/>
+
+			<HzStack pGap={new Pixel(30,10)}>
+
+				<EmoCallIcon BlackSky />
+
+				<EmoWhatsIcon BlackSky />
+
+			</HzStack>
+
+		</VrStack>
 
 	</Hero>
 
@@ -110,17 +103,13 @@ import { Colors, ElemBg, RespString, Text } from "@/TypesLib";
 
 			<VrStack pBgColor={new ElemBg(Colors.SkyLite)}>
 
-				<Emograph
-					pText={Text.Body.Centered.OfText("تجربة عملية مع عشرات ملفات الترخيص المتنوعة ( محال تجارية - صيدليات - معامل تحاليل طبية ) .")}
-				/>
+				<Emograph pText={Text.Body.Centered.OfText("تجربة عملية مع عشرات ملفات الترخيص المتنوعة ( محال تجارية - صيدليات - معامل تحاليل طبية ) .")} />
 
 			</VrStack>
 
 			<VrStack pBgColor={new ElemBg(Colors.SkyLite)}>
 
-				<Emograph
-					pText={Text.Body.Centered.OfText("التزام تام بالسرية في التعامل مع الرسومات والبيانات المقدمة لا يتعدى حدود عملية تنفيذ الختم .")}
-				/>
+				<Emograph pText={Text.Body.Centered.OfText("التزام تام بالسرية في التعامل مع الرسومات والبيانات المقدمة لا يتعدى حدود عملية تنفيذ الختم .")} />
 
 			</VrStack>
 
@@ -138,9 +127,7 @@ import { Colors, ElemBg, RespString, Text } from "@/TypesLib";
 
 		<SecTitle style = {`--StripBg:${Colors.Gray1};`} pTitle="ما المقصود بـ مهندس نقابي ؟" />
 
-		<Emograph
-			pText={Text.Body.Centered.OfText("​المهندس النقابي هو مهندس مقيد بنقابة المهندسين ذو خبرة من 3 إلى 15 سنة وحاصل على سجل هندسي")}
-		/>
+		<Emograph pText={Text.Body.Centered.OfText("​المهندس النقابي هو مهندس مقيد بنقابة المهندسين ذو خبرة من 3 إلى 15 سنة وحاصل على سجل هندسي")} />
 
 	</EmoSec>
 

@@ -1,25 +1,10 @@
 ---
 import BLayout from "@/Layout.astro";
-import { EmoCall, Emograph, EmoList, Grid, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
-import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { EmoCallIcon, Emograph, EmoList, EmoWhatsIcon, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { EmoSec, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { EmoStr } from "@/Widgets/Strips";
-import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
+import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -37,21 +22,22 @@ import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, T
 
 
 
-	<Hero pImgF="/Media/Emomed/Office">
+	<Hero>
 
-		<VrStack
-			pSize={new Size(new NumPer("35%","95%"))}
-			pLoc={new Loc(new NumPer("52%","2.5%"),new NumPer("20%","60%"))}
-			pBgColor={new ElemBg(Colors.Gray5)}
-			pBgOpacity={new Percent(50)}
-		>
+		<VrStack pSize={new Size(new NumPer("40%","95%"))} pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("20%","20%"))} pHzAlign={"Center"}>
 
 			<Emograph
-				pTitle={Text.H1.Centered.White.OfText("رسم هندسي لمكتب علمي")}
-				pText={Text.Body.Centered.White.OfText("لوحة هندسية لمقر المكتب العلمي ومخزن العينات، جاهزة للمراجعة والمعاينة ضمن ملف هيئة الدواء المصرية")}
+				pTitle={Text.H1.Centered.OfText("رسم هندسي لمكتب علمي")}
+				pText={Text.Body.Centered.OfText("خدمة إعداد رسم هندسي لمكتب علمي ومخزن عينات لشركات الأدوية أمام هيئة الدواء المصرية، تشمل رفع المقاسات، تحديد مقر المكتب ومخزن العينات، المسقط الأفقي والرأسي، العنوان التفصيلي، سند الحيازة، واعتماد اللوحة هندسيًا لملف الترخيص.")}
 			/>
 
-			<EmoCall BlackSky />
+			<HzStack pGap={new Pixel(30,10)}>
+
+				<EmoCallIcon BlackSky />
+
+				<EmoWhatsIcon BlackSky />
+
+			</HzStack>
 
 		</VrStack>
 
@@ -63,280 +49,26 @@ import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, T
 
 
 
-	<EmoSec pBg={new ElemBg(Colors.Creamy)}>
-
-		<SecTitle
-			GreenLite
-			pTitle="الرسم الهندسي يثبت مقر المكتب ومخزن العينات"
-			pDesc="ملف المكتب العلمي يحتاج لوحة تقرأ العنوان والحدود والارتفاع وعلاقة مخزن العينات بالمقر قبل دخول لجنة المعاينة"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg(Colors.Creamy)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<Emograph
-					pTitle={Text.H3.Centered.OfText("مقر المكتب")}
-					pText={Text.Body.Centered.OfText("نحدد حدود المقر، عنوانه التفصيلي، مدخله، علاقته بالدور، ومساحاته التي تظهر في سند الحيازة والرسم.")}
-					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.Centered.OfText("مخزن العينات")}
-					pText={Text.Body.Centered.OfText("نرسم مخزن العينات كفراغ واضح، مع أطواله وارتفاعه وموضعه داخل المقر أو خارجه وبيانات الصيدلي المسئول.")}
-					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<Emograph
-					pTitle={Text.H3.Centered.OfText("مطابقة المعاينة")}
-					pText={Text.Body.Centered.OfText("نراجع اللوحة مع الواقع قبل الطباعة، لأن المعاينة تقارن العنوان والحدود والمخزن والارتفاع وسند الحيازة بنفس البيانات.")}
-					pSize={new Size(new NumPer(350, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
 	<EmoSec>
 
-		<SecTitle
-			OrangeLite
-			pTitle="البيانات التي تظهر على الرسم"
-			pDesc="نجهز اللوحة بحيث تجمع بيانات هندسية وتنظيمية تساعد في مراجعة ملف المكتب العلمي"
-		/>
+		<SecTitle OrangeLite pTitle="البيانات التي تظهر على الرسم" pDesc="نجهز اللوحة بحيث تجمع بيانات هندسية وتنظيمية تساعد في مراجعة ملف المكتب العلمي" />
 
-		<EmoStr
-			pBg={new ElemBg(Colors.Creamy)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+		<EmoStr pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<EmoList
-					pWidth={new RespString("650px", "100%")}
-					pTitle={Text.H3.Centered.OfText("مكونات الرسم")}
-					pDesc={Text.Body.Centered.OfText("كل بند له وظيفة مباشرة أثناء المراجعة والمعاينة")}
-					pHeadBg={new ElemBg(Colors.WhiteOff)}
-					pItemsBg={new ElemBg(Colors.SkyLite)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
+			<EmoList
+				pWidth={new RespString("650px", "100%")}
+				pTitle={Text.H3.Centered.OfText("مكونات الرسم")}
+				pDesc={Text.Body.Centered.OfText("كل بند له وظيفة مباشرة أثناء المراجعة والمعاينة")}
+				pHeadBg={new ElemBg(Colors.WhiteOff)}
+				pItemsBg={new ElemBg(Colors.SkyLite)}
+				pItemFnt={Text.Body}
+				pNumbered={true}
+				pItems={[
 						{ Title: "المسقط الأفقي", Items: ["حدود مقر المكتب.", "تقسيمات الفراغات الداخلية.", "موضع مخزن العينات.", "الأطوال الصافية وفتحات الدخول."] },
 						{ Title: "المسقط الرأسي", Items: ["الارتفاع الصافي لمخزن العينات.", "أي سقوطات أو كمرات مؤثرة.", "علاقة الأرضية بالسقف والفتحات."] },
 						{ Title: "الواجهة والكروكي", Items: ["واجهة العقار أو مدخل الوحدة عند الحاجة.", "كروكي مبسط لموقع العين وحدودها.", "بيان الدور والشقة ورقم العقار."] },
 						{ Title: "لوحة البيانات", Items: ["اسم المكتب العلمي.", "اسم الشركة طالبة الترخيص.", "عنوان المقر ومخزن العينات.", "اسم المهندس واعتماد اللوحة."] }
 					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("650px", "100%")}
-					pTitle={Text.H3.Centered.OfText("بيانات نطابقها قبل الطباعة")}
-					pDesc={Text.Body.Centered.OfText("هذه المراجعة تمنع اختلاف اللوحة عن باقي مستندات الملف")}
-					pHeadBg={new ElemBg(Colors.WhiteOff)}
-					pItemsBg={new ElemBg(Colors.GreenLite)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						{ Title: "العنوان", Items: ["مطابقة العنوان مع عقد الحيازة.", "كتابة رقم العقار والدور والشقة.", "توحيد صياغة العنوان في الطلب والرسم."] },
-						{ Title: "الحيازة", Items: ["مراجعة أن العين المرسومة هي نفس العين الواردة بالعقد.", "تحديد وجود مخزن عينات داخل المقر أو في عنوان منفصل."] },
-						{ Title: "المخزن", Items: ["قياس أطوال مخزن العينات.", "قياس الارتفاع.", "توضيح الفتحات ومصدر التهوية."] },
-						{ Title: "المسئولية الفنية", Items: ["ربط مخزن العينات ببيانات الصيدلي المسئول.", "إظهار البيانات بطريقة مناسبة للملف."] }
-					]}
-				/>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec>
-
-		<SecTitle
-			Gray5
-			pTitle="الرسم حسب حالة مخزن العينات"
-			pDesc="طريقة الرسم تتغير حسب وجود مخزن العينات داخل المكتب أو خارجه أو ضمن طلب تعديل بيانات"
-		/>
-
-		<Grid Centered pMax=4>
-
-			<VrStack
-				pGap={new Pixel(10, 10)}
-				pPad={new Pixel(25, 15)}
-				pBgColor={new ElemBg(Colors.WhiteOff)}
-			>
-
-				<Emograph
-					pTitle={Text.H4.Centered.OfText("مخزن داخل المقر")}
-					pText={Text.Body.Centered.OfText("نظهر المخزن كفراغ داخل حدود المكتب، ونحدد علاقته بمسار الدخول والحركة الداخلية وباقي الغرف.")}
-					pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</VrStack>
-
-			<VrStack
-				pWidth={new Pixel(300, 340)}
-				pGap={new Pixel(10, 10)}
-				pPad={new Pixel(25, 15)}
-				pBgColor={new ElemBg(Colors.SkyLite)}
-			>
-
-				<Emograph
-					pTitle={Text.H4.Centered.OfText("مخزن بعنوان منفصل")}
-					pText={Text.Body.Centered.OfText("نجهز لوحة مستقلة للمخزن عند اختلاف عنوانه، مع ربطها ببيانات المكتب العلمي في ملف الترخيص.")}
-					pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</VrStack>
-
-			<VrStack
-				pWidth={new Pixel(300, 340)}
-				pGap={new Pixel(10, 10)}
-				pPad={new Pixel(25, 15)}
-				pBgColor={new ElemBg(Colors.Creamy)}
-			>
-
-				<Emograph
-					pTitle={Text.H4.Centered.OfText("إضافة مخزن عينات")}
-					pText={Text.Body.Centered.OfText("عند إضافة مخزن جديد لمكتب قائم، نركز على بيانات المخزن الجديد وعنوانه وارتباطه بالرخصة الحالية.")}
-					pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</VrStack>
-
-			<VrStack
-				pWidth={new Pixel(300, 340)}
-				pGap={new Pixel(10, 10)}
-				pPad={new Pixel(25, 15)}
-				pBgColor={new ElemBg(Colors.GreenLite)}
-			>
-
-				<Emograph
-					pTitle={Text.H4.Centered.OfText("تغيير مقر")}
-					pText={Text.Body.Centered.OfText("طلب تغيير مقر يحتاج لوحة جديدة تقرأ العنوان الجديد وحدود العين ومخزن العينات والبيانات المعدلة.")}
-					pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</VrStack>
-
-			<VrStack
-				pWidth={new Pixel(300, 340)}
-				pGap={new Pixel(10, 10)}
-				pPad={new Pixel(25, 15)}
-				pBgColor={new ElemBg(Colors.OrangeLite)}
-			>
-
-				<Emograph
-					pTitle={Text.H4.Centered.OfText("تغيير مخزن")}
-					pText={Text.Body.Centered.OfText("نراجع المخزن البديل هندسيًا، ثم نعد لوحة مطابقة للعنوان الجديد والمساحة والارتفاع والتهوية.")}
-					pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</VrStack>
-
-			<VrStack
-				pWidth={new Pixel(300, 340)}
-				pGap={new Pixel(10, 10)}
-				pPad={new Pixel(25, 15)}
-				pBgColor={new ElemBg(Colors.WhiteOff)}
-			>
-
-				<Emograph
-					pTitle={Text.H4.Centered.OfText("تجديد ترخيص")}
-					pText={Text.Body.Centered.OfText("عند التجديد نراجع احتفاظ المكتب بالرسم والرخصة ومطابقة الواقع للبيانات القديمة قبل استخدام نفس اللوحة أو تحديثها.")}
-					pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</VrStack>
-
-			<VrStack
-				pWidth={new Pixel(300, 340)}
-				pGap={new Pixel(10, 10)}
-				pPad={new Pixel(25, 15)}
-				pBgColor={new ElemBg(Colors.SkyLite)}
-			>
-
-				<Emograph
-					pTitle={Text.H4.Centered.OfText("تعدد الشركات")}
-					pText={Text.Body.Centered.OfText("المكتب المشترك يحتاج قراءة واضحة للشركات المرتبطة بالمقر ومخزن العينات داخل مستندات الملف.")}
-					pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</VrStack>
-
-			<VrStack
-				pWidth={new Pixel(300, 340)}
-				pGap={new Pixel(10, 10)}
-				pPad={new Pixel(25, 15)}
-				pBgColor={new ElemBg(Colors.Creamy)}
-			>
-
-				<Emograph
-					pTitle={Text.H4.Centered.OfText("مستندات مترجمة")}
-					pText={Text.Body.Centered.OfText("ملفات الشركات الخارجية تحتاج توافقًا بين اسم الشركة في التفويض والترجمة والرسم وطلب الترخيص.")}
-					pSize={new Size(new NumPer(260, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-			</VrStack>
-
-		</Grid>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec>
-
-		<SecTitle
-			SkyLite
-			pTitle="طريقة تنفيذ خدمة الرسم"
-			pDesc="نبدأ بمراجعة الملف، ثم نرفع المقاسات، ثم نجهز اللوحة النهائية للمراجعة والاعتماد"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg(Colors.WhiteOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<EmoList
-				pWidth={new RespString("1100px", "100%")}
-				pTitle={Text.H3.Centered.OfText("من بيانات العميل إلى لوحة التقديم")}
-				pDesc={Text.Body.Centered.OfText("كل خطوة تضبط عنصرًا محددًا في الرسم وتمنع تضارب الملف")}
-				pHeadBg={new ElemBg(Colors.Creamy)}
-				pItemsBg={new ElemBg(Colors.SkyLite)}
-				pItemFnt={Text.Body}
-				pNumbered={true}
-				pItems={[
-					{ Title: "استلام بيانات الملف", Items: ["اسم الشركة.", "اسم المكتب العلمي المقترح.", "عنوان المقر.", "عنوان مخزن العينات.", "صورة عقد الحيازة إن وجد."] },
-					{ Title: "مراجعة صلاحية العين", Items: ["مطابقة العنوان مع المستندات.", "تحديد علاقة المخزن بالمكتب.", "رصد أي تعارض واضح قبل النزول للرفع."] },
-					{ Title: "رفع المقاسات", Items: ["قياس أطوال المقر والمخزن.", "قياس الارتفاع.", "تحديد الفتحات والتهوية.", "تصوير الواجهة والمدخل والفراغات المؤثرة."] },
-					{ Title: "إعداد اللوحة", Items: ["رسم المسقط الأفقي.", "إضافة المسقط الرأسي.", "تجهيز جدول البيانات.", "تنسيق الكروكي والواجهة عند الحاجة."] },
-					{ Title: "المراجعة النهائية", Items: ["مراجعة الاسم والعنوان.", "مطابقة اللوحة مع الواقع.", "تجهيز النسخة القابلة للطباعة والاعتماد."] }
-				]}
 			/>
 
 		</EmoStr>
@@ -349,310 +81,9 @@ import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, T
 
 
 
-	<EmoSec>
+	<RelServices>
 
-		<SecTitle
-			Gray5
-			pTitle="ملاحظات هندسية قبل المعاينة"
-			pDesc="هذه النقاط ترفع جودة اللوحة وتقلل ملاحظات المراجعة"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg(Colors.BlackOff)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<EmoList
-					pWidth={new RespString("650px", "100%")}
-					pTitle={Text.H3.Centered.OfText("أخطاء تظهر في الرسم")}
-					pDesc={Text.Body.Centered.OfText("نراجعها قبل الطباعة")}
-					pHeadBg={new ElemBg(Colors.OrangeLite)}
-					pItemsBg={new ElemBg(Colors.WhiteOff)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						{ Title: "عنوان غير موحد", Items: ["العقد يذكر عنوانًا بصياغة مختلفة عن الطلب.", "الدور أو رقم الشقة غير ظاهر على اللوحة."] },
-						{ Title: "مخزن غير محدد", Items: ["المخزن مرسوم كجزء عام من المكتب.", "الأطوال والارتفاع غير مكتوبة بوضوح."] },
-						{ Title: "حدود مبهمة", Items: ["حدود العين مع الجيران أو الممر غير مفهومة.", "المدخل أو اتجاه الشارع غير ظاهر."] },
-						{ Title: "غياب بيانات الترخيص", Items: ["اسم الشركة أو المكتب ناقص من اللوحة.", "اللوحة مكتوبة بصياغة عامة بعيدة عن ملف المكتب العلمي ومخزن العينات."] }
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("650px", "100%")}
-					pTitle={Text.H3.Centered.OfText("ضبط النسخة النهائية")}
-					pDesc={Text.Body.Centered.OfText("نسلم لوحة مرتبة يمكن الرجوع إليها أثناء المعاينة")}
-					pHeadBg={new ElemBg(Colors.GreenLite)}
-					pItemsBg={new ElemBg(Colors.WhiteOff)}
-					pItemFnt={Text.Body}
-					pNumbered={true}
-					pItems={[
-						{ Title: "عنوان كامل", Items: ["محافظة ومدينة ومنطقة.", "شارع ورقم عقار ودور وشقة.", "صياغة متطابقة مع سند الحيازة قدر الإمكان."] },
-						{ Title: "مخزن واضح", Items: ["حدود المخزن.", "الأطوال.", "الارتفاع.", "التهوية.", "صلة المخزن بالمكتب."] },
-						{ Title: "بيانات مهنية", Items: ["اسم المكتب العلمي.", "اسم الشركة.", "اسم المهندس وختمه.", "مقياس الرسم وتاريخ الإصدار."] },
-						{ Title: "ملف قابل للتحديث", Items: ["نسخة PDF.", "نسخة قابلة للتعديل عند تغيير مقر أو إضافة مخزن.", "تنظيم أسماء الملفات بما يطابق طلب الترخيص."] }
-					]}
-				/>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec>
-
-		<SecTitle
-			GreenLite
-			pTitle="مخرجات الخدمة"
-			pDesc="نحدد منذ البداية ما الذي سيستلمه العميل وما الذي يحتاجه في ملف الترخيص"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg(Colors.Creamy)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(25, 15)} pPad={new Pixel(30, 15)}>
-
-				<EmoList
-					pWidth={new RespString("400px", "100%")}
-					pTitle={Text.H3.Centered.OfText("ملف هندسي")}
-					pDesc={Text.Body.Centered.OfText("صيغة منظمة للرسمة")}
-					pHeadBg={new ElemBg(Colors.WhiteOff)}
-					pItemsBg={new ElemBg(Colors.SkyLite)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						"لوحة PDF جاهزة للطباعة.",
-						"مسقط أفقي للمقر ومخزن العينات.",
-						"قطاع أو مسقط رأسي يوضح الارتفاع.",
-						"جدول بيانات للعنوان والمساحات والارتفاعات."
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("400px", "100%")}
-					pTitle={Text.H3.Centered.OfText("اعتماد ومراجعة")}
-					pDesc={Text.Body.Centered.OfText("تجهيز قبل التقديم")}
-					pHeadBg={new ElemBg(Colors.WhiteOff)}
-					pItemsBg={new ElemBg(Colors.GreenLite)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						"مراجعة العنوان مع سند الحيازة.",
-						"مراجعة مخزن العينات مع الواقع.",
-						"تجهيز اللوحة للاعتماد الهندسي.",
-						"تعديلات نهائية قبل الطباعة عند الحاجة."
-					]}
-				/>
-
-				<EmoList
-					pWidth={new RespString("400px", "100%")}
-					pTitle={Text.H3.Centered.OfText("ملف مساعد")}
-					pDesc={Text.Body.Centered.OfText("لتسهيل المتابعة")}
-					pHeadBg={new ElemBg(Colors.WhiteOff)}
-					pItemsBg={new ElemBg(Colors.OrangeLite)}
-					pItemFnt={Text.Body}
-					pNumbered={false}
-					pItems={[
-						"صور الرفع الأساسية.",
-						"ملاحظات هندسية على المكان.",
-						"قائمة بيانات ناقصة من العميل.",
-						"نسخة رقمية للرجوع إليها عند التعديل أو التجديد."
-					]}
-				/>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec id="cta">
-
-		<SecTitle
-			Bistage
-			pTitle="اطلب رسم هندسي لمكتب علمي"
-			pDesc="أرسل بيانات الشركة وعنوان المقر ومخزن العينات وصور المكان، وسنحدد المطلوب للرفع والرسم والمراجعة قبل التقديم"
-		/>
-
-		<EmoStr
-			pBg={new ElemBg(Colors.Sky)}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
-
-			<HzStack pGap={new Pixel(30, 15)} pPad={new Pixel(30, 15)}>
-
-				<Emograph
-					pTitle={Text.H3.OfText("بيانات نحتاجها قبل الزيارة")}
-					pText={Text.Body.OfText("اسم الشركة، اسم المكتب العلمي، عنوان المقر، عنوان مخزن العينات، صورة عقد الحيازة إن وجد، صور الواجهة والمدخل والفراغات الداخلية، وبيانات المدير والصيدلي المسئول إذا كانت جاهزة. بعد مراجعة البيانات نحدد زيارة الرفع ونجهز اللوحة المناسبة لحالة الملف.")}
-					pSize={new Size(new NumPer(750, "100%"), new NumPer("auto", "auto"))}
-				/>
-
-				<VrStack
-					pWidth={new Pixel(350, 340)}
-					pGap={new Pixel(20, 15)}
-					pPad={new Pixel(25, 15)}
-					pBgColor={new ElemBg(Colors.WhiteOff)}
-				>
-
-					<Emograph
-						pTitle={Text.H3.Centered.OfText("01014490054")}
-						pText={Text.Body.Centered.OfText("اتصل أو ارسل بيانات المقر ومخزن العينات على واتساب لبدء خدمة الرسم الهندسي.")}
-						pSize={new Size(new NumPer(300, "100%"), new NumPer("auto", "auto"))}
-					/>
-
-					<EmoCall BlackSky pText="اطلب الخدمة" />
-
-				</VrStack>
-
-			</HzStack>
-
-		</EmoStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoFaq>
-
-		<FaqItem
-			pQuestion="هل الرسم الهندسي مطلوب لترخيص المكتب العلمي؟"
-			pAnswer="نعم، ملف المكتب العلمي يتضمن رسمًا هندسيًا معتمدًا يوضح مقر المكتب ومخزن العينات والبيانات الهندسية المطلوبة للمراجعة والمعاينة."
-		/>
-
-		<FaqItem
-			pQuestion="ماذا يظهر في رسم مخزن العينات؟"
-			pAnswer="يظهر موقع المخزن، حدوده، أطواله، ارتفاعه، فتحاته، وعلاقته بمقر المكتب أو عنوانه المستقل، مع بيانات العنوان والشركة طالبة الترخيص."
-		/>
-
-		<FaqItem
-			pQuestion="هل يمكن أن يكون مخزن العينات خارج مقر المكتب؟"
-			pAnswer="يمكن تجهيز ملف الرسم حسب الحالة الواقعية، فإذا كان المخزن في عنوان منفصل يتم رسمه وكتابة عنوانه وربطه بملف المكتب العلمي بوضوح."
-		/>
-
-		<FaqItem
-			pQuestion="هل نحتاج زيارة رفع مقاسات؟"
-			pAnswer="نعم، الزيارة مهمة لقياس الأطوال والارتفاعات والفتحات والحدود، ولمنع اختلاف الرسم عن الواقع أثناء المعاينة."
-		/>
-
-		<FaqItem
-			pQuestion="ما أهم خطأ في رسم المكتب العلمي؟"
-			pAnswer="أكثر الأخطاء تأثيرًا اختلاف العنوان بين العقد والرسم والطلب، أو عدم تحديد مخزن العينات بشكل واضح في اللوحة."
-		/>
-
-		<FaqItem
-			pQuestion="هل الرسم يستخدم عند تغيير مقر المكتب؟"
-			pAnswer="نعم، تغيير مقر المكتب أو تغيير مخزن العينات يحتاج لوحة جديدة أو محدثة توضح العنوان الجديد والحدود والمساحات والارتفاعات."
-		/>
-
-	</EmoFaq>
-
-
-
-
-
-
-
-	<ReadAlso
-		pHeadBg={new ElemBg(Colors.Sky)}
-		pBodyBg={new ElemBg(Colors.WhiteOff)}
-		pCardBg={new ElemBg(Colors.SkyLite)}
-		pWidth={new Size(new NumPer(1600, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
-		pGap={new Pixel(20, 15)}
-	>
-
-		<ReadAlsoItem
-			pTitle="ترخيص مكتب علمي"
-			pDesc="الصفحة الرئيسية لخدمة ترخيص المكتب العلمي وتجهيز ملف الشركة والمدير ومخزن العينات."
-			pHref="/emomed/soffice"
-			pImg="https://www.edaegypt.gov.eg/media/nykldemm/%D9%85%D8%A4%D8%AA%D9%85%D8%B1-%D8%A7%D9%84%D8%B3%D9%81%D8%A7%D8%B1%D8%A9-%D8%A7%D9%84%D8%A7%D9%84%D9%85%D8%A7%D9%86%D9%8A%D8%A9.jpg?anchor=center&height=465&mode=crop&rnd=133505904739170000&width=825"
-		/>
-
-		<ReadAlsoItem
-			pTitle="تراخيص المنشآت الطبية"
-			pDesc="القسم العام لخدمات تراخيص المنشآت الطبية والصيدلية أمام الجهات المختصة."
-			pHref="/emomed"
-			pImg="https://www.edaegypt.gov.eg/media/n30phs3j/%D8%A7%D9%84%D8%BA%D8%B1%D9%81%D8%A9-%D8%A7%D9%84%D8%AA%D8%AC%D8%A7%D8%B1%D9%8A%D8%A9.jpg?anchor=center&height=465&mode=crop&rnd=133565202378870000&width=825"
-		/>
-
-		<ReadAlsoItem
-			pTitle="رسم هندسي لمخزن أدوية"
-			pDesc="رسم هندسي لمخزن أدوية وتجهيز اللوحة المطلوبة لملف هيئة الدواء."
-			pHref="/emomed/pharmastore/dwg"
-			pImg="https://www.vaisala.com/sites/default/files/inline-images/LIFT-pharmaceuticals-warehouse-800x450.jpg"
-		/>
-
-		<ReadAlsoItem
-			pTitle="رسم هندسي لصيدلية"
-			pDesc="رسم هندسي للصيدلية وتجهيز اللوحة المطلوبة للترخيص والمعاينة."
-			pHref="/emomed/pharmacy/dwg"
-			pImg="https://delexpharma.com/img/delex/sample2.jpg"
-		/>
-
-	</ReadAlso>
-
-
-
-
-
-
-
-	<RelServices
-		pTitle={Text.H2.Centered.White.OfText("خدمات مرتبطة برسم المكتب العلمي")}
-		pDesc={Text.Body.Centered.White.OfText("الرسم الهندسي يعمل ضمن ملف ترخيص ومراجعة موقع وتجهيز مقر")}
-		pHeadBg={new ElemBg(Colors.Gray5)}
-		pBodyBg={new ElemBg(Colors.Gray1)}
-		pCardBg={new ElemBg(Colors.WhiteOff)}
-		pWidth={new Size(new NumPer(1300, "calc(100% - 30px)"), new NumPer("auto", "auto"))}
-		pGap={new Pixel(20, 15)}
-	>
-
-		<RelServiceItem
-			pTitle="ترخيص مكتب علمي"
-			pDesc="متابعة ملف الترخيص كاملًا من مراجعة المستندات حتى المعاينة وإصدار الترخيص."
-			pHref="/emomed/soffice"
-			pImg="https://www.edaegypt.gov.eg/media/nykldemm/%D9%85%D8%A4%D8%AA%D9%85%D8%B1-%D8%A7%D9%84%D8%B3%D9%81%D8%A7%D8%B1%D8%A9-%D8%A7%D9%84%D8%A7%D9%84%D9%85%D8%A7%D9%86%D9%8A%D8%A9.jpg?anchor=center&height=465&mode=crop&rnd=133505904739170000&width=825"
-			pBtnText="افتح الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="تقارير وشهادات هندسية"
-			pDesc="تقارير فنية عند الحاجة لتوضيح حالة المقر أو معالجة ملاحظات هندسية قبل الترخيص."
-			pHref="/emonsult/report"
-			pImg="https://www.planndesignpro.com/admin/uploads/images/Pharmaceutical-Factory-2D-CAD-Layout-30x60m-Floor-Plans.jpg"
-			pBtnText="افتح الخدمة"
-		/>
-
-		<RelServiceItem
-			pTitle="تشطيب وتجهيز منشآت طبية"
-			pDesc="تجهيز مقر المكتب ومخزن العينات بما يناسب المعاينة والتشغيل."
-			pHref="/emocrete/finishing/pharmacy"
-			pImg="https://www.vaisala.com/sites/default/files/inline-images/LIFT-pharmaceuticals-warehouse-800x450.jpg"
-			pBtnText="افتح الخدمة"
-		/>
+		<RelServiceItem pTitle="ترخيص مكتب علمي" pDesc="متابعة ملف الترخيص كاملًا من مراجعة المستندات حتى المعاينة وإصدار الترخيص." pHref="/emomed/soffice" />
 
 	</RelServices>
 

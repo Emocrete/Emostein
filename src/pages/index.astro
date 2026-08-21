@@ -1,16 +1,17 @@
 ---
 import BLayout from "@/Layout.astro";
-import { EmoBtn, Emograph } from "@/Widgets/Comp";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
 import { RespImg } from "@/Widgets/Media";
 import { EmoSec, Hero } from "@/Widgets/Sections";
 import { EmoStr } from "@/Widgets/Strips";
-import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, Size, Text } from "@/TypesLib";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, Size, Text } from "@/TypesLib";
 ---
 
 
 
 
 
+<BLayout pSchemaType="Organization" pTitle="المجموعة الهندسية" pDescr="المجموعة الهندسية">
 
 
 
@@ -18,39 +19,28 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, Size, Text } from "
 
 
 
+	<Hero pImgF="/Media/Home">
 
+		<VrStack pSize={new Size(new NumPer("40%","95%"))} pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("10%","10%"))} pHzAlign={"Center"}>
 
+			<Emograph pTitle={Text.H1.Centered.OfText("المجموعة الهندسية")} />
 
+			<RespImg pImg={new EmoMediaData("Img","/Media/","Emostein.svg",false,"",new Size(new NumPer(700, 280), new NumPer(200, 100)))} />
 
+			<Emograph
+				pTitle={Text.Body.Bold.Centered.OfSize(50,25).OfText("فكرة خلَّاقة .. تنفيذ احترافي")}
+				pText={Text.Body.Centered.OfText("خدمات هندسية تغطي العديد من المجالات المطلوبة في جمهورية مصر العربية ، من خلال اقسام متخصصة تتولى تقديم الخدمات ذات العلاقة في سياق واحد")}
+			/>
 
+			<HzStack pGap={new Pixel(30,10)} pForceHz>
 
+				<EmoCallIcon BlackSky />
 
+				<EmoWhatsIcon BlackSky />
 
-<BLayout
-	pSchemaType="Organization"
-	pTitle="المجموعة الهندسية"
-	pDescr="المجموعة الهندسية"
->
+			</HzStack>
 
-
-
-
-
-
-
-	<Hero
-		pImgF="/Media/Home"
-		pTitle="المجموعة الهندسية"
-		pPosL="35% 60% 30% 10%"
-		pPosP="15% 5% 50% 5%"
-		pBlurP="off"
-	>
-
-		<RespImg pImg={new EmoMediaData("Img","/Media/","Emostein.svg",false,"",new Size(new NumPer(700, 280), new NumPer(200, 100)))} />
-
-		<p class = " HeroSlogan ">
-			فكرة خلَّاقة .. تنفيذ احترافي
-		</p>
+		</VrStack>
 
 	</Hero>
 
@@ -62,13 +52,19 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, Size, Text } from "
 
 	<EmoSec id="Sections">
 
-		<EmoStr pBg={new ElemBg(Colors.BistageLite)} pSize={new Size(new NumPer("100%", "100%"), new NumPer(300, 600))}>
+		<EmoStr
+			pBg={new ElemBg(Colors.BlackOff,new EmoMediaData("Img","/Media/Home/","Emodsign.webp",true))}
+			pHzAlign={Align.LeftCenter}
+			pSize={new Size(new NumPer(1920, "100%"), new NumPer(900, "680px"))}
+		>
 
-			<Emograph
-				pTitle={Text.Body.WithSize(new Pixel(40)).Centered.OfText("تجد هنا ..")}
-				pText={Text.Body.WithSize(new Pixel(30,12)).Centered.OfText("خدمات هندسية تغطي العديد من المجالات المطلوبة في جمهورية مصر العربية ، من خلال اقسام متخصصة تتولى تقديم الخدمات ذات العلاقة في سياق واحد")}
-				pSize={new Size(new NumPer(1400, "95%"), new NumPer("auto", "auto"))}
-			/>
+			<VrStack pSize={new Size(new NumPer(1000, "auto"))} pLoc={new Loc(new NumPer(100, "auto"),new NumPer(100, 50))} pHzAlign={"Center"}>
+
+				<Emograph pTitle={Text.H2.Centered.White.OfText("المكتب الهندسي")} />
+
+				<EmoDet WhiteBlack pHref="/emodesign" />
+
+			</VrStack>
 
 		</EmoStr>
 
@@ -77,21 +73,13 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, Size, Text } from "
 			pSize={new Size(new NumPer(1920, "100%"), new NumPer(900, "680px"))}
 		>
 
-			<EmoStr pHzAlign={Align.LeftCenter} pVrAlign={Align.LeftCenter}>
+			<VrStack pSize={new Size(new NumPer(1000, "auto"))} pLoc={new Loc(new NumPer(100, "auto"),new NumPer(100, 50))} pHzAlign={"Center"}>
 
-				<Emograph
-					pTitle={Text.H2.Centered.White.OfText("خدمات التصميم الهندسي لكافة التخصصات ، وخدمات المكتب الفني وإدارة المشروعات")}
-					pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))}
-				/>
+				<Emograph pTitle={Text.H2.Centered.White.OfText("المقاولات")} />
 
-			</EmoStr>
+				<EmoDet WhiteBlack pHref="/emocrete" />
 
-			<EmoBtn
-				pText="تصميم هندسي"
-				pHeight="50px"
-				pFontSize="25px"
-				pWidth="300px"
-			/>
+			</VrStack>
 
 		</EmoStr>
 
@@ -100,18 +88,13 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, Size, Text } from "
 			pSize={new Size(new NumPer(1920, "100%"), new NumPer(900, "680px"))}
 		>
 
-			<EmoStr pHzAlign={Align.LeftCenter} pVrAlign={Align.LeftCenter}>
+			<VrStack pSize={new Size(new NumPer(1000, "auto"))} pLoc={new Loc(new NumPer(100, "auto"),new NumPer(100, 50))} pHzAlign={"Center"}>
 
-				<Emograph pTitle={Text.H2.Centered.White.OfText("مقاولات")} pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))} />
+				<Emograph pTitle={Text.H2.Centered.White.OfText("توريد وتركيب الرخام والجرانيت والأحجار الطبيعية")} />
 
-			</EmoStr>
+				<EmoDet WhiteBlack pHref="/emostone" />
 
-			<EmoBtn
-				pText="مقاولات"
-				pHeight="50px"
-				pFontSize="25px"
-				pWidth="300px"
-			/>
+			</VrStack>
 
 		</EmoStr>
 
@@ -120,18 +103,13 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, Size, Text } from "
 			pSize={new Size(new NumPer(1920, "100%"), new NumPer(900, "680px"))}
 		>
 
-			<EmoStr pHzAlign={Align.LeftCenter} pVrAlign={Align.LeftCenter}>
+			<VrStack pSize={new Size(new NumPer(1000, "auto"))} pLoc={new Loc(new NumPer(100, "auto"),new NumPer(100, 50))} pHzAlign={"Center"}>
 
-				<Emograph pTitle={Text.H2.Centered.White.OfText("رخام")} pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))} />
+				<Emograph pTitle={Text.H2.Centered.White.OfText("التوريدات العمومية")} />
 
-			</EmoStr>
+				<EmoDet WhiteBlack pHref="/emochain" />
 
-			<EmoBtn
-				pText="رخام"
-				pHeight="50px"
-				pFontSize="25px"
-				pWidth="300px"
-			/>
+			</VrStack>
 
 		</EmoStr>
 
@@ -140,18 +118,13 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, Size, Text } from "
 			pSize={new Size(new NumPer(1920, "100%"), new NumPer(900, "680px"))}
 		>
 
-			<EmoStr pHzAlign={Align.LeftCenter} pVrAlign={Align.LeftCenter}>
+			<VrStack pSize={new Size(new NumPer(1000, "auto"))} pLoc={new Loc(new NumPer(100, "auto"),new NumPer(100, 50))} pHzAlign={"Center"}>
 
-				<Emograph pTitle={Text.H2.Centered.White.OfText("توريدات")} pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))} />
+				<Emograph pTitle={Text.H2.Centered.White.OfText("التراخيص الإدارية")} />
 
-			</EmoStr>
+				<EmoDet WhiteBlack pHref="/emoperm" />
 
-			<EmoBtn
-				pText="توريدات"
-				pHeight="50px"
-				pFontSize="25px"
-				pWidth="300px"
-			/>
+			</VrStack>
 
 		</EmoStr>
 
@@ -160,18 +133,13 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, Size, Text } from "
 			pSize={new Size(new NumPer(1920, "100%"), new NumPer(900, "680px"))}
 		>
 
-			<EmoStr pHzAlign={Align.LeftCenter} pVrAlign={Align.LeftCenter}>
+			<VrStack pSize={new Size(new NumPer(1000, "auto"))} pLoc={new Loc(new NumPer(100, "auto"),new NumPer(100, 50))} pHzAlign={"Center"}>
 
-				<Emograph pTitle={Text.H2.Centered.White.OfText("تراخيص")} pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))} />
+				<Emograph pTitle={Text.H2.Centered.White.OfText("التراخيص الطبية")} />
 
-			</EmoStr>
+				<EmoDet WhiteBlack pHref="/emomed" />
 
-			<EmoBtn
-				pText="تراخيص"
-				pHeight="50px"
-				pFontSize="25px"
-				pWidth="300px"
-			/>
+			</VrStack>
 
 		</EmoStr>
 
@@ -180,18 +148,13 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, Size, Text } from "
 			pSize={new Size(new NumPer(1920, "100%"), new NumPer(900, "680px"))}
 		>
 
-			<EmoStr pHzAlign={Align.LeftCenter} pVrAlign={Align.LeftCenter}>
+			<VrStack pSize={new Size(new NumPer(1000, "auto"))} pLoc={new Loc(new NumPer(100, "auto"),new NumPer(100, 50))} pHzAlign={"Center"}>
 
-				<Emograph pTitle={Text.H2.Centered.White.OfText("تراخيص طبية")} pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))} />
+				<Emograph pTitle={Text.H2.Centered.White.OfText("الخدمات الاستشارية الهندسية")} />
 
-			</EmoStr>
+				<EmoDet WhiteBlack pHref="/emonsult" />
 
-			<EmoBtn
-				pText="تراخيص طبية"
-				pHeight="50px"
-				pFontSize="25px"
-				pWidth="300px"
-			/>
+			</VrStack>
 
 		</EmoStr>
 
@@ -200,38 +163,13 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, Size, Text } from "
 			pSize={new Size(new NumPer(1920, "100%"), new NumPer(900, "680px"))}
 		>
 
-			<EmoStr pHzAlign={Align.LeftCenter} pVrAlign={Align.LeftCenter}>
+			<VrStack pSize={new Size(new NumPer(1000, "auto"))} pLoc={new Loc(new NumPer(100, "auto"),new NumPer(100, 50))} pHzAlign={"Center"}>
 
-				<Emograph pTitle={Text.H2.Centered.White.OfText("خدمات استشارية")} pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))} />
+				<Emograph pTitle={Text.H2.Centered.White.OfText("التسويق العقاري")} />
 
-			</EmoStr>
+				<EmoDet WhiteBlack pHref="/emostate" />
 
-			<EmoBtn
-				pText="خدمات استشارية"
-				pHeight="50px"
-				pFontSize="25px"
-				pWidth="300px"
-			/>
-
-		</EmoStr>
-
-		<EmoStr
-			pBg={new ElemBg(Colors.BlackOff,new EmoMediaData("Img","/Media/Home/","Emodsign.webp",true))}
-			pSize={new Size(new NumPer(1920, "100%"), new NumPer(900, "680px"))}
-		>
-
-			<EmoStr pHzAlign={Align.LeftCenter} pVrAlign={Align.LeftCenter}>
-
-				<Emograph pTitle={Text.H2.Centered.White.OfText("تسويق عقاري")} pSize={new Size(new NumPer(400, "auto"), new NumPer(200, "auto"))} />
-
-			</EmoStr>
-
-			<EmoBtn
-				pText="تسويق عقاري"
-				pHeight="50px"
-				pFontSize="25px"
-				pWidth="300px"
-			/>
+			</VrStack>
 
 		</EmoStr>
 
@@ -244,71 +182,3 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, Size, Text } from "
 
 
 </BLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<style>
-
-
-
-	.HeroSlogan {
-		margin: 5;
-		font-size: clamp(14px, 2.6vw, 50px);
-		line-height: 1;
-		font-weight: 500;
-		text-align: center;
-	}
-
-
-
-</style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<style>
-
-
-
-	@media (orientation: portrait) {
-		.HeroSlogan {
-			font-size: clamp(20px, 3.2vw, 25px);
-		}
-	}
-
-
-
-</style>

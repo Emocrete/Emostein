@@ -1,15 +1,19 @@
 ---
 import BLayout from "@/Layout.astro";
-import { EmoCall, Emograph, VrStack } from "@/Widgets/Comp";
+import { EmoCallIcon, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
 import { Hero } from "@/Widgets/Sections";
-import { Loc, NumPer, Size, Text } from "@/TypesLib";
+import { Loc, NumPer, Pixel, Size, Text } from "@/TypesLib";
 ---
 
 
 
 
 
-<BLayout pSchemaType="HomeAndConstructionBusiness" pTitle="المكتب الهندسي" pDescr="المكتب الهندسي">
+<BLayout
+	pSchemaType="HomeAndConstructionBusiness"
+	pTitle="المكتب الهندسي"
+	pDescr="خدمات التصميم الهندسي لكافة التخصصات وخدمات حصر الكميات لأعمال البناء والتشطيبات وخدمات الإدارة وإعداد الجداول الزمنية للمشاريع الهندسية"
+>
 
 
 
@@ -19,11 +23,20 @@ import { Loc, NumPer, Size, Text } from "@/TypesLib";
 
 	<Hero>
 
-		<VrStack pSize={new Size(new NumPer("40%","95%"))} pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("30%","15%"))} pHzAlign={"Center"}>
+		<VrStack pSize={new Size(new NumPer("40%","95%"))} pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("20%","20%"))} pHzAlign={"Center"}>
 
-			<Emograph pTitle={Text.H1.Centered.White.OfText("المكتب الهندسي")} />
+			<Emograph
+				pTitle={Text.H1.Centered.White.OfText("المكتب الهندسي")}
+				pText={Text.Body.Centered.White.OfText("خدمات التصميم الهندسي لكافة التخصصات وخدمات حصر الكميات لأعمال البناء والتشطيبات وخدمات الإدارة وإعداد الجداول الزمنية للمشاريع الهندسية")}
+			/>
 
-			<EmoCall BlackSky />
+			<HzStack pGap={new Pixel(30,10)}>
+
+				<EmoCallIcon BlackSky />
+
+				<EmoWhatsIcon BlackSky />
+
+			</HzStack>
 
 		</VrStack>
 

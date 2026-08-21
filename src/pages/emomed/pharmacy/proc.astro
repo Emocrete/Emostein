@@ -1,27 +1,12 @@
 ---
 import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
-import { EmoCall, Emograph, EmoList, HzStack, SecTitle } from "@/Widgets/Comp";
+import { EmoCallIcon, Emograph, EmoList, EmoWhatsIcon, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
 import { RespImg } from "@/Widgets/Media";
 import { EmoFaq, EmoSec, FaqItem, Hero, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { EmoStr } from "@/Widgets/Strips";
-import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -31,12 +16,6 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, T
 	pSchemaType="Article"
 	pTitle="إجراءات ترخيص صيدلية"
 	pDescr="شرح تفصيلي لإجراءات ترخيص صيدلية في مصر من فحص المقر قبل التقديم، تجهيز المستندات، رفع طلب الترخيص عبر برنامج ميكنة التراخيص، المعاينة الأولى، المعاينة الثانية، الاستكمال، إصدار الترخيص، وفتح الصيدلية خلال المهلة القانونية."
-	pSchemaImages={[
-		"/Media/Emomed/Pharmacy/Proc/HeroD.webp",
-		"/Media/Emomed/Pharmacy/PreparePharmacyFile.webp",
-		"/Media/Emomed/Pharmacy/SendReq.webp",
-		"/Media/Emomed/Pharmacy/Inspection.webp"
-	]}
 >
 
 
@@ -45,23 +24,24 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, T
 
 
 
-	<Hero
-		pImgF="/Media/Emomed/Pharmacy/Proc/"
-		pImgL="HeroD.webp"
-		pImgP="HeroM.webp"
-		pTitle="إجراءات ترخيص صيدلية"
-		pDesc="خطوات عملية لترخيص صيدلية من فحص المكان وتجهيز المستندات، إلى رفع الطلب عبر برنامج ميكنة التراخيص، ثم المعاينة الأولى، والمعاينة الثانية، واستكمال المستندات حتى إصدار الرخصة."
-		pTitleClr={Colors.WhiteOff}
-		pDescClr={Colors.WhiteOff}
-		pHzAlign="right"
-		pVrAlign="right"
-		pPosL="18% 50% 12% 8%"
-		pPosP="12% 8% 42% 8%"
-		pBlurL="on"
-		pBlurP="on"
-	>
+	<Hero>
 
-		<EmoCall BlackSky pText="ابدأ ملف الترخيص" />
+		<VrStack pSize={new Size(new NumPer("40%","95%"))} pLoc={new Loc(new NumPer("55%","2.5%"),new NumPer("20%","20%"))} pHzAlign={"Center"}>
+
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("إجراءات ترخيص صيدلية")}
+				pText={Text.Body.Centered.OfText("خطوات عملية لترخيص صيدلية من فحص المكان وتجهيز المستندات، إلى رفع الطلب عبر برنامج ميكنة التراخيص، ثم المعاينة الأولى، والمعاينة الثانية، واستكمال المستندات حتى إصدار الرخصة.")}
+			/>
+
+			<HzStack pGap={new Pixel(30,10)}>
+
+				<EmoCallIcon BlackSky />
+
+				<EmoWhatsIcon BlackSky />
+
+			</HzStack>
+
+		</VrStack>
 
 	</Hero>
 
@@ -802,37 +782,11 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, T
 
 
 
-	<ReadAlso
-		pTitle={Text.H2.Centered.OfText("اقرأ أيضًا")}
-		pDesc={Text.Body.Centered.OfText("صفحات تساعدك على فهم ملف ترخيص الصيدلية من ناحية الشروط والرسم والمسافة.")}
-		pHeadBg={new ElemBg(Colors.SkyLite)}
-		pBodyBg={new ElemBg(Colors.WhiteOff)}
-		pCardBg={new ElemBg(Colors.WhiteOff)}
-	>
+	<ReadAlso>
 
-		<ReadAlsoItem
-			pTitle="ترخيص صيدلية"
-			pDesc="الصفحة الرئيسية لخدمة ترخيص الصيدليات وتجهيز الملف."
-			pHref="/emomed/pharmacy"
-		/>
+		<ReadAlsoItem pTitle="شروط ترخيص صيدلية" pDesc="شروط الصيدلي والمقر والمعاينة الأولى والثانية." pHref="/emomed/pharmacy/cond" />
 
-		<ReadAlsoItem
-			pTitle="شروط ترخيص صيدلية"
-			pDesc="شروط الصيدلي والمقر والمعاينة الأولى والثانية."
-			pHref="/emomed/pharmacy/cond"
-		/>
-
-		<ReadAlsoItem
-			pTitle="رسم هندسي لصيدلية"
-			pDesc="الرسم المطلوب للمعاينة الأولى والثانية ومكونات اللوحة."
-			pHref="/emomed/pharmacy/dwg"
-		/>
-
-		<ReadAlsoItem
-			pTitle="قياس المسافة بين صيدليتين"
-			pDesc="فحص شرط المسافة قبل اختيار مقر الصيدلية."
-			pHref="/emomed/pharmacy/distance"
-		/>
+		<ReadAlsoItem pTitle="قياس المسافة بين صيدليتين" pDesc="فحص شرط المسافة قبل اختيار مقر الصيدلية." pHref="/emomed/pharmacy/distance" />
 
 	</ReadAlso>
 
@@ -842,54 +796,26 @@ import { Align, Colors, ElemBg, EmoMediaData, NumPer, Pixel, RespString, Size, T
 
 
 
-	<RelServices
-		pTitle={Text.H2.Centered.WithColor(Colors.BistageLite).OfText("خدمات مرتبطة بإجراءات الترخيص")}
-		pDesc={Text.Body.Centered.White.OfText("خدمات فعلية تساعد في تجهيز الملف وتجنب تعطله أثناء المعاينات.")}
-		pHeadBg={new ElemBg(Colors.Gray5)}
-		pBodyBg={new ElemBg(Colors.SkyLite)}
-		pCardBg={new ElemBg(Colors.WhiteOff)}
-	>
+	<RelServices>
 
-		<RelServiceItem
-			pTitle="استخراج ترخيص صيدلية"
-			pDesc="متابعة إجراءات ترخيص الصيدلية وتجهيز الملف ومراجعة الملاحظات."
-			pHref="/emomed/pharmacy"
-			pBtnText="اطلب الخدمة"
-		/>
+		<RelServiceItem pTitle="استخراج ترخيص صيدلية" pDesc="متابعة إجراءات ترخيص الصيدلية وتجهيز الملف ومراجعة الملاحظات." pHref="/emomed/pharmacy" />
 
-		<RelServiceItem
-			pTitle="رسم هندسي لصيدلية"
-			pDesc="إعداد الرسم المطلوب للمعاينة الأولى أو الرسم النهائي بعد التجهيز."
-			pHref="/emomed/pharmacy/dwg"
-			pBtnText="اطلب الخدمة"
-		/>
+		<RelServiceItem pTitle="رسم هندسي لصيدلية" pDesc="إعداد الرسم المطلوب للمعاينة الأولى أو الرسم النهائي بعد التجهيز." pHref="/emomed/pharmacy/dwg" />
 
-		<RelServiceItem
-			pTitle="قياس المسافة بين صيدليتين"
-			pDesc="فحص شرط المسافة قبل التعاقد على المحل أو رفع الطلب."
-			pHref="/emomed/pharmacy/distance"
-			pBtnText="اطلب الخدمة"
-		/>
+		<RelServiceItem pTitle="قياس المسافة بين صيدليتين" pDesc="فحص شرط المسافة قبل التعاقد على المحل أو رفع الطلب." pHref="/emomed/pharmacy/distance" />
 
-		<RelServiceItem
-			pTitle="تقرير هندسي عن حالة مبنى"
-			pDesc="تقرير فني عند الحاجة لمراجعة حالة العقار أو موقفه الإنشائي."
-			pHref="/emonsult/report"
-			pBtnText="اطلب الخدمة"
-		/>
+		<RelServiceItem pTitle="تقرير هندسي عن حالة مبنى" pDesc="تقرير فني عند الحاجة لمراجعة حالة العقار أو موقفه الإنشائي." pHref="/emonsult/report" />
 
 		<RelServiceItem
 			pTitle="دعبس .. بيع وشراء صيدليات"
 			pDesc="خدمات الربط بين أصحاب الصيدليات والمحلات المعروضة للبيع وبين الصيادلة الجادين الراغبين في الشراء"
 			pHref="/emomed/pharmacy/mining"
-			pBtnText="التفاصيل"
 		/>
 
 		<RelServiceItem
 			pTitle="تسجيل مدير"
 			pDesc="الشروط والأوراق والإجراءات المطلوبة لتسجيل مدير لصيدلية ، ونعمل كحلقة وصل بين المديرين وأصحاب الصيدليات"
 			pHref="/emomed/pharmacy/manager"
-			pBtnText="التفاصيل"
 		/>
 
 	</RelServices>
