@@ -1,6 +1,7 @@
 export const prerender = false;
 
 import { createSign } from "node:crypto";
+import { getSecret } from "astro:env/server";
 
 const cAnalyticsScope = "https://www.googleapis.com/auth/analytics.readonly";
 const cTokenUrl = "https://oauth2.googleapis.com/token";
@@ -25,12 +26,15 @@ function Json(pBody, pStatus = 200, pCacheSeconds = 0) {
 }
 
 function Env(pName) {
-	const cValue = process.env[pName];
-	return typeof cValue === "string" ? cValue.trim() : "";
+	const cRuntimeValue = getSecret(pName);
+	if (typeof cRuntimeValue === "string" && cRuntimeValue.trim()) return cRuntimeValue.trim();
+
+	const cProcessValue = process.env[pName];
+	return typeof cProcessValue === "string" ? cProcessValue.trim() : "";
 }
 
 function GetConfig() {
-	const cPropertyId = Env("GA4_PROPERTY_ID");
+	const cPropertyId = Env("GA4_PROPERTY_ID") || "387588470";
 	let cClientEmail = Env("GA4_CLIENT_EMAIL");
 	let cPrivateKey = Env("GA4_PRIVATE_KEY").replace(/\\n/g, "\n");
 	const cJson = Env("GA4_SERVICE_ACCOUNT_JSON");
@@ -287,6 +291,12 @@ export async function GET({ request }) {
 	} catch (pError) {
 		const cMessage = pError instanceof Error ? pError.message : String(pError);
 		console.error("EmoStats API:", cMessage);
-		return Json({ ok: false, error: "Stats are temporarily unavailable" }, 503);
+
+		const cUrl = new URL(request.url);
+		const cIsLocal = cUrl.hostname === "localhost" || cUrl.hostname === "127.0.0.1" || import.meta.env.DEV;
+		return Json({
+			ok: false,
+			error: cIsLocal ? cMessage : "Stats are temporarily unavailable"
+		}, 503);
 	}
 }
