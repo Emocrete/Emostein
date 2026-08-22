@@ -1,6 +1,6 @@
 ---
 import BLayout from "@/Layout.astro";
-import { Badge, EmoCallIcon, Emograph, EmoWhatsIcon, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { Badge, EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
 import { EmoGallery, RespImg } from "@/Widgets/Media";
 import { DivCol, DivStr, EmoSec, Hero } from "@/Widgets/Sections";
 import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, Size, Text } from "@/TypesLib";
@@ -175,47 +175,21 @@ import { StoneRequestBuilder } from "../../site/Widgets/Stone/StoneRequest";
 
 		<SecTitle id="sectMarble" GreenLite pTitle="أنواع الرخام المصري والمستورد" />
 
-		<DivStr id="strEgMarble">
+		<VrStack>
 
-			<DivCol>
+			<Emograph id="txtEgMarple" pTitle={Text.H3.Centered.AtRight.OfText("رخام مصري")} />
 
-				<Emograph
-					id="txtEgMarple"
-					pTitle={Text.H3.Centered.OfText("رخام مصري")}
-					pSize={new Size(new NumPer(200),new NumPer(30))}
-					data-own-size
-				/>
+			<EmoDet pHref="/emostone/marble/eg" />
 
-			</DivCol>
+			<EmoGallery pFolder="/Media/Emostone/Marble/Eg/Samples/Raw" pSize={new Size(new NumPer("100%","100%"),new NumPer(550,600))} data-own-size />
 
-			<DivCol>
+			<Emograph id="txtImpMarple" pTitle={Text.H3.Centered.AtRight.OfText("رخام مستورد")} />
 
-				<EmoGallery id="galEgMarble" pFolder="/Media/Emostone/Marble/Eg/Samples/Raw" />
+			<EmoDet pHref="/emostone/marble/imp" />
 
-			</DivCol>
+			<EmoGallery pFolder="/Media/Emostone/Marble/Imp/Samples/Raw" pSize={new Size(new NumPer("100%","100%"),new NumPer(550,600))} data-own-size />
 
-		</DivStr>
-
-		<DivStr>
-
-			<DivCol>
-
-				<Emograph
-					id="txtImpMarple"
-					pTitle={Text.H3.Centered.OfText("رخام مستورد")}
-					pSize={new Size(new NumPer(200),new NumPer(30))}
-					data-own-size
-				/>
-
-			</DivCol>
-
-			<DivCol>
-
-				<EmoGallery id="galImpMarble" pFolder="/Media/Emostone/Marble/Imp/Samples/Raw" />
-
-			</DivCol>
-
-		</DivStr>
+		</VrStack>
 
 	</EmoSec>
 
@@ -234,61 +208,23 @@ import { StoneRequestBuilder } from "../../site/Widgets/Stone/StoneRequest";
 
 		<SecTitle id="sectGranit" GreenLite pTitle="أنواع الجرانيت المصري والمستورد" />
 
-		<DivStr id="strEgGranit">
+		<VrStack>
 
-			<DivCol>
+			<Emograph id="txtEgMarple" pTitle={Text.H3.Centered.AtRight.OfText("جرانيت مصري")} />
 
-				<Emograph
-					id="txtEgGranit"
-					pTitle={Text.H3.Centered.OfText("جرانيت مصري")}
-					pSize={new Size(new NumPer(200),new NumPer(30))}
-					data-own-size
-				/>
+			<EmoDet pHref="/emostone/granit/eg" />
 
-			</DivCol>
+			<EmoGallery pFolder="/Media/Emostone/Granit/Eg/Samples/Raw" pSize={new Size(new NumPer("100%","100%"),new NumPer(550,600))} data-own-size />
 
-			<DivCol>
+			<Emograph id="txtImpMarple" pTitle={Text.H3.Centered.AtRight.OfText("جرانيت مستورد")} />
 
-				<EmoGallery id="galEgGranit" pFolder="/Media/Emostone/Granit/Eg/Samples/Raw" />
+			<EmoDet pHref="/emostone/granit/imp" />
 
-			</DivCol>
+			<EmoGallery pFolder="/Media/Emostone/Granit/Imp/Samples/Raw" pSize={new Size(new NumPer("100%","100%"),new NumPer(550,600))} data-own-size />
 
-		</DivStr>
-
-		<DivStr>
-
-			<DivCol>
-
-				<Emograph
-					id="txtImpGranit"
-					pTitle={Text.H3.Centered.OfText("جرانيت مستورد")}
-					pSize={new Size(new NumPer(200),new NumPer(30))}
-					data-own-size
-				/>
-
-			</DivCol>
-
-			<DivCol>
-
-				<EmoGallery id="galImpGranit" pFolder="/Media/Emostone/Granit/Imp/Samples/Raw" />
-
-			</DivCol>
-
-		</DivStr>
+		</VrStack>
 
 	</EmoSec>
-
-
-
-
-
-
-
-	<StoneRequestBuilder
-		pSourcePage="صفحة الرخام والجرانيت"
-		pTitle="سجل طلباتك من الرخام أو الجرانيت"
-		pDesc="أضف كل صنف ومقاس على حدة، واحفظ الطلب واستكمله لاحقًا."
-	/>
 
 
 

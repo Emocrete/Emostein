@@ -1,9 +1,8 @@
 ---
 import BLayout from "@/Layout.astro";
-import { Badge, EmoCallIcon, Emograph, EmoWhatsIcon, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
+import { Badge, EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
 import { EmoGallery } from "@/Widgets/Media";
-import { DivCol, DivStr, EmoSec, Hero } from "@/Widgets/Sections";
-import { StoneGallery, StoneRequestBuilder } from "@/Widgets/Stone";
+import { EmoSec, Hero } from "@/Widgets/Sections";
 import { Align, Colors, ElemBg, Loc, NumPer, Pixel, Size, Text } from "@/TypesLib";
 ---
 
@@ -82,55 +81,23 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, Size, Text } from "@/TypesLi
 
 		<SecTitle id="sectMarble" cBrownWhite pTitle="أنواع الرخام المصري والمستورد" />
 
-		<DivStr>
+		<VrStack>
 
-			<DivCol pSize={new Size(new NumPer(200),new NumPer(30))} pHzAlign={"Center"}>
+			<Emograph id="txtEgMarple" pTitle={Text.H3.Centered.AtRight.OfText("رخام مصري")} />
 
-				<Emograph id="txtEgMarple" pTitle={Text.H3.Centered.OfText("رخام مصري")} />
+			<EmoDet pHref="/emostone/marble/eg" />
 
-			</DivCol>
+			<EmoGallery pFolder="/Media/Emostone/Marble/Eg/Samples/Raw" pSize={new Size(new NumPer("100%","100%"),new NumPer(550,600))} data-own-size />
 
-			<DivCol>
+			<Emograph id="txtImpMarple" pTitle={Text.H3.Centered.AtRight.OfText("رخام مستورد")} />
 
-				<EmoGallery pFolder="/Media/Emostone/Marble/Eg/Samples/Raw" />
+			<EmoDet pHref="/emostone/marble/imp" />
 
-			</DivCol>
+			<EmoGallery pFolder="/Media/Emostone/Marble/Imp/Samples/Raw" pSize={new Size(new NumPer("100%","100%"),new NumPer(550,600))} data-own-size />
 
-		</DivStr>
-
-		<DivStr>
-
-			<DivCol pSize={new Size(new NumPer(200),new NumPer(30))} pHzAlign={"Center"}>
-
-				<Emograph pTitle={Text.H3.Centered.OfText("رخام مستورد")} />
-
-			</DivCol>
-
-			<DivCol>
-
-				<EmoGallery pFolder="/Media/Emostone/Marble/Imp/Samples/Raw" />
-
-			</DivCol>
-
-		</DivStr>
+		</VrStack>
 
 	</EmoSec>
-
-
-
-
-
-
-
-	<StoneGallery pFolder="/Media/Emostone/Stones" pExcel="stones.xlsx" pRequestBuilderId="StoneOrder" />
-
-
-
-
-
-
-
-	<StoneRequestBuilder id="StoneOrder" />
 
 
 
