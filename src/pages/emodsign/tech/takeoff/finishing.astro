@@ -1,10 +1,10 @@
 ---
 import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
-import { EmoCallIcon, Emograph, EmoList, EmoWhatsIcon, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
-import { RespImg } from "@/Widgets/Media";
-import { EmoSec, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
-import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { EmoCallIcon, Emograph, EmoList, EmoWhatsIcon, HzStack, ListItem, SecTitle, VrStack } from "@/Widgets/Comp";
+import { AngleBand, LayerDeck, LayerItem, MosaicGrid, MosaicItem, RadialItem, RadialLayout, SideRail, SplitPane, SplitScene, StoryRail, StoryStep, ZigzagItem, ZigzagStory } from "@/Widgets/Layouts";
+import { EmoSec, Hero } from "@/Widgets/Sections";
+import { Align, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
 ---
 
 
@@ -50,40 +50,739 @@ import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text
 
 
 
-	<EmoSec
-		id="takeoff-meaning"
-		pBg={new ElemBg("#F7F1E6")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
+	<AngleBand
+		id="takeoff-scope"
+		pBg="linear-gradient(118deg, #101820 0%, #243640 62%, #6F7D67 100%)"
+		pColor="#F8F4EC"
+		pDirection="Rise"
+		pCut={new RespString("7%", "3%")}
+		pMinHeight={new RespString("310px", "280px")}
 	>
 
-		<SecTitle
-			pTitle="حصر التشطيبات يبدأ من تفاصيل السطح النهائي"
-			pDesc="أعمال التشطيبات لا تقاس مثل الهيكل الخرساني. هنا تتحول اختلافات الخامات والألوان والمقاسات وطريقة التركيب إلى كميات وبنود وملاحظات. نفس الغرفة قد تحتوي أرضية مختلفة، وزرة، وزخرفة جبس، ودهانين مختلفين، وبانوهات، ووحدات إنارة، وباب خاص، وكل ذلك يحتاج قراءة منفصلة حتى لا يتحول عرض المقاول إلى رقم إجمالي غامض."
+		<Emograph
+			pSize={new Size(new NumPer("930px", "100%"), new NumPer("auto", "auto"))}
+			pTitle={Text.H2.WithColor("#F8F4EC").OfText("الحصر يتغير بتغيّر نظام التشطيب نفسه")}
+			pText={Text.Body.WithColor("#DDE4E1").OfText("المحارة والنقاشة والسيراميك يمكن حصرها كمساحات وأطوال وأعداد واضحة، بينما الجبسيوم بورد يحتاج تفكيك النظام إلى ألواح وقطاعات وتعليقات وإكسسوارات، والرخام يحتاج قراءة القطع والمقاسات والسمك والحليات والدرج والهالك. لذلك نقسم حصر التشطيبات حسب طبيعة البند، لا تحت رقم إجمالي واحد.")}
 		/>
 
-		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
+	</AngleBand>
+
+
+
+
+
+
+
+	<ZigzagStory
+		id="main-takeoff-types"
+		pBg="#EEE9E0"
+		pGap={new RespString("54px", "22px")}
+		pPad={new RespString("64px", "14px")}
+	>
+
+		<ZigzagItem
+			pMediaShare={48}
+			pBg="#FFFDF8"
+			pMediaBg="#18232A"
+			pRadius={new RespString("42px", "24px")}
+			pMediaRadius={new RespString("42px", "20px")}
+			pMinHeight={new RespString("560px", "760px")}
+			pMediaMinHeight={new RespString("430px", "330px")}
+		>
+
+			<RadialLayout
+				slot="media"
+				pCount={6}
+				pDiameter={new RespString("94%", "94%")}
+				pOrbit={new RespString("37%", "36%")}
+				pCenterSize={new RespString("34%", "34%")}
+				pBg="radial-gradient(circle, #23323A 0 43%, #18232A 44% 100%)"
+				pCenterBg="#E4835F"
+				pCenterColor="#111820"
+				pRingColor="rgba(255,255,255,.18)"
+				pAccent="#E4835F"
+				pCenterTitle="01"
+				pCenterText="الأعمال الاعتيادية"
+				pStackPortrait={false}
+			>
+
+				<RadialItem
+					pTitle="محارة"
+					pText="م²"
+					pWidth={new RespString("126px", "88px")}
+					pBg="#FFF8EE"
+					pAccent="#E4835F"
+				/>
+
+				<RadialItem
+					pTitle="نقاشة"
+					pText="م²"
+					pWidth={new RespString("126px", "88px")}
+					pBg="#FFF8EE"
+					pAccent="#E4835F"
+				/>
+
+				<RadialItem
+					pTitle="سيراميك"
+					pText="م²"
+					pWidth={new RespString("126px", "88px")}
+					pBg="#FFF8EE"
+					pAccent="#E4835F"
+				/>
+
+				<RadialItem
+					pTitle="بورسلين"
+					pText="م²"
+					pWidth={new RespString("126px", "88px")}
+					pBg="#FFF8EE"
+					pAccent="#E4835F"
+				/>
+
+				<RadialItem
+					pTitle="وزرات"
+					pText="م ط"
+					pWidth={new RespString("126px", "88px")}
+					pBg="#FFF8EE"
+					pAccent="#E4835F"
+				/>
+
+				<RadialItem
+					pTitle="عتبات"
+					pText="م ط / عدد"
+					pWidth={new RespString("126px", "88px")}
+					pBg="#FFF8EE"
+					pAccent="#E4835F"
+				/>
+
+			</RadialLayout>
 
 			<Emograph
-				pSize={new Size(new NumPer(560, 320), new NumPer("auto", "auto"))}
-				pTitle={Text.H3.WithColor("#111318").OfText("ما الذي يختلف في حصر التشطيبات؟")}
-				pText={Text.Body.WithColor("#333333").OfText("حصر التشطيبات يتعامل مع بنود كثيرة صغيرة التأثير منفردة وكبيرة التأثير عند جمعها. متر السيراميك ليس رقم مساحة فقط، بل نوع مقاس، اتجاه تركيب، وزرة، هالك، قطع، خامات لاصقة، منطقة رطبة أو جافة، وتداخل مع الأبواب والعتبات. متر الدهانات يرتبط بتحضير السطح والمعجون والبرايمر وعدد الأوجه ونوع الدهان. لذلك قيمة الحصر تظهر عندما يفصل البنود بدل جمعها تحت بند تشطيب عام.")}
+				pTitle={Text.H2.WithColor("#111820").OfText("حصر الأعمال الاعتيادية")}
+				pText={Text.Body.WithColor("#465157").OfText("يشمل البنود المتكررة في أغلب المشروعات والتي يمكن ردّها إلى مساحات وأطوال وأعداد مباشرة، مع فصل كل خامة ومكان استعمالها بدل جمعها في بند تشطيب واحد.")}
 			/>
 
-			<RespImg
-				pImg={new EmoMediaData(
-					"Img",
-					"https://images.unsplash.com",
-					"photo-1586023492125-27b2c045efd7?auto=format&fit=crop&fm=jpg&q=70&w=1200",
-					false,
-					"حصر كميات التشطيبات داخل مشروع تصميم داخلي",
-					new Size(new NumPer(560, 320), new NumPer(360, 220))
-				)}
+			<EmoList
+				pWidth={new RespString("100%", "100%")}
+				pItemsBg={new ElemBg("transparent")}
+				pItemFnt={Text.Body.WithColor("#283238")}
+				pNumbered={false}
+			>
+
+				<ListItem pText="المحارة: حوائط، أسقف، أكتاف، أعمدة ظاهرة، جوانب فتحات، ومناطق تختلف في السمك أو المواصفة." />
+
+				<ListItem pText="النقاشة: حوائط وأسقف وأخشاب ومعادن، مع فصل أنظمة المعجون والبطانات والأوجه النهائية عند الحصر التفصيلي." />
+
+				<ListItem pText="السيراميك والبورسلين: أرضيات، حوائط، حمامات، مطابخ، بلكونات، وزرات، اختلاف المقاسات واتجاهات التركيب." />
+
+				<ListItem pText="يمكن إخراج الحصر كمسطحات تنفيذ أو تحويله إلى احتياجات شراء وخامات حسب الغرض من الملف." />
+
+			</EmoList>
+
+		</ZigzagItem>
+
+		<ZigzagItem
+			pMediaShare={46}
+			pBg="#F5F7F5"
+			pMediaBg="#DCE4DF"
+			pRadius={new RespString("42px", "24px")}
+			pMediaRadius={new RespString("42px", "20px")}
+			pMinHeight={new RespString("560px", "760px")}
+			pMediaMinHeight={new RespString("430px", "330px")}
+		>
+
+			<LayerDeck
+				slot="media"
+				pAspect={new RespString("1 / 1", "1 / 1")}
+				pMinHeight={new RespString("420px", "320px")}
+				pMaxWidth={new RespString("100%", "100%")}
+				pPad={new RespString("24px", "16px")}
+				pBg="linear-gradient(145deg, #DCE4DF, #B9C8C0)"
+				pRadius={new RespString("34px", "18px")}
+			>
+
+				<LayerItem
+					pWidth={new RespString("68%", "72%")}
+					pHeight={new RespString("58%", "54%")}
+					pOffsetX={new RespString("-16%", "-12%")}
+					pOffsetY={new RespString("-10%", "-12%")}
+					pBg="#26363D"
+					pColor="#F8F6EF"
+					pRadius={new RespString("24px", "18px")}
+				>
+
+					<Emograph
+						pTitle={Text.H3.Centered.WithColor("#F8F6EF").OfText("ألواح")}
+						pText={Text.Body.Centered.WithColor("#CAD5CF").OfText("عادي · مقاوم للرطوبة · مقاوم للحريق")}
+					/>
+
+				</LayerItem>
+
+				<LayerItem
+					pWidth={new RespString("62%", "68%")}
+					pHeight={new RespString("54%", "50%")}
+					pOffsetX={new RespString("16%", "13%")}
+					pOffsetY={new RespString("7%", "8%")}
+					pBg="#D7A84A"
+					pColor="#111820"
+					pRadius={new RespString("24px", "18px")}
+				>
+
+					<Emograph
+						pTitle={Text.H3.Centered.WithColor("#111820").OfText("قطاعات")}
+						pText={Text.Body.Centered.WithColor("#31383B").OfText("Stud · Track · Channel · تعليق")}
+					/>
+
+				</LayerItem>
+
+				<LayerItem
+					pWidth={new RespString("54%", "62%")}
+					pHeight={new RespString("38%", "34%")}
+					pOffsetX={new RespString("0%", "0%")}
+					pOffsetY={new RespString("29%", "28%")}
+					pBg="#F9F7F0"
+					pColor="#111820"
+					pRadius={new RespString("20px", "16px")}
+				>
+
+					<Emograph
+						pTitle={Text.H4.Centered.WithColor("#111820").OfText("إكسسوارات + عزل")}
+						pText={Text.Body.Centered.WithColor("#4A555A").OfText("وصلات · مسامير · شريط · معجون · صوف عازل")}
+					/>
+
+				</LayerItem>
+
+			</LayerDeck>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#111820").OfText("حصر الجبسيوم بورد")}
+				pText={Text.Body.WithColor("#465157").OfText("الجبسيوم بورد لا يُختصر في مساحة السقف. الحصر الصحيح يفكك النظام إلى أسطح وتشكيلات وقطاعات وإكسسوارات وفتحات، ويحدد اختلاف نوع اللوح ومكان استخدامه.")}
 			/>
 
-		</HzStack>
+			<EmoList
+				pWidth={new RespString("100%", "100%")}
+				pItemsBg={new ElemBg("transparent")}
+				pItemFnt={Text.Body.WithColor("#283238")}
+				pNumbered={false}
+			>
 
-	</EmoSec>
+				<ListItem pText="أسقف مستوية ومتعددة المناسيب، سواقط، باندات، بيوت نور، تجاويف، كرانيش وفتحات صيانة." />
+
+				<ListItem pText="قواطيع بوجه واحد أو وجهين أو طبقات متعددة، ومناطق مقاومة للرطوبة أو الحريق أو ذات عزل صوتي وحراري." />
+
+				<ListItem pText="ألواح، Studs، Tracks، Main Channels، Furring Channels، زوايا، تعليقات، وصلات، مسامير، شرائط ومعجون." />
+
+				<ListItem pText="يمكن تسليم المسطحات فقط أو حصر مكونات النظام بالكامل للتوريد والتنفيذ." />
+
+			</EmoList>
+
+		</ZigzagItem>
+
+		<ZigzagItem
+			pMediaShare={49}
+			pBg="#FFFDF8"
+			pMediaBg="#DDD5C7"
+			pRadius={new RespString("42px", "24px")}
+			pMediaRadius={new RespString("42px", "20px")}
+			pMinHeight={new RespString("600px", "820px")}
+			pMediaMinHeight={new RespString("450px", "350px")}
+		>
+
+			<MosaicGrid
+				slot="media"
+				pColumns={6}
+				pColumnsP={4}
+				pAutoRows={new RespString("72px", "62px")}
+				pGap={new RespString("10px", "8px")}
+				pPad={new RespString("14px", "10px")}
+				pMinHeight={new RespString("430px", "330px")}
+				pMaxWidth={new RespString("100%", "100%")}
+				pBg="#D8D0C3"
+				pRadius={new RespString("32px", "18px")}
+			>
+
+				<MosaicItem
+					pColSpan={4}
+					pColSpanP={4}
+					pRowSpan={3}
+					pRowSpanP={2}
+					pBg="linear-gradient(145deg, #F1EEE8, #C9C4BB)"
+				>
+
+					<Emograph
+						pTitle={Text.H3.Centered.WithColor("#2F3334").OfText("أرضيات وكسوات")}
+						pText={Text.Body.Centered.WithColor("#555A5A").OfText("ألواح · قطع · اتجاه عروق")}
+					/>
+
+				</MosaicItem>
+
+				<MosaicItem
+					pColSpan={2}
+					pColSpanP={2}
+					pRowSpan={2}
+					pRowSpanP={2}
+					pBg="#AFA89C"
+				>
+
+					<Emograph pTitle={Text.H4.Centered.WithColor("#FFFFFF").OfText("درج")} pText={Text.Body.Centered.WithColor("#F0EDE7").OfText("قوائم · نوايم")} />
+
+				</MosaicItem>
+
+				<MosaicItem
+					pColSpan={2}
+					pColSpanP={2}
+					pRowSpan={2}
+					pRowSpanP={2}
+					pBg="#575A58"
+				>
+
+					<Emograph pTitle={Text.H4.Centered.WithColor("#FFFFFF").OfText("وزرات")} pText={Text.Body.Centered.WithColor("#E5E4DE").OfText("مقاس · سمك")} />
+
+				</MosaicItem>
+
+				<MosaicItem
+					pColSpan={3}
+					pColSpanP={2}
+					pRowSpan={2}
+					pRowSpanP={2}
+					pBg="#E7DED0"
+				>
+
+					<Emograph pTitle={Text.H4.Centered.WithColor("#343838").OfText("عتب وجلسات")} />
+
+				</MosaicItem>
+
+				<MosaicItem
+					pColSpan={3}
+					pColSpanP={2}
+					pRowSpan={2}
+					pRowSpanP={2}
+					pBg="#C5B69F"
+				>
+
+					<Emograph pTitle={Text.H4.Centered.WithColor("#343838").OfText("كاونترات")} />
+
+				</MosaicItem>
+
+			</MosaicGrid>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#111820").OfText("حصر الرخام والجرانيت والحجر الطبيعي")}
+				pText={Text.Body.WithColor("#465157").OfText("هنا المساحة وحدها لا تكفي. السعر يتأثر بنوع الخامة والسمك والمقاسات وعدد القطع واتجاه العروق والحليات والتلميع وطريقة التقطيع، لذلك الحصر يُجهز بصورة تصلح للتسعير والتوريد الفعلي.")}
+			/>
+
+			<EmoList
+				pWidth={new RespString("100%", "100%")}
+				pItemsBg={new ElemBg("transparent")}
+				pItemFnt={Text.Body.WithColor("#283238")}
+				pNumbered={false}
+			>
+
+				<ListItem pText="أرضيات، كسوات حوائط، وزرات، عتب، جلسات، أكتاف، برور، حليات، مداخل وترابيع مصاعد." />
+
+				<ListItem pText="درج: قوائم، نوايم، بسطات، صدور وحواف، مع فصل المقاسات والسمك لكل قطعة." />
+
+				<ListItem pText="كاونترات مطابخ وحمامات، أحواض، قطع خاصة، بانوهات وترابيع زخرفية." />
+
+				<ListItem pText="فصل النوع واللون والسمك والتشطيب السطحي والمقاس ومكان التركيب والهالك المتوقع." />
+
+			</EmoList>
+
+		</ZigzagItem>
+
+	</ZigzagStory>
+
+
+
+
+
+
+
+	<SideRail
+		id="full-finishing-map"
+		pRailWidth={new RespString("270px", "100%")}
+		pGap={new RespString("28px", "14px")}
+		pPad={new RespString("42px", "14px")}
+		pBg="#E9ECE8"
+		pRailBg="linear-gradient(180deg, #172229, #354840)"
+		pRailColor="#F7F4ED"
+		pSticky={true}
+	>
+
+		<Emograph
+			slot="rail"
+			pTitle={Text.H2.WithColor("#F7F4ED").OfText("الخريطة الكاملة لبنود حصر التشطيبات")}
+			pText={Text.Body.WithColor("#D5DDD8").OfText("أي بند له وحدة قياس وكمية ومواصفة ويمكن تسعيره أو توريده أو تنفيذه يدخل ضمن نطاق حصر التشطيبات. القائمة التالية تجمع الفئات الرئيسية بدون اختزالها في نوعين أو ثلاثة.")}
+		/>
+
+		<MosaicGrid
+			pColumns={12}
+			pColumnsP={4}
+			pAutoRows={new RespString("72px", "66px")}
+			pGap={new RespString("16px", "12px")}
+			pPad={new RespString("0px", "0px")}
+			pMinHeight={new RespString("1650px", "auto")}
+			pMaxWidth={new RespString("100%", "100%")}
+			pBg="transparent"
+			pRadius={new RespString("0px", "0px")}
+		>
+
+			<MosaicItem
+				pColSpan={6}
+				pColSpanP={4}
+				pRowSpan={3}
+				pRowSpanP={3}
+				pBg="#FFF9EF"
+				pColor="#171E22"
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#171E22").OfText("الأرضيات والكسوات الأرضية")}
+					pText={Text.Body.WithColor("#525B5D").OfText("سيراميك · بورسلين · رخام · جرانيت · حجر · موزايكو · تيرازو · إنترلوك · إيبوكسي · Self Leveling · فينيل · PVC · SPC · LVT · HDF · باركيه · خشب · مطاط · موكيت · Raised Floor · ترتان · Decking · WPC")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={6}
+				pColSpanP={4}
+				pRowSpan={3}
+				pRowSpanP={3}
+				pBg="#26343A"
+				pColor="#F6F3EB"
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#F6F3EB").OfText("تشطيبات الحوائط")}
+					pText={Text.Body.WithColor("#D7DEDA").OfText("محارة · معجون · دهانات · ورق حائط · فينيل جداري · MDF · HDF · HPL · Compact HPL · بديل خشب · بديل رخام · PVC · WPC · أكريليك · كوريان · Solid Surface · ألمنيوم · ستانلس · زجاج · مرايات · Acoustic Panels · طوب ديكوري · حجر طبيعي وصناعي · حجر هاشمي · مايكا · طوب حراري · موزاييك")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={4}
+				pRowSpan={3}
+				pRowSpanP={3}
+				pBg="#D7A84A"
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#171E22").OfText("الأسقف")}
+					pText={Text.Body.WithColor("#353A39").OfText("جبس بلدي · جبسيوم بورد · Mineral Fiber · Acoustic Tiles · أسقف معدنية · ألمنيوم · Linear Ceiling · Open Cell · Clip-in · Lay-in · Hook-on · خشب · MDF · HPL · PVC · Stretch Ceiling · Baffles · كرانيش · بيوت نور · تجاويف")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={4}
+				pRowSpan={3}
+				pRowSpanP={3}
+				pBg="#F4F6F3"
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#171E22").OfText("النجارة والأخشاب")}
+					pText={Text.Body.WithColor("#525B5D").OfText("أبواب خشبية · حلوق · برور · حليات · ضلف · أبواب مصفحة · HDF · MDF · HPL · Compact · Fire Rated Doors · خزائن · Dressing · مطابخ · أثاث ثابت · مكتبات · استقبال · Millwork · أعمال خشبية ديكورية")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={4}
+				pRowSpan={3}
+				pRowSpanP={3}
+				pBg="#B8C7C0"
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#171E22").OfText("الألومنيوم والزجاج")}
+					pText={Text.Body.WithColor("#36413E").OfText("أبواب وشبابيك ألمنيوم · UPVC · Curtain Wall · Structural Glazing · Spider System · زجاج سيكوريت · مصفح · مزدوج · قواطيع زجاجية · أبواب زجاج · كبائن شاور · درابزين زجاج · مرايات")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={3}
+				pColSpanP={4}
+				pRowSpan={2}
+				pRowSpanP={2}
+				pBg="#48565B"
+				pColor="#F7F4ED"
+			>
+
+				<Emograph
+					pTitle={Text.H4.WithColor("#F7F4ED").OfText("الأعمال المعدنية")}
+					pText={Text.Body.WithColor("#DDE3E0").OfText("أبواب · درابزين · هاندريل · بوابات · ستانلس · Metal Screens · مشربيات · شبك · مظلات · سلالم معدنية خفيفة")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={3}
+				pColSpanP={4}
+				pRowSpan={2}
+				pRowSpanP={2}
+				pBg="#EEF0E7"
+			>
+
+				<Emograph
+					pTitle={Text.H4.WithColor("#171E22").OfText("العزل")}
+					pText={Text.Body.WithColor("#525B5D").OfText("حمامات · مطابخ · أسطح · بلكونات · تراسات · أحواض زراعة · مسابح · بيتومين · أسمنتي · بولي يوريثان · حراري · XPS · EPS · صوف صخري · صوف زجاجي · صوتي")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={6}
+				pColSpanP={4}
+				pRowSpan={2}
+				pRowSpanP={3}
+				pBg="#C8B79E"
+			>
+
+				<Emograph
+					pTitle={Text.H4.WithColor("#171E22").OfText("الواجهات")}
+					pText={Text.Body.WithColor("#424744").OfText("دهانات خارجية · محارة خارجية · رخام · جرانيت · حجر طبيعي · هاشمي · مايكا · طوب حراري · GRC · GRP · GFRC · ACP · ألمنيوم · HPL خارجي · Compact HPL · واجهات زجاجية · Louvers · Screens · كرانيش وحليات خارجية")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={4}
+				pRowSpan={3}
+				pRowSpanP={3}
+				pBg="#F9F4EC"
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#171E22").OfText("الأعمال الصحية النهائية")}
+					pText={Text.Body.WithColor("#525B5D").OfText("أطقم حمامات · مراحيض · أحواض · بيديهات · بانيوهات · كبائن شاور · خلاطات · دش · إكسسوارات · وحدات حمامات · أحواض مطابخ · سخانات · Floor Drains · أغطية تفتيش نهائية")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={4}
+				pRowSpan={3}
+				pRowSpanP={3}
+				pBg="#202C32"
+				pColor="#F7F4ED"
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#F7F4ED").OfText("الأعمال الكهربائية النهائية")}
+					pText={Text.Body.WithColor("#D7DEDA").OfText("وحدات إنارة · سبوتات · LED Strips · نجف · أباليك · مفاتيح · برايز · Floor Boxes · Data Sockets · Telephone · TV · USB · لوحات نهائية · تحكم · Motion Sensors · Dimmers · Smart Home")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={4}
+				pRowSpan={3}
+				pRowSpanP={3}
+				pBg="#D9E2DD"
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#171E22").OfText("التيار الخفيف الظاهر")}
+					pText={Text.Body.WithColor("#46514D").OfText("Data · Telephone · TV · CCTV · Access Control · Card Readers · Intercom · Sound System · Wi‑Fi · AV · أجهزة إنذار الحريق الظاهرة")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={4}
+				pRowSpan={2}
+				pRowSpanP={2}
+				pBg="#A8BBB1"
+			>
+
+				<Emograph
+					pTitle={Text.H4.WithColor("#171E22").OfText("التكييف والتهوية النهائية")}
+					pText={Text.Body.WithColor("#37423E").OfText("Grilles · Diffusers · Linear Slots · Louvers · Access Panels · Thermostats · Split Units · FCU · شفاطات · Kitchen Hoods")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={4}
+				pRowSpan={2}
+				pRowSpanP={2}
+				pBg="#E5D7C5"
+			>
+
+				<Emograph
+					pTitle={Text.H4.WithColor("#171E22").OfText("المطابخ والحمامات")}
+					pText={Text.Body.WithColor("#4A504D").OfText("وحدات مطابخ · خزائن حمامات · كاونترات · رخام وجرانيت · Solid Surface · كوريان · أحواض · أجهزة مدمجة · مرايات · Shower Enclosures · Toilet Partitions")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={4}
+				pRowSpan={2}
+				pRowSpanP={2}
+				pBg="#EEEAE1"
+			>
+
+				<Emograph
+					pTitle={Text.H4.WithColor("#171E22").OfText("السلالم والدرابزين")}
+					pText={Text.Body.WithColor("#525B5D").OfText("رخام · جرانيت · خشب · بورسلين · قوائم · نوايم · وزرات · حليات · Nosing · درابزين معدني · خشبي · زجاجي · Handrail")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={6}
+				pColSpanP={4}
+				pRowSpan={3}
+				pRowSpanP={3}
+				pBg="#31423B"
+				pColor="#F7F4ED"
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#F7F4ED").OfText("الأعمال الخارجية واللاندسكيب")}
+					pText={Text.Body.WithColor("#D7DEDA").OfText("إنترلوك · بردورات · بلاطات خارجية · حجر · Decking · أرضيات مطاطية · Pergolas · مظلات · أسوار · بوابات · أحواض زراعة · زلط وحصى ديكوري · نجيل صناعي وطبيعي · زراعة · إنارة خارجية · أثاث خارجي ثابت")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={6}
+				pColSpanP={4}
+				pRowSpan={3}
+				pRowSpanP={3}
+				pBg="#D7A84A"
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#171E22").OfText("التجهيزات والتشطيبات الخاصة")}
+					pText={Text.Body.WithColor("#343B38").OfText("مكاتب · محلات · مطاعم · كافيهات · فنادق · مستشفيات · عيادات · صيدليات · مدارس · مصانع · معامل · تشطيبات صوتية · غرف اجتماعات · مسارح وقاعات عرض · مقاومة حريق · مقاومة رطوبة · مقاومة مواد كيميائية · Clean Room Finishes")}
+				/>
+
+			</MosaicItem>
+
+		</MosaicGrid>
+
+	</SideRail>
+
+
+
+
+
+
+
+	<StoryRail
+		id="takeoff-levels"
+		pBg="#111A20"
+		pTrackColor="rgba(255,255,255,.19)"
+		pAccent="#D7A84A"
+		pPad={new RespString("70px", "16px")}
+	>
+
+		<StoryStep
+			pNumber="01"
+			pKicker="مستوى القياس"
+			pTitle="حصر مسطحات وأطوال وأعداد"
+			pText="قياس المتر المسطح والمتر الطولي والعدد لكل بند، مع فصل الخامات والمناطق المختلفة داخل المشروع."
+			pBg="rgba(255,255,255,.06)"
+			pAccent="#D7A84A"
+		/>
+
+		<StoryStep
+			pNumber="02"
+			pKicker="التسعير"
+			pTitle="جدول كميات BOQ"
+			pText="تحويل القياسات إلى بنود لها وصف ووحدة وكمية واضحة بحيث تصبح قابلة لتسعير المقاولين ومراجعتهم."
+			pBg="rgba(255,255,255,.08)"
+			pAccent="#B8C7C0"
+		/>
+
+		<StoryStep
+			pNumber="03"
+			pKicker="الخامات"
+			pTitle="Material Takeoff"
+			pText="تحويل كميات التنفيذ إلى احتياجات خامات فعلية، مع المقاسات التجارية والعبوات ونسب الهالك عند الحاجة."
+			pBg="rgba(255,255,255,.06)"
+			pAccent="#E4835F"
+		/>
+
+		<StoryStep
+			pNumber="04"
+			pKicker="التوريد"
+			pTitle="حصر طلب أسعار وشراء"
+			pText="تجهيز الكميات بالصورة التي يمكن إرسالها للموردين ومقارنة عروضهم ثم الوصول إلى كمية الشراء الفعلية."
+			pBg="rgba(255,255,255,.08)"
+			pAccent="#D7A84A"
+		/>
+
+		<StoryStep
+			pNumber="05"
+			pKicker="المقاولين"
+			pTitle="مقارنة عروض ومستخلصات"
+			pText="توحيد نطاق المقارنة بين المقاولين، ثم استخدام نفس هيكل البنود لمراجعة الكميات المنفذة والمستخلصات."
+			pBg="rgba(255,255,255,.06)"
+			pAccent="#B8C7C0"
+		/>
+
+		<StoryStep
+			pNumber="06"
+			pKicker="التغييرات"
+			pTitle="فروق وزيادات ونواقص"
+			pText="قياس البنود المستجدة والمحذوفة والزيادات والنقص الناتج عن تعديلات التصميم أو التنفيذ بدل تركها كتقديرات غير موثقة."
+			pBg="rgba(255,255,255,.08)"
+			pAccent="#E4835F"
+		/>
+
+	</StoryRail>
+
+
+
+
+
+
+
+	<SplitScene
+		id="takeoff-output"
+		pColumns={new RespString("minmax(0, 7fr) minmax(0, 5fr)", "minmax(0, 1fr)")}
+		pMinHeight={new RespString("390px", "620px")}
+		pBg="#E9ECE8"
+		pRadius={new RespString("0px", "0px")}
+	>
+
+		<SplitPane
+			pBg="linear-gradient(135deg, #D7A84A, #E8C879)"
+			pColor="#111820"
+			pEdge="DiagonalEnd"
+			pMinHeight={new RespString("390px", "300px")}
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#111820").OfText("الناتج ليس رقمًا واحدًا")}
+				pText={Text.Body.WithColor("#303633").OfText("يمكن أن يكون المطلوب مقايسة للتسعير، أو كشف كميات للشراء، أو ملف توريد لمورد رخام، أو حصر مكونات جبسيوم بورد، أو مقارنة عروض مقاولين. مستوى التفصيل يتحدد من القرار الذي ستستخدم الحصر لاتخاذه.")}
+			/>
+
+		</SplitPane>
+
+		<SplitPane pBg="#1E2B31" pColor="#F7F4ED" pMinHeight={new RespString("390px", "300px")}>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#F7F4ED").OfText("القاعدة البسيطة")}
+				pText={Text.Body.WithColor("#D5DDD8").OfText("كل عنصر تشطيب يمكن تعريفه بوحدة قياس + كمية + مواصفة + مكان استخدام، يمكن إدخاله في الحصر وفصله كبند مستقل متى كانت دقة المشروع تتطلب ذلك.")}
+			/>
+
+		</SplitPane>
+
+	</SplitScene>
 
 
 
@@ -98,11 +797,7 @@ import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text
 		pVrAlign={Align.Center}
 	>
 
-		<SecTitle
-			style = " --StripBg : #E7D3A1 "
-			pTitle="بنود التشطيبات التي تدخل في الحصر"
-			pDesc="تصنيف البنود هو بداية الحصر الصحيح. كل مجموعة لها وحدة قياس وطريقة قراءة مختلفة، لذلك يتم تقسيم التشطيبات إلى أرضيات وحوائط وأسقف وفتحات وأعمال نهائية بدل رقم إجمالي واحد."
-		/>
+		<SecTitle style = " --StripBg : #E7D3A1 " pTitle="بنود التشطيبات التي تدخل في الحصر" />
 
 		<CardsGr
 			pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("خريطة بنود التشطيبات")}
@@ -122,344 +817,6 @@ import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text
 		/>
 
 	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		id="measurement-units"
-		pBg={new ElemBg("#FFFFFF")}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle
-			style = " --StripBg : #F7F1E6 "
-			pTitle="وحدات القياس في حصر التشطيبات"
-			pDesc="نفس خامة التشطيب قد تقاس بمتر مسطح أو متر طولي أو عدد أو مقطوعية حسب موضعها وطريقة تركيبها. لذلك تعتمد جودة الحصر على اختيار الوحدة المناسبة قبل إدخال الكمية."
-		/>
-
-		<HzStack pGap={new Pixel(25, 20)} pPad={new Pixel(35, 20)}>
-
-			<EmoList
-				pWidth={new RespString("575px", "320px")}
-				pTitle={Text.H3.WithColor("#111318").OfText("كيف نختار وحدة القياس؟")}
-				pDesc={Text.Body.WithColor("#333333").OfText("القياس ليس خطوة حسابية فقط، بل قرار تعاقدي يحدد طريقة التسعير والمراجعة لاحقًا.")}
-				pHeadBg={new ElemBg("#F7F1E6")}
-				pItemsBg={new ElemBg("#FFFFFF")}
-				pItemFnt={Text.Body.WithColor("#333333")}
-				pNumbered={true}
-				pItems={[
-					{ Title: "المتر المسطح", Items: [
-						"الأرضيات، الدهانات، المحارة، التكسيات، السيراميك، البورسلين، الرخام، الجبس بورد المسطح، وورق الحائط.",
-						"يحتاج تحديد طريقة الخصم: فتحات الأبواب والشبابيك، المناطق الصغيرة، البروزات، والحوائط ذات الارتفاعات المختلفة.",
-					] },
-					{ Title: "المتر الطولي", Items: [
-						"الوزرات، الكرانيش، البروفيلات، حليات الجبس، درابزينات، كوابيل، حواف السلالم، وشرائط الإضاءة.",
-						"يحتاج فصل النوع والمقاس لأن متر وزرة رخام يختلف عن متر وزرة سيراميك أو خشب أو ألمنيوم.",
-					] },
-				]}
-			/>
-
-			<EmoList
-				pWidth={new RespString("575px", "320px")}
-				pTitle={Text.H3.WithColor("#111318").OfText("بنود لا تكفيها المساحة")}
-				pDesc={Text.Body.WithColor("#333333").OfText("الكثير من تكلفة التشطيبات تظهر في الأطراف والنهايات والإكسسوارات، لا في المساحات الكبيرة وحدها.")}
-				pHeadBg={new ElemBg("#F7F1E6")}
-				pItemsBg={new ElemBg("#FFFFFF")}
-				pItemFnt={Text.Body.WithColor("#333333")}
-				pNumbered={true}
-				pItems={[
-					{ Title: "العدد", Items: [
-						"الأبواب، الشبابيك، الخلاطات، الأحواض، المراحيض، السخانات، السبوتات، وحدات الإضاءة، الإكسسوارات، والمفاتيح.",
-						"العدد وحده غير كافٍ عند اختلاف المقاس أو النوع أو الموديل أو طريقة التركيب.",
-					] },
-					{ Title: "البند أو المقطوعية", Items: [
-						"التنظيف النهائي، حماية الأرضيات، نقل المخلفات، فتحات صيانة خاصة، أعمال صغيرة متفرقة، وتجهيزات لا تقاس بسهولة.",
-						"يجب وصف البند جيدًا حتى لا يتحول إلى باب خلاف بين العميل والمقاول.",
-					] },
-				]}
-			/>
-
-		</HzStack>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec pBg={new ElemBg("#F7F1E6")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
-
-		<SecTitle
-			pTitle="ماذا نحتاج منك قبل بدء الحصر؟"
-			pDesc="حصر التشطيبات يعتمد على الرسومات والمواصفات والصور والقرار التجاري المطلوب من الحصر. الملف الذي يصلح للشراء قد يختلف في تفصيله عن الملف المستخدم لمراجعة عرض مقاول."
-		/>
-
-		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
-
-			<EmoList
-				pWidth={new RespString("560px", "320px")}
-				pTitle={Text.H3.WithColor("#111318").OfText("ملفات فنية")}
-				pDesc={Text.Body.WithColor("#333333").OfText("كلما زادت تفاصيل الملفات زادت دقة فصل البنود والكميات.")}
-				pHeadBg={new ElemBg("#FFFFFF")}
-				pItemsBg={new ElemBg("#FFFFFF")}
-				pItemFnt={Text.Body.WithColor("#333333")}
-				pNumbered={false}
-				pItems={[
-					"المساقط المعمارية النهائية أو شبه النهائية بصيغة واضحة.",
-					"واجهات داخلية أو Elevations للحوائط المهمة عند وجود تكسيات أو بانوهات.",
-					"جدول تشطيبات يحدد نوع الأرضية والحوائط والسقف لكل فراغ.",
-					"تفاصيل الحمامات والمطابخ ومناطق السيراميك والرخام والبورسلين.",
-					"مخططات الجبس بورد أو الأسقف الساقطة ومواقع فتحات الإضاءة والتكييف.",
-					"مخططات الكهرباء النهائية للنقاط والسبوتات والبرايز والمفاتيح.",
-				]}
-			/>
-
-			<EmoList
-				pWidth={new RespString("560px", "320px")}
-				pTitle={Text.H3.WithColor("#111318").OfText("معلومات تنفيذية وتجارية")}
-				pDesc={Text.Body.WithColor("#333333").OfText("هذه المعلومات تحدد شكل جدول الحصر وطريقة عرضه على العميل أو المقاول.")}
-				pHeadBg={new ElemBg("#FFFFFF")}
-				pItemsBg={new ElemBg("#FFFFFF")}
-				pItemFnt={Text.Body.WithColor("#333333")}
-				pNumbered={false}
-				pItems={[
-					"صور الموقع إذا كان المشروع قائمًا أو تحت التشطيب.",
-					"رفع مقاسات فعلي عند وجود اختلاف بين الواقع والرسومات.",
-					"مود بورد أو قائمة خامات أو صور مرجعية للخامات المطلوبة.",
-					"تحديد هل الحصر للشراء أم للمقايسة أم لمراجعة عرض مقاول.",
-					"تحديد البنود التي سيتولاها العميل بنفسه والبنود الداخلة في المقاولة.",
-					"تحديد صيغة التسليم المطلوبة: جدول كميات، مقايسة، مقارنة عروض، أو تقرير ملاحظات.",
-				]}
-			/>
-
-		</HzStack>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec pBg={new ElemBg("#111318")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
-
-		<SecTitle
-			pTitle="تفصيل حصر الأرضيات والحوائط"
-			pDesc="أكبر جزء من تكلفة التشطيبات غالبًا يظهر في الأرضيات والحوائط. لذلك يتم فصل الخامات والمناطق بدقة بدل جمع كل المساحات في بند واحد."
-		/>
-
-		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
-
-			<CardsGr
-				pWidth={new RespString("560px", "340px")}
-				pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("أرضيات")}
-				pCardBg={new ElemBg("#F7F1E6")}
-				pCardTitleFnt={Text.H4.WithColor("#111318")}
-				pCardBodyFnt={Text.Body.WithColor("#333333")}
-				pStackDir="Col"
-				pSpacing={20}
-				pTopic1={new Topic("السيراميك والبورسلين", "يتم فصل الأرضيات عن الحوائط والوزرات، وتحديد المقاس والنوع والاتجاه والمنطقة، مع ملاحظات الهالك والقطع عند الأركان والمداخل.")}
-				pTopic2={new Topic("الرخام والجرانيت", "الحصر يحتاج فصل الألواح أو القطع والأعتاب والنوايم والقوايم والوزرات والحواف والتخانات والتلميع والنقل والتركيب.")}
-				pTopic3={new Topic("الباركيه والفينيل", "يتم قياس المساحات الصافية وفصل الوزرات والفواصل وطبقات التحضير وعتبات الانتقال بين الخامات المختلفة.")}
-				pTopic4={new Topic("الإيبوكسي والأرضيات الخاصة", "يحتاج وصفًا لطبقات التحضير والبرايمر والسماكة والدهان النهائي والفواصل ومناطق الحركة أو الرطوبة.")}
-			/>
-
-			<CardsGr
-				pWidth={new RespString("560px", "340px")}
-				pGrTitle={Text.H3.Centered.WithColor("#F4E5C4").OfText("حوائط")}
-				pCardBg={new ElemBg("#F7F1E6")}
-				pCardTitleFnt={Text.H4.WithColor("#111318")}
-				pCardBodyFnt={Text.Body.WithColor("#333333")}
-				pStackDir="Col"
-				pSpacing={20}
-				pTopic1={new Topic("المحارة والمعجون", "تفصل الأسطح الداخلية والخارجية والمناطق الرطبة والأسقف والحوائط حسب طبقات التحضير ومستوى الاستواء المطلوب.")}
-				pTopic2={new Topic("الدهانات", "يتم فصل البرايمر والمعجون والأوجه النهائية وأنواع الدهان والحوائط والأسقف والأبواب والمعادن عند دخولها في نطاق الخدمة.")}
-				pTopic3={new Topic("التكسيات", "الحجر والخشب وبدائل الخشب وورق الحائط والبانوهات تحتاج فصلًا حسب المساحة والحدود والإكسسوارات وطريقة التثبيت.")}
-				pTopic4={new Topic("الحوائط الرطبة", "حمامات ومطابخ وغسيل وشرفات تحتاج فصل ارتفاعات السيراميك والعزل والنهايات والتقاء الحائط بالأرضية والسقف.")}
-			/>
-
-		</HzStack>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = " --StripBg : #E7D3A1 "
-			pTitle="تفصيل حصر الأسقف والفتحات والتجهيزات"
-			pDesc="بنود الأسقف والفتحات كثيرة التفاصيل، وتؤثر في السعر النهائي رغم أن مساحاتها قد تبدو أصغر من الأرضيات. الفصل الدقيق يحمي العميل من الإضافات المتكررة أثناء التنفيذ."
-		/>
-
-		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
-
-			<CardsGr
-				pWidth={new RespString("560px", "340px")}
-				pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("أسقف وجبس")}
-				pCardBg={new ElemBg("#F7F1E6")}
-				pCardTitleFnt={Text.H4.WithColor("#111318")}
-				pCardBodyFnt={Text.Body.WithColor("#333333")}
-				pStackDir="Col"
-				pSpacing={20}
-				pTopic1={new Topic("جبس بورد مسطح", "يقاس بالمتر المسطح مع فصل المناسيب والقطاعات ومناطق الرطوبة، وتحديد فتحات السبوتات والتكييف والصيانة عند الحاجة.")}
-				pTopic2={new Topic("بيوت نور وبروفيلات", "غالبًا تقاس بالمتر الطولي أو البند حسب التفصيل، وتحتاج وصفًا لقطاع الجبس والإضاءة المخفية وطريقة النهاية.")}
-				pTopic3={new Topic("كرانيش وحليات", "يتم فصل الأطوال والمقاسات والأنواع، لأن اختلاف قطاع الكورنيشة يغير السعر ولو كان الطول واحدًا.")}
-				pTopic4={new Topic("فتحات وتقاطعات", "فتحات التكييف والسبوتات والسماعات والرشاشات وفتحات الصيانة يجب تسجيلها حتى لا تظهر كمطالبات إضافية.")}
-			/>
-
-			<CardsGr
-				pWidth={new RespString("560px", "340px")}
-				pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("فتحات وتجهيزات")}
-				pCardBg={new ElemBg("#F7F1E6")}
-				pCardTitleFnt={Text.H4.WithColor("#111318")}
-				pCardBodyFnt={Text.Body.WithColor("#333333")}
-				pStackDir="Col"
-				pSpacing={20}
-				pTopic1={new Topic("الأبواب", "عدد ومقاس ونوع الباب والحلق والضلفة والكوالين والمفصلات والدهان أو القشرة أو اللاكيه ونطاق التركيب.")}
-				pTopic2={new Topic("الشبابيك والزجاج", "الألومنيوم أو الخشب أو الحديد، نوع الزجاج، الشبك، الإكسسوارات، المقاسات، وطريقة التركيب.")}
-				pTopic3={new Topic("الأدوات الصحية", "الحوض والقاعدة والخلاط والشاور والصرف والإكسسوارات، مع فصل التوريد عن التركيب إذا كان ذلك مطلوبًا.")}
-				pTopic4={new Topic("الإكسسوارات النهائية", "مرايات، علاقات، هاندريل، مقابض، سدد، أغطية، أعتاب، ونهايات قد تضيع إذا تم الاكتفاء ببند عام.")}
-			/>
-
-		</HzStack>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = " --StripBg : #E7D3A1 "
-			pTitle="كيف يخدم الحصر الشراء ومقارنة المقاولين؟"
-			pDesc="حصر التشطيبات ليس ملفًا هندسيًا فقط. هو أداة قرار مالي تساعد في شراء الخامات، طلب الأسعار، مقارنة المقاولين، وضبط الدفعات قبل أن يبدأ التنفيذ الفعلي."
-		/>
-
-		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
-
-			<CardsGr
-				pWidth={new RespString("560px", "340px")}
-				pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("قبل شراء الخامات")}
-				pCardBg={new ElemBg("#F7F1E6")}
-				pCardTitleFnt={Text.H4.WithColor("#111318")}
-				pCardBodyFnt={Text.Body.WithColor("#333333")}
-				pStackDir="Col"
-				pSpacing={20}
-				pTopic1={new Topic("شراء الخامات", "يساعد الحصر في معرفة كميات السيراميك والدهانات والجبس والرخام والأبواب والإكسسوارات قبل النزول للموردين.")}
-				pTopic2={new Topic("تقليل الهالك", "إظهار المقاسات والاتجاهات ومناطق القطع يساعد في تقدير احتياطي مناسب دون شراء عشوائي مبالغ فيه.")}
-				pTopic3={new Topic("مقارنة الموردين", "يمكن إرسال نفس الكميات لأكثر من مورد للحصول على أسعار قابلة للمقارنة بدل عروض غير متطابقة.")}
-				pTopic4={new Topic("توقيت التوريد", "تقسيم البنود يساعد في ترتيب شراء الخامات التي تحتاج حجزًا أو تصنيعًا أو ألوانًا خاصة.")}
-			/>
-
-			<CardsGr
-				pWidth={new RespString("560px", "340px")}
-				pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("عند مقارنة عروض المقاولين")}
-				pCardBg={new ElemBg("#F7F1E6")}
-				pCardTitleFnt={Text.H4.WithColor("#111318")}
-				pCardBodyFnt={Text.Body.WithColor("#333333")}
-				pStackDir="Col"
-				pSpacing={20}
-				pTopic1={new Topic("تفريغ عرض المقاول", "نحول العرض إلى نفس هيكل الحصر حتى تظهر البنود الناقصة أو المدمجة أو المبالغ فيها.")}
-				pTopic2={new Topic("مقارنة البنود المتطابقة", "المقارنة لا تعتمد على الإجمالي فقط، بل على وحدة وسعر وكمية ووصف كل بند.")}
-				pTopic3={new Topic("كشف التحفظات", "تحفظ مثل حسب المعاينة أو لا يشمل الإكسسوارات قد يغير السعر النهائي حتى لو بدا العرض أقل.")}
-				pTopic4={new Topic("فصل التوريد والتركيب", "يساعد في معرفة هل المقاول يبيع خامة وتركيبًا أم أجرة فقط أم يترك بعض البنود على العميل.")}
-			/>
-
-		</HzStack>
-
-		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(0, 20)}>
-
-			<CardsGr
-				pWidth={new RespString("560px", "340px")}
-				pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("ضبط التوريد")}
-				pCardBg={new ElemBg("#F7F1E6")}
-				pCardTitleFnt={Text.H4.WithColor("#111318")}
-				pCardBodyFnt={Text.Body.WithColor("#333333")}
-				pStackDir="Col"
-				pSpacing={20}
-				pTopic1={new Topic("منع نقص الخامة", "النقص أثناء التنفيذ قد يسبب اختلاف درجة لون أو موديل عند إعادة الشراء، خصوصًا في السيراميك والرخام والدهانات.")}
-				pTopic2={new Topic("ضبط النقدية", "معرفة الكميات تساعد في توزيع الدفعات على مراحل بدل صرف ميزانية كبيرة على خامات غير عاجلة.")}
-			/>
-
-			<CardsGr
-				pWidth={new RespString("560px", "340px")}
-				pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("ضبط التعاقد")}
-				pCardBg={new ElemBg("#F7F1E6")}
-				pCardTitleFnt={Text.H4.WithColor("#111318")}
-				pCardBodyFnt={Text.Body.WithColor("#333333")}
-				pStackDir="Col"
-				pSpacing={20}
-				pTopic1={new Topic("تحديد البنود غير المسعرة", "أي بند بلا سعر أو بلا وصف واضح يظهر كخطر قبل التعاقد.")}
-				pTopic2={new Topic("اختيار عرض أقوى", "القرار يصبح مبنيًا على نطاق واضح وجودة وصف، وليس الرقم الأقل في أول صفحة من العرض.")}
-			/>
-
-		</HzStack>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec pBg={new ElemBg("#FFFFFF")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
-
-		<SecTitle
-			style = " --StripBg : #E7D3A1 "
-			pTitle="العوامل المؤثرة في أتعاب حصر التشطيبات"
-			pDesc="الأتعاب لا ترتبط بالمساحة وحدها. حصر شقة صغيرة مليئة بالتفاصيل قد يحتاج وقتًا أكبر من مساحة أكبر بتشطيب بسيط ومتكرر. لذلك يتم تسعير الخدمة بعد معرفة نطاق التسليم والملفات المتاحة."
-		/>
-
-		<CardsGr
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("ما الذي يغير سعر الخدمة؟")}
-			pCardBg={new ElemBg("#F7F1E6")}
-			pCardTitleFnt={Text.H4.WithColor("#111318")}
-			pCardBodyFnt={Text.Body.WithColor("#333333")}
-			pStackDir="Row"
-			pSpacing={20}
-			pTopic1={new Topic("عدد الفراغات", "كلما زاد عدد الغرف والحمامات والمناطق المختلفة زادت الحاجة لفصل البنود والقياس والمراجعة.")}
-			pTopic2={new Topic("مستوى التفاصيل", "حصر خامات عامة يختلف عن حصر تفصيلي يشمل الوزرات والنهايات والإكسسوارات وفتحات الصيانة.")}
-			pTopic3={new Topic("حالة الرسومات", "ملف CAD واضح مع جداول تشطيب يوفر وقتًا مختلفًا عن صور PDF أو كروكي أو قياس من الموقع.")}
-			pTopic4={new Topic("نوع المشروع", "شقة بسيطة تختلف عن فيلا أو مطعم أو عيادة أو محل تجاري أو تجديد قائم.")}
-			pTopic5={new Topic("هدف الحصر", "التسعير المبدئي لا يحتاج نفس مستوى التفصيل المطلوب للتعاقد أو مقارنة عروض مقاولين.")}
-			pTopic6={new Topic("المراجعات", "تعديل الخامات أو التصميم بعد الحصر يحتاج تحديثًا للكميات وربما إعادة فصل بعض البنود.")}
-		/>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<RelServices>
-
-		<RelServiceItem
-			pTitle="حصر كميات أعمال البناء"
-			pDesc="حصر الخرسانة والحديد والشدات والمباني والحفر والردم وبنود الهيكل."
-			pHref="/emodsign/tech/takeoff/construction"
-		/>
-
-	</RelServices>
 
 
 
