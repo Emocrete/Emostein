@@ -217,6 +217,9 @@ async function RunPeriodReport(pConfig, pStartDate, pEndDate, pFilter = null, pC
 	if (pFilter) cBody.dimensionFilter = pFilter;
 
 	const cValue = SumReport(await AnalyticsRequest(pConfig, "runReport", cBody));
+	cValue.activeUsers = NumberOf(cValue.activeUsers);
+	cValue.screenPageViews = NumberOf(cValue.screenPageViews);
+
 	cReportCache.set(cKey, { CreatedAt: Date.now(), Value: cValue });
 	return cValue;
 }
