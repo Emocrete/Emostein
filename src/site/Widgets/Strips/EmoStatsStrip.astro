@@ -137,6 +137,7 @@ const cCycleMs = Math.max(1000, Number(pCyclEmoSeconds || 5) * 1000);
 	data-emo-stats-strip="true"
 	data-section-key={cSectionKey}
 	data-section-name={cSectionName}
+	data-page-path={Astro.url.pathname}
 	data-footer-mode={pFooterMode ? "true" : "false"}
 	data-cycle-ms={String(cCycleMs)}
 	{...RemAttr}
@@ -1637,46 +1638,84 @@ const cCycleMs = Math.max(1000, Number(pCyclEmoSeconds || 5) * 1000);
 
 <script>
 	type StatsWindow = Window & {
-	__EmoStatsStripCycleReady?: boolean;
+		__EmoStatsStripReady?: boolean;
 	};
+
+	interface StatsResponse {
+		ok?: boolean;
+		stats?: Record<string, number>;
+	}
 
 	const cStatsWindow = window as StatsWindow;
 
-	if (!cStatsWindow.__EmoStatsStripCycleReady) {
-	cStatsWindow.__EmoStatsStripCycleReady = true;
-	document.addEventListener("astro:page-load", SetupStatsStripCycles);
-	window.addEventListener("load", SetupStatsStripCycles);
-	SetupStatsStripCycles();
+	if (!cStatsWindow.__EmoStatsStripReady) {
+		cStatsWindow.__EmoStatsStripReady = true;
+		document.addEventListener("astro:page-load", SetupStatsStrips);
+		window.addEventListener("load", SetupStatsStrips);
+		SetupStatsStrips();
 	}
 
-	function SetupStatsStripCycles(): void {
-	const cStrips = document.querySelectorAll<HTMLElement>("[data-emo-stats-strip='true'][data-footer-mode='true']:not([data-stats-cycle-ready='true'])");
+	function SetupStatsStrips(): void {
+		const cStrips = document.querySelectorAll<HTMLElement>("[data-emo-stats-strip='true']");
 
-	cStrips.forEach(SetupStatsStripCycle);
+		cStrips.forEach(function SetupStrip(pRoot): void {
+			SetupStatsStripCycle(pRoot);
+			SetupStatsStripData(pRoot);
+		});
 	}
 
 	function SetupStatsStripCycle(pRoot: HTMLElement): void {
-	pRoot.dataset.statsCycleReady = "true";
+		if (pRoot.dataset.footerMode !== "true" || pRoot.dataset.statsCycleReady === "true") return;
+		pRoot.dataset.statsCycleReady = "true";
 
-	const cGroups = Array.from(pRoot.querySelectorAll<HTMLElement>(".StatsGroup"));
-	if (!cGroups.length) return;
+		const cGroups = Array.from(pRoot.querySelectorAll<HTMLElement>(".StatsGroup"));
+		if (!cGroups.length) return;
 
-	let cIndex = 0;
-	const cCycleMs = Number(pRoot.dataset.cycleMs || 5000);
+		let cIndex = 0;
+		const cCycleMs = Number(pRoot.dataset.cycleMs || 5000);
 
-	ActivateStatsGroup(cGroups, cIndex);
+		ActivateStatsGroup(cGroups, cIndex);
 
-	window.setInterval(function MoveStatsGroup(): void {
-	if (!pRoot.isConnected) return;
+		window.setInterval(function MoveStatsGroup(): void {
+			if (!pRoot.isConnected) return;
 
-	cIndex = (cIndex + 1) % cGroups.length;
-	ActivateStatsGroup(cGroups, cIndex);
-	}, cCycleMs);
+			cIndex = (cIndex + 1) % cGroups.length;
+			ActivateStatsGroup(cGroups, cIndex);
+		}, cCycleMs);
+	}
+
+	async function SetupStatsStripData(pRoot: HTMLElement): Promise<void> {
+		if (pRoot.dataset.statsDataReady === "true") return;
+		pRoot.dataset.statsDataReady = "true";
+
+		const cPagePath = pRoot.dataset.pagePath || window.location.pathname || "/";
+
+		try {
+			const cResponse = await fetch(`/api/stats?path=${encodeURIComponent(cPagePath)}`, {
+				headers: { accept: "application/json" }
+			});
+			if (!cResponse.ok) return;
+
+			const cData = await cResponse.json() as StatsResponse;
+			if (!cData.ok || !cData.stats) return;
+
+			for (const [cKey, cValue] of Object.entries(cData.stats)) {
+				const cMetric = pRoot.querySelector<HTMLElement>(`[data-stat-key="${cKey}"] .MetricValue`);
+				if (!cMetric || !Number.isFinite(Number(cValue))) continue;
+				cMetric.textContent = FormatStat(cValue);
+			}
+		} catch {
+			// Keep the widget's original fixed values when Analytics is unavailable.
+		}
+	}
+
+	function FormatStat(pValue: number): string {
+		return Math.max(0, Math.round(Number(pValue))).toLocaleString("en-US");
 	}
 
 	function ActivateStatsGroup(pGroups: HTMLElement[], pIndex: number): void {
-	pGroups.forEach(function ToggleGroup(pGroup, pGroupIndex): void {
-	pGroup.classList.toggle("IsActive", pGroupIndex === pIndex);
-	});
+		pGroups.forEach(function ToggleGroup(pGroup, pGroupIndex): void {
+			pGroup.classList.toggle("IsActive", pGroupIndex === pIndex);
+		});
 	}
 </script>
