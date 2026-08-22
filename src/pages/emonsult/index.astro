@@ -1,9 +1,8 @@
 ---
 import BLayout from "@/Layout.astro";
-import { EmoCall, EmoDet, Emograph, EmoList, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
-import { DivCol, DivStr, EmoSec, Hero } from "@/Widgets/Sections";
-import { GlassCard } from "@/Widgets/Shapes";
-import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
+import { EmoCallIcon, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { Hero } from "@/Widgets/Sections";
+import { Loc, NumPer, Pixel, Size, Text } from "@/TypesLib";
 ---
 
 
@@ -24,266 +23,24 @@ import { Align, Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, T
 
 	<Hero>
 
-		<GlassCard
-			pLoc={new Loc(new NumPer("8%", "4%"), new NumPer("22%", "14%"))}
-			pSize={new Size(new NumPer("46%", "92%"), new NumPer("auto", "auto"))}
-			pBg="rgba(12,18,26,.76)"
-			pBorder="rgba(255,255,255,.22)"
-			pRadius={24}
-			pBlur={8}
-			pZ={3}
-		>
+		<VrStack pSize={new Size(new NumPer("40%","95%"))} pLoc={new Loc(new NumPer("0%","2.5%"),new NumPer("30%","15%"))} pHzAlign={"Center"}>
 
-			<VrStack
-				pGap={new Pixel(22, 14)}
-				pPad={new Pixel(4, 2)}
-				pHzAlign="Start"
-				pVrAlign="Center"
-			>
+			<Emograph
+				pTitle={Text.H1.Centered.OfText("خدمات استشارية هندسية")}
+				pText={Text.Body.Centered.OfText("خدمات استشارية هندسية تشمل الشهادات الهندسية، التقارير الفنية، والأختام والاعتمادات الهندسية للرسومات والمستندات أمام الجهات الإدارية وشركات المرافق والجهات الخاصة.")}
+			/>
 
-				<Emograph
-					pTitle={Text.H1.White.AtRight.OfText("خدمات استشارية هندسية")}
-					pText={Text.Body.White.AtRight.OfSize(21, 15).OfText("مدخل مختصر للخدمات التي تعتمد على مستند هندسي قابل للتقديم: شهادة تثبت موقفًا محددًا، تقرير يشرح حالة فنية، أو ختم يعتمد رسمًا أو مستندًا قبل تسليمه للجهة المختصة.")}
-				/>
+			<HzStack pGap={new Pixel(30,10)}>
 
-				<Emograph
-					pText={Text.Body.White.AtRight.OfSize(19, 14).OfText("الصفحة تفصل بين الأنواع الثلاثة حتى تختار المسار الصحيح بدل الخلط بين شهادة، تقرير، وختم؛ لأن كل واحد منهم له وظيفة مختلفة داخل الملف الرسمي.")}
-				/>
+				<EmoCallIcon BlackSky />
 
-				<HzStack
-					pGap={new Pixel(16, 10)}
-					pPad={new Pixel(0)}
-					pHzAlign="Start"
-					pVrAlign="Center"
-				>
+				<EmoWhatsIcon BlackSky />
 
-					<EmoCall BlackSky pText="اسأل عن المستند المناسب" />
+			</HzStack>
 
-					<EmoDet
-						WhiteBlack
-						pHref="#Certificates"
-						pText="استعراض الأقسام"
-						pWidth="190px"
-					/>
-
-				</HzStack>
-
-			</VrStack>
-
-		</GlassCard>
+		</VrStack>
 
 	</Hero>
-
-
-
-
-
-
-
-	<EmoSec
-		id="Certificates"
-		pBg={new ElemBg(Colors.WhiteOff)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle SkyLite pTitle="الشهادات الهندسية" pDesc="مستندات اعتماد مختصرة تثبت موقفًا هندسيًا محددًا داخل ملف ترخيص أو مرافق أو تعامل رسمي." />
-
-		<DivStr pContentSize={new Size(new NumPer("1180px", "calc(100% - 24px)"))} pGap={new Pixel(26, 16)} pPad={new Pixel(42, 18)}>
-
-			<DivCol
-				pBgColor={new ElemBg(Colors.SkyLite)}
-				pBgOpacity={new Percent(100)}
-				pPad={new Pixel(36, 22)}
-				pGap={new Pixel(20, 14)}
-				pHzAlign="Right"
-				pVrAlign="Center"
-			>
-
-				<Emograph
-					pTitle={Text.H2.AtRight.WithColor(Colors.BlackOff).OfText("إثبات هندسي محدد")}
-					pText={Text.Body.AtRight.OfSize(19, 14).OfText("الشهادة الهندسية تستخدم عندما يكون المطلوب إثبات واقعة أو مسؤولية محددة: مهندس مشرف، صلاحية إشغال، إشراف هدم، أو معاينة مختصرة. قيمتها في ربط المستند بعقار ومالك وبيانات مهندس وغرض تقديم واضح.")}
-				/>
-
-				<Emograph
-					pText={Text.Body.AtRight.OfSize(18, 13).OfText("الصياغة لا تكون عامة ولا منفصلة عن الملف؛ يتم ضبطها حسب الجهة المستلمة، ومرحلة العقار، والمستندات المطلوبة مع الطلب.")}
-				/>
-
-				<EmoDet
-					BlackSky
-					pHref="/emonsult/certificate"
-					pText="خدمات الشهادات الهندسية"
-					pWidth="285px"
-				/>
-
-			</DivCol>
-
-			<DivCol
-				pBgColor={new ElemBg(Colors.Gray1)}
-				pPad={new Pixel(36, 22)}
-				pGap={new Pixel(18, 12)}
-				pHzAlign="Right"
-			>
-
-				<EmoList
-					pWidth={new RespString("100%", "100%")}
-					pNumbered={false}
-					pTitle={Text.H3.AtRight.OfText("أشهر الحالات داخل القسم")}
-					pDesc={Text.Body.AtRight.OfText("الخدمة مناسبة عندما تكون الجهة طالبة إثباتًا مختصرًا لا شرحًا تفصيليًا طويلًا.")}
-					pItems={[
-						"شهادة صلاحية المبنى للإشغال بعد انتهاء التنفيذ أو عند طلب توصيل المرافق.",
-						"شهادة إشراف هندسي على أعمال البناء ضمن ملف الترخيص أو تصريح الحفر.",
-						"شهادة إشراف هندسي على أعمال الهدم قبل أو أثناء تنفيذ رخصة الهدم.",
-						"شهادات ومعاينات مختصرة لإثبات حالة عقار أو وحدة أو نشاط قائم."
-					]}
-				/>
-
-			</DivCol>
-
-		</DivStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		id="Reports"
-		pBg={new ElemBg(Colors.Gray5)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle Black pTitle="التقارير الهندسية" pDesc="مستندات فنية تشرح الحالة وتعرض الملاحظات والنتيجة والتوصيات، بدل الاكتفاء بإثبات مختصر." />
-
-		<DivStr pContentSize={new Size(new NumPer("1180px", "calc(100% - 24px)"))} pGap={new Pixel(26, 16)} pPad={new Pixel(42, 18)}>
-
-			<DivCol
-				pBgColor={new ElemBg("rgba(255,255,255,.10)")}
-				pBgOpacity={new Percent(100)}
-				pBlur={new Pixel(8, 4)}
-				pPad={new Pixel(36, 22)}
-				pGap={new Pixel(20, 14)}
-				pHzAlign="Right"
-				pVrAlign="Center"
-			>
-
-				<Emograph
-					pTitle={Text.H2.White.AtRight.OfText("شرح فني لحالة تحتاج رأيًا واضحًا")}
-					pText={Text.Body.White.AtRight.OfSize(19, 14).OfText("التقرير يستخدم عندما تكون المسألة محتاجة توصيفًا وتحليلًا: حالة إنشائية، سلامة تشغيل، تهوية ومدخنة، مصعد، حضانة، أو منشأة قائمة. هنا لا يكفي مستند قصير؛ المطلوب عرض نطاق المعاينة والنتيجة الفنية بصورة تقبلها الجهة المستلمة.")}
-				/>
-
-				<Emograph
-					pText={Text.Body.White.AtRight.OfSize(18, 13).OfText("النتيجة قد تكون قبولًا، تحفظًا، توصية بإجراء معين، أو تحديد نواقص يجب استكمالها قبل الترخيص أو التشغيل أو التسليم.")}
-				/>
-
-				<EmoDet
-					WhiteBlack
-					pHref="/emonsult/report"
-					pText="خدمات التقارير الهندسية"
-					pWidth="285px"
-				/>
-
-			</DivCol>
-
-			<DivCol
-				pBgColor={new ElemBg(Colors.WhiteOff)}
-				pPad={new Pixel(36, 22)}
-				pGap={new Pixel(18, 12)}
-				pHzAlign="Right"
-			>
-
-				<EmoList
-					pWidth={new RespString("100%", "100%")}
-					pNumbered={false}
-					pTitle={Text.H3.AtRight.OfText("أشهر الحالات داخل القسم")}
-					pDesc={Text.Body.AtRight.OfText("القسم مناسب لأي ملف يحتاج رأيًا فنيًا مكتوبًا لا مجرد اعتماد شكلي.")}
-					pItems={[
-						"تقرير سلامة إنشائية لمبنى أو محل أو منشأة قائمة.",
-						"تقرير فني لترخيص أو تشغيل مصعد حسب طلب الجهة المختصة.",
-						"تقرير مداخن وتهوية وصرف أدخنة للأنشطة التي لها اشتراطات تشغيل.",
-						"تقارير فنية للحضانات أو الأنشطة التي تحتاج مراجعة سلامة قبل الترخيص."
-					]}
-				/>
-
-			</DivCol>
-
-		</DivStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		id="Stamps"
-		pBg={new ElemBg(Colors.Creamy)}
-		pHzAlign={Align.Center}
-		pVrAlign={Align.Center}
-	>
-
-		<SecTitle OrangeLite pTitle="الأختام والاعتمادات الهندسية" pDesc="اعتماد رسومات أو تقارير أو مستندات هندسية بختم مناسب لنوع الملف والجهة التي ستتسلمه." />
-
-		<DivStr pContentSize={new Size(new NumPer("1180px", "calc(100% - 24px)"))} pGap={new Pixel(26, 16)} pPad={new Pixel(42, 18)}>
-
-			<DivCol
-				pBgColor={new ElemBg(Colors.BlackOff)}
-				pBgOpacity={new Percent(100)}
-				pPad={new Pixel(36, 22)}
-				pGap={new Pixel(20, 14)}
-				pHzAlign="Right"
-				pVrAlign="Center"
-			>
-
-				<Emograph
-					pTitle={Text.H2.White.AtRight.OfText("اعتماد المستند قبل تسليمه")}
-					pText={Text.Body.White.AtRight.OfSize(19, 14).OfText("هذا القسم للملفات التي تحتاج ختمًا هندسيًا على رسم أو تقرير أو مستند جاهز أو شبه جاهز. المهم هنا تحديد نوع الاعتماد قبل التنفيذ: مهندس نقابي، مهندس استشاري، أو اعتماد مرتبط بمتطلبات نقابة المهندسين والجهة المستلمة.")}
-				/>
-
-				<Emograph
-					pText={Text.Body.White.AtRight.OfSize(18, 13).OfText("الختم لا يعوض مستندًا ناقصًا، ولا يصلح كل ختم لكل جهة. لذلك تبدأ الخدمة بفهم طلب الجهة ومراجعة المستند ثم تحديد الاعتماد المناسب.")}
-				/>
-
-				<EmoDet
-					BlackOrange
-					pHref="/emonsult/stamp"
-					pText="خدمات الأختام الهندسية"
-					pWidth="285px"
-				/>
-
-			</DivCol>
-
-			<DivCol
-				pBgColor={new ElemBg(Colors.WhiteOff)}
-				pPad={new Pixel(36, 22)}
-				pGap={new Pixel(18, 12)}
-				pHzAlign="Right"
-			>
-
-				<EmoList
-					pWidth={new RespString("100%", "100%")}
-					pNumbered={false}
-					pTitle={Text.H3.AtRight.OfText("أشهر الحالات داخل القسم")}
-					pDesc={Text.Body.AtRight.OfText("القسم مناسب عندما تكون المشكلة الأساسية في نوع الاعتماد المطلوب لا في كتابة تقرير كامل من البداية.")}
-					pItems={[
-						"ختم مهندس نقابي على رسومات أو مستندات هندسية حسب طبيعة الملف.",
-						"ختم مهندس استشاري إنشائي أو ميكانيكا أو كهرباء عند اشتراط جهة التسليم.",
-						"اعتماد تقارير أو رسومات مرتبطة بتراخيص أو تشغيل أو توصيل مرافق.",
-						"مراجعة نوع الختم المطلوب قبل تنفيذ اعتماد قد لا تقبله الجهة المستلمة."
-					]}
-				/>
-
-			</DivCol>
-
-		</DivStr>
-
-	</EmoSec>
 
 
 
