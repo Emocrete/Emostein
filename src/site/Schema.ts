@@ -94,9 +94,9 @@ export class Schema {
 	private static readonly cLogoPath = "/Media/EmoLogo.svg";
 
 	private static readonly cDefaultSchemaImageSpecs: SchemaImageSpec[] = [
-		{ FileName: "Schema-1x1-1200.webp", Width: 1200, Height: 1200 },
-		{ FileName: "Schema-4x3-1200.webp", Width: 1200, Height: 900 },
-		{ FileName: "Schema-16x9-1200.webp", Width: 1200, Height: 675 },
+		{ FileName: "Schema-1x1-1200x1200.webp", Width: 1200, Height: 1200 },
+		{ FileName: "Schema-4x3-1200x900.webp", Width: 1200, Height: 900 },
+		{ FileName: "Schema-16x9-1200x675.webp", Width: 1200, Height: 675 },
 		{ FileName: "HeroL.webp", Width: 1920, Height: 911 },
 		{ FileName: "HeroP.webp", Width: 360, Height: 680 },
 		{ FileName: "Share.jpg", Width: 1200, Height: 630 }
@@ -417,7 +417,7 @@ public static GetPrimaryImageMeta( pTitle: string , pDescr: string , pUrl: strin
 		const cUsedUrls = new Set<string>();
 		const cPreviewSpecs: SchemaImageSpec[] = [
 			Schema.GetImageSpecByName("Share.jpg"),
-			Schema.GetImageSpecByName("Schema-16x9-1200.webp"),
+			Schema.GetImageSpecByName("Schema-16x9-1200x675.webp"),
 			Schema.GetImageSpecByName("HeroL.webp")
 		];
 
@@ -434,7 +434,7 @@ public static GetPrimaryImageMeta( pTitle: string , pDescr: string , pUrl: strin
 		const cImage = cImages[0];
 		const cImageUrl = Schema.GetImageUrl(cImage);
 
-		if (!cImageUrl) { throw new Error(`No rectangular preview image was found for ${pUrl}. Expected Share.jpg, Schema-16x9-1200.webp, or HeroL.`); }
+		if (!cImageUrl) { throw new Error(`No rectangular preview image was found for ${pUrl}. Expected Share.jpg, Schema-16x9-1200x675.webp, or HeroL.`); }
 
 		return {
 			Url: cImageUrl,

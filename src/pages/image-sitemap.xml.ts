@@ -5,7 +5,7 @@ import { join, relative } from "node:path";
 export const prerender = true;
 
 const cImageExtPattern = /\.(webp|avif|png|jpe?g)$/i;
-const cPreviewImagePattern = /(^|[-_\s])(HeroL|HeroP|Share|Schema[-_\s]?(1x1|4x3|16x9)?[-_\s]?1200?)(\.|[-_\s])/i;
+const cPreviewImagePattern = /(^|[-_\s])(HeroL|HeroP|Share|Schema[-_\s]?(1x1[-_\s]?1200(?:x1200)?|4x3[-_\s]?1200(?:x900)?|16x9[-_\s]?1200(?:x675)?))(\.|[-_\s])/i;
 
 export const GET: APIRoute = ({ site }) => {
 	const cSite = String(site ?? "https://www.emocrete.com").replace(/\/$/, "");
