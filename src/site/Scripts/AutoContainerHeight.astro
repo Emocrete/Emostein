@@ -1,10 +1,16 @@
 <script is:inline>
 	(() => {
 		const cContainerSelector = "[data-emo-auto-container]";
+		const cSectionSelector = "section";
 		const cIgnoredChildSelector = "[data-emo-container-bg], script, style, template, link, meta";
 		const cDefaultEmptyHeight = 200;
-		const fObserved = new WeakMap();
-		let fQueued = false;
+		const cMaxPasses = 12;
+		const cHeightTolerance = 0.5;
+
+		const fSections = new Set();
+		const fSectionRecords = new WeakMap();
+		const fContainerStates = new WeakMap();
+		const fObservedMedia = new WeakSet();
 
 		function ToNumber(pValue, pFallback = 0) {
 			const cValue = Number.parseFloat(`${pValue}`);
@@ -19,18 +25,59 @@
 			return pChild.matches(cIgnoredChildSelector) || pChild.closest("[data-emo-container-bg]") !== null;
 		}
 
-		function IsVisibleElement(pElem) {
-			if (!(pElem instanceof HTMLElement)) return false;
-			if (pElem.hidden) return false;
+		function GetContainerState(pContainer) {
+			let cState = fContainerStates.get(pContainer);
+			if (cState) return cState;
 
-			const cStyle = window.getComputedStyle(pElem);
-			return cStyle.display !== "none" && cStyle.visibility !== "collapse";
+			cState = {
+				OriginalMinHeight: pContainer.style.minHeight,
+				AppliedMinHeight: null,
+				BaseMinHeight: 0,
+			};
+
+			fContainerStates.set(pContainer, cState);
+			return cState;
+		}
+
+		function GetSectionRoot(pElement) {
+			if (!(pElement instanceof Element)) return null;
+			const cSection = pElement.closest(cSectionSelector);
+			return cSection instanceof HTMLElement ? cSection : null;
+		}
+
+		function GetSectionContainers(pSection) {
+			const cContainers = [];
+
+			if (pSection.matches(cContainerSelector)) {
+				cContainers.push(pSection);
+			}
+
+			pSection.querySelectorAll(cContainerSelector).forEach((pContainer) => {
+				if (!(pContainer instanceof HTMLElement)) return;
+				if (GetSectionRoot(pContainer) !== pSection) return;
+				cContainers.push(pContainer);
+			});
+
+			return cContainers;
+		}
+
+		function IsVisibleStyle(pStyle) {
+			return pStyle.display !== "none" && pStyle.visibility !== "collapse";
 		}
 
 		function GetContentChildren(pContainer) {
-			return Array.from(pContainer.children).filter((pChild) => {
-				return pChild instanceof HTMLElement && !IsIgnoredChild(pChild) && IsVisibleElement(pChild);
-			});
+			const cChildren = [];
+
+			for (const cChild of pContainer.children) {
+				if (!(cChild instanceof HTMLElement) || IsIgnoredChild(cChild) || cChild.hidden) continue;
+
+				const cStyle = window.getComputedStyle(cChild);
+				if (!IsVisibleStyle(cStyle)) continue;
+
+				cChildren.push({ Element: cChild, Style: cStyle });
+			}
+
+			return cChildren;
 		}
 
 		function HasDirectTextContent(pContainer) {
@@ -39,23 +86,7 @@
 			});
 		}
 
-		function GetBaseMinHeight(pContainer) {
-			const cPreviousMinHeight = pContainer.style.minHeight;
-			pContainer.style.minHeight = "";
-			const cBaseMinHeight = ToNumber(window.getComputedStyle(pContainer).minHeight, 0);
-			pContainer.style.minHeight = cPreviousMinHeight;
-			return cBaseMinHeight;
-		}
-
-		function IsOutOfFlowElement(pElem) {
-			const cPosition = window.getComputedStyle(pElem).position;
-			return cPosition === "absolute" || cPosition === "fixed";
-		}
-
 		function MeasureContentHeight(pContainer, pChildren) {
-			const cPreviousMinHeight = pContainer.style.minHeight;
-			pContainer.style.minHeight = "";
-
 			const cContainerRect = pContainer.getBoundingClientRect();
 			const cStyle = window.getComputedStyle(pContainer);
 			const cBorderTop = ToNumber(cStyle.borderTopWidth, 0);
@@ -64,10 +95,11 @@
 			let cHeight = pContainer.scrollHeight;
 
 			for (const cChild of pChildren) {
-				const cChildRect = cChild.getBoundingClientRect();
+				const cChildRect = cChild.Element.getBoundingClientRect();
 				const cChildBottom = cChildRect.bottom - cContainerRect.top + cBorderBottom;
+				const cIsOutOfFlow = cChild.Style.position === "absolute" || cChild.Style.position === "fixed";
 
-				if (IsOutOfFlowElement(cChild)) {
+				if (cIsOutOfFlow) {
 					cHeight = Math.max(cHeight, cChildBottom);
 					continue;
 				}
@@ -75,112 +107,316 @@
 				cHeight = Math.max(cHeight, cChildBottom + cPaddingBottom);
 			}
 
-			pContainer.style.minHeight = cPreviousMinHeight;
 			return Math.max(0, Math.ceil(cHeight + cBorderTop));
 		}
 
-		function ApplyContainerHeight(pContainer) {
-			if (!(pContainer instanceof HTMLElement)) return;
+		function ResetGeneratedMinHeights(pRecord) {
+			for (const cContainer of pRecord.Containers) {
+				const cState = GetContainerState(cContainer);
+				if (cContainer.style.minHeight !== cState.OriginalMinHeight) {
+					cContainer.style.minHeight = cState.OriginalMinHeight;
+				}
+				cState.AppliedMinHeight = null;
+			}
+		}
 
-			if (IsExplicitHeight(pContainer)) {
-				pContainer.style.minHeight = "";
+		function MeasureSection(pRecord, pRefreshBase) {
+			const cMeasurements = [];
+
+			for (const cContainer of pRecord.Containers) {
+				const cState = GetContainerState(cContainer);
+				const cContainerStyle = window.getComputedStyle(cContainer);
+
+				if (pRefreshBase) {
+					cState.BaseMinHeight = ToNumber(cContainerStyle.minHeight, 0);
+				}
+
+				if (IsExplicitHeight(cContainer)) {
+					cMeasurements.push({ Container: cContainer, State: cState, TargetHeight: null });
+					continue;
+				}
+
+				const cChildren = GetContentChildren(cContainer);
+				const cHasDirectTextContent = HasDirectTextContent(cContainer);
+				let cTargetHeight;
+
+				if (cChildren.length === 0 && !cHasDirectTextContent) {
+					const cEmptyHeight = ToNumber(cContainer.dataset.emoEmptyHeight, cDefaultEmptyHeight);
+					cTargetHeight = Math.max(cEmptyHeight, cState.BaseMinHeight);
+				} else {
+					const cContentHeight = MeasureContentHeight(cContainer, cChildren);
+					cTargetHeight = Math.max(cContentHeight, cState.BaseMinHeight);
+				}
+
+				cMeasurements.push({ Container: cContainer, State: cState, TargetHeight: cTargetHeight });
+			}
+
+			return cMeasurements;
+		}
+
+		function ApplyMeasurements(pMeasurements) {
+			let cChangedCount = 0;
+
+			for (const cMeasurement of pMeasurements) {
+				const { Container: cContainer, State: cState, TargetHeight: cTargetHeight } = cMeasurement;
+				let cDesiredMinHeight = cState.OriginalMinHeight;
+				let cAppliedHeight = null;
+
+				if (cTargetHeight !== null && cTargetHeight > cState.BaseMinHeight + cHeightTolerance) {
+					cAppliedHeight = Math.ceil(cTargetHeight);
+					cDesiredMinHeight = `${cAppliedHeight}px`;
+				}
+
+				if (cContainer.style.minHeight !== cDesiredMinHeight) {
+					cContainer.style.minHeight = cDesiredMinHeight;
+					cChangedCount += 1;
+				}
+
+				cState.AppliedMinHeight = cAppliedHeight;
+			}
+
+			return cChangedCount;
+		}
+
+		function DiscardOwnMutations(pRecord) {
+			pRecord.MutationObserver?.takeRecords();
+		}
+
+		function FinishSection(pRecord) {
+			pRecord.Stabilizing = false;
+			pRecord.Pass = 0;
+			DiscardOwnMutations(pRecord);
+
+			if (pRecord.PendingExternalChange) {
+				pRecord.PendingExternalChange = false;
+				QueueSection(pRecord);
+			}
+		}
+
+		function WarnNonConvergingSection(pRecord) {
+			if (location.hostname !== "localhost" && location.hostname !== "127.0.0.1") return;
+
+			const cName = pRecord.Section.id
+				? `#${pRecord.Section.id}`
+				: pRecord.Section.className
+					? `.${`${pRecord.Section.className}`.trim().replace(/\s+/g, ".")}`
+					: pRecord.Section.tagName.toLowerCase();
+
+			console.warn(`AutoContainerHeight did not converge inside ${cName} after ${cMaxPasses} passes.`);
+		}
+
+		function RunSectionPass(pRecord, pRefreshBase = false) {
+			if (!pRecord.Section.isConnected) {
+				FinishSection(pRecord);
 				return;
 			}
 
-			const cBaseMinHeight = GetBaseMinHeight(pContainer);
-			const cChildren = GetContentChildren(pContainer);
-			const cHasDirectTextContent = HasDirectTextContent(pContainer);
+			pRecord.Pass += 1;
 
-			if (cChildren.length === 0 && !cHasDirectTextContent) {
-				const cEmptyHeight = ToNumber(pContainer.dataset.emoEmptyHeight, cDefaultEmptyHeight);
-				pContainer.style.minHeight = `${Math.max(cEmptyHeight, cBaseMinHeight)}px`;
+			if (pRefreshBase) {
+				ResetGeneratedMinHeights(pRecord);
+			}
+
+			const cMeasurements = MeasureSection(pRecord, pRefreshBase);
+			const cChangedCount = ApplyMeasurements(cMeasurements);
+			DiscardOwnMutations(pRecord);
+
+			if (cChangedCount === 0) {
+				FinishSection(pRecord);
 				return;
 			}
 
-			const cContentHeight = MeasureContentHeight(pContainer, cChildren);
-			pContainer.style.minHeight = `${Math.max(cContentHeight, cBaseMinHeight)}px`;
+			if (pRecord.Pass >= cMaxPasses) {
+				WarnNonConvergingSection(pRecord);
+				FinishSection(pRecord);
+				return;
+			}
+
+			window.requestAnimationFrame(() => RunSectionPass(pRecord, false));
 		}
 
-		function ApplyAll() {
-			fQueued = false;
-			document.querySelectorAll(cContainerSelector).forEach(ApplyContainerHeight);
+		function QueueSection(pRecord) {
+			if (!pRecord.Section.isConnected) return;
+
+			if (pRecord.Stabilizing) {
+				pRecord.PendingExternalChange = true;
+				return;
+			}
+
+			if (pRecord.Queued) return;
+
+			pRecord.Queued = true;
+			window.requestAnimationFrame(() => {
+				pRecord.Queued = false;
+				if (!pRecord.Section.isConnected) return;
+
+				pRecord.Stabilizing = true;
+				pRecord.PendingExternalChange = false;
+				pRecord.Pass = 0;
+				RunSectionPass(pRecord, true);
+			});
 		}
 
-		function QueueApplyAll() {
-			if (fQueued) return;
-			fQueued = true;
-			window.requestAnimationFrame(ApplyAll);
+		function HandleExternalMinHeightChange(pMutation) {
+			if (pMutation.type !== "attributes" || pMutation.attributeName !== "style") return;
+			if (!(pMutation.target instanceof HTMLElement) || !pMutation.target.matches(cContainerSelector)) return;
+
+			const cState = GetContainerState(pMutation.target);
+			const cCurrentMinHeight = pMutation.target.style.minHeight;
+			const cAppliedMinHeight = cState.AppliedMinHeight === null ? null : `${cState.AppliedMinHeight}px`;
+
+			if (cAppliedMinHeight === null || cCurrentMinHeight !== cAppliedMinHeight) {
+				cState.OriginalMinHeight = cCurrentMinHeight;
+				cState.AppliedMinHeight = null;
+			}
 		}
 
-		function ObserveContainerChildren(pContainer, pRecord) {
+		function ObserveMediaInSection(pRecord) {
+			pRecord.Section.querySelectorAll("img, video").forEach((pMedia) => {
+				if (!(pMedia instanceof HTMLElement) || GetSectionRoot(pMedia) !== pRecord.Section || fObservedMedia.has(pMedia)) return;
+				fObservedMedia.add(pMedia);
+
+				const cInvalidate = () => QueueSection(pRecord);
+				pMedia.addEventListener("load", cInvalidate, { passive: true });
+				pMedia.addEventListener("loadedmetadata", cInvalidate, { passive: true });
+			});
+		}
+
+		function SyncResizeTargets(pRecord) {
 			if (!pRecord.ResizeObserver) return;
 
-			Array.from(pContainer.children).forEach((pChild) => {
-				if (!(pChild instanceof HTMLElement) || pRecord.Children.has(pChild)) return;
-				pRecord.Children.add(pChild);
-				pRecord.ResizeObserver.observe(pChild);
+			pRecord.ResizeObserver.disconnect();
+			const cObserved = new Set();
+
+			for (const cContainer of pRecord.Containers) {
+				for (const cChild of cContainer.children) {
+					if (!(cChild instanceof HTMLElement) || IsIgnoredChild(cChild) || cObserved.has(cChild)) continue;
+					cObserved.add(cChild);
+					pRecord.ResizeObserver.observe(cChild);
+				}
+			}
+		}
+
+		function SyncSection(pRecord) {
+			pRecord.Containers = GetSectionContainers(pRecord.Section);
+			for (const cContainer of pRecord.Containers) GetContainerState(cContainer);
+			SyncResizeTargets(pRecord);
+			ObserveMediaInSection(pRecord);
+		}
+
+		function EnsureSection(pSection) {
+			if (!(pSection instanceof HTMLElement)) return null;
+
+			let cRecord = fSectionRecords.get(pSection);
+			if (cRecord) return cRecord;
+
+			const cContainers = GetSectionContainers(pSection);
+			if (cContainers.length === 0) return null;
+
+			cRecord = {
+				Section: pSection,
+				Containers: cContainers,
+				ResizeObserver: null,
+				MutationObserver: null,
+				Queued: false,
+				Stabilizing: false,
+				PendingExternalChange: false,
+				Pass: 0,
+			};
+
+			if ("ResizeObserver" in window) {
+				cRecord.ResizeObserver = new ResizeObserver(() => {
+					if (cRecord.Stabilizing) return;
+					QueueSection(cRecord);
+				});
+			}
+
+			if ("MutationObserver" in window) {
+				cRecord.MutationObserver = new MutationObserver((pMutations) => {
+					let cStructureChanged = false;
+
+					for (const cMutation of pMutations) {
+						HandleExternalMinHeightChange(cMutation);
+						if (cMutation.type === "childList" || cMutation.attributeName === "data-emo-auto-container") {
+							cStructureChanged = true;
+						}
+					}
+
+					if (cStructureChanged) SyncSection(cRecord);
+
+					if (cRecord.Stabilizing) {
+						cRecord.PendingExternalChange = true;
+						return;
+					}
+
+					QueueSection(cRecord);
+				});
+
+				cRecord.MutationObserver.observe(pSection, {
+					childList: true,
+					subtree: true,
+					characterData: true,
+					attributes: true,
+					attributeFilter: [
+						"class",
+						"style",
+						"hidden",
+						"data-emo-auto-container",
+						"data-emo-explicit-height",
+						"data-emo-empty-height",
+					],
+				});
+			}
+
+			fSectionRecords.set(pSection, cRecord);
+			fSections.add(pSection);
+			SyncSection(cRecord);
+			return cRecord;
+		}
+
+		function RemoveDisconnectedSections() {
+			for (const cSection of fSections) {
+				if (cSection.isConnected) continue;
+
+				const cRecord = fSectionRecords.get(cSection);
+				cRecord?.ResizeObserver?.disconnect();
+				cRecord?.MutationObserver?.disconnect();
+				fSections.delete(cSection);
+			}
+		}
+
+		function ObserveSections() {
+			RemoveDisconnectedSections();
+
+			document.querySelectorAll(cSectionSelector).forEach((pSection) => {
+				if (!(pSection instanceof HTMLElement)) return;
+				EnsureSection(pSection);
 			});
 		}
 
-		function ObserveContainers() {
-			document.querySelectorAll(cContainerSelector).forEach((pContainer) => {
-				if (!(pContainer instanceof HTMLElement)) return;
+		function QueueAllSections() {
+			ObserveSections();
 
-				const cExistingRecord = fObserved.get(pContainer);
-				if (cExistingRecord) {
-					ObserveContainerChildren(pContainer, cExistingRecord);
-					return;
-				}
-
-				const cRecord = {
-					ResizeObserver: null,
-					MutationObserver: null,
-					Children: new WeakSet(),
-				};
-
-				if ("ResizeObserver" in window) {
-					cRecord.ResizeObserver = new ResizeObserver(QueueApplyAll);
-					cRecord.ResizeObserver.observe(pContainer);
-				}
-
-				ObserveContainerChildren(pContainer, cRecord);
-
-				if ("MutationObserver" in window) {
-					cRecord.MutationObserver = new MutationObserver(() => {
-						ObserveContainerChildren(pContainer, cRecord);
-						QueueApplyAll();
-					});
-
-					cRecord.MutationObserver.observe(pContainer, {
-						childList: true,
-						subtree: true,
-						attributes: true,
-						attributeFilter: ["class", "style", "hidden", "data-emo-explicit-height"],
-					});
-				}
-
-				fObserved.set(pContainer, cRecord);
-			});
+			for (const cSection of fSections) {
+				const cRecord = fSectionRecords.get(cSection);
+				if (cRecord) QueueSection(cRecord);
+			}
 		}
 
-		window.addEventListener("load", QueueApplyAll, { passive: true });
-		window.addEventListener("resize", QueueApplyAll, { passive: true });
-		window.addEventListener("orientationchange", QueueApplyAll, { passive: true });
+		window.addEventListener("load", QueueAllSections, { passive: true });
+		window.addEventListener("resize", QueueAllSections, { passive: true });
+		window.addEventListener("orientationchange", QueueAllSections, { passive: true });
+
 		document.addEventListener("astro:page-load", () => {
-			ObserveContainers();
-			QueueApplyAll();
+			ObserveSections();
+			QueueAllSections();
 		});
 
 		if (document.fonts?.ready) {
-			document.fonts.ready.then(QueueApplyAll).catch(() => {});
+			document.fonts.ready.then(QueueAllSections).catch(() => {});
 		}
 
-		document.querySelectorAll("img, video").forEach((pMedia) => {
-			pMedia.addEventListener("load", QueueApplyAll, { passive: true });
-			pMedia.addEventListener("loadedmetadata", QueueApplyAll, { passive: true });
-		});
-
-		ObserveContainers();
-		QueueApplyAll();
+		ObserveSections();
+		QueueAllSections();
 	})();
 </script>
