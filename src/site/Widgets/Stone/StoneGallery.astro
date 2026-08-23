@@ -310,6 +310,28 @@ const cPlace = new Place({
 const cDataJson = JSON.stringify(cItems).replaceAll("<", "\\u003c");
 const cQuoteLocationName = `${pGivenID}-location`;
 
+function FormatStonePriceText(pItem: NormalizedStoneItem) {
+	if (!(pItem.PriceFrom > 0)) {
+		return pItem.PriceLevel && pItem.PriceLevel !== "غير محدد"
+			? pItem.PriceLevel
+			: "يُراجع حسب الدفعة";
+	}
+
+	const cFormat = new Intl.NumberFormat("ar-EG", { maximumFractionDigits: 0 });
+	const cFrom = cFormat.format(Math.round(pItem.PriceFrom));
+
+	if (pItem.PriceTo > pItem.PriceFrom) {
+		const cTo = cFormat.format(Math.round(pItem.PriceTo));
+		return `${cFrom} – ${cTo} ${pItem.Currency}/م²`;
+	}
+
+	return `يبدأ من ${cFrom} ${pItem.Currency}/م²`;
+}
+
+function JoinStoneList(pItems: string[]) {
+	return pItems.length > 0 ? pItems.join("، ") : "غير محدد";
+}
+
 function GetRawItems(): StoneGalleryItemInput[] {
 	if (Array.isArray(pItems) && pItems.length > 0) return pItems;
 
@@ -730,9 +752,13 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 }
 ---
 
+
+
+
+
 <section
-	class={`StoneGallery ${cPlace.Class} ${pGivenClass}`.trim()}
-	style={cPlace.Style}
+	class = {`StoneGallery ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
 	id={pGivenID}
 	dir="rtl"
 	readable={cReadable ? "" : undefined}
@@ -754,43 +780,109 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 	data-emo-empty-height="620"
 	{...RemAttr}
 >
-	<header class="StoneGalleryHead">
-		<div class="StoneGalleryHeading">
-			<h2>{pTitle}</h2>
-			{pDesc && <p>{pDesc}</p>}
+
+
+
+
+
+
+
+	<header class = " StoneGalleryHead ">
+
+		<div class = " StoneGalleryHeading ">
+
+			<h2>
+				{pTitle}
+			</h2>
+
+			{ pDesc &&
+
+				<p>
+					{pDesc}
+				</p>
+
+			}
+
 		</div>
 
-		<div class="StoneGalleryHeadActions" aria-label="أدوات اختيارات الخامات">
+		<div class = " StoneGalleryHeadActions " aria-label="أدوات اختيارات الخامات">
+
 			<button
-				class="StoneGalleryHeadAction"
+				class = " StoneGalleryHeadAction "
 				type="button"
 				data-action="open-shortlist"
 				data-ops-event="stone_gallery_shortlist_open"
 				data-ops-label="فتح الخامات المحفوظة"
 			>
-				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5 3.8 12.7A5.4 5.4 0 0 1 11.4 5l.6.7.6-.7a5.4 5.4 0 0 1 7.6 7.7Z" /></svg>
-				<span>المحفوظة</span>
-				<b data-shortlist-count>0</b>
+
+				<svg viewBox="0 0 24 24" aria-hidden="true">
+
+					<path d="M12 20.5 3.8 12.7A5.4 5.4 0 0 1 11.4 5l.6.7.6-.7a5.4 5.4 0 0 1 7.6 7.7Z" />
+
+				</svg>
+
+				<span>
+					المحفوظة
+				</span>
+
+				<b data-shortlist-count>
+
+					0
+
+				</b>
+
 			</button>
 
 			<button
-				class="StoneGalleryHeadAction"
+				class = " StoneGalleryHeadAction "
 				type="button"
 				data-action="open-compare"
 				data-ops-event="stone_gallery_compare_open"
 				data-ops-label="فتح مقارنة الخامات"
 			>
-				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h6M14 5h6M7 5v14M17 5v14M3 15h8M13 11h8" /></svg>
-				<span>المقارنة</span>
-				<b data-compare-count>0</b>
+
+				<svg viewBox="0 0 24 24" aria-hidden="true">
+
+					<path d="M4 5h6M14 5h6M7 5v14M17 5v14M3 15h8M13 11h8" />
+
+				</svg>
+
+				<span>
+					المقارنة
+				</span>
+
+				<b data-compare-count>
+
+					0
+
+				</b>
+
 			</button>
+
 		</div>
+
 	</header>
 
-	{pShowFilters && (
-		<form class="StoneGalleryFilters" data-filters-form>
-			<label class="StoneGallerySearch">
-				<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>
+	{ pShowFilters && (
+
+		<form class = " StoneGalleryFilters " data-filters-form>
+		
+		
+		
+		
+		
+		
+		
+			<label class = " StoneGallerySearch ">
+		
+				<svg viewBox="0 0 24 24" aria-hidden="true">
+		
+					<circle cx="11" cy="11" r="7" />
+		
+					<path d="m20 20-4-4" />
+		
+				</svg>
+		
 				<input
 					type="search"
 					placeholder={pSearchPlaceholder}
@@ -799,49 +891,187 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 					data-ops-event="stone_gallery_search"
 					data-ops-on="change"
 				/>
+		
 			</label>
-
-			<label class="StoneGalleryFilter">
-				<span>النوع</span>
+		
+		
+		
+		
+		
+		
+		
+			<label class = " StoneGalleryFilter ">
+		
+				<span>
+					النوع
+				</span>
+		
 				<select data-filter-type data-ops-event="stone_gallery_filter_type" data-ops-on="change">
-					<option value="">الكل</option>
-					{cTypes.map((pValue) => <option value={pValue}>{pValue}</option>)}
+		
+					<option value="">
+		
+						الكل
+		
+					</option>
+		
+					{ cTypes.map((pValue) =>
+		
+						<option value={pValue}>
+		
+							{pValue}
+		
+						</option>
+		
+					) }
+		
 				</select>
+		
 			</label>
-
-			<label class="StoneGalleryFilter">
-				<span>اللون</span>
+		
+		
+		
+		
+		
+		
+		
+			<label class = " StoneGalleryFilter ">
+		
+				<span>
+					اللون
+				</span>
+		
 				<select data-filter-color data-ops-event="stone_gallery_filter_color" data-ops-on="change">
-					<option value="">الكل</option>
-					{cColors.map((pValue) => <option value={pValue}>{pValue}</option>)}
+		
+					<option value="">
+		
+						الكل
+		
+					</option>
+		
+					{ cColors.map((pValue) =>
+		
+						<option value={pValue}>
+		
+							{pValue}
+		
+						</option>
+		
+					) }
+		
 				</select>
+		
 			</label>
-
-			<label class="StoneGalleryFilter">
-				<span>الاستخدام</span>
+		
+		
+		
+		
+		
+		
+		
+			<label class = " StoneGalleryFilter ">
+		
+				<span>
+					الاستخدام
+				</span>
+		
 				<select data-filter-use data-ops-event="stone_gallery_filter_use" data-ops-on="change">
-					<option value="">الكل</option>
-					{cUses.map((pValue) => <option value={pValue}>{pValue}</option>)}
+		
+					<option value="">
+		
+						الكل
+		
+					</option>
+		
+					{ cUses.map((pValue) =>
+		
+						<option value={pValue}>
+		
+							{pValue}
+		
+						</option>
+		
+					) }
+		
 				</select>
+		
 			</label>
-
-			<label class="StoneGalleryFilter">
-				<span>المنشأ</span>
+		
+		
+		
+		
+		
+		
+		
+			<label class = " StoneGalleryFilter ">
+		
+				<span>
+					المنشأ
+				</span>
+		
 				<select data-filter-country data-ops-event="stone_gallery_filter_country" data-ops-on="change">
-					<option value="">الكل</option>
-					{cCountries.map((pValue) => <option value={pValue}>{pValue}</option>)}
+		
+					<option value="">
+		
+						الكل
+		
+					</option>
+		
+					{ cCountries.map((pValue) =>
+		
+						<option value={pValue}>
+		
+							{pValue}
+		
+						</option>
+		
+					) }
+		
 				</select>
+		
 			</label>
-
-			<label class="StoneGalleryFilter">
-				<span>السعر</span>
+		
+		
+		
+		
+		
+		
+		
+			<label class = " StoneGalleryFilter ">
+		
+				<span>
+					السعر
+				</span>
+		
 				<select data-filter-price data-ops-event="stone_gallery_filter_price" data-ops-on="change">
-					<option value="">الكل</option>
-					{cPriceLevels.map((pValue) => <option value={pValue}>{pValue}</option>)}
+		
+					<option value="">
+		
+						الكل
+		
+					</option>
+		
+					{ cPriceLevels.map((pValue) =>
+		
+						<option value={pValue}>
+		
+							{pValue}
+		
+						</option>
+		
+					) }
+		
 				</select>
+		
 			</label>
-
-			<label class="StoneGalleryAvailable">
+		
+		
+		
+		
+		
+		
+		
+			<label class = " StoneGalleryAvailable ">
+		
 				<input
 					type="checkbox"
 					checked={pAvailableOnly}
@@ -849,36 +1079,94 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 					data-ops-event="stone_gallery_filter_available"
 					data-ops-on="change"
 				/>
-				<span aria-hidden="true"></span>
-				<strong>المتوفر الآن</strong>
+		
+				<span aria-hidden="true">
+		
+				</span>
+		
+				<strong>
+					المتوفر الآن
+				</strong>
+		
 			</label>
-
-			<button class="StoneGalleryClearFilters" type="reset" data-action="clear-filters">مسح الفلاتر</button>
+		
+		
+		
+		
+		
+		
+		
+			<button class = " StoneGalleryClearFilters " type="reset" data-action="clear-filters">
+		
+				مسح الفلاتر
+		
+			</button>
+		
+		
+		
+		
+		
+		
+		
 		</form>
-	)}
+	) }
 
-	<div class="StoneGalleryResultBar">
-		<p>اختر خامة لعرض التفاصيل، واضغط عليها مرة ثانية لفحص صورها.</p>
-		<span><b data-result-count>{cItems.length}</b> خامة</span>
+	<div class = " StoneGalleryResultBar ">
+
+		<p>
+			اختر خامة لعرض التفاصيل، واضغط عليها مرة ثانية لفحص صورها.
+		</p>
+
+		<span>
+
+			<b data-result-count>
+
+				{cItems.length}
+
+			</b>
+
+			خامة
+
+		</span>
+
 	</div>
 
-	<div class="StoneGalleryBody">
-		<div class="StoneGalleryCatalog">
-			<div class="StoneGalleryGrid" data-gallery-grid hidden={cItems.length === 0}>
-				{cItems.map((pItem, pIndex) => (
-					<article class="StoneGalleryCard" data-stone-card data-stone-id={pItem.Id} data-index={pIndex}>
+
+
+
+
+
+
+	<div class = " StoneGalleryBody ">
+
+		<div class = " StoneGalleryCatalog ">
+
+			<div class = " StoneGalleryGrid " data-gallery-grid hidden={cItems.length === 0}>
+
+				{ cItems.map((pItem, pIndex) => (
+
+					<article
+						class = " StoneGalleryCard "
+						data-stone-card
+						data-stone-id={pItem.Id}
+						data-index={pIndex}
+					>
+
 						<button
-							class="StoneGalleryCardMain"
+							class = " StoneGalleryCardMain "
 							type="button"
 							aria-label={`اختيار خامة ${pItem.Name}`}
 							aria-pressed="false"
+							aria-controls={`${pGivenID}-detail-${pIndex + 1}`}
 							data-action="select-stone"
 							data-stone-id={pItem.Id}
 							data-ops-event="stone_gallery_select"
 							data-ops-label={pItem.Name}
 							data-ops-value={pItem.Id}
 						>
-							<span class="StoneGalleryCardMedia">
+
+							<span class = " StoneGalleryCardMedia ">
+
 								<img
 									src={pItem.PrimaryImage}
 									alt={pItem.Alt}
@@ -886,21 +1174,44 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 									decoding="async"
 								/>
 
-								{pItem.Badge && <small class="StoneGalleryCardBadge">{pItem.Badge}</small>}
-								<span class="StoneGallerySelectedMark" aria-hidden="true">✓</span>
+								{ pItem.Badge &&
+
+									<small class = " StoneGalleryCardBadge ">
+
+										{pItem.Badge}
+
+									</small>
+
+								}
+
+								<span class = " StoneGallerySelectedMark " aria-hidden="true">
+									✓
+								</span>
+
 							</span>
 
-							<span class="StoneGalleryCardInfo">
-								<strong>{pItem.Name}</strong>
-								<small>{[pItem.Type, pItem.Country].filter(Boolean).join(" · ")}</small>
-								<span class="StoneGalleryStock" data-available={pItem.Available ? "true" : "false"}>
+							<span class = " StoneGalleryCardInfo ">
+
+								<strong>
+									{pItem.Name}
+								</strong>
+
+								<small>
+
+									{[pItem.Type, pItem.Country].filter(Boolean).join(" · ")}
+
+								</small>
+
+								<span class = " StoneGalleryStock " data-available={pItem.Available ? "true" : "false"}>
 									{pItem.Available ? "متوفر" : "حسب الطلب"}
 								</span>
+
 							</span>
+
 						</button>
 
 						<button
-							class="StoneGallerySave"
+							class = " StoneGallerySave "
 							type="button"
 							aria-label={`حفظ خامة ${pItem.Name}`}
 							aria-pressed="false"
@@ -910,251 +1221,1061 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 							data-ops-label={pItem.Name}
 							data-ops-value={pItem.Id}
 						>
-							<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5 3.8 12.7A5.4 5.4 0 0 1 11.4 5l.6.7.6-.7a5.4 5.4 0 0 1 7.6 7.7Z" /></svg>
+
+							<svg viewBox="0 0 24 24" aria-hidden="true">
+
+								<path d="M12 20.5 3.8 12.7A5.4 5.4 0 0 1 11.4 5l.6.7.6-.7a5.4 5.4 0 0 1 7.6 7.7Z" />
+
+							</svg>
+
 						</button>
+
 					</article>
-				))}
+
+				)) }
+
 			</div>
 
-			<div class="StoneGalleryEmpty" data-gallery-empty hidden={cItems.length !== 0}>
-				<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4M8 11h6" /></svg>
-				<strong>{pEmptyText}</strong>
-				{import.meta.env.DEV && cDataWarnings.length > 0 && (
-					<details class="StoneGalleryDataDebug" open>
-						<summary>تشخيص ملف بيانات الخامات</summary>
-						<ul>{cDataWarnings.map((pWarning) => <li>{pWarning}</li>)}</ul>
-						<small>بعد تعديل Excel احفظ الملف ثم أعد تحميل المعاينة أو احفظ صفحة Astro لإجبارها على إعادة البناء.</small>
+			<div class = " StoneGalleryEmpty " data-gallery-empty hidden={cItems.length !== 0}>
+
+				<svg viewBox="0 0 24 24" aria-hidden="true">
+
+					<circle cx="11" cy="11" r="7" />
+
+					<path d="m20 20-4-4M8 11h6" />
+
+				</svg>
+
+				<strong>
+					{pEmptyText}
+				</strong>
+
+				{ import.meta.env.DEV && cDataWarnings.length > 0 && (
+
+					<details class = " StoneGalleryDataDebug " open>
+
+						<summary>
+
+							تشخيص ملف بيانات الخامات
+
+						</summary>
+
+						<ul>
+
+							{ cDataWarnings.map((pWarning) =>
+
+								<li>
+
+									{pWarning}
+
+								</li>
+
+							) }
+
+						</ul>
+
+						<small>
+
+							بعد تعديل Excel احفظ الملف ثم أعد تحميل المعاينة أو احفظ صفحة Astro لإجبارها على إعادة البناء.
+
+						</small>
+
 					</details>
-				)}
-				<button type="button" data-action="clear-filters">عرض كل الخامات</button>
+
+				) }
+
+				<button type="button" data-action="clear-filters">
+
+					عرض كل الخامات
+
+				</button>
+
 			</div>
+
 		</div>
 
-		<aside class="StoneGalleryDetails" data-details-panel hidden aria-live="polite">
-			<button class="StoneGalleryPanelClose" type="button" data-action="close-details" aria-label="إغلاق تفاصيل الخامة">×</button>
+		{ cItems.map((pItem, pIndex) => (
 
-			<button
-				class="StoneGalleryDetailMedia"
-				type="button"
-				data-action="inspect-stone"
-				data-ops-event="stone_gallery_inspect"
-				data-ops-label="فحص صور الخامة المختارة"
+			<aside
+				class = " StoneGalleryDetails "
+				id={`${pGivenID}-detail-${pIndex + 1}`}
+				data-details-panel
+				data-stone-id={pItem.Id}
+				hidden
+				aria-labelledby={`${pGivenID}-detail-title-${pIndex + 1}`}
 			>
-				<img src="" alt="" data-detail-image />
-				<span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4M11 8v6M8 11h6" /></svg> فحص الصورة واللوح</span>
-			</button>
-
-			<div class="StoneGalleryDetailHead">
-				<h3 data-detail-name></h3>
-				<div class="StoneGalleryDetailChips">
-					<span data-detail-type></span>
-					<span data-detail-country></span>
-				</div>
-			</div>
-
-			<p class="StoneGalleryDetailDesc" data-detail-description></p>
-
-			<dl class="StoneGalleryDetailFacts">
-				<div><dt>اللون</dt><dd data-detail-color></dd></div>
-				<div><dt>العروق أو الحبيبات</dt><dd data-detail-pattern></dd></div>
-				<div><dt>أفضل استخدام</dt><dd data-detail-uses></dd></div>
-				<div><dt>التشطيب</dt><dd data-detail-finishes></dd></div>
-				<div><dt>التوفر</dt><dd data-detail-available></dd></div>
-				<div><dt>السعر الاستدلالي</dt><dd data-detail-price></dd></div>
-			</dl>
-
-			<div class="StoneGalleryDetailActions">
-				{pEnableQuote && (
-					<button
-						class="StoneGalleryPrimary"
-						type="button"
-						data-action="open-quote"
-						data-ops-event="stone_gallery_quote_open"
-						data-ops-important="true"
-					>
-						اعرف سعره لمشروعي
-					</button>
-				)}
 
 				<button
-					class="StoneGallerySecondary"
+					class = " StoneGalleryPanelClose "
 					type="button"
-					data-action="toggle-compare"
-					data-ops-event="stone_gallery_compare_toggle"
+					data-action="close-details"
+					aria-label={`إغلاق تفاصيل ${pItem.Name}`}
 				>
-					<span data-compare-action-text>أضف للمقارنة</span>
+
+					×
+
 				</button>
 
-				{pAllowShare && (
-					<button
-						class="StoneGallerySecondary"
-						type="button"
-						data-action="share-stone"
-						data-ops-event="stone_gallery_share"
-					>
-						شارك الخامة
-					</button>
-				)}
-			</div>
-
-			<p class="StoneGalleryPanelStatus" data-panel-status role="status"></p>
-		</aside>
-	</div>
-
-	<div class="StoneGalleryLightbox" data-lightbox hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="فحص صور الخامة">
-		<div class="StoneGalleryOverlayBack" data-action="close-lightbox"></div>
-		<section class="StoneGalleryLightboxPanel">
-			<header>
-				<div><small>فحص الخامة</small><h3 data-lightbox-name></h3></div>
-				<button type="button" data-action="close-lightbox" aria-label="إغلاق">×</button>
-			</header>
-
-			<div class="StoneGalleryInspectStage" data-inspect-stage>
-				<button class="StoneGalleryInspectNav IsPrev" type="button" data-action="lightbox-prev" aria-label="الصورة السابقة">‹</button>
-				<img src="" alt="" data-lightbox-image />
-				<button class="StoneGalleryInspectNav IsNext" type="button" data-action="lightbox-next" aria-label="الصورة التالية">›</button>
-
-				<div class="StoneGalleryZoomTools">
-					<button type="button" data-action="zoom-out" aria-label="تصغير الصورة">−</button>
-					<button type="button" data-action="zoom-reset" aria-label="إعادة حجم الصورة">100%</button>
-					<button type="button" data-action="zoom-in" aria-label="تكبير الصورة">+</button>
-					<button type="button" data-action="fullscreen" aria-label="ملء الشاشة">⛶</button>
-				</div>
-			</div>
-
-			<div class="StoneGalleryFilm" data-lightbox-film aria-label="صور الخامة"></div>
-
-			<footer>
-				<p>طبيعة الحجر قد تختلف بين لوح وآخر؛ راجع صورة الدفعة الفعلية قبل الاعتماد النهائي.</p>
-				<div>
-					<button class="StoneGallerySecondary" type="button" data-action="toggle-compare">أضف للمقارنة</button>
-					{pEnableQuote && <button class="StoneGalleryPrimary" type="button" data-action="open-quote">اعرف سعره لمشروعي</button>}
-				</div>
-			</footer>
-		</section>
-	</div>
-
-	<div class="StoneGalleryCompare" data-compare-overlay hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="مقارنة الخامات">
-		<div class="StoneGalleryOverlayBack" data-action="close-compare"></div>
-		<section class="StoneGalleryComparePanel">
-			<header>
-				<div><small>اختياراتك</small><h3>مقارنة الخامات</h3></div>
-				<button type="button" data-action="close-compare" aria-label="إغلاق">×</button>
-			</header>
-
-			<div class="StoneGalleryCompareGrid" data-compare-grid>
-				{Array.from({ length: cCompareCount }, (_, pIndex) => (
-					<article class="StoneGalleryCompareSlot" data-compare-slot data-slot-index={pIndex} hidden>
-						<button class="StoneGalleryCompareRemove" type="button" data-action="remove-compare" aria-label="حذف من المقارنة">×</button>
-						<img src="" alt="" data-compare-image />
-						<h4 data-compare-name></h4>
-						<p data-compare-kind></p>
-						<dl>
-							<div><dt>درجة اللون</dt><dd data-compare-color></dd></div>
-							<div><dt>طبيعة العروق</dt><dd data-compare-pattern></dd></div>
-							<div><dt>أفضل استخدام</dt><dd data-compare-uses></dd></div>
-							<div><dt>التشطيب</dt><dd data-compare-finishes></dd></div>
-							<div><dt>التوفر</dt><dd data-compare-available></dd></div>
-							<div><dt>السعر</dt><dd data-compare-price></dd></div>
-						</dl>
-						<button class="StoneGallerySecondary" type="button" data-action="choose-compare">اختار هذه الخامة</button>
-					</article>
-				))}
-
-				<button class="StoneGalleryCompareEmpty" type="button" data-action="close-compare" data-compare-empty>
-					<span>＋</span>
-					<strong>أضف خامة للمقارنة</strong>
-					<small>ارجع للجاليري واختر خامة أخرى</small>
-				</button>
-			</div>
-
-			<footer>
-				{pAllowShare && <button class="StoneGallerySecondary" type="button" data-action="share-comparison">شارك المقارنة</button>}
-				{pEnableQuote && <button class="StoneGalleryPrimary" type="button" data-action="open-quote">اعرف سعر الخامات لمشروعي</button>}
-			</footer>
-		</section>
-	</div>
-
-	{pEnableQuote && (
-	<div class="StoneGalleryQuote" data-quote-overlay hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="تقدير سعر الخامة">
-		<div class="StoneGalleryOverlayBack" data-action="close-quote"></div>
-		<form
-			class="StoneGalleryQuotePanel"
-			data-quote-form
-			data-ops-event="stone_gallery_quote_submit"
-			data-ops-on="submit"
-			data-ops-important="true"
-		>
-			<header>
-				<div><small>خطوة منخفضة الالتزام</small><h3>احسب تقديرًا مبدئيًا لمشروعك</h3></div>
-				<button type="button" data-action="close-quote" aria-label="إغلاق">×</button>
-			</header>
-
-			<div class="StoneGalleryQuoteLayout">
-				<div class="StoneGalleryQuoteFields">
-					<div class="StoneGalleryQuoteStone">
-						<img src="" alt="" data-quote-image />
-						<div><small>الخامة المختارة</small><strong data-quote-name></strong><span data-quote-kind></span></div>
-					</div>
-
-					<fieldset>
-						<legend>نوع الاستخدام</legend>
-						<div class="StoneGalleryChoiceRow" data-quote-uses>
-							<label><input type="radio" name={`${pGivenID}-use`} value="أرضيات" checked /> <span>أرضيات</span></label>
-							<label><input type="radio" name={`${pGivenID}-use`} value="سلالم" /> <span>سلالم</span></label>
-							<label><input type="radio" name={`${pGivenID}-use`} value="حوائط" /> <span>حوائط</span></label>
-							<label><input type="radio" name={`${pGivenID}-use`} value="أخرى" /> <span>أخرى</span></label>
-						</div>
-					</fieldset>
-
-					<div class="StoneGalleryQuoteInline">
-						<label><span>المساحة التقريبية</span><input type="number" min="0" step="0.5" name="area" value="45" /><small>م²</small></label>
-						<label><span>الخدمة</span><select name="service"><option value="supply-install">توريد وتركيب</option><option value="supply">توريد فقط</option><option value="selection">اختيار ومعاينة</option></select></label>
-					</div>
-
-					<fieldset>
-						<legend>مكان المشروع فين؟</legend>
-						<div class="StoneGalleryLocationGrid">
-							<label><input type="radio" name={cQuoteLocationName} value="cairo-giza" checked /><span><strong>القاهرة أو الجيزة</strong><small>داخل نطاق التنفيذ الأساسي</small></span></label>
-							<label><input type="radio" name={cQuoteLocationName} value="other-egypt" /><span><strong>محافظة أخرى</strong><small>نراجع إمكانية التوريد أو التنفيذ</small></span></label>
-							<label><input type="radio" name={cQuoteLocationName} value="remote-egypt" /><span><strong>أنا خارج مصر والمشروع داخل مصر</strong><small>اختيار ومتابعة عن بُعد</small></span></label>
-							<label><input type="radio" name={cQuoteLocationName} value="outside-egypt" /><span><strong>المشروع خارج مصر</strong><small>يُراجع نطاق التوريد أولًا</small></span></label>
-						</div>
-					</fieldset>
-				</div>
-
-				<aside class="StoneGalleryEstimate">
-					<small>نطاق سعر مبدئي</small>
-					<strong data-estimate-value>يُحدد بعد اختيار البيانات</strong>
-					<p data-estimate-note>السعر يتأثر بالدفعة الفعلية والسمك والتشطيب والقياسات النهائية.</p>
-					<div><span>دقة التقدير</span><b data-estimate-accuracy>45%</b></div>
-					<progress max="100" value="45" data-estimate-progress>45%</progress>
-				</aside>
-			</div>
-
-			<footer>
-				<div><strong>بدون مكالمة إلزامية</strong><small>احفظ اختيارك الآن وأكمل بيانات التواصل عندما تكون جاهزًا.</small></div>
-				<button class="StoneGallerySecondary" type="button" data-action="close-quote">ارجع للمقارنة</button>
 				<button
-					class="StoneGalleryPrimary"
-					type="submit"
+					class = " StoneGalleryDetailMedia "
+					type="button"
+					data-action="inspect-stone"
+					data-ops-event="stone_gallery_inspect"
+					data-ops-label={`فحص صور ${pItem.Name}`}
 				>
-					احفظ الطلب وأرسله
-				</button>
-			</footer>
-			<p class="StoneGalleryQuoteStatus" data-quote-status role="status"></p>
-		</form>
-	</div>
-	)}
 
-	<script type="application/json" is:inline data-stone-gallery-data set:html={cDataJson}></script>
+					<img
+						src={pItem.PrimaryImage}
+						alt={pItem.Alt}
+						loading="lazy"
+						decoding="async"
+						data-detail-image
+					/>
+
+					<span>
+
+						<svg viewBox="0 0 24 24" aria-hidden="true">
+
+							<circle cx="11" cy="11" r="7" />
+
+							<path d="m20 20-4-4M11 8v6M8 11h6" />
+
+						</svg>
+
+						فحص الصورة واللوح
+
+					</span>
+
+				</button>
+
+				<div class = " StoneGalleryDetailHead ">
+
+					<h3 id={`${pGivenID}-detail-title-${pIndex + 1}`} data-detail-name>
+						{pItem.Name}
+					</h3>
+
+					<div class = " StoneGalleryDetailChips ">
+
+						<span data-detail-type>
+							{pItem.Type}
+						</span>
+
+						<span data-detail-country>
+							{pItem.Country}
+						</span>
+
+					</div>
+
+				</div>
+
+				<p class = " StoneGalleryDetailDesc " data-detail-description>
+					{pItem.Description || "افحص صور اللوح والاستخدامات قبل اعتماد الخامة النهائية."}
+				</p>
+
+				<dl class = " StoneGalleryDetailFacts ">
+
+					<div>
+
+						<dt>
+
+							اللون
+
+						</dt>
+
+						<dd data-detail-color>
+
+							{ pItem.Color || "غير محدد"}
+
+						</dd>
+
+					</div>
+
+					<div>
+
+						<dt>
+
+							العروق أو الحبيبات
+
+						</dt>
+
+						<dd data-detail-pattern>
+
+							{ pItem.Pattern || "غير محدد"}
+
+						</dd>
+
+					</div>
+
+					<div>
+
+						<dt>
+
+							أفضل استخدام
+
+						</dt>
+
+						<dd data-detail-uses>
+
+							{JoinStoneList(pItem.Uses)}
+
+						</dd>
+
+					</div>
+
+					<div>
+
+						<dt>
+
+							التشطيب
+
+						</dt>
+
+						<dd data-detail-finishes>
+
+							{JoinStoneList(pItem.Finishes)}
+
+						</dd>
+
+					</div>
+
+					<div>
+
+						<dt>
+
+							التوفر
+
+						</dt>
+
+						<dd data-detail-available>
+
+							{ pItem.Available ? "متوفر الآن" : "حسب الطلب"}
+
+						</dd>
+
+					</div>
+
+					<div>
+
+						<dt>
+
+							السعر الاستدلالي
+
+						</dt>
+
+						<dd data-detail-price>
+
+							{FormatStonePriceText(pItem)}
+
+						</dd>
+
+					</div>
+
+				</dl>
+
+				<div class = " StoneGalleryDetailActions ">
+
+					{ pEnableQuote && ( <button class = " StoneGalleryPrimary " type="button" data-action="open-quote" data-ops-event="stone_gallery_quote_open" data-ops-important="true" >اعرف سعره لمشروعي</button> ) }
+
+					<button
+						class = " StoneGallerySecondary "
+						type="button"
+						data-action="toggle-compare"
+						data-ops-event="stone_gallery_compare_toggle"
+					>
+
+						<span data-compare-action-text>
+							أضف للمقارنة
+						</span>
+
+					</button>
+
+					{ pAllowShare && ( <button class = " StoneGallerySecondary " type="button" data-action="share-stone" data-ops-event="stone_gallery_share" >شارك الخامة</button> ) }
+
+				</div>
+
+				<p class = " StoneGalleryPanelStatus " data-panel-status role="status">
+
+				</p>
+
+			</aside>
+
+		)) }
+
+	</div>
+
+
+
+
+
+
+
+	<div
+		class = " StoneGalleryLightbox "
+		data-lightbox
+		hidden
+		aria-hidden="true"
+		role="dialog"
+		aria-modal="true"
+		aria-label="فحص صور الخامة"
+	>
+
+		<div class = " StoneGalleryOverlayBack " data-action="close-lightbox">
+
+		</div>
+
+		<section class = " StoneGalleryLightboxPanel ">
+
+			<header>
+
+				<div>
+
+					<small>
+
+						فحص الخامة
+
+					</small>
+
+					<h3 data-lightbox-name>
+
+					</h3>
+
+				</div>
+
+				<button type="button" data-action="close-lightbox" aria-label="إغلاق">
+
+					×
+
+				</button>
+
+			</header>
+
+			<div class = " StoneGalleryInspectStage " data-inspect-stage>
+
+				<button
+					class = " StoneGalleryInspectNav IsPrev "
+					type="button"
+					data-action="lightbox-prev"
+					aria-label="الصورة السابقة"
+				>
+
+					‹
+
+				</button>
+
+				<img src="" alt="" data-lightbox-image />
+
+				<button
+					class = " StoneGalleryInspectNav IsNext "
+					type="button"
+					data-action="lightbox-next"
+					aria-label="الصورة التالية"
+				>
+
+					›
+
+				</button>
+
+				<div class = " StoneGalleryZoomTools ">
+
+					<button type="button" data-action="zoom-out" aria-label="تصغير الصورة">
+
+						−
+
+					</button>
+
+					<button type="button" data-action="zoom-reset" aria-label="إعادة حجم الصورة">
+
+						100%
+
+					</button>
+
+					<button type="button" data-action="zoom-in" aria-label="تكبير الصورة">
+
+						+
+
+					</button>
+
+					<button type="button" data-action="fullscreen" aria-label="ملء الشاشة">
+
+						⛶
+
+					</button>
+
+				</div>
+
+			</div>
+
+			<div class = " StoneGalleryFilm " data-lightbox-film aria-label="صور الخامة">
+
+			</div>
+
+			<footer>
+
+				<p>
+					طبيعة الحجر قد تختلف بين لوح وآخر؛ راجع صورة الدفعة الفعلية قبل الاعتماد النهائي.
+				</p>
+
+				<div>
+
+					<button class = " StoneGallerySecondary " type="button" data-action="toggle-compare">
+
+						أضف للمقارنة
+
+					</button>
+
+					{ pEnableQuote &&
+
+						<button class = " StoneGalleryPrimary " type="button" data-action="open-quote">
+
+							اعرف سعره لمشروعي
+
+						</button>
+
+					}
+
+				</div>
+
+			</footer>
+
+		</section>
+
+	</div>
+
+
+
+
+
+
+
+	<div
+		class = " StoneGalleryCompare "
+		data-compare-overlay
+		hidden
+		aria-hidden="true"
+		role="dialog"
+		aria-modal="true"
+		aria-label="مقارنة الخامات"
+	>
+
+		<div class = " StoneGalleryOverlayBack " data-action="close-compare">
+
+		</div>
+
+		<section class = " StoneGalleryComparePanel ">
+
+			<header>
+
+				<div>
+
+					<small>
+
+						اختياراتك
+
+					</small>
+
+					<h3>
+						مقارنة الخامات
+					</h3>
+
+				</div>
+
+				<button type="button" data-action="close-compare" aria-label="إغلاق">
+
+					×
+
+				</button>
+
+			</header>
+
+			<div class = " StoneGalleryCompareGrid " data-compare-grid>
+
+				{Array.from(
+
+					{ length: cCompareCount }, (_, pIndex) => (
+
+						<article
+							class = " StoneGalleryCompareSlot "
+							data-compare-slot
+							data-slot-index={pIndex}
+							hidden
+						>
+
+							<button
+								class = " StoneGalleryCompareRemove "
+								type="button"
+								data-action="remove-compare"
+								aria-label="حذف من المقارنة"
+							>
+
+								×
+
+							</button>
+
+							<img src="" alt="" data-compare-image />
+
+							<h4 data-compare-name>
+
+							</h4>
+
+							<p data-compare-kind>
+
+							</p>
+
+							<dl>
+
+								<div>
+
+									<dt>
+
+										درجة اللون
+
+									</dt>
+
+									<dd data-compare-color>
+
+									</dd>
+
+								</div>
+
+								<div>
+
+									<dt>
+
+										طبيعة العروق
+
+									</dt>
+
+									<dd data-compare-pattern>
+
+									</dd>
+
+								</div>
+
+								<div>
+
+									<dt>
+
+										أفضل استخدام
+
+									</dt>
+
+									<dd data-compare-uses>
+
+									</dd>
+
+								</div>
+
+								<div>
+
+									<dt>
+
+										التشطيب
+
+									</dt>
+
+									<dd data-compare-finishes>
+
+									</dd>
+
+								</div>
+
+								<div>
+
+									<dt>
+
+										التوفر
+
+									</dt>
+
+									<dd data-compare-available>
+
+									</dd>
+
+								</div>
+
+								<div>
+
+									<dt>
+
+										السعر
+
+									</dt>
+
+									<dd data-compare-price>
+
+									</dd>
+
+								</div>
+
+							</dl>
+
+							<button class = " StoneGallerySecondary " type="button" data-action="choose-compare">
+
+								اختار هذه الخامة
+
+							</button>
+
+						</article>
+
+					)) }
+
+				<button
+					class = " StoneGalleryCompareEmpty "
+					type="button"
+					data-action="close-compare"
+					data-compare-empty
+				>
+
+					<span>
+						＋
+					</span>
+
+					<strong>
+						أضف خامة للمقارنة
+					</strong>
+
+					<small>
+
+						ارجع للجاليري واختر خامة أخرى
+
+					</small>
+
+				</button>
+
+			</div>
+
+			<footer>
+
+				{ pAllowShare &&
+
+					<button class = " StoneGallerySecondary " type="button" data-action="share-comparison">
+
+						شارك المقارنة
+
+					</button>
+
+				}
+
+				{ pEnableQuote &&
+
+					<button class = " StoneGalleryPrimary " type="button" data-action="open-quote">
+
+						اعرف سعر الخامات لمشروعي
+
+					</button>
+
+				}
+
+			</footer>
+
+		</section>
+
+	</div>
+
+	{ pEnableQuote && (
+
+		<div
+			class = " StoneGalleryQuote "
+			data-quote-overlay
+			hidden
+			aria-hidden="true"
+			role="dialog"
+			aria-modal="true"
+			aria-label="تقدير سعر الخامة"
+		>
+		
+		
+		
+		
+		
+		
+		
+			<div class = " StoneGalleryOverlayBack " data-action="close-quote">
+		
+		
+		
+		
+		
+		
+		
+			</div>
+		
+		
+		
+		
+		
+		
+		
+			<form
+				class = " StoneGalleryQuotePanel "
+				data-quote-form
+				data-ops-event="stone_gallery_quote_submit"
+				data-ops-on="submit"
+				data-ops-important="true"
+			>
+		
+				<header>
+		
+					<div>
+		
+						<small>
+		
+							خطوة منخفضة الالتزام
+		
+						</small>
+		
+						<h3>
+							احسب تقديرًا مبدئيًا لمشروعك
+						</h3>
+		
+					</div>
+		
+					<button type="button" data-action="close-quote" aria-label="إغلاق">
+		
+						×
+		
+					</button>
+		
+				</header>
+		
+				<div class = " StoneGalleryQuoteLayout ">
+		
+					<div class = " StoneGalleryQuoteFields ">
+		
+						<div class = " StoneGalleryQuoteStone ">
+		
+							<img src="" alt="" data-quote-image />
+		
+							<div>
+		
+								<small>
+		
+									الخامة المختارة
+		
+								</small>
+		
+								<strong data-quote-name>
+		
+								</strong>
+		
+								<span data-quote-kind>
+		
+								</span>
+		
+							</div>
+		
+						</div>
+		
+						<fieldset>
+		
+							<legend>
+		
+								نوع الاستخدام
+		
+							</legend>
+		
+							<div class = " StoneGalleryChoiceRow " data-quote-uses>
+		
+								<label>
+		
+									<input
+										type="radio"
+										name={`${pGivenID}-use`}
+										value="أرضيات"
+										checked
+									/>
+		
+									<span>
+										أرضيات
+									</span>
+		
+								</label>
+		
+								<label>
+		
+									<input type="radio" name={`${pGivenID}-use`} value="سلالم" />
+		
+									<span>
+										سلالم
+									</span>
+		
+								</label>
+		
+								<label>
+		
+									<input type="radio" name={`${pGivenID}-use`} value="حوائط" />
+		
+									<span>
+										حوائط
+									</span>
+		
+								</label>
+		
+								<label>
+		
+									<input type="radio" name={`${pGivenID}-use`} value="أخرى" />
+		
+									<span>
+										أخرى
+									</span>
+		
+								</label>
+		
+							</div>
+		
+						</fieldset>
+		
+						<div class = " StoneGalleryQuoteInline ">
+		
+							<label>
+		
+								<span>
+									المساحة التقريبية
+								</span>
+		
+								<input
+									type="number"
+									min="0"
+									step="0.5"
+									name="area"
+									value="45"
+								/>
+		
+								<small>
+		
+									م²
+		
+								</small>
+		
+							</label>
+		
+							<label>
+		
+								<span>
+									الخدمة
+								</span>
+		
+								<select name="service">
+		
+									<option value="supply-install">
+		
+										توريد وتركيب
+		
+									</option>
+		
+									<option value="supply">
+		
+										توريد فقط
+		
+									</option>
+		
+									<option value="selection">
+		
+										اختيار ومعاينة
+		
+									</option>
+		
+								</select>
+		
+							</label>
+		
+						</div>
+		
+						<fieldset>
+		
+							<legend>
+		
+								مكان المشروع فين؟
+		
+							</legend>
+		
+							<div class = " StoneGalleryLocationGrid ">
+		
+								<label>
+		
+									<input
+										type="radio"
+										name={cQuoteLocationName}
+										value="cairo-giza"
+										checked
+									/>
+		
+									<span>
+		
+										<strong>
+											القاهرة أو الجيزة
+										</strong>
+		
+										<small>
+		
+											داخل نطاق التنفيذ الأساسي
+		
+										</small>
+		
+									</span>
+		
+								</label>
+		
+								<label>
+		
+									<input type="radio" name={cQuoteLocationName} value="other-egypt" />
+		
+									<span>
+		
+										<strong>
+											محافظة أخرى
+										</strong>
+		
+										<small>
+		
+											نراجع إمكانية التوريد أو التنفيذ
+		
+										</small>
+		
+									</span>
+		
+								</label>
+		
+								<label>
+		
+									<input type="radio" name={cQuoteLocationName} value="remote-egypt" />
+		
+									<span>
+		
+										<strong>
+											أنا خارج مصر والمشروع داخل مصر
+										</strong>
+		
+										<small>
+		
+											اختيار ومتابعة عن بُعد
+		
+										</small>
+		
+									</span>
+		
+								</label>
+		
+								<label>
+		
+									<input type="radio" name={cQuoteLocationName} value="outside-egypt" />
+		
+									<span>
+		
+										<strong>
+											المشروع خارج مصر
+										</strong>
+		
+										<small>
+		
+											يُراجع نطاق التوريد أولًا
+		
+										</small>
+		
+									</span>
+		
+								</label>
+		
+							</div>
+		
+						</fieldset>
+		
+					</div>
+		
+					<aside class = " StoneGalleryEstimate ">
+		
+						<small>
+		
+							نطاق سعر مبدئي
+		
+						</small>
+		
+						<strong data-estimate-value>
+							يُحدد بعد اختيار البيانات
+						</strong>
+		
+						<p data-estimate-note>
+							السعر يتأثر بالدفعة الفعلية والسمك والتشطيب والقياسات النهائية.
+						</p>
+		
+						<div>
+		
+							<span>
+								دقة التقدير
+							</span>
+		
+							<b data-estimate-accuracy>
+		
+								45%
+		
+							</b>
+		
+						</div>
+		
+						<progress max="100" value="45" data-estimate-progress>
+		
+							45%
+		
+						</progress>
+		
+					</aside>
+		
+				</div>
+		
+				<footer>
+		
+					<div>
+		
+						<strong>
+							بدون مكالمة إلزامية
+						</strong>
+		
+						<small>
+		
+							احفظ اختيارك الآن وأكمل بيانات التواصل عندما تكون جاهزًا.
+		
+						</small>
+		
+					</div>
+		
+					<button class = " StoneGallerySecondary " type="button" data-action="close-quote">
+		
+						ارجع للمقارنة
+		
+					</button>
+		
+					<button class = " StoneGalleryPrimary " type="submit">
+		
+						احفظ الطلب وأرسله
+		
+					</button>
+		
+				</footer>
+		
+				<p class = " StoneGalleryQuoteStatus " data-quote-status role="status">
+		
+				</p>
+		
+			</form>
+		
+		
+		
+		
+		
+		
+		
+		</div>
+	) }
+
 </section>
 
+
+
+
+
 <style>
-	.StoneGallery,
-	.StoneGallery * {
-		box-sizing: border-box;
-	}
+
+
 
 	.StoneGallery {
 		position: relative;
@@ -1163,8 +2284,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		overflow: clip;
 		isolation: isolate;
 		color: var(--StoneGalleryText);
-		background:
-			radial-gradient(circle at 8% 4%, color-mix(in srgb, var(--StoneGalleryAccentSoft) 54%, transparent), transparent 31rem),
+		background: radial-gradient(circle at 8% 4%, color-mix(in srgb, var(--StoneGalleryAccentSoft) 54%, transparent), transparent 31rem),
 			linear-gradient(145deg, var(--StoneGalleryBg), color-mix(in srgb, var(--StoneGalleryBg) 82%, white));
 		font-family: inherit;
 		line-height: 1.55;
@@ -1179,21 +2299,8 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		pointer-events: none;
 	}
 
-	.StoneGallery button,
-	.StoneGallery input,
-	.StoneGallery select {
-		font: inherit;
-	}
-
 	.StoneGallery button {
 		color: inherit;
-	}
-
-	.StoneGallery button:focus-visible,
-	.StoneGallery input:focus-visible,
-	.StoneGallery select:focus-visible {
-		outline: 3px solid color-mix(in srgb, var(--StoneGalleryAccent) 38%, transparent);
-		outline-offset: 3px;
 	}
 
 	.StoneGallery svg {
@@ -1210,13 +2317,22 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		display: none;
 	}
 
-	.StoneGalleryHead,
-	.StoneGalleryFilters,
-	.StoneGalleryResultBar,
-	.StoneGalleryBody {
-		width: min(var(--StoneGalleryMaxWidth), 100%);
-		margin-inline: auto;
+	.StoneGallery .StoneGalleryVisuallyHidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		overflow: hidden;
+		border: 0;
+		clip: rect(0 0 0 0);
+		clip-path: inset(50%);
+		white-space: nowrap;
 	}
+
+	.StoneGallery [hidden][hidden] {
+		display: none;
+	}
+
 
 	.StoneGalleryHead {
 		display: flex;
@@ -1225,6 +2341,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		gap: 24px;
 		margin-bottom: clamp(20px, 2.2vw, 32px);
 	}
+
 
 	.StoneGalleryHeading {
 		max-width: 760px;
@@ -1245,11 +2362,13 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		font-size: clamp(14px, 1.1vw, 17px);
 	}
 
+
 	.StoneGalleryHeadActions {
 		display: flex;
 		flex: 0 0 auto;
 		gap: 10px;
 	}
+
 
 	.StoneGalleryHeadAction {
 		display: grid;
@@ -1269,11 +2388,6 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 	.StoneGalleryHeadAction:hover {
 		border-color: color-mix(in srgb, var(--StoneGalleryAccent) 55%, var(--StoneGalleryBorder));
 		transform: translateY(-2px);
-	}
-
-	.StoneGalleryHeadAction.IsActive {
-		border-color: var(--StoneGalleryAccent);
-		background: var(--StoneGalleryAccentSoft);
 	}
 
 	.StoneGalleryHeadAction svg {
@@ -1301,6 +2415,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		text-align: center;
 	}
 
+
 	.StoneGalleryFilters {
 		display: grid;
 		grid-template-columns: minmax(220px, 1.7fr) repeat(5, minmax(110px, .72fr)) auto auto;
@@ -1314,12 +2429,6 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		backdrop-filter: blur(16px);
 	}
 
-	.StoneGallerySearch,
-	.StoneGalleryFilter {
-		position: relative;
-		display: grid;
-		gap: 4px;
-	}
 
 	.StoneGalleryFilter > span {
 		padding-inline: 4px;
@@ -1327,6 +2436,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		font-size: 10px;
 		font-weight: 800;
 	}
+
 
 	.StoneGallerySearch svg {
 		position: absolute;
@@ -1337,27 +2447,10 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		transform: translateY(-50%);
 	}
 
-	.StoneGallerySearch input,
-	.StoneGalleryFilter select,
-	.StoneGalleryQuote input,
-	.StoneGalleryQuote select {
-		width: 100%;
-		min-height: 46px;
-		border: 1px solid var(--StoneGalleryBorder);
-		border-radius: 12px;
-		color: var(--StoneGalleryText);
-		background: #fff;
-	}
-
 	.StoneGallerySearch input {
 		padding: 9px 42px 9px 13px;
 	}
 
-	.StoneGalleryFilter select,
-	.StoneGalleryQuote select {
-		padding: 8px 10px;
-		cursor: pointer;
-	}
 
 	.StoneGalleryAvailable {
 		display: flex;
@@ -1405,10 +2498,6 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		transform: translateX(-16px);
 	}
 
-	.StoneGalleryAvailable strong,
-	.StoneGalleryClearFilters {
-		font-size: 12px;
-	}
 
 	.StoneGalleryClearFilters {
 		min-height: 46px;
@@ -1425,6 +2514,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		color: var(--StoneGalleryAccent);
 	}
 
+
 	.StoneGalleryResultBar {
 		display: flex;
 		align-items: center;
@@ -1435,14 +2525,10 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		font-size: 12px;
 	}
 
-	.StoneGalleryResultBar p,
-	.StoneGalleryResultBar span {
-		margin: 0;
-	}
-
 	.StoneGalleryResultBar b {
 		color: var(--StoneGalleryText);
 	}
+
 
 	.StoneGalleryBody {
 		display: grid;
@@ -1452,19 +2538,18 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		transition: grid-template-columns .28s ease;
 	}
 
-	.StoneGallery.HasSelection .StoneGalleryBody {
-		grid-template-columns: minmax(0, 1fr) minmax(330px, 410px);
-	}
 
 	.StoneGalleryCatalog {
 		min-width: 0;
 	}
+
 
 	.StoneGalleryGrid {
 		display: grid;
 		grid-template-columns: repeat(var(--StoneGalleryColumns), minmax(0, 1fr));
 		gap: clamp(12px, 1.25vw, 19px);
 	}
+
 
 	.StoneGalleryCard {
 		position: relative;
@@ -1482,10 +2567,10 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		transform: translateY(-3px);
 	}
 
-	.StoneGalleryCard.IsSelected {
-		border-color: var(--StoneGalleryAccent);
-		box-shadow: 0 0 0 3px color-mix(in srgb, var(--StoneGalleryAccent) 20%, transparent), 0 14px 36px rgba(31, 37, 43, .11);
+	.StoneGalleryCard:hover .StoneGalleryCardMedia img {
+		transform: scale(1.04);
 	}
+
 
 	.StoneGalleryCardMain {
 		display: block;
@@ -1497,6 +2582,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		text-align: right;
 		cursor: pointer;
 	}
+
 
 	.StoneGalleryCardMedia {
 		position: relative;
@@ -1523,9 +2609,6 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		transition: transform .45s cubic-bezier(.2, .8, .2, 1);
 	}
 
-	.StoneGalleryCard:hover .StoneGalleryCardMedia img {
-		transform: scale(1.04);
-	}
 
 	.StoneGalleryCardBadge {
 		position: absolute;
@@ -1540,6 +2623,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		font-weight: 800;
 		backdrop-filter: blur(8px);
 	}
+
 
 	.StoneGallerySelectedMark {
 		position: absolute;
@@ -1561,10 +2645,6 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		transition: opacity .2s ease, transform .2s ease;
 	}
 
-	.StoneGalleryCard.IsSelected .StoneGallerySelectedMark {
-		opacity: 1;
-		transform: scale(1);
-	}
 
 	.StoneGalleryCardInfo {
 		display: grid;
@@ -1590,6 +2670,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		white-space: nowrap;
 	}
 
+
 	.StoneGalleryStock {
 		grid-row: 1 / span 2;
 		grid-column: 2;
@@ -1603,10 +2684,6 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		white-space: nowrap;
 	}
 
-	.StoneGalleryStock[data-available="false"] {
-		color: #92601a;
-		background: #fff0d5;
-	}
 
 	.StoneGallerySave {
 		position: absolute;
@@ -1631,14 +2708,6 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		transform: scale(1.07);
 	}
 
-	.StoneGallerySave.IsSaved {
-		color: #fff;
-		background: #db4b68;
-	}
-
-	.StoneGallerySave.IsSaved svg {
-		fill: currentColor;
-	}
 
 	.StoneGalleryEmpty {
 		display: grid;
@@ -1666,6 +2735,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		cursor: pointer;
 	}
 
+
 	.StoneGalleryDataDebug {
 		width: min(100%, 760px);
 		padding: 12px 15px;
@@ -1692,6 +2762,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		color: #8d594d;
 	}
 
+
 	.StoneGalleryDetails {
 		position: sticky;
 		top: 18px;
@@ -1703,6 +2774,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		box-shadow: 0 20px 55px rgba(31, 37, 43, .13);
 		animation: StoneGalleryPanelIn .28s ease both;
 	}
+
 
 	.StoneGalleryPanelClose {
 		position: absolute;
@@ -1723,6 +2795,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		cursor: pointer;
 		backdrop-filter: blur(8px);
 	}
+
 
 	.StoneGalleryDetailMedia {
 		position: relative;
@@ -1759,6 +2832,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		backdrop-filter: blur(9px);
 	}
 
+
 	.StoneGalleryDetailHead {
 		display: flex;
 		align-items: flex-start;
@@ -1773,6 +2847,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		font-weight: 900;
 		line-height: 1.2;
 	}
+
 
 	.StoneGalleryDetailChips {
 		display: flex;
@@ -1791,11 +2866,13 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		white-space: nowrap;
 	}
 
+
 	.StoneGalleryDetailDesc {
 		margin: 0 4px 12px;
 		color: var(--StoneGalleryMuted);
 		font-size: 12px;
 	}
+
 
 	.StoneGalleryDetailFacts {
 		display: grid;
@@ -1827,6 +2904,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		white-space: nowrap;
 	}
 
+
 	.StoneGalleryDetailActions {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
@@ -1838,16 +2916,6 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		grid-column: 1 / -1;
 	}
 
-	.StoneGalleryPrimary,
-	.StoneGallerySecondary {
-		min-height: 44px;
-		padding: 9px 15px;
-		border-radius: 12px;
-		font-size: 12px;
-		font-weight: 900;
-		cursor: pointer;
-		transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
-	}
 
 	.StoneGalleryPrimary {
 		border: 1px solid var(--StoneGalleryAccent);
@@ -1856,31 +2924,13 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		box-shadow: 0 10px 25px color-mix(in srgb, var(--StoneGalleryAccent) 25%, transparent);
 	}
 
+
 	.StoneGallerySecondary {
 		border: 1px solid var(--StoneGalleryBorder);
 		color: var(--StoneGalleryText);
 		background: white;
 	}
 
-	.StoneGalleryPrimary:hover,
-	.StoneGallerySecondary:hover {
-		transform: translateY(-2px);
-	}
-
-	.StoneGallerySecondary.IsActive {
-		border-color: var(--StoneGalleryAccent);
-		color: var(--StoneGalleryAccent);
-		background: var(--StoneGalleryAccentSoft);
-	}
-
-	.StoneGalleryPanelStatus,
-	.StoneGalleryQuoteStatus {
-		min-height: 1.4em;
-		margin: 8px 2px 0;
-		color: var(--StoneGalleryMuted);
-		font-size: 10px;
-		font-weight: 700;
-	}
 
 	.StoneGalleryOverlayBack {
 		position: absolute;
@@ -1889,76 +2939,6 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		backdrop-filter: blur(13px);
 	}
 
-	.StoneGalleryLightbox,
-	.StoneGalleryCompare,
-	.StoneGalleryQuote {
-		position: fixed;
-		z-index: 1500;
-		inset: 0;
-		display: grid;
-		place-items: center;
-		padding: clamp(14px, 2.2vw, 32px);
-	}
-
-	.StoneGalleryLightboxPanel,
-	.StoneGalleryComparePanel,
-	.StoneGalleryQuotePanel {
-		position: relative;
-		z-index: 1;
-		display: grid;
-		width: min(1180px, 100%);
-		max-height: calc(100dvh - 28px);
-		overflow: auto;
-		border: 1px solid rgba(255, 255, 255, .2);
-		border-radius: clamp(18px, 2vw, 30px);
-		background: var(--StoneGalleryPanel);
-		box-shadow: 0 35px 110px rgba(0, 0, 0, .35);
-		animation: StoneGalleryOverlayIn .24s ease both;
-	}
-
-	.StoneGalleryLightboxPanel > header,
-	.StoneGalleryComparePanel > header,
-	.StoneGalleryQuotePanel > header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 18px;
-		padding: 16px 20px;
-		border-bottom: 1px solid var(--StoneGalleryBorder);
-	}
-
-	.StoneGalleryLightboxPanel > header small,
-	.StoneGalleryComparePanel > header small,
-	.StoneGalleryQuotePanel > header small {
-		display: block;
-		color: var(--StoneGalleryAccent);
-		font-size: 9px;
-		font-weight: 900;
-	}
-
-	.StoneGalleryLightboxPanel > header h3,
-	.StoneGalleryComparePanel > header h3,
-	.StoneGalleryQuotePanel > header h3 {
-		margin: 2px 0 0;
-		font-size: clamp(19px, 2vw, 27px);
-		line-height: 1.15;
-	}
-
-	.StoneGalleryLightboxPanel > header > button,
-	.StoneGalleryComparePanel > header > button,
-	.StoneGalleryQuotePanel > header > button {
-		display: grid;
-		place-items: center;
-		width: 36px;
-		height: 36px;
-		padding: 0;
-		border: 1px solid var(--StoneGalleryBorder);
-		border-radius: 50%;
-		background: white;
-		font-size: 24px;
-		line-height: 1;
-		cursor: pointer;
-	}
 
 	.StoneGalleryInspectStage {
 		position: relative;
@@ -1966,8 +2946,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		place-items: center;
 		min-height: clamp(360px, 59vh, 680px);
 		overflow: hidden;
-		background:
-			linear-gradient(45deg, #d9dde0 25%, transparent 25%, transparent 75%, #d9dde0 75%),
+		background: linear-gradient(45deg, #d9dde0 25%, transparent 25%, transparent 75%, #d9dde0 75%),
 			linear-gradient(45deg, #d9dde0 25%, #edf0f2 25%, #edf0f2 75%, #d9dde0 75%);
 		background-position: 0 0, 12px 12px;
 		background-size: 24px 24px;
@@ -1981,6 +2960,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		transition: transform .2s ease;
 		user-select: none;
 	}
+
 
 	.StoneGalleryInspectNav {
 		position: absolute;
@@ -2002,13 +2982,6 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		backdrop-filter: blur(8px);
 	}
 
-	.StoneGalleryInspectNav.IsPrev {
-		right: 14px;
-	}
-
-	.StoneGalleryInspectNav.IsNext {
-		left: 14px;
-	}
 
 	.StoneGalleryZoomTools {
 		position: absolute;
@@ -2035,6 +3008,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		font-size: 13px;
 		cursor: pointer;
 	}
+
 
 	.StoneGalleryFilm {
 		display: flex;
@@ -2078,15 +3052,6 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		font-weight: 800;
 	}
 
-	.StoneGalleryLightboxPanel > footer,
-	.StoneGalleryComparePanel > footer,
-	.StoneGalleryQuotePanel > footer {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 13px;
-		padding: 14px 20px;
-	}
 
 	.StoneGalleryLightboxPanel > footer p {
 		max-width: 680px;
@@ -2095,15 +3060,11 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		font-size: 10px;
 	}
 
-	.StoneGalleryLightboxPanel > footer > div,
-	.StoneGalleryComparePanel > footer {
-		display: flex;
-		gap: 8px;
-	}
 
 	.StoneGalleryComparePanel {
 		width: min(1240px, 100%);
 	}
+
 
 	.StoneGalleryCompareGrid {
 		display: grid;
@@ -2112,6 +3073,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		padding: 18px;
 		overflow-x: auto;
 	}
+
 
 	.StoneGalleryCompareSlot {
 		position: relative;
@@ -2166,6 +3128,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		width: 100%;
 	}
 
+
 	.StoneGalleryCompareRemove {
 		position: absolute;
 		z-index: 2;
@@ -2184,6 +3147,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		line-height: 1;
 		cursor: pointer;
 	}
+
 
 	.StoneGalleryCompareEmpty {
 		display: grid;
@@ -2212,9 +3176,29 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		font-size: 9px;
 	}
 
+
 	.StoneGalleryQuotePanel {
 		width: min(1100px, 100%);
 	}
+
+	.StoneGalleryQuotePanel > footer {
+		border-top: 1px solid var(--StoneGalleryBorder);
+	}
+
+	.StoneGalleryQuotePanel > footer > div {
+		display: grid;
+		margin-inline-end: auto;
+	}
+
+	.StoneGalleryQuotePanel > footer > div strong {
+		font-size: 11px;
+	}
+
+	.StoneGalleryQuotePanel > footer > div small {
+		color: var(--StoneGalleryMuted);
+		font-size: 9px;
+	}
+
 
 	.StoneGalleryQuoteLayout {
 		display: grid;
@@ -2223,10 +3207,12 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		padding: 18px 20px;
 	}
 
+
 	.StoneGalleryQuoteFields {
 		display: grid;
 		gap: 15px;
 	}
+
 
 	.StoneGalleryQuoteStone {
 		display: flex;
@@ -2249,15 +3235,10 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		display: grid;
 	}
 
-	.StoneGalleryQuoteStone small,
-	.StoneGalleryQuoteStone span {
-		color: var(--StoneGalleryMuted);
-		font-size: 9px;
-	}
-
 	.StoneGalleryQuoteStone strong {
 		font-size: 17px;
 	}
+
 
 	.StoneGalleryQuote fieldset {
 		min-width: 0;
@@ -2266,31 +3247,11 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		border: 0;
 	}
 
-	.StoneGalleryQuote legend,
-	.StoneGalleryQuoteInline label > span {
-		margin-bottom: 7px;
-		color: var(--StoneGalleryMuted);
-		font-size: 10px;
-		font-weight: 900;
-	}
 
 	.StoneGalleryChoiceRow {
 		display: grid;
 		grid-template-columns: repeat(4, minmax(0, 1fr));
 		gap: 7px;
-	}
-
-	.StoneGalleryChoiceRow label,
-	.StoneGalleryLocationGrid label {
-		position: relative;
-		cursor: pointer;
-	}
-
-	.StoneGalleryChoiceRow input,
-	.StoneGalleryLocationGrid input {
-		position: absolute;
-		opacity: 0;
-		pointer-events: none;
 	}
 
 	.StoneGalleryChoiceRow span {
@@ -2305,13 +3266,6 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		font-weight: 800;
 	}
 
-	.StoneGalleryChoiceRow input:checked + span,
-	.StoneGalleryLocationGrid input:checked + span {
-		border-color: var(--StoneGalleryAccent);
-		color: color-mix(in srgb, var(--StoneGalleryAccent) 78%, #17202a);
-		background: var(--StoneGalleryAccentSoft);
-		box-shadow: 0 0 0 2px color-mix(in srgb, var(--StoneGalleryAccent) 15%, transparent);
-	}
 
 	.StoneGalleryQuoteInline {
 		display: grid;
@@ -2335,6 +3289,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		color: var(--StoneGalleryMuted);
 		font-size: 10px;
 	}
+
 
 	.StoneGalleryLocationGrid {
 		display: grid;
@@ -2360,6 +3315,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		font-size: 8px;
 	}
 
+
 	.StoneGalleryEstimate {
 		display: grid;
 		align-content: center;
@@ -2368,8 +3324,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		padding: 24px;
 		border-radius: 19px;
 		color: white;
-		background:
-			linear-gradient(145deg, rgba(255, 255, 255, .08), transparent 55%),
+		background: linear-gradient(145deg, rgba(255, 255, 255, .08), transparent 55%),
 			color-mix(in srgb, var(--StoneGalleryAccent) 48%, #172331);
 		box-shadow: 0 20px 48px color-mix(in srgb, var(--StoneGalleryAccent) 18%, transparent);
 	}
@@ -2421,50 +3376,366 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		background: white;
 	}
 
-	.StoneGalleryQuotePanel > footer {
-		border-top: 1px solid var(--StoneGalleryBorder);
-	}
-
-	.StoneGalleryQuotePanel > footer > div {
-		display: grid;
-		margin-inline-end: auto;
-	}
-
-	.StoneGalleryQuotePanel > footer > div strong {
-		font-size: 11px;
-	}
-
-	.StoneGalleryQuotePanel > footer > div small {
-		color: var(--StoneGalleryMuted);
-		font-size: 9px;
-	}
 
 	.StoneGalleryQuoteStatus {
 		padding: 0 20px 13px;
 		margin: 0;
 	}
 
+
+
+	.StoneGalleryHeadAction.IsActive {
+		border-color: var(--StoneGalleryAccent);
+		background: var(--StoneGalleryAccentSoft);
+	}
+
+
+	.StoneGallery.HasSelection .StoneGalleryBody {
+		grid-template-columns: minmax(0, 1fr) minmax(330px, 410px);
+	}
+
+
+	.StoneGalleryCard.IsSelected {
+		border-color: var(--StoneGalleryAccent);
+		box-shadow: 0 0 0 3px color-mix(in srgb, var(--StoneGalleryAccent) 20%, transparent), 0 14px 36px rgba(31, 37, 43, .11);
+	}
+
+	.StoneGalleryCard.IsSelected .StoneGallerySelectedMark {
+		opacity: 1;
+		transform: scale(1);
+	}
+
+
+	.StoneGallerySave.IsSaved {
+		color: #fff;
+		background: #db4b68;
+	}
+
+	.StoneGallerySave.IsSaved svg {
+		fill: currentColor;
+	}
+
+
+	.StoneGallerySecondary.IsActive {
+		border-color: var(--StoneGalleryAccent);
+		color: var(--StoneGalleryAccent);
+		background: var(--StoneGalleryAccentSoft);
+	}
+
+
+	.StoneGalleryInspectNav.IsPrev {
+		right: 14px;
+	}
+
+
+	.StoneGalleryInspectNav.IsNext {
+		left: 14px;
+	}
+
+
+
+	.StoneGallery,
+	.StoneGallery *
+	{
+		box-sizing: border-box;
+	}
+
+
+	.StoneGallery button,
+	.StoneGallery input,
+	.StoneGallery select
+	{
+		font: inherit;
+	}
+
+
+	.StoneGallery button:focus-visible,
+	.StoneGallery input:focus-visible,
+	.StoneGallery select:focus-visible
+	{
+		outline: 3px solid color-mix(in srgb, var(--StoneGalleryAccent) 38%, transparent);
+		outline-offset: 3px;
+	}
+
+
+	.StoneGalleryHead,
+	.StoneGalleryFilters,
+	.StoneGalleryResultBar,
+	.StoneGalleryBody
+	{
+		width: min(var(--StoneGalleryMaxWidth), 100%);
+		margin-inline: auto;
+	}
+
+
+	.StoneGallerySearch,
+	.StoneGalleryFilter
+	{
+		position: relative;
+		display: grid;
+		gap: 4px;
+	}
+
+
+	.StoneGallerySearch input,
+	.StoneGalleryFilter select,
+	.StoneGalleryQuote input,
+	.StoneGalleryQuote select
+	{
+		width: 100%;
+		min-height: 46px;
+		border: 1px solid var(--StoneGalleryBorder);
+		border-radius: 12px;
+		color: var(--StoneGalleryText);
+		background: #fff;
+	}
+
+
+	.StoneGalleryFilter select,
+	.StoneGalleryQuote select
+	{
+		padding: 8px 10px;
+		cursor: pointer;
+	}
+
+
+	.StoneGalleryAvailable strong,
+	.StoneGalleryClearFilters
+	{
+		font-size: 12px;
+	}
+
+
+	.StoneGalleryResultBar p,
+	.StoneGalleryResultBar span
+	{
+		margin: 0;
+	}
+
+
+	.StoneGalleryStock[data-available="false"] {
+		color: #92601a;
+		background: #fff0d5;
+	}
+
+
+	.StoneGalleryPrimary,
+	.StoneGallerySecondary
+	{
+		min-height: 44px;
+		padding: 9px 15px;
+		border-radius: 12px;
+		font-size: 12px;
+		font-weight: 900;
+		cursor: pointer;
+		transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+	}
+
+
+	.StoneGalleryPrimary:hover,
+	.StoneGallerySecondary:hover
+	{
+		transform: translateY(-2px);
+	}
+
+
+	.StoneGalleryPanelStatus,
+	.StoneGalleryQuoteStatus
+	{
+		min-height: 1.4em;
+		margin: 8px 2px 0;
+		color: var(--StoneGalleryMuted);
+		font-size: 10px;
+		font-weight: 700;
+	}
+
+
+	.StoneGalleryLightbox,
+	.StoneGalleryCompare,
+	.StoneGalleryQuote
+	{
+		position: fixed;
+		z-index: 1500;
+		inset: 0;
+		display: grid;
+		place-items: center;
+		padding: clamp(14px, 2.2vw, 32px);
+	}
+
+
+	.StoneGalleryLightboxPanel,
+	.StoneGalleryComparePanel,
+	.StoneGalleryQuotePanel
+	{
+		position: relative;
+		z-index: 1;
+		display: grid;
+		width: min(1180px, 100%);
+		max-height: calc(100dvh - 28px);
+		overflow: auto;
+		border: 1px solid rgba(255, 255, 255, .2);
+		border-radius: clamp(18px, 2vw, 30px);
+		background: var(--StoneGalleryPanel);
+		box-shadow: 0 35px 110px rgba(0, 0, 0, .35);
+		animation: StoneGalleryOverlayIn .24s ease both;
+	}
+
+
+	.StoneGalleryLightboxPanel > header,
+	.StoneGalleryComparePanel > header,
+	.StoneGalleryQuotePanel > header
+	{
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 18px;
+		padding: 16px 20px;
+		border-bottom: 1px solid var(--StoneGalleryBorder);
+	}
+
+
+	.StoneGalleryLightboxPanel > header small,
+	.StoneGalleryComparePanel > header small,
+	.StoneGalleryQuotePanel > header small
+	{
+		display: block;
+		color: var(--StoneGalleryAccent);
+		font-size: 9px;
+		font-weight: 900;
+	}
+
+
+	.StoneGalleryLightboxPanel > header h3,
+	.StoneGalleryComparePanel > header h3,
+	.StoneGalleryQuotePanel > header h3
+	{
+		margin: 2px 0 0;
+		font-size: clamp(19px, 2vw, 27px);
+		line-height: 1.15;
+	}
+
+
+	.StoneGalleryLightboxPanel > header > button,
+	.StoneGalleryComparePanel > header > button,
+	.StoneGalleryQuotePanel > header > button
+	{
+		display: grid;
+		place-items: center;
+		width: 36px;
+		height: 36px;
+		padding: 0;
+		border: 1px solid var(--StoneGalleryBorder);
+		border-radius: 50%;
+		background: white;
+		font-size: 24px;
+		line-height: 1;
+		cursor: pointer;
+	}
+
+
+	.StoneGalleryLightboxPanel > footer,
+	.StoneGalleryComparePanel > footer,
+	.StoneGalleryQuotePanel > footer
+	{
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 13px;
+		padding: 14px 20px;
+	}
+
+
+	.StoneGalleryLightboxPanel > footer > div,
+	.StoneGalleryComparePanel > footer
+	{
+		display: flex;
+		gap: 8px;
+	}
+
+
+	.StoneGalleryQuoteStone small,
+	.StoneGalleryQuoteStone span
+	{
+		color: var(--StoneGalleryMuted);
+		font-size: 9px;
+	}
+
+
+	.StoneGalleryQuote legend,
+	.StoneGalleryQuoteInline label > span
+	{
+		margin-bottom: 7px;
+		color: var(--StoneGalleryMuted);
+		font-size: 10px;
+		font-weight: 900;
+	}
+
+
+	.StoneGalleryChoiceRow label,
+	.StoneGalleryLocationGrid label
+	{
+		position: relative;
+		cursor: pointer;
+	}
+
+
+	.StoneGalleryChoiceRow input,
+	.StoneGalleryLocationGrid input
+	{
+		position: absolute;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+
+	.StoneGalleryChoiceRow input:checked + span,
+	.StoneGalleryLocationGrid input:checked + span
+	{
+		border-color: var(--StoneGalleryAccent);
+		color: color-mix(in srgb, var(--StoneGalleryAccent) 78%, #17202a);
+		background: var(--StoneGalleryAccentSoft);
+		box-shadow: 0 0 0 2px color-mix(in srgb, var(--StoneGalleryAccent) 15%, transparent);
+	}
+
+
 	.StoneGalleryQuoteStatus[data-mode="success"] {
 		color: #177245;
 	}
+
 
 	.StoneGalleryQuoteStatus[data-mode="error"] {
 		color: #a9323a;
 	}
 
+
+	@keyframes StoneGalleryPanelIn {
+	from { opacity: 0; transform: translateX(-13px); }
+			to { opacity: 1; transform: translateX(0); }
+	}
+
+
+	@keyframes StoneGalleryOverlayIn {
+	from { opacity: 0; transform: translateY(13px) scale(.985); }
+			to { opacity: 1; transform: translateY(0) scale(1); }
+	}
+
+
+
 	:global(html.StoneGalleryNoScroll) {
 		overflow: hidden;
 	}
 
-	@keyframes StoneGalleryPanelIn {
-		from { opacity: 0; transform: translateX(-13px); }
-		to { opacity: 1; transform: translateX(0); }
-	}
 
-	@keyframes StoneGalleryOverlayIn {
-		from { opacity: 0; transform: translateY(13px) scale(.985); }
-		to { opacity: 1; transform: translateY(0) scale(1); }
-	}
+
+</style>
+
+
+
+
+
+<style>
+
+
 
 	@media (max-width: 1280px) {
 		.StoneGalleryFilters {
@@ -2472,11 +3743,12 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		}
 
 		.StoneGalleryFilters .StoneGalleryFilter:nth-of-type(5),
-		.StoneGalleryFilters .StoneGalleryFilter:nth-of-type(6) {
+		.StoneGalleryFilters .StoneGalleryFilter:nth-of-type(6)
+		{
 			display: none;
 		}
-
 	}
+
 
 	@media (max-width: 920px) {
 		.StoneGallery {
@@ -2493,7 +3765,8 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		}
 
 		.StoneGalleryFilters .StoneGalleryFilter:nth-of-type(n+3),
-		.StoneGalleryAvailable {
+		.StoneGalleryAvailable
+		{
 			display: none;
 		}
 
@@ -2508,7 +3781,8 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		}
 
 		.StoneGalleryGrid,
-		.StoneGallery.HasSelection .StoneGalleryGrid {
+		.StoneGallery.HasSelection .StoneGalleryGrid
+		{
 			grid-template-columns: repeat(var(--StoneGalleryColumnsP), minmax(0, 1fr));
 		}
 
@@ -2524,6 +3798,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 			min-height: 220px;
 		}
 	}
+
 
 	@media (max-width: 620px) {
 		.StoneGalleryHead {
@@ -2566,7 +3841,8 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		}
 
 		.StoneGalleryCardInfo > strong,
-		.StoneGalleryCardInfo > small {
+		.StoneGalleryCardInfo > small
+		{
 			display: block;
 		}
 
@@ -2585,13 +3861,15 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 
 		.StoneGalleryLightbox,
 		.StoneGalleryCompare,
-		.StoneGalleryQuote {
+		.StoneGalleryQuote
+		{
 			padding: 0;
 		}
 
 		.StoneGalleryLightboxPanel,
 		.StoneGalleryComparePanel,
-		.StoneGalleryQuotePanel {
+		.StoneGalleryQuotePanel
+		{
 			width: 100%;
 			max-height: 100dvh;
 			min-height: 100dvh;
@@ -2604,38 +3882,45 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 
 		.StoneGalleryLightboxPanel > footer,
 		.StoneGalleryComparePanel > footer,
-		.StoneGalleryQuotePanel > footer {
+		.StoneGalleryQuotePanel > footer
+		{
 			align-items: stretch;
 			flex-wrap: wrap;
 		}
 
 		.StoneGalleryLightboxPanel > footer p,
-		.StoneGalleryQuotePanel > footer > div {
+		.StoneGalleryQuotePanel > footer > div
+		{
 			width: 100%;
 		}
 
 		.StoneGalleryLightboxPanel > footer > div,
-		.StoneGalleryComparePanel > footer {
+		.StoneGalleryComparePanel > footer
+		{
 			width: 100%;
 		}
 
 		.StoneGalleryLightboxPanel > footer button,
 		.StoneGalleryComparePanel > footer button,
-		.StoneGalleryQuotePanel > footer button {
+		.StoneGalleryQuotePanel > footer button
+		{
 			flex: 1 1 0;
 		}
 
 		.StoneGalleryChoiceRow,
 		.StoneGalleryLocationGrid,
-		.StoneGalleryQuoteInline {
+		.StoneGalleryQuoteInline
+		{
 			grid-template-columns: repeat(2, minmax(0, 1fr));
 		}
 	}
 
+
 	@media (prefers-reduced-motion: reduce) {
 		.StoneGallery *,
 		.StoneGallery *::before,
-		.StoneGallery *::after {
+		.StoneGallery *::after
+		{
 			scroll-behavior: auto;
 			transition-duration: .01ms;
 			animation-duration: .01ms;
@@ -2643,50 +3928,65 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		}
 	}
 
-	.StoneGallery .StoneGalleryVisuallyHidden {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		padding: 0;
-		overflow: hidden;
-		border: 0;
-		clip: rect(0 0 0 0);
-		clip-path: inset(50%);
-		white-space: nowrap;
-	}
 
-	.StoneGallery [hidden][hidden] {
-		display: none;
-	}
+
 </style>
 
-<script is:inline>
-	(function () {
-		const cRoots = document.querySelectorAll("[data-stone-gallery='true']");
-		for (const cRoot of cRoots) RegisterStoneGallery(cRoot);
-		document.addEventListener("astro:page-load", () => {
-			const cPageRoots = document.querySelectorAll("[data-stone-gallery='true']");
-			for (const cRoot of cPageRoots) RegisterStoneGallery(cRoot);
-		});
 
-		function RegisterStoneGallery(pRoot) {
+
+
+
+<script type="application/json" is:inline data-stone-gallery-data set:html={cDataJson}>
+
+
+
+	// ==================== Definitions: Variables & Methods ====================
+
+
+
+
+
+	// ==================== Execution Logic ====================
+</script>
+
+
+
+<script is:inline>
+
+
+
+	(function ()
+	{
+
+		// ==================== Definitions: Variables & Methods ====================
+
+		const cRoots = document.querySelectorAll("[data-stone-gallery='true']");
+
+
+
+
+
+		function RegisterStoneGallery(pRoot)
+		{
 			if (!pRoot || pRoot.dataset.galleryReady === "true") return;
 			pRoot.dataset.galleryReady = "true";
-
 			const cDataElement = pRoot.querySelector("[data-stone-gallery-data]");
 			let cItems = [];
-			try {
+			try
+			{
 				cItems = JSON.parse(cDataElement?.textContent || "[]");
 			} catch {
 				cItems = [];
 			}
-
-			const cItemMap = new Map(cItems.map((pItem) => [pItem.Id, pItem]));
+			const cItemMap = new Map(cItems.map((pItem) => [
+						pItem.Id,
+						pItem
+			]));
 			const cCards = Array.from(pRoot.querySelectorAll("[data-stone-card]"));
 			const cStorageKey = pRoot.dataset.storageKey || "EmoStoneGalleryV1";
 			const cMaxCompare = Math.max(2, Number(pRoot.dataset.maxCompare) || 3);
 			const cFiltersForm = pRoot.querySelector("[data-filters-form]");
-			const cDetailsPanel = pRoot.querySelector("[data-details-panel]");
+			const cDetailsPanels = Array.from(pRoot.querySelectorAll("[data-details-panel]"));
 			const cLightbox = pRoot.querySelector("[data-lightbox]");
 			const cCompareOverlay = pRoot.querySelector("[data-compare-overlay]");
 			const cQuoteOverlay = pRoot.querySelector("[data-quote-overlay]");
@@ -2697,14 +3997,13 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 			const cShortlistCount = pRoot.querySelector("[data-shortlist-count]");
 			const cCompareCount = pRoot.querySelector("[data-compare-count]");
 			const cShortlistButton = pRoot.querySelector("[data-action='open-shortlist']");
-			const cDetailImage = pRoot.querySelector("[data-detail-image]");
 			const cLightboxImage = pRoot.querySelector("[data-lightbox-image]");
 			const cInspectStage = pRoot.querySelector("[data-inspect-stage]");
 			const cLightboxFilm = pRoot.querySelector("[data-lightbox-film]");
-			const cPanelStatus = pRoot.querySelector("[data-panel-status]");
 			const cQuoteStatus = pRoot.querySelector("[data-quote-status]");
 			const cPersisted = LoadPersistedState();
 			let cSelectedId = "";
+			let cDetailsPanel = null;
 			let cShortlist = ValidIds(cPersisted.shortlist);
 			let cCompare = ValidIds(cPersisted.compare).slice(0, cMaxCompare);
 			let cShortlistOnly = false;
@@ -2713,33 +4012,32 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 			let cLastFocused = null;
 			let cLastEstimate = null;
 			const cLive = MakeLiveRegion();
-
 			pRoot.addEventListener("click", HandleClick);
 			cFiltersForm?.addEventListener("input", ApplyFilters);
 			cFiltersForm?.addEventListener("change", ApplyFilters);
-			cFiltersForm?.addEventListener("reset", () => {
-				window.setTimeout(() => {
-					cShortlistOnly = false;
-					UpdateCollections();
-					ApplyFilters();
-				}, 0);
+			cFiltersForm?.addEventListener("reset", () =>
+				{
+					window.setTimeout(() =>
+						{
+							cShortlistOnly = false;
+							UpdateCollections();
+							ApplyFilters();
+						}, 0);
 			});
 			cQuoteForm?.addEventListener("input", UpdateEstimate);
 			cQuoteForm?.addEventListener("change", UpdateEstimate);
 			cQuoteForm?.addEventListener("submit", SubmitQuote);
 			document.addEventListener("keydown", HandleKeyDown);
-
 			UpdateCollections();
 			ApplyFilters();
 			RestoreSelection();
-
-			function HandleClick(pEvent) {
+			function HandleClick(pEvent)
+			{
 				const cButton = pEvent.target.closest("button[data-action]");
 				if (!cButton || !pRoot.contains(cButton)) return;
 				const cAction = cButton.dataset.action || "";
 				const cStoneId = cButton.dataset.stoneId || cButton.closest("[data-stone-id]")?.dataset.stoneId || "";
 				pEvent.preventDefault();
-
 				if (cAction === "select-stone") SelectStone(cStoneId, true);
 				else if (cAction === "toggle-shortlist") ToggleShortlist(cStoneId);
 				else if (cAction === "open-shortlist") ToggleShortlistView();
@@ -2753,9 +4051,9 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 				else if (cAction === "lightbox-prev") StepLightbox(-1);
 				else if (cAction === "lightbox-next") StepLightbox(1);
 				else if (cAction === "show-lightbox-image") SetLightboxImage(Number(cButton.dataset.imageIndex));
-				else if (cAction === "zoom-out") SetZoom(cZoom - .25);
+				else if (cAction === "zoom-out") SetZoom(cZoom -.25);
 				else if (cAction === "zoom-reset") SetZoom(1);
-				else if (cAction === "zoom-in") SetZoom(cZoom + .25);
+				else if (cAction === "zoom-in") SetZoom(cZoom +.25);
 				else if (cAction === "fullscreen") ToggleFullscreen();
 				else if (cAction === "close-compare") CloseOverlay(cCompareOverlay);
 				else if (cAction === "remove-compare") RemoveCompare(cButton.closest("[data-compare-slot]")?.dataset.stoneId || "");
@@ -2764,74 +4062,62 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 				else if (cAction === "open-quote") OpenQuote();
 				else if (cAction === "close-quote") CloseOverlay(cQuoteOverlay);
 			}
-
-			function RestoreSelection() {
+			function RestoreSelection()
+			{
 				const cUrl = new URL(window.location.href);
 				const cUrlId = cUrl.searchParams.get("stone") || "";
-				if (cItemMap.has(cUrlId)) {
+				if (cItemMap.has(cUrlId))
+				{
 					SelectStone(cUrlId, false);
 					return;
 				}
 				if (pRoot.dataset.selectFirst === "true" && cItems[0]) SelectStone(cItems[0].Id, false);
 			}
-
-			function SelectStone(pStoneId, pAllowReselect) {
+			function SelectStone(pStoneId, pAllowReselect)
+			{
 				const cItem = cItemMap.get(pStoneId);
 				if (!cItem) return;
-
-				if (cSelectedId === pStoneId && pAllowReselect) {
+				if (cSelectedId === pStoneId && pAllowReselect)
+				{
 					Emit("emo-stone-gallery-reselect", { stone: cItem, stoneId: pStoneId });
 					OpenLightbox();
 					return;
 				}
-
 				cSelectedId = pStoneId;
+				cDetailsPanel = cDetailsPanels.find((pPanel) => pPanel.dataset.stoneId === pStoneId) || null;
 				pRoot.classList.add("HasSelection");
-				if (cDetailsPanel) cDetailsPanel.hidden = false;
-				for (const cCard of cCards) {
+				for (const cPanel of cDetailsPanels) cPanel.hidden = cPanel !== cDetailsPanel;
+				for (const cCard of cCards)
+				{
 					const cSelected = cCard.dataset.stoneId === pStoneId;
 					cCard.classList.toggle("IsSelected", cSelected);
 					const cSelectButton = cCard.querySelector("[data-action='select-stone']");
 					cSelectButton?.setAttribute("aria-pressed", cSelected ? "true" : "false");
 				}
-
-				FillDetails(cItem);
+				SetPanelStatus("");
+				UpdateCompareButtons();
 				UpdateSelectedUrl(pStoneId);
 				Emit("emo-stone-gallery-select", { stone: cItem, stoneId: pStoneId });
-
-				if (pAllowReselect && window.matchMedia("(max-width: 920px)").matches) {
+				if (pAllowReselect && window.matchMedia("(max-width: 920px)").matches)
+				{
 					cDetailsPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
 				}
 			}
-
-			function FillDetails(pItem) {
-				SetImage(cDetailImage, pItem.PrimaryImage, pItem.Alt);
-				SetText("[data-detail-name]", pItem.Name);
-				SetText("[data-detail-type]", pItem.Type);
-				SetText("[data-detail-country]", pItem.Country);
-				SetText("[data-detail-description]", pItem.Description || "افحص صور اللوح والاستخدامات قبل اعتماد الخامة النهائية.");
-				SetText("[data-detail-color]", pItem.Color || "غير محدد");
-				SetText("[data-detail-pattern]", pItem.Pattern || "غير محدد");
-				SetText("[data-detail-uses]", JoinList(pItem.Uses));
-				SetText("[data-detail-finishes]", JoinList(pItem.Finishes));
-				SetText("[data-detail-available]", pItem.Available ? "متوفر الآن" : "حسب الطلب");
-				SetText("[data-detail-price]", FormatStonePrice(pItem));
-				SetPanelStatus("");
-				UpdateCompareButtons();
-			}
-
-			function CloseDetails() {
+			function CloseDetails()
+			{
 				cSelectedId = "";
 				pRoot.classList.remove("HasSelection");
-				if (cDetailsPanel) cDetailsPanel.hidden = true;
-				for (const cCard of cCards) {
+				for (const cPanel of cDetailsPanels) cPanel.hidden = true;
+				cDetailsPanel = null;
+				for (const cCard of cCards)
+				{
 					cCard.classList.remove("IsSelected");
 					cCard.querySelector("[data-action='select-stone']")?.setAttribute("aria-pressed", "false");
 				}
 				UpdateSelectedUrl("");
 			}
-
-			function ApplyFilters() {
+			function ApplyFilters()
+			{
 				const cSearch = NormalizeSearch(cFiltersForm?.querySelector("[data-filter-search]")?.value || "");
 				const cType = cFiltersForm?.querySelector("[data-filter-type]")?.value || "";
 				const cColor = cFiltersForm?.querySelector("[data-filter-color]")?.value || "";
@@ -2840,48 +4126,51 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 				const cPrice = cFiltersForm?.querySelector("[data-filter-price]")?.value || "";
 				const cAvailableOnly = Boolean(cFiltersForm?.querySelector("[data-filter-available]")?.checked);
 				let cVisibleCount = 0;
-
-				for (const cCard of cCards) {
+				for (const cCard of cCards)
+				{
 					const cItem = cItemMap.get(cCard.dataset.stoneId || "");
 					if (!cItem) continue;
 					const cVisible = (!cSearch || NormalizeSearch(cItem.SearchText).includes(cSearch))
-						&& (!cType || cItem.Type === cType)
-						&& (!cColor || cItem.Color === cColor)
-						&& (!cUse || cItem.Uses.includes(cUse))
-						&& (!cCountry || cItem.Country === cCountry)
-						&& (!cPrice || cItem.PriceLevel === cPrice)
-						&& (!cAvailableOnly || cItem.Available)
-						&& (!cShortlistOnly || cShortlist.includes(cItem.Id));
+					&& (!cType || cItem.Type === cType)
+					&& (!cColor || cItem.Color === cColor)
+					&& (!cUse || cItem.Uses.includes(cUse))
+					&& (!cCountry || cItem.Country === cCountry)
+					&& (!cPrice || cItem.PriceLevel === cPrice)
+					&& (!cAvailableOnly || cItem.Available)
+					&& (!cShortlistOnly || cShortlist.includes(cItem.Id));
 					cCard.hidden = !cVisible;
 					if (cVisible) cVisibleCount += 1;
 				}
-
 				if (cResultCount) cResultCount.textContent = String(cVisibleCount);
 				if (cGrid) cGrid.hidden = cVisibleCount === 0;
 				if (cEmpty) cEmpty.hidden = cVisibleCount !== 0;
 			}
-
-			function ClearFilters() {
+			function ClearFilters()
+			{
 				cShortlistOnly = false;
 				cFiltersForm?.reset();
 				UpdateCollections();
 				window.setTimeout(ApplyFilters, 0);
 			}
-
-			function ToggleShortlist(pStoneId) {
+			function ToggleShortlist(pStoneId)
+			{
 				const cItem = cItemMap.get(pStoneId);
 				if (!cItem) return;
 				const cWasSaved = cShortlist.includes(pStoneId);
-				cShortlist = cWasSaved ? cShortlist.filter((pId) => pId !== pStoneId) : [...cShortlist, pStoneId];
+				cShortlist = cWasSaved ? cShortlist.filter((pId) => pId !== pStoneId) : [
+					...cShortlist,
+					pStoneId
+				];
 				SavePersistedState();
 				UpdateCollections();
 				if (cShortlistOnly) ApplyFilters();
 				Announce(cWasSaved ? `تم حذف ${cItem.Name} من المحفوظة.` : `تم حفظ ${cItem.Name} للرجوع إليها.`);
 				Emit("emo-stone-gallery-shortlist", { stone: cItem, stoneId: pStoneId, saved: !cWasSaved, shortlist: [...cShortlist] });
 			}
-
-			function ToggleShortlistView() {
-				if (cShortlist.length === 0 && !cShortlistOnly) {
+			function ToggleShortlistView()
+			{
+				if (cShortlist.length === 0 && !cShortlistOnly)
+				{
 					Announce("لم تحفظ أي خامة بعد. استخدم علامة القلب فوق الصورة.");
 					return;
 				}
@@ -2890,42 +4179,46 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 				ApplyFilters();
 				Announce(cShortlistOnly ? `نعرض ${cShortlist.length} خامة محفوظة فقط.` : "نعرض كل الخامات مرة أخرى.");
 			}
-
-			function ToggleCompare(pStoneId) {
+			function ToggleCompare(pStoneId)
+			{
 				const cItem = cItemMap.get(pStoneId);
 				if (!cItem) return;
 				const cAlreadyAdded = cCompare.includes(pStoneId);
-				if (!cAlreadyAdded && cCompare.length >= cMaxCompare) {
+				if (!cAlreadyAdded && cCompare.length >= cMaxCompare)
+				{
 					SetPanelStatus(`المقارنة تستوعب ${cMaxCompare} خامات. احذف خامة ثم أضف ${cItem.Name}.`);
 					Announce(`وصلت للحد الأقصى: ${cMaxCompare} خامات.`);
 					return;
 				}
-
-				cCompare = cAlreadyAdded ? cCompare.filter((pId) => pId !== pStoneId) : [...cCompare, pStoneId];
+				cCompare = cAlreadyAdded ? cCompare.filter((pId) => pId !== pStoneId) : [
+					...cCompare,
+					pStoneId
+				];
 				SavePersistedState();
 				UpdateCollections();
 				RenderComparison();
 				SetPanelStatus(cAlreadyAdded ? "تم حذف الخامة من المقارنة." : `تمت إضافة الخامة للمقارنة (${cCompare.length}/${cMaxCompare}).`);
 				Emit("emo-stone-gallery-compare", { stone: cItem, stoneId: pStoneId, added: !cAlreadyAdded, comparison: [...cCompare] });
 			}
-
-			function RemoveCompare(pStoneId) {
+			function RemoveCompare(pStoneId)
+			{
 				if (!pStoneId) return;
 				cCompare = cCompare.filter((pId) => pId !== pStoneId);
 				SavePersistedState();
 				UpdateCollections();
 				RenderComparison();
 			}
-
-			function OpenCompare() {
+			function OpenCompare()
+			{
 				RenderComparison();
 				OpenOverlay(cCompareOverlay);
 				Emit("emo-stone-gallery-compare-open", { comparison: cCompare.map((pId) => cItemMap.get(pId)).filter(Boolean) });
 			}
-
-			function RenderComparison() {
+			function RenderComparison()
+			{
 				const cSlots = Array.from(pRoot.querySelectorAll("[data-compare-slot]"));
-				for (let cIndex = 0; cIndex < cSlots.length; cIndex += 1) {
+				for (let cIndex = 0; cIndex < cSlots.length; cIndex += 1)
+				{
 					const cSlot = cSlots[cIndex];
 					const cItem = cItemMap.get(cCompare[cIndex]);
 					cSlot.hidden = !cItem;
@@ -2933,7 +4226,10 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 					if (!cItem) continue;
 					SetImage(cSlot.querySelector("[data-compare-image]"), cItem.PrimaryImage, cItem.Alt);
 					SetSlotText(cSlot, "[data-compare-name]", cItem.Name);
-					SetSlotText(cSlot, "[data-compare-kind]", [cItem.Type, cItem.Country].filter(Boolean).join(" · "));
+					SetSlotText(cSlot, "[data-compare-kind]", [
+							cItem.Type,
+							cItem.Country
+						].filter(Boolean).join(" · "));
 					SetSlotText(cSlot, "[data-compare-color]", cItem.Color);
 					SetSlotText(cSlot, "[data-compare-pattern]", cItem.Pattern);
 					SetSlotText(cSlot, "[data-compare-uses]", JoinList(cItem.Uses));
@@ -2941,45 +4237,47 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 					SetSlotText(cSlot, "[data-compare-available]", cItem.Available ? "متوفر" : "حسب الطلب");
 					SetSlotText(cSlot, "[data-compare-price]", FormatStonePrice(cItem));
 				}
-
 				const cEmptySlot = pRoot.querySelector("[data-compare-empty]");
 				if (cEmptySlot) cEmptySlot.hidden = cCompare.length >= cMaxCompare;
 			}
-
-			function ChooseComparedStone(pStoneId) {
+			function ChooseComparedStone(pStoneId)
+			{
 				if (!pStoneId) return;
 				CloseOverlay(cCompareOverlay, false);
 				SelectStone(pStoneId, false);
 				pRoot.querySelector(`[data-stone-card][data-stone-id="${EscapeSelector(pStoneId)}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" });
 			}
-
-			function UpdateCollections() {
+			function UpdateCollections()
+			{
 				if (cShortlistCount) cShortlistCount.textContent = String(cShortlist.length);
 				if (cCompareCount) cCompareCount.textContent = String(cCompare.length);
 				cShortlistButton?.classList.toggle("IsActive", cShortlistOnly);
 				cShortlistButton?.setAttribute("aria-pressed", cShortlistOnly ? "true" : "false");
-				for (const cButton of pRoot.querySelectorAll("[data-action='toggle-shortlist']")) {
+				for (const cButton of pRoot.querySelectorAll("[data-action='toggle-shortlist']"))
+				{
 					const cSaved = cShortlist.includes(cButton.dataset.stoneId || "");
 					cButton.classList.toggle("IsSaved", cSaved);
 					cButton.setAttribute("aria-pressed", cSaved ? "true" : "false");
 				}
 				UpdateCompareButtons();
 			}
-
-			function UpdateCompareButtons() {
+			function UpdateCompareButtons()
+			{
 				const cCompared = Boolean(cSelectedId && cCompare.includes(cSelectedId));
-				for (const cButton of pRoot.querySelectorAll("[data-action='toggle-compare']")) {
+				for (const cButton of pRoot.querySelectorAll("[data-action='toggle-compare']"))
+				{
 					cButton.classList.toggle("IsActive", cCompared);
 					cButton.setAttribute("aria-pressed", cCompared ? "true" : "false");
-					if (cButton.querySelector("[data-compare-action-text]")) {
+					if (cButton.querySelector("[data-compare-action-text]"))
+					{
 						cButton.querySelector("[data-compare-action-text]").textContent = cCompared ? "احذف من المقارنة" : "أضف للمقارنة";
 					} else if (!cButton.closest("[data-compare-overlay]")) {
 						cButton.textContent = cCompared ? "احذف من المقارنة" : "أضف للمقارنة";
 					}
 				}
 			}
-
-			function OpenLightbox() {
+			function OpenLightbox()
+			{
 				const cItem = cItemMap.get(cSelectedId);
 				if (!cItem || !cLightbox) return;
 				cLightboxIndex = 0;
@@ -2989,11 +4287,12 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 				OpenOverlay(cLightbox);
 				Emit("emo-stone-gallery-inspect", { stone: cItem, stoneId: cItem.Id, images: cItem.Images.length });
 			}
-
-			function BuildFilm(pItem) {
+			function BuildFilm(pItem)
+			{
 				if (!cLightboxFilm) return;
 				cLightboxFilm.replaceChildren();
-				for (let cIndex = 0; cIndex < pItem.Images.length; cIndex += 1) {
+				for (let cIndex = 0; cIndex < pItem.Images.length; cIndex += 1)
+				{
 					const cImage = pItem.Images[cIndex];
 					const cButton = document.createElement("button");
 					cButton.type = "button";
@@ -3010,8 +4309,8 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 					cLightboxFilm.append(cButton);
 				}
 			}
-
-			function SetLightboxImage(pIndex) {
+			function SetLightboxImage(pIndex)
+			{
 				const cItem = cItemMap.get(cSelectedId);
 				if (!cItem || cItem.Images.length === 0) return;
 				cLightboxIndex = (Number(pIndex) + cItem.Images.length) % cItem.Images.length;
@@ -3019,47 +4318,52 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 				SetImage(cLightboxImage, cImage.Src, cImage.Alt);
 				SetZoom(1);
 				const cFilmButtons = Array.from(cLightboxFilm?.querySelectorAll("button") || []);
-				for (let cIndex = 0; cIndex < cFilmButtons.length; cIndex += 1) {
+				for (let cIndex = 0; cIndex < cFilmButtons.length; cIndex += 1)
+				{
 					cFilmButtons[cIndex].classList.toggle("IsActive", cIndex === cLightboxIndex);
 					cFilmButtons[cIndex].setAttribute("aria-current", cIndex === cLightboxIndex ? "true" : "false");
 				}
 				const cNavButtons = pRoot.querySelectorAll("[data-action='lightbox-prev'], [data-action='lightbox-next']");
 				for (const cButton of cNavButtons) cButton.hidden = cItem.Images.length < 2;
 			}
-
-			function StepLightbox(pStep) {
+			function StepLightbox(pStep)
+			{
 				SetLightboxImage(cLightboxIndex + pStep);
 			}
-
-			function SetZoom(pValue) {
+			function SetZoom(pValue)
+			{
 				cZoom = Math.max(.5, Math.min(3, Math.round(Number(pValue) * 100) / 100));
 				cInspectStage?.style.setProperty("--StoneGalleryZoom", String(cZoom));
 				const cResetButton = pRoot.querySelector("[data-action='zoom-reset']");
 				if (cResetButton) cResetButton.textContent = `${Math.round(cZoom * 100)}%`;
 			}
-
-			async function ToggleFullscreen() {
-				try {
+			async function ToggleFullscreen()
+			{
+				try
+				{
 					if (document.fullscreenElement) await document.exitFullscreen();
 					else await cInspectStage?.requestFullscreen?.();
 				} catch {
 					Announce("ملء الشاشة غير متاح في هذا المتصفح.");
 				}
 			}
-
-			function OpenQuote() {
+			function OpenQuote()
+			{
 				if (pRoot.dataset.enableQuote !== "true" || !cQuoteOverlay) return;
 				const cOpenedFromOverlay = Boolean((cLightbox && !cLightbox.hidden) || (cCompareOverlay && !cCompareOverlay.hidden));
 				if (!cSelectedId && cCompare[0]) SelectStone(cCompare[0], false);
 				const cItem = cItemMap.get(cSelectedId);
-				if (!cItem) {
+				if (!cItem)
+				{
 					Announce("اختر خامة أولًا حتى نحسب التقدير المبدئي.");
 					return;
 				}
-
 				SetImage(pRoot.querySelector("[data-quote-image]"), cItem.PrimaryImage, cItem.Alt);
 				SetText("[data-quote-name]", cItem.Name);
-				SetText("[data-quote-kind]", [cItem.Type, cItem.Country].filter(Boolean).join(" · "));
+				SetText("[data-quote-kind]", [
+						cItem.Type,
+						cItem.Country
+					].filter(Boolean).join(" · "));
 				SetQuoteUse(cItem);
 				SetQuoteStatus("");
 				UpdateEstimate();
@@ -3068,14 +4372,14 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 				OpenOverlay(cQuoteOverlay, cOpenedFromOverlay);
 				Emit("emo-stone-gallery-quote-open", { stone: cItem, stoneId: cItem.Id, comparison: [...cCompare] });
 			}
-
-			function SetQuoteUse(pItem) {
+			function SetQuoteUse(pItem)
+			{
 				const cInputs = Array.from(cQuoteForm?.querySelectorAll("[data-quote-uses] input") || []);
 				const cPreferred = cInputs.find((pInput) => pItem.Uses.includes(pInput.value)) || cInputs[0];
 				if (cPreferred) cPreferred.checked = true;
 			}
-
-			function UpdateEstimate() {
+			function UpdateEstimate()
+			{
 				const cItem = cItemMap.get(cSelectedId);
 				if (!cQuoteForm || !cItem) return;
 				const cData = new FormData(cQuoteForm);
@@ -3090,14 +4394,16 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 				const cHasPrice = cItem.PriceFrom > 0;
 				let cFrom = 0;
 				let cTo = 0;
-				if (cHasPrice && cArea > 0 && cServiceFactor > 0) {
+				if (cHasPrice && cArea > 0 && cServiceFactor > 0)
+				{
 					cFrom = cItem.PriceFrom * cArea * cUseFactor * cServiceFactor * cLocationFactor;
 					cTo = (cItem.PriceTo || cItem.PriceFrom * 1.28) * cArea * cUseFactor * cServiceFactor * cLocationFactor;
 				}
 				const cAccuracy = Math.min(92, 25 + (cArea > 0 ? 24 : 0) + (cUse ? 10 : 0) + (cService ? 10 : 0) + (cLocation ? 10 : 0) + (cHasPrice ? 13 : 0));
 				const cValue = pRoot.querySelector("[data-estimate-value]");
 				const cNote = pRoot.querySelector("[data-estimate-note]");
-				if (cService === "selection") {
+				if (cService === "selection")
+				{
 					if (cValue) cValue.textContent = "خدمة المعاينة تُسعّر حسب الموقع";
 					if (cNote) cNote.textContent = "سنراجع مكان المشروع وطريقة عرض العينات قبل تحديد تكلفة الخدمة.";
 				} else if (!cHasPrice) {
@@ -3115,11 +4421,12 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 				if (cProgress) cProgress.value = cAccuracy;
 				cLastEstimate = { area: cArea, use: cUse, service: cService, location: cLocation, priceFrom: Math.round(cFrom), priceTo: Math.round(cTo), currency: cItem.Currency, accuracy: cAccuracy };
 			}
-
-			function SubmitQuote(pEvent) {
+			function SubmitQuote(pEvent)
+			{
 				pEvent.preventDefault();
 				const cItem = cItemMap.get(cSelectedId);
-				if (!cItem || !cLastEstimate) {
+				if (!cItem || !cLastEstimate)
+				{
 					SetQuoteStatus("اختر خامة وأدخل بيانات المشروع أولًا.", "error");
 					return;
 				}
@@ -3128,32 +4435,32 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 					stone: cItem,
 					stoneId: cItem.Id,
 					comparison: cCompare.map((pId) => cItemMap.get(pId)).filter(Boolean),
-					estimate: { ...cLastEstimate },
+					estimate: {...cLastEstimate },
 					requestBuilderId: pRoot.dataset.requestBuilderId || "",
 					pageUrl: window.location.href,
 					createdAt: new Date().toISOString(),
 				};
-
-				try {
+				try
+				{
 					localStorage.setItem(`${cStorageKey}:quote`, JSON.stringify(cDetail));
 				} catch {
 					// يظل الحدث المباشر متاحًا حتى إذا منع المتصفح التخزين المحلي.
 				}
-
 				document.dispatchEvent(new CustomEvent("emo-stone-request-prefill", { detail: cDetail }));
 				Emit("emo-stone-gallery-quote-submit", cDetail);
 				const cBuilderSelector = cDetail.requestBuilderId
-					? `#${EscapeSelector(cDetail.requestBuilderId)}[data-stone-request-builder='true']`
-					: "[data-stone-request-builder='true']";
+				? `#${EscapeSelector(cDetail.requestBuilderId)}[data-stone-request-builder='true']`
+				: "[data-stone-request-builder='true']";
 				const cBuilder = document.querySelector(cBuilderSelector);
 				const cRequestHref = pRoot.dataset.requestHref || "";
-
-				if (cBuilder) {
+				if (cBuilder)
+				{
 					SetQuoteStatus("تم نقل الخامة والتقدير إلى طلبك. أكمل المقاسات أو بيانات التواصل عندما تكون جاهزًا.", "success");
-					window.setTimeout(() => {
-						CloseOverlay(cQuoteOverlay, false);
-						cBuilder.scrollIntoView({ behavior: "smooth", block: "start" });
-					}, 650);
+					window.setTimeout(() =>
+						{
+							CloseOverlay(cQuoteOverlay, false);
+							cBuilder.scrollIntoView({ behavior: "smooth", block: "start" });
+						}, 650);
 				} else if (cRequestHref) {
 					SetQuoteStatus("تم حفظ الاختيار. جارٍ الانتقال لاستكمال الطلب…", "success");
 					window.setTimeout(() => window.location.assign(cRequestHref), 450);
@@ -3161,17 +4468,18 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 					SetQuoteStatus("تم حفظ الاختيار والتقدير على هذا الجهاز. أضف StoneRequestBuilder للصفحة لنقل البيانات إليه مباشرة.", "success");
 				}
 			}
-
-			async function ShareStone() {
+			async function ShareStone()
+			{
 				const cItem = cItemMap.get(cSelectedId);
 				if (!cItem || pRoot.dataset.allowShare !== "true") return;
 				const cUrl = BuildShareUrl([cItem.Id]);
 				await Share({ title: cItem.Name, text: `شاهد خامة ${cItem.Name} وقارنها لمشروعك.`, url: cUrl });
 				Emit("emo-stone-gallery-share", { stone: cItem, stoneId: cItem.Id, url: cUrl });
 			}
-
-			async function ShareComparison() {
-				if (cCompare.length === 0) {
+			async function ShareComparison()
+			{
+				if (cCompare.length === 0)
+				{
 					Announce("أضف خامة واحدة على الأقل قبل مشاركة المقارنة.");
 					return;
 				}
@@ -3180,11 +4488,13 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 				await Share({ title: "مقارنة خامات الحجر", text: `مقارنة بين: ${cNames}`, url: cUrl });
 				Emit("emo-stone-gallery-share-comparison", { comparison: [...cCompare], url: cUrl });
 			}
-
-			async function Share(pData) {
-				try {
+			async function Share(pData)
+			{
+				try
+				{
 					if (navigator.share) await navigator.share(pData);
-					else if (navigator.clipboard?.writeText) {
+					else if (navigator.clipboard?.writeText)
+					{
 						await navigator.clipboard.writeText(pData.url);
 						Announce("تم نسخ رابط المشاركة.");
 					} else {
@@ -3200,16 +4510,16 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 					if (pError?.name !== "AbortError") Announce("تعذرت المشاركة الآن؛ جرّب مرة أخرى.");
 				}
 			}
-
-			function BuildShareUrl(pIds) {
+			function BuildShareUrl(pIds)
+			{
 				const cUrl = new URL(window.location.href);
 				if (pIds[0]) cUrl.searchParams.set("stone", pIds[0]);
 				if (pIds.length > 1) cUrl.searchParams.set("stones", pIds.join(","));
 				else cUrl.searchParams.delete("stones");
 				return cUrl.toString();
 			}
-
-			function OpenOverlay(pOverlay, pPreserveLastFocus = false) {
+			function OpenOverlay(pOverlay, pPreserveLastFocus = false)
+			{
 				if (!pOverlay || !pOverlay.hidden) return;
 				if (!pPreserveLastFocus) cLastFocused = document.activeElement;
 				pOverlay.hidden = false;
@@ -3217,32 +4527,43 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 				document.documentElement.classList.add("StoneGalleryNoScroll");
 				window.setTimeout(() => pOverlay.querySelector("header button[data-action]")?.focus(), 0);
 			}
-
-			function CloseOverlay(pOverlay, pRestoreFocus = true) {
+			function CloseOverlay(pOverlay, pRestoreFocus = true)
+			{
 				if (!pOverlay || pOverlay.hidden) return;
 				pOverlay.hidden = true;
 				pOverlay.setAttribute("aria-hidden", "true");
-				if (![cLightbox, cCompareOverlay, cQuoteOverlay].some((pItem) => pItem && !pItem.hidden)) {
+				if (![
+						cLightbox,
+						cCompareOverlay,
+						cQuoteOverlay
+					].some((pItem) => pItem && !pItem.hidden)) {
 					document.documentElement.classList.remove("StoneGalleryNoScroll");
 				}
 				if (pRestoreFocus && cLastFocused?.focus) cLastFocused.focus();
 			}
-
-			function HandleKeyDown(pEvent) {
-				const cOpenOverlay = [cQuoteOverlay, cCompareOverlay, cLightbox].find((pItem) => pItem && !pItem.hidden);
+			function HandleKeyDown(pEvent)
+			{
+				const cOpenOverlay = [
+					cQuoteOverlay,
+					cCompareOverlay,
+					cLightbox
+				].find((pItem) => pItem && !pItem.hidden);
 				if (!cOpenOverlay) return;
-				if (pEvent.key === "Escape") {
+				if (pEvent.key === "Escape")
+				{
 					pEvent.preventDefault();
 					CloseOverlay(cOpenOverlay);
 					return;
 				}
-				if (pEvent.key === "Tab") {
+				if (pEvent.key === "Tab")
+				{
 					const cFocusable = Array.from(cOpenOverlay.querySelectorAll("button:not([hidden]):not([disabled]), input:not([hidden]):not([disabled]), select:not([hidden]):not([disabled]), [href], [tabindex]:not([tabindex='-1'])"))
-						.filter((pElement) => pElement.getClientRects().length > 0);
+					.filter((pElement) => pElement.getClientRects().length > 0);
 					if (cFocusable.length === 0) return;
 					const cFirst = cFocusable[0];
 					const cLast = cFocusable[cFocusable.length - 1];
-					if (pEvent.shiftKey && document.activeElement === cFirst) {
+					if (pEvent.shiftKey && document.activeElement === cFirst)
+					{
 						pEvent.preventDefault();
 						cLast.focus();
 					} else if (!pEvent.shiftKey && document.activeElement === cLast) {
@@ -3257,30 +4578,33 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 				else return;
 				pEvent.preventDefault();
 			}
-
-			function LoadPersistedState() {
-				try {
+			function LoadPersistedState()
+			{
+				try
+				{
 					const cValue = JSON.parse(localStorage.getItem(cStorageKey) || "{}");
 					return cValue && typeof cValue === "object" ? cValue : {};
 				} catch {
 					return {};
 				}
 			}
-
-			function SavePersistedState() {
-				try {
+			function SavePersistedState()
+			{
+				try
+				{
 					localStorage.setItem(cStorageKey, JSON.stringify({ version: 1, shortlist: cShortlist, compare: cCompare }));
 				} catch {
 					// الودجت يعمل في الجلسة الحالية حتى إذا منع المتصفح التخزين المحلي.
 				}
 			}
-
-			function ValidIds(pIds) {
+			function ValidIds(pIds)
+			{
 				return Array.isArray(pIds) ? [...new Set(pIds.map(String).filter((pId) => cItemMap.has(pId)))] : [];
 			}
-
-			function UpdateSelectedUrl(pStoneId) {
-				try {
+			function UpdateSelectedUrl(pStoneId)
+			{
+				try
+				{
 					const cUrl = new URL(window.location.href);
 					if (pStoneId) cUrl.searchParams.set("stone", pStoneId);
 					else cUrl.searchParams.delete("stone");
@@ -3289,52 +4613,53 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 					// لا يمنع فشل الرابط تجربة الاختيار نفسها.
 				}
 			}
-
-			function FormatStonePrice(pItem) {
+			function FormatStonePrice(pItem)
+			{
 				if (!(pItem.PriceFrom > 0)) return pItem.PriceLevel && pItem.PriceLevel !== "غير محدد" ? pItem.PriceLevel : "يُراجع حسب الدفعة";
 				if (pItem.PriceTo > pItem.PriceFrom) return `${FormatMoney(pItem.PriceFrom)} – ${FormatMoney(pItem.PriceTo)} ${pItem.Currency}/م²`;
 				return `يبدأ من ${FormatMoney(pItem.PriceFrom)} ${pItem.Currency}/م²`;
 			}
-
-			function FormatMoney(pValue) {
+			function FormatMoney(pValue)
+			{
 				return new Intl.NumberFormat("ar-EG", { maximumFractionDigits: 0 }).format(Math.round(Number(pValue) || 0));
 			}
-
-			function JoinList(pItems) {
+			function JoinList(pItems)
+			{
 				return Array.isArray(pItems) && pItems.length ? pItems.join("، ") : "غير محدد";
 			}
-
-			function NormalizeSearch(pValue) {
+			function NormalizeSearch(pValue)
+			{
 				return String(pValue || "").trim().toLocaleLowerCase("ar").replace(/[أإآ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه");
 			}
-
-			function SetText(pSelector, pValue) {
+			function SetText(pSelector, pValue)
+			{
 				const cElement = pRoot.querySelector(pSelector);
 				if (cElement) cElement.textContent = String(pValue ?? "");
 			}
-
-			function SetSlotText(pSlot, pSelector, pValue) {
+			function SetSlotText(pSlot, pSelector, pValue)
+			{
 				const cElement = pSlot.querySelector(pSelector);
 				if (cElement) cElement.textContent = String(pValue ?? "");
 			}
-
-			function SetImage(pElement, pSrc, pAlt) {
+			function SetImage(pElement, pSrc, pAlt)
+			{
 				if (!pElement) return;
 				pElement.src = String(pSrc || "");
 				pElement.alt = String(pAlt || "");
 			}
-
-			function SetPanelStatus(pValue) {
+			function SetPanelStatus(pValue)
+			{
+				const cPanelStatus = cDetailsPanel?.querySelector("[data-panel-status]");
 				if (cPanelStatus) cPanelStatus.textContent = pValue;
 			}
-
-			function SetQuoteStatus(pValue, pMode = "") {
+			function SetQuoteStatus(pValue, pMode = "")
+			{
 				if (!cQuoteStatus) return;
 				cQuoteStatus.textContent = pValue;
 				cQuoteStatus.dataset.mode = pMode;
 			}
-
-			function MakeLiveRegion() {
+			function MakeLiveRegion()
+			{
 				const cElement = document.createElement("p");
 				cElement.className = "StoneGalleryVisuallyHidden";
 				cElement.setAttribute("role", "status");
@@ -3342,20 +4667,37 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 				pRoot.append(cElement);
 				return cElement;
 			}
-
-			function Announce(pValue) {
+			function Announce(pValue)
+			{
 				cLive.textContent = "";
-				window.setTimeout(() => { cLive.textContent = pValue; }, 15);
+				window.setTimeout(() =>
+					{
+						cLive.textContent = pValue;
+					}, 15);
 			}
-
-			function EscapeSelector(pValue) {
+			function EscapeSelector(pValue)
+			{
 				if (window.CSS?.escape) return window.CSS.escape(String(pValue));
 				return String(pValue).replace(/["\\]/g, "\\$&");
 			}
-
-			function Emit(pName, pDetail) {
-				pRoot.dispatchEvent(new CustomEvent(pName, { bubbles: true, detail: { galleryId: pRoot.id, ...pDetail } }));
+			function Emit(pName, pDetail)
+			{
+				pRoot.dispatchEvent(new CustomEvent(pName, { bubbles: true, detail: { galleryId: pRoot.id,...pDetail } }));
 			}
 		}
+
+
+
+
+
+		// ==================== Execution Logic ====================
+
+		for (const cRoot of cRoots) RegisterStoneGallery(cRoot);
+
+		document.addEventListener("astro:page-load", () =>
+			{
+				const cPageRoots = document.querySelectorAll("[data-stone-gallery='true']");
+				for (const cRoot of cPageRoots) RegisterStoneGallery(cRoot);
+		});
 	})();
 </script>
