@@ -319,7 +319,6 @@ function FormatStonePriceText(pItem: NormalizedStoneItem) {
 
 	const cFormat = new Intl.NumberFormat("ar-EG", { maximumFractionDigits: 0 });
 	const cFrom = cFormat.format(Math.round(pItem.PriceFrom));
-
 	if (pItem.PriceTo > pItem.PriceFrom) {
 		const cTo = cFormat.format(Math.round(pItem.PriceTo));
 		return `${cFrom} – ${cTo} ${pItem.Currency}/م²`;
@@ -328,8 +327,8 @@ function FormatStonePriceText(pItem: NormalizedStoneItem) {
 	return `يبدأ من ${cFrom} ${pItem.Currency}/م²`;
 }
 
-function JoinStoneList(pItems: string[]) {
-	return pItems.length > 0 ? pItems.join("، ") : "غير محدد";
+function JoinStoneValues(pValues: string[]) {
+	return pValues.length > 0 ? pValues.join("، ") : "غير محدد";
 }
 
 function GetRawItems(): StoneGalleryItemInput[] {
@@ -764,6 +763,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 	readable={cReadable ? "" : undefined}
 	data-own-size={cOwnSize ? "true" : undefined}
 	data-stone-gallery="true"
+	data-gallery-data-id={`${pGivenID}-data`}
 	data-ops-scope="true"
 	data-ops-widget="StoneGallery"
 	data-ops-title={pTitle}
@@ -1302,6 +1302,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 				data-details-panel
 				data-stone-id={pItem.Id}
 				hidden
+				aria-live="polite"
 				aria-labelledby={`${pGivenID}-detail-title-${pIndex + 1}`}
 			>
 
@@ -1416,7 +1417,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 
 						<dd data-detail-uses>
 
-							{JoinStoneList(pItem.Uses)}
+							{JoinStoneValues(pItem.Uses)}
 
 						</dd>
 
@@ -1432,7 +1433,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 
 						<dd data-detail-finishes>
 
-							{JoinStoneList(pItem.Finishes)}
+							{JoinStoneValues(pItem.Finishes)}
 
 						</dd>
 
@@ -3936,7 +3937,7 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 
 
 
-<script type="application/json" is:inline data-stone-gallery-data set:html={cDataJson}>
+<script id={`${pGivenID}-data`} type="application/json" is:inline data-stone-gallery-data set:html={cDataJson}>
 
 
 
@@ -3970,7 +3971,8 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 		{
 			if (!pRoot || pRoot.dataset.galleryReady === "true") return;
 			pRoot.dataset.galleryReady = "true";
-			const cDataElement = pRoot.querySelector("[data-stone-gallery-data]");
+			const cDataElement = document.getElementById(pRoot.dataset.galleryDataId || "")
+			|| pRoot.querySelector("[data-stone-gallery-data]");
 			let cItems = [];
 			try
 			{
@@ -4263,9 +4265,11 @@ function GetBoolAttr(pValue: unknown, pDefault = false) {
 			}
 			function UpdateCompareButtons()
 			{
-				const cCompared = Boolean(cSelectedId && cCompare.includes(cSelectedId));
 				for (const cButton of pRoot.querySelectorAll("[data-action='toggle-compare']"))
 				{
+					const cPanelStoneId = cButton.closest("[data-details-panel]")?.dataset.stoneId || "";
+					const cButtonStoneId = cPanelStoneId || cSelectedId;
+					const cCompared = Boolean(cButtonStoneId && cCompare.includes(cButtonStoneId));
 					cButton.classList.toggle("IsActive", cCompared);
 					cButton.setAttribute("aria-pressed", cCompared ? "true" : "false");
 					if (cButton.querySelector("[data-compare-action-text]"))
