@@ -5,7 +5,6 @@ import EmoFooter from "./Widgets/EmoFooter.astro";
 import SiteIntro from "./Widgets/Intro/SiteIntro.astro";
 import { type LayoutSchemaType, Schema } from "@/Schema";
 import { SeoText } from "@/SeoText";
-import OrientationVisibility from "@/Scripts/OrientationVisibility.astro";
 import Clarity from "@/Scripts/Clarity.astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
 import OpsVisitTracker from "@/Scripts/OpsVisitTracker.astro";
@@ -159,7 +158,6 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 			<link rel="icon" type="image/svg+xml" href="/Media/EmoLogo.svg" />
 
-			<link rel="stylesheet" href="/Styles/Site.css" />
 
 			<meta charset="utf-8" />
 
@@ -292,7 +290,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 		</head>
 
-		<body style = " font-family : Cairo, system-ui, sans-serif ">
+		<body>
 
 			{ cIsRealDomain && !cReplayMode &&
 
@@ -403,7 +401,6 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 			<AutoContainerHeight />
 
-			<OrientationVisibility />
 
 			{ cIsRealDomain && !cReplayMode &&
 
@@ -427,6 +424,204 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 	</html>
 
+
+
+
+
+<style is:global>
+
+	@font-face {
+		font-family: "Cairo";
+		src: url("/Fonts/Cairo.ttf") format("truetype");
+		font-weight: 200 900;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	html,
+	body {
+		height: 100%;
+	}
+
+	body {
+		margin: 0;
+		font-family: "Cairo", system-ui, Arial, sans-serif;
+	}
+
+	/* Shared widget placement contract. */
+	.PlaceSized {
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+		box-sizing: border-box;
+		min-width: 0;
+	}
+
+	.PlaceStyled,
+	.IsPlaced {
+		z-index: var(--PlaceZ, auto);
+		opacity: var(--PlaceOpacityL, 100%);
+		transform: rotate(var(--PlaceRotateL, 0deg));
+		transform-origin: var(--PlaceOrigin, center center);
+		pointer-events: var(--PlaceClickable, auto);
+	}
+
+	.IsPlaced {
+		position: absolute;
+		left: var(--PlaceXL);
+		top: var(--PlaceYL);
+		box-sizing: border-box;
+		min-width: 0;
+	}
+
+	@media (orientation: landscape) {
+		.PlaceHideLand {
+			display: none;
+		}
+	}
+
+	@media (orientation: portrait) {
+		.PlaceSized {
+			width: var(--PlaceWidthP);
+			height: var(--PlaceHeightP);
+		}
+
+		.PlaceStyled,
+		.IsPlaced {
+			opacity: var(--PlaceOpacityP, var(--PlaceOpacityL, 100%));
+			transform: rotate(var(--PlaceRotateP, var(--PlaceRotateL, 0deg)));
+		}
+
+		.IsPlaced {
+			left: var(--PlaceXP);
+			top: var(--PlaceYP);
+		}
+
+		.PlaceHidePort {
+			display: none;
+		}
+	}
+
+	.IsMoving {
+		will-change: transform, opacity;
+	}
+
+	.IsPlaced.IsMoving {
+		will-change: left, top, width, height, transform, opacity;
+	}
+
+	/* Shared reveal behavior used by the few widgets that opt in with .reveal. */
+	.reveal {
+		opacity: 0;
+		transform: translateY(18px);
+		transition: opacity 0.45s ease, transform 0.45s ease;
+		will-change: opacity, transform;
+	}
+
+	.reveal[data-reveal="right"] {
+		transform: translateX(26px);
+	}
+
+	.reveal[data-reveal="left"] {
+		transform: translateX(-26px);
+	}
+
+	.reveal[data-reveal="up"] {
+		transform: translateY(26px);
+	}
+
+	.reveal[data-reveal="scale"] {
+		transform: scale(0.96);
+	}
+
+	.reveal.isVisible {
+		opacity: 1;
+		transform: none;
+	}
+
+	@keyframes kBounceIn {
+		0% {
+			opacity: 0;
+			transform: translateY(22px) scale(0.98);
+		}
+
+		60% {
+			opacity: 1;
+			transform: translateY(-6px) scale(1);
+		}
+
+		100% {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	.reveal[data-reveal="bounce"].isVisible {
+		animation: kBounceIn 0.55s ease both;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.reveal,
+		.reveal[data-reveal],
+		.reveal.isVisible,
+		.reveal[data-reveal="bounce"].isVisible {
+			transition: none;
+			animation: none;
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	/* Debug outlines are intentionally global because Debug/DebugF/DebugG are widget-wide props. */
+	html body :is(
+		[debug][debug][debug],
+		[Debug][Debug][Debug],
+		[data-debug][data-debug][data-debug]
+	) {
+		outline: 3px solid red;
+		outline-offset: -3px;
+		box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.55) inset;
+	}
+
+	html body :is(
+		[debugf][debugf][debugf],
+		[DebugF][DebugF][DebugF],
+		[data-debugF][data-debugF][data-debugF],
+		[data-debugf][data-debugf][data-debugf]
+	) {
+		outline: 3px solid rgb(32, 158, 216);
+		outline-offset: -3px;
+		box-shadow: 0 0 0 3px rgba(32, 158, 216, 0.55) inset;
+	}
+
+	html body :is(
+		[debugg][debugg][debugg],
+		[DebugG][DebugG][DebugG],
+		[data-debugG][data-debugG][data-debugG],
+		[data-debugg][data-debugg][data-debugg]
+	) {
+		outline: 3px solid rgb(255, 166, 0);
+		outline-offset: -3px;
+		box-shadow: 0 0 0 3px rgba(255, 166, 0, 0.6) inset;
+	}
+
+	html body :is(
+		[debug][debug][debug],
+		[Debug][Debug][Debug],
+		[debugf][debugf][debugf],
+		[DebugF][DebugF][DebugF],
+		[debugg][debugg][debugg],
+		[DebugG][DebugG][DebugG],
+		[data-debug][data-debug][data-debug],
+		[data-debugF][data-debugF][data-debugF],
+		[data-debugf][data-debugf][data-debugf],
+		[data-debugG][data-debugG][data-debugG],
+		[data-debugg][data-debugg][data-debugg]
+	) {
+		-webkit-mask-image: none;
+		mask-image: none;
+	}
+
+</style>
 
 
 
@@ -700,27 +895,5 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 
 
-<script defer src="/Scripts/Carousel.js">
-</script>
 
 
-
-<script defer src="/Scripts/Lightbox.js">
-</script>
-
-
-
-<script is:inline>
-
-
-
-	// ==================== Definitions: Variables & Methods ====================
-
-
-
-
-
-	// ==================== Execution Logic ====================
-
-	document.documentElement.classList.add("js");
-</script>
