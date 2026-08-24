@@ -1,0 +1,359 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, Emograph, EmoList, EmoWhatsIcon, HzStack, ListItem, VrStack } from "@/Widgets/Comp";
+import { MosaicGrid, MosaicItem, ScrollShelf, ShelfItem, SideRail, SplitPane, SplitScene, StoryRail, StoryStep } from "@/Widgets/Layouts";
+import { Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="البحث عن موردين لبنود المشروعات الهندسية"
+	pDescr="خدمة بحث عن مصادر توريد لبنود المشروعات الهندسية والصناعية، تشمل تحديد السوق المناسب وجمع جهات محتملة وطلب أسعار وبيانات أولية تمهيدًا للمقارنة والشراء."
+>
+
+
+
+
+
+
+
+	<Hero pBg={new ElemBg("#4A352B")}>
+
+		<VrStack
+			pSize={new Size(new NumPer("50%", "94%"), new NumPer("auto", "auto"))}
+			pLoc={new Loc(new NumPer("45%", "3%"), new NumPer("28%", "16%"))}
+			pGap={new Pixel(24, 16)}
+			pHzAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.White.OfText("البحث عن موردين للمشروعات الهندسية")}
+				pText={Text.Body.Centered.White.OfSize(22, 18).OfText("الوصول إلى جهات توريد مناسبة لكل مجموعة من البنود، وتجميع بيانات التواصل والأسعار الأولية ومدد التجهيز والملاحظات التي تساعد على استكمال الشراء.")}
+			/>
+
+			<HzStack pGap={new Pixel(16, 10)} pForceHz>
+
+				<EmoCallIcon BlackOrange />
+
+				<EmoWhatsIcon BlackOrange />
+
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
+
+	<SideRail
+		pRailWidth={new RespString("280px", "100%")}
+		pGap={new RespString("26px", "14px")}
+		pPad={new RespString("44px", "14px")}
+		pBg="#F0EBE4"
+		pRailBg="linear-gradient(180deg, #4A352B, #725546)"
+		pRailColor="#FFF8EF"
+		pSticky={true}
+	>
+
+		<Emograph
+			slot="rail"
+			pTitle={Text.H2.WithColor("#FFF8EF").OfText("البحث يبدأ من السوق الصحيح") }
+			pText={Text.Body.WithColor("#E9DED5").OfText("اسم البند وحده يعطي بداية، بينما الكمية والمقاس والمادة والماركة ومكان التسليم تساعد على اختيار نوع المورد وقناة البحث الأقرب للطلب.")}
+		/>
+
+		<MosaicGrid
+			pColumns={8}
+			pColumnsP={4}
+			pAutoRows={new RespString("94px", "76px")}
+			pGap={new RespString("14px", "10px")}
+			pPad={new RespString("0px", "0px")}
+			pMinHeight={new RespString("650px", "auto")}
+			pBg="transparent"
+		>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={4}
+				pRowSpan={3}
+				pRowSpanP={3}
+				pBg="#FFF9F0"
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#3F3028").OfText("مصنع أو منتج")}
+					pText={Text.Body.WithColor("#5A514D").OfText("مناسب للخامات أو المنتجات التي تباع مباشرة أو تحتاج كمية تسمح بالتعامل مع جهة الإنتاج.")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={4}
+				pRowSpan={2}
+				pRowSpanP={2}
+				pBg="#D9B889"
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#3F3028").OfText("وكيل أو موزع")}
+					pText={Text.Body.WithColor("#51453F").OfText("مسار مناسب للماركات والمعدات والمنتجات التي لها شبكة بيع معروفة داخل السوق.")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={3}
+				pColSpanP={4}
+				pRowSpan={2}
+				pRowSpanP={2}
+				pBg="#C9D3CA"
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#3F3028").OfText("تاجر متخصص")}
+					pText={Text.Body.WithColor("#4B5650").OfText("مفيد في البنود التي تتوفر لدى تجمعات تجارية أو أسواق متخصصة وتحتاج مقارنة سريعة بين أكثر من مصدر.")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={5}
+				pColSpanP={4}
+				pRowSpan={2}
+				pRowSpanP={2}
+				pBg="#5D493E"
+				pColor="#FFF8EF"
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#FFF8EF").OfText("مورد يخدم مجموعة بنود")}
+					pText={Text.Body.WithColor("#E7DED8").OfText("أحيانًا تكون قيمة المورد في قدرته على جمع أكثر من صنف داخل نفس أمر الشراء أو نفس شحنة التسليم.")}
+				/>
+
+			</MosaicItem>
+
+		</MosaicGrid>
+
+	</SideRail>
+
+
+
+
+
+
+
+	<StoryRail
+		pAxis="Horizontal"
+		pAxisP="Vertical"
+		pBg="#3F3028"
+		pTrackColor="rgba(255,255,255,.22)"
+		pAccent="#D9B889"
+		pGap={new RespString("20px", "14px")}
+		pPad={new RespString("52px", "16px")}
+	>
+
+		<StoryStep
+			pNumber="01"
+			pKicker="تعريف"
+			pTitle="تحديد البند"
+			pText="تسجيل الاستخدام والكمية والمقاس أو السعة أو الخامة والموعد ومكان التسليم."
+			pBg="#FFF9F0"
+			pColor="#3F3028"
+			pAccent="#D9B889"
+		/>
+
+		<StoryStep
+			pNumber="02"
+			pKicker="تصنيف"
+			pTitle="اختيار نوع المصدر"
+			pText="تحديد مسار البحث بين مصنع أو وكيل أو موزع أو تاجر متخصص حسب طبيعة المنتج والكمية."
+			pBg="#E3EAE5"
+			pColor="#3F3028"
+			pAccent="#739083"
+		/>
+
+		<StoryStep
+			pNumber="03"
+			pKicker="اتصال"
+			pTitle="طلب السعر والبيانات"
+			pText="إرسال طلب مختصر وتجميع السعر ومدة التجهيز ومكان الاستلام والبيانات المتاحة عن المنتج."
+			pBg="#F2D9B7"
+			pColor="#3F3028"
+			pAccent="#D9B889"
+		/>
+
+		<StoryStep
+			pNumber="04"
+			pKicker="ترتيب"
+			pTitle="تجميع المصادر المناسبة"
+			pText="ترتيب الجهات التي قدمت ردًا قابلًا للمراجعة وإدخالها في المقارنة أو متابعة التوريد."
+			pBg="#DDE6E0"
+			pColor="#3F3028"
+			pAccent="#739083"
+		/>
+
+	</StoryRail>
+
+
+
+
+
+
+
+	<ScrollShelf
+		pItemWidth={new RespString("340px", "84vw")}
+		pGap={new RespString("18px", "12px")}
+		pPad={new RespString("42px", "14px")}
+		pMaxWidth={new RespString("1280px", "100%") }
+		pBg="#F0EBE4"
+		pEdgeFade={true}
+		pSnap="proximity"
+	>
+
+		<ShelfItem
+			pBg="#FFF9F0"
+			pColor="#3F3028"
+			pAccent="#D9B889"
+			pMinHeight={new RespString("280px", "260px")}
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#3F3028").OfText("بيانات التواصل")}
+				pText={Text.Body.WithColor("#5A514D").OfText("اسم الجهة، الشخص المسؤول عند توفره، الهاتف، البريد، العنوان أو منطقة النشاط، وقناة التواصل المستخدمة في طلب السعر.")}
+			/>
+
+		</ShelfItem>
+
+		<ShelfItem
+			pBg="#DDE6E0"
+			pColor="#3F3028"
+			pAccent="#739083"
+			pMinHeight={new RespString("280px", "260px")}
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#3F3028").OfText("رد السوق")}
+				pText={Text.Body.WithColor("#4B5650").OfText("توفر الصنف، أقل كمية، مدة التجهيز، البدائل المقترحة، وطريقة استلام العرض الرسمي.")}
+			/>
+
+		</ShelfItem>
+
+		<ShelfItem
+			pBg="#F0D6B4"
+			pColor="#3F3028"
+			pAccent="#D9B889"
+			pMinHeight={new RespString("280px", "260px")}
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#3F3028").OfText("قابلية المتابعة")}
+				pText={Text.Body.WithColor("#5A514D").OfText("مدى وضوح الرد وسرعة التواصل ووجود عرض مكتوب وبيانات تسمح بإدخال المورد في مقارنة فعلية.")}
+			/>
+
+		</ShelfItem>
+
+		<ShelfItem
+			pBg="#6A5448"
+			pColor="#FFF8EF"
+			pAccent="#D9B889"
+			pMinHeight={new RespString("280px", "260px")}
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#FFF8EF").OfText("الخطوة التالية")}
+				pText={Text.Body.WithColor("#E7DED8").OfText("المصدر المناسب ينتقل إلى مقارنة السعر أو المقارنة الفنية أو المعاينة حسب طبيعة البند وقيمة الشراء.")}
+			/>
+
+		</ShelfItem>
+
+	</ScrollShelf>
+
+
+
+
+
+
+
+	<SplitScene
+		pColumns={new RespString("minmax(0, 1fr) minmax(0, 1fr)", "minmax(0, 1fr)")}
+		pGap={new RespString("18px", "12px")}
+		pPad={new RespString("34px", "12px")}
+		pBg="#3F3028"
+		pRadius={new RespString("0px", "0px") }
+	>
+
+		<SplitPane pBg="#FFF9F0" pColor="#3F3028" pRadius={new RespString("28px", "18px")}>
+
+			<Emograph pTitle={Text.H2.WithColor("#3F3028").OfText("تفاصيل تساعد في الوصول للمصدر المناسب")} />
+
+			<EmoList pWidth={new RespString("100%", "100%")} pItemsBg={new ElemBg("transparent")} pNumbered={false}>
+
+				<ListItem pText="اسم البند واستخدامه داخل المشروع." />
+
+				<ListItem pText="الكمية والوحدة والمقاس أو السعة." />
+
+				<ListItem pText="الماركة أو بلد المنشأ عندما يكون لها تأثير على الاختيار." />
+
+				<ListItem pText="عنوان التسليم والموعد المطلوب." />
+
+			</EmoList>
+
+		</SplitPane>
+
+		<SplitPane pBg="#CAD6CF" pColor="#3F3028" pRadius={new RespString("28px", "18px")}>
+
+			<Emograph pTitle={Text.H2.WithColor("#3F3028").OfText("حصيلة البحث القابلة للاستخدام")} />
+
+			<EmoList pWidth={new RespString("100%", "100%")} pItemsBg={new ElemBg("transparent")} pNumbered={false}>
+
+				<ListItem pText="جهات قدمت ردًا فعليًا على الطلب." />
+
+				<ListItem pText="أسعار أو عروض أولية حسب استجابة السوق." />
+
+				<ListItem pText="مدد تجهيز وملاحظات مرتبطة بالتوفر." />
+
+				<ListItem pText="بدائل يمكن إدخالها في مرحلة المراجعة." />
+
+			</EmoList>
+
+		</SplitPane>
+
+	</SplitScene>
+
+
+
+
+
+
+
+	<RelServices
+		pTitle={Text.H2.Centered.White.OfText("خدمات تأتي بعد البحث عن الموردين")}
+		pHeadBg={new ElemBg("#3F3028")}
+		pBodyBg={new ElemBg("#F0EBE4")}
+		pMax={3}
+	>
+
+		<RelServiceItem pTitle="مقارنة عروض الأسعار" pDesc="ترتيب الردود التجارية في جدول موحد." pHref="/emochain/quotations-comparison/" />
+
+		<RelServiceItem pTitle="المقارنة الفنية" pDesc="مراجعة بيانات المنتجات والموديلات والمواصفات." pHref="/emochain/technical-comparison/" />
+
+		<RelServiceItem pTitle="معاينة قبل التوريد" pDesc="توثيق البند المتاح لدى المورد قبل الشحن أو الاستلام." pHref="/emochain/inspection/" />
+
+	</RelServices>
+
+
+
+
+
+
+
+</BLayout>

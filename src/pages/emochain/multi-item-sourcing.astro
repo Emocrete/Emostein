@@ -1,0 +1,293 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { RadialItem, RadialLayout, ScrollShelf, ShelfItem, ZigzagItem, ZigzagStory } from "@/Widgets/Layouts";
+import { Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="تسعير عدة بنود من موردين وأسواق مختلفة"
+	pDescr="خدمة بحث وتسعير لقوائم مشتريات هندسية تجمع عدة خامات ومعدات ومستلزمات من أسواق مختلفة، مع تنسيق الموردين والعروض ومواعيد التوريد."
+>
+
+
+
+
+
+
+
+	<Hero pBg={new ElemBg("#10212B")}>
+
+		<VrStack
+			pSize={new Size(new NumPer("52%", "94%"), new NumPer("auto", "auto"))}
+			pLoc={new Loc(new NumPer("24%", "3%"), new NumPer("28%", "17%"))}
+			pGap={new Pixel(24, 16)}
+			pHzAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.White.OfText("تسعير عدة بنود من أسواق مختلفة")}
+				pText={Text.Body.Centered.White.OfSize(22, 18).OfText("طلب واحد قد يحتاج اتصالات في الكهرباء والميكانيكا والخامات الصناعية ومواد التنفيذ. الخدمة ترتب هذه التحركات وتجمع نتائجها في متابعة واحدة.")}
+			/>
+
+			<HzStack pGap={new Pixel(16, 10)} pForceHz>
+
+				<EmoCallIcon BlackSky />
+
+				<EmoWhatsIcon BlackSky />
+
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
+
+	<RadialLayout
+		pCount={6}
+		pDiameter={new RespString("820px", "100%")}
+		pOrbit={new RespString("38%", "35%")}
+		pCenterSize={new RespString("32%", "36%")}
+		pBg="radial-gradient(circle, #F7F1E7 0 42%, #DDE6E2 43% 100%)"
+		pCenterBg="#10212B"
+		pCenterColor="#F8F4EC"
+		pRingColor="rgba(16,33,43,.18)"
+		pAccent="#D89959"
+		pCenterTitle="قائمة واحدة"
+		pCenterText="عدة أسواق وموردين"
+		pStackPortrait={false}
+	>
+
+		<RadialItem
+			pTitle="كهرباء"
+			pText="كابلات · لوحات · ملحقات"
+			pBg="#FFF9F0"
+			pAccent="#D89959"
+		/>
+
+		<RadialItem
+			pTitle="ميكانيكا"
+			pText="مواسير · محابس · قياس"
+			pBg="#FFF9F0"
+			pAccent="#6A8E82"
+		/>
+
+		<RadialItem
+			pTitle="صناعي"
+			pText="مكونات · تشغيل · صيانة"
+			pBg="#FFF9F0"
+			pAccent="#D89959"
+		/>
+
+		<RadialItem
+			pTitle="عزل"
+			pText="مواد · فواصل · حماية"
+			pBg="#FFF9F0"
+			pAccent="#6A8E82"
+		/>
+
+		<RadialItem
+			pTitle="تثبيت"
+			pText="Anchors · Sealants · Accessories"
+			pBg="#FFF9F0"
+			pAccent="#D89959"
+		/>
+
+		<RadialItem
+			pTitle="تشطيبات فنية"
+			pText="خامات مرتبطة بالمشروع"
+			pBg="#FFF9F0"
+			pAccent="#6A8E82"
+		/>
+
+	</RadialLayout>
+
+
+
+
+
+
+
+	<ZigzagStory pBg="#E9EEEB" pGap={new RespString("46px", "20px")} pPad={new RespString("58px", "14px")}>
+
+		<ZigzagItem
+			pMediaShare={43}
+			pBg="#FFF9F0"
+			pMediaBg="#D89959"
+			pRadius={new RespString("36px", "22px")}
+			pMediaRadius={new RespString("36px", "20px")}
+			pMinHeight={new RespString("430px", "660px")}
+		>
+
+			<Emograph
+				slot="media"
+				pTitle={Text.H2.Centered.WithColor("#10212B").OfText("صيانة منشأة")}
+				pText={Text.Body.Centered.WithColor("#26383E").OfText("محابس + سيور + رولمان بلي + وصلات + أجهزة قياس + مستلزمات تثبيت")}
+			/>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#10212B").OfText("طلبات الصيانة المختلطة")}
+				pText={Text.Body.WithColor("#4B595E").OfText("أعمال الصيانة كثيرًا ما تجمع قطعًا من أكثر من تخصص في أمر شراء واحد. ترتيب القائمة حسب السوق يساعد على تقليل عدد جولات البحث وتوضيح ما توفر وما يحتاج وقت تجهيز أطول.")}
+			/>
+
+		</ZigzagItem>
+
+		<ZigzagItem
+			pMediaShare={43}
+			pBg="#F6F8F6"
+			pMediaBg="#6A8E82"
+			pRadius={new RespString("36px", "22px")}
+			pMediaRadius={new RespString("36px", "20px")}
+			pMinHeight={new RespString("430px", "660px")}
+		>
+
+			<Emograph
+				slot="media"
+				pTitle={Text.H2.Centered.WithColor("#FFFFFF").OfText("حزمة MEP")}
+				pText={Text.Body.Centered.WithColor("#ECF2EF").OfText("Cable Tray + Valves + Drains + Firestop + Gauges + Fittings")}
+			/>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#10212B").OfText("حزمة تنفيذ صغيرة متعددة التخصصات")}
+				pText={Text.Body.WithColor("#4B595E").OfText("المشروع قد يحتاج مجموعة بنود لتقفيل منطقة أو مرحلة تنفيذ. هنا قيمة الخدمة في تجميع الأسعار ومواعيد التجهيز ومتابعة العناصر المرتبطة بنفس الموعد في الموقع.")}
+			/>
+
+		</ZigzagItem>
+
+		<ZigzagItem
+			pMediaShare={43}
+			pBg="#FFF9F0"
+			pMediaBg="#243C47"
+			pRadius={new RespString("36px", "22px")}
+			pMediaRadius={new RespString("36px", "20px")}
+			pMinHeight={new RespString("430px", "660px")}
+		>
+
+			<Emograph
+				slot="media"
+				pTitle={Text.H2.Centered.White.OfText("تجهيز موقع")}
+				pText={Text.Body.Centered.White.OfText("عزل + قطاعات + مثبتات + Sealants + مستلزمات حماية + أجزاء معدنية")}
+			/>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#10212B").OfText("قائمة تجهيز قبل بدء بند تنفيذي")}
+				pText={Text.Body.WithColor("#4B595E").OfText("بعض المهام تحتاج مجموعة خامات وإكسسوارات تصل معًا قبل بدء التنفيذ. الخدمة ترتب البنود حسب زمن التجهيز وتجمع الموردين الذين يخدمون كل جزء من القائمة.")}
+			/>
+
+		</ZigzagItem>
+
+	</ZigzagStory>
+
+
+
+
+
+
+
+	<ScrollShelf
+		pItemWidth={new RespString("330px", "82vw")}
+		pGap={new RespString("18px", "12px")}
+		pPad={new RespString("44px", "14px")}
+		pMaxWidth={new RespString("1280px", "100%")}
+		pBg="#10212B"
+		pEdgeFade={true}
+		pSnap="proximity"
+	>
+
+		<ShelfItem
+			pBg="#FFF9F0"
+			pColor="#10212B"
+			pAccent="#D89959"
+			pMinHeight={new RespString("260px", "250px")}
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#10212B").OfText("التقسيم حسب السوق")}
+				pText={Text.Body.WithColor("#4B595E").OfText("تجميع البنود التي تتحرك في نفس منطقة الموردين أو نفس نوع النشاط لتسهيل البحث والاتصال.")}
+			/>
+
+		</ShelfItem>
+
+		<ShelfItem
+			pBg="#DCE7E2"
+			pColor="#10212B"
+			pAccent="#6A8E82"
+			pMinHeight={new RespString("260px", "250px")}
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#10212B").OfText("التقسيم حسب الأولوية")}
+				pText={Text.Body.WithColor("#4B595E").OfText("إظهار البنود التي يحتاجها الموقع أولًا والبنود التي يمكن تجهيزها مع المراحل التالية.")}
+			/>
+
+		</ShelfItem>
+
+		<ShelfItem
+			pBg="#F2D7B7"
+			pColor="#10212B"
+			pAccent="#D89959"
+			pMinHeight={new RespString("260px", "250px")}
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#10212B").OfText("التقسيم حسب مدة التجهيز")}
+				pText={Text.Body.WithColor("#4B595E").OfText("تمييز العناصر المتاحة سريعًا والعناصر التي تحتاج تصنيعًا أو حجزًا أو تجهيزًا مسبقًا.")}
+			/>
+
+		</ShelfItem>
+
+		<ShelfItem
+			pBg="#E8ECEA"
+			pColor="#10212B"
+			pAccent="#6A8E82"
+			pMinHeight={new RespString("260px", "250px")}
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#10212B").OfText("التقسيم حسب التسليم")}
+				pText={Text.Body.WithColor("#4B595E").OfText("ترتيب الشحنات حسب عنوان الموقع وموعد الاستلام والمساحة المتاحة للتخزين.")}
+			/>
+
+		</ShelfItem>
+
+	</ScrollShelf>
+
+
+
+
+
+
+
+	<RelServices
+		pTitle={Text.H2.Centered.White.OfText("خدمات تكمل طلبات البنود المتعددة")}
+		pHeadBg={new ElemBg("#10212B")}
+		pBodyBg={new ElemBg("#E9EEEB")}
+		pMax={3}
+	>
+
+		<RelServiceItem pTitle="البحث عن موردين" pDesc="الوصول إلى مصادر مناسبة لكل مجموعة من البنود." pHref="/emochain/supplier-sourcing/" />
+
+		<RelServiceItem pTitle="مقارنة عروض الأسعار" pDesc="تجميع فروق السعر والنقل والدفع ومدة التوريد." pHref="/emochain/quotations-comparison/" />
+
+		<RelServiceItem pTitle="إدارة مشتريات المشروع" pDesc="جمع التسعير والمتابعة والتسليم في مهمة واحدة." pHref="/emochain/project-procurement/" />
+
+	</RelServices>
+
+
+
+
+
+
+
+</BLayout>

@@ -1,0 +1,287 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, MosaicGrid, MosaicItem, ZigzagItem, ZigzagStory } from "@/Widgets/Layouts";
+import { Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="معاينة الخامات والمعدات قبل التوريد"
+	pDescr="خدمة معاينة ميدانية للخامات والمعدات المرتبطة بالمشروعات قبل الشحن أو الاستلام، تشمل توثيق الهوية والكمية والحالة الظاهرة والملحقات والمستندات حسب نطاق المهمة."
+>
+
+
+
+
+
+
+
+	<Hero pBg={new ElemBg("#23322D")}>
+
+		<VrStack
+			pSize={new Size(new NumPer("50%", "94%"), new NumPer("auto", "auto"))}
+			pLoc={new Loc(new NumPer("10%", "3%"), new NumPer("28%", "16%"))}
+			pGap={new Pixel(24, 16)}
+			pHzAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.White.OfText("معاينة الخامات والمعدات قبل التوريد")}
+				pText={Text.Body.Centered.White.OfSize(22, 18).OfText("زيارة للمورد أو مكان التجهيز لتسجيل بيانات البند والحالة الظاهرة والكمية والملحقات والصور قبل الشحن أو الاستلام.")}
+			/>
+
+			<HzStack pGap={new Pixel(16, 10)} pForceHz>
+
+				<EmoCallIcon BlackGreen />
+
+				<EmoWhatsIcon BlackGreen />
+
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
+
+	<ZigzagStory pBg="#E6ECE7" pGap={new RespString("50px", "20px")} pPad={new RespString("60px", "14px")}>
+
+		<ZigzagItem
+			pMediaShare={42}
+			pBg="#FFF9F0"
+			pMediaBg="#D4A15F"
+			pRadius={new RespString("38px", "22px")}
+			pMediaRadius={new RespString("38px", "20px")}
+			pMinHeight={new RespString("430px", "650px")}
+		>
+
+			<Emograph
+				slot="media"
+				pTitle={Text.H2.Centered.WithColor("#23322D").OfText("قبل الزيارة")}
+				pText={Text.Body.Centered.WithColor("#33433E").OfText("طلب شراء · صورة مرجعية · موديل · كمية · نقاط مراجعة")}
+			/>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#23322D").OfText("تجهيز مرجع المعاينة")}
+				pText={Text.Body.WithColor("#4D5B56").OfText("يتم ترتيب البيانات التي سيجري الرجوع إليها أثناء الزيارة: اسم البند، الكمية، الموديل أو المواصفة، الصور المرجعية، وأي نقطة يرغب العميل في توثيقها قبل الشحن.")}
+			/>
+
+		</ZigzagItem>
+
+		<ZigzagItem
+			pMediaShare={42}
+			pBg="#F7F9F6"
+			pMediaBg="#668678"
+			pRadius={new RespString("38px", "22px")}
+			pMediaRadius={new RespString("38px", "20px")}
+			pMinHeight={new RespString("430px", "650px")}
+		>
+
+			<Emograph
+				slot="media"
+				pTitle={Text.H2.Centered.White.OfText("أثناء الزيارة")}
+				pText={Text.Body.Centered.White.OfText("Nameplate · Count · Packaging · Accessories · Photos")}
+			/>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#23322D").OfText("تسجيل ما هو موجود فعليًا")}
+				pText={Text.Body.WithColor("#4D5B56").OfText("المعاينة تركز على العناصر التي يمكن رؤيتها وتوثيقها في مكان المورد: بيانات اللوحة أو العبوة، الموديل، العدد، الحالة الظاهرة، التغليف، الملحقات، والمستندات التي يعرضها المورد.")}
+			/>
+
+		</ZigzagItem>
+
+		<ZigzagItem
+			pMediaShare={42}
+			pBg="#FFF9F0"
+			pMediaBg="#31463E"
+			pRadius={new RespString("38px", "22px")}
+			pMediaRadius={new RespString("38px", "20px")}
+			pMinHeight={new RespString("430px", "650px")}
+		>
+
+			<Emograph
+				slot="media"
+				pTitle={Text.H2.Centered.White.OfText("بعد الزيارة")}
+				pText={Text.Body.Centered.White.OfText("صور · ملاحظات · كميات · مستندات · نقاط متابعة")}
+			/>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#23322D").OfText("تجميع نتيجة واضحة للعميل")}
+				pText={Text.Body.WithColor("#4D5B56").OfText("الصور والملاحظات ترتب حسب البنود التي تمت معاينتها، مع تسجيل العناصر التي تحتاج متابعة قبل التحميل أو عند الاستلام في الموقع.")}
+			/>
+
+		</ZigzagItem>
+
+	</ZigzagStory>
+
+
+
+
+
+
+
+	<MosaicGrid
+		pColumns={12}
+		pColumnsP={4}
+		pAutoRows={new RespString("86px", "74px")}
+		pGap={new RespString("12px", "10px")}
+		pPad={new RespString("46px", "12px")}
+		pMinHeight={new RespString("590px", "auto")}
+		pMaxWidth={new RespString("1220px", "100%")}
+		pBg="#F0EAE1"
+		pRadius={new RespString("0px", "0px")}
+	>
+
+		<MosaicItem
+			pColSpan={5}
+			pColSpanP={4}
+			pRowSpan={3}
+			pRowSpanP={3}
+			pBg="#23322D"
+			pColor="#FFFFFF"
+		>
+
+			<Emograph
+				pTitle={Text.H3.White.OfText("هوية البند")}
+				pText={Text.Body.White.OfText("الماركة، الموديل، الكود، بيانات اللوحة، وصف العبوة، وأي تعريف ظاهر على المنتج.")}
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={3}
+			pColSpanP={4}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#D4A15F"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#23322D").OfText("الكمية")}
+				pText={Text.Body.WithColor("#34423E").OfText("عدد الوحدات أو العبوات المتاحة للمعاينة حسب ترتيب المورد.")}
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={4}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#C8D7CF"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#23322D").OfText("الحالة الظاهرة")}
+				pText={Text.Body.WithColor("#43514C").OfText("التغليف، الخدوش أو التلف الظاهر، وطريقة حفظ المنتج في مكان التجهيز.")}
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={4}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#FFF9F0"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#23322D").OfText("الملحقات")}
+				pText={Text.Body.WithColor("#4D5B56").OfText("الأجزاء المرافقة، الوصلات، القواعد، الكتيبات أو العناصر المذكورة ضمن طلب الشراء.")}
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={4}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#DDE7E1"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#23322D").OfText("المستندات")}
+				pText={Text.Body.WithColor("#4D5B56").OfText("فاتورة أولية، شهادة منشأ، كتالوج، شهادة اختبار أو مستندات أخرى يقدمها المورد.")}
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={4}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#EDCFAB"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#23322D").OfText("التوثيق")}
+				pText={Text.Body.WithColor("#4D5B56").OfText("صور عامة وتفصيلية مرتبطة بكل نقطة داخل نطاق المعاينة.")}
+			/>
+
+		</MosaicItem>
+
+	</MosaicGrid>
+
+
+
+
+
+
+
+	<AngleBand
+		pBg="linear-gradient(115deg, #668678, #A9C0B5)"
+		pColor="#F8F4EC"
+		pDirection="Fall"
+		pCut={new RespString("7%", "3%")}
+		pMinHeight={new RespString("280px", "300px")}
+	>
+
+		<Emograph
+			pSize={new Size(new NumPer("980px", "100%"), new NumPer("auto", "auto"))}
+			pTitle={Text.H2.WithColor("#F8F4EC").OfText("نطاق المعاينة يحدد قبل الزيارة")}
+			pText={Text.Body.WithColor("#EDF3F0").OfText("كل بند يحتاج نقاط مراجعة تناسب طبيعته. المعدات تعتمد أكثر على الموديل واللوحة والملحقات، والخامات تعتمد أكثر على النوع والمقاس والكمية والتغليف. عند الحاجة لاختبارات معملية أو قياسات متخصصة يتم ترتيبها مع جهة متخصصة وتدخل نتائجها ضمن مستندات الشراء.")}
+		/>
+
+	</AngleBand>
+
+
+
+
+
+
+
+	<RelServices
+		pTitle={Text.H2.Centered.White.OfText("خدمات مرتبطة بالمعاينة والتوريد")}
+		pHeadBg={new ElemBg("#23322D")}
+		pBodyBg={new ElemBg("#E6ECE7")}
+		pMax={3}
+	>
+
+		<RelServiceItem pTitle="المقارنة الفنية" pDesc="ترتيب بيانات العرض والمواصفات قبل اختيار البند للشراء." pHref="/emochain/technical-comparison/" />
+
+		<RelServiceItem pTitle="متابعة التوريد" pDesc="متابعة التجهيز والشحن والاستلام بعد اعتماد الشراء." pHref="/emochain/procurement-follow-up/" />
+
+		<RelServiceItem pTitle="البحث عن موردين" pDesc="الوصول إلى جهات مناسبة وطلب بيانات وأسعار أولية." pHref="/emochain/supplier-sourcing/" />
+
+	</RelServices>
+
+
+
+
+
+
+
+</BLayout>

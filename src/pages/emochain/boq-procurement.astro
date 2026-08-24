@@ -1,0 +1,324 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, Emograph, EmoTable, EmoTableCell, EmoTableRow, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, LayerDeck, LayerItem, SplitPane, SplitScene, StoryRail, StoryStep } from "@/Widgets/Layouts";
+import { Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="تسعير وتنسيق توريد بنود المقايسات"
+	pDescr="خدمة ترتيب بنود المقايسات وBOQ للمشروعات إلى مجموعات شراء، وتجهيز طلبات أسعار للموردين وتجميع الردود والشروط تمهيدًا للشراء والتوريد."
+>
+
+
+
+
+
+
+
+	<Hero pBg={new ElemBg("#E8DFD1")}>
+
+		<VrStack
+			pSize={new Size(new NumPer("50%", "94%"), new NumPer("auto", "auto"))}
+			pLoc={new Loc(new NumPer("7%", "3%"), new NumPer("27%", "16%"))}
+			pGap={new Pixel(24, 16)}
+			pHzAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor("#182126").OfText("تسعير بنود المقايسات للمشروعات")}
+				pText={Text.Body.Centered.WithColor("#475257").OfSize(22, 18).OfText("قراءة الـ BOQ مع المواصفات والرسومات المرتبطة به، ثم تقسيم البنود إلى مجموعات شراء وإرسالها إلى الأسواق المناسبة وتجميع الردود في صورة قابلة للمراجعة.")}
+			/>
+
+			<HzStack pGap={new Pixel(16, 10)} pForceHz>
+
+				<EmoCallIcon BlackOrange />
+
+				<EmoWhatsIcon BlackOrange />
+
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
+
+	<SplitScene
+		pColumns={new RespString("minmax(0, 6fr) minmax(0, 5fr)", "minmax(0, 1fr)")}
+		pGap={new RespString("22px", "14px")}
+		pPad={new RespString("48px", "14px")}
+		pBg="#182126"
+		pRadius={new RespString("0px", "0px")}
+	>
+
+		<LayerDeck
+			pAspect={new RespString("1 / 1", "1 / 1")}
+			pMinHeight={new RespString("500px", "340px")}
+			pBg="linear-gradient(145deg, #26343A, #101820)"
+			pRadius={new RespString("34px", "22px")}
+		>
+
+			<LayerItem
+				pWidth={new RespString("72%", "76%")}
+				pHeight={new RespString("58%", "54%")}
+				pOffsetX={new RespString("-13%", "-10%")}
+				pOffsetY={new RespString("-12%", "-12%")}
+				pBg="#F7F1E7"
+				pColor="#182126"
+				pRadius={new RespString("24px", "18px")}
+			>
+
+				<Emograph pTitle={Text.H3.Centered.WithColor("#182126").OfText("BOQ")} pText={Text.Body.Centered.WithColor("#4A555A").OfText("بند · وحدة · كمية · وصف")} />
+
+			</LayerItem>
+
+			<LayerItem
+				pWidth={new RespString("62%", "68%")}
+				pHeight={new RespString("48%", "46%")}
+				pOffsetX={new RespString("14%", "12%")}
+				pOffsetY={new RespString("4%", "5%")}
+				pBg="#D4A45F"
+				pColor="#182126"
+				pRadius={new RespString("24px", "18px")}
+			>
+
+				<Emograph
+					pTitle={Text.H3.Centered.WithColor("#182126").OfText("RFQ Packages")}
+					pText={Text.Body.Centered.WithColor("#30383A").OfText("كهرباء · ميكانيكا · خامات · صناعي")}
+				/>
+
+			</LayerItem>
+
+			<LayerItem
+				pWidth={new RespString("55%", "62%")}
+				pHeight={new RespString("36%", "34%")}
+				pOffsetX={new RespString("-2%", "0%")}
+				pOffsetY={new RespString("29%", "28%")}
+				pBg="#BFD0C7"
+				pColor="#182126"
+				pRadius={new RespString("22px", "16px")}
+			>
+
+				<Emograph
+					pTitle={Text.H4.Centered.WithColor("#182126").OfText("ردود الموردين")}
+					pText={Text.Body.Centered.WithColor("#39474A").OfText("سعر · مدة · نقل · دفع · بيانات فنية")}
+				/>
+
+			</LayerItem>
+
+		</LayerDeck>
+
+		<SplitPane
+			pBg="#F7F1E7"
+			pColor="#182126"
+			pRadius={new RespString("34px", "22px")}
+			pMinHeight={new RespString("500px", "360px")}
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#182126").OfText("المقايسة تتحول إلى مجموعات شراء") }
+				pText={Text.Body.WithColor("#4A555A").OfText("ترتيب البنود بهذه الصورة يسهل إرسال كل مجموعة للجهات التي تتعامل معها فعلًا. بند المواسير يتحرك في سوق، والإكسسوارات في سوق آخر، والمعدات لها دورة تسعير مختلفة. التجميع يبدأ من هيكل الـ BOQ ثم يتوسع بالمواصفات والرسومات عندما يحتاج المورد تفاصيل إضافية.")}
+			/>
+
+			<Emograph
+				pTitle={Text.H4.WithColor("#182126").OfText("النتيجة العملية")}
+				pText={Text.Body.WithColor("#4A555A").OfText("كل بند يصبح مرتبطًا بطلب سعر واضح، ومورد أو أكثر، وحالة رد، وشروط تجارية يمكن الرجوع إليها أثناء المراجعة.")}
+			/>
+
+		</SplitPane>
+
+	</SplitScene>
+
+
+
+
+
+
+
+	<AngleBand
+		pBg="linear-gradient(115deg, #D4A45F, #F0D7AE)"
+		pColor="#182126"
+		pDirection="Rise"
+		pCut={new RespString("7%", "3%")}
+		pMinHeight={new RespString("250px", "260px")}
+	>
+
+		<Emograph
+			pSize={new Size(new NumPer("960px", "100%"), new NumPer("auto", "auto"))}
+			pTitle={Text.H2.WithColor("#182126").OfText("الـ BOQ يعطي الكمية، والمستندات تكمل صورة البند")}
+			pText={Text.Body.WithColor("#333B3E").OfText("الوصف الموجود في المقايسة قد يكفي لبنود بسيطة، بينما بنود أخرى تحتاج Specification أو Schedule أو Detail أو Data Sheet. أثناء التسعير يتم ربط كل طلب بالمستند الذي يساعد المورد على فهم المطلوب بصورة صحيحة.")}
+		/>
+
+	</AngleBand>
+
+
+
+
+
+
+
+	<SplitPane
+		pBg="#F1F3F0"
+		pColor="#182126"
+		pPad={new RespString("52px", "14px")}
+		pRadius={new RespString("0px", "0px")}
+	>
+
+		<Emograph
+			pTitle={Text.H2.Centered.WithColor("#182126").OfText("شكل جدول العمل أثناء التسعير")}
+			pText={Text.Body.Centered.WithColor("#566064").OfText("مثال مبسط على طريقة تحويل بنود المقايسة إلى متابعة شراء، مع اختلاف التفاصيل حسب المشروع وطبيعة كل بند.")}
+		/>
+
+		<EmoTable pBorderColor="#B8C1BC" pCellPad={new Pixel(14, 8)}>
+
+			<EmoTableRow pBg="#182126">
+
+				<EmoTableCell pText={Text.Body.Bold.White.OfText("بند المقايسة")} />
+
+				<EmoTableCell pText={Text.Body.Bold.White.OfText("مجموعة الشراء")} />
+
+				<EmoTableCell pText={Text.Body.Bold.White.OfText("مرجع التسعير")} />
+
+				<EmoTableCell pText={Text.Body.Bold.White.OfText("بيانات العرض")} />
+
+			</EmoTableRow>
+
+			<EmoTableRow pBg="#FFFDF8">
+
+				<EmoTableCell pText={Text.Body.WithColor("#182126").OfText("كابل قدرة + نهايات")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#182126").OfText("كهرباء")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#182126").OfText("BOQ + Cable Schedule")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#182126").OfText("سعر / مدة / منشأ / نقل")} />
+
+			</EmoTableRow>
+
+			<EmoTableRow pBg="#E8EEE9">
+
+				<EmoTableCell pText={Text.Body.WithColor("#182126").OfText("محابس وملحقات خط")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#182126").OfText("ميكانيكا")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#182126").OfText("BOQ + Specification")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#182126").OfText("سعر / مادة / ضغط / مدة")} />
+
+			</EmoTableRow>
+
+			<EmoTableRow pBg="#FFFDF8">
+
+				<EmoTableCell pText={Text.Body.WithColor("#182126").OfText("مواد عزل وفواصل")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#182126").OfText("خامات تنفيذ")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#182126").OfText("BOQ + Detail")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#182126").OfText("سعر / عبوة / تغطية / تجهيز")} />
+
+			</EmoTableRow>
+
+		</EmoTable>
+
+	</SplitPane>
+
+
+
+
+
+
+
+	<StoryRail
+		pAxis="Vertical"
+		pAxisP="Vertical"
+		pBg="#EEE8DF"
+		pTrackColor="#A9B5AF"
+		pAccent="#D4A45F"
+		pGap={new RespString("28px", "16px")}
+		pPad={new RespString("52px", "14px")}
+		pMaxWidth={new RespString("1050px", "100%")}
+		pAlternate={true}
+	>
+
+		<StoryStep
+			pNumber="1"
+			pKicker="قراءة"
+			pTitle="فرز البنود"
+			pText="تجميع البنود المتقاربة في مجموعات شراء منطقية وربط كل مجموعة بالمستندات المتاحة."
+			pBg="#FFFDF8"
+			pColor="#182126"
+			pAccent="#D4A45F"
+		/>
+
+		<StoryStep
+			pNumber="2"
+			pKicker="تجهيز"
+			pTitle="إعداد طلب السعر"
+			pText="صياغة الكمية والوحدة والمواصفة ومكان التسليم والبيانات المطلوبة من المورد بصورة مختصرة ومفهومة."
+			pBg="#DCE5E0"
+			pColor="#182126"
+			pAccent="#6C8A7B"
+		/>
+
+		<StoryStep
+			pNumber="3"
+			pKicker="متابعة"
+			pTitle="استلام الردود والاستفسارات"
+			pText="تسجيل العروض الواردة وتجميع الأسئلة التي تظهر أثناء التسعير وتحديث بيانات البند عند الحاجة."
+			pBg="#FFF4E2"
+			pColor="#182126"
+			pAccent="#D4A45F"
+		/>
+
+		<StoryStep
+			pNumber="4"
+			pKicker="مراجعة"
+			pTitle="ترتيب الأسعار والشروط"
+			pText="وضع الردود في صورة موحدة تسهل مراجعة السعر ومدة التوريد والنقل والدفع والملاحظات الفنية."
+			pBg="#DCE5E0"
+			pColor="#182126"
+			pAccent="#6C8A7B"
+		/>
+
+	</StoryRail>
+
+
+
+
+
+
+
+	<RelServices
+		pTitle={Text.H2.Centered.White.OfText("خدمات مرتبطة بالمقايسات والتسعير")}
+		pHeadBg={new ElemBg("#182126")}
+		pBodyBg={new ElemBg("#EEE8DF")}
+		pMax={3}
+	>
+
+		<RelServiceItem pTitle="المقارنة التجارية" pDesc="ترتيب أسعار الموردين وشروط الدفع والتوريد والنقل." pHref="/emochain/quotations-comparison/" />
+
+		<RelServiceItem pTitle="المقارنة الفنية" pDesc="وضع بيانات العروض الفنية بجانب متطلبات المشروع." pHref="/emochain/technical-comparison/" />
+
+		<RelServiceItem pTitle="إدارة مشتريات المشروع" pDesc="متابعة البنود من الطلب حتى وصول التوريدات للموقع." pHref="/emochain/project-procurement/" />
+
+	</RelServices>
+
+
+
+
+
+
+
+</BLayout>

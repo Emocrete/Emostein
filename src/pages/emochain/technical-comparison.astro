@@ -1,0 +1,332 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, Emograph, EmoTable, EmoTableCell, EmoTableRow, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, LayerDeck, LayerItem, StickyStory, StickyStoryItem } from "@/Widgets/Layouts";
+import { Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="المقارنة الفنية بين عروض الموردين"
+	pDescr="خدمة تنظيم ومقارنة البيانات الفنية في عروض الموردين للمعدات والخامات الهندسية، وربط الموديلات والمواصفات والملحقات بمتطلبات المشروع في جدول مراجعة واحد."
+>
+
+
+
+
+
+
+
+	<Hero pBg={new ElemBg("#17343A")}>
+
+		<VrStack
+			pSize={new Size(new NumPer("50%", "94%"), new NumPer("auto", "auto"))}
+			pLoc={new Loc(new NumPer("8%", "3%"), new NumPer("28%", "16%"))}
+			pGap={new Pixel(24, 16)}
+			pHzAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.White.OfText("المقارنة الفنية بين عروض الموردين")}
+				pText={Text.Body.Centered.White.OfSize(22, 18).OfText("قراءة المطلوب في المشروع بجانب البيانات التي قدمها كل مورد، ثم ترتيب الفروق في الموديل والسعة والخامة والأبعاد والملحقات والمستندات الفنية.")}
+			/>
+
+			<HzStack pGap={new Pixel(16, 10)} pForceHz>
+
+				<EmoCallIcon BlackGreen />
+
+				<EmoWhatsIcon BlackGreen />
+
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
+
+	<StickyStory
+		pVisualShare={46}
+		pGap={new RespString("30px", "16px")}
+		pPad={new RespString("46px", "14px")}
+		pMinHeight={new RespString("1500px", "920px")}
+		pBg="#E8EEEA"
+		pVisualBg="linear-gradient(145deg, #17343A, #365B60)"
+		pSide="Start"
+		pCollapsePortrait={true}
+	>
+
+		<LayerDeck
+			slot="visual"
+			pAspect={new RespString("1 / 1", "1 / 1")}
+			pMinHeight={new RespString("470px", "320px")}
+			pBg="linear-gradient(145deg, #17343A, #284E54)"
+			pRadius={new RespString("30px", "18px")}
+		>
+
+			<LayerItem
+				pWidth={new RespString("72%", "76%")}
+				pHeight={new RespString("56%", "52%")}
+				pOffsetX={new RespString("-14%", "-11%")}
+				pOffsetY={new RespString("-12%", "-12%")}
+				pBg="#FFF9EF"
+				pColor="#17343A"
+				pRadius={new RespString("22px", "16px")}
+			>
+
+				<Emograph
+					pTitle={Text.H3.Centered.WithColor("#17343A").OfText("المطلوب")}
+					pText={Text.Body.Centered.WithColor("#4A5A5E").OfText("Specification · Schedule · Data Sheet")}
+				/>
+
+			</LayerItem>
+
+			<LayerItem
+				pWidth={new RespString("62%", "68%")}
+				pHeight={new RespString("48%", "44%")}
+				pOffsetX={new RespString("13%", "11%")}
+				pOffsetY={new RespString("4%", "5%")}
+				pBg="#CE9E62"
+				pColor="#17343A"
+				pRadius={new RespString("22px", "16px")}
+			>
+
+				<Emograph
+					pTitle={Text.H3.Centered.WithColor("#17343A").OfText("عرض أ")}
+					pText={Text.Body.Centered.WithColor("#334246").OfText("Model · Capacity · Materials")}
+				/>
+
+			</LayerItem>
+
+			<LayerItem
+				pWidth={new RespString("55%", "62%")}
+				pHeight={new RespString("36%", "34%")}
+				pOffsetX={new RespString("-1%", "0%")}
+				pOffsetY={new RespString("29%", "28%")}
+				pBg="#C7D8D0"
+				pColor="#17343A"
+				pRadius={new RespString("20px", "16px")}
+			>
+
+				<Emograph
+					pTitle={Text.H4.Centered.WithColor("#17343A").OfText("عرض ب")}
+					pText={Text.Body.Centered.WithColor("#3F5054").OfText("Accessories · Origin · Warranty")}
+				/>
+
+			</LayerItem>
+
+		</LayerDeck>
+
+		<StickyStoryItem
+			pKicker="01"
+			pTitle="تعريف البند"
+			pText="تثبيت اسم المعدة أو الخامة والموديل أو النوع المطلوب ووحدة القياس والكمية قبل بدء المقارنة."
+			pBg="#FFF9EF"
+			pColor="#17343A"
+			pAccent="#CE9E62"
+		/>
+
+		<StickyStoryItem
+			pKicker="02"
+			pTitle="الخصائص المؤثرة"
+			pText="استخراج السعة والمقاس والخامة والضغط والقدرة والجهد ودرجات الحماية أو أي خصائص مرتبطة بطبيعة البند."
+			pBg="#F6F8F5"
+			pColor="#17343A"
+			pAccent="#6D9183"
+		/>
+
+		<StickyStoryItem
+			pKicker="03"
+			pTitle="الملحقات ونطاق التوريد"
+			pText="تسجيل ما يدخل مع المنتج من إكسسوارات وقواعد ووصلات وأجزاء تحكم ومستندات تشغيل أو شهادات يذكرها العرض."
+			pBg="#FFF1DD"
+			pColor="#17343A"
+			pAccent="#CE9E62"
+		/>
+
+		<StickyStoryItem
+			pKicker="04"
+			pTitle="المستندات الفنية"
+			pText="ربط كل قيمة بمصدرها داخل Data Sheet أو كتالوج أو عرض فني حتى يسهل الرجوع إليها أثناء المراجعة."
+			pBg="#DDE8E2"
+			pColor="#17343A"
+			pAccent="#6D9183"
+		/>
+
+		<StickyStoryItem
+			pKicker="05"
+			pTitle="نقاط الاستفسار"
+			pText="تجميع الخصائص التي تحتاج توضيحًا أو مستندًا إضافيًا وإرسالها للمورد في قائمة قصيرة مرتبطة بالبند."
+			pBg="#FFF9EF"
+			pColor="#17343A"
+			pAccent="#CE9E62"
+		/>
+
+	</StickyStory>
+
+
+
+
+
+
+
+	<AngleBand
+		pBg="linear-gradient(115deg, #CE9E62, #F1D9BA)"
+		pColor="#17343A"
+		pDirection="Rise"
+		pCut={new RespString("7%", "3%")}
+		pMinHeight={new RespString("260px", "280px")}
+	>
+
+		<Emograph
+			pSize={new Size(new NumPer("980px", "100%"), new NumPer("auto", "auto"))}
+			pTitle={Text.H2.WithColor("#17343A").OfText("مستوى المقارنة يتبع جودة المستندات المتاحة")}
+			pText={Text.Body.WithColor("#35464A").OfText("عندما يوفر المشروع Specification واضحًا وتصل عروض الموردين بكتالوجات وData Sheets، يمكن بناء مقارنة تفصيلية. عندما تكون البيانات أقصر، تركز المقارنة على الخصائص المذكورة فعليًا وتجمع البنود التي تحتاج استكمالًا.")}
+		/>
+
+	</AngleBand>
+
+
+
+
+
+
+
+	<LayerDeck
+		pAspect={new RespString("2.2 / 1", "1 / 1.35")}
+		pMinHeight={new RespString("620px", "760px")}
+		pMaxWidth={new RespString("1240px", "100%")}
+		pPad={new RespString("40px", "14px")}
+		pBg="#EEF2EF"
+		pRadius={new RespString("0px", "0px")}
+	>
+
+		<LayerItem
+			pWidth={new RespString("88%", "94%")}
+			pHeight={new RespString("76%", "86%")}
+			pOffsetX={new RespString("0%", "0%")}
+			pOffsetY={new RespString("0%", "0%")}
+			pBg="#FFFFFF"
+			pColor="#17343A"
+			pRadius={new RespString("26px", "18px") }
+		>
+
+			<Emograph pTitle={Text.H2.Centered.WithColor("#17343A").OfText("نموذج مبسط لجدول المقارنة الفنية")} />
+
+			<EmoTable pBorderColor="#B6C4BE" pCellPad={new Pixel(12, 7)}>
+
+				<EmoTableRow pBg="#17343A">
+
+					<EmoTableCell pText={Text.Body.Bold.White.OfText("الخاصية")} />
+
+					<EmoTableCell pText={Text.Body.Bold.White.OfText("المطلوب")} />
+
+					<EmoTableCell pText={Text.Body.Bold.White.OfText("عرض أ")} />
+
+					<EmoTableCell pText={Text.Body.Bold.White.OfText("عرض ب")} />
+
+				</EmoTableRow>
+
+				<EmoTableRow pBg="#FFFDF8">
+
+					<EmoTableCell pText={Text.Body.Bold.WithColor("#17343A").OfText("الموديل")} />
+
+					<EmoTableCell pText={Text.Body.WithColor("#17343A").OfText("طبقًا للمشروع")} />
+
+					<EmoTableCell pText={Text.Body.WithColor("#17343A").OfText("الموديل المقدم")} />
+
+					<EmoTableCell pText={Text.Body.WithColor("#17343A").OfText("الموديل المقدم")} />
+
+				</EmoTableRow>
+
+				<EmoTableRow pBg="#E4ECE7">
+
+					<EmoTableCell pText={Text.Body.Bold.WithColor("#17343A").OfText("السعة / المقاس")} />
+
+					<EmoTableCell pText={Text.Body.WithColor("#17343A").OfText("القيمة المطلوبة")} />
+
+					<EmoTableCell pText={Text.Body.WithColor("#17343A").OfText("القيمة المقدمة")} />
+
+					<EmoTableCell pText={Text.Body.WithColor("#17343A").OfText("القيمة المقدمة")} />
+
+				</EmoTableRow>
+
+				<EmoTableRow pBg="#FFFDF8">
+
+					<EmoTableCell pText={Text.Body.Bold.WithColor("#17343A").OfText("الخامة")} />
+
+					<EmoTableCell pText={Text.Body.WithColor("#17343A").OfText("المواصفة المرجعية")} />
+
+					<EmoTableCell pText={Text.Body.WithColor("#17343A").OfText("بيانات العرض")} />
+
+					<EmoTableCell pText={Text.Body.WithColor("#17343A").OfText("بيانات العرض")} />
+
+				</EmoTableRow>
+
+				<EmoTableRow pBg="#E4ECE7">
+
+					<EmoTableCell pText={Text.Body.Bold.WithColor("#17343A").OfText("الملحقات")} />
+
+					<EmoTableCell pText={Text.Body.WithColor("#17343A").OfText("العناصر المطلوبة")} />
+
+					<EmoTableCell pText={Text.Body.WithColor("#17343A").OfText("العناصر المذكورة")} />
+
+					<EmoTableCell pText={Text.Body.WithColor("#17343A").OfText("العناصر المذكورة")} />
+
+				</EmoTableRow>
+
+				<EmoTableRow pBg="#FFFDF8">
+
+					<EmoTableCell pText={Text.Body.Bold.WithColor("#17343A").OfText("ملاحظة المراجعة")} />
+
+					<EmoTableCell pText={Text.Body.WithColor("#17343A").OfText("مرجع المشروع")} />
+
+					<EmoTableCell pText={Text.Body.WithColor("#17343A").OfText("نقطة استفسار أو تطابق")} />
+
+					<EmoTableCell pText={Text.Body.WithColor("#17343A").OfText("نقطة استفسار أو تطابق")} />
+
+				</EmoTableRow>
+
+			</EmoTable>
+
+		</LayerItem>
+
+	</LayerDeck>
+
+
+
+
+
+
+
+	<RelServices
+		pTitle={Text.H2.Centered.White.OfText("خدمات مرتبطة بالمراجعة الفنية")}
+		pHeadBg={new ElemBg("#17343A")}
+		pBodyBg={new ElemBg("#E8EEEA")}
+		pMax={3}
+	>
+
+		<RelServiceItem pTitle="مقارنة عروض الأسعار" pDesc="جمع الفروق التجارية بجانب المراجعة الفنية." pHref="/emochain/quotations-comparison/" />
+
+		<RelServiceItem pTitle="معاينة الخامات والمعدات" pDesc="توثيق بيانات البند والحالة الظاهرة لدى المورد قبل التوريد." pHref="/emochain/inspection/" />
+
+		<RelServiceItem pTitle="تسعير بنود المقايسات" pDesc="ربط بنود الـ BOQ بالمواصفات والعروض الواردة." pHref="/emochain/boq-procurement/" />
+
+	</RelServices>
+
+
+
+
+
+
+
+</BLayout>

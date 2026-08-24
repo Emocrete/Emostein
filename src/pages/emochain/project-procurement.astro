@@ -1,0 +1,355 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, Emograph, EmoList, EmoWhatsIcon, HzStack, ListItem, VrStack } from "@/Widgets/Comp";
+import { AngleBand, MosaicGrid, MosaicItem, SideRail, SplitPane, SplitScene, StoryRail, StoryStep } from "@/Widgets/Layouts";
+import { Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="إدارة مشتريات وتوريدات المشروعات الهندسية"
+	pDescr="خدمة تنسيق مشتريات المشروعات التي تضم بنودًا هندسية من أكثر من سوق ومورد، من ترتيب الطلب وطلب الأسعار والمقارنة حتى متابعة التجهيز والتسليم."
+>
+
+
+
+
+
+
+
+	<Hero pBg={new ElemBg("#172126")}>
+
+		<VrStack
+			pSize={new Size(new NumPer("48%", "94%"), new NumPer("auto", "auto"))}
+			pLoc={new Loc(new NumPer("48%", "3%"), new NumPer("26%", "17%"))}
+			pGap={new Pixel(24, 16)}
+			pHzAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.White.OfText("إدارة مشتريات وتوريدات المشروعات")}
+				pText={Text.Body.Centered.White.OfSize(22, 18).OfText("تنسيق الطلبات التي تجمع خامات ومعدات ومستلزمات من أكثر من تخصص، مع متابعة الموردين والأسعار والتجهيز والتسليم في مسار واحد.")}
+			/>
+
+			<HzStack pGap={new Pixel(16, 10)} pForceHz>
+
+				<EmoCallIcon BlackSky />
+
+				<EmoWhatsIcon BlackSky />
+
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
+
+	<AngleBand
+		pBg="linear-gradient(120deg, #E7DDCA 0%, #F7F2E8 58%, #D8E1DC 100%)"
+		pColor="#172126"
+		pDirection="Fall"
+		pCut={new RespString("8%", "3%")}
+		pMinHeight={new RespString("300px", "300px")}
+	>
+
+		<Emograph
+			pSize={new Size(new NumPer("930px", "100%"), new NumPer("auto", "auto"))}
+			pTitle={Text.H2.WithColor("#172126").OfText("القيمة تظهر عندما يتوزع الطلب على أكثر من سوق")}
+			pText={Text.Body.WithColor("#465158").OfText("مشروع صغير قد يجمع كابلات ومحابس وعزل ومثبتات وأجهزة قياس ومستلزمات تركيب. كل مجموعة لها موردون وطريقة تسعير ومدة تجهيز مختلفة. الخدمة تجمع هذه التحركات في متابعة واحدة وتعرض للعميل صورة واضحة عن الأسعار والمواعيد وحالة كل بند.")}
+		/>
+
+	</AngleBand>
+
+
+
+
+
+
+
+	<SideRail
+		pRailWidth={new RespString("300px", "100%")}
+		pGap={new RespString("28px", "14px")}
+		pPad={new RespString("44px", "14px")}
+		pBg="#EEF0EC"
+		pRailBg="linear-gradient(180deg, #172126, #32464B)"
+		pRailColor="#F7F3EA"
+		pSticky={true}
+	>
+
+		<Emograph
+			slot="rail"
+			pTitle={Text.H2.WithColor("#F7F3EA").OfText("شكل الطلب المناسب للخدمة")}
+			pText={Text.Body.WithColor("#D9E0DC").OfText("قائمة فيها بنود من أكثر من تخصص، أو مشروع يحتاج متابعة شراء على مراحل، أو فريق يريد شخصًا يجمع الأسعار والموردين والتسليمات في نقطة اتصال واحدة.")}
+		/>
+
+		<MosaicGrid
+			pColumns={12}
+			pColumnsP={4}
+			pAutoRows={new RespString("88px", "76px")}
+			pGap={new RespString("14px", "10px")}
+			pPad={new RespString("0px", "0px")}
+			pMinHeight={new RespString("820px", "auto")}
+			pBg="transparent"
+		>
+
+			<MosaicItem
+				pColSpan={7}
+				pColSpanP={4}
+				pRowSpan={3}
+				pRowSpanP={3}
+				pBg="#FFF9F0"
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#172126").OfText("بنود كهرباء وميكانيكا")}
+					pText={Text.Body.WithColor("#4C5659").OfText("كابلات ومستلزماتها، لوحات فرعية، مواسير، محابس، وصلات، أجهزة قياس، معدات صغيرة وملحقات تركيب حسب قائمة المشروع.")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={5}
+				pColSpanP={4}
+				pRowSpan={2}
+				pRowSpanP={2}
+				pBg="#C8D6CF"
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#172126").OfText("خامات تنفيذ")}
+					pText={Text.Body.WithColor("#374447").OfText("عزل، مواد تثبيت، مواد سد وفواصل، قطاعات ومستلزمات مرتبطة بالتنفيذ.")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={5}
+				pColSpanP={4}
+				pRowSpan={2}
+				pRowSpanP={2}
+				pBg="#D6A45D"
+			>
+
+				<Emograph
+					pTitle={Text.H3.WithColor("#172126").OfText("بنود صناعية")}
+					pText={Text.Body.WithColor("#30383A").OfText("قطع ومكونات ومستلزمات تشغيل مرتبطة بمهمة صيانة أو تجهيز أو تعديل داخل منشأة.")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={4}
+				pRowSpan={2}
+				pRowSpanP={2}
+				pBg="#33464C"
+				pColor="#F8F4EC"
+			>
+
+				<Emograph
+					pTitle={Text.H4.WithColor("#F8F4EC").OfText("أكثر من عنوان توريد")}
+					pText={Text.Body.WithColor("#D8E0DD").OfText("تنسيق التجهيز حسب الموقع ومواعيد الاستلام المتاحة.")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={4}
+				pRowSpan={2}
+				pRowSpanP={2}
+				pBg="#F6F0E5"
+			>
+
+				<Emograph
+					pTitle={Text.H4.WithColor("#172126").OfText("أكثر من مورد")}
+					pText={Text.Body.WithColor("#4C5659").OfText("متابعة الردود والتعديلات ومواعيد التجهيز لكل جهة.")}
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={4}
+				pRowSpan={2}
+				pRowSpanP={2}
+				pBg="#A9BBB2"
+			>
+
+				<Emograph
+					pTitle={Text.H4.WithColor("#172126").OfText("أكثر من دفعة")}
+					pText={Text.Body.WithColor("#384548").OfText("ترتيب ما يجهز أولًا وما يرتبط ببرنامج التنفيذ في الموقع.")}
+				/>
+
+			</MosaicItem>
+
+		</MosaicGrid>
+
+	</SideRail>
+
+
+
+
+
+
+
+	<StoryRail
+		pAxis="Horizontal"
+		pAxisP="Vertical"
+		pBg="#172126"
+		pTrackColor="rgba(255,255,255,.22)"
+		pAccent="#D6A45D"
+		pGap={new RespString("22px", "16px")}
+		pPad={new RespString("58px", "18px")}
+	>
+
+		<StoryStep
+			pNumber="01"
+			pKicker="البداية"
+			pTitle="استلام القائمة"
+			pText="تجميع البنود والكميات والمواصفات والصور والرسومات ومكان التسليم في قائمة عمل واحدة."
+			pBg="#FFF9F0"
+			pColor="#172126"
+			pAccent="#D6A45D"
+		/>
+
+		<StoryStep
+			pNumber="02"
+			pKicker="الفرز"
+			pTitle="تقسيم الطلب"
+			pText="تجميع البنود حسب السوق ونوع المورد وطريقة التسعير والموعد المطلوب."
+			pBg="#E1E8E3"
+			pColor="#172126"
+			pAccent="#6F8D7E"
+		/>
+
+		<StoryStep
+			pNumber="03"
+			pKicker="السوق"
+			pTitle="جمع العروض"
+			pText="طلب الأسعار وتسجيل مدة التجهيز والنقل والدفع والبيانات الفنية المرتبطة بكل عرض."
+			pBg="#F4E5CE"
+			pColor="#172126"
+			pAccent="#D6A45D"
+		/>
+
+		<StoryStep
+			pNumber="04"
+			pKicker="الاختيار"
+			pTitle="ترتيب البدائل"
+			pText="عرض الفروق التجارية والفنية بصورة تساعد صاحب المشروع أو المهندس المسؤول على اختيار الأنسب."
+			pBg="#D5E0DA"
+			pColor="#172126"
+			pAccent="#6F8D7E"
+		/>
+
+		<StoryStep
+			pNumber="05"
+			pKicker="التنفيذ"
+			pTitle="متابعة التوريد"
+			pText="متابعة التجهيز والتحرك والتسليم وتسجيل البنود التي وصلت والبنود التي ما زالت قيد التجهيز."
+			pBg="#FFF9F0"
+			pColor="#172126"
+			pAccent="#D6A45D"
+		/>
+
+	</StoryRail>
+
+
+
+
+
+
+
+	<SplitScene
+		pColumns={new RespString("minmax(0, 1fr) minmax(0, 1fr)", "minmax(0, 1fr)")}
+		pGap={new RespString("18px", "12px")}
+		pPad={new RespString("34px", "12px")}
+		pBg="#E8ECE8"
+		pRadius={new RespString("0px", "0px")}
+	>
+
+		<SplitPane pBg="#FFF9F0" pColor="#172126" pRadius={new RespString("28px", "18px")}>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#172126").OfText("البيانات التي تبدأ بها المهمة")}
+				pText={Text.Body.WithColor("#4C5659").OfText("قائمة البنود، الكميات، المواصفات المتاحة، صور أو رسومات عند الحاجة، عنوان التسليم، والموعد المتوقع. أي ملاحظات من الموقع تدخل مع الطلب من البداية.")}
+			/>
+
+			<EmoList pWidth={new RespString("100%", "100%")} pItemsBg={new ElemBg("transparent")} pNumbered={false}>
+
+				<ListItem pText="BOQ أو قائمة مشتريات حتى لو كانت في صورة Excel بسيطة." />
+
+				<ListItem pText="الماركات أو درجات الجودة المحددة داخل المشروع." />
+
+				<ListItem pText="ترتيب الأولوية بين البنود حسب برنامج التنفيذ." />
+
+			</EmoList>
+
+		</SplitPane>
+
+		<SplitPane pBg="#24353B" pColor="#F7F3EA" pRadius={new RespString("28px", "18px")}>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#F7F3EA").OfText("الصورة التي تخرج للعميل")}
+				pText={Text.Body.WithColor("#D8E0DD").OfText("قائمة موردين وعروض مرتبطة بكل بند، ملخص للأسعار والشروط، حالة التجهيز، ملاحظات تحتاج اعتماد، ومتابعة واضحة حتى وصول التوريدات للموقع.")}
+			/>
+
+			<EmoList
+				pWidth={new RespString("100%", "100%")}
+				pItemsBg={new ElemBg("transparent")}
+				pItemFnt={Text.Body.WithColor("#F7F3EA")}
+				pNumbered={false}
+			>
+
+				<ListItem pText="عرض حالة كل بند في وقت المتابعة." />
+
+				<ListItem pText="تسجيل التغييرات التي يطلبها العميل أو المورد." />
+
+				<ListItem pText="تجميع مستندات وعناوين وأرقام التواصل الخاصة بالتوريد." />
+
+			</EmoList>
+
+		</SplitPane>
+
+	</SplitScene>
+
+
+
+
+
+
+
+	<RelServices
+		pTitle={Text.H2.Centered.White.OfText("خدمات مرتبطة بإدارة المشتريات")}
+		pDesc={Text.Body.Centered.White.OfText("صفحات تفصل أجزاء المهمة عندما يحتاج المشروع خدمة محددة") }
+		pHeadBg={new ElemBg("#172126")}
+		pBodyBg={new ElemBg("#E8ECE8")}
+		pMax={3}
+	>
+
+		<RelServiceItem pTitle="تسعير بنود المقايسات" pDesc="تحويل الـ BOQ إلى مجموعات طلب أسعار قابلة للمتابعة." pHref="/emochain/boq-procurement/" />
+
+		<RelServiceItem pTitle="تسعير عدة بنود" pDesc="تنسيق قائمة مشتريات موزعة على أكثر من سوق ومورد." pHref="/emochain/multi-item-sourcing/" />
+
+		<RelServiceItem pTitle="متابعة التوريد" pDesc="متابعة أوامر الشراء والتجهيز والتسليم حتى الموقع." pHref="/emochain/procurement-follow-up/" />
+
+	</RelServices>
+
+
+
+
+
+
+
+</BLayout>

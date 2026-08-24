@@ -1,0 +1,357 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, Emograph, EmoTable, EmoTableCell, EmoTableRow, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { MosaicGrid, MosaicItem, SplitPane, SplitScene, StoryRail, StoryStep } from "@/Widgets/Layouts";
+import { Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="متابعة أوامر التوريد حتى التسليم"
+	pDescr="خدمة متابعة أوامر شراء وتوريدات المشروعات بعد اعتماد المورد، تشمل التجهيز والمواعيد والشحن والتسليم الجزئي والتنسيق مع الموقع وتسجيل حالة كل بند."
+>
+
+
+
+
+
+
+
+	<Hero pBg={new ElemBg("#172A3A")}>
+
+		<VrStack
+			pSize={new Size(new NumPer("54%", "94%"), new NumPer("auto", "auto"))}
+			pLoc={new Loc(new NumPer("23%", "3%"), new NumPer("28%", "16%"))}
+			pGap={new Pixel(24, 16)}
+			pHzAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.White.OfText("متابعة أوامر التوريد حتى التسليم")}
+				pText={Text.Body.Centered.White.OfSize(22, 18).OfText("متابعة المورد بعد اعتماد الشراء: موعد التجهيز، الجاهزية، التحميل، حركة الشحنة، استقبال الموقع، الكميات المسلمة، والبنود التي تستكمل في دفعات لاحقة.")}
+			/>
+
+			<HzStack pGap={new Pixel(16, 10)} pForceHz>
+
+				<EmoCallIcon BlackSky />
+
+				<EmoWhatsIcon BlackSky />
+
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
+
+	<StoryRail
+		pAxis="Horizontal"
+		pAxisP="Vertical"
+		pBg="#E8EEF1"
+		pTrackColor="#9EB0B9"
+		pAccent="#D69A55"
+		pGap={new RespString("18px", "14px")}
+		pPad={new RespString("50px", "14px")}
+	>
+
+		<StoryStep
+			pNumber="01"
+			pKicker="اعتماد"
+			pTitle="أمر الشراء"
+			pText="تسجيل البنود والكميات والسعر المتفق عليه ومكان التسليم وموعد التجهيز الذي يبدأ عليه المتابعة."
+			pBg="#FFF9F0"
+			pColor="#172A3A"
+			pAccent="#D69A55"
+		/>
+
+		<StoryStep
+			pNumber="02"
+			pKicker="تجهيز"
+			pTitle="متابعة المورد"
+			pText="متابعة حالة التصنيع أو التجهيز والموعد المتوقع للجاهزية وأي تحديث يؤثر على برنامج التسليم."
+			pBg="#DCE7EC"
+			pColor="#172A3A"
+			pAccent="#64899B"
+		/>
+
+		<StoryStep
+			pNumber="03"
+			pKicker="جاهزية"
+			pTitle="تأكيد الشحنة"
+			pText="مراجعة الكمية الجاهزة وعنوان التحميل وموعد التحرك وبيانات النقل عند دخولها ضمن المهمة."
+			pBg="#F1D7B6"
+			pColor="#172A3A"
+			pAccent="#D69A55"
+		/>
+
+		<StoryStep
+			pNumber="04"
+			pKicker="موقع"
+			pTitle="تنسيق الاستلام"
+			pText="تأكيد موعد دخول الشحنة ونقطة الاستلام والشخص المسؤول في الموقع وأي متطلبات مرتبطة بالتحميل والتنزيل."
+			pBg="#DCE7EC"
+			pColor="#172A3A"
+			pAccent="#64899B"
+		/>
+
+		<StoryStep
+			pNumber="05"
+			pKicker="تسجيل"
+			pTitle="تحديث الحالة"
+			pText="تسجيل ما وصل فعليًا والكميات المتبقية والملاحظات المرتبطة بالشحنة التالية أو إقفال البند."
+			pBg="#FFF9F0"
+			pColor="#172A3A"
+			pAccent="#D69A55"
+		/>
+
+	</StoryRail>
+
+
+
+
+
+
+
+	<SplitPane
+		pBg="#172A3A"
+		pColor="#F7F4EC"
+		pPad={new RespString("52px", "14px")}
+		pRadius={new RespString("0px", "0px")}
+	>
+
+		<Emograph
+			pTitle={Text.H2.Centered.White.OfText("جدول متابعة بسيط يختصر اتصالات كثيرة")}
+			pText={Text.Body.Centered.WithColor("#DCE5E9").OfText("كل بند يظهر بحالته الحالية وموعده والمورد المسؤول والملاحظة التالية المطلوبة، فيسهل الرجوع إلى آخر تحديث بدل البحث في الرسائل والمكالمات.")}
+		/>
+
+		<EmoTable pBorderColor="#5F7682" pCellPad={new Pixel(13, 8)}>
+
+			<EmoTableRow pBg="#D69A55">
+
+				<EmoTableCell pText={Text.Body.Bold.WithColor("#172A3A").OfText("البند")} />
+
+				<EmoTableCell pText={Text.Body.Bold.WithColor("#172A3A").OfText("الحالة")} />
+
+				<EmoTableCell pText={Text.Body.Bold.WithColor("#172A3A").OfText("الموعد")} />
+
+				<EmoTableCell pText={Text.Body.Bold.WithColor("#172A3A").OfText("التحديث التالي")} />
+
+			</EmoTableRow>
+
+			<EmoTableRow pBg="#F7F3EA">
+
+				<EmoTableCell pText={Text.Body.WithColor("#172A3A").OfText("مجموعة 01")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#172A3A").OfText("قيد التجهيز")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#172A3A").OfText("موعد المورد")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#172A3A").OfText("تأكيد الجاهزية")} />
+
+			</EmoTableRow>
+
+			<EmoTableRow pBg="#DDE7EB">
+
+				<EmoTableCell pText={Text.Body.WithColor("#172A3A").OfText("مجموعة 02")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#172A3A").OfText("جاهز للتحميل")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#172A3A").OfText("موعد التحرك")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#172A3A").OfText("تنسيق الموقع")} />
+
+			</EmoTableRow>
+
+			<EmoTableRow pBg="#F7F3EA">
+
+				<EmoTableCell pText={Text.Body.WithColor("#172A3A").OfText("مجموعة 03")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#172A3A").OfText("توريد جزئي")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#172A3A").OfText("دفعة حالية + دفعة لاحقة")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#172A3A").OfText("تأكيد الكمية المتبقية")} />
+
+			</EmoTableRow>
+
+			<EmoTableRow pBg="#DDE7EB">
+
+				<EmoTableCell pText={Text.Body.WithColor("#172A3A").OfText("مجموعة 04")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#172A3A").OfText("تم التسليم")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#172A3A").OfText("تاريخ الاستلام")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#172A3A").OfText("تجميع مستندات البند")} />
+
+			</EmoTableRow>
+
+		</EmoTable>
+
+	</SplitPane>
+
+
+
+
+
+
+
+	<SplitScene
+		pColumns={new RespString("minmax(0, 1fr) minmax(0, 1fr)", "minmax(0, 1fr)")}
+		pGap={new RespString("16px", "12px")}
+		pPad={new RespString("34px", "12px")}
+		pBg="#E8EEF1"
+		pRadius={new RespString("0px", "0px") }
+	>
+
+		<SplitPane pBg="#FFF9F0" pColor="#172A3A" pRadius={new RespString("28px", "18px")}>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#172A3A").OfText("جانب المورد")}
+				pText={Text.Body.WithColor("#4D5B63").OfText("موعد التجهيز، الكميات الجاهزة، التعبئة، التحميل، المستندات، وتحديثات التصنيع أو التوريد التي تؤثر على الشحنة.")}
+			/>
+
+		</SplitPane>
+
+		<SplitPane pBg="#C9D9E0" pColor="#172A3A" pRadius={new RespString("28px", "18px")}>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#172A3A").OfText("جانب الموقع")}
+				pText={Text.Body.WithColor("#42535B").OfText("موعد الاستلام، مساحة التخزين، ترتيب الدخول، الشخص المسؤول، الكمية المستلمة، والملاحظات التي تظهر عند التسليم.")}
+			/>
+
+		</SplitPane>
+
+	</SplitScene>
+
+
+
+
+
+
+
+	<MosaicGrid
+		pColumns={12}
+		pColumnsP={4}
+		pAutoRows={new RespString("84px", "74px")}
+		pGap={new RespString("12px", "10px")}
+		pPad={new RespString("44px", "12px")}
+		pMinHeight={new RespString("560px", "auto")}
+		pMaxWidth={new RespString("1220px", "100%") }
+		pBg="#F1E9DE"
+		pRadius={new RespString("0px", "0px") }
+	>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={4}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#172A3A"
+			pColor="#FFFFFF"
+		>
+
+			<Emograph pTitle={Text.H3.White.OfText("توريد جزئي")} pText={Text.Body.White.OfText("تسجيل الكمية التي تحركت والكمية التي تنتظر الدفعة التالية.")} />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={4}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#D69A55"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#172A3A").OfText("تعديل موعد")}
+				pText={Text.Body.WithColor("#33434B").OfText("تحديث جدول المتابعة وربط الموعد الجديد باحتياج الموقع.")}
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={4}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#C6D7DE"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#172A3A").OfText("تجهيز مستندات")}
+				pText={Text.Body.WithColor("#42535B").OfText("تجميع الفاتورة أو إذن التسليم أو المستندات المرتبطة بالشحنة.")}
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={6}
+			pColSpanP={4}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#FFF9F0"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#172A3A").OfText("تنسيق النقل والاستلام")}
+				pText={Text.Body.WithColor("#4D5B63").OfText("ربط جاهزية المورد بموعد دخول الموقع وترتيب التحميل والتنزيل ضمن نطاق المهمة المتفق عليه.")}
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={6}
+			pColSpanP={4}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#DDE7EB"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#172A3A").OfText("تحديث العميل")}
+				pText={Text.Body.WithColor("#42535B").OfText("ملخص قصير يوضح حالة كل مجموعة وما تم وما هو موعد الخطوة التالية.")}
+			/>
+
+		</MosaicItem>
+
+	</MosaicGrid>
+
+
+
+
+
+
+
+	<RelServices
+		pTitle={Text.H2.Centered.White.OfText("خدمات مرتبطة بمرحلة التنفيذ")}
+		pHeadBg={new ElemBg("#172A3A")}
+		pBodyBg={new ElemBg("#E8EEF1")}
+		pMax={3}
+	>
+
+		<RelServiceItem pTitle="إدارة مشتريات المشروع" pDesc="جمع التسعير والاختيار والمتابعة في مهمة واحدة." pHref="/emochain/project-procurement/" />
+
+		<RelServiceItem pTitle="معاينة قبل التوريد" pDesc="زيارة المورد وتوثيق البند قبل الشحن أو الاستلام." pHref="/emochain/inspection/" />
+
+		<RelServiceItem pTitle="مقارنة عروض الأسعار" pDesc="ترتيب الشروط التجارية قبل اعتماد المورد." pHref="/emochain/quotations-comparison/" />
+
+	</RelServices>
+
+
+
+
+
+
+
+</BLayout>

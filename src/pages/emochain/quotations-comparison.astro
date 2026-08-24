@@ -1,0 +1,347 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, Emograph, EmoTable, EmoTableCell, EmoTableRow, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, MosaicGrid, MosaicItem, SplitPane, SplitScene } from "@/Widgets/Layouts";
+import { Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="مقارنة عروض أسعار الموردين للمشروعات"
+	pDescr="خدمة تنظيم ومقارنة عروض أسعار الموردين للمشروعات من حيث قيمة البنود والنقل والضريبة والدفع ومدة التوريد ونطاق كل عرض، مع تجهيز جدول واضح للمراجعة."
+>
+
+
+
+
+
+
+
+	<Hero pBg={new ElemBg("#2C3032")}>
+
+		<VrStack
+			pSize={new Size(new NumPer("54%", "94%"), new NumPer("auto", "auto"))}
+			pLoc={new Loc(new NumPer("39%", "3%"), new NumPer("27%", "16%"))}
+			pGap={new Pixel(24, 16)}
+			pHzAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.White.OfText("مقارنة عروض أسعار الموردين")}
+				pText={Text.Body.Centered.White.OfSize(22, 18).OfText("تجميع العروض المختلفة في جدول واحد يوضح قيمة البنود وشروط الدفع والنقل والضريبة ومدة التوريد ونطاق السعر المقدم.")}
+			/>
+
+			<HzStack pGap={new Pixel(16, 10)} pForceHz>
+
+				<EmoCallIcon BlackOrange />
+
+				<EmoWhatsIcon BlackOrange />
+
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
+
+	<AngleBand
+		pBg="linear-gradient(112deg, #F3E4CD, #D9E2DD)"
+		pColor="#20282B"
+		pDirection="Fall"
+		pCut={new RespString("7%", "3%")}
+		pMinHeight={new RespString("270px", "280px")}
+	>
+
+		<Emograph
+			pSize={new Size(new NumPer("980px", "100%"), new NumPer("auto", "auto"))}
+			pTitle={Text.H2.WithColor("#20282B").OfText("السعر النهائي يتكون من أكثر من رقم")}
+			pText={Text.Body.WithColor("#4A5458").OfText("عرض أقل في سعر الوحدة قد يحمل نقلًا أعلى أو مدة أطول أو دفعة مقدمة أكبر. جدول المقارنة يجمع هذه العناصر في نفس المكان حتى تظهر تكلفة كل بديل وشروطه بصورة مباشرة.")}
+		/>
+
+	</AngleBand>
+
+
+
+
+
+
+
+	<SplitPane
+		pBg="#F4F5F2"
+		pColor="#20282B"
+		pPad={new RespString("54px", "14px")}
+		pRadius={new RespString("0px", "0px")}
+	>
+
+		<Emograph
+			pTitle={Text.H2.Centered.WithColor("#20282B").OfText("مثال لشكل المقارنة التجارية")}
+			pText={Text.Body.Centered.WithColor("#566064").OfText("المحتوى الفعلي يتغير حسب نوع الطلب وعدد البنود وطريقة التسعير لدى كل مورد.")}
+		/>
+
+		<EmoTable pBorderColor="#BBC2BE" pCellPad={new Pixel(14, 8)}>
+
+			<EmoTableRow pBg="#2C3032">
+
+				<EmoTableCell pText={Text.Body.Bold.White.OfText("عنصر المقارنة")} />
+
+				<EmoTableCell pText={Text.Body.Bold.White.OfText("المورد أ")} />
+
+				<EmoTableCell pText={Text.Body.Bold.White.OfText("المورد ب")} />
+
+				<EmoTableCell pText={Text.Body.Bold.White.OfText("المورد ج")} />
+
+			</EmoTableRow>
+
+			<EmoTableRow pBg="#FFFDF9">
+
+				<EmoTableCell pText={Text.Body.Bold.WithColor("#20282B").OfText("قيمة البنود")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#20282B").OfText("طبقًا للعرض")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#20282B").OfText("طبقًا للعرض")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#20282B").OfText("طبقًا للعرض")} />
+
+			</EmoTableRow>
+
+			<EmoTableRow pBg="#E7ECE8">
+
+				<EmoTableCell pText={Text.Body.Bold.WithColor("#20282B").OfText("النقل")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#20282B").OfText("ضمن السعر / منفصل")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#20282B").OfText("ضمن السعر / منفصل")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#20282B").OfText("ضمن السعر / منفصل")} />
+
+			</EmoTableRow>
+
+			<EmoTableRow pBg="#FFFDF9">
+
+				<EmoTableCell pText={Text.Body.Bold.WithColor("#20282B").OfText("مدة التوريد")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#20282B").OfText("المدة المذكورة")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#20282B").OfText("المدة المذكورة")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#20282B").OfText("المدة المذكورة")} />
+
+			</EmoTableRow>
+
+			<EmoTableRow pBg="#E7ECE8">
+
+				<EmoTableCell pText={Text.Body.Bold.WithColor("#20282B").OfText("الدفع")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#20282B").OfText("مقدم / استلام / أجل")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#20282B").OfText("مقدم / استلام / أجل")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#20282B").OfText("مقدم / استلام / أجل")} />
+
+			</EmoTableRow>
+
+			<EmoTableRow pBg="#FFFDF9">
+
+				<EmoTableCell pText={Text.Body.Bold.WithColor("#20282B").OfText("نطاق العرض")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#20282B").OfText("البنود والملحقات المشمولة")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#20282B").OfText("البنود والملحقات المشمولة")} />
+
+				<EmoTableCell pText={Text.Body.WithColor("#20282B").OfText("البنود والملحقات المشمولة")} />
+
+			</EmoTableRow>
+
+		</EmoTable>
+
+	</SplitPane>
+
+
+
+
+
+
+
+	<MosaicGrid
+		pColumns={12}
+		pColumnsP={4}
+		pAutoRows={new RespString("92px", "76px")}
+		pGap={new RespString("14px", "10px")}
+		pPad={new RespString("46px", "12px")}
+		pMinHeight={new RespString("630px", "auto")}
+		pMaxWidth={new RespString("1220px", "100%")}
+		pBg="#E9E6DF"
+		pRadius={new RespString("0px", "0px")}
+	>
+
+		<MosaicItem
+			pColSpan={5}
+			pColSpanP={4}
+			pRowSpan={3}
+			pRowSpanP={3}
+			pBg="#2C3032"
+			pColor="#FFFFFF"
+		>
+
+			<Emograph
+				pTitle={Text.H3.White.OfText("السعر")}
+				pText={Text.Body.White.OfText("سعر الوحدة، إجمالي البند، الخصومات، الضريبة، العملة، وصلاحية العرض عند ذكرها.")}
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={4}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#D8A664"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#20282B").OfText("التوريد")}
+				pText={Text.Body.WithColor("#333B3E").OfText("مدة التجهيز، التوريد الكامل أو الجزئي، ومكان التسليم.")}
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={3}
+			pColSpanP={4}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#BCD0C6"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#20282B").OfText("الدفع")}
+				pText={Text.Body.WithColor("#3E4A4E").OfText("نسبة المقدم وتوقيت باقي الدفعات وطريقة السداد.")}
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={4}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#FFF9F0"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#20282B").OfText("النقل")}
+				pText={Text.Body.WithColor("#4A5458").OfText("تكلفة النقل، مسؤولية التحميل، وعنوان التسليم.")}
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={4}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#CAD7D1"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#20282B").OfText("نطاق العرض")}
+				pText={Text.Body.WithColor("#4A5458").OfText("الملحقات والكميات والخدمات المرتبطة بالسعر المقدم.")}
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={4}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#F0D9B8"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#20282B").OfText("الملاحظات")}
+				pText={Text.Body.WithColor("#4A5458").OfText("استفسارات تحتاج رد المورد قبل اعتماد الاختيار.")}
+			/>
+
+		</MosaicItem>
+
+	</MosaicGrid>
+
+
+
+
+
+
+
+	<SplitScene
+		pColumns={new RespString("minmax(0, 1fr) minmax(0, 1fr)", "minmax(0, 1fr)")}
+		pGap={new RespString("0px", "12px")}
+		pPad={new RespString("0px", "0px")}
+		pBg="#2C3032"
+		pRadius={new RespString("0px", "0px")}
+	>
+
+		<SplitPane
+			pBg="#2C3032"
+			pColor="#F8F4EC"
+			pEdge="Chevron"
+			pEdgeP="None"
+			pMinHeight={new RespString("360px", "320px")}
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#F8F4EC").OfText("العروض تدخل بأشكال مختلفة")}
+				pText={Text.Body.WithColor("#D9DEDC").OfText("مورد يرسل Excel، وآخر PDF، وثالث يكتب السعر في رسالة. المقارنة تبدأ بتوحيد البنود والوحدات والعناصر التجارية قبل قراءة الفروق.")}
+			/>
+
+		</SplitPane>
+
+		<SplitPane pBg="#F4E4CC" pColor="#20282B" pMinHeight={new RespString("360px", "320px")}>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#20282B").OfText("الجدول النهائي يخدم قرار الشراء")}
+				pText={Text.Body.WithColor("#4A5458").OfText("كل صف يعرض نفس البند أمام الموردين، مع إجماليات وشروط واضحة وملاحظات مركزة على النقاط التي تؤثر في الشراء والتسليم.")}
+			/>
+
+		</SplitPane>
+
+	</SplitScene>
+
+
+
+
+
+
+
+	<RelServices
+		pTitle={Text.H2.Centered.White.OfText("خدمات مرتبطة بمراجعة العروض")}
+		pHeadBg={new ElemBg("#2C3032")}
+		pBodyBg={new ElemBg("#E9E6DF")}
+		pMax={3}
+	>
+
+		<RelServiceItem pTitle="المقارنة الفنية" pDesc="مراجعة المواصفات والموديلات والبيانات الفنية بجانب السعر." pHref="/emochain/technical-comparison/" />
+
+		<RelServiceItem pTitle="البحث عن موردين" pDesc="توسيع قائمة الجهات التي يمكن طلب أسعار منها." pHref="/emochain/supplier-sourcing/" />
+
+		<RelServiceItem pTitle="تسعير بنود المقايسات" pDesc="تجهيز مجموعات RFQ انطلاقًا من الـ BOQ." pHref="/emochain/boq-procurement/" />
+
+	</RelServices>
+
+
+
+
+
+
+
+</BLayout>
