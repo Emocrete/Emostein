@@ -1,0 +1,449 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { MosaicGrid, MosaicItem, ScrollShelf, ShelfItem, SideRail, SplitPane, SplitScene, StoryRail, StoryStep } from "@/Widgets/Layouts";
+import { Hero, RelatedServices, RelServiceItem } from "@/Widgets/Sections";
+import { EmoContactStrip } from "@/Widgets/Strips";
+import { ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="توريد معدات ومكونات وقطع غيار الحريق"
+	pDescr="توريد معدات ومكونات أنظمة مكافحة الحريق والإنذار وقطع الغيار، مع مراجعة المواصفات والاعتمادات والبدائل الفنية وملف التوريد والأسطوانات وإعادة التعبئة والتتبع والضمان."
+>
+
+
+
+
+
+
+
+	<Hero pBg={new ElemBg("#18211F")}>
+
+		<VrStack pSize={new Size(new NumPer("58%", "95%"))} pLoc={new Loc(new NumPer("5%", "2.5%"), new NumPer("15%", "12%"))} pHzAlign="Center">
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor("#FCFCFA").OfText("توريد معدات ومكونات وقطع غيار الحريق")}
+				pText={Text.Body.Centered.WithColor("#DCE5E1").OfText("التوريد هنا يبدأ بالمواصفة والاعتماد والموديل، لا باسم المنتج فقط. الهدف أن يصل للموقع مكوّن معروف المصدر والتصنيف ومتوافق مع النظام ويمكن تتبعه وصيانته واستبداله لاحقًا.")}
+			/>
+
+			<HzStack pGap={new Pixel(22, 10)} pForceHz>
+
+				<EmoCallIcon BlackGreen />
+
+				<EmoWhatsIcon BlackGreen />
+
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
+
+	<SideRail
+		id="SupplyLogic"
+		pRailWidth={new RespString("310px", "100%")}
+		pGap={new RespString("26px", "12px")}
+		pPad={new RespString("50px", "12px")}
+		pBg="#F4F5F1"
+		pRailBg="linear-gradient(180deg,#18211F,#315D4F)"
+		pRailColor="#FCFCFA"
+		pSticky={true}
+	>
+
+		<Emograph
+			slot="rail"
+			pTitle={Text.H2.WithColor("#FCFCFA").OfText("قبل إصدار أمر الشراء") }
+			pText={Text.Body.WithColor("#DCE5E1").OfText("نراجع ما الذي يجب مطابقته، وما الذي يمكن استبداله، وما المستندات التي يجب أن تأتي مع المنتج حتى لا يتحول السعر الأرخص إلى مشكلة اعتماد أو تشغيل.") }
+		/>
+
+		<MosaicGrid
+			pColumns={12}
+			pColumnsP={4}
+			pAutoRows={new RespString("76px", "66px")}
+			pGap={new RespString("9px", "7px")}
+			pBg="#F4F5F1"
+		>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={2}
+				pRowSpan={2}
+				pBg="#FFFDF8"
+			>
+
+				<Emograph pTitle={Text.H3.OfText("المواصفة") } pText={Text.Body.OfText("النوع، المقاس، الضغط، المادة، الأداء، ظروف التشغيل وأي خصائص خاصة بالمشروع.") } />
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={2}
+				pRowSpan={2}
+				pBg="#EEF2EE"
+			>
+
+				<Emograph pTitle={Text.H3.OfText("الاعتماد") } pText={Text.Body.OfText("شهادات وتقارير اختبار وبيانات مصنع وبلد منشأ ونطاق اعتماد المنتج.") } />
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={4}
+				pRowSpan={2}
+				pBg="#F4F0E8"
+			>
+
+				<Emograph
+					pTitle={Text.H3.OfText("التوافق") }
+					pText={Text.Body.OfText("مطابقة المكوّن مع النظام القائم أو التصميم: وصلات، ضغط، بروتوكول، عامل إطفاء أو لوحة تحكم.") }
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={6}
+				pColSpanP={2}
+				pRowSpan={2}
+				pBg="#EDF3F5"
+			>
+
+				<Emograph pTitle={Text.H3.OfText("التتبع") } pText={Text.Body.OfText("Serial / Batch / تاريخ إنتاج وشهادات فحص وضمان ومستندات استلام واضحة.") } />
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={6}
+				pColSpanP={2}
+				pRowSpan={2}
+				pBg="#F7EDEE"
+			>
+
+				<Emograph
+					pTitle={Text.H3.OfText("ما بعد البيع") }
+					pText={Text.Body.OfText("قطع غيار، مواد استهلاكية، إعادة تعبئة، صيانة، ودعم عند استبدال جزء بعد سنوات.") }
+				/>
+
+			</MosaicItem>
+
+		</MosaicGrid>
+
+	</SideRail>
+
+
+
+
+
+
+
+	<ScrollShelf
+		id="SupplyFamilies"
+		pItemWidth={new RespString("330px", "84vw")}
+		pGap={new RespString("16px", "12px")}
+		pPad={new RespString("52px", "16px")}
+		pMaxWidth={new RespString("1440px", "100%")}
+		pBg="#E9ECE8"
+		pEdgeFade={true}
+	>
+
+		<ShelfItem pBg="#EDF3F5" pAccent="#4B7185">
+
+			<Emograph
+				pTitle={Text.H2.OfText("شبكات المياه") }
+				pText={Text.Body.OfText("رشاشات، صمامات، Flow Switches، Test & Drain، خزائن، خراطيم، Landing Valves، Hydrants، مواسير ووصلات وملحقات.") }
+			/>
+
+			<EmoDet BlackSky pText="الأنظمة المائية" pHref="/emofire/water-systems" />
+
+		</ShelfItem>
+
+		<ShelfItem pBg="#F4F0E8" pAccent="#B88535">
+
+			<Emograph
+				pTitle={Text.H2.OfText("الطلمبات") }
+				pText={Text.Body.OfText("Fire Pumps، Jockey، Controllers، محابس، عدادات، Relief، Test Header، Flow Meter وقطع غيار تشغيلية.") }
+			/>
+
+			<EmoDet BlackOrange pText="الطلمبات" pHref="/emofire/pumps" />
+
+		</ShelfItem>
+
+		<ShelfItem pBg="#F7EDEE" pAccent="#B8322A">
+
+			<Emograph
+				pTitle={Text.H2.OfText("الإنذار") }
+				pText={Text.Body.OfText("Panels، Detectors، Modules، Sounders، Strobes، Manual Calls، Batteries، Interfaces وكابلات وملحقات حسب النظام.") }
+			/>
+
+			<EmoDet BlackRed pText="الإنذار" pHref="/emofire/alarm" />
+
+		</ShelfItem>
+
+		<ShelfItem pBg="#EEF2EE" pAccent="#315D4F">
+
+			<Emograph
+				pTitle={Text.H2.OfText("الإطفاء المتخصص") }
+				pText={Text.Body.OfText("أسطوانات، صمامات، فوهات، وحدات إطلاق، Hose Assemblies، معدات Foam، Kitchen Wet Chemical ومكونات الأنظمة المعتمدة.") }
+			/>
+
+			<EmoDet BlackGreen pText="الإطفاء المتخصص" pHref="/emofire/suppression" />
+
+		</ShelfItem>
+
+		<ShelfItem pBg="#FFFDF8" pAccent="#596068">
+
+			<Emograph
+				pTitle={Text.H2.OfText("معدات محمولة ومساندة") }
+				pText={Text.Body.OfText("طفايات وخزائن وملحقات وأجهزة قياس أو اختبار وعناصر تعريف وسلامة بحسب نطاق المشروع أو خطة الصيانة.") }
+			/>
+
+		</ShelfItem>
+
+	</ScrollShelf>
+
+
+
+
+
+
+
+	<StoryRail
+		id="SupplyWorkflow"
+		pAxis="Horizontal"
+		pAxisP="Vertical"
+		pBg="#FCFCFA"
+		pAccent="#315D4F"
+		pTrackColor="#D7DDD9"
+		pPad={new RespString("58px", "16px")}
+		pMaxWidth={new RespString("1360px", "100%")}
+	>
+
+		<StoryStep
+			pNumber="01"
+			pKicker="Request"
+			pTitle="قراءة الطلب"
+			pText="BOQ أو Data Sheet أو موديل قائم أو قائمة قطع غيار أو طلب استبدال جزء تالف."
+			pBg="#FFFDF8"
+			pAccent="#596068"
+		/>
+
+		<StoryStep
+			pNumber="02"
+			pKicker="Submittal"
+			pTitle="مراجعة المطابقة"
+			pText="مقارنة المواصفة والأداء والاعتماد والملحقات المطلوبة قبل تثبيت البديل والسعر."
+			pBg="#EEF2EE"
+			pAccent="#315D4F"
+		/>
+
+		<StoryStep
+			pNumber="03"
+			pKicker="Commercial"
+			pTitle="عرض فني ومالي"
+			pText="تحديد الموديل والكمية والملحقات والضمان ومدة التوريد وأي استثناءات أو بدائل."
+			pBg="#F4F0E8"
+			pAccent="#B88535"
+		/>
+
+		<StoryStep
+			pNumber="04"
+			pKicker="Delivery"
+			pTitle="استلام وتتبع"
+			pText="مراجعة الكميات والحالة والشهادات وأرقام التشغيل أو الدفعات وتوثيق التسليم."
+			pBg="#EDF3F5"
+			pAccent="#4B7185"
+		/>
+
+		<StoryStep
+			pNumber="05"
+			pKicker="Aftercare"
+			pTitle="قطع غيار وخدمة"
+			pText="حفظ بيانات المنتج لتسهيل الصيانة وإعادة الطلب أو التعبئة والاستبدال مستقبلًا."
+			pBg="#F7EDEE"
+			pAccent="#8C3138"
+		/>
+
+	</StoryRail>
+
+
+
+
+
+
+
+	<SplitScene
+		id="TechnicalAlternatives"
+		pColumns={new RespString("1fr 1fr", "1fr")}
+		pGap={new RespString("0px", "0px")}
+		pMinHeight={new RespString("540px", "720px")}
+		pBg="#FCFCFA"
+	>
+
+		<SplitPane
+			pBg="#18211F"
+			pColor="#FCFCFA"
+			pPad={new RespString("52px", "22px")}
+			pEdge="DiagonalEnd"
+			pEdgeP="None"
+			pHzAlign="Right"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#FCFCFA").OfText("البديل الفني المقبول") }
+				pText={Text.Body.WithColor("#DCE5E1").OfText("البديل لا يُقبل لأنه أرخص أو متاح فقط. يجب مقارنة الوظيفة والأداء والتصنيف والأبعاد وطريقة التوصيل والاعتماد والملحقات والعمر التشغيلي ومتطلبات الصيانة، ثم تحديد الفروقات صراحة في العرض الفني.") }
+			/>
+
+		</SplitPane>
+
+		<SplitPane
+			pBg="#F4F0E8"
+			pPad={new RespString("52px", "22px")}
+			pHzAlign="Right"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H2.OfText("المنتج الصحيح قد يكون خطأ في نظام آخر") }
+				pText={Text.Body.OfText("بعض المكونات تعمل كعائلة معتمدة أو تعتمد على بروتوكول لوحة أو ضغط تخزين أو Agent أو Nozzle أو Valve محدد. لذلك لا يتم فصل القطعة عن بقية المنظومة عند استبدالها، خصوصًا في الإنذار والغاز والطلمبات والصمامات المتخصصة.") }
+			/>
+
+		</SplitPane>
+
+	</SplitScene>
+
+
+
+
+
+
+
+	<MosaicGrid
+		id="CylinderAndSpares"
+		pColumns={12}
+		pColumnsP={4}
+		pAutoRows={new RespString("76px", "66px")}
+		pGap={new RespString("10px", "8px")}
+		pPad={new RespString("50px", "12px")}
+		pMaxWidth={new RespString("1320px", "100%")}
+		pBg="#EEEAE3"
+		pRadius={new RespString("30px", "16px")}
+	>
+
+		<MosaicItem
+			pColSpan={5}
+			pColSpanP={4}
+			pRowSpan={3}
+			pBg="#315D4F"
+			pColor="#FCFCFA"
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#FCFCFA").OfText("خدمة الأسطوانات وقطع الغيار") }
+				pText={Text.Body.WithColor("#DCE8E3").OfText("الأنظمة القائمة تحتاج سلسلة إمداد مستمرة بعد التركيب: تعبئة واختبار واستبدال مكونات وتوفير مواد استهلاكية وقطع تتحرك مع العمر التشغيلي أو نتائج الصيانة.") }
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={3}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#FFFDF8"
+		>
+
+			<Emograph
+				pTitle={Text.H3.OfText("إعادة تعبئة") }
+				pText={Text.Body.OfText("مراجعة نوع العامل ووزنه والأسطوانة والصمام والملصقات وحالة الاختبار قبل التعبئة.") }
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#F7EDEE"
+		>
+
+			<Emograph
+				pTitle={Text.H3.OfText("قطع إطلاق") }
+				pText={Text.Body.OfText("Solenoids، actuators، hoses، pressure switches، release modules ومكونات مرتبطة بالنظام.") }
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={3}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#EDF3F5"
+		>
+
+			<Emograph
+				pTitle={Text.H3.OfText("قطع طلمبات") }
+				pText={Text.Body.OfText("حساسات، عدادات، شواحن، بطاريات، قطع لوحة وتحكم ومكونات ميكانيكية حسب الموديل.") }
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#F4F0E8"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("مستهلكات صيانة") } pText={Text.Body.OfText("بطاريات، جوانات، شحوم، فلاتر، شارات تعريف وعناصر اختبار أو استبدال دوري.") } />
+
+		</MosaicItem>
+
+	</MosaicGrid>
+
+
+
+
+
+
+
+	<RelatedServices pTitle={Text.H2.Centered.WithColor("#FCFCFA").OfText("خدمات مرتبطة بالتوريد") } pMax={4} pMaxP={1}>
+
+		<RelServiceItem pTitle="مقاولات أنظمة الحريق" pDesc="توريد + تركيب + اختبار وتسليم ضمن عقد واحد." pHref="/emofire/contracting" />
+
+		<RelServiceItem pTitle="صيانة أنظمة الحريق" pDesc="تحديد قطع الغيار المطلوبة من الفحص الفعلي للمنظومة." pHref="/emofire/maintenance" />
+
+		<RelServiceItem pTitle="تصميم أنظمة الحريق" pDesc="تثبيت المواصفة والموديلات والمعايير الفنية قبل الشراء." pHref="/emofire/design" />
+
+		<RelServiceItem pTitle="تكلفة نظام الحريق" pDesc="فصل تكلفة المعدات عن التنفيذ والهندسة والاختبارات." pHref="/emofire/cost" />
+
+	</RelatedServices>
+
+
+
+
+
+
+
+	<EmoContactStrip
+		pTitle="أرسل قائمة المعدات أو صورة بيانات القطعة"
+		pDesc="للتوريد أو الاستبدال أرسل الموديل والمقاس والكمية والمواصفة وصورة الـNameplate إن كانت القطعة قائمة. لو المطلوب بديل فني، اذكر النظام الذي ستعمل داخله القطعة وليس اسمها فقط."
+		pSourceName="EmoFire Supply"
+	/>
+
+
+
+
+
+
+
+</BLayout>

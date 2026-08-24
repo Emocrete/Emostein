@@ -10,10 +10,12 @@ type CssValue = string | number;
 
 type GalleryJsonItem = {
 	File?: string;
+	Src?: string;
 	NameAr?: string;
 	Alt?: string;
 	Use?: string;
 	file?: string;
+	src?: string;
 	nameAr?: string;
 	alt?: string;
 	use?: string;
@@ -33,7 +35,10 @@ interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps
 	pStoneType?: StoneProductType;
 
 	/** فولدر الصور داخل public، مثل /Media/Emostone/ProductStripSample. */
-	pFolder: string;
+	pFolder?: string;
+
+	/** صور جاهزة مباشرة. لها أولوية على pFolder وملف JSON. */
+	pImages?: GalleryJsonItem[];
 
 	/** اسم ملف الجسون داخل نفس فولدر الصور. */
 	pJson?: string;
@@ -73,7 +78,8 @@ const cProps = Astro.props as Props & Record<string, unknown>;
 
 const {
 	pStoneType = "Marble",
-	pFolder,
+	pFolder = "",
+	pImages = [],
 	pJson = "gallery.json",
 	pName = "جلالة روزا",
 	pKind = "رخام مصري طبيعي",
@@ -148,7 +154,7 @@ const cUses = ToList(pUses);
 const cSizes = ToList(pSizes);
 const cBodyLines = ToList(pBody);
 const cMobileCount = Math.max(1, pMobileInitialCount);
-const cGalleryItems = GetGalleryItems(pFolder, pJson, cUses.join("، ")).map((pItem, pIndex) => ({
+const cGalleryItems = GetGalleryItems(pFolder, pJson, cUses.join("، "), pImages).map((pItem, pIndex) => ({
 	...pItem,
 	HiddenOnMobile: pIndex >= cMobileCount,
 }));
@@ -250,7 +256,11 @@ function GetCssName(pName: string) {
 	return pName.replace(/[A-Z]/g, (pChar) => `-${pChar.toLowerCase()}`);
 }
 
-function GetGalleryItems(pFolderValue: string, pJsonName: string, pDefaultUse: string): GalleryItem[] {
+function GetGalleryItems(pFolderValue: string, pJsonName: string, pDefaultUse: string, pDirectItems: GalleryJsonItem[] = []): GalleryItem[] {
+	if (pDirectItems.length > 0) {
+		return NormalizeGalleryItems(pDirectItems, pFolderValue, pDefaultUse);
+	}
+
 	const cPublicRoot = resolve(process.cwd(), "public");
 	const cFolder = NormalizePublicFolder(pFolderValue);
 	if (!cFolder) return [];
@@ -273,28 +283,36 @@ function GetGalleryItems(pFolderValue: string, pJsonName: string, pDefaultUse: s
 		const cRaw = JSON.parse(readFileSync(cJsonPath, "utf-8"));
 		const cItems = Array.isArray(cRaw) ? cRaw : Array.isArray(cRaw?.Images) ? cRaw.Images : Array.isArray(cRaw?.images) ? cRaw.images : [];
 
-		return cItems
-			.map((pItem: GalleryJsonItem) => {
-				const cFile = `${pItem.File ?? pItem.file ?? ""}`.trim();
-				if (!cFile) return null;
-
-				const cName = `${pItem.NameAr ?? pItem.nameAr ?? StripExt(cFile)}`.trim();
-				const cAlt = `${pItem.Alt ?? pItem.alt ?? cName}`.trim();
-				const cUse = `${pItem.Use ?? pItem.use ?? pDefaultUse}`.trim();
-
-				return {
-					Src: JoinPublicUrl(cFolder, cFile),
-					File: cFile,
-					NameAr: cName,
-					Alt: cAlt,
-					Use: cUse,
-					HiddenOnMobile: false,
-				};
-			})
-			.filter(Boolean) as GalleryItem[];
+		return NormalizeGalleryItems(cItems, cFolder, pDefaultUse);
 	} catch {
 		return [];
 	}
+}
+
+
+function NormalizeGalleryItems(pItems: GalleryJsonItem[], pFolderValue: string, pDefaultUse: string): GalleryItem[] {
+	const cFolder = NormalizePublicFolder(pFolderValue);
+
+	return pItems
+		.map((pItem) => {
+			const cFile = `${pItem.File ?? pItem.file ?? pItem.Src ?? pItem.src ?? ""}`.trim();
+			if (!cFile) return null;
+
+			const cName = `${pItem.NameAr ?? pItem.nameAr ?? StripExt(cFile)}`.trim();
+			const cAlt = `${pItem.Alt ?? pItem.alt ?? cName}`.trim();
+			const cUse = `${pItem.Use ?? pItem.use ?? pDefaultUse}`.trim();
+			const cSrc = cFile.startsWith("/") ? cFile : JoinPublicUrl(cFolder, cFile);
+
+			return {
+				Src: cSrc,
+				File: cFile,
+				NameAr: cName,
+				Alt: cAlt,
+				Use: cUse,
+				HiddenOnMobile: false,
+			};
+		})
+		.filter(Boolean) as GalleryItem[];
 }
 
 function NormalizePublicFolder(pFolderValue: string) {

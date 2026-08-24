@@ -1,0 +1,509 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { MosaicGrid, MosaicItem, RadialItem, RadialLayout, SplitPane, SplitScene, StickyStory, StickyStoryItem, StoryRail, StoryStep } from "@/Widgets/Layouts";
+import { Hero, RelatedServices, RelServiceItem } from "@/Widgets/Sections";
+import { EmoContactStrip } from "@/Widgets/Strips";
+import { ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="تصميم أنظمة مكافحة الحريق"
+	pDescr="تصميم أنظمة مكافحة الحريق والإنذار للمباني والمنشآت: تصنيف الخطورة، أسس التصميم، الحسابات الهيدروليكية، الخزانات والطلمبات، المخططات والمواصفات والمقايسات والتنسيق."
+>
+
+
+
+
+
+
+
+	<Hero pBg={new ElemBg("#10202A")}>
+
+		<VrStack pSize={new Size(new NumPer("55%", "95%"))} pLoc={new Loc(new NumPer("5%", "2.5%"), new NumPer("15%", "12%"))} pHzAlign="Center">
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor("#FCFCFA").OfText("تصميم أنظمة مكافحة الحريق")}
+				pText={Text.Body.Centered.WithColor("#D8E3E8").OfText("من فرضيات الخطر إلى رسومات يمكن تنفيذها: نثبت أساس التصميم، نحسب الطلب الهيدروليكي، نحدد الخزان والطلمبات والأنظمة، ثم نحول النتائج إلى مخططات ومواصفات ومقايسة منسقة مع المشروع.")}
+			/>
+
+			<HzStack pGap={new Pixel(22, 10)} pForceHz>
+
+				<EmoCallIcon BlackSky />
+
+				<EmoWhatsIcon BlackSky />
+
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
+
+	<StickyStory
+		id="DesignLogic"
+		pVisualShare={42}
+		pBg="#F3F0EA"
+		pVisualBg="linear-gradient(150deg,#0D1820,#28404E)"
+		pGap={new RespString("42px", "18px")}
+		pPad={new RespString("58px", "14px")}
+		pMaxWidth={new RespString("1360px", "100%")}
+	>
+
+		<Emograph
+			slot="visual"
+			pTitle={Text.H2.WithColor("#FCFCFA").OfText("Basis of Design")}
+			pText={Text.Body.WithColor("#D5E0E5").OfText("وثيقة واحدة تربط طبيعة الإشغال والكود ومصدر المياه والأنظمة المختارة والفرضيات الحسابية، فتمنع أن يتحول التصميم إلى رسومات منفصلة بلا مرجعية مشتركة.")}
+		/>
+
+		<StickyStoryItem
+			pKicker="01 / INPUT"
+			pTitle="دراسة النشاط والخطر"
+			pText="تحديد استخدامات الفراغات والمواد وطريقة التخزين والارتفاعات ومساحات الحريق وأعداد الشاغلين ومصادر الطاقة والمياه والقيود المعمارية. من هنا يتحدد نوع الحماية المطلوبة بدل اختيار نظام جاهز وتطبيقه على كل مشروع."
+			pBg="#FFFDF8"
+			pAccent="#B8322A"
+		/>
+
+		<StickyStoryItem
+			pKicker="02 / RULES"
+			pTitle="تثبيت أسس التصميم"
+			pText="تحديد إصدار المرجعية المستخدمة واشتراطات الجهة المختصة وتصنيف الخطورة ودرجات الحرارة وبيانات المعدات وفرضيات التشغيل ومعدلات الطلب التي ستبنى عليها الحسابات والمخططات والمراجعات."
+			pBg="#F6F1E9"
+			pAccent="#B88535"
+		/>
+
+		<StickyStoryItem
+			pKicker="03 / CALC"
+			pTitle="الحسابات والاختيار"
+			pText="الحسابات الهيدروليكية تحدد الطلب عند المنطقة الأشد تأثيرًا، وفواقد الاحتكاك والمناسيب، ثم تنتقل النتائج إلى أقطار المواسير وسعة الخزان ونقطة تشغيل الطلمبة ومكونات التحكم والاختبار."
+			pBg="#EDF3F5"
+			pAccent="#4B7185"
+		/>
+
+		<StickyStoryItem
+			pKicker="04 / OUTPUT"
+			pTitle="تحويل الحساب إلى مستندات"
+			pText="المخططات والمواصفات والمقايسة وجداول المعدات يجب أن تعكس نفس الفرضيات والحسابات، وتوضح المسارات والأقطار والمناسيب ونقاط التحكم والتنسيق والاختبار بصورة قابلة للتنفيذ والمراجعة."
+			pBg="#EEF2EE"
+			pAccent="#315D4F"
+		/>
+
+	</StickyStory>
+
+
+
+
+
+
+
+	<RadialLayout
+		id="DesignInputs"
+		pCount={6}
+		pDiameter={new RespString("900px", "96%")}
+		pOrbit={new RespString("38%", "36%")}
+		pCenterSize={new RespString("30%", "34%")}
+		pBg="radial-gradient(circle,#F9F7F2 0 46%,#E7ECEE 47% 100%)"
+		pCenterBg="#B8322A"
+		pCenterColor="#FCFCFA"
+		pRingColor="rgba(15,35,45,.18)"
+		pAccent="#B8322A"
+		pCenterTitle="DESIGN"
+		pCenterText="مدخلات القرار"
+		pStackPortrait={true}
+	>
+
+		<RadialItem
+			pTitle="الإشغال"
+			pText="نوع الاستخدام وعدد الشاغلين وتقسيم المناطق"
+			pBg="#FFFDF8"
+			pAccent="#B8322A"
+		/>
+
+		<RadialItem
+			pTitle="الخطر"
+			pText="مواد وتخزين وعمليات وارتفاعات ومصادر اشتعال"
+			pBg="#F7EDEE"
+			pAccent="#8C3138"
+		/>
+
+		<RadialItem
+			pTitle="المياه"
+			pText="المصدر والضغط والتصرف والتخزين المتاح"
+			pBg="#EDF3F5"
+			pAccent="#4B7185"
+		/>
+
+		<RadialItem
+			pTitle="المعماري"
+			pText="القطاعات والأسقف والفراغات ومسالك الهروب"
+			pBg="#F4F0E8"
+			pAccent="#B88535"
+		/>
+
+		<RadialItem
+			pTitle="MEP"
+			pText="تكييف وكهرباء وصحي وتحكم ونقاط الربط"
+			pBg="#EEF2EE"
+			pAccent="#315D4F"
+		/>
+
+		<RadialItem
+			pTitle="الاعتماد"
+			pText="اشتراطات الاستشاري والجهة المختصة والمشروع"
+			pBg="#F2F2F2"
+			pAccent="#596068"
+		/>
+
+	</RadialLayout>
+
+
+
+
+
+
+
+	<SplitScene
+		id="HydraulicDesign"
+		pColumns={new RespString("1fr 1fr", "1fr")}
+		pGap={new RespString("12px", "10px")}
+		pPad={new RespString("52px", "12px")}
+		pBg="#101820"
+		pRadius={new RespString("34px", "18px")}
+	>
+
+		<SplitPane
+			pBg="#DCEEF4"
+			pPad={new RespString("48px", "22px")}
+			pEdge="Chevron"
+			pEdgeP="None"
+			pHzAlign="Right"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#10202A").OfText("الحسابات الهيدروليكية")}
+				pText={Text.Body.WithColor("#33454E").OfText("تُحسب الشبكة عند المنطقة الأشد تأثيرًا باستخدام كثافة أو معدل التصرف المطلوب، مساحة التشغيل، الطلب الإضافي للخراطيم، فواقد الاحتكاك، فروق المناسيب والضغط المتبقي المطلوب. الناتج ليس رقمًا منفصلًا؛ هو الذي يحدد أقطار الخطوط ونقطة تغذية النظام ومتطلبات المصدر والطلمبات.")}
+			/>
+
+		</SplitPane>
+
+		<SplitPane
+			pBg="#17222D"
+			pColor="#FCFCFA"
+			pPad={new RespString("48px", "22px")}
+			pHzAlign="Right"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#FCFCFA").OfText("الخزان والطلمبات")}
+				pText={Text.Body.WithColor("#D6E0E4").OfText("تُحسب سعة المياه من الطلب المتزامن ومدة الإمداد، مع مراجعة الحجم القابل للاستخدام وإعادة الملء ومنسوب السحب. ثم تُطابق نقطة الطلب مع منحنى الطلمبة والقدرة وظروف السحب وحدود Shutoff و150% Flow، وتحدد الطلمبة الرئيسية والاحتياطية وJockey ولوحات التحكم وملحقات القياس والاختبار.")}
+			/>
+
+			<EmoDet WhiteBlack pText="تفاصيل غرف الطلمبات" pHref="/emofire/pumps" />
+
+		</SplitPane>
+
+	</SplitScene>
+
+
+
+
+
+
+
+	<MosaicGrid
+		id="DesignDocuments"
+		pColumns={12}
+		pColumnsP={4}
+		pAutoRows={new RespString("80px", "70px")}
+		pGap={new RespString("10px", "8px")}
+		pPad={new RespString("52px", "12px")}
+		pMaxWidth={new RespString("1320px", "100%")}
+		pBg="#F3F0EA"
+		pRadius={new RespString("30px", "16px")}
+		pDense={true}
+	>
+
+		<MosaicItem
+			pColSpan={5}
+			pColSpanP={4}
+			pRowSpan={3}
+			pBg="#B8322A"
+			pColor="#FCFCFA"
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#FCFCFA").OfText("مخططات التصميم")}
+				pText={Text.Body.WithColor("#FFF1ED").OfText("مناطق الحريق، الرايزرات، الطلمبات والخزانات، مواقع التحكم، توزيع الأجهزة والتغطيات ونقاط الربط بين الأنظمة.")}
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={7}
+			pColSpanP={4}
+			pRowSpan={3}
+			pBg="#FFFDF8"
+		>
+
+			<Emograph
+				pTitle={Text.H2.OfText("المخططات التنفيذية / Shop Drawings")}
+				pText={Text.Body.OfText("تضيف الأقطار والمناسيب والحوامل والصمامات والفتحات وأبعاد غرف المعدات وبيانات المنتجات ومسارات العبور والتعارضات ونقاط الاختبار، بحيث تصل المعلومة إلى الموقع في صورة يمكن تنفيذها وفحصها.")}
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#EDF3F5"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("Specifications")} pText={Text.Body.OfText("المواد والتصنيفات والاعتمادات ومعايير التركيب والاختبار والقبول.")} />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#F4F0E8"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("BOQ")} pText={Text.Body.OfText("بنود قابلة للتسعير بوصف فني ووحدة وكمية واضحة.")} />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={4}
+			pRowSpan={2}
+			pBg="#EEF2EE"
+		>
+
+			<Emograph
+				pTitle={Text.H3.OfText("Coordination")}
+				pText={Text.Body.OfText("ربط مسارات الحريق مع الإنشاء والمعماري والتكييف والكهرباء والصحي والأسقف المستعارة ومساحات الصيانة.")}
+			/>
+
+		</MosaicItem>
+
+	</MosaicGrid>
+
+
+
+
+
+
+
+	<StoryRail
+		id="DesignIssueCycle"
+		pAxis="Horizontal"
+		pAxisP="Vertical"
+		pBg="#FCFCFA"
+		pAccent="#4B7185"
+		pTrackColor="#D7E0E4"
+		pPad={new RespString("58px", "16px")}
+		pMaxWidth={new RespString("1360px", "100%")}
+	>
+
+		<StoryStep
+			pNumber="A"
+			pKicker="Concept"
+			pTitle="اختيار الاستراتيجية"
+			pText="ما الأنظمة المطلوبة لكل منطقة؟ وما حدود كل نظام ونقاط الاتصال بينه وبين الأنظمة الأخرى؟"
+			pBg="#FFFDF8"
+			pAccent="#B8322A"
+		/>
+
+		<StoryStep
+			pNumber="B"
+			pKicker="Calculation"
+			pTitle="إثبات الأداء"
+			pText="حسابات الطلب والسعات والضغوط والتصرفات والاختيارات الرئيسية قبل تثبيت الأقطار والمعدات."
+			pBg="#EDF3F5"
+			pAccent="#4B7185"
+		/>
+
+		<StoryStep
+			pNumber="C"
+			pKicker="Drawing"
+			pTitle="إصدار الرسومات"
+			pText="توزيع ومسارات وأقطار ومناسيب ومواقع تحكم وجداول وملاحظات وتفاصيل تنفيذية."
+			pBg="#F4F0E8"
+			pAccent="#B88535"
+		/>
+
+		<StoryStep
+			pNumber="D"
+			pKicker="Coordination"
+			pTitle="حل التعارضات"
+			pText="توحيد المناسيب والفتحات والمسارات ومساحات الصيانة مع باقي التخصصات قبل إصدار IFC أو Shop Drawings."
+			pBg="#EEF2EE"
+			pAccent="#315D4F"
+		/>
+
+		<StoryStep
+			pNumber="E"
+			pKicker="Tender"
+			pTitle="المواصفات والمقايسة"
+			pText="تحويل التصميم إلى نطاق يمكن تسعيره ومراجعته وربطه باعتمادات المواد والاختبارات ومخرجات التسليم."
+			pBg="#F7EDEE"
+			pAccent="#8C3138"
+		/>
+
+	</StoryRail>
+
+
+
+
+
+
+
+	<MosaicGrid
+		id="DesignReferences"
+		pColumns={12}
+		pColumnsP={4}
+		pAutoRows={new RespString("70px", "64px")}
+		pGap={new RespString("9px", "7px")}
+		pPad={new RespString("48px", "12px")}
+		pMaxWidth={new RespString("1320px", "100%")}
+		pBg="#17222D"
+		pRadius={new RespString("30px", "16px")}
+	>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={4}
+			pRowSpan={3}
+			pBg="#263A45"
+			pColor="#FCFCFA"
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#FCFCFA").OfText("المرجعية الفنية")}
+				pText={Text.Body.WithColor("#D7E0E4").OfText("المشروع يثبت المرجع والإصدار والمتطلبات المحلية والجهة المختصة قبل بدء الحسابات؛ ولا تُخلط أرقام من مراجع مختلفة داخل تصميم واحد بلا أساس معلن.")}
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={2}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#DCEEF4"
+		>
+
+			<Emograph pTitle={Text.H3.Centered.OfText("NFPA 13")} pText={Text.Body.Centered.OfText("Sprinklers")} />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={2}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#E7D4B2"
+		>
+
+			<Emograph pTitle={Text.H3.Centered.OfText("NFPA 14")} pText={Text.Body.Centered.OfText("Standpipe")} />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={2}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#F7EDEE"
+		>
+
+			<Emograph pTitle={Text.H3.Centered.OfText("NFPA 20")} pText={Text.Body.Centered.OfText("Pumps")} />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={2}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#EEF2EE"
+		>
+
+			<Emograph pTitle={Text.H3.Centered.OfText("NFPA 22")} pText={Text.Body.Centered.OfText("Tanks")} />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#FFFDF8"
+		>
+
+			<Emograph pTitle={Text.H3.Centered.OfText("NFPA 72")} pText={Text.Body.Centered.OfText("Fire Alarm & Signaling")} />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#F4F0E8"
+		>
+
+			<Emograph
+				pTitle={Text.H3.Centered.OfText("Special Suppression")}
+				pText={Text.Body.Centered.OfText("Foam · CO₂ · Clean Agent · Water Mist حسب النظام والتطبيق")}
+			/>
+
+		</MosaicItem>
+
+	</MosaicGrid>
+
+
+
+
+
+
+
+	<RelatedServices pTitle={Text.H2.Centered.WithColor("#FCFCFA").OfText("بعد التصميم") } pMax={4} pMaxP={1}>
+
+		<RelServiceItem pTitle="مقاولات أنظمة الحريق" pDesc="تحويل المخططات إلى تنفيذ واختبارات وتسليم." pHref="/emofire/contracting" />
+
+		<RelServiceItem pTitle="أنظمة الإطفاء بالماء" pDesc="تفاصيل الرش الآلي والصناديق والهيدرنت والأنظمة المائية." pHref="/emofire/water-systems" />
+
+		<RelServiceItem pTitle="أنظمة الإطفاء المتخصصة" pDesc="Foam وClean Agent وCO₂ وWater Mist والمطابخ." pHref="/emofire/suppression" />
+
+		<RelServiceItem pTitle="تكلفة نظام الحريق" pDesc="مدخلات المقايسة والتسعير ومقارنة نطاقات العروض." pHref="/emofire/cost" />
+
+	</RelatedServices>
+
+
+
+
+
+
+
+	<EmoContactStrip
+		pTitle="اطلب تصميم أو مراجعة نظام حريق"
+		pDesc="أرسل المعماري المتاح وبيانات النشاط والارتفاعات ومصدر المياه وأي اشتراطات أو تصميم سابق. يمكن تحديد المطلوب كتصميم كامل أو مراجعة أو حسابات أو مخططات تنفيذية أو مقايسة."
+		pSourceName="EmoFire Design"
+	/>
+
+
+
+
+
+
+
+</BLayout>

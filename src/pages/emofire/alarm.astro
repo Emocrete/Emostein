@@ -1,0 +1,363 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, MosaicGrid, MosaicItem, RadialItem, RadialLayout, SplitPane, SplitScene, StoryRail, StoryStep } from "@/Widgets/Layouts";
+import { Hero, RelatedServices, RelServiceItem } from "@/Widgets/Sections";
+import { EmoContactStrip } from "@/Widgets/Strips";
+import { ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="أنظمة إنذار الحريق"
+	pDescr="تصميم وتوريد وتركيب وبرمجة واختبار أنظمة إنذار الحريق Conventional وAddressable، تشمل الكشف والتنبيه والإخلاء الصوتي وCause & Effect والتكامل مع أنظمة المبنى والإطفاء."
+>
+
+
+
+
+
+
+
+	<Hero pBg={new ElemBg("#351416")}>
+
+		<VrStack pSize={new Size(new NumPer("55%", "95%"))} pLoc={new Loc(new NumPer("5%", "2.5%"), new NumPer("15%", "12%"))} pHzAlign="Center">
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor("#FCFCFA").OfText("أنظمة إنذار الحريق")}
+				pText={Text.Body.Centered.WithColor("#F0DEDF").OfText("الكشف وحده ليس النظام. منظومة الإنذار تقرأ الحدث، تحدد مكانه وحالته، تنبه الشاغلين، وتشغّل أو توقف أنظمة أخرى وفق Cause & Effect واضح وقابل للاختبار.")}
+			/>
+
+			<HzStack pGap={new Pixel(22, 10)} pForceHz>
+
+				<EmoCallIcon BlackRed />
+
+				<EmoWhatsIcon BlackRed />
+
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
+
+	<SplitScene
+		id="AlarmArchitecture"
+		pColumns={new RespString("1fr 1fr", "1fr")}
+		pGap={new RespString("0px", "0px")}
+		pMinHeight={new RespString("560px", "760px")}
+		pBg="#FCFCFA"
+	>
+
+		<SplitPane
+			pBg="#F4F0E8"
+			pPad={new RespString("52px", "22px")}
+			pEdge="DiagonalEnd"
+			pEdgeP="None"
+			pHzAlign="Right"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H2.OfText("Conventional") }
+				pText={Text.Body.OfText("يقسم المبنى إلى Zones، وتظهر اللوحة المنطقة التي صدرت منها الإشارة. يناسب التطبيقات التي تكون فيها بساطة النظام وعدد المناطق كافيين لطبيعة المنشأة، مع دوائر كشف وتنبيه ومراقبة أعطال واضحة.") }
+			/>
+
+		</SplitPane>
+
+		<SplitPane
+			pBg="#B8322A"
+			pColor="#FCFCFA"
+			pPad={new RespString("52px", "22px")}
+			pHzAlign="Right"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#FCFCFA").OfText("Addressable") }
+				pText={Text.Body.WithColor("#FFF0EC").OfText("كل جهاز له عنوان وحالة يمكن قراءتها على اللوحة، فتتحسن دقة تحديد الموقع والمراقبة والبرمجة والتكامل. يتيح النظام سيناريوهات أكثر تعقيدًا للإنذار والتحكم والإشراف، لكنه يحتاج تخطيطًا للعناوين والLoops والـModules والبرمجة والنسخ الاحتياطية.") }
+			/>
+
+		</SplitPane>
+
+	</SplitScene>
+
+
+
+
+
+
+
+	<RadialLayout
+		id="AlarmDevices"
+		pCount={6}
+		pDiameter={new RespString("900px", "96%")}
+		pOrbit={new RespString("38%", "36%")}
+		pCenterSize={new RespString("30%", "34%")}
+		pBg="radial-gradient(circle,#3A1718 0 47%,#521D20 48% 100%)"
+		pCenterBg="#F7EDEE"
+		pCenterColor="#351416"
+		pRingColor="rgba(255,255,255,.15)"
+		pAccent="#E05A45"
+		pCenterTitle="FACP"
+		pCenterText="لوحة التحكم"
+		pStackPortrait={true}
+	>
+
+		<RadialItem
+			pTitle="Smoke"
+			pText="كواشف دخان حسب طبيعة المكان ومصادر الإنذار الكاذب"
+			pBg="#FFFDF8"
+			pAccent="#B8322A"
+		/>
+
+		<RadialItem
+			pTitle="Heat"
+			pText="كواشف حرارة ثابتة أو معدل ارتفاع حيث يناسب التطبيق"
+			pBg="#F4F0E8"
+			pAccent="#B88535"
+		/>
+
+		<RadialItem
+			pTitle="Manual Call"
+			pText="نقاط تشغيل يدوية موزعة على مسارات الحركة والخروج"
+			pBg="#F7EDEE"
+			pAccent="#8C3138"
+		/>
+
+		<RadialItem
+			pTitle="Sounder / Strobe"
+			pText="تنبيه سمعي وبصري بمستويات وتوزيع مناسبين للمكان"
+			pBg="#EDF3F5"
+			pAccent="#4B7185"
+		/>
+
+		<RadialItem
+			pTitle="Modules"
+			pText="مراقبة وتحكم وربط مع مصاعد وتهوية وأبواب وأنظمة إطفاء"
+			pBg="#EEF2EE"
+			pAccent="#315D4F"
+		/>
+
+		<RadialItem
+			pTitle="Voice Evac"
+			pText="رسائل وإخلاء صوتي ومناطق سماعات ومنطق تشغيل عند الحاجة"
+			pBg="#F2F2F2"
+			pAccent="#596068"
+		/>
+
+	</RadialLayout>
+
+
+
+
+
+
+
+	<StoryRail
+		id="CauseEffectSequence"
+		pAxis="Horizontal"
+		pAxisP="Vertical"
+		pBg="#FCFCFA"
+		pAccent="#B8322A"
+		pTrackColor="#DDD5D5"
+		pPad={new RespString("58px", "16px")}
+		pMaxWidth={new RespString("1360px", "100%")}
+	>
+
+		<StoryStep
+			pNumber="01"
+			pKicker="Detect"
+			pTitle="الكشف"
+			pText="إشارة من كاشف أو Manual Call أو نظام متخصص مع تعريف المصدر والمنطقة والحالة."
+			pBg="#FFFDF8"
+			pAccent="#B8322A"
+		/>
+
+		<StoryStep
+			pNumber="02"
+			pKicker="Confirm"
+			pTitle="التأكيد والمنطق"
+			pText="تحقق أو Cross-Zoning أو تأخير حسب السيناريو، مع منع الإطلاق غير المقصود في الأنظمة التي تتطلب ذلك."
+			pBg="#F7EDEE"
+			pAccent="#8C3138"
+		/>
+
+		<StoryStep
+			pNumber="03"
+			pKicker="Notify"
+			pTitle="التنبيه والإخلاء"
+			pText="Sounders وStrobes أو Voice Evacuation وفق مناطق الحريق وطريقة الإخلاء المطلوبة."
+			pBg="#F4F0E8"
+			pAccent="#B88535"
+		/>
+
+		<StoryStep
+			pNumber="04"
+			pKicker="Control"
+			pTitle="تشغيل الأنظمة المرتبطة"
+			pText="إيقاف أو تشغيل مراوح، إغلاق مخمدات وأبواب، استدعاء مصاعد، تحرير أقفال أو إرسال إشارة إطلاق لنظام إطفاء."
+			pBg="#EEF2EE"
+			pAccent="#315D4F"
+		/>
+
+		<StoryStep
+			pNumber="05"
+			pKicker="Record"
+			pTitle="الإشراف والتسجيل"
+			pText="ظهور Alarm وTrouble وSupervisory وحفظ الحدث والتحقق من استعادة النظام بعد المعالجة."
+			pBg="#EDF3F5"
+			pAccent="#4B7185"
+		/>
+
+	</StoryRail>
+
+
+
+
+
+
+
+	<MosaicGrid
+		id="AlarmIntegration"
+		pColumns={12}
+		pColumnsP={4}
+		pAutoRows={new RespString("76px", "68px")}
+		pGap={new RespString("10px", "8px")}
+		pPad={new RespString("50px", "12px")}
+		pMaxWidth={new RespString("1320px", "100%")}
+		pBg="#F0EBE7"
+		pRadius={new RespString("30px", "16px")}
+		pDense={true}
+	>
+
+		<MosaicItem
+			pColSpan={5}
+			pColSpanP={4}
+			pRowSpan={3}
+			pBg="#351416"
+			pColor="#FCFCFA"
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#FCFCFA").OfText("تكامل أنظمة المبنى") }
+				pText={Text.Body.WithColor("#F0DEDF").OfText("الـCause & Effect يجب أن يتحول إلى نقاط I/O حقيقية يمكن تتبعها واختبارها، وليس جدولًا نظريًا منفصلًا عن اللوحات والموديولات والتوصيلات.") }
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={3}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#F7EDEE"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("HVAC") } pText={Text.Body.OfText("Fans · Dampers · Smoke Control") } />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#EDF3F5"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("Elevators") } pText={Text.Body.OfText("Recall وحالات تشغيل مرتبطة بموقع الحريق.") } />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={3}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#EEF2EE"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("Access Control") } pText={Text.Body.OfText("تحرير أبواب ومسارات خروج وفق السيناريو.") } />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#F4F0E8"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("Suppression") } pText={Text.Body.OfText("إشراف وإطلاق وتأخير وAbort وManual Release للأنظمة المتخصصة.") } />
+
+		</MosaicItem>
+
+	</MosaicGrid>
+
+
+
+
+
+
+
+	<AngleBand
+		id="VoiceEvacuation"
+		pBg="linear-gradient(118deg,#17222D,#4B1A1D)"
+		pColor="#FCFCFA"
+		pDirection="Peak"
+		pCut={new RespString("6%", "3%") }
+		pMinHeight={new RespString("390px", "360px") }
+	>
+
+		<Emograph
+			pSize={new Size(new NumPer("980px", "100%"), new NumPer("auto", "auto"))}
+			pTitle={Text.H2.WithColor("#FCFCFA").OfText("الإخلاء الصوتي ليس مجرد سماعات") }
+			pText={Text.Body.WithColor("#E6DEE0").OfText("عند استخدام Voice Evacuation تُقسم مناطق الرسائل ويُراجع مستوى الصوت والوضوح ومصادر التغذية والبطاريات والمضخمات والمسارات المقاومة للأعطال وأولوية الرسائل وعلاقة النظام بلوحة الإنذار. السيناريو يجب أن يطابق خطة الإخلاء الفعلية للمبنى، لا أن يعمل كإذاعة منفصلة.") }
+		/>
+
+	</AngleBand>
+
+
+
+
+
+
+
+	<RelatedServices pTitle={Text.H2.Centered.WithColor("#FCFCFA").OfText("خدمات مرتبطة بالإنذار") } pMax={4} pMaxP={1}>
+
+		<RelServiceItem pTitle="أنظمة الإطفاء المتخصصة" pDesc="الإنذار ومنطق الإطلاق جزء أساسي من أنظمة الغاز والرغوة والمطابخ." pHref="/emofire/suppression" />
+
+		<RelServiceItem pTitle="تصميم أنظمة الحريق" pDesc="توزيع الأجهزة والدوائر وCause & Effect والمواصفات." pHref="/emofire/design" />
+
+		<RelServiceItem pTitle="مقاولات أنظمة الحريق" pDesc="تمديد الكابلات وتركيب اللوحات والأجهزة والبرمجة والاختبار." pHref="/emofire/contracting" />
+
+		<RelServiceItem pTitle="صيانة أنظمة الحريق" pDesc="فحص الأجهزة والدوائر والبطاريات والبرمجة والتكامل دوريًا." pHref="/emofire/maintenance" />
+
+	</RelatedServices>
+
+
+
+
+
+
+
+	<EmoContactStrip
+		pTitle="اطلب تصميم أو تطوير نظام الإنذار"
+		pDesc="أرسل مخطط المنشأة أو مخطط النظام القائم ونوع اللوحة والأجهزة إن كانت موجودة. يمكن تحديد المطلوب كتصميم جديد أو توسعة أو برمجة أو إصلاح أو اختبار Cause & Effect."
+		pSourceName="EmoFire Alarm"
+	/>
+
+
+
+
+
+
+
+</BLayout>

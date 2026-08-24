@@ -1,0 +1,448 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { MosaicGrid, MosaicItem, ScrollShelf, ShelfItem, SideRail, SplitPane, SplitScene, StoryRail, StoryStep } from "@/Widgets/Layouts";
+import { Hero, RelatedServices, RelServiceItem } from "@/Widgets/Sections";
+import { EmoContactStrip } from "@/Widgets/Strips";
+import { ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="أنظمة الإطفاء المتخصصة"
+	pDescr="تصميم وتوريد وتنفيذ أنظمة الإطفاء المتخصصة للمخاطر التي لا يناسبها الماء وحده: Foam وClean Agent وFM-200 وInert Gas وCO2 وWater Mist وWet Chemical للمطابخ وحماية الكبائن."
+>
+
+
+
+
+
+
+
+	<Hero pBg={new ElemBg("#1A2524")}>
+
+		<VrStack pSize={new Size(new NumPer("56%", "95%"))} pLoc={new Loc(new NumPer("5%", "2.5%"), new NumPer("15%", "12%"))} pHzAlign="Center">
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor("#FCFCFA").OfText("أنظمة الإطفاء المتخصصة")}
+				pText={Text.Body.Centered.WithColor("#DDE6E2").OfText("عندما يكون الخطر سريع النمو، أو الوقود سائلاً، أو التجهيزات حساسة للمياه، أو الحيز يحتاج إطفاءً كليًا، يتحول اختيار وسيط الإطفاء وطريقة الإطلاق وإحكام الحيز إلى قرار هندسي مستقل.")}
+			/>
+
+			<HzStack pGap={new Pixel(22, 10)} pForceHz>
+
+				<EmoCallIcon BlackGreen />
+
+				<EmoWhatsIcon BlackGreen />
+
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
+
+	<ScrollShelf
+		id="SuppressionFamilies"
+		pItemWidth={new RespString("350px", "84vw")}
+		pGap={new RespString("16px", "12px")}
+		pPad={new RespString("52px", "16px")}
+		pMaxWidth={new RespString("1440px", "100%")}
+		pBg="#E9ECE8"
+		pEdgeFade={true}
+	>
+
+		<ShelfItem pBg="#F4F0E8" pAccent="#B88535">
+
+			<Emograph
+				pTitle={Text.H2.OfText("Foam") }
+				pText={Text.Body.OfText("لأخطار السوائل القابلة للاشتعال؛ يحدد نوع الوقود معدل التطبيق وزمن التشغيل وتركيز الرغوة وطريقة الخلط والتصريف.") }
+			/>
+
+		</ShelfItem>
+
+		<ShelfItem pBg="#17222D" pColor="#FCFCFA" pAccent="#4B7185">
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#FCFCFA").OfText("Clean Agent") }
+				pText={Text.Body.WithColor("#D7E0E4").OfText("إطفاء كلي سريع للغرف الحساسة مثل الكهرباء والتحكم والخوادم مع حساب التركيز والشبكة والفوهات ومنطق الإطلاق.") }
+			/>
+
+		</ShelfItem>
+
+		<ShelfItem pBg="#F7EDEE" pAccent="#B8322A">
+
+			<Emograph
+				pTitle={Text.H2.OfText("CO₂") }
+				pText={Text.Body.OfText("Total Flooding أو Local Application لتطبيقات صناعية محددة مع متطلبات صارمة للإخلاء والتأخير والعزل قبل التصريف.") }
+			/>
+
+		</ShelfItem>
+
+		<ShelfItem pBg="#EEF2EE" pAccent="#315D4F">
+
+			<Emograph
+				pTitle={Text.H2.OfText("Inert Gas") }
+				pText={Text.Body.OfText("خلطات غازات خاملة تخفض تركيز الأكسجين وفق حدود التصميم، مع بنوك أسطوانات وخطوط وتنفيس ضغط محسوب.") }
+			/>
+
+		</ShelfItem>
+
+		<ShelfItem pBg="#E7F0F3" pAccent="#4B9EC4">
+
+			<Emograph
+				pTitle={Text.H2.OfText("Water Mist") }
+				pText={Text.Body.OfText("فوهات وقطرات دقيقة تحقق تبريدًا وتقليل إشعاع حراري باستهلاك مائي أقل في تطبيقات معتمدة محددة.") }
+			/>
+
+		</ShelfItem>
+
+		<ShelfItem pBg="#FFF4E9" pAccent="#D06C36">
+
+			<Emograph
+				pTitle={Text.H2.OfText("Kitchen Wet Chemical") }
+				pText={Text.Body.OfText("حماية القلايات والـHoods والـDucts والفوهات وربط الإطلاق بقطع الوقود والتهوية والإنذار.") }
+			/>
+
+		</ShelfItem>
+
+	</ScrollShelf>
+
+
+
+
+
+
+
+	<SideRail
+		id="SuppressionSelection"
+		pRailWidth={new RespString("310px", "100%")}
+		pGap={new RespString("26px", "12px")}
+		pPad={new RespString("50px", "12px")}
+		pBg="#F5F4EF"
+		pRailBg="linear-gradient(180deg,#17222D,#315D4F)"
+		pRailColor="#FCFCFA"
+		pSticky={true}
+	>
+
+		<Emograph
+			slot="rail"
+			pTitle={Text.H2.WithColor("#FCFCFA").OfText("اختيار النظام") }
+			pText={Text.Body.WithColor("#D9E3DF").OfText("الاختيار لا يبدأ باسم الغاز أو الرغوة، بل من طبيعة الخطر والحيز وما يجب حمايته وما يمكن احتماله أثناء الإطلاق وبعده.") }
+		/>
+
+		<MosaicGrid
+			pColumns={12}
+			pColumnsP={4}
+			pAutoRows={new RespString("76px", "66px")}
+			pGap={new RespString("9px", "7px")}
+			pBg="#F5F4EF"
+		>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={2}
+				pRowSpan={2}
+				pBg="#FFFDF8"
+			>
+
+				<Emograph pTitle={Text.H3.OfText("نوع الوقود") } pText={Text.Body.OfText("مواد صلبة، سوائل، زيوت طبخ، معدات كهربائية أو خطر صناعي خاص.") } />
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={2}
+				pRowSpan={2}
+				pBg="#F7EDEE"
+			>
+
+				<Emograph pTitle={Text.H3.OfText("وجود أشخاص") } pText={Text.Body.OfText("إشغال الحيز، زمن الإخلاء، الإنذارات المسبقة وتأمين التشغيل اليدوي والآلي.") } />
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={4}
+				pRowSpan={2}
+				pBg="#EDF3F5"
+			>
+
+				<Emograph
+					pTitle={Text.H3.OfText("حساسية المعدات") }
+					pText={Text.Body.OfText("هل الماء أو الرواسب مقبولة؟ وما زمن التوقف المطلوب بعد الحريق أو التصريف؟") }
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={6}
+				pColSpanP={2}
+				pRowSpan={2}
+				pBg="#F4F0E8"
+			>
+
+				<Emograph pTitle={Text.H3.OfText("هندسة الحيز") } pText={Text.Body.OfText("الحجم والفتحات والتهوية والضغط والتسرب وتوزيع الفوهات ومسارات المواسير.") } />
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={6}
+				pColSpanP={2}
+				pRowSpan={2}
+				pBg="#EEF2EE"
+			>
+
+				<Emograph
+					pTitle={Text.H3.OfText("اعتماد التطبيق") }
+					pText={Text.Body.OfText("النظام والفوهة والعامل وطريقة الاستخدام يجب أن تقع داخل نطاق اعتماد المنتج والحسابات.") }
+				/>
+
+			</MosaicItem>
+
+		</MosaicGrid>
+
+	</SideRail>
+
+
+
+
+
+
+
+	<SplitScene
+		id="CleanAgentRoom"
+		pColumns={new RespString("1.08fr .92fr", "1fr")}
+		pGap={new RespString("0px", "0px")}
+		pMinHeight={new RespString("590px", "760px")}
+		pBg="#FCFCFA"
+	>
+
+		<SplitPane
+			pBg="#17222D"
+			pColor="#FCFCFA"
+			pPad={new RespString("54px", "22px")}
+			pEdge="DiagonalEnd"
+			pEdgeP="None"
+			pHzAlign="Right"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#FCFCFA").OfText("Clean Agent / FM-200 وما شابه") }
+				pText={Text.Body.WithColor("#D7E0E4").OfText("يُحسب عامل الإطفاء من حجم الحيز والتركيز التصميمي ودرجة الحرارة والارتفاع، ثم تحدد كمية العامل وعدد الأسطوانات وشبكة المواسير والفوهات وزمن التصريف. نظام الإطلاق يرتبط بالكشف المتقاطع وتأخير التصريف وManual Release وAbort وإيقاف التهوية وغلق الفتحات وإشارات الإنذار.") }
+			/>
+
+		</SplitPane>
+
+		<SplitPane
+			pBg="#EDF3F5"
+			pPad={new RespString("54px", "22px")}
+			pHzAlign="Right"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H2.OfText("إحكام الحيز جزء من النظام") }
+				pText={Text.Body.OfText("نجاح الإطفاء الكلي يتوقف على قدرة الحيز على الاحتفاظ بالتركيز التصميمي. اختبار Door Fan يقرأ التسرب وزمن الاحتفاظ، ويقود إلى معالجة الأبواب والفتحات ومخمدات الهواء وفتحات تنفيس الضغط قبل اعتبار المنظومة جاهزة للقبول.") }
+			/>
+
+		</SplitPane>
+
+	</SplitScene>
+
+
+
+
+
+
+
+	<StoryRail
+		id="SuppressionDelivery"
+		pAxis="Horizontal"
+		pAxisP="Vertical"
+		pBg="#FCFCFA"
+		pAccent="#315D4F"
+		pTrackColor="#D7DDD9"
+		pPad={new RespString("58px", "16px")}
+		pMaxWidth={new RespString("1360px", "100%")}
+	>
+
+		<StoryStep
+			pNumber="01"
+			pKicker="Hazard"
+			pTitle="تحليل الخطر"
+			pText="ما المادة أو المعدة التي تحترق؟ وما طريقة الاشتعال والانتشار والضرر المقبول؟"
+			pBg="#FFFDF8"
+			pAccent="#B8322A"
+		/>
+
+		<StoryStep
+			pNumber="02"
+			pKicker="Agent"
+			pTitle="اختيار وسيط الإطفاء"
+			pText="ماء دقيق أو رغوة أو عامل نظيف أو غاز خامل أو CO2 أو Wet Chemical حسب التطبيق."
+			pBg="#EEF2EE"
+			pAccent="#315D4F"
+		/>
+
+		<StoryStep
+			pNumber="03"
+			pKicker="Engineering"
+			pTitle="الحسابات والتوزيع"
+			pText="كمية العامل أو التركيز أو معدل التطبيق، الأسطوانات والمواسير والفوهات أو معدات الخلط والتصريف."
+			pBg="#EDF3F5"
+			pAccent="#4B7185"
+		/>
+
+		<StoryStep
+			pNumber="04"
+			pKicker="Release"
+			pTitle="منطق الإطلاق"
+			pText="الكشف والتأكيد والتأخير والإنذار والعزل وإيقاف التهوية والطاقة وManual Release وAbort."
+			pBg="#F7EDEE"
+			pAccent="#8C3138"
+		/>
+
+		<StoryStep
+			pNumber="05"
+			pKicker="Acceptance"
+			pTitle="الاختبار والتوثيق"
+			pText="فحص الحيز والدوائر والضغوط والفوهات والبرمجة وشهادات الأسطوانات والتشغيل التجريبي."
+			pBg="#F4F0E8"
+			pAccent="#B88535"
+		/>
+
+	</StoryRail>
+
+
+
+
+
+
+
+	<MosaicGrid
+		id="SpecialApplications"
+		pColumns={12}
+		pColumnsP={4}
+		pAutoRows={new RespString("76px", "66px")}
+		pGap={new RespString("10px", "8px")}
+		pPad={new RespString("50px", "12px")}
+		pMaxWidth={new RespString("1320px", "100%")}
+		pBg="#192421"
+		pRadius={new RespString("30px", "16px")}
+		pDense={true}
+	>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={4}
+			pRowSpan={3}
+			pBg="#315D4F"
+			pColor="#FCFCFA"
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#FCFCFA").OfText("تطبيقات تحتاج حلًا خاصًا") }
+				pText={Text.Body.WithColor("#DCE8E3").OfText("لا يوجد نظام متخصص يصلح لكل خطر؛ الصفحة تجمع العائلات، لكن كل تطبيق يُعامل كمشروع هندسي مستقل.") }
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#EDF3F5"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("Data Centers") } pText={Text.Body.OfText("غرف خوادم واتصالات وتحكم تحتاج إطفاء سريعًا وتقليل أثر الوسيط على المعدات.") } />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#F4F0E8"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("Fuel & Process") } pText={Text.Body.OfText("خزانات وسوائل قابلة للاشتعال ومناطق عمليات قد تحتاج Foam أو Water Spray.") } />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#FFF4E9"
+		>
+
+			<Emograph
+				pTitle={Text.H3.OfText("Commercial Kitchens") }
+				pText={Text.Body.OfText("Wet Chemical للفراير ومعدات الطبخ والهود والدكت مع ربط الوقود والتهوية.") }
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#F7EDEE"
+		>
+
+			<Emograph
+				pTitle={Text.H3.OfText("Electrical Cabinets") }
+				pText={Text.Body.OfText("حلول Pre-Engineered أو أنبوب كشف حراري لحماية كبائن ومعدات محددة محليًا.") }
+			/>
+
+		</MosaicItem>
+
+	</MosaicGrid>
+
+
+
+
+
+
+
+	<RelatedServices pTitle={Text.H2.Centered.WithColor("#FCFCFA").OfText("خدمات مرتبطة بالإطفاء المتخصص") } pMax={4} pMaxP={1}>
+
+		<RelServiceItem pTitle="أنظمة إنذار الحريق" pDesc="الكشف ومنطق الإطلاق والتنبيه والتكامل." pHref="/emofire/alarm" />
+
+		<RelServiceItem pTitle="تصميم أنظمة الحريق" pDesc="الحسابات والمخططات والمواصفات واعتماد الحل." pHref="/emofire/design" />
+
+		<RelServiceItem pTitle="توريد معدات الحريق" pDesc="أسطوانات وفوهات ووحدات إطلاق ومكونات وقطع غيار." pHref="/emofire/supply" />
+
+		<RelServiceItem pTitle="صيانة أنظمة الحريق" pDesc="فحص الأسطوانات والدوائر وإعادة التعبئة وتأهيل الأنظمة." pHref="/emofire/maintenance" />
+
+	</RelatedServices>
+
+
+
+
+
+
+
+	<EmoContactStrip
+		pTitle="اعرض الخطر قبل اختيار اسم النظام"
+		pDesc="أرسل نوع الحيز والمعدات أو المواد داخله وأبعاده وحالة التهوية وأي نظام قائم. التقييم يبدأ من الخطر والتطبيق ثم يحدد نظام الإطفاء المناسب ونطاق التصميم أو التوريد أو التنفيذ."
+		pSourceName="EmoFire Suppression"
+	/>
+
+
+
+
+
+
+
+</BLayout>

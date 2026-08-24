@@ -1,0 +1,420 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { MosaicGrid, MosaicItem, SideRail, SplitPane, SplitScene, StoryRail, StoryStep } from "@/Widgets/Layouts";
+import { EmoFaq, FaqItem, Hero, RelatedServices, RelServiceItem } from "@/Widgets/Sections";
+import { EmoContactStrip } from "@/Widgets/Strips";
+import { ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="تجهيز متطلبات الحماية المدنية لأنظمة الحريق"
+	pDescr="تجهيز ومراجعة الملف الفني ومتطلبات أنظمة الحريق للحماية المدنية، تشمل مراجعة المخططات والحسابات واعتمادات المعدات وتقارير الاختبار وتجهيز المنشأة للمعاينة ومتابعة الملاحظات والتجديد."
+>
+
+
+
+
+
+
+
+	<Hero pBg={new ElemBg("#2A2420")}>
+
+		<VrStack pSize={new Size(new NumPer("58%", "95%"))} pLoc={new Loc(new NumPer("5%", "2.5%"), new NumPer("15%", "12%"))} pHzAlign="Center">
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor("#FCFCFA").OfText("تجهيز متطلبات الحماية المدنية لأنظمة الحريق")}
+				pText={Text.Body.Centered.WithColor("#E8E0D9").OfText("الملف الفني والمعاينة الميدانية وجهان لنفس الحالة. المطلوب أن تتطابق المخططات والحسابات واعتمادات المعدات ونتائج الاختبارات مع ما هو منفذ فعلًا داخل المنشأة عند المراجعة والمعاينة.")}
+			/>
+
+			<HzStack pGap={new Pixel(22, 10)} pForceHz>
+
+				<EmoCallIcon BlackOrange />
+
+				<EmoWhatsIcon BlackOrange />
+
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
+
+	<StoryRail
+		id="CivilDefensePath"
+		pAxis="Horizontal"
+		pAxisP="Vertical"
+		pBg="#F5F2EC"
+		pAccent="#B88535"
+		pTrackColor="#D9D0C4"
+		pPad={new RespString("58px", "16px")}
+		pMaxWidth={new RespString("1360px", "100%")}
+	>
+
+		<StoryStep
+			pNumber="01"
+			pKicker="Review"
+			pTitle="قراءة حالة المنشأة"
+			pText="تحديد النشاط والمساحات والإشغال وحالة الترخيص والمخططات القائمة وما تم تنفيذه فعلًا من وسائل الحماية."
+			pBg="#FFFDF8"
+			pAccent="#596068"
+		/>
+
+		<StoryStep
+			pNumber="02"
+			pKicker="Engineering"
+			pTitle="مراجعة المخططات والحسابات"
+			pText="التأكد من أن الأنظمة المختارة والتغطيات والطلمبات والخزانات والإنذار والمخارج ومتطلبات الحماية مرتبطة بواقع المنشأة."
+			pBg="#EDF3F5"
+			pAccent="#4B7185"
+		/>
+
+		<StoryStep
+			pNumber="03"
+			pKicker="Readiness"
+			pTitle="تجهيز المنشأة"
+			pText="معالجة النواقص الميدانية، استكمال التعريف والوصول للمعدات، اختبار الأنظمة وإغلاق الملاحظات التي تمنع القبول."
+			pBg="#EEF2EE"
+			pAccent="#315D4F"
+		/>
+
+		<StoryStep
+			pNumber="04"
+			pKicker="File"
+			pTitle="تجهيز الملف الفني"
+			pText="جمع المخططات والحسابات واعتمادات المعدات وتقارير الاختبار والسجلات والمستندات المطلوبة بصورة متسقة وقابلة للمراجعة."
+			pBg="#F4F0E8"
+			pAccent="#B88535"
+		/>
+
+		<StoryStep
+			pNumber="05"
+			pKicker="Follow-up"
+			pTitle="المعاينة والملاحظات"
+			pText="متابعة الملاحظات الفنية وتحديث المستند أو التنفيذ المتأثر بها حتى يصبح الملف والمنشأة في حالة متوافقة مع المطلوب."
+			pBg="#F7EDEE"
+			pAccent="#8C3138"
+		/>
+
+	</StoryRail>
+
+
+
+
+
+
+
+	<SideRail
+		id="CivilDefenseFile"
+		pRailWidth={new RespString("320px", "100%")}
+		pGap={new RespString("26px", "12px")}
+		pPad={new RespString("50px", "12px")}
+		pBg="#F6F4EF"
+		pRailBg="linear-gradient(180deg,#2A2420,#6A533A)"
+		pRailColor="#FCFCFA"
+		pSticky={true}
+	>
+
+		<Emograph
+			slot="rail"
+			pTitle={Text.H2.WithColor("#FCFCFA").OfText("مكونات الملف الفني") }
+			pText={Text.Body.WithColor("#E8E0D9").OfText("المحتويات الفعلية تختلف حسب نوع المنشأة والجهة والإجراء، لكن الملف الجيد يربط بيانات النشاط بالمخططات والمعدات والاختبارات والسجلات بدل تجميع أوراق منفصلة.") }
+		/>
+
+		<MosaicGrid
+			pColumns={12}
+			pColumnsP={4}
+			pAutoRows={new RespString("76px", "66px")}
+			pGap={new RespString("9px", "7px")}
+			pBg="#F6F4EF"
+		>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={2}
+				pRowSpan={2}
+				pBg="#FFFDF8"
+			>
+
+				<Emograph
+					pTitle={Text.H3.OfText("بيانات المنشأة") }
+					pText={Text.Body.OfText("النشاط والمساحات والإشغال والأدوار والارتفاعات والبيانات الأساسية ذات العلاقة بالحماية.") }
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={2}
+				pRowSpan={2}
+				pBg="#EDF3F5"
+			>
+
+				<Emograph
+					pTitle={Text.H3.OfText("المخططات") }
+					pText={Text.Body.OfText("توزيع الأنظمة والرايزرات والمضخات والخزانات وأجهزة الإنذار ووسائل الإخلاء ونقاط الربط.") }
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={4}
+				pRowSpan={2}
+				pBg="#F4F0E8"
+			>
+
+				<Emograph
+					pTitle={Text.H3.OfText("الحسابات والمواصفات") }
+					pText={Text.Body.OfText("الحسابات المرتبطة بالأنظمة وBasis of Design ومواصفات العناصر الرئيسية عند الحاجة للمراجعة.") }
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={6}
+				pColSpanP={2}
+				pRowSpan={2}
+				pBg="#EEF2EE"
+			>
+
+				<Emograph
+					pTitle={Text.H3.OfText("اعتمادات المعدات") }
+					pText={Text.Body.OfText("كتالوجات وشهادات وتقارير اختبار وبيانات مصنع للمعدات المؤثرة في أداء النظام.") }
+				/>
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={6}
+				pColSpanP={2}
+				pRowSpan={2}
+				pBg="#F7EDEE"
+			>
+
+				<Emograph
+					pTitle={Text.H3.OfText("تقارير التشغيل والصيانة") }
+					pText={Text.Body.OfText("نتائج الاختبارات ومحاضر الفحص والسجلات وخطة الصيانة والتدريب وأي توثيق مطلوب للحالة التشغيلية.") }
+				/>
+
+			</MosaicItem>
+
+		</MosaicGrid>
+
+	</SideRail>
+
+
+
+
+
+
+
+	<SplitScene
+		id="DrawingVsSite"
+		pColumns={new RespString("1fr 1fr", "1fr")}
+		pGap={new RespString("0px", "0px")}
+		pMinHeight={new RespString("560px", "760px")}
+		pBg="#FCFCFA"
+	>
+
+		<SplitPane
+			pBg="#EDF3F5"
+			pPad={new RespString("52px", "22px")}
+			pEdge="DiagonalEnd"
+			pEdgeP="None"
+			pHzAlign="Right"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H2.OfText("مراجعة المخططات") }
+				pText={Text.Body.OfText("تراجع التغطيات والمسارات ومواقع المعدات والرايزرات والطلمبات والخزانات والإنذار وعلاقة النظام بالإخلاء والأنظمة الأخرى. إذا كانت المخططات لا تمثل التنفيذ القائم، تُحدد الفجوة أولًا بدل الاستمرار بملف نظري لا يمكن إثباته في المعاينة.") }
+			/>
+
+			<EmoDet BlackSky pText="تصميم أنظمة الحريق" pHref="/emofire/design" />
+
+		</SplitPane>
+
+		<SplitPane
+			pBg="#2A2420"
+			pColor="#FCFCFA"
+			pPad={new RespString("52px", "22px")}
+			pHzAlign="Right"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#FCFCFA").OfText("تجهيز الموقع للمعاينة") }
+				pText={Text.Body.WithColor("#E8E0D9").OfText("المعاينة ترى ما هو منفذ: سهولة الوصول للمعدات، سلامة الصمامات واللوحات، تعريف المناطق، حالة الطلمبات، ضغط الشبكات، أجهزة الإنذار، مخارج الحركة، سجل الصيانة والاختبارات. لذلك يتم عمل قائمة ملاحظات ميدانية وربط كل ملاحظة بالمستند أو النظام الذي تتبعه.") }
+			/>
+
+		</SplitPane>
+
+	</SplitScene>
+
+
+
+
+
+
+
+	<MosaicGrid
+		id="CivilDefenseReadiness"
+		pColumns={12}
+		pColumnsP={4}
+		pAutoRows={new RespString("76px", "68px")}
+		pGap={new RespString("10px", "8px")}
+		pPad={new RespString("50px", "12px")}
+		pMaxWidth={new RespString("1320px", "100%")}
+		pBg="#EEE9E1"
+		pRadius={new RespString("30px", "16px")}
+		pDense={true}
+	>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={4}
+			pRowSpan={3}
+			pBg="#6A533A"
+			pColor="#FCFCFA"
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#FCFCFA").OfText("النواقص الأكثر تأثيرًا") }
+				pText={Text.Body.WithColor("#EDE5DC").OfText("قبل أي متابعة إدارية، يتم التعامل مع الفجوات الفنية التي تجعل المستندات غير متطابقة مع الحالة الفعلية أو تجعل النظام غير قابل للاختبار.") }
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#F7EDEE"
+		>
+
+			<Emograph
+				pTitle={Text.H3.OfText("مخططات قديمة") }
+				pText={Text.Body.OfText("تغييرات في التقسيم أو النشاط أو المسارات لم تنتقل إلى As-Built أو التصميم المحدث.") }
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#EDF3F5"
+		>
+
+			<Emograph
+				pTitle={Text.H3.OfText("اختبارات غير موثقة") }
+				pText={Text.Body.OfText("النظام قد يعمل لكن لا توجد نتائج واضحة للضغط أو التدفق أو الطلمبات أو الإنذار.") }
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#EEF2EE"
+		>
+
+			<Emograph
+				pTitle={Text.H3.OfText("معدات بلا بيانات") }
+				pText={Text.Body.OfText("موديلات أو شهادات أو تواريخ أو أرقام تشغيل غير متاحة عند الحاجة للمراجعة.") }
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#F4F0E8"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("صيانة متقطعة") } pText={Text.Body.OfText("لا يوجد سجل يثبت حالة النظام عبر الزمن أو ما تم إصلاحه واختباره وتجديده.") } />
+
+		</MosaicItem>
+
+	</MosaicGrid>
+
+
+
+
+
+
+
+	<EmoFaq id="CivilDefenseFaq">
+
+		<FaqItem
+			pQuestion="هل هذه الصفحة تعني ضمان صدور اعتماد الحماية المدنية؟"
+			pAnswer="لا. الخدمة الهندسية يمكن أن تشمل مراجعة وتجهيز المخططات والأنظمة والملف الفني والمتابعة الفنية، لكن القرار النهائي وإجراءات الإصدار تخضع للجهة المختصة وحالة المنشأة والمستندات والمتطلبات السارية عليها."
+		/>
+
+		<FaqItem
+			pQuestion="هل يمكن البدء لو المنشأة قائمة ولا يوجد As-Built واضح؟"
+			pAnswer="نعم، لكن البداية تكون بحصر الحالة الفعلية ومقارنة الموجود بالمستندات المتاحة، ثم تحديد ما يحتاج تحديث رسم أو اختبار أو استكمال تنفيذ قبل ترتيب الملف النهائي."
+		/>
+
+		<FaqItem
+			pQuestion="هل الصيانة مرتبطة بالتجديد؟"
+			pAnswer="سجل الصيانة والاختبارات يساعد في إثبات الحالة التشغيلية للنظام ويكشف النواقص قبل المعاينة، لذلك يكون مهمًا خصوصًا للمنشآت القائمة التي تتعامل مع تجديدات أو مراجعات دورية."
+		/>
+
+		<FaqItem
+			pQuestion="هل يمكن تجهيز المخططات فقط بدون تنفيذ؟"
+			pAnswer="يمكن تحديد النطاق كمراجعة أو تصميم أو تحديث مخططات فقط، أو إضافة تنفيذ الملاحظات والاختبارات والتوريدات عند الحاجة. الفصل بين النطاقات يوضح المسؤوليات والتكلفة."
+		/>
+
+	</EmoFaq>
+
+
+
+
+
+
+
+	<RelatedServices pTitle={Text.H2.Centered.WithColor("#FCFCFA").OfText("خدمات تساعد في تجهيز المنشأة") } pMax={4} pMaxP={1}>
+
+		<RelServiceItem pTitle="تصميم أنظمة الحريق" pDesc="إعداد أو تحديث المخططات والحسابات والمواصفات." pHref="/emofire/design" />
+
+		<RelServiceItem pTitle="مقاولات أنظمة الحريق" pDesc="تنفيذ الملاحظات واستكمال الأنظمة والاختبارات." pHref="/emofire/contracting" />
+
+		<RelServiceItem pTitle="صيانة أنظمة الحريق" pDesc="فحص النظام وتحديث السجلات ومعالجة الأعطال." pHref="/emofire/maintenance" />
+
+		<RelServiceItem pTitle="توريد معدات الحريق" pDesc="توفير مكونات أو قطع غيار مطلوبة لإغلاق الملاحظات." pHref="/emofire/supply" />
+
+	</RelatedServices>
+
+
+
+
+
+
+
+	<EmoContactStrip
+		pTitle="أرسل حالة المنشأة والملف المتاح"
+		pDesc="اذكر نوع النشاط وموقع المنشأة وحالة الإجراء الحالية، وأرسل أي مخططات أو ملاحظات أو تقارير أو صور للأنظمة القائمة. يبدأ التقييم بتحديد الفجوة بين المستندات والتنفيذ قبل تحديد نطاق العمل."
+		pSourceName="EmoFire Civil Defense"
+	/>
+
+
+
+
+
+
+
+</BLayout>

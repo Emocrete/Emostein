@@ -1,0 +1,409 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, MosaicGrid, MosaicItem, RadialItem, RadialLayout, SplitPane, SplitScene, StoryRail, StoryStep } from "@/Widgets/Layouts";
+import { EmoFaq, FaqItem, Hero, RelatedServices, RelServiceItem } from "@/Widgets/Sections";
+import { EmoContactStrip } from "@/Widgets/Strips";
+import { ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="تكلفة أنظمة مكافحة الحريق"
+	pDescr="شرح عناصر تكلفة أنظمة مكافحة الحريق وكيفية إعداد عرض سعر قابل للمقارنة، من التصميم والحسابات إلى المعدات والشبكات والطلمبات والإنذار والتركيب والاختبارات والتسليم والصيانة."
+>
+
+
+
+
+
+
+
+	<Hero pBg={new ElemBg("#1C1C1A")}>
+
+		<VrStack pSize={new Size(new NumPer("58%", "95%"))} pLoc={new Loc(new NumPer("5%", "2.5%"), new NumPer("15%", "12%"))} pHzAlign="Center">
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor("#FCFCFA").OfText("تكلفة أنظمة مكافحة الحريق")}
+				pText={Text.Body.Centered.WithColor("#E5E2DC").OfText("سعر نظام الحريق لا يُفهم من مساحة المبنى وحدها. النشاط والخطر والارتفاعات ومصدر المياه ونوع الأنظمة والاعتمادات وحالة الموقع تغيّر المقايسة جذريًا، لذلك نبدأ بتفكيك التكلفة إلى بنود يمكن قياسها ومقارنتها.")}
+			/>
+
+			<HzStack pGap={new Pixel(22, 10)} pForceHz>
+
+				<EmoCallIcon BlackOrange />
+
+				<EmoWhatsIcon BlackOrange />
+
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
+
+	<RadialLayout
+		id="CostDrivers"
+		pCount={6}
+		pDiameter={new RespString("900px", "96%")}
+		pOrbit={new RespString("38%", "36%")}
+		pCenterSize={new RespString("30%", "34%")}
+		pBg="radial-gradient(circle,#242421 0 47%,#1C1C1A 48% 100%)"
+		pCenterBg="#E7D4B2"
+		pCenterColor="#1C1C1A"
+		pRingColor="rgba(255,255,255,.13)"
+		pAccent="#B88535"
+		pCenterTitle="COST"
+		pCenterText="محركات السعر"
+		pStackPortrait={true}
+	>
+
+		<RadialItem
+			pTitle="نوع النشاط"
+			pText="مكتب أو مول أو مصنع أو مخزن أو منشأة صحية أو خطر خاص"
+			pBg="#FFFDF8"
+			pAccent="#596068"
+		/>
+
+		<RadialItem
+			pTitle="تصنيف الخطورة"
+			pText="يؤثر على الكثافات والمسافات والأنظمة والطلب المائي"
+			pBg="#F7EDEE"
+			pAccent="#B8322A"
+		/>
+
+		<RadialItem
+			pTitle="الارتفاعات"
+			pText="رايزرات وضغوط وتقسيم مناطق ومسافات ومعدات وصول"
+			pBg="#EDF3F5"
+			pAccent="#4B7185"
+		/>
+
+		<RadialItem
+			pTitle="مصدر المياه"
+			pText="خزان وطلمبات وخطوط تغذية أو تطوير مصدر قائم"
+			pBg="#EEF2EE"
+			pAccent="#315D4F"
+		/>
+
+		<RadialItem
+			pTitle="نوع الأنظمة"
+			pText="Sprinkler وAlarm وGas وFoam وKitchen وغيرها"
+			pBg="#F4F0E8"
+			pAccent="#B88535"
+		/>
+
+		<RadialItem
+			pTitle="الاعتماد والجودة"
+			pText="الماركة والشهادات والمواد والاختبارات ومستوى التوثيق"
+			pBg="#F2F2F2"
+			pAccent="#596068"
+		/>
+
+	</RadialLayout>
+
+
+
+
+
+
+
+	<SplitScene
+		id="CostStructure"
+		pColumns={new RespString("1fr 1fr", "1fr")}
+		pGap={new RespString("12px", "10px")}
+		pPad={new RespString("52px", "12px")}
+		pBg="#F1EEE8"
+		pRadius={new RespString("34px", "18px")}
+	>
+
+		<SplitPane
+			pBg="#1C1C1A"
+			pColor="#FCFCFA"
+			pPad={new RespString("52px", "22px")}
+			pEdge="Chevron"
+			pEdgeP="None"
+			pHzAlign="Right"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#FCFCFA").OfText("تكلفة المعدات والخامات") }
+				pText={Text.Body.WithColor("#E5E2DC").OfText("مواسير ووصلات وصمامات ورشاشات وخزائن وهيدرنت وطلمبات وخزانات ولوحات وكواشف وكابلات وأسـطوانات وفوهات ومكونات تحكم. السعر يتأثر بالمادة والضغط والمقاس والاعتماد والماركة والمنشأ والملحقات المطلوبة لكل جزء.") }
+			/>
+
+			<EmoDet WhiteBlack pText="توريد معدات الحريق" pHref="/emofire/supply" />
+
+		</SplitPane>
+
+		<SplitPane
+			pBg="#FFFDF8"
+			pPad={new RespString("52px", "22px")}
+			pHzAlign="Right"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H2.OfText("تكلفة الهندسة والتنفيذ") }
+				pText={Text.Body.OfText("التصميم والحسابات والمخططات والاعتمادات، ثم العمالة والحوامل واللحام أو القلاووظ والاختبارات والبرمجة والرفع والمعدات المساعدة والتنسيق وإدارة الجودة والتشغيل والتسليم. عرض السعر الذي يجمعها تحت بند مبهم يصعب مقارنته بعرض آخر.") }
+			/>
+
+		</SplitPane>
+
+	</SplitScene>
+
+
+
+
+
+
+
+	<MosaicGrid
+		id="PricingInputs"
+		pColumns={12}
+		pColumnsP={4}
+		pAutoRows={new RespString("76px", "68px")}
+		pGap={new RespString("10px", "8px")}
+		pPad={new RespString("50px", "12px")}
+		pMaxWidth={new RespString("1320px", "100%")}
+		pBg="#EEEAE3"
+		pRadius={new RespString("30px", "16px")}
+		pDense={true}
+	>
+
+		<MosaicItem
+			pColSpan={5}
+			pColSpanP={4}
+			pRowSpan={3}
+			pBg="#B88535"
+		>
+
+			<Emograph
+				pTitle={Text.H2.OfText("ما نحتاجه لتسعير أقرب للواقع") }
+				pText={Text.Body.OfText("كل معلومة تقلل الافتراضات. إذا كانت البيانات ناقصة يمكن عمل تقدير أولي، لكن يجب تمييزه عن المقايسة التفصيلية المبنية على تصميم ورسومات وكميات.") }
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={3}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#FFFDF8"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("الموقع والنشاط") } pText={Text.Body.OfText("المحافظة، طبيعة المنشأة، الاستخدام، مساحات الأدوار والارتفاعات.") } />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#EDF3F5"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("الرسومات") } pText={Text.Body.OfText("معماري وMEP وتصميم حريق أو As-Built متاح، حتى لو كان إصدارًا غير نهائي.") } />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={3}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#F7EDEE"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("المخاطر والتخزين") } pText={Text.Body.OfText("مواد، ارتفاعات تخزين، وقود، معدات خاصة أو مناطق حساسة.") } />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#EEF2EE"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("المياه والطاقة") } pText={Text.Body.OfText("مصدر المياه والضغط والخزان وحالة الطلمبات والكهرباء أو الديزل المتاح.") } />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={7}
+			pColSpanP={4}
+			pRowSpan={2}
+			pBg="#F4F0E8"
+		>
+
+			<Emograph
+				pTitle={Text.H3.OfText("حدود العقد") }
+				pText={Text.Body.OfText("توريد فقط أم تركيب؟ تصميم واعتماد؟ مدني وفتحات؟ كابلات؟ برمجة؟ اختبارات؟ As-Built؟ صيانة؟ تحديد الحدود يمنع فروق الأسعار الوهمية.") }
+			/>
+
+		</MosaicItem>
+
+	</MosaicGrid>
+
+
+
+
+
+
+
+	<StoryRail
+		id="QuotationProcess"
+		pAxis="Horizontal"
+		pAxisP="Vertical"
+		pBg="#FCFCFA"
+		pAccent="#B88535"
+		pTrackColor="#DDD6CB"
+		pPad={new RespString("58px", "16px")}
+		pMaxWidth={new RespString("1360px", "100%")}
+	>
+
+		<StoryStep
+			pNumber="01"
+			pKicker="Scope"
+			pTitle="تحديد نطاق المقارنة"
+			pText="ما الأنظمة والبنود والمستندات الداخلة في السعر وما الاستثناءات؟"
+			pBg="#FFFDF8"
+			pAccent="#596068"
+		/>
+
+		<StoryStep
+			pNumber="02"
+			pKicker="Quantity"
+			pTitle="كميات قابلة للقياس"
+			pText="أطوال وأعداد ومعدات وسعات ومناطق ونقاط بدل رقم إجمالي لا يوضح ما تم تسعيره."
+			pBg="#EDF3F5"
+			pAccent="#4B7185"
+		/>
+
+		<StoryStep
+			pNumber="03"
+			pKicker="Specification"
+			pTitle="تثبيت مستوى الخامة"
+			pText="مادة وتصنيف واعتماد وماركة أو مستوى فني مقبول وبدائل محددة عند الحاجة."
+			pBg="#EEF2EE"
+			pAccent="#315D4F"
+		/>
+
+		<StoryStep
+			pNumber="04"
+			pKicker="Execution"
+			pTitle="احتساب التركيب والاختبار"
+			pText="عمالة وحوامل ومعدات مساعدة وبرمجة واختبارات وتوثيق وتسليم ضمن بنود واضحة."
+			pBg="#F4F0E8"
+			pAccent="#B88535"
+		/>
+
+		<StoryStep
+			pNumber="05"
+			pKicker="Compare"
+			pTitle="مقارنة عروض متكافئة"
+			pText="المقارنة تكون بندًا ببند وعلى نفس الحدود والمواصفات، لا على الإجمالي قبل فهم ما حذف أو تغير."
+			pBg="#F7EDEE"
+			pAccent="#8C3138"
+		/>
+
+	</StoryRail>
+
+
+
+
+
+
+
+	<AngleBand
+		id="NoSquareMeterPrice"
+		pBg="linear-gradient(118deg,#5B1F1F,#B8322A)"
+		pColor="#FCFCFA"
+		pDirection="Fall"
+		pCut={new RespString("6%", "3%") }
+		pMinHeight={new RespString("390px", "360px") }
+	>
+
+		<Emograph
+			pSize={new Size(new NumPer("980px", "100%"), new NumPer("auto", "auto"))}
+			pTitle={Text.H2.WithColor("#FCFCFA").OfText("سعر المتر وحده مؤشر ضعيف لنظام الحريق") }
+			pText={Text.Body.WithColor("#FFF0EC").OfText("مساحتان متساويتان قد تختلفان جذريًا إذا كانت إحداهما مكتبًا منخفض الخطورة والأخرى مخزنًا مرتفع التخزين، أو إذا كان مشروع يستخدم شبكة مياه فقط والآخر يحتاج طلمبات وخزان وإنذار وإطفاء غازي. يمكن استخدام مؤشرات تقريبية مبكرة، لكن عرض السعر التنفيذي يجب أن يعود إلى النظام والكميات والمواصفات.") }
+		/>
+
+	</AngleBand>
+
+
+
+
+
+
+
+	<EmoFaq id="CostFaq">
+
+		<FaqItem
+			pQuestion="هل يمكن إعطاء رقم تقريبي قبل وجود تصميم؟"
+			pAnswer="يمكن تكوين نطاق تقديري إذا توفرت بيانات النشاط والمساحة والارتفاعات ونوع الأنظمة المتوقعة، لكن يجب اعتباره Budget Estimate وليس مقايسة تنفيذية نهائية."
+		/>
+
+		<FaqItem
+			pQuestion="لماذا تختلف عروض الأسعار لنفس المشروع؟"
+			pAnswer="غالبًا بسبب اختلاف حدود العقد أو الماركات والاعتمادات أو الكميات أو وجود بنود غير ظاهرة مثل الحوامل والبرمجة والاختبارات والمستندات. لذلك يجب توحيد المقارنة قبل الحكم على الإجمالي."
+		/>
+
+		<FaqItem
+			pQuestion="هل التوريد فقط أرخص دائمًا من عقد توريد وتركيب؟"
+			pAnswer="إجمالي عقد التوريد فقط أقل لأنه لا يشمل التنفيذ، لكن شراء الخامات منفصلة لا يضمن أن التكلفة النهائية للمشروع ستكون أقل؛ يجب إضافة العمالة والتنسيق والاختبارات والمخاطر والمسؤوليات المتفرقة."
+		/>
+
+		<FaqItem
+			pQuestion="هل الصيانة تدخل في تكلفة المشروع الأولية؟"
+			pAnswer="يمكن فصلها كبند أو عقد لاحق، لكن من الأفضل معرفة متطلبات الصيانة وقطع الغيار منذ اختيار المعدات حتى لا يكون النظام منخفض التكلفة عند الشراء وصعب الخدمة بعد التشغيل."
+		/>
+
+	</EmoFaq>
+
+
+
+
+
+
+
+	<RelatedServices pTitle={Text.H2.Centered.WithColor("#FCFCFA").OfText("حوّل التقدير إلى نطاق قابل للتسعير") } pMax={4} pMaxP={1}>
+
+		<RelServiceItem pTitle="تصميم أنظمة الحريق" pDesc="الحسابات والمخططات التي تنتج الكميات والمواصفات." pHref="/emofire/design" />
+
+		<RelServiceItem pTitle="توريد معدات الحريق" pDesc="تسعير المعدات والمكونات وقطع الغيار حسب المواصفة." pHref="/emofire/supply" />
+
+		<RelServiceItem pTitle="مقاولات أنظمة الحريق" pDesc="تسعير التنفيذ والاختبارات والتسليم." pHref="/emofire/contracting" />
+
+		<RelServiceItem pTitle="صيانة أنظمة الحريق" pDesc="تكلفة التشغيل والصيانة بعد التسليم وتأهيل الأنظمة القائمة." pHref="/emofire/maintenance" />
+
+	</RelatedServices>
+
+
+
+
+
+
+
+	<EmoContactStrip
+		pTitle="اطلب تقديرًا أو مقايسة لنظام الحريق"
+		pDesc="أرسل نوع المنشأة والمساحات والارتفاعات والرسومات المتاحة ونطاق الخدمة المطلوب. كلما زادت البيانات أمكن الانتقال من تقدير ميزانية إلى عرض أكثر تفصيلًا وقابلية للمقارنة."
+		pSourceName="EmoFire Cost"
+	/>
+
+
+
+
+
+
+
+</BLayout>

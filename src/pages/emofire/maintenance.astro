@@ -1,0 +1,394 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, MosaicGrid, MosaicItem, StickyStory, StickyStoryItem, StoryRail, StoryStep } from "@/Widgets/Layouts";
+import { Hero, RelatedServices, RelServiceItem } from "@/Widgets/Sections";
+import { EmoContactStrip } from "@/Widgets/Strips";
+import { ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="صيانة أنظمة مكافحة الحريق"
+	pDescr="صيانة وفحص أنظمة مكافحة الحريق والإنذار: صيانة وقائية وتصحيحية وطوارئ، فحص الطلمبات والشبكات والإنذار والأسطوانات، إعادة التأهيل وتوثيق الاختبارات وسجلات الصيانة."
+>
+
+
+
+
+
+
+
+	<Hero pBg={new ElemBg("#17251F")}>
+
+		<VrStack pSize={new Size(new NumPer("56%", "95%"))} pLoc={new Loc(new NumPer("5%", "2.5%"), new NumPer("15%", "12%"))} pHzAlign="Center">
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor("#FCFCFA").OfText("صيانة أنظمة مكافحة الحريق")}
+				pText={Text.Body.Centered.WithColor("#DCE8E1").OfText("الصيانة لا تعني انتظار العطل. الهدف هو معرفة حالة النظام قبل وقت الحاجة: هل الطلمبة تعمل على منحناها؟ هل الصمامات في وضعها الصحيح؟ هل اللوحة ترى كل الأجهزة؟ وهل الأسطوانة والشبكة جاهزتان فعليًا؟")}
+			/>
+
+			<HzStack pGap={new Pixel(22, 10)} pForceHz>
+
+				<EmoCallIcon BlackGreen />
+
+				<EmoWhatsIcon BlackGreen />
+
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
+
+	<MosaicGrid
+		id="MaintenanceModes"
+		pColumns={12}
+		pColumnsP={4}
+		pAutoRows={new RespString("82px", "70px")}
+		pGap={new RespString("10px", "8px")}
+		pPad={new RespString("52px", "12px")}
+		pMaxWidth={new RespString("1320px", "100%")}
+		pBg="#E9ECE8"
+		pRadius={new RespString("30px", "16px")}
+		pDense={true}
+	>
+
+		<MosaicItem
+			pColSpan={5}
+			pColSpanP={4}
+			pRowSpan={3}
+			pBg="#315D4F"
+			pColor="#FCFCFA"
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#FCFCFA").OfText("الصيانة الوقائية") }
+				pText={Text.Body.WithColor("#DCE8E3").OfText("فحوص واختبارات مجدولة لاكتشاف التدهور والانسداد وضعف البطاريات والتسريب وتغير الضبط قبل تحوله إلى عطل أثناء الطوارئ.") }
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#FFFDF8"
+		>
+
+			<Emograph
+				pTitle={Text.H3.OfText("الصيانة التصحيحية") }
+				pText={Text.Body.OfText("تشخيص عطل معروف وإصلاح أو استبدال الجزء ثم إعادة اختبار الوظيفة المرتبطة به.") }
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={3}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#F7EDEE"
+		>
+
+			<Emograph
+				pTitle={Text.H3.OfText("الاستجابة الطارئة") }
+				pText={Text.Body.OfText("تعامل مع توقف أو Alarm متكرر أو تسريب أو مشكلة تشغيل تحتاج تدخلًا سريعًا.") }
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#EDF3F5"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("إعادة التأهيل") } pText={Text.Body.OfText("رفع جاهزية نظام قديم أو ناقص أو غير موثق بدل تبديله كاملًا بدون تشخيص.") } />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={3}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#F4F0E8"
+		>
+
+			<Emograph
+				pTitle={Text.H3.OfText("الصيانة التنبؤية") }
+				pText={Text.Body.OfText("قراءة الاتجاهات المتكررة في الضغط والأعطال والبطاريات والاستهلاك لتوجيه الاستبدال قبل الفشل.") }
+			/>
+
+		</MosaicItem>
+
+	</MosaicGrid>
+
+
+
+
+
+
+
+	<StickyStory
+		id="SystemMaintenance"
+		pVisualShare={40}
+		pBg="#F5F4EF"
+		pVisualBg="linear-gradient(150deg,#17251F,#315D4F)"
+		pGap={new RespString("42px", "18px")}
+		pPad={new RespString("58px", "14px")}
+		pMaxWidth={new RespString("1360px", "100%")}
+	>
+
+		<Emograph
+			slot="visual"
+			pTitle={Text.H2.WithColor("#FCFCFA").OfText("System Health") }
+			pText={Text.Body.WithColor("#DCE8E1").OfText("كل نظام له علامات صحة مختلفة، لذلك جدول الصيانة يُبنى حسب نوع المعدات والمخاطر وسجل الأعطال وليس كقائمة موحدة لكل المواقع.") }
+		/>
+
+		<StickyStoryItem
+			pKicker="PUMPS"
+			pTitle="الطلمبات وغرفة الضخ"
+			pText="تشغيل Jockey والطلمبات الرئيسية والاحتياطية، مراجعة الضغوط والعدادات والبطاريات والشواحن والديزل والزيوت والتسريب والاهتزاز وصمامات السحب والطرد وخط الاختبار، مع تنفيذ اختبارات أداء دورية حسب برنامج الموقع."
+			pBg="#FFFDF8"
+			pAccent="#B88535"
+		/>
+
+		<StickyStoryItem
+			pKicker="WATER"
+			pTitle="الشبكات المائية"
+			pText="مراجعة أوضاع الصمامات والتسريب والتآكل ونقاط الاختبار والتصريف وFlow Switches والرشاشات والصناديق والهيدرنت وإتاحة الوصول للمكونات، مع معالجة أي جزء تم حجبه أو تعديله بسبب أعمال الموقع."
+			pBg="#EDF3F5"
+			pAccent="#4B7185"
+		/>
+
+		<StickyStoryItem
+			pKicker="ALARM"
+			pTitle="الإنذار والتحكم"
+			pText="فحص اللوحات والبطاريات والكواشف والManual Calls وأجهزة التنبيه والموديولات والدوائر والأعطال والـSupervisory، وتجربة وظائف Cause & Effect والربط بالمصاعد والتهوية والأبواب والأنظمة المتخصصة."
+			pBg="#F7EDEE"
+			pAccent="#B8322A"
+		/>
+
+		<StickyStoryItem
+			pKicker="SUPPRESSION"
+			pTitle="الأسطوانات والأنظمة المتخصصة"
+			pText="مراجعة الضغط أو الوزن وحالة الأسطوانات والصمامات والخراطيم والفوهات ودوائر الإطلاق وManual Release وAbort والإنذارات المسبقة، مع التحقق من إحكام الحيز والتعديلات المعمارية التي قد تؤثر على الأداء."
+			pBg="#EEF2EE"
+			pAccent="#315D4F"
+		/>
+
+	</StickyStory>
+
+
+
+
+
+
+
+	<StoryRail
+		id="MaintenanceCycle"
+		pAxis="Horizontal"
+		pAxisP="Vertical"
+		pBg="#FCFCFA"
+		pAccent="#315D4F"
+		pTrackColor="#D7DDD9"
+		pPad={new RespString("58px", "16px")}
+		pMaxWidth={new RespString("1360px", "100%")}
+	>
+
+		<StoryStep
+			pNumber="01"
+			pKicker="Survey"
+			pTitle="حصر المنظومة"
+			pText="تحديد اللوحات والمضخات والصمامات والمناطق والأسطوانات والموديلات وحالة المستندات والسجلات."
+			pBg="#FFFDF8"
+			pAccent="#596068"
+		/>
+
+		<StoryStep
+			pNumber="02"
+			pKicker="Baseline"
+			pTitle="تثبيت الحالة الحالية"
+			pText="تسجيل الضغط والحالة والأعطال والملاحظات والصور والقراءات قبل أي تدخل حتى يمكن قياس التحسن."
+			pBg="#EDF3F5"
+			pAccent="#4B7185"
+		/>
+
+		<StoryStep
+			pNumber="03"
+			pKicker="Service"
+			pTitle="فحص وصيانة"
+			pText="تنظيف وضبط وتشحيم واختبار وإصلاح واستبدال العناصر المطلوبة وفق نوع النظام وتعليمات المنتج."
+			pBg="#EEF2EE"
+			pAccent="#315D4F"
+		/>
+
+		<StoryStep
+			pNumber="04"
+			pKicker="Test"
+			pTitle="إعادة اختبار الوظائف"
+			pText="أي جزء تم إصلاحه يعاد اختباره منفردًا ثم داخل الوظيفة المرتبطة به للتأكد من عودة المنظومة للعمل."
+			pBg="#F7EDEE"
+			pAccent="#8C3138"
+		/>
+
+		<StoryStep
+			pNumber="05"
+			pKicker="Record"
+			pTitle="تحديث السجل"
+			pText="نتائج الفحص والقطع المستبدلة والقراءات والتوصيات والمواعيد التالية تحفظ كسجل قابل للمقارنة في الزيارة القادمة."
+			pBg="#F4F0E8"
+			pAccent="#B88535"
+		/>
+
+	</StoryRail>
+
+
+
+
+
+
+
+	<AngleBand
+		id="MaintenanceRecords"
+		pBg="linear-gradient(118deg,#17222D,#315D4F)"
+		pColor="#FCFCFA"
+		pDirection="Rise"
+		pCut={new RespString("6%", "3%") }
+		pMinHeight={new RespString("380px", "350px") }
+	>
+
+		<Emograph
+			pSize={new Size(new NumPer("980px", "100%"), new NumPer("auto", "auto"))}
+			pTitle={Text.H2.WithColor("#FCFCFA").OfText("سجل الصيانة جزء من النظام نفسه") }
+			pText={Text.Body.WithColor("#DCE8E3").OfText("النظام الذي يتم فحصه بدون سجل يفقد ذاكرته بعد كل زيارة. التقرير الجيد يوضح ما تم اختباره، القراءة قبل وبعد، الجزء الذي تم استبداله، الموديل، العطل المتكرر، الملاحظة المؤجلة، وما يجب مراجعته في الزيارة التالية. مع الوقت يتحول السجل إلى أداة لاتخاذ قرار الإصلاح أو الإحلال بدل الاعتماد على الانطباع.") }
+		/>
+
+	</AngleBand>
+
+
+
+
+
+
+
+	<MosaicGrid
+		id="WhenRehabilitationNeeded"
+		pColumns={12}
+		pColumnsP={4}
+		pAutoRows={new RespString("76px", "68px")}
+		pGap={new RespString("10px", "8px")}
+		pPad={new RespString("50px", "12px")}
+		pMaxWidth={new RespString("1320px", "100%")}
+		pBg="#F0EEE9"
+		pRadius={new RespString("30px", "16px")}
+	>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={4}
+			pRowSpan={3}
+			pBg="#18211F"
+			pColor="#FCFCFA"
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#FCFCFA").OfText("متى يتحول الموضوع إلى تأهيل؟") }
+				pText={Text.Body.WithColor("#DCE5E1").OfText("إذا أصبحت الأعطال نتيجة تصميم قديم أو توسعات غير محسوبة أو قطع لم تعد متاحة أو تغيير في النشاط، فالصيانة وحدها قد تحافظ على عيب بنيوي بدل إصلاحه.") }
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#F7EDEE"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("تغيير النشاط") } pText={Text.Body.OfText("زيادة حمل الحريق أو تغيير التخزين أو استخدام جديد للمبنى.") } />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#EDF3F5"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("توسعات عشوائية") } pText={Text.Body.OfText("إضافات على الشبكة أو اللوحة دون مراجعة السعة أو الحسابات أو العناوين.") } />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#F4F0E8"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("معدات متقادمة") } pText={Text.Body.OfText("موديلات انتهى دعمها أو يصعب توفير قطعها أو لا تقبل التوسع المطلوب.") } />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#EEF2EE"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("توثيق مفقود") } pText={Text.Body.OfText("عدم وجود As-Built أو جداول أجهزة أو Cause & Effect أو سجلات اختبار موثوقة.") } />
+
+		</MosaicItem>
+
+	</MosaicGrid>
+
+
+
+
+
+
+
+	<RelatedServices pTitle={Text.H2.Centered.WithColor("#FCFCFA").OfText("خدمات مرتبطة بالصيانة") } pMax={4} pMaxP={1}>
+
+		<RelServiceItem pTitle="توريد قطع غيار الحريق" pDesc="توفير المكونات التي يحددها الفحص والصيانة." pHref="/emofire/supply" />
+
+		<RelServiceItem pTitle="غرف طلمبات الحريق" pDesc="اختبارات وصيانة وتأهيل غرف الضخ والخزانات." pHref="/emofire/pumps" />
+
+		<RelServiceItem pTitle="أنظمة إنذار الحريق" pDesc="أجهزة ولوحات وبرمجة وتكامل Cause & Effect." pHref="/emofire/alarm" />
+
+		<RelServiceItem pTitle="الحماية المدنية" pDesc="سجلات وتقارير وتجهيز المنشأة عند المعاينة أو التجديد." pHref="/emofire/civil-defense" />
+
+	</RelatedServices>
+
+
+
+
+
+
+
+	<EmoContactStrip
+		pTitle="اطلب فحص نظام قائم أو عقد صيانة"
+		pDesc="أرسل نوع المنشأة وأي أعطال ظاهرة وصور اللوحات والطلمبات والأسطوانات إن أمكن. لو توجد سجلات صيانة أو As-Built أو قوائم معدات، تساعد في تحديد نطاق الفحص قبل الزيارة."
+		pSourceName="EmoFire Maintenance"
+	/>
+
+
+
+
+
+
+
+</BLayout>

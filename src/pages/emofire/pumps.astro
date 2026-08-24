@@ -1,0 +1,395 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, LayerDeck, LayerItem, MosaicGrid, MosaicItem, SplitPane, SplitScene, StoryRail, StoryStep } from "@/Widgets/Layouts";
+import { Hero, RelatedServices, RelServiceItem } from "@/Widgets/Sections";
+import { EmoContactStrip } from "@/Widgets/Strips";
+import { ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="غرف وطلمبات الحريق"
+	pDescr="تصميم وتوريد وتركيب واختبار غرف طلمبات الحريق والخزانات ولوحات التحكم، وتشمل الطلمبة الرئيسية والاحتياطية وJockey Pump وخطوط السحب والطرد والاختبار والقياس."
+>
+
+
+
+
+
+
+
+	<Hero pBg={new ElemBg("#2A2118")}>
+
+		<VrStack pSize={new Size(new NumPer("55%", "95%"))} pLoc={new Loc(new NumPer("5%", "2.5%"), new NumPer("15%", "12%"))} pHzAlign="Center">
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor("#FCFCFA").OfText("غرف وطلمبات الحريق")}
+				pText={Text.Body.Centered.WithColor("#E7DED2").OfText("غرفة الطلمبات هي نقطة الطاقة الهيدروليكية للمنظومة المائية. اختيار الطلمبة وحده لا يكفي؛ خط السحب والطرد، الخزان، اللوحات، الاختبار، التهوية والصيانة كلها أجزاء من نفس التصميم.")}
+			/>
+
+			<HzStack pGap={new Pixel(22, 10)} pForceHz>
+
+				<EmoCallIcon BlackOrange />
+
+				<EmoWhatsIcon BlackOrange />
+
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
+
+	<LayerDeck
+		id="PumpRoomComposition"
+		pAspect={new RespString("16 / 7", "1 / 1.2")}
+		pMinHeight={new RespString("620px", "760px")}
+		pMaxWidth={new RespString("1320px", "100%")}
+		pPad={new RespString("46px", "16px")}
+		pBg="linear-gradient(145deg,#E9E0D2,#BDA98B)"
+		pRadius={new RespString("38px", "20px")}
+	>
+
+		<LayerItem
+			pWidth={new RespString("48%", "82%")}
+			pHeight={new RespString("54%", "30%")}
+			pOffsetX={new RespString("-22%", "0%")}
+			pOffsetY={new RespString("-10%", "-30%")}
+			pBg="#5B1F1F"
+			pColor="#FCFCFA"
+			pRadius={new RespString("28px", "18px")}
+		>
+
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor("#FCFCFA").OfText("Main Fire Pump")}
+				pText={Text.Body.Centered.WithColor("#F2DCDC").OfText("نقطة التشغيل الرئيسية المطلوبة من الحسابات الهيدروليكية.")}
+			/>
+
+		</LayerItem>
+
+		<LayerItem
+			pWidth={new RespString("42%", "76%")}
+			pHeight={new RespString("48%", "28%")}
+			pOffsetX={new RespString("18%", "0%")}
+			pOffsetY={new RespString("-2%", "0%")}
+			pBg="#B88535"
+			pColor="#101820"
+			pRadius={new RespString("28px", "18px")}
+		>
+
+			<Emograph pTitle={Text.H2.Centered.OfText("Standby Pump")} pText={Text.Body.Centered.OfText("مصدر احتياطي مستقل حسب تكوين المشروع ومتطلبات الاعتماد.")} />
+
+		</LayerItem>
+
+		<LayerItem
+			pWidth={new RespString("34%", "68%")}
+			pHeight={new RespString("34%", "24%")}
+			pOffsetX={new RespString("-8%", "0%")}
+			pOffsetY={new RespString("28%", "28%")}
+			pBg="#F7F3EA"
+			pColor="#101820"
+			pRadius={new RespString("24px", "16px")}
+		>
+
+			<Emograph
+				pTitle={Text.H3.Centered.OfText("Jockey Pump")}
+				pText={Text.Body.Centered.OfText("تحافظ على ضغط الشبكة أمام التسريبات البسيطة وتحد من تشغيل الطلمبة الرئيسية.")}
+			/>
+
+		</LayerItem>
+
+		<LayerItem
+			pWidth={new RespString("30%", "62%")}
+			pHeight={new RespString("30%", "22%")}
+			pOffsetX={new RespString("25%", "0%")}
+			pOffsetY={new RespString("31%", "55%")}
+			pBg="#263A45"
+			pColor="#FCFCFA"
+			pRadius={new RespString("24px", "16px")}
+		>
+
+			<Emograph
+				pTitle={Text.H3.Centered.WithColor("#FCFCFA").OfText("Controllers")}
+				pText={Text.Body.Centered.WithColor("#D7E0E4").OfText("لوحات تشغيل وإشراف وإنذار لكل طلمبة.")}
+			/>
+
+		</LayerItem>
+
+	</LayerDeck>
+
+
+
+
+
+
+
+	<SplitScene
+		id="PumpSelection"
+		pColumns={new RespString("1fr 1fr", "1fr")}
+		pGap={new RespString("12px", "10px")}
+		pPad={new RespString("52px", "12px")}
+		pBg="#F4F0E8"
+		pRadius={new RespString("34px", "18px")}
+	>
+
+		<SplitPane
+			pBg="#FFFDF8"
+			pPad={new RespString("48px", "22px")}
+			pEdge="DiagonalEnd"
+			pEdgeP="None"
+			pHzAlign="Right"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H2.OfText("اختيار الطلمبة يبدأ من نقطة الطلب") }
+				pText={Text.Body.OfText("الحساب الهيدروليكي ينتج تصرفًا وضغطًا مطلوبين عند نقطة التغذية. تُراجع هذه النقطة على منحنى الطلمبة مع ظروف السحب والارتفاع وقدرة المحرك وحدود Shutoff والتصرف عند 150%، ثم يثبت نوع القيادة كهرباء أو ديزل وتكوين الطلمبة الاحتياطية.") }
+			/>
+
+		</SplitPane>
+
+		<SplitPane
+			pBg="#2A2118"
+			pColor="#FCFCFA"
+			pPad={new RespString("48px", "22px")}
+			pHzAlign="Right"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#FCFCFA").OfText("الخزان جزء من نفس المعادلة") }
+				pText={Text.Body.WithColor("#E7DED2").OfText("السعة الصافية تُحسب من الطلب المتزامن ومدة الإمداد، مع مراعاة الحجم القابل للاستخدام ومنسوب السحب وإعادة الملء والـOverflow والتهوية والتصريف وفتحات الفحص. جودة الطلمبة لا تعوض خزانًا غير كافٍ أو خط سحب سيئ الترتيب.") }
+			/>
+
+		</SplitPane>
+
+	</SplitScene>
+
+
+
+
+
+
+
+	<StoryRail
+		id="PumpSizingSteps"
+		pAxis="Horizontal"
+		pAxisP="Vertical"
+		pBg="#FCFCFA"
+		pAccent="#B88535"
+		pTrackColor="#D9D0C3"
+		pPad={new RespString("56px", "16px")}
+		pMaxWidth={new RespString("1360px", "100%")}
+	>
+
+		<StoryStep
+			pNumber="01"
+			pKicker="Demand"
+			pTitle="تثبيت الضغط والتصرف"
+			pText="قراءة نتائج الحسابات عند نقطة تغذية النظام ومراجعة السيناريو المتزامن المطلوب."
+			pBg="#FFFDF8"
+			pAccent="#B8322A"
+		/>
+
+		<StoryStep
+			pNumber="02"
+			pKicker="Suction"
+			pTitle="مراجعة ظروف السحب"
+			pText="منسوب المياه وأقطار خطوط السحب والصمامات وترتيب المانيفولد ومساحة الاقتراب من مدخل الطلمبة."
+			pBg="#F4F0E8"
+			pAccent="#B88535"
+		/>
+
+		<StoryStep
+			pNumber="03"
+			pKicker="Curve"
+			pTitle="مطابقة منحنى الأداء"
+			pText="مقارنة Rated Point وChurn و150% Flow والقدرة المطلوبة مع اعتماد الطلمبة والمحرك أو الديزل."
+			pBg="#F7EDEE"
+			pAccent="#8C3138"
+		/>
+
+		<StoryStep
+			pNumber="04"
+			pKicker="Control"
+			pTitle="تتابع التشغيل"
+			pText="ضبط نقاط تشغيل Jockey ثم الطلمبات الرئيسية والاحتياطية وربط الإنذارات والإشارات بلوحات التحكم."
+			pBg="#EDF3F5"
+			pAccent="#4B7185"
+		/>
+
+		<StoryStep
+			pNumber="05"
+			pKicker="Acceptance"
+			pTitle="اختبار ميداني"
+			pText="تشغيل وقياس الضغط والتصرف وتسجيل النتائج ومقارنتها بمنحنى الأداء والتصميم قبل التسليم."
+			pBg="#EEF2EE"
+			pAccent="#315D4F"
+		/>
+
+	</StoryRail>
+
+
+
+
+
+
+
+	<MosaicGrid
+		id="PumpRoomRequirements"
+		pColumns={12}
+		pColumnsP={4}
+		pAutoRows={new RespString("76px", "68px")}
+		pGap={new RespString("10px", "8px")}
+		pPad={new RespString("50px", "12px")}
+		pMaxWidth={new RespString("1320px", "100%")}
+		pBg="#E9E4DB"
+		pRadius={new RespString("30px", "16px")}
+		pDense={true}
+	>
+
+		<MosaicItem
+			pColSpan={5}
+			pColSpanP={4}
+			pRowSpan={3}
+			pBg="#B88535"
+		>
+
+			<Emograph
+				pTitle={Text.H2.OfText("غرفة قابلة للتشغيل والصيانة") }
+				pText={Text.Body.OfText("المسافات حول المعدات ومسار الفك والتركيب والتهوية والصرف والإنارة والوصول إلى اللوحات والمحابس ليست تفاصيل معمارية لاحقة؛ هي شروط تشغيلية تؤثر على ترتيب المعدات من البداية.") }
+			/>
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={3}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#FFFDF8"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("Suction")} pText={Text.Body.OfText("خطوط قصيرة ومنظمة ومحابس ومصفاة عند الحاجة وترتيب يقلل الاضطراب.")} />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#EDF3F5"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("Discharge")} pText={Text.Body.OfText("Check valve وعزل وأجهزة قياس وخط اختبار ونقاط ربط واضحة.")} />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={3}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#F7EDEE"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("Controllers")} pText={Text.Body.OfText("مساحة تشغيل أمام اللوحات وتغذية وإشارات وإنذارات وتعريف واضح.")} />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pBg="#EEF2EE"
+		>
+
+			<Emograph pTitle={Text.H3.OfText("Ventilation")} pText={Text.Body.OfText("تهوية مناسبة خصوصًا لمحركات الديزل مع تصريف الحرارة والعادم.")} />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={5}
+			pColSpanP={4}
+			pRowSpan={2}
+			pBg="#263A45"
+			pColor="#FCFCFA"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#FCFCFA").OfText("Test Header / Flow Meter")}
+				pText={Text.Body.WithColor("#D7E0E4").OfText("ترتيب يسمح بقياس الأداء الفعلي دون تفكيك المنظومة أو تعطيل باقي الشبكة.")}
+			/>
+
+		</MosaicItem>
+
+	</MosaicGrid>
+
+
+
+
+
+
+
+	<AngleBand
+		id="PumpAcceptance"
+		pBg="linear-gradient(118deg,#5B1F1F,#8C3138)"
+		pColor="#FCFCFA"
+		pDirection="Chevron"
+		pCut={new RespString("6%", "3%") }
+		pMinHeight={new RespString("360px", "340px") }
+	>
+
+		<Emograph
+			pSize={new Size(new NumPer("980px", "100%"), new NumPer("auto", "auto"))}
+			pTitle={Text.H2.WithColor("#FCFCFA").OfText("اختبار الطلمبة ليس زر تشغيل") }
+			pText={Text.Body.WithColor("#F2DDDD").OfText("القبول يحتاج قياسًا عند أكثر من نقطة تشغيل ومقارنة النتائج بالمنحنى المعتمد، مع مراجعة الضغط على السحب والطرد، استقرار المحرك أو الديزل، إشارات اللوحة، تتابع Jockey والطلمبات الرئيسية، خط الاختبار والتصريف، وأي إنذارات أو اهتزازات أو تسريب يظهر أثناء التشغيل.") }
+		/>
+
+	</AngleBand>
+
+
+
+
+
+
+
+	<RelatedServices pTitle={Text.H2.Centered.WithColor("#FCFCFA").OfText("خدمات مرتبطة بغرفة الطلمبات") } pMax={4} pMaxP={1}>
+
+		<RelServiceItem pTitle="أنظمة الإطفاء بالماء" pDesc="الشبكات التي تعتمد على الطلمبات كمصدر ضغط وتصرف." pHref="/emofire/water-systems" />
+
+		<RelServiceItem pTitle="تصميم أنظمة الحريق" pDesc="الحساب الهيدروليكي واختيار السعات والمعدات." pHref="/emofire/design" />
+
+		<RelServiceItem pTitle="توريد معدات الحريق" pDesc="الطلمبات واللوحات والصمامات وأجهزة القياس وقطع الغيار." pHref="/emofire/supply" />
+
+		<RelServiceItem pTitle="صيانة أنظمة الحريق" pDesc="اختبارات دورية وصيانة للطلمبات واللوحات والشبكات." pHref="/emofire/maintenance" />
+
+	</RelatedServices>
+
+
+
+
+
+
+
+	<EmoContactStrip
+		pTitle="اطلب تصميم أو تسعير غرفة طلمبات"
+		pDesc="أرسل نتائج الحسابات إن وجدت، أو بيانات الشبكة والمبنى ومصدر المياه ومساحة غرفة الطلمبات. يمكن العمل على اختيار المعدات أو المراجعة أو التوريد والتنفيذ والاختبار."
+		pSourceName="EmoFire Pumps"
+	/>
+
+
+
+
+
+
+
+</BLayout>

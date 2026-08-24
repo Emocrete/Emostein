@@ -1,0 +1,511 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, MosaicGrid, MosaicItem, RadialItem, RadialLayout, ScrollShelf, ShelfItem, StoryRail, StoryStep } from "@/Widgets/Layouts";
+import { Hero, RelatedServices, RelServiceItem } from "@/Widgets/Sections";
+import { EmoContactStrip } from "@/Widgets/Strips";
+import { ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+
+
+
+
+<BLayout
+	pSchemaType="CollectionPage"
+	pTitle="EmoFire | أنظمة مكافحة الحريق"
+	pDescr="EmoFire قسم متخصص في تصميم وتوريد وتنفيذ وصيانة أنظمة مكافحة الحريق والإنذار، من دراسة الخطر والحسابات والمخططات إلى التوريد والتركيب والاختبارات والتسليم وخدمات الحماية المدنية."
+>
+
+
+
+
+
+
+
+	<Hero pBg={new ElemBg("#0B1118")}>
+
+		<VrStack pSize={new Size(new NumPer("52%", "95%"))} pLoc={new Loc(new NumPer("6%", "2.5%"), new NumPer("15%", "12%"))} pHzAlign="Center">
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor("#FCFCFA").OfText("EmoFire | أنظمة مكافحة الحريق")}
+				pText={Text.Body.Centered.WithColor("#D9E0E4").OfText("قسم متخصص يجمع الهندسة والتوريد والتنفيذ والتشغيل في مسار واحد: نبدأ من طبيعة الإشغال والخطر، وننتهي بنظام قابل للاختبار والتشغيل والصيانة؛ وليس مجرد بند ميكانيكا داخل مقاولة عامة.")}
+			/>
+
+			<HzStack pGap={new Pixel(22, 10)} pForceHz>
+
+				<EmoCallIcon BlackRed />
+
+				<EmoWhatsIcon BlackRed />
+
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
+
+	<AngleBand
+		id="EmoFireIdentity"
+		pBg="linear-gradient(118deg, #7B1518 0%, #B8322A 52%, #E05A45 100%)"
+		pColor="#FCFCFA"
+		pDirection="Rise"
+		pCut={new RespString("7%", "3%")}
+		pMinHeight={new RespString("330px", "300px")}
+	>
+
+		<Emograph
+			pSize={new Size(new NumPer("980px", "100%"), new NumPer("auto", "auto"))}
+			pTitle={Text.H2.WithColor("#FCFCFA").OfText("الحريق هنا قطاع كامل، لا خدمة فرعية")}
+			pText={Text.Body.WithColor("#FFF1EC").OfText("EmoFire يجمع تصميم شبكات الإطفاء والإنذار، الحسابات الهيدروليكية، غرف الطلمبات، الأنظمة المائية والمتخصصة، اعتماد التوريدات، التنفيذ الميداني، الاختبارات، الصيانة، وتجهيز الملف الفني للحماية المدنية. كل صفحة في القسم تمثل قرار شراء أو نطاق عمل مستقل ويمكن الوصول إليها مباشرة من البحث أو من بقية خدمات القسم.")}
+		/>
+
+	</AngleBand>
+
+
+
+
+
+
+
+	<MosaicGrid
+		id="EmoFireServiceMap"
+		pColumns={12}
+		pColumnsP={4}
+		pAutoRows={new RespString("84px", "76px")}
+		pGap={new RespString("12px", "9px")}
+		pPad={new RespString("48px", "12px")}
+		pMinHeight={new RespString("690px", "1050px")}
+		pMaxWidth={new RespString("1320px", "100%")}
+		pBg="#F2EFE9"
+		pRadius={new RespString("38px", "18px")}
+		pDense={true}
+	>
+
+		<MosaicItem
+			pColSpan={7}
+			pColSpanP={4}
+			pRowSpan={3}
+			pRowSpanP={3}
+			pBg="#111A21"
+			pColor="#FCFCFA"
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#FCFCFA").OfText("تصميم أنظمة الحريق")}
+				pText={Text.Body.WithColor("#D8E0E4").OfText("أسس التصميم، تصنيف الخطورة، الحسابات الهيدروليكية، سعات الخزانات والطلمبات، المخططات، المواصفات والمقايسات والتنسيق مع باقي التخصصات.")}
+			/>
+
+			<EmoDet RedBlack pText="صفحة التصميم" pHref="/emofire/design" />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={5}
+			pColSpanP={4}
+			pRowSpan={3}
+			pRowSpanP={3}
+			pBg="#B8322A"
+			pColor="#FCFCFA"
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#FCFCFA").OfText("المقاولات والتنفيذ")}
+				pText={Text.Body.WithColor("#FFF0EB").OfText("من استلام الخامات وتحديد المسارات والمناسيب إلى تركيب الشبكات والمعدات والإنذار وضبط الجودة والاختبارات والتسليم الفعلي.")}
+			/>
+
+			<EmoDet WhiteBlack pText="صفحة المقاولات" pHref="/emofire/contracting" />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#DCEEF4"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#101820").OfText("أنظمة المياه")}
+				pText={Text.Body.WithColor("#33434C").OfText("Sprinkler · Hose Reel · Hydrant · Water Spray")}
+			/>
+
+			<EmoDet BlackSky pText="التفاصيل" pHref="/emofire/water-systems" />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#E7D4B2"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#101820").OfText("الطلمبات والخزانات")}
+				pText={Text.Body.WithColor("#4A4031").OfText("Duty · Standby · Jockey · Controllers · Tanks")}
+			/>
+
+			<EmoDet BlackOrange pText="التفاصيل" pHref="/emofire/pumps" />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={4}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#26363D"
+			pColor="#FCFCFA"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#FCFCFA").OfText("الإطفاء المتخصص")}
+				pText={Text.Body.WithColor("#D4DEE2").OfText("Foam · Clean Agent · CO₂ · Inert Gas · Water Mist · Kitchen")}
+			/>
+
+			<EmoDet WhiteBlack pText="التفاصيل" pHref="/emofire/suppression" />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={5}
+			pColSpanP={4}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#F4E9E5"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#7B1518").OfText("إنذار الحريق")}
+				pText={Text.Body.WithColor("#4A4140").OfText("Conventional وAddressable والكشف والإخلاء الصوتي ومنطق Cause & Effect وتكامل الأنظمة.")}
+			/>
+
+			<EmoDet BlackRed pText="التفاصيل" pHref="/emofire/alarm" />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={4}
+			pColSpanP={2}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#E8EDE8"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#183128").OfText("التوريد وقطع الغيار")}
+				pText={Text.Body.WithColor("#3E5048").OfText("اعتماد خامات، بدائل فنية، أسطوانات، إعادة تعبئة، قطع غيار وتتبع التوريد.")}
+			/>
+
+			<EmoDet GreenBlack pText="التفاصيل" pHref="/emofire/supply" />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={3}
+			pColSpanP={2}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#D9E5E0"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#17222D").OfText("الصيانة")}
+				pText={Text.Body.WithColor("#42504B").OfText("وقائية وتصحيحية وطوارئ وتأهيل للأنظمة القائمة.")}
+			/>
+
+			<EmoDet BlackGreen pText="التفاصيل" pHref="/emofire/maintenance" />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={6}
+			pColSpanP={4}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#F3E8D9"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#101820").OfText("الحماية المدنية")}
+				pText={Text.Body.WithColor("#4A4339").OfText("مراجعة المخططات وتجهيز الملف الفني وقراءة الملاحظات وتجهيز المنشأة للمعاينة والمتابعة والتجديد.")}
+			/>
+
+			<EmoDet BlackOrange pText="التفاصيل" pHref="/emofire/civil-defense" />
+
+		</MosaicItem>
+
+		<MosaicItem
+			pColSpan={6}
+			pColSpanP={4}
+			pRowSpan={2}
+			pRowSpanP={2}
+			pBg="#151C22"
+			pColor="#FCFCFA"
+		>
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#FCFCFA").OfText("تكلفة نظام الحريق")}
+				pText={Text.Body.WithColor("#D7DEE2").OfText("ما الذي يرفع السعر؟ وما البيانات التي يجب أن تدخل المقايسة قبل مقارنة عروض التصميم والتوريد والتنفيذ؟")}
+			/>
+
+			<EmoDet WhiteBlack pText="التكلفة والتسعير" pHref="/emofire/cost" />
+
+		</MosaicItem>
+
+	</MosaicGrid>
+
+
+
+
+
+
+
+	<StoryRail
+		id="EmoFireLifecycle"
+		pAxis="Horizontal"
+		pAxisP="Vertical"
+		pGap={new RespString("18px", "16px")}
+		pPad={new RespString("64px", "18px")}
+		pMaxWidth={new RespString("1320px", "100%")}
+		pBg="#FCFCFA"
+		pTrackColor="#D6DCE0"
+		pAccent="#B8322A"
+	>
+
+		<StoryStep
+			pNumber="01"
+			pKicker="الدراسة"
+			pTitle="فهم النشاط والخطر"
+			pText="تحديد الإشغال والمواد ومساحات الحريق ومصدر المياه والقيود المعمارية ومتطلبات الجهة المختصة قبل اختيار أي نظام."
+			pBg="#FFF7F3"
+			pAccent="#B8322A"
+		/>
+
+		<StoryStep
+			pNumber="02"
+			pKicker="الهندسة"
+			pTitle="تصميم قابل للمراجعة"
+			pText="حسابات ومخططات ومواصفات ومقايسة تربط كل نظام بفرضياته ومعدلاته ومكوناته ونقاط التنسيق مع المشروع."
+			pBg="#F2F6F7"
+			pAccent="#4B7185"
+		/>
+
+		<StoryStep
+			pNumber="03"
+			pKicker="التوريد"
+			pTitle="منتج مطابق للنطاق"
+			pText="Submittals وشهادات واعتمادات وبيانات مصنع وبدائل فنية قبل الشراء، ثم استلام وتتبّع الخامات والمعدات بالموقع."
+			pBg="#F4F0E8"
+			pAccent="#B88535"
+		/>
+
+		<StoryStep
+			pNumber="04"
+			pKicker="التنفيذ"
+			pTitle="تركيب واختبارات"
+			pText="تنسيق المسارات والمناسيب، تنفيذ الشبكات والمعدات والإنذار، اختبارات الضغط والتدفق والطلمبات والبرمجة والتشغيل التجريبي."
+			pBg="#EEF2EE"
+			pAccent="#315D4F"
+		/>
+
+		<StoryStep
+			pNumber="05"
+			pKicker="التشغيل"
+			pTitle="تسليم وصيانة"
+			pText="As-Built وتقارير اختبار وضمانات وكتيبات تشغيل وتدريب، ثم خطة صيانة تحافظ على جاهزية المنظومة بعد التسليم."
+			pBg="#F2F2F2"
+			pAccent="#596068"
+		/>
+
+	</StoryRail>
+
+
+
+
+
+
+
+	<RadialLayout
+		id="EmoFireProtectionDomains"
+		pCount={6}
+		pDiameter={new RespString("900px", "96%")}
+		pOrbit={new RespString("38%", "36%")}
+		pCenterSize={new RespString("30%", "32%")}
+		pBg="radial-gradient(circle, #131D24 0 48%, #0B1118 49% 100%)"
+		pCenterBg="#B8322A"
+		pCenterColor="#FCFCFA"
+		pRingColor="rgba(255,255,255,.16)"
+		pAccent="#E05A45"
+		pCenterTitle="EmoFire"
+		pCenterText="منظومة حماية واحدة"
+		pStackPortrait={true}
+	>
+
+		<RadialItem
+			pTitle="حماية الأرواح"
+			pText="كشف وإنذار وإخلاء ووسائل مكافحة أولية"
+			pBg="#FFF7F3"
+			pAccent="#B8322A"
+		/>
+
+		<RadialItem
+			pTitle="حماية الممتلكات"
+			pText="تقليل انتشار الحريق والخسائر والتوقف"
+			pBg="#F4F0E8"
+			pAccent="#B88535"
+		/>
+
+		<RadialItem
+			pTitle="المخاطر الصناعية"
+			pText="سوائل قابلة للاشتعال ومخازن ومعدات خاصة"
+			pBg="#EEF2EE"
+			pAccent="#315D4F"
+		/>
+
+		<RadialItem
+			pTitle="المعدات الحساسة"
+			pText="غرف كهرباء وتحكم وخوادم واتصالات"
+			pBg="#EDF2F5"
+			pAccent="#4B7185"
+		/>
+
+		<RadialItem
+			pTitle="استمرارية التشغيل"
+			pText="اختبارات وصيانة وقطع غيار وتوثيق"
+			pBg="#F2F2F2"
+			pAccent="#596068"
+		/>
+
+		<RadialItem
+			pTitle="الاعتماد"
+			pText="مخططات وملفات فنية ومتطلبات الجهات المختصة"
+			pBg="#F7EDEE"
+			pAccent="#8C3138"
+		/>
+
+	</RadialLayout>
+
+
+
+
+
+
+
+	<ScrollShelf
+		id="EmoFireEntryPoints"
+		pItemWidth={new RespString("330px", "84vw")}
+		pGap={new RespString("18px", "12px")}
+		pPad={new RespString("50px", "16px")}
+		pMaxWidth={new RespString("1400px", "100%")}
+		pBg="#ECE8E1"
+		pEdgeFade={true}
+	>
+
+		<ShelfItem pBg="#111A21" pColor="#FCFCFA" pAccent="#E05A45">
+
+			<Emograph
+				pTitle={Text.H3.WithColor("#FCFCFA").OfText("عندي مشروع جديد")}
+				pText={Text.Body.WithColor("#D9E0E4").OfText("ابدأ بالتصميم ثم انتقل إلى المقاولة والتوريد ضمن نفس أسس التصميم والمقايسة.")}
+			/>
+
+			<EmoDet WhiteBlack pText="ابدأ بالتصميم" pHref="/emofire/design" />
+
+		</ShelfItem>
+
+		<ShelfItem pBg="#FFF9F5" pAccent="#B8322A">
+
+			<Emograph
+				pTitle={Text.H3.OfText("عندي تصميم جاهز")}
+				pText={Text.Body.OfText("يمكن مراجعة النطاق وتجهيز التوريد والتنفيذ والاختبارات على أساس الرسومات والمواصفات القائمة.")}
+			/>
+
+			<EmoDet BlackRed pText="المقاولات" pHref="/emofire/contracting" />
+
+		</ShelfItem>
+
+		<ShelfItem pBg="#F2F6F7" pAccent="#4B7185">
+
+			<Emograph
+				pTitle={Text.H3.OfText("عندي نظام قائم")}
+				pText={Text.Body.OfText("ابدأ بالفحص والصيانة أو إعادة التأهيل وتحديد الأعطال والمكونات التي تحتاج إصلاحًا أو استبدالًا.")}
+			/>
+
+			<EmoDet BlackSky pText="الصيانة" pHref="/emofire/maintenance" />
+
+		</ShelfItem>
+
+		<ShelfItem pBg="#F4F0E8" pAccent="#B88535">
+
+			<Emograph
+				pTitle={Text.H3.OfText("محتاج توريد فقط")}
+				pText={Text.Body.OfText("جهّز المواصفة والموديل والاعتماد والكمية، ثم تتم مراجعة المطابقة والبدائل وملف التسليم.")}
+			/>
+
+			<EmoDet BlackOrange pText="التوريد" pHref="/emofire/supply" />
+
+		</ShelfItem>
+
+		<ShelfItem pBg="#EEF2EE" pAccent="#315D4F">
+
+			<Emograph
+				pTitle={Text.H3.OfText("محتاج تجهيز حماية مدنية")}
+				pText={Text.Body.OfText("يتم تحديد حالة المخططات والمنشأة والملف الفني والملاحظات قبل ترتيب خطوات التجهيز والمتابعة.")}
+			/>
+
+			<EmoDet BlackGreen pText="الحماية المدنية" pHref="/emofire/civil-defense" />
+
+		</ShelfItem>
+
+	</ScrollShelf>
+
+
+
+
+
+
+
+	<RelatedServices
+		pTitle={Text.H2.Centered.WithColor("#FCFCFA").OfText("صفحات EmoFire الأساسية")}
+		pDesc={Text.Body.Centered.WithColor("#E7ECEE").OfText("كل صفحة تمثل نطاق خدمة مستقل ويمكن طلبه منفردًا أو دمجه ضمن مشروع متكامل.")}
+		pMax={4}
+		pMaxP={1}
+	>
+
+		<RelServiceItem pTitle="مقاولات أنظمة الحريق" pDesc="تنفيذ وتركيب واختبار وتسليم." pHref="/emofire/contracting" />
+
+		<RelServiceItem pTitle="تصميم أنظمة الحريق" pDesc="حسابات ومخططات ومواصفات ومقايسة." pHref="/emofire/design" />
+
+		<RelServiceItem pTitle="توريد معدات الحريق" pDesc="معدات ومكونات واعتمادات وقطع غيار." pHref="/emofire/supply" />
+
+		<RelServiceItem pTitle="صيانة أنظمة الحريق" pDesc="صيانة وقائية وتصحيحية وتأهيل." pHref="/emofire/maintenance" />
+
+	</RelatedServices>
+
+
+
+
+
+
+
+	<EmoContactStrip
+		pTitle="حدد نقطة دخولك إلى EmoFire"
+		pDesc="أرسل نوع المنشأة وحالة المشروع الحالية: تصميم جديد، تنفيذ، توريد، صيانة أو تجهيز حماية مدنية، ومعها أي رسومات أو قوائم معدات متاحة."
+		pSourceName="EmoFire"
+	/>
+
+
+
+
+
+
+
+</BLayout>

@@ -94,6 +94,7 @@ import StoneProductStripIndexExport from "./StoneProductStrip.astro";
 /**
  * @pStoneType as StoneProductType — Marble / Granite / رخام / جرانيت. يغير زخرفة الخلفية تلقائيًا.
  * @pFolder as string — فولدر الصور داخل public، مثل /Media/Emostone/ProductStripSample.
+ * @pImages as GalleryJsonItem[] — صور جاهزة مباشرة. لها أولوية على pFolder وملف JSON.
  * @pJson as string — اسم ملف الجسون داخل نفس فولدر الصور.
  * @pName as string — بيانات الخامة.
  * @pKind as string

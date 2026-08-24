@@ -1,0 +1,478 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { MosaicGrid, MosaicItem, RadialItem, RadialLayout, SideRail, SplitPane, SplitScene, ZigzagItem, ZigzagStory } from "@/Widgets/Layouts";
+import { Hero, RelatedServices, RelServiceItem } from "@/Widgets/Sections";
+import { EmoContactStrip } from "@/Widgets/Strips";
+import { ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+
+
+
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="أنظمة الإطفاء بالماء"
+	pDescr="تصميم وتنفيذ أنظمة الإطفاء بالماء: شبكات الرش الآلي Wet وDry وDeluge وPre-Action، صناديق وخراطيم الحريق، الهيدرنت وWater Spray ومكونات التحكم والاختبار."
+>
+
+
+
+
+
+
+
+	<Hero pBg={new ElemBg("#123144")}>
+
+		<VrStack pSize={new Size(new NumPer("55%", "95%"))} pLoc={new Loc(new NumPer("5%", "2.5%"), new NumPer("15%", "12%"))} pHzAlign="Center">
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor("#FCFCFA").OfText("أنظمة الإطفاء بالماء")}
+				pText={Text.Body.Centered.WithColor("#D8E8F0").OfText("الرش الآلي والخراطيم والهيدرنت وWater Spray ليست شبكة مواسير واحدة بأسماء مختلفة؛ كل نظام له منطق تشغيل ومعدل طلب وتحكم واختبار وظروف استخدام محددة.")}
+			/>
+
+			<HzStack pGap={new Pixel(22, 10)} pForceHz>
+
+				<EmoCallIcon BlackSky />
+
+				<EmoWhatsIcon BlackSky />
+
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+
+
+
+
+
+	<RadialLayout
+		id="WaterSystemsMap"
+		pCount={6}
+		pDiameter={new RespString("920px", "96%")}
+		pOrbit={new RespString("38%", "36%")}
+		pCenterSize={new RespString("30%", "34%")}
+		pBg="radial-gradient(circle,#0D2533 0 47%,#123144 48% 100%)"
+		pCenterBg="#DCEEF4"
+		pCenterColor="#10202A"
+		pRingColor="rgba(255,255,255,.16)"
+		pAccent="#7FC7E7"
+		pCenterTitle="WATER"
+		pCenterText="منظومات الإطفاء"
+		pStackPortrait={true}
+	>
+
+		<RadialItem
+			pTitle="Wet Pipe"
+			pText="مياه داخل الشبكة وتشغيل مباشر للرشاش المتأثر بالحرارة"
+			pBg="#F7FCFE"
+			pAccent="#4B9EC4"
+		/>
+
+		<RadialItem
+			pTitle="Dry Pipe"
+			pText="هواء أو نيتروجين مضغوط قبل دخول المياه للشبكة"
+			pBg="#EDF3F5"
+			pAccent="#4B7185"
+		/>
+
+		<RadialItem
+			pTitle="Pre-Action"
+			pText="تحكم إضافي بالكشف قبل امتلاء الشبكة"
+			pBg="#F4F0E8"
+			pAccent="#B88535"
+		/>
+
+		<RadialItem
+			pTitle="Deluge"
+			pText="رشاشات مفتوحة وتصريف جماعي لمنطقة الخطر"
+			pBg="#F7EDEE"
+			pAccent="#B8322A"
+		/>
+
+		<RadialItem
+			pTitle="Standpipe"
+			pText="صناديق وخراطيم ونقاط خدمة داخل المبنى"
+			pBg="#EEF2EE"
+			pAccent="#315D4F"
+		/>
+
+		<RadialItem
+			pTitle="Hydrant / Spray"
+			pText="شبكات خارجية أو حماية موجهة لمعدات ومخاطر خاصة"
+			pBg="#FFFDF8"
+			pAccent="#8C6B39"
+		/>
+
+	</RadialLayout>
+
+
+
+
+
+
+
+	<ZigzagStory
+		id="WaterSystemDetails"
+		pBg="#E9EEF0"
+		pGap={new RespString("34px", "18px")}
+		pPad={new RespString("58px", "14px")}
+		pAlternate={true}
+	>
+
+		<ZigzagItem
+			pMediaShare={46}
+			pBg="#FFFDF8"
+			pMediaBg="#DCEEF4"
+			pRadius={new RespString("34px", "20px")}
+			pMediaRadius={new RespString("34px", "18px")}
+			pMinHeight={new RespString("520px", "720px")}
+		>
+
+			<MosaicGrid
+				slot="media"
+				pColumns={4}
+				pColumnsP={2}
+				pAutoRows={new RespString("78px", "68px")}
+				pGap={new RespString("8px", "7px")}
+				pPad={new RespString("14px", "10px")}
+				pBg="#DCEEF4"
+			>
+
+				<MosaicItem
+					pColSpan={4}
+					pColSpanP={2}
+					pRowSpan={2}
+					pBg="#2F6F8D"
+					pColor="#FCFCFA"
+				>
+
+					<Emograph pTitle={Text.H3.Centered.WithColor("#FCFCFA").OfText("Automatic Sprinklers")} />
+
+				</MosaicItem>
+
+				<MosaicItem
+					pColSpan={2}
+					pColSpanP={1}
+					pRowSpan={2}
+					pBg="#F7FCFE"
+				>
+
+					<Emograph pTitle={Text.H4.Centered.OfText("K-Factor")} />
+
+				</MosaicItem>
+
+				<MosaicItem
+					pColSpan={2}
+					pColSpanP={1}
+					pRowSpan={2}
+					pBg="#C7DFEA"
+				>
+
+					<Emograph pTitle={Text.H4.Centered.OfText("Coverage")} />
+
+				</MosaicItem>
+
+			</MosaicGrid>
+
+			<Emograph
+				pTitle={Text.H2.OfText("شبكات الرش الآلي") }
+				pText={Text.Body.OfText("يتحدد توزيع الرشاشات من نوع الإشغال ومساحة التغطية ودرجة الحرارة ومعامل K والعوائق وارتفاعات السقف. بعد تحديد النوع والاتجاه ودرجة الاستجابة، تُحسب منطقة التشغيل وكثافة التصرف والطلب الإضافي للخراطيم، ثم تُراجع أقطار الشبكة ونقطة التغذية بالهيدروليك.") }
+			/>
+
+			<EmoDet BlackSky pText="التصميم والحسابات" pHref="/emofire/design" />
+
+		</ZigzagItem>
+
+		<ZigzagItem
+			pMediaShare={43}
+			pBg="#F6F3EC"
+			pMediaBg="#173646"
+			pRadius={new RespString("34px", "20px")}
+			pMediaRadius={new RespString("34px", "18px")}
+			pMinHeight={new RespString("520px", "720px")}
+		>
+
+			<MosaicGrid
+				slot="media"
+				pColumns={4}
+				pColumnsP={2}
+				pAutoRows={new RespString("76px", "66px")}
+				pGap={new RespString("8px", "7px")}
+				pPad={new RespString("14px", "10px")}
+				pBg="#173646"
+			>
+
+				<MosaicItem
+					pColSpan={2}
+					pColSpanP={1}
+					pRowSpan={3}
+					pBg="#B8322A"
+					pColor="#FCFCFA"
+				>
+
+					<Emograph pTitle={Text.H3.Centered.WithColor("#FCFCFA").OfText("Hose Reel")} />
+
+				</MosaicItem>
+
+				<MosaicItem
+					pColSpan={2}
+					pColSpanP={1}
+					pRowSpan={3}
+					pBg="#E7D4B2"
+				>
+
+					<Emograph pTitle={Text.H3.Centered.OfText("Landing Valve")} />
+
+				</MosaicItem>
+
+			</MosaicGrid>
+
+			<Emograph
+				pTitle={Text.H2.OfText("صناديق وخراطيم الحريق") }
+				pText={Text.Body.OfText("شبكات Standpipe وHose Reel تنقل مياه الإطفاء إلى نقاط خدمة موزعة داخل المبنى. التصميم يحدد نوع النظام وفئات الخراطيم والصمامات وأقطار الرايزرات والضغط المتبقي عند أبعد نقطة ونقاط Fire Department Connection والصرف والاختبار، مع مراعاة الارتفاعات وتقسيم الضغط عند المباني المرتفعة.") }
+			/>
+
+		</ZigzagItem>
+
+		<ZigzagItem
+			pMediaShare={46}
+			pBg="#FFFDF8"
+			pMediaBg="#315D4F"
+			pRadius={new RespString("34px", "20px")}
+			pMediaRadius={new RespString("34px", "18px")}
+			pMinHeight={new RespString("500px", "700px")}
+		>
+
+			<MosaicGrid
+				slot="media"
+				pColumns={4}
+				pColumnsP={2}
+				pAutoRows={new RespString("76px", "66px")}
+				pGap={new RespString("8px", "7px")}
+				pPad={new RespString("14px", "10px")}
+				pBg="#315D4F"
+			>
+
+				<MosaicItem
+					pColSpan={4}
+					pColSpanP={2}
+					pRowSpan={2}
+					pBg="#DCEFE8"
+				>
+
+					<Emograph pTitle={Text.H3.Centered.OfText("Hydrant Ring")} />
+
+				</MosaicItem>
+
+				<MosaicItem
+					pColSpan={2}
+					pColSpanP={1}
+					pRowSpan={2}
+					pBg="#F4F0E8"
+				>
+
+					<Emograph pTitle={Text.H4.Centered.OfText("Yard Hydrant")} />
+
+				</MosaicItem>
+
+				<MosaicItem
+					pColSpan={2}
+					pColSpanP={1}
+					pRowSpan={2}
+					pBg="#E7D4B2"
+				>
+
+					<Emograph pTitle={Text.H4.Centered.OfText("Monitor")} />
+
+				</MosaicItem>
+
+			</MosaicGrid>
+
+			<Emograph
+				pTitle={Text.H2.OfText("الهيدرنت وWater Spray") }
+				pText={Text.Body.OfText("الهيدرنت يخدم ساحات ومحيط المنشآت أو شبكات خاصة خارج المبنى، بينما Water Spray يستخدم فوهات مفتوحة لتوجيه المياه على معدات أو أسطح محددة مثل المحولات والخزانات وبعض المخاطر الصناعية. كلاهما يحتاج حسابات للتصرف والضغط ومصدر المياه، لكن هندسة التطبيق وطريقة التشغيل تختلف حسب الخطر.") }
+			/>
+
+		</ZigzagItem>
+
+	</ZigzagStory>
+
+
+
+
+
+
+
+	<SideRail
+		id="WaterNetworkComponents"
+		pRailWidth={new RespString("300px", "100%")}
+		pGap={new RespString("24px", "12px")}
+		pPad={new RespString("48px", "12px")}
+		pBg="#F4F6F6"
+		pRailBg="linear-gradient(180deg,#10202A,#2F6F8D)"
+		pRailColor="#FCFCFA"
+		pSticky={true}
+	>
+
+		<Emograph
+			slot="rail"
+			pTitle={Text.H2.WithColor("#FCFCFA").OfText("مكونات الشبكة") }
+			pText={Text.Body.WithColor("#D7E5EB").OfText("كل مكوّن له وظيفة تشغيل وفحص، لذلك موقعه واتجاهه وإمكانية الوصول إليه جزء من التصميم والتنفيذ.") }
+		/>
+
+		<MosaicGrid
+			pColumns={12}
+			pColumnsP={4}
+			pAutoRows={new RespString("74px", "66px")}
+			pGap={new RespString("9px", "7px")}
+			pBg="#F4F6F6"
+		>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={2}
+				pRowSpan={2}
+				pBg="#FFFDF8"
+			>
+
+				<Emograph pTitle={Text.H3.OfText("Control Valves")} pText={Text.Body.OfText("عزل مناطق الشبكة ومراقبة وضع الفتح والإغلاق.")} />
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={2}
+				pRowSpan={2}
+				pBg="#DCEEF4"
+			>
+
+				<Emograph pTitle={Text.H3.OfText("Flow / Pressure")} pText={Text.Body.OfText("إشراف على التدفق والضغط وإرسال الإشارات عند التشغيل أو الخلل.")} />
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={4}
+				pColSpanP={4}
+				pRowSpan={2}
+				pBg="#F4F0E8"
+			>
+
+				<Emograph pTitle={Text.H3.OfText("Test & Drain")} pText={Text.Body.OfText("نقاط اختبار وتصريف تسمح بقياس الأداء وفحص المنطقة بدون تفكيك الشبكة.")} />
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={6}
+				pColSpanP={2}
+				pRowSpan={2}
+				pBg="#EEF2EE"
+			>
+
+				<Emograph pTitle={Text.H3.OfText("Pipes & Fittings")} pText={Text.Body.OfText("مادة وتصنيف ضغط ووصلات ودهان وحماية وتثبيت حسب المواصفة.")} />
+
+			</MosaicItem>
+
+			<MosaicItem
+				pColSpan={6}
+				pColSpanP={2}
+				pRowSpan={2}
+				pBg="#F7EDEE"
+			>
+
+				<Emograph pTitle={Text.H3.OfText("Hangers & Seismic")} pText={Text.Body.OfText("حوامل ودعامات ومسافات تثبيت ومساحات حركة وصيانة مناسبة للمشروع.")} />
+
+			</MosaicItem>
+
+		</MosaicGrid>
+
+	</SideRail>
+
+
+
+
+
+
+
+	<SplitScene
+		id="WetDryDecision"
+		pColumns={new RespString("1fr 1fr", "1fr")}
+		pGap={new RespString("0px", "0px")}
+		pMinHeight={new RespString("520px", "720px")}
+		pBg="#FCFCFA"
+	>
+
+		<SplitPane
+			pBg="#DCEEF4"
+			pPad={new RespString("50px", "22px")}
+			pEdge="DiagonalEnd"
+			pEdgeP="None"
+			pHzAlign="Right"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H2.OfText("Wet Pipe") }
+				pText={Text.Body.OfText("الأكثر مباشرة عندما لا توجد مشكلة تجمد أو ظروف تمنع وجود المياه داخل المواسير. الشبكة ممتلئة بالماء، وكل رشاش يعمل منفردًا عند تأثر العنصر الحراري، لذلك تكون الاستجابة بسيطة ومسار الصيانة واضحًا.") }
+			/>
+
+		</SplitPane>
+
+		<SplitPane
+			pBg="#17222D"
+			pColor="#FCFCFA"
+			pPad={new RespString("50px", "22px")}
+			pHzAlign="Right"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H2.WithColor("#FCFCFA").OfText("Dry / Pre-Action") }
+				pText={Text.Body.WithColor("#D7E0E4").OfText("تُستخدم عندما توجد ظروف حرارية أو حساسية للمياه أو حاجة إلى طبقة تحكم إضافية. هنا يدخل الهواء أو النيتروجين أو نظام الكشف وصمام التحكم وزمن وصول المياه ومنطق الإشراف كعناصر تصميم وتشغيل لا توجد بنفس الشكل في Wet Pipe.") }
+			/>
+
+		</SplitPane>
+
+	</SplitScene>
+
+
+
+
+
+
+
+	<RelatedServices pTitle={Text.H2.Centered.WithColor("#FCFCFA").OfText("خدمات مرتبطة بالأنظمة المائية") } pMax={4} pMaxP={1}>
+
+		<RelServiceItem pTitle="غرف طلمبات الحريق" pDesc="مصدر الضغط والتصرف للشبكات المائية." pHref="/emofire/pumps" />
+
+		<RelServiceItem pTitle="تصميم أنظمة الحريق" pDesc="الحسابات الهيدروليكية وتحديد الأقطار والمصدر." pHref="/emofire/design" />
+
+		<RelServiceItem pTitle="مقاولات أنظمة الحريق" pDesc="تنفيذ الشبكات والحوامل والصمامات والاختبارات." pHref="/emofire/contracting" />
+
+		<RelServiceItem pTitle="صيانة أنظمة الحريق" pDesc="الفحص الدوري والتصريف والاختبارات والصيانة." pHref="/emofire/maintenance" />
+
+	</RelatedServices>
+
+
+
+
+
+
+
+	<EmoContactStrip
+		pTitle="حدد نوع الشبكة أو أرسل المخططات"
+		pDesc="يمكن مراجعة نظام قائم أو تصميم شبكة جديدة أو تسعير توريد وتنفيذ. أرسل نوع المنشأة والارتفاعات والمساحات ومصدر المياه وأي مخططات متاحة."
+		pSourceName="EmoFire Water Systems"
+	/>
+
+
+
+
+
+
+
+</BLayout>
