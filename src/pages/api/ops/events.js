@@ -11,6 +11,11 @@ function Env(pName) { const Value = process.env[pName]; return typeof Value === 
 function Str(pValue) { return String(pValue ?? "").trim(); }
 function Num(pValue) { const Value = Number(pValue); return Number.isFinite(Value) ? Value : 0; }
 function Bool(pValue) { return pValue === true || ["true", "1", "yes", "on", "important"].includes(Str(pValue).toLowerCase()); }
+function ClientName(pValue) {
+	const Value = Str(pValue).toLowerCase();
+	return Value === "desktop" ? "desktop" : "mobile";
+}
+function ReadColumn(pClient) { return pClient === "desktop" ? "read_desktop" : "read_mobile"; }
 function CheckOpsKey(pRequest) {
 	const Url = new URL(pRequest.url);
 	const Given = Str(pRequest.headers.get("x-ops-key") || Url.searchParams.get("key"));
@@ -45,7 +50,10 @@ function MapEvent(pRow) {
 		locationBand: Str(P.locationBand),
 		locationLabel: Str(P.locationLabel),
 		locationBorderColor: Str(P.locationBorderColor),
+		locationGovernorate: Str(P.locationGovernorate || P.locationRegion),
 		locationCity: Str(P.locationCity),
+		locationArea: Str(P.locationArea),
+		locationAreaType: Str(P.locationAreaType),
 		locationCountryCode: Str(P.locationCountryCode),
 		durationMs: Num(P.durationMs),
 		elapsedMs: Num(P.elapsedMs || pRow.page_elapsed_ms),
@@ -68,6 +76,7 @@ function MapEvent(pRow) {
 		clarityDurationText: Str(P.clarityDurationText),
 		controlCommand: Str(P.controlCommand || P.opsCommand),
 		targetVisitorId: Str(P.targetVisitorId || P.deletedVisitorId),
+		targetSessionId: Str(P.targetSessionId || P.deletedSessionId),
 		userAgent: Str(pRow.user_agent || P.userAgentClient || P.userAgent),
 		clientFingerprint: Str(P.clientFingerprint),
 		clientProfile: Str(P.clientProfile),
@@ -102,23 +111,53 @@ function GetConfig() {
 	if (!SupabaseUrl || !ServiceKey) throw new Error("Missing Supabase env vars");
 	return { SupabaseUrl, ServiceKey };
 }
+async function AcknowledgeIds(pSupabaseUrl, pServiceKey, pIds, pClient, pStream) {
+	let Deleted = 0;
+	const ReadField = ReadColumn(pClient);
+	for (let Index = 0; Index < pIds.length; Index += cDeleteChunk) {
+		const Chunk = pIds.slice(Index, Index + cDeleteChunk);
+		const PatchQuery = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
+		PatchQuery.searchParams.set("id", `in.(${Chunk.join(",")})`);
+		PatchQuery.searchParams.set("event_stream", `eq.${pStream}`);
+		await SupabaseRequest(PatchQuery, pServiceKey, {
+			method: "PATCH",
+			headers: { "content-type": "application/json", prefer: "return=minimal" },
+			body: JSON.stringify({ [ReadField]: true })
+		});
+
+		const DeleteQuery = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
+		DeleteQuery.searchParams.set("id", `in.(${Chunk.join(",")})`);
+		DeleteQuery.searchParams.set("event_stream", `eq.${pStream}`);
+		DeleteQuery.searchParams.set("read_mobile", "eq.true");
+		DeleteQuery.searchParams.set("read_desktop", "eq.true");
+		const DeletedRows = await SupabaseRequest(DeleteQuery, pServiceKey, {
+			method: "DELETE",
+			headers: { prefer: "return=representation" }
+		});
+		try { Deleted += JSON.parse(DeletedRows).length || 0; }
+		catch { }
+	}
+	return Deleted;
+}
 export async function OPTIONS() { return Json({ ok: true }); }
 export async function GET({ request }) {
 	try {
 		if (!CheckOpsKey(request)) return Json({ ok: false, error: "Unauthorized" }, 401);
 		const { SupabaseUrl, ServiceKey } = GetConfig();
 		const Url = new URL(request.url);
+		const Client = ClientName(Url.searchParams.get("client"));
 		const Limit = Math.min(cMaxBatch, Math.max(1, Number.parseInt(Url.searchParams.get("limit") || String(cMaxBatch), 10) || cMaxBatch));
 		const Query = new URL(`${SupabaseUrl}/rest/v1/ops_events`);
 		Query.searchParams.set("select", "id,client_event_uid,event_type,event_source,visitor_id,session_id,page_instance_id,session_seq,page_elapsed_ms,session_elapsed_ms,occurred_at,page_path,page_title,created_at,user_agent,payload");
 		Query.searchParams.set("event_stream", "eq.normal");
 		Query.searchParams.set("event_type", "neq.system.clarity_session_index");
+		Query.searchParams.set(ReadColumn(Client), "eq.false");
 		Query.searchParams.set("order", "id.asc");
 		Query.searchParams.set("limit", String(Limit + 1));
 		let Rows = await FetchRows(Query, ServiceKey);
 		const HasMore = Rows.length > Limit;
 		if (HasMore) Rows = Rows.slice(0, Limit);
-		return Json({ ok: true, hasMore: HasMore, serverTime: new Date().toISOString(), events: Rows.map(MapEvent) });
+		return Json({ ok: true, client: Client, hasMore: HasMore, serverTime: new Date().toISOString(), events: Rows.map(MapEvent) });
 	} catch (Ex) {
 		return Json({ ok: false, error: Ex instanceof Error ? Ex.message : String(Ex) }, 500);
 	}
@@ -128,16 +167,12 @@ export async function DELETE({ request }) {
 		if (!CheckOpsKey(request)) return Json({ ok: false, error: "Unauthorized" }, 401);
 		const { SupabaseUrl, ServiceKey } = GetConfig();
 		const Body = await ReadJsonBody(request);
+		const Client = ClientName(Body.client);
 		const Ids = Array.from(new Set((Array.isArray(Body.ids) ? Body.ids : []).map((Value) => Math.trunc(Number(Value))).filter((Value) => Number.isSafeInteger(Value) && Value > 0)));
-		if (!Ids.length) return Json({ ok: true, deleted: 0 });
+		if (!Ids.length) return Json({ ok: true, client: Client, acknowledged: 0, deleted: 0 });
 		if (Ids.length > cMaxBatch) return Json({ ok: false, error: `ids must contain at most ${cMaxBatch} items` }, 400);
-		for (let Index = 0; Index < Ids.length; Index += cDeleteChunk) {
-			const Query = new URL(`${SupabaseUrl}/rest/v1/ops_events`);
-			Query.searchParams.set("id", `in.(${Ids.slice(Index, Index + cDeleteChunk).join(",")})`);
-			Query.searchParams.set("event_stream", "eq.normal");
-			await SupabaseRequest(Query, ServiceKey, { method: "DELETE", headers: { prefer: "return=minimal" } });
-		}
-		return Json({ ok: true, deleted: Ids.length });
+		const Deleted = await AcknowledgeIds(SupabaseUrl, ServiceKey, Ids, Client, "normal");
+		return Json({ ok: true, client: Client, acknowledged: Ids.length, deleted: Deleted });
 	} catch (Ex) {
 		const Message = Ex instanceof Error ? Ex.message : String(Ex);
 		return Json({ ok: false, error: Message }, /Invalid|ids must/.test(Message) ? 400 : 500);

@@ -85,6 +85,7 @@ try {
 	SetFetch(async (Url) => {
 		const Parsed = new URL(Url);
 		assert.equal(Parsed.searchParams.get("event_stream"), "eq.normal");
+		assert.equal(Parsed.searchParams.get("read_mobile"), "eq.false");
 		return new Response(JSON.stringify([{
 			id: 10,
 			client_event_uid: "evt-normal-1",
@@ -115,6 +116,7 @@ try {
 		const Parsed = new URL(Url);
 		assert.equal(Parsed.searchParams.get("event_stream"), "eq.replay");
 		assert.equal(Parsed.searchParams.get("session_id"), "eq.s_abc_123");
+		assert.equal(Parsed.searchParams.get("read_mobile"), "eq.false");
 		assert.equal(Parsed.searchParams.get("id"), "gt.5");
 		return new Response(JSON.stringify([{
 			id: 7,
@@ -141,15 +143,24 @@ try {
 	assert.equal(ReplayJson.nextAfterId, 7);
 	assert.equal(ReplayJson.events[0].eventData.selector, "#Button");
 
+	let ReplayAckCall = 0;
 	SetFetch(async (Url, Init) => {
+		ReplayAckCall += 1;
 		const Parsed = new URL(Url);
-		assert.equal(Init.method, "DELETE");
 		assert.equal(Parsed.searchParams.get("event_stream"), "eq.replay");
 		assert.equal(Parsed.searchParams.get("session_id"), "eq.s_abc_123");
 		assert.equal(Parsed.searchParams.get("id"), "lte.7");
-		return new Response(null, { status: 204 });
+		if (ReplayAckCall === 1) {
+			assert.equal(Init.method, "PATCH");
+			assert.equal(JSON.parse(String(Init.body || "{}")).read_mobile, true);
+			return new Response(null, { status: 204 });
+		}
+		assert.equal(Init.method, "DELETE");
+		assert.equal(Parsed.searchParams.get("read_mobile"), "eq.true");
+		assert.equal(Parsed.searchParams.get("read_desktop"), "eq.true");
+		return new Response(JSON.stringify([]), { status: 200 });
 	});
-	const ReplayDelete = await Replay.DELETE({ request: ApiRequest("/api/ops/replay", "DELETE", { sessionId: "s_abc_123", throughId: 7 }) });
+	const ReplayDelete = await Replay.DELETE({ request: ApiRequest("/api/ops/replay", "DELETE", { client: "mobile", sessionId: "s_abc_123", throughId: 7 }) });
 	assert.equal((await JsonOf(ReplayDelete)).ok, true);
 
 	console.log("ops replay API tests passed");
