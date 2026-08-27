@@ -93,7 +93,8 @@ export async function GET({ request }) {
 		const Limit = Math.min(cMaxBatch, Math.max(1, Number.parseInt(Url.searchParams.get("limit") || String(cMaxBatch), 10) || cMaxBatch));
 		const Query = new URL(`${SupabaseUrl}/rest/v1/ops_events`);
 		Query.searchParams.set("select", "id,client_event_uid,event_type,event_source,visitor_id,session_id,page_instance_id,session_seq,page_elapsed_ms,session_elapsed_ms,occurred_at,page_path,page_title,created_at,user_agent,payload");
-		Query.searchParams.set("event_stream", "eq.replay");
+		if (ArchiveRead) Query.searchParams.set("or", "(event_stream.eq.replay,event_stream.is.null)");
+		else Query.searchParams.set("event_stream", "eq.replay");
 		if (!ArchiveRead) Query.searchParams.set("session_id", `eq.${SessionId}`);
 		if (AfterId > 0) Query.searchParams.set("id", `gt.${AfterId}`);
 		Query.searchParams.set("order", "id.asc");
