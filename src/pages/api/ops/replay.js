@@ -10,8 +10,6 @@ function Json(pBody, pStatus = 200) {
 function Env(pName) { const Value = process.env[pName]; return typeof Value === "string" ? Value.trim() : ""; }
 function Str(pValue) { return String(pValue ?? "").trim(); }
 function Num(pValue) { const Value = Number(pValue); return Number.isFinite(Value) ? Value : 0; }
-function ClientName(pValue) { return Str(pValue).toLowerCase() === "desktop" ? "desktop" : "mobile"; }
-function ReadColumn(pClient) { return pClient === "desktop" ? "read_desktop" : "read_mobile"; }
 function ReplayOrigin() {
 	const Value = Env("EMO_REPLAY_ORIGIN");
 	if (!Value) return "";
@@ -49,6 +47,8 @@ function MapEvent(pRow) {
 		pagePath: Str(pRow.page_path || P.pagePath),
 		pageTitle: Str(pRow.page_title || P.pageTitle),
 		focusState: Str(P.focusState),
+		userAgent: Str(pRow.user_agent || P.userAgentClient || P.userAgent),
+		payload: P,
 		eventData: P.eventData && typeof P.eventData === "object" ? P.eventData : {}
 	};
 }
@@ -79,50 +79,22 @@ function ValidClientId(pValue, pPrefix) {
 	const Value = Str(pValue);
 	return !!Value && Value.startsWith(`${pPrefix}_`) && /^[a-z]_[a-z0-9]+_[a-z0-9]+$/i.test(Value);
 }
-async function AckQuery(pSupabaseUrl, pServiceKey, pClient, pSessionId, pThroughId, pIds) {
-	const ReadField = ReadColumn(pClient);
-	const PatchQuery = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
-	PatchQuery.searchParams.set("event_stream", "eq.replay");
-	if (pIds.length) PatchQuery.searchParams.set("id", `in.(${pIds.join(",")})`);
-	else {
-		PatchQuery.searchParams.set("session_id", `eq.${pSessionId}`);
-		if (pThroughId > 0) PatchQuery.searchParams.set("id", `lte.${pThroughId}`);
-	}
-	await SupabaseRequest(PatchQuery, pServiceKey, {
-		method: "PATCH",
-		headers: { "content-type": "application/json", prefer: "return=minimal" },
-		body: JSON.stringify({ [ReadField]: true })
-	});
-
-	const DeleteQuery = new URL(`${pSupabaseUrl}/rest/v1/ops_events`);
-	DeleteQuery.searchParams.set("event_stream", "eq.replay");
-	if (pIds.length) DeleteQuery.searchParams.set("id", `in.(${pIds.join(",")})`);
-	else {
-		DeleteQuery.searchParams.set("session_id", `eq.${pSessionId}`);
-		if (pThroughId > 0) DeleteQuery.searchParams.set("id", `lte.${pThroughId}`);
-	}
-	DeleteQuery.searchParams.set("read_mobile", "eq.true");
-	DeleteQuery.searchParams.set("read_desktop", "eq.true");
-	const DeletedRows = await SupabaseRequest(DeleteQuery, pServiceKey, { method: "DELETE", headers: { prefer: "return=representation" } });
-	try { return JSON.parse(DeletedRows).length || 0; }
-	catch { return 0; }
-}
 export async function OPTIONS() { return Json({ ok: true }); }
 export async function GET({ request }) {
 	try {
 		if (!CheckOpsKey(request)) return Json({ ok: false, error: "Unauthorized" }, 401);
 		const { SupabaseUrl, ServiceKey } = Config();
 		const Url = new URL(request.url);
-		const Client = ClientName(Url.searchParams.get("client"));
 		const SessionId = Str(Url.searchParams.get("sessionId"));
-		if (!ValidClientId(SessionId, "s")) return Json({ ok: false, error: "Invalid sessionId" }, 400);
+		const Client = Str(Url.searchParams.get("client")).toLowerCase();
+		const ArchiveRead = !SessionId && Client === "desktop";
+		if (!ArchiveRead && !ValidClientId(SessionId, "s")) return Json({ ok: false, error: "Invalid sessionId" }, 400);
 		const AfterId = Math.max(0, Math.trunc(Number(Url.searchParams.get("afterId")) || 0));
 		const Limit = Math.min(cMaxBatch, Math.max(1, Number.parseInt(Url.searchParams.get("limit") || String(cMaxBatch), 10) || cMaxBatch));
 		const Query = new URL(`${SupabaseUrl}/rest/v1/ops_events`);
-		Query.searchParams.set("select", "id,client_event_uid,event_type,event_source,visitor_id,session_id,page_instance_id,session_seq,page_elapsed_ms,session_elapsed_ms,occurred_at,page_path,page_title,created_at,payload");
+		Query.searchParams.set("select", "id,client_event_uid,event_type,event_source,visitor_id,session_id,page_instance_id,session_seq,page_elapsed_ms,session_elapsed_ms,occurred_at,page_path,page_title,created_at,user_agent,payload");
 		Query.searchParams.set("event_stream", "eq.replay");
-		Query.searchParams.set("session_id", `eq.${SessionId}`);
-		Query.searchParams.set(ReadColumn(Client), "eq.false");
+		if (!ArchiveRead) Query.searchParams.set("session_id", `eq.${SessionId}`);
 		if (AfterId > 0) Query.searchParams.set("id", `gt.${AfterId}`);
 		Query.searchParams.set("order", "id.asc");
 		Query.searchParams.set("limit", String(Limit + 1));
@@ -130,7 +102,13 @@ export async function GET({ request }) {
 		const HasMore = Rows.length > Limit;
 		if (HasMore) Rows = Rows.slice(0, Limit);
 		const Events = Rows.map(MapEvent);
-		return Json({ ok: true, client: Client, hasMore: HasMore, nextAfterId: Events.length ? Events[Events.length - 1].id : AfterId, replayOrigin: ReplayOrigin(), events: Events });
+		return Json({
+			ok: true,
+			hasMore: HasMore,
+			nextAfterId: Events.length ? Events[Events.length - 1].id : AfterId,
+			replayOrigin: ReplayOrigin(),
+			events: Events
+		});
 	} catch (Ex) {
 		return Json({ ok: false, error: Ex instanceof Error ? Ex.message : String(Ex) }, 500);
 	}
@@ -140,18 +118,31 @@ export async function DELETE({ request }) {
 		if (!CheckOpsKey(request)) return Json({ ok: false, error: "Unauthorized" }, 401);
 		const { SupabaseUrl, ServiceKey } = Config();
 		const Body = await ReadJsonBody(request);
-		const Client = ClientName(Body.client);
 		const Ids = Array.from(new Set((Array.isArray(Body.ids) ? Body.ids : []).map((Value) => Math.trunc(Number(Value))).filter((Value) => Number.isSafeInteger(Value) && Value > 0)));
+		const VisitorId = Str(Body.visitorId);
 		const SessionId = Str(Body.sessionId);
 		const ThroughId = Math.max(0, Math.trunc(Number(Body.throughId) || 0));
 		if (Ids.length > cMaxBatch) return Json({ ok: false, error: `ids must contain at most ${cMaxBatch} items` }, 400);
-		if (!Ids.length && !ValidClientId(SessionId, "s")) return Json({ ok: false, error: "Provide ids or sessionId" }, 400);
 		let Deleted = 0;
 		if (Ids.length) {
-			for (let Index = 0; Index < Ids.length; Index += cDeleteChunk)
-				Deleted += await AckQuery(SupabaseUrl, ServiceKey, Client, "", 0, Ids.slice(Index, Index + cDeleteChunk));
-		} else Deleted = await AckQuery(SupabaseUrl, ServiceKey, Client, SessionId, ThroughId, []);
-		return Json({ ok: true, client: Client, acknowledged: Ids.length || ThroughId, deleted: Deleted });
+			for (let Index = 0; Index < Ids.length; Index += cDeleteChunk) {
+				const Chunk = Ids.slice(Index, Index + cDeleteChunk);
+				const Query = new URL(`${SupabaseUrl}/rest/v1/ops_events`);
+				Query.searchParams.set("id", `in.(${Chunk.join(",")})`);
+				Query.searchParams.set("event_stream", "eq.replay");
+				await SupabaseRequest(Query, ServiceKey, { method: "DELETE", headers: { prefer: "return=minimal" } });
+			}
+			Deleted = Ids.length;
+		} else if (ValidClientId(SessionId, "s") || ValidClientId(VisitorId, "v")) {
+			const Query = new URL(`${SupabaseUrl}/rest/v1/ops_events`);
+			Query.searchParams.set("event_stream", "eq.replay");
+			if (ValidClientId(SessionId, "s")) {
+				Query.searchParams.set("session_id", `eq.${SessionId}`);
+				if (ThroughId > 0) Query.searchParams.set("id", `lte.${ThroughId}`);
+			} else Query.searchParams.set("visitor_id", `eq.${VisitorId}`);
+			await SupabaseRequest(Query, ServiceKey, { method: "DELETE", headers: { prefer: "return=minimal" } });
+		} else return Json({ ok: false, error: "Provide ids, sessionId, or visitorId" }, 400);
+		return Json({ ok: true, deleted: Deleted });
 	} catch (Ex) {
 		const Message = Ex instanceof Error ? Ex.message : String(Ex);
 		return Json({ ok: false, error: Message }, /Invalid|Provide|ids must/.test(Message) ? 400 : 500);
