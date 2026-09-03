@@ -4,6 +4,7 @@ const cDefaultOpsKey = "Emocrete20015161";
 const cMaxEventsPerRequest = 500;
 const cMaxBodyBytes = 4 * 1024 * 1024;
 const cSyntheticUserAgentPattern = /(bot|crawl|spider|slurp|googlebot|googleother|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb|pageburst|google-read-aloud|google-notebooklm|google-gemininotebook|google-agent|googlemessages|google-pinpoint|google-cws|feedfetcher-google|ptst(?:\/|\b))/i;
+const cSyntheticReferrerHosts = new Set(["pagespeed.web.dev"]);
 const cArabCountryCodes = new Set(["EG", "SA", "AE", "KW", "QA", "BH", "OM", "YE", "JO", "LB", "SY", "IQ", "PS", "MA", "DZ", "TN", "LY", "SD", "SO", "DJ", "KM", "MR"]);
 
 function Json(pBody, pStatus = 200) {
@@ -142,30 +143,127 @@ function BuildGeo(pRequest, pEvent = {}) {
 	return { countryCode: CountryCode, region: DecodeHeaderText(Region), city: DecodeHeaderText(City), ...Classified };
 }
 
+function UserAgentPlatformFamily(pUserAgent) {
+	const Value = Str(pUserAgent).toLowerCase();
+	if (/iphone|ipad|ipod/.test(Value)) return "ios";
+	if (Value.includes("android")) return "android";
+	if (Value.includes("windows")) return "windows";
+	if (Value.includes("macintosh") || Value.includes("mac os x")) return "macos";
+	if (Value.includes("cros")) return "chromeos";
+	if (Value.includes("linux") || Value.includes("x11")) return "linux";
+	return "";
+}
+
+function NavigatorPlatformFamily(pPlatform) {
+	const Value = Str(pPlatform).toLowerCase();
+	if (Value.includes("iphone") || Value.includes("ipad") || Value.includes("ipod")) return "ios";
+	if (Value.includes("android")) return "android";
+	if (Value.includes("win")) return "windows";
+	if (Value.includes("mac")) return "macos";
+	if (Value.includes("cros")) return "chromeos";
+	if (Value.includes("linux")) return "linux";
+	return "";
+}
+
+function UserAgentDataPlatformFamily(pPlatform) {
+	const Value = Str(pPlatform).toLowerCase();
+	if (Value.includes("android")) return "android";
+	if (Value.includes("windows")) return "windows";
+	if (Value.includes("mac")) return "macos";
+	if (Value.includes("chrome os") || Value.includes("chromeos")) return "chromeos";
+	if (Value.includes("linux")) return "linux";
+	return "";
+}
+
+function IsNavigatorPlatformCompatible(pUaFamily, pNavigatorFamily) {
+	if (!pUaFamily || !pNavigatorFamily) return true;
+	if (pUaFamily === "android") return pNavigatorFamily === "android" || pNavigatorFamily === "linux";
+	if (pUaFamily === "ios") return pNavigatorFamily === "ios" || pNavigatorFamily === "macos";
+	return pUaFamily === pNavigatorFamily;
+}
+
+function ChromeMajorFromUserAgent(pUserAgent) {
+	const Match = Str(pUserAgent).match(/(?:Chrome|Chromium)\/(\d+)/i);
+	return Match ? Num(Match[1], 0) : 0;
+}
+
+function ChromeMajorFromUserAgentData(pUserAgentData) {
+	const Lists = [
+		Array.isArray(pUserAgentData?.fullVersionList) ? pUserAgentData.fullVersionList : [],
+		Array.isArray(pUserAgentData?.brands) ? pUserAgentData.brands : []
+	];
+	for (const List of Lists) {
+		for (const Item of List) {
+			const Brand = Str(Item?.brand).toLowerCase();
+			if (Brand !== "google chrome" && Brand !== "chromium") continue;
+			const Major = Number.parseInt(Str(Item?.version).split(".")[0], 10);
+			if (Number.isFinite(Major) && Major > 0) return Major;
+		}
+	}
+	return 0;
+}
+
+function UserAgentDataHasHeadlessBrand(pUserAgentData) {
+	const Lists = [
+		Array.isArray(pUserAgentData?.fullVersionList) ? pUserAgentData.fullVersionList : [],
+		Array.isArray(pUserAgentData?.brands) ? pUserAgentData.brands : []
+	];
+	return Lists.some((List) => List.some((Item) => /headlesschrome|headless/i.test(Str(Item?.brand))));
+}
+
+function SyntheticReferrerReason(pValue) {
+	const Value = Str(pValue);
+	if (!Value) return "";
+	try {
+		const Host = new URL(Value).hostname.toLowerCase();
+		return cSyntheticReferrerHosts.has(Host) ? "pagespeed_referrer" : "";
+	} catch {
+		return "";
+	}
+}
+
 function BrowserAutomationReason(pEvent = {}) {
 	const EventData = pEvent?.eventData && typeof pEvent.eventData === "object" ? pEvent.eventData : {};
 	const Diagnostics = EventData.clientDiagnostics && typeof EventData.clientDiagnostics === "object" ? EventData.clientDiagnostics : null;
 	if (!Diagnostics) return "";
 	const Hardware = Num(Diagnostics.hardwareConcurrency, 0);
+	const DeviceMemory = Num(Diagnostics.deviceMemory, 0);
 	const Renderer = Str(Diagnostics.webgl?.renderer).toLowerCase();
-	const Platform = Str(Diagnostics.platform || Diagnostics.userAgentData?.platform).toLowerCase();
-	const Desktop = Diagnostics.userAgentData?.mobile !== true && Num(Diagnostics.maxTouchPoints, 0) === 0;
+	const SwiftShader = Renderer.includes("swiftshader");
 	const EmptyBrowserSurface = Num(Diagnostics.pluginsLength, 0) === 0 && Num(Diagnostics.mimeTypesLength, 0) === 0;
+	const UserAgent = Str(Diagnostics.userAgent || pEvent.userAgentClient || pEvent.userAgent);
+	const UserAgentData = Diagnostics.userAgentData && typeof Diagnostics.userAgentData === "object" ? Diagnostics.userAgentData : null;
+	const UaFamily = UserAgentPlatformFamily(UserAgent);
+	const NavigatorFamily = NavigatorPlatformFamily(Diagnostics.platform);
+	const UaDataFamily = UserAgentDataPlatformFamily(UserAgentData?.platform);
+	const UaChromeMajor = ChromeMajorFromUserAgent(UserAgent);
+	const UaDataChromeMajor = ChromeMajorFromUserAgentData(UserAgentData);
+	const UaLooksMobile = /iphone|ipad|ipod|android|\bmobile\b/i.test(UserAgent);
+
 	if (Diagnostics.webdriver === true) return "webdriver";
+	if (UserAgentDataHasHeadlessBrand(UserAgentData)) return "headless_client_hint";
+	if (DeviceMemory > 8) return "device_memory_impossible";
 	if (Hardware >= 256) return "hardware_concurrency_extreme";
-	if (Hardware >= 128 && Renderer.includes("swiftshader")) return "swiftshader_high_concurrency";
-	if (Hardware >= 128 && Desktop && Platform.includes("linux") && EmptyBrowserSurface) return "linux_virtual_browser_surface";
+	if (!IsNavigatorPlatformCompatible(UaFamily, NavigatorFamily)) return "ua_navigator_platform_mismatch";
+	if (UaDataFamily && UaFamily && UaFamily !== "ios" && UaFamily !== UaDataFamily) return "ua_client_hint_platform_mismatch";
+	if (UserAgentData && UaLooksMobile && UserAgentData.mobile === false) return "mobile_client_hint_mismatch";
+	if (UaChromeMajor && UaDataChromeMajor && Math.abs(UaChromeMajor - UaDataChromeMajor) >= 2) return "chrome_version_mismatch";
+	if (SwiftShader && EmptyBrowserSurface) return "swiftshader_empty_browser_surface";
+	if (SwiftShader && Hardware >= 64) return "swiftshader_high_concurrency";
 	return "";
 }
 
 function SyntheticTrafficReason(pRequest, pEvent = {}) {
 	const UserAgent = Str(pRequest.headers.get("user-agent") || pEvent.userAgentClient || pEvent.userAgent);
+	const ClientHintUa = Str(pRequest.headers.get("sec-ch-ua"));
 	const Purpose = Str(pRequest.headers.get("purpose") || pRequest.headers.get("sec-purpose") || pRequest.headers.get("x-purpose")).toLowerCase();
 	const BodySignal = Str(pEvent.botSignal ?? pEvent.bot_signal);
 	const TrafficKind = Str(pEvent.trafficKind ?? pEvent.traffic_kind).toLowerCase();
 	const Reasons = [];
-	if (cSyntheticUserAgentPattern.test(UserAgent)) Reasons.push("ua_bot");
-	if (Purpose.includes("prefetch") || Purpose.includes("preview")) Reasons.push("prefetch");
+	if (cSyntheticUserAgentPattern.test(UserAgent) || cSyntheticUserAgentPattern.test(ClientHintUa)) Reasons.push("ua_bot");
+	if (Purpose.includes("prefetch") || Purpose.includes("preview") || Purpose.includes("prerender")) Reasons.push("prefetch");
+	const ReferrerReason = SyntheticReferrerReason(pEvent.referrer);
+	if (ReferrerReason) Reasons.push(ReferrerReason);
 	if (Bool(pEvent.synthetic ?? pEvent.isSynthetic)) Reasons.push("client_synthetic");
 	const BrowserReason = BrowserAutomationReason(pEvent);
 	if (BrowserReason) Reasons.push(`browser_${BrowserReason}`);
@@ -343,7 +441,7 @@ export async function POST({ request }) {
 		const ActiveInputs = Inputs.filter((Item) => EventTypeOf(Item) !== "system.page_snapshot");
 		if (!ActiveInputs.length) return Json({ ok: true, accepted: 0, ignored: true, reason: "legacy_snapshot_disabled" });
 		const SyntheticReason = ActiveInputs.map((Item) => SyntheticTrafficReason(request, Item)).find(Boolean) || SyntheticTrafficReason(request, Body);
-		if (SyntheticReason) return Json({ ok: true, stored: 0, ignored: true, reason: SyntheticReason });
+		if (SyntheticReason) return Json({ ok: true, stored: 0, ignored: true, blocked: true, reason: SyntheticReason });
 
 		const Rows = ActiveInputs.map((Item) => NormalizeEvent(Item, request));
 		for (const Row of Rows) {

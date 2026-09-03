@@ -74,8 +74,9 @@ function ClientIp(pRequest) {
 
 function HeaderReason(pRequest) {
 	const UserAgent = Header(pRequest, "user-agent");
+	const ClientHintUa = Header(pRequest, "sec-ch-ua");
 	const Purpose = Str(Header(pRequest, "purpose") || Header(pRequest, "sec-purpose") || Header(pRequest, "x-purpose")).toLowerCase();
-	if (cBotPattern.test(UserAgent)) return "known_automation_user_agent";
+	if (cBotPattern.test(UserAgent) || cBotPattern.test(ClientHintUa)) return "known_automation_user_agent";
 	if (Purpose.includes("prefetch") || Purpose.includes("preview") || Purpose.includes("prerender")) return "automated_fetch";
 	return "";
 }

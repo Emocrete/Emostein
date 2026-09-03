@@ -201,6 +201,18 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		const cPagePingMs = 1500;
 
+		const cVisitQualificationMs = 10000;
+
+		const cSyntheticReferrerHosts = new Set(["pagespeed.web.dev"]);
+
+		let fTrackingBlocked = false;
+
+		let fVisitQualificationTimer = 0;
+
+		let fVisitQualificationBound = false;
+
+		let fVisitQualificationReason = "";
+
 		const cBotUserAgentPattern = /(bot|crawl|spider|slurp|googlebot|googleother|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb|pageburst|google-read-aloud|google-notebooklm|google-gemininotebook|google-agent|googlemessages|google-pinpoint|google-cws|feedfetcher-google|ptst(?:\/|\b))/i;
 
 
@@ -1115,24 +1127,151 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 
 
+		function UserAgentPlatformFamily(pUserAgent)
+		{
+			const Value = String(pUserAgent || "").toLowerCase();
+			if (/iphone|ipad|ipod/.test(Value)) return "ios";
+			if (Value.includes("android")) return "android";
+			if (Value.includes("windows")) return "windows";
+			if (Value.includes("macintosh") || Value.includes("mac os x")) return "macos";
+			if (Value.includes("cros")) return "chromeos";
+			if (Value.includes("linux") || Value.includes("x11")) return "linux";
+			return "";
+		}
+
+
+
+
+		function NavigatorPlatformFamily(pPlatform)
+		{
+			const Value = String(pPlatform || "").toLowerCase();
+			if (Value.includes("iphone") || Value.includes("ipad") || Value.includes("ipod")) return "ios";
+			if (Value.includes("android")) return "android";
+			if (Value.includes("win")) return "windows";
+			if (Value.includes("mac")) return "macos";
+			if (Value.includes("cros")) return "chromeos";
+			if (Value.includes("linux")) return "linux";
+			return "";
+		}
+
+
+
+
+		function UserAgentDataPlatformFamily(pPlatform)
+		{
+			const Value = String(pPlatform || "").toLowerCase();
+			if (Value.includes("android")) return "android";
+			if (Value.includes("windows")) return "windows";
+			if (Value.includes("mac")) return "macos";
+			if (Value.includes("chrome os") || Value.includes("chromeos")) return "chromeos";
+			if (Value.includes("linux")) return "linux";
+			return "";
+		}
+
+
+
+
+		function IsNavigatorPlatformCompatible(pUaFamily, pNavigatorFamily)
+		{
+			if (!pUaFamily || !pNavigatorFamily) return true;
+			if (pUaFamily === "android") return pNavigatorFamily === "android" || pNavigatorFamily === "linux";
+			if (pUaFamily === "ios") return pNavigatorFamily === "ios" || pNavigatorFamily === "macos";
+			return pUaFamily === pNavigatorFamily;
+		}
+
+
+
+
+		function ChromeMajorFromUserAgent(pUserAgent)
+		{
+			const Match = String(pUserAgent || "").match(/(?:Chrome|Chromium)\/(\d+)/i);
+			return Match ? Number(Match[1]) || 0 : 0;
+		}
+
+
+
+
+		function ChromeMajorFromUserAgentData(pUserAgentData)
+		{
+			const Lists = [
+				Array.isArray(pUserAgentData?.fullVersionList) ? pUserAgentData.fullVersionList : [],
+				Array.isArray(pUserAgentData?.brands) ? pUserAgentData.brands : []
+			];
+			for (const List of Lists)
+			{
+				for (const Item of List)
+				{
+					const Brand = String(Item?.brand || "").toLowerCase();
+					if (Brand !== "google chrome" && Brand !== "chromium") continue;
+					const Major = Number.parseInt(String(Item?.version || "").split(".")[0], 10);
+					if (Number.isFinite(Major) && Major > 0) return Major;
+				}
+			}
+			return 0;
+		}
+
+
+
+
+		function UserAgentDataHasHeadlessBrand(pUserAgentData)
+		{
+			const Lists = [
+				Array.isArray(pUserAgentData?.fullVersionList) ? pUserAgentData.fullVersionList : [],
+				Array.isArray(pUserAgentData?.brands) ? pUserAgentData.brands : []
+			];
+			return Lists.some((List) => List.some((Item) => /headlesschrome|headless/i.test(String(Item?.brand || ""))));
+		}
+
+
+
+
+		function ReferrerAutomationSignal()
+		{
+			const Referrer = String(document.referrer || "").trim();
+			if (!Referrer) return "";
+			try
+			{
+				const Host = new URL(Referrer, location.href).hostname.toLowerCase();
+				if (cSyntheticReferrerHosts.has(Host)) return "pagespeed_referrer";
+			}catch {}
+			return "";
+		}
+
+
+
+
 		function BrowserAutomationSignal()
 		{
 			const Diagnostics = fClientDiagnostics;
 			if (!Diagnostics || typeof Diagnostics !== "object") return "";
 			const Hardware = Number(Diagnostics.hardwareConcurrency || 0);
+			const DeviceMemory = Number(Diagnostics.deviceMemory || 0);
 			const Renderer = String(Diagnostics.webgl?.renderer || "").toLowerCase();
-			const Platform = String(Diagnostics.platform || Diagnostics.userAgentData?.platform || "").toLowerCase();
-			const Desktop = Diagnostics.userAgentData?.mobile !== true && Number(Diagnostics.maxTouchPoints || 0) === 0;
 			const SwiftShader = Renderer.includes("swiftshader");
 			const EmptyBrowserSurface = Number(Diagnostics.pluginsLength || 0) === 0 && Number(Diagnostics.mimeTypesLength || 0) === 0;
+			const UserAgent = String(Diagnostics.userAgent || navigator.userAgent || "");
+			const UserAgentData = Diagnostics.userAgentData && typeof Diagnostics.userAgentData === "object" ? Diagnostics.userAgentData : null;
+			const UaFamily = UserAgentPlatformFamily(UserAgent);
+			const NavigatorFamily = NavigatorPlatformFamily(Diagnostics.platform);
+			const UaDataFamily = UserAgentDataPlatformFamily(UserAgentData?.platform);
+			const UaChromeMajor = ChromeMajorFromUserAgent(UserAgent);
+			const UaDataChromeMajor = ChromeMajorFromUserAgentData(UserAgentData);
+			const UaLooksMobile = /iphone|ipad|ipod|android|\bmobile\b/i.test(UserAgent);
 
 			const Reasons = [];
 			if (Diagnostics.webdriver === true) Reasons.push("webdriver");
+			if (UserAgentDataHasHeadlessBrand(UserAgentData)) Reasons.push("headless_client_hint");
+			if (DeviceMemory > 8) Reasons.push("device_memory_impossible");
 			if (Hardware >= 256) Reasons.push("hardware_concurrency_extreme");
-			if (Hardware >= 128 && SwiftShader) Reasons.push("swiftshader_high_concurrency");
-			if (Hardware >= 128 && Desktop && Platform.includes("linux") && EmptyBrowserSurface) Reasons.push("linux_virtual_browser_surface");
+			if (!IsNavigatorPlatformCompatible(UaFamily, NavigatorFamily)) Reasons.push("ua_navigator_platform_mismatch");
+			if (UaDataFamily && UaFamily && UaFamily !== "ios" && UaFamily !== UaDataFamily) Reasons.push("ua_client_hint_platform_mismatch");
+			if (UserAgentData && UaLooksMobile && UserAgentData.mobile === false) Reasons.push("mobile_client_hint_mismatch");
+			if (UaChromeMajor && UaDataChromeMajor && Math.abs(UaChromeMajor - UaDataChromeMajor) >= 2) Reasons.push("chrome_version_mismatch");
+			if (SwiftShader && EmptyBrowserSurface) Reasons.push("swiftshader_empty_browser_surface");
+			if (SwiftShader && Hardware >= 64) Reasons.push("swiftshader_high_concurrency");
 			return Reasons.join(",");
 		}
+
 
 
 
@@ -1144,6 +1283,8 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			if (navigator.webdriver) Reasons.push("webdriver");
 			if (window.callPhantom || window._phantom || window.__nightmare) Reasons.push("headless_marker");
 			if (document.visibilityState === "prerender") Reasons.push("prerender");
+			const ReferrerSignal = ReferrerAutomationSignal();
+			if (ReferrerSignal) Reasons.push(ReferrerSignal);
 			const BrowserSignal = BrowserAutomationSignal();
 			if (BrowserSignal) Reasons.push(BrowserSignal);
 			return Reasons.join(",");
@@ -1152,12 +1293,10 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 
 
-
 		function IsSyntheticTraffic()
 		{
-			return BotSignal() !== "";
+			return fTrackingBlocked || BotSignal() !== "";
 		}
-
 
 
 
@@ -2486,7 +2625,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		async function FlushRetryQueue()
 		{
-			if (fQueueFlushRunning || !navigator.onLine) return;
+			if (fQueueFlushRunning || !navigator.onLine || !fPageOpenSent || IsSyntheticTraffic()) return;
 			fQueueFlushRunning = true;
 			try
 			{
@@ -2668,7 +2807,17 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			}
 			if (EventType !== "page_open" && !fPageOpenSent && !BoolValue(pOptions.allowBeforeOpen))
 			{
-				const Result = { ok: true, skipped: true, reason: "page_not_visible_yet" };
+				if (fPageOpenPromise)
+				{
+					return fPageOpenPromise.then(() =>
+						{
+							if (fPageOpenSent) return TrackOpsEvent(pEventType, pOptions);
+							const Result = { ok: true, skipped: true, reason: "page_not_qualified" };
+							if (DebugLifecycle) ReportFocusLifecycleDebug(EventType, pOptions, NativeEvent, "skipped", Result);
+							return Result;
+						});
+				}
+				const Result = { ok: true, skipped: true, reason: "page_not_qualified" };
 				if (DebugLifecycle) ReportFocusLifecycleDebug(EventType, pOptions, NativeEvent, "skipped", Result);
 				return Promise.resolve(Result);
 			}
@@ -2699,7 +2848,8 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 		{
 			if (!Array.isArray(pEvents) || !pEvents.length) return { ok: true, skipped: true };
 			if (IsSyntheticTraffic()) return { ok: true, skipped: true, reason: "synthetic_traffic" };
-			if (!fPageOpenSent) return { ok: true, skipped: true, reason: "page_not_visible_yet" };
+			if (!fPageOpenSent && fPageOpenPromise) await fPageOpenPromise;
+			if (!fPageOpenSent) return { ok: true, skipped: true, reason: "page_not_qualified" };
 			let QueuedAny = false;
 			for (let Index = 0; Index < pEvents.length; Index += 500)
 			{
@@ -2732,12 +2882,11 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			{
 		}) {
 			const EventType = String(pEventType || "").trim();
-			if (EventType !== "page_open" && !fPageOpenSent && !BoolValue(pOptions.allowBeforeOpen)) return { ok: true, skipped: true, reason: "page_not_visible_yet" };
 			const Store = GetOnceStore();
 			const Key = `${pEventType}:${pOnceKey}`;
 			if (Store.Values.has(Key)) return { ok: true, skipped: true };
 			const Result = await TrackOpsEvent(pEventType, pOptions);
-			if (Result && Result.ok)
+			if (Result && Result.ok && Result.skipped !== true && Result.ignored !== true && Result.blocked !== true)
 			{
 				Store.Values.add(Key);
 				SaveOnceStore(Store);
@@ -3422,12 +3571,122 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 
 
-		function TrackPageOpen()
+		function ResetPreQualificationReadState()
+		{
+			fActiveReadState = null;
+			fFocusedFaqReadState = null;
+			fLastReadTickAt = Date.now();
+			cReadTargets.forEach((pState) =>
+				{
+					pState.InFocus = false;
+					pState.Active = false;
+					pState.Done = false;
+					pState.QuickCandidate = false;
+					pState.QuickDone = false;
+					pState.FullDone = false;
+					pState.AccumMs = 0;
+					pState.Cycle = 0;
+					pState.FullAt = 0;
+					pState.ResetAt = 0;
+				});
+			CheckReading();
+		}
+
+
+
+
+		function ClearVisitQualification()
+		{
+			if (fVisitQualificationTimer)
+			{
+				clearTimeout(fVisitQualificationTimer);
+				fVisitQualificationTimer = 0;
+			}
+			if (!fVisitQualificationBound) return;
+			fVisitQualificationBound = false;
+			document.removeEventListener("pointerdown", OnVisitQualificationInput, true);
+			document.removeEventListener("keydown", OnVisitQualificationInput, true);
+			document.removeEventListener("touchstart", OnVisitQualificationInput, true);
+			document.removeEventListener("wheel", OnVisitQualificationInput, true);
+			window.removeEventListener("focus", OnVisitQualificationFocus, true);
+		}
+
+
+
+
+		function BlockCurrentTracking(pReason)
+		{
+			fTrackingBlocked = true;
+			ClearVisitQualification();
+			window.__EMO_OPS_TRAFFIC_ALLOWED__ = false;
+			window.__EMO_OPS_PAGE_OPENED__ = false;
+			if (fPagePingTimer)
+			{
+				clearInterval(fPagePingTimer);
+				fPagePingTimer = 0;
+			}
+			PublishTrackingDecision(false, String(pReason || "server_synthetic_traffic"));
+		}
+
+
+
+
+		function QualifyVisit(pReason)
+		{
+			if (fTrackingBlocked || fPageOpenSent || fPageOpenPromise) return fPageOpenPromise;
+			if (!document.hasFocus()) return Promise.resolve({ ok: true, skipped: true, reason: "page_not_focused" });
+			fVisitQualificationReason = String(pReason || "qualified").trim() || "qualified";
+			return TrackPageOpen(fVisitQualificationReason);
+		}
+
+
+
+
+		function OnVisitQualificationInput(pEvent)
+		{
+			if (!pEvent || pEvent.isTrusted !== true) return;
+			QualifyVisit(`trusted_${String(pEvent.type || "input")}`);
+		}
+
+
+
+
+		function OnVisitQualificationFocus()
+		{
+			if (Date.now() - fPageStartedAt < cVisitQualificationMs) return;
+			QualifyVisit("focused_after_dwell");
+		}
+
+
+
+
+		function InitVisitQualification()
+		{
+			if (fVisitQualificationBound || fPageOpenSent || fTrackingBlocked) return;
+			fVisitQualificationBound = true;
+			document.addEventListener("pointerdown", OnVisitQualificationInput, { capture: true, passive: true });
+			document.addEventListener("keydown", OnVisitQualificationInput, { capture: true });
+			document.addEventListener("touchstart", OnVisitQualificationInput, { capture: true, passive: true });
+			document.addEventListener("wheel", OnVisitQualificationInput, { capture: true, passive: true });
+			window.addEventListener("focus", OnVisitQualificationFocus, true);
+			const RemainingMs = Math.max(0, cVisitQualificationMs - (Date.now() - fPageStartedAt));
+			fVisitQualificationTimer = window.setTimeout(() =>
+				{
+					fVisitQualificationTimer = 0;
+					if (document.hasFocus()) QualifyVisit("focused_dwell");
+				}, RemainingMs);
+		}
+
+
+
+
+		function TrackPageOpen(pQualificationReason = "qualified")
 		{
 			if (fPageOpenSent || fPageOpenPromise) return fPageOpenPromise;
-			if (IsSyntheticTraffic()) return Promise.resolve({ ok: true, skipped: true });
-			if (!document.hasFocus()) return Promise.resolve({ ok: true, skipped: true });
-			fPageStartedAt = Date.now();
+			if (IsSyntheticTraffic()) return Promise.resolve({ ok: true, skipped: true, reason: "synthetic_traffic" });
+			if (!document.hasFocus()) return Promise.resolve({ ok: true, skipped: true, reason: "page_not_focused" });
+			const QualifiedAt = Date.now();
+			const QualificationReason = String(pQualificationReason || fVisitQualificationReason || "qualified").trim() || "qualified";
 			fPageOpenPromise = TrackOpsEventOnce("page_open", "page_open", {
 					eventOn: "load",
 					widget: "Page",
@@ -3435,6 +3694,8 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 					important: true,
 					notifyMobile: true,
 					sound: true,
+					createdAtClient: new Date(fPageStartedAt).toISOString(),
+					pageElapsedMs: 0,
 					eventData: {
 						replayAvailable: window.__EMO_REPLAY_RECORDER__ === true,
 						viewportWidth: window.innerWidth || document.documentElement.clientWidth || 0,
@@ -3444,6 +3705,12 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 						preTrackingDelayMs: Math.max(0, fPageStartedAt - cTrackerLoadedAt),
 						trackerLoadedAtClient: new Date(cTrackerLoadedAt).toISOString(),
 						trackingStartedAtClient: new Date(fPageStartedAt).toISOString(),
+						qualifiedAtClient: new Date(QualifiedAt).toISOString(),
+						visitQualification: {
+							reason: QualificationReason,
+							thresholdMs: cVisitQualificationMs,
+							delayMs: Math.max(0, QualifiedAt - fPageStartedAt)
+						},
 						replayCaptureStartsAfterPageOpen: true,
 						clientDiagnostics: fClientDiagnostics,
 						trafficGate: fTrafficGateDiagnostics,
@@ -3451,9 +3718,12 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 					}
 			}).then((Result) =>
 				{
-					if (Result && Result.ok)
+					const Accepted = Result && Result.ok && Result.skipped !== true && Result.ignored !== true && Result.blocked !== true;
+					if (Accepted)
 					{
 						fPageOpenSent = true;
+						ClearVisitQualification();
+						ResetPreQualificationReadState();
 						window.__EMO_OPS_PAGE_OPENED__ = true;
 						if (fPendingLocationUpdateReason)
 						{
@@ -3463,6 +3733,11 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 						}
 						window.dispatchEvent(new CustomEvent("emo:ops-page-open", { detail: window.__EmoOpsIds }));
 						StartLocationEnhancement();
+						setTimeout(FlushRetryQueue, 1500);
+					}
+					else if (Result && (Result.blocked === true || Result.ignored === true))
+					{
+						BlockCurrentTracking(`server_${String(Result.reason || "synthetic_traffic")}`);
 					}
 					return Result;
 			}).finally(() =>
@@ -3471,7 +3746,6 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			});
 			return fPageOpenPromise;
 		}
-
 
 
 
@@ -3615,7 +3889,6 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 				PublishTrackingDecision(false, "client_synthetic_fingerprint");
 				return;
 			}
-			StartLocationEnhancement();
 			fPageStartedAt = Date.now();
 			GetVisitorId();
 			GetSessionId();
@@ -3624,7 +3897,6 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			PublishVisitIds();
 			InitClarityIdentifiers();
 			window.addEventListener("online", FlushRetryQueue);
-			setTimeout(FlushRetryQueue, 1500);
 			window.TrackOpsEvent = TrackOpsEvent;
 			window.TrackOpsEventBatch = TrackOpsEventBatch;
 			window.TrackOpsEventOnce = TrackOpsEventOnce;
@@ -3644,7 +3916,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			InitContinuousReplayEvents();
 			InitFocusAwayEvents();
 			InitPageLiveEvents();
-			TrackPageOpen();
+			InitVisitQualification();
 		}
 
 
