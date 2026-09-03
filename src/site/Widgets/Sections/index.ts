@@ -277,9 +277,9 @@ import IndexSecIndexExport from "./IndexSec.astro";
 
 /**
  * @pMedia as EmoMediaData (Default: new EmoMediaData("Vid", "/Media/", "IndexBgVid.mp4"))
- * @pTitleClr as string (Default: "black")
- * @pBlurL as "auto" | "on" | "off" (Default: "auto")
- * @pBlurP as "auto" | "on" | "off" (Default: "auto")
+ * @pTitleClr as string (Default: "white")
+ * @pBlurL as "auto" | "on" | "off" (Default: "off")
+ * @pBlurP as "auto" | "on" | "off" (Default: "off")
  */
 export const IndexSec = IndexSecIndexExport;
 

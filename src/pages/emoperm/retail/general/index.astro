@@ -1,27 +1,12 @@
 ---
 import BLayout from "@/Layout.astro";
-import { EmoCall, Emograph, EmoList, HzStack, IndexBtn, VrStack } from "@/Widgets/Comp";
+import { EmoCallIcon, Emograph, EmoList, EmoWhatsIcon, HzStack, IndexBtn, VrStack } from "@/Widgets/Comp";
 import { EmoGallery } from "@/Widgets/Media";
 import { EmoSec, Hero, IndexSec, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { EmoStr } from "@/Widgets/Strips";
-import { Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, Size, Text } from "@/TypesLib";
+import { Colors, ElemBg, Loc, NumPer, Percent, Pixel, Size, Text } from "@/TypesLib";
 import { number } from "astro:schema";
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -45,22 +30,24 @@ import { number } from "astro:schema";
 			pBlur={new Pixel(10)}
 			pBgOpacity={new Percent(50)}
 			pBgColor={new ElemBg(Colors.BlackOff)}
-			pLoc={new Loc(new NumPer("10%","5%"),new NumPer("40%","20%"))}
+			pLoc={new Loc(new NumPer("10%","5%"),new NumPer("40%","65%"))}
 			pSize={new Size(new NumPer("40%","90%"))}
 			pHzAlign="Center"
 			pVrAlign="Center"
 		>
 
 			<Emograph
-				pTitle={Text.H1.White.OfText("ترخيص محل تجاري")}
-				pText={Text.Body.White.OfSize(16).OfText("خدمة احترافية لاستخراج ترخيص محل تجاري وكيلا عن العميل")}
+				pTitle={Text.H1.White.Centered.OfText("ترخيص محل تجاري")}
+				pText={Text.Body.White.Centered.OfText("خدمة احترافية لاستخراج ترخيص محل تجاري وكيلا عن العميل")}
 			/>
 
-			<EmoCall
-				data-own-size
-				BlackSky
-				pText="تواصل معنا"
-			/>
+			<HzStack pGap={new Pixel(30,10)}>
+
+				<EmoCallIcon BlackSky />
+
+				<EmoWhatsIcon BlackSky />
+
+			</HzStack>
 
 		</VrStack>
 
@@ -72,12 +59,7 @@ import { number } from "astro:schema";
 
 
 
-	<IndexSec
-		pMedia={new EmoMediaData("Vid", "/Media/", "IndexBgVid.mp4")}
-		pTitleClr="white"
-		pBlurL="on"
-		pBlurP="on"
-	>
+	<IndexSec pTitleClr="white">
 
 		<VrStack>
 
@@ -584,21 +566,6 @@ import { number } from "astro:schema";
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
 
 
@@ -932,21 +899,6 @@ import { number } from "astro:schema";
 
 
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

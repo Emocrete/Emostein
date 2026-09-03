@@ -12,9 +12,9 @@ export interface Props extends DebugOutlineProps, HTMLAttributes<"section">, Pla
 
 const {
 	pMedia =new EmoMediaData("Vid", "/Media/", "IndexBgVid.mp4"),
-	pTitleClr = "black",
-	pBlurL = "auto",
-	pBlurP = "auto",
+	pTitleClr = "white",
+	pBlurL = "off",
+	pBlurP = "off",
 
 	pLoc,
 	pSize,
@@ -60,21 +60,6 @@ const CssVars = [
 
 const cPlace = new Place(Astro.props as PlaceProps, CssVars);
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -193,21 +178,6 @@ const cPlace = new Place(Astro.props as PlaceProps, CssVars);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
 
 
@@ -319,21 +289,6 @@ const cPlace = new Place(Astro.props as PlaceProps, CssVars);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
 
 
@@ -373,68 +328,84 @@ const cPlace = new Place(Astro.props as PlaceProps, CssVars);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script is:inline>
-	(function InitIndexSecResponsiveScript() {
-	const cTargetRatioL = 16 / 9;
-	const cTargetRatioP = 9 / 20;
-	const cTolL = 0.12;
-	const cTolP = 0.035;
-	let fTimer = 0;
 
-	const cSections = Array.from(document.querySelectorAll(".IndexSecBox"));
-	if (cSections.length === 0) return;
 
-	window.addEventListener("resize", RefreshIndexSections);
-	window.addEventListener("orientationchange", RefreshIndexSections);
 
-	UpdateIndexSections();
+	(function InitIndexSecResponsiveScript()
+	{
 
-	function RefreshIndexSections() {
-	clearTimeout(fTimer);
-	fTimer = window.setTimeout(UpdateIndexSections, 80);
-	}
+		// ==================== Definitions: Variables & Methods ====================
 
-	function UpdateIndexSections() {
-	const cIsLandscape = window.innerWidth >= window.innerHeight;
-	const cRatio = window.innerWidth / Math.max(window.innerHeight, 1);
-	const cTargetRatio = cIsLandscape ? cTargetRatioL : cTargetRatioP;
-	const cTol = cIsLandscape ? cTolL : cTolP;
+		const cTargetRatioL = 16 / 9;
 
-	for (const cSection of cSections) {
-	const cContentBox = cSection.querySelector(".IndexSecContentBox");
-	if (!cContentBox) continue;
+		const cTargetRatioP = 9 / 20;
 
-	const cBlurMode = cIsLandscape
-	? cSection.dataset.blurL || "auto"
-	: cSection.dataset.blurP || "auto";
+		const cTolL = 0.12;
 
-	cContentBox.classList.toggle(
-	"isBlur",
-	IsNeedBlur(cBlurMode, cRatio, cTargetRatio, cTol)
-	);
-	}
-	}
+		const cTolP = 0.035;
 
-	function IsNeedBlur(pBlurMode, pRatio, pTargetRatio, pTol) {
-	if (pBlurMode === "on") return true;
-	if (pBlurMode === "off") return false;
+		let fTimer = 0;
 
-	return Math.abs(pRatio - pTargetRatio) > pTol;
-	}
+		const cSections = Array.from(document.querySelectorAll(".IndexSecBox"));
+
+
+
+
+
+		function RefreshIndexSections()
+		{
+			clearTimeout(fTimer);
+			fTimer = window.setTimeout(UpdateIndexSections, 80);
+		}
+
+
+
+
+
+		function UpdateIndexSections()
+		{
+			const cIsLandscape = window.innerWidth >= window.innerHeight;
+			const cRatio = window.innerWidth / Math.max(window.innerHeight, 1);
+			const cTargetRatio = cIsLandscape ? cTargetRatioL : cTargetRatioP;
+			const cTol = cIsLandscape ? cTolL : cTolP;
+			for (const cSection of cSections)
+			{
+				const cContentBox = cSection.querySelector(".IndexSecContentBox");
+				if (!cContentBox) continue;
+				const cBlurMode = cIsLandscape
+				? cSection.dataset.blurL || "auto"
+				: cSection.dataset.blurP || "auto";
+				cContentBox.classList.toggle(
+					"isBlur",
+					IsNeedBlur(cBlurMode, cRatio, cTargetRatio, cTol)
+				);
+			}
+		}
+
+
+
+
+
+		function IsNeedBlur(pBlurMode, pRatio, pTargetRatio, pTol)
+		{
+			if (pBlurMode === "on") return true;
+			if (pBlurMode === "off") return false;
+			return Math.abs(pRatio - pTargetRatio) > pTol;
+		}
+
+
+
+
+
+		// ==================== Execution Logic ====================
+
+		if (cSections.length === 0) return;
+
+		window.addEventListener("resize", RefreshIndexSections);
+
+		window.addEventListener("orientationchange", RefreshIndexSections);
+
+		UpdateIndexSections();
 	})();
 </script>
