@@ -32,7 +32,7 @@ interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
 }
 
 let {
-	pWidth = new RespString("50%", "100%"),
+	pWidth = new RespString("100%", "100%"),
 	pTitle,
 	pDesc,
 	pHeadBg = new ElemBg("transparent"),
@@ -119,109 +119,180 @@ const cBodyStyle = [
 const cPlace = new Place(Astro.props as PlaceProps, cRootStyle);
 ---
 
+
+
+
+
 <div
-	class={`AutoNumList ${cPlace.Class} ${pGivenClass}`.trim()}
-	style={cPlace.Style}
+	class = {`AutoNumList ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
 	id={pGivenID}
 	{...RemAttr}
 >
-	{cHasHead &&
-		<div class="EmoListHead" style={cHeadStyle}>
-			{cHasTitle && pTitle &&
-				<TitleTag style={pTitle.GetStyle()}>
+
+	{ cHasHead &&
+
+		<div class = " EmoListHead " style = {cHeadStyle}>
+
+			{ cHasTitle && pTitle &&
+
+				<TitleTag style = {pTitle.GetStyle()}>
+
 					{pTitle.text}
+
 				</TitleTag>
+
 			}
 
-			{cHasDesc && pDesc &&
-				<p style={pDesc.GetStyle()}>
+			{ cHasDesc && pDesc &&
+
+				<p style = {pDesc.GetStyle()}>
 					{pDesc.text}
 				</p>
+
 			}
+
 		</div>
+
 	}
 
-	<div class="EmoListBodyBox" style={cBodyStyle}>
-		<ListTag class={`EmoList ${pNumbered ? "Numbered" : "Bulleted"} ${!pNumbered && cHasBulletIcon ? "HasIcon" : ""}`.trim()}>
-			{cHasSlotItems ? (
+	<div class = " EmoListBodyBox " style = {cBodyStyle}>
+
+		<ListTag class = {`EmoList ${pNumbered ? "Numbered" : "Bulleted"} ${!pNumbered && cHasBulletIcon ? "HasIcon" : ""}`.trim()}>
+
+			{ cHasSlotItems ? (
+
 				<slot />
-			) : (
-				pItems.map((cItem) => (
-					<li class="EmoListItem">
-						{!pNumbered && cHasBulletIcon &&
-							<img
-								class="BulletIcon"
-								src={pBulletIcon}
-								alt=""
-								loading="lazy"
-								decoding="async"
-							/>
-						}
 
-						<div class="EmoListItemBox">
-							{IsSubListItem(cItem) ? (
-								<>
-									<span class={`EmoListItemText ${pNumbered ? "" : "ItemTitle"}`.trim()}>
-										{cItem.Title}
+				) : (
+					pItems.map((cItem) => (
+
+						<li class = " EmoListItem ">
+
+							{ !pNumbered && cHasBulletIcon &&
+
+								<img
+									class = " BulletIcon "
+									src={pBulletIcon}
+									alt=""
+									loading="lazy"
+									decoding="async"
+								/>
+
+							}
+
+							<div class = " EmoListItemBox ">
+
+								{ IsSubListItem(cItem) ? (
+
+									<>
+									
+									
+									
+									
+									
+									
+									
+										<span class = {`EmoListItemText ${pNumbered ? "" : "ItemTitle"}`.trim()}>
+											{cItem.Title}
+										</span>
+									
+										{ cItem.Items.length > 0 &&
+									
+											<ul class = {`SubList ${cHasBulletIcon ? "HasIcon" : ""}`.trim()}>
+									
+												{ cItem.Items.map((cSubItem) => (
+									
+													<li class = " EmoListSubItem ">
+									
+														{ cHasBulletIcon &&
+									
+															<img
+																class = " SubBulletIcon "
+																src={pBulletIcon}
+																alt=""
+																loading="lazy"
+																decoding="async"
+															/>
+									
+														}
+									
+														<span class = " EmoListSubItemText ">
+															{cSubItem}
+														</span>
+									
+													</li>
+									
+												)) }
+									
+											</ul>
+									
+										}
+									
+									</>
+								) : (
+
+									<span class = " EmoListItemText ">
+										{cItem}
 									</span>
+								) }
 
-									{cItem.Items.length > 0 &&
-										<ul class={`SubList ${cHasBulletIcon ? "HasIcon" : ""}`.trim()}>
-											{cItem.Items.map((cSubItem) => (
-												<li class="EmoListSubItem">
-													{cHasBulletIcon &&
-														<img
-															class="SubBulletIcon"
-															src={pBulletIcon}
-															alt=""
-															loading="lazy"
-															decoding="async"
-														/>
-													}
+							</div>
 
-													<span class="EmoListSubItemText">
-														{cSubItem}
-													</span>
-												</li>
-											))}
-										</ul>
-									}
-								</>
-							) : (
-								<span class="EmoListItemText">
-									{cItem}
-								</span>
-							)}
-						</div>
-					</li>
-				))
-			)}
+						</li>
+
+					))) }
+
 		</ListTag>
+
 	</div>
+
+
+
+
+
+
+
 </div>
 
+
+
+
+
 <style>
+
+
+
 	.AutoNumList {
 		width: var(--WidthL);
 	}
+
 
 	.EmoListHead {
 		background: var(--HeadBg, transparent);
 		line-height: 2;
 	}
 
+	.EmoListHead > :global(*) {
+		--TextSize: var(--TextSizeL);
+	}
+
+
 	.EmoListBodyBox {
 		background: var(--BodyBg, transparent);
 	}
+
 
 	.EmoList {
 		margin: 0;
 		line-height: 2;
 	}
 
+
 	.Numbered {
 		padding: 0 32px 0 0;
 	}
+
 
 	.Bulleted {
 		padding: 0 28px 0 0;
@@ -229,68 +300,11 @@ const cPlace = new Place(Astro.props as PlaceProps, cRootStyle);
 		list-style-position: outside;
 	}
 
-	.EmoList > :global(.ListItem),
-	.EmoList > :global(.Emograph),
-	.EmoList > :global(.TotalGraph) {
-		display: list-item;
-		max-width: 100%;
-		min-width: 0;
-		box-sizing: border-box;
-		margin: 0 0 10px;
-	}
-
-	.EmoList > :global(.ListItem)::marker,
-	.EmoList > :global(.Emograph)::marker,
-	.EmoList > :global(.TotalGraph)::marker {
-		color: var(--ItemColor, currentColor);
-		font-size: var(--ItemSizeL, 18px);
-		font-weight: var(--ItemWeight, 400);
-	}
-
-	.EmoList > :global(.ListItem):last-child,
-	.EmoList > :global(.Emograph):last-child,
-	.EmoList > :global(.TotalGraph):last-child {
-		margin-bottom: 0;
-	}
-
-	.Bulleted.HasIcon {
-		padding: 0;
-		list-style: none;
-	}
-
-	.Bulleted.HasIcon > :global(.ListItem),
-	.Bulleted.HasIcon > :global(.Emograph),
-	.Bulleted.HasIcon > :global(.TotalGraph) {
-		position: relative;
-		list-style: none;
-		padding-inline-start: 28px;
-	}
-
-	.Bulleted.HasIcon > :global(.ListItem)::before,
-	.Bulleted.HasIcon > :global(.Emograph)::before,
-	.Bulleted.HasIcon > :global(.TotalGraph)::before {
-		content: "";
-		position: absolute;
-		inset-inline-start: 0;
-		top: 8px;
-		width: 18px;
-		height: 18px;
-		background-image: var(--BulletIcon);
-		background-position: center;
-		background-repeat: no-repeat;
-		background-size: contain;
-	}
 
 	.EmoListItem {
 		margin: 0 0 10px;
 	}
 
-	.Bulleted.HasIcon .EmoListItem {
-		display: flex;
-		align-items: flex-start;
-		justify-content: flex-start;
-		gap: 10px;
-	}
 
 	.BulletIcon {
 		width: 18px;
@@ -300,11 +314,13 @@ const cPlace = new Place(Astro.props as PlaceProps, cRootStyle);
 		object-fit: contain;
 	}
 
+
 	.EmoListItemBox {
 		display: block;
 		width: 100%;
 		max-width: 100%;
 	}
+
 
 	.EmoListItemText {
 		display: block;
@@ -319,10 +335,12 @@ const cPlace = new Place(Astro.props as PlaceProps, cRootStyle);
 		overflow-wrap: break-word;
 	}
 
+
 	.ItemTitle {
 		font-weight: 700;
 		margin-bottom: 8px;
 	}
+
 
 	.SubList {
 		margin: 8px 0 0;
@@ -331,9 +349,11 @@ const cPlace = new Place(Astro.props as PlaceProps, cRootStyle);
 		list-style-position: outside;
 	}
 
+
 	.EmoListSubItem {
 		margin: 0 0 8px;
 	}
+
 
 	.SubBulletIcon {
 		width: 16px;
@@ -342,6 +362,7 @@ const cPlace = new Place(Astro.props as PlaceProps, cRootStyle);
 		margin-top: 9px;
 		object-fit: contain;
 	}
+
 
 	.EmoListSubItemText {
 		display: block;
@@ -356,6 +377,21 @@ const cPlace = new Place(Astro.props as PlaceProps, cRootStyle);
 		overflow-wrap: break-word;
 	}
 
+
+
+	.Bulleted.HasIcon {
+		padding: 0;
+		list-style: none;
+	}
+
+	.Bulleted.HasIcon .EmoListItem {
+		display: flex;
+		align-items: flex-start;
+		justify-content: flex-start;
+		gap: 10px;
+	}
+
+
 	.SubList.HasIcon {
 		padding: 0;
 		list-style: none;
@@ -368,10 +404,82 @@ const cPlace = new Place(Astro.props as PlaceProps, cRootStyle);
 		gap: 10px;
 	}
 
-	.EmoListItem:last-child,
-	.EmoListSubItem:last-child {
+
+
+	.EmoList > :global(.ListItem),
+	.EmoList > :global(.Emograph),
+	.EmoList > :global(.TotalGraph)
+	{
+		display: list-item;
+		max-width: 100%;
+		min-width: 0;
+		box-sizing: border-box;
+		margin: 0 0 10px;
+	}
+
+
+	.EmoList > :global(.ListItem)::marker,
+	.EmoList > :global(.Emograph)::marker,
+	.EmoList > :global(.TotalGraph)::marker
+	{
+		color: var(--ItemColor, currentColor);
+		font-size: var(--ItemSizeL, 18px);
+		font-weight: var(--ItemWeight, 400);
+	}
+
+
+	.EmoList > :global(.ListItem):last-child,
+	.EmoList > :global(.Emograph):last-child,
+	.EmoList > :global(.TotalGraph):last-child
+	{
 		margin-bottom: 0;
 	}
+
+
+	.Bulleted.HasIcon > :global(.ListItem),
+	.Bulleted.HasIcon > :global(.Emograph),
+	.Bulleted.HasIcon > :global(.TotalGraph)
+	{
+		position: relative;
+		list-style: none;
+		padding-inline-start: 28px;
+	}
+
+
+	.Bulleted.HasIcon > :global(.ListItem)::before,
+	.Bulleted.HasIcon > :global(.Emograph)::before,
+	.Bulleted.HasIcon > :global(.TotalGraph)::before
+	{
+		content: "";
+		position: absolute;
+		inset-inline-start: 0;
+		top: 8px;
+		width: 18px;
+		height: 18px;
+		background-image: var(--BulletIcon);
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
+
+
+	.EmoListItem:last-child,
+	.EmoListSubItem:last-child
+	{
+		margin-bottom: 0;
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
 
 	@media (orientation: portrait) {
 		.AutoNumList {
@@ -380,13 +488,22 @@ const cPlace = new Place(Astro.props as PlaceProps, cRootStyle);
 
 		.EmoList > :global(.ListItem)::marker,
 		.EmoList > :global(.Emograph)::marker,
-		.EmoList > :global(.TotalGraph)::marker {
+		.EmoList > :global(.TotalGraph)::marker
+		{
 			font-size: var(--ItemSizeP, var(--ItemSizeL, 18px));
 		}
 
 		.EmoListItemText,
-		.EmoListSubItemText {
+		.EmoListSubItemText
+		{
 			font-size: var(--ItemSizeP, var(--ItemSizeL, 18px));
 		}
+
+		.EmoListHead > :global(*) {
+			--TextSize: var(--TextSizeP, var(--TextSizeL));
+		}
 	}
+
+
+
 </style>

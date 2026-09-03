@@ -186,7 +186,7 @@ export { default as EmoLine } from "./Content/EmoLine.astro";
 import EmoListIndexExport from "./Content/EmoList.astro";
 
 /**
- * @pWidth as RespString (Default: new RespString("50%", "100%"))
+ * @pWidth as RespString (Default: new RespString("100%", "100%"))
  * @pTitle as Text
  * @pDesc as Text
  * @pHeadBg as ElemBg (Default: new ElemBg("transparent"))

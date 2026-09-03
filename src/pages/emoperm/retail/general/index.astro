@@ -1,8 +1,8 @@
 ---
 import BLayout from "@/Layout.astro";
-import { EmoCallIcon, Emograph, EmoList, EmoWhatsIcon, HzStack, IndexBtn, VrStack } from "@/Widgets/Comp";
+import { EmoCallIcon, Emograph, EmoList, EmoWhatsIcon, HzStack, IndexBtn, ListItem, SecTitle, VrStack } from "@/Widgets/Comp";
 import { EmoGallery } from "@/Widgets/Media";
-import { EmoSec, Hero, IndexSec, RelServiceItem, RelServices } from "@/Widgets/Sections";
+import { DivCol, DivStr, EmoSec, Hero, IndexSec, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { EmoStr } from "@/Widgets/Strips";
 import { Colors, ElemBg, Loc, NumPer, Percent, Pixel, Size, Text } from "@/TypesLib";
 import { number } from "astro:schema";
@@ -81,57 +81,53 @@ import { number } from "astro:schema";
 
 	<EmoSec id="secDoc">
 
-		<EmoStr pBg={new ElemBg(Colors.Bistage)}>
+		<SecTitle Bistage pTitle="الأوراق المطلوبة لاستخراج رخصة محل تجاري" />
 
-			<Emograph pTitle={Text.H2.Centered.OfText("الأوراق المطلوبة لاستخراج رخصة محل تجاري")} />
+		<DivStr>
 
-		</EmoStr>
+			<DivCol>
 
-		<HzStack pSize={new Size(new NumPer("90%","95%"),new NumPer(500,"auto"))}>
+				<EmoList pTitle={Text.H3.OfText("أولا: مستندات أساسية لجميع المحلات العامة:")}>
 
-			<EmoStr pBg={new ElemBg(Colors.Gray1)} pSize={new Size(new NumPer("80%"),new NumPer(500,"auto"))}>
+					<ListItem pText="بطاقة ضريبية" />
 
-				<EmoList
-					pTitle={Text.H3.OfText("أولا: مستندات أساسية لجميع المحلات العامة:")}
-					pItems={	[
-				"بطاقة ضريبية",
-				"سجل تجاري",
-				"صورة عقد الملكية أو عقد إيجار المحل مع توفير أصل العقد للإطلاع",
-				"صورة بطاقة الرقم القومي لصاحب الترخيص",
-				"عدد 3 نسخ من الرسومات الهندسية للمحل حسب المواصفات المعتمدة",
-				"خطاب التأمين الصادر عن التأمينات الاجتماعية",
-				"شهادة بالقيمة الإيجارية للمحل من الضرائب العقارية"
-			] }
-				>
+					<ListItem pText="سجل تجاري" />
 
-				</EmoList>
+					<ListItem pText="صورة عقد الملكية أو عقد إيجار المحل مع توفير أصل العقد للإطلاع" />
 
-			</EmoStr>
+					<ListItem pText="صورة بطاقة الرقم القومي لصاحب الترخيص" />
 
-			<EmoStr pBg={new ElemBg(Colors.Gray1)} pSize={new Size(new NumPer("80%"),new NumPer(500,"auto"))}>
+					<ListItem pText="عدد 3 نسخ من الرسومات الهندسية للمحل حسب المواصفات المعتمدة" />
 
-				<EmoList
-					pTitle={Text.H3.OfText("ثانيا: مستندات خاصة بالمطاعم والأنشطة الخاصة بالمأكولات والمشروبات")}
-					pItems={	[
-				"شهادة صحية للعاملين في المحل مستخرج من مستشفى حكومي"
-			] }
-				>
+					<ListItem pText="خطاب التأمين الصادر عن التأمينات الاجتماعية" />
+
+					<ListItem pText="شهادة بالقيمة الإيجارية للمحل من الضرائب العقارية" />
 
 				</EmoList>
 
-			</EmoStr>
+			</DivCol>
 
-			<EmoStr pBg={new ElemBg(Colors.Gray1)} pSize={new Size(new NumPer("80%"),new NumPer(500,"auto"))}>
+			<DivCol>
 
-				<EmoList pTitle={Text.H3.OfText("ثالثا: مستندات خاصة بمحال الأنشطة العامة والترفيهية")} pItems={	[
-				"صحيفة الحالة الجنائية"
-				]}>
+				<EmoList pTitle={Text.H3.OfText("ثانيا: مستندات خاصة بالمطاعم والأنشطة الخاصة بالمأكولات والمشروبات")}>
+
+					<ListItem pText="شهادة صحية للعاملين في المحل مستخرج من مستشفى حكومي" />
 
 				</EmoList>
 
-			</EmoStr>
+			</DivCol>
 
-		</HzStack>
+			<DivCol>
+
+				<EmoList pTitle={Text.H3.OfText("ثالثا: مستندات خاصة بمحال الأنشطة العامة والترفيهية")}>
+
+					<ListItem pText="صحيفة الحالة الجنائية" />
+
+				</EmoList>
+
+			</DivCol>
+
+		</DivStr>
 
 	</EmoSec>
 
@@ -143,11 +139,7 @@ import { number } from "astro:schema";
 
 	<EmoSec id="secProc">
 
-		<EmoStr pBg={new ElemBg(Colors.Bistage)}>
-
-			<Emograph pTitle={Text.H2.Centered.OfText("إجراءات ترخيص محل تجاري")} />
-
-		</EmoStr>
+		<SecTitle Bistage pTitle="إجراءات ترخيص محل تجاري" />
 
 		<div class = " StepsWrap ">
 
