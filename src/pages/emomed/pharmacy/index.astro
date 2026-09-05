@@ -1,7 +1,7 @@
 ---
 import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
-import { EmoCall, EmoCallIcon, Emograph, EmoList, EmoWhatsIcon, Grid, HzStack, ListItem, SecTitle, VrStack } from "@/Widgets/Comp";
+import { EmoCall, EmoCallIcon, EmoDet, Emograph, EmoList, EmoWhatsIcon, Grid, HzStack, ListItem, SecTitle, VrStack } from "@/Widgets/Comp";
 import { RespImg, YTPlayer } from "@/Widgets/Media";
 import { PharmacyWorkCard } from "@/Widgets/Pharmacy";
 import { DivCol, DivStr, EmoFaq, EmoSec, FaqItem, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
@@ -30,8 +30,8 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 		<VrStack
 			pBg={new ElemBg(Colors.SkyLite)}
-			pBgOpacity={new Percent(50)}
-			pLoc={new Loc(new NumPer("50%","2.5%"),new NumPer("60%","55%"))}
+			pBgOpacity={new Percent(85)}
+			pLoc={new Loc(new NumPer("50%","2.5%"),new NumPer("60%","50%"))}
 			pSize={new Size(new NumPer("40%","95%"))}
 			pGap={new Pixel(20, 10)}
 			pPad={new Pixel(10,5)}
@@ -46,9 +46,11 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 			<HzStack pGap={new Pixel(30,10)}>
 
-				<EmoCallIcon BistageBlack />
+				<EmoCallIcon />
 
-				<EmoWhatsIcon Black />
+				<EmoWhatsIcon />
+
+				<EmoDet Gold pHref="#secSrvCost" pHeight="58px" />
 
 			</HzStack>
 
@@ -170,9 +172,11 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 
 					<VrStack pHzAlign="Center" pVrAlign="Center">
 
-						<Emograph pTitle={Text.Body.Centered.OfSize(25,20).OfText("إذا كنت غير متأكد من تحقق الشروط يمكنك طلب المساعدة")} />
+						<Emograph
+							pTitle={Text.Body.Centered.OfSize(25,20).OfText("إذا كنت غير متأكد من تحقق الشروط راسلنا للمساعدة في فحص حالة المكان ومدى تحقق الاشتراطات المطلوبة لترخيص الصيدلية")}
+						/>
 
-						<EmoCall SkyBistage />
+						<EmoWhatsIcon Black pMessage="لدي محل أرغب في ترخيصه كصيدلية وأريد المساعدة بخصوص تحقق الاشتراطات" />
 
 					</VrStack>
 
@@ -181,130 +185,6 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 			</DivCol>
 
 		</DivStr>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec
-		Service
-		id="secSrvCost"
-		pBg={new ElemBg(Colors.Gray5)}
-		pMinH={new NumPer(780, 980)}
-		pHzAlign={new Align("Center", "Center", "Center", "Center")}
-		pVrAlign={new Align("Center", "Center", "Center", "Center")}
-		pPad={new Pixel(50,20)}
-		pGap={new Pixel(50,30)}
-	>
-
-		<SvgDots
-			pColor="rgba(255,255,255,.10)"
-			pGap={24}
-			pDot={2}
-			pLoc={new Loc(new NumPer("0%"), new NumPer("0%"))}
-			pSize={new Size(new NumPer("100%"), new NumPer("100%"))}
-			pZ={1}
-		/>
-
-		<SecTitle BistageLite pTitle="تكلفة خدمات ترخيص الصيدليات" pDesc="اختر باقة الخدمات المناسبة لحالتك" />
-
-		<Grid
-			id="srvPackages"
-			pMax={3}
-			pMaxP={1}
-			pSize={new Size(new NumPer("80%", "95%"))}
-			pGap={new Pixel(40, 40)}
-			pPad={new Pixel(50, 5)}
-			Centered
-		>
-
-			<BadgeFrame
-				id="srvMainPackage"
-				pBadge="أساسية"
-				pBg="white"
-				pBadgeBg={Colors.SkyDark}
-				pColor={Colors.BlackOff}
-				pMove="SlideInRight"
-				pMoveDuration={800}
-				pMoveViewTarget="self"
-			>
-
-				<Emograph pTitle={Text.Body.Bold.DarkSky.OfSize(80,50).Centered.OfText("10,000")} pText={Text.Body.Centered.OfText("جنيه")} />
-
-				<Emograph
-					pTitle={Text.H3.Centered.OfText("استخراج ترخيص صيدلية")}
-					pText={Text.Body.Centered.OfText("مناسبة لمن لديه مقاسات ورسومات جاهزة ويريد البدء باستخراج الترخيص فقط.")}
-				/>
-
-			</BadgeFrame>
-
-			<BadgeFrame
-				id="srvMostReqPackage"
-				pBadge="الأكثر طلبًا"
-				pBg="white"
-				pBadgeBg={Colors.BistageLite}
-				pColor={Colors.BlackOff}
-				pMove="SlideInTop"
-				pMoveDuration={850}
-				pMoveViewTarget="self"
-			>
-
-				<Emograph pTitle={Text.Body.Bold.Bistage.OfSize(80,50).Centered.OfText("11,000")} pText={Text.Body.Centered.OfText("جنيه")} />
-
-				<Emograph
-					pTitle={Text.H3.Centered.OfText("رسم هندسي + ترخيص")}
-					pText={Text.Body.Centered.OfText("اختيار عملي لمن يريد تجهيز الرسم المطلوب للملف مع متابعة إجراءات الترخيص.")}
-				/>
-
-			</BadgeFrame>
-
-			<BadgeFrame
-				id="srvFullPackage"
-				pBadge="كاملة"
-				pBg="rgba(255,255,255,.96)"
-				pBadgeBg={Colors.OrangeDark}
-				pColor={Colors.BlackOff}
-				pMove="SlideInLeft"
-				pMoveDuration={900}
-				pMoveViewTarget="self"
-			>
-
-				<Emograph pTitle={Text.Body.Bold.OrangeDark.OfSize(80,50).Centered.OfText("12,000")} pText={Text.Body.Centered.OfText("جنيه")} />
-
-				<Emograph
-					pTitle={Text.H3.Centered.OfText("قياس + رسم + ترخيص")}
-					pText={Text.Body.Centered.OfText("أفضل اختيار قبل الالتزام بالمكان أو عند الحاجة لفحص صلاحية المقر وتجهيز ملف الترخيص.")}
-				/>
-
-			</BadgeFrame>
-
-		</Grid>
-
-		<GlassCard
-			pBg="rgba(255,255,255,.10)"
-			pBorder="rgba(255,255,255,.20)"
-			pRadius={20}
-			pBlur={10}
-			pSize={new Size(new NumPer("60%", "95%"))}
-			pHzAlign={new Align("Center", "Center", "Center", "Center")}
-		>
-
-			<VrStack pPad={new Pixel(30,10)} pGap={new Pixel(30,10)} pHzAlign={new Align("Center","Center")}>
-
-				<Emograph
-					pTitle={Text.H3.Centered.Bistage.OfText("لا يشمل")}
-					pText={Text.Body.Centered.White.OfText("رسوم حكومية أو نقابية أو تكاليف تشطيب وتجهيز الصيدلية.")}
-				/>
-
-				<EmoCall BlackSky />
-
-			</VrStack>
-
-		</GlassCard>
 
 	</EmoSec>
 
@@ -860,6 +740,116 @@ import { Align, Colors, ElemBg, EmoMediaData, Loc, NumPer, Percent, Pixel, RespS
 			/>
 
 		</GlassCard>
+
+	</EmoSec>
+
+
+
+
+
+
+
+	<EmoSec
+		Service
+		id="secSrvCost"
+		pBg={new ElemBg(Colors.Gray5)}
+		pMinH={new NumPer(780, 980)}
+		pHzAlign={new Align("Center", "Center", "Center", "Center")}
+		pVrAlign={new Align("Center", "Center", "Center", "Center")}
+		pPad={new Pixel(50,20)}
+		pGap={new Pixel(50,30)}
+	>
+
+		<SvgDots
+			pColor="rgba(255,255,255,.10)"
+			pGap={24}
+			pDot={2}
+			pLoc={new Loc(new NumPer("0%"), new NumPer("0%"))}
+			pSize={new Size(new NumPer("100%"), new NumPer("100%"))}
+			pZ={1}
+		/>
+
+		<SecTitle BistageLite pTitle="تكلفة خدمات ترخيص الصيدليات" pDesc="اختر باقة الخدمات المناسبة لحالتك" />
+
+		<Grid
+			id="srvPackages"
+			pMax={3}
+			pMaxP={1}
+			pSize={new Size(new NumPer("80%", "95%"))}
+			pGap={new Pixel(40, 40)}
+			pPad={new Pixel(50, 5)}
+			Centered
+		>
+
+			<BadgeFrame
+				id="srvMainPackage"
+				pBadge="أساسية"
+				pBg="white"
+				pBadgeBg={Colors.SkyDark}
+				pColor={Colors.BlackOff}
+				pMove="SlideInRight"
+				pMoveDuration={800}
+				pMoveViewTarget="self"
+			>
+
+				<Emograph pTitle={Text.Body.Bold.DarkSky.OfSize(80,50).Centered.OfText("10,000")} pText={Text.Body.Centered.OfText("جنيه")} />
+
+				<Emograph
+					pTitle={Text.H3.Centered.OfText("استخراج ترخيص صيدلية")}
+					pText={Text.Body.Centered.OfText("مناسبة لمن لديه مقاسات ورسومات جاهزة ويريد البدء باستخراج الترخيص فقط.")}
+				/>
+
+			</BadgeFrame>
+
+			<BadgeFrame
+				id="srvMostReqPackage"
+				pBadge="الأكثر طلبًا"
+				pBg="white"
+				pBadgeBg={Colors.BistageLite}
+				pColor={Colors.BlackOff}
+				pMove="SlideInTop"
+				pMoveDuration={850}
+				pMoveViewTarget="self"
+			>
+
+				<Emograph pTitle={Text.Body.Bold.Bistage.OfSize(80,50).Centered.OfText("11,000")} pText={Text.Body.Centered.OfText("جنيه")} />
+
+				<Emograph
+					pTitle={Text.H3.Centered.OfText("رسم هندسي + ترخيص")}
+					pText={Text.Body.Centered.OfText("اختيار عملي لمن يريد تجهيز الرسم المطلوب للملف مع متابعة إجراءات الترخيص.")}
+				/>
+
+			</BadgeFrame>
+
+			<BadgeFrame
+				id="srvFullPackage"
+				pBadge="كاملة"
+				pBg="rgba(255,255,255,.96)"
+				pBadgeBg={Colors.OrangeDark}
+				pColor={Colors.BlackOff}
+				pMove="SlideInLeft"
+				pMoveDuration={900}
+				pMoveViewTarget="self"
+			>
+
+				<Emograph pTitle={Text.Body.Bold.OrangeDark.OfSize(80,50).Centered.OfText("12,000")} pText={Text.Body.Centered.OfText("جنيه")} />
+
+				<Emograph
+					pTitle={Text.H3.Centered.OfText("قياس + رسم + ترخيص")}
+					pText={Text.Body.Centered.OfText("أفضل اختيار قبل الالتزام بالمكان أو عند الحاجة لفحص صلاحية المقر وتجهيز ملف الترخيص.")}
+				/>
+
+			</BadgeFrame>
+
+		</Grid>
+
+		<HzStack pGap={new Pixel(30,10)} pHzAlign={"Center"}>
+
+			<EmoCallIcon />
+
+			<EmoWhatsIcon pMessage="لدي محل أرغب في ترخيص صيدلية به" />
+
+		</HzStack>
 
 	</EmoSec>
 
