@@ -366,6 +366,14 @@ function HasExplicitCssSize(pValue?: string) {
 			min-height: var(--DivColMinHeightP, auto);
 		}
 
+		.DivStr.DivStr > .DivCol.DivCol[data-duo-width-p="true"] {
+			flex-grow: 0;
+			flex-shrink: 1;
+			flex-basis: var(--DivColWidthP);
+			width: var(--DivColWidthP);
+			max-width: min(100%, var(--DivColWidthP));
+		}
+
 		.DivStr.IsPlaced {
 			width: var(--PlaceWidthP);
 			height: var(--PlaceHeightP);

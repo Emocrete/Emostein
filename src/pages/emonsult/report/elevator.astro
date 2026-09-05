@@ -55,7 +55,7 @@ import { Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/Ty
 
 		<DivStr id="strInstall" pBg={new ElemBg(Colors.Gray1)}>
 
-			<DivCol id="colInstallInfo">
+			<DivCol id="colInstallInfo" pSize={new Size(new NumPer("20%","100%"))}>
 
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("أولا: تقرير استشاري هندسي لترخيص تركيب مصعد")}
@@ -67,13 +67,17 @@ import { Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/Ty
 					pText={Text.Body.Centered.OfText("يقدم ضمن المستندات المطلوبة من قبل الجهة الإدارية المعنية، مثل رئاسة الحي أو جهاز المدينة، لترخيص تركيب مصعد جديد لأول مرة.")}
 				/>
 
-				<DivStr id="strInstallCost">
+			</DivCol>
+
+			<DivCol pHzAlign={"Center"}>
+
+				<DivStr id="strInstallCost" pHzAlign={"Center"}>
 
 					<Emograph pTitle={Text.H4.Centered.OfText("تكلفة أتعاب اعتماد تقرير تركيب مصعد")} />
 
 					<DivCol id="colInstallCostEngOnly">
 
-						<Emograph pTitle={Text.H3.Centered.OfText("تقرير تركيب مصعد معتمد من مهندس استشاري إنشائي فقط")} />
+						<Emograph pTitle={Text.H5.Centered.OfText("تقرير تركيب مصعد معتمد من مهندس استشاري إنشائي فقط")} />
 
 						<Emograph pTitle={Text.Body.Bold.DarkSky.OfSize(40,25).Centered.OfText("يبدأ من 3000 جنيه")} />
 
@@ -94,7 +98,7 @@ import { Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/Ty
 
 					<DivCol id="colInstallCostEng">
 
-						<Emograph pTitle={Text.H3.Centered.OfText("تقرير تركيب مصعد معتمد من مهندس استشاري إنشائي ونقابة المهندسين")} />
+						<Emograph pTitle={Text.H5.Centered.OfText("تقرير تركيب مصعد معتمد من مهندس استشاري إنشائي ونقابة المهندسين")} />
 
 						<Emograph
 							pTitle={Text.Body.Bold.DarkSky.OfSize(40,25).Centered.OfText("يبدأ من 4000 جنيه")}
@@ -118,13 +122,19 @@ import { Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/Ty
 
 					</DivCol>
 
-					<EmoCall id="btnInstallCall" BlackSky pText="للطلب والاستفسار" />
+					<HzStack pGap={new Pixel(30,10)} pHzAlign={"Center"}>
+
+						<EmoCallIcon BlackSky pText="اتصل لطلب الخدمة" />
+
+						<EmoWhatsIcon BlackSky pText="اطلب عبر واتساب" pMessage="أرغب في عمل تقرير تركيب مصعد" />
+
+					</HzStack>
 
 				</DivStr>
 
 			</DivCol>
 
-			<DivCol id="colInstallSample">
+			<DivCol id="colInstallSample" pSize={new Size(new NumPer("20%","100%"))}>
 
 				<Emograph pTitle={Text.H4.Centered.OfText("نموذج تقرير تركيب مصعد")} pText={Text.Body.Centered.OfText("( إنشائي )")} />
 

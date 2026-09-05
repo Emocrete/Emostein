@@ -57,7 +57,6 @@ const {
 	pMoveViewMargin,
 	pMoveViewTarget,
 
-
 	id: pGivenID = GetWidgetId("HzStack"),
 	class: pGivenClass = "",
 	style: pGivenStyle = "",
@@ -83,8 +82,12 @@ const cBgVidL = pBg?.Vid?.LinkL || "";
 const cBgVidP = pBg?.Vid?.LinkP || pBg?.Vid?.LinkL || "";
 
 const cBgAlt = pBg?.Img?.Alt || pBg?.Vid?.Alt || "";
-const cHzAlign = GetHzAlignCss(pHzAlign);
-const cVrAlign = GetVrAlignCss(pVrAlign);
+
+const cHzAlignL = GetHzAlignCss(pHzAlign, "Landscape");
+const cHzAlignP = GetHzAlignCss(pHzAlign, "Portrait");
+const cVrAlignL = GetVrAlignCss(pVrAlign, "Landscape");
+const cVrAlignP = GetVrAlignCss(pVrAlign, "Portrait");
+
 const cHasExplicitHeight = HasExplicitCssSize(pSize?.HeightL) || HasExplicitCssSize(pSize?.HeightP);
 
 const cFinalBgImgL = cBgImgL || cBgImgP;
@@ -107,11 +110,13 @@ const cCoreStyle = [
 	`--HzMarginP:${pMargin.Portrait};`,
 	`--HzBgColor:${cBgColor};`,
 	`--HzBgOpacityL:${cBgOpacityL};`,
-`--HzBgOpacityP:${cBgOpacityP};`,
+	`--HzBgOpacityP:${cBgOpacityP};`,
 	`--HzRadiusL:${pRadius.Landscape};`,
 	`--HzRadiusP:${pRadius.Portrait};`,
-	`--HzAlignItems:${cVrAlign};`,
-	`--HzJustifyContent:${cHzAlign};`,
+	`--HzHzAlignL:${cHzAlignL};`,
+	`--HzHzAlignP:${cHzAlignP};`,
+	`--HzVrAlignL:${cVrAlignL};`,
+	`--HzVrAlignP:${cVrAlignP};`,
 	GetStyleText(pGivenStyle),
 ].filter(Boolean).join(" ");
 
@@ -181,17 +186,17 @@ function GetCssName(pName: string) {
 			muted
 		>
 
-			{ cBgVidP ? (
+			{ cBgVidP ?
 
 				<source media="(orientation: portrait)" src={cBgVidP} />
 
-				) : null}
+				: null}
 
-				{ cBgVidL ? (
+				{ cBgVidL ?
 
 					<source media="(orientation: landscape)" src={cBgVidL} />
 
-					) : null}
+					: null}
 
 					<source src={cMainBgVid} />
 
@@ -241,13 +246,13 @@ function GetCssName(pName: string) {
 		gap: var(--HzGapL, 0);
 		border-radius: var(--HzRadiusL, 0);
 		background-color: color-mix(
-	in srgb,
-	var(--HzBgColor) var(--HzBgOpacityL),
-	transparent
-);
+			in srgb,
+			var(--HzBgColor) var(--HzBgOpacityL),
+			transparent
+		);
 		overflow: hidden;
-		align-items: var(--HzAlignItems, stretch);
-		justify-content: var(--HzJustifyContent, flex-start);
+		align-items: var(--HzVrAlignL, stretch);
+		justify-content: var(--HzHzAlignL, flex-start);
 		min-width: 0;
 	}
 
@@ -282,54 +287,54 @@ function GetCssName(pName: string) {
 		inset: 0;
 		z-index: 0;
 		display: block;
-		width: 100% !important;
-		height: 100% !important;
+		width: 100%;
+		height: 100%;
 		object-fit: cover;
 		pointer-events: none;
 		user-select: none;
-		flex: 0 0 auto !important;
+		flex: 0 0 auto;
 	}
 
 	.HzStack.HzStack.HzStack > :global(:not(.HzStackBg)) {
 		position: relative;
 		z-index: 1;
-		box-sizing: border-box !important;
-		min-width: 0 !important;
+		box-sizing: border-box;
+		min-width: 0;
 	}
 
 	.HzStack.HzStack.HzStack > :global(:not(.HzStackBg):not([data-own-size])) {
-		flex-grow: 1 !important;
-		flex-shrink: 1 !important;
-		flex-basis: 0 !important;
-		width: 0 !important;
-		min-width: 0 !important;
-		max-width: none !important;
-		margin: 0 !important;
-		align-self: stretch !important;
+		flex-grow: 1;
+		flex-shrink: 1;
+		flex-basis: 0;
+		width: 0;
+		min-width: 0;
+		max-width: none;
+		margin: 0;
+		align-self: stretch;
 	}
 
 	.HzStack.HzStack.HzStack > :global(:not(.HzStackBg):not([data-own-size]) > *) {
-		width: 100% !important;
-		max-width: 100% !important;
-		box-sizing: border-box !important;
+		width: 100%;
+		max-width: 100%;
+		box-sizing: border-box;
 	}
 
 	.HzStack.HzStack.HzStack > :global(:not(.HzStackBg)[data-own-size]) {
-		flex-grow: 0 !important;
-		flex-shrink: 1 !important;
-		flex-basis: auto !important;
-		min-width: 0 !important;
-		max-width: 100% !important;
+		flex-grow: 0;
+		flex-shrink: 1;
+		flex-basis: auto;
+		min-width: 0;
+		max-width: 100%;
 	}
 
 
 
 	.HzStack.HzStack.HzStack.FitContent > :global(:not(.HzStackBg):not([data-own-size])) {
-		flex-grow: 0 !important;
-		flex-shrink: 1 !important;
-		flex-basis: auto !important;
-		width: auto !important;
-		max-width: 100% !important;
+		flex-grow: 0;
+		flex-shrink: 1;
+		flex-basis: auto;
+		width: auto;
+		max-width: 100%;
 	}
 
 
@@ -353,10 +358,10 @@ function GetCssName(pName: string) {
 			gap: var(--HzGapP, var(--HzGapL, 0));
 			border-radius: var(--HzRadiusP, var(--HzRadiusL, 0));
 			background-color: color-mix(
-	in srgb,
-	var(--HzBgColor) var(--HzBgOpacityP),
-	transparent
-);
+				in srgb,
+				var(--HzBgColor) var(--HzBgOpacityP),
+				transparent
+			);
 		}
 
 		.HzStack.IsPlaced {
@@ -366,40 +371,47 @@ function GetCssName(pName: string) {
 
 		.HzStack:not(.ForceHz) {
 			flex-direction: column;
+			align-items: var(--HzHzAlignP, flex-start);
+			justify-content: var(--HzVrAlignP, flex-start);
+		}
+
+		.HzStack.ForceHz {
+			align-items: var(--HzVrAlignP, stretch);
+			justify-content: var(--HzHzAlignP, flex-start);
 		}
 
 		.HzStack.HzStack.HzStack:not(.ForceHz) > :global(:not(.HzStackBg):not([data-own-size])) {
-			flex-grow: 0 !important;
-			flex-shrink: 0 !important;
-			flex-basis: auto !important;
-			width: 100% !important;
-			max-width: 100% !important;
-			margin: 0 !important;
-			align-self: stretch !important;
+			flex-grow: 0;
+			flex-shrink: 0;
+			flex-basis: auto;
+			width: 100%;
+			max-width: 100%;
+			margin: 0;
+			align-self: stretch;
 		}
 
 		.HzStack.HzStack.HzStack:not(.ForceHz) > :global(:not(.HzStackBg):not([data-own-size]) > *) {
-			width: 100% !important;
-			max-width: 100% !important;
-			box-sizing: border-box !important;
+			width: 100%;
+			max-width: 100%;
+			box-sizing: border-box;
 		}
 
 		.HzStack.HzStack.HzStack:not(.ForceHz) > :global(:not(.HzStackBg)[data-own-size]) {
-			flex-grow: 0 !important;
-			flex-shrink: 1 !important;
-			flex-basis: auto !important;
-			max-width: 100% !important;
+			flex-grow: 0;
+			flex-shrink: 1;
+			flex-basis: auto;
+			max-width: 100%;
 		}
 
 		.HzStack.HzStack.HzStack.ForceHz > :global(:not(.HzStackBg):not([data-own-size])) {
-			flex-grow: 1 !important;
-			flex-shrink: 1 !important;
-			flex-basis: 0 !important;
-			width: 0 !important;
-			min-width: 0 !important;
-			max-width: none !important;
-			margin: 0 !important;
-			align-self: stretch !important;
+			flex-grow: 1;
+			flex-shrink: 1;
+			flex-basis: 0;
+			width: 0;
+			min-width: 0;
+			max-width: none;
+			margin: 0;
+			align-self: stretch;
 		}
 	}
 
