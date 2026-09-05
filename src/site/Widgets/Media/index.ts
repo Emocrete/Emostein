@@ -146,6 +146,13 @@ export const EmoGallery = EmoGalleryIndexExport;
 
 export { default as Gallery } from "./Gallery.astro";
 
+import PdfPreviewIndexExport from "./PdfPreview.astro";
+
+/**
+ * @pFile as string
+ */
+export const PdfPreview = PdfPreviewIndexExport;
+
 import RespImageIndexExport from "./RespImage.astro";
 
 /**
