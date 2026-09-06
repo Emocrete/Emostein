@@ -137,7 +137,13 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } fro
 
 
 
-	<SupervisionCertificateCostCalc pCairoFee={3000} pGizaFee={4000} />
+	<SupervisionCertificateCostCalc
+		pCairoFee={4000}
+		pGizaFee={5000}
+		pCairoNonResidentialFee={6000}
+		pGizaNonResidentialFee={7000}
+		pContractFee={3000}
+	/>
 
 
 
@@ -145,142 +151,15 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } fro
 
 
 
-	<EmoSec pHzAlign={Align.Center} pVrAlign={Align.Center}>
+	<EmoSec pMinH={new NumPer(300,300)} pHzAlign={"Center"} pBg={new ElemBg(Colors.BistageLite)}>
 
-		<SecTitle style = " --StripBg : #c9bfb8 " pTitle="تكلفة استخراج شهادة الإشراف الهندسي" pDesc="" />
+		<HzStack pGap={new Pixel(30,10)} pHzAlign={"Center"}>
 
-		<VrStack>
+			<EmoCallIcon BlackSky pText="اتصل للطلب" />
 
-			<HzStack>
+			<EmoWhatsIcon BlackSky pText="اطلب عبر واتساب" pMessage="أرغب في عمل شهادة إشراف هندسي على البناء" />
 
-				<VrStack>
-
-					<Emograph pTitle={Text.H3.OfText("قيمة الخدمة").WithColor("#2f3340").Centered} pText={Text.Body.OfText("")} />
-
-				</VrStack>
-
-				<VrStack>
-
-					<HzStack>
-
-						<Emograph pTitle={Text.H2.OfText("4000 جنيه").WithColor("#302c3c").WithAlign("right")} pText={Text.Body.OfText("")} />
-
-						<Emograph pTitle={Text.Body.OfText("للمباني السكنية العادية").WithColor("#302c3c").WithAlign("right")} pText={Text.Body.OfText("")} />
-
-					</HzStack>
-
-					<HzStack>
-
-						<Emograph pTitle={Text.H2.OfText("6000 جنيه").WithColor("#302c3c").WithAlign("right")} pText={Text.Body.OfText("")} />
-
-						<Emograph pTitle={Text.Body.OfText("للمباني التجارية والإدارية والصناعية").WithColor("#302c3c").WithAlign("right")} pText={Text.Body.OfText("")} />
-
-					</HzStack>
-
-				</VrStack>
-
-			</HzStack>
-
-			<HzStack>
-
-				<VrStack>
-
-					<Emograph pTitle={Text.H3.OfText("رسوم الخدمة المدفوعة لنقابة المهندسين").WithColor("#2f3340").Centered} pText={Text.Body.OfText("")} />
-
-				</VrStack>
-
-				<VrStack>
-
-					<HzStack>
-
-						<Emograph pTitle={Text.H2.OfText("900 جنيه").WithColor("#302c3c").WithAlign("right")} pText={Text.Body.OfText("")} />
-
-						<Emograph pTitle={Text.Body.OfText("الرسوم الأساسية لكل مبنى في المشروع").WithColor("#302c3c").WithAlign("right")} pText={Text.Body.OfText("")} />
-
-					</HzStack>
-
-					<VrStack>
-
-						<Emograph pTitle={Text.H4.OfText("مثال لحالة مشروع سكني أو تجاري أو إداري :").WithColor("#8b1e2d")} pText={Text.Body.OfText("")} />
-
-						<EmoList
-							pWidth={new RespString("100%", "100%")}
-							pTitle={Text.Body.OfText("")}
-							pDesc={Text.Body.OfText("")}
-							pNumbered={false}
-							pItemFnt={Text.Body.WithColor("#302c3c")}
-							pItems={[
-								"منطوق الرخصة ( بدروم + أرضي + متكرر + غرف سطح + سور ) تحتسب جميعًا كمبنى واحد",
-								"منطوق الرخصة ( أرضي + متكرر + غرف سطح ) تحتسب جميعًا كمبنى واحد",
-								"منطوق الرخصة ( أرضي + متكرر + غرفة كهرباء ) تحتسب على أنها 2 مبنى"
-							]}
-						/>
-
-						<Emograph
-							pTitle={Text.H4.OfText("مثال لحالة مباني صناعية :").WithColor("#8b1e2d")}
-							pText={Text.Body.OfText("يتم اعتبار كلا من المبنى الإداري والجمالون وغرفة الكهرباء وغرفة الأمن والسور على أنها مبنى مستقل حسب العناصر المثبتة منها في منطوق رخصة البناء، ويحسب منها فقط العناصر المطلوب تضمينها في شهادة الإشراف الهندسي.")}
-						/>
-
-						<Emograph pTitle={Text.H4.OfText("الرسوم الأساسية الإجمالية للشهادة = 900 × عدد المباني").WithColor("#008cff").Centered} pText={Text.Body.OfText("")} />
-
-					</VrStack>
-
-					<HzStack>
-
-						<Emograph
-							pTitle={Text.H2.OfText("% 0.45").WithColor("#302c3c").Centered}
-							pText={Text.Body.OfText("نسبة رسوم الدمغة الهندسية إلى تكلفة رخصة البناء").WithColor("#302c3c").Centered}
-						/>
-
-						<Emograph
-							pTitle={Text.Body.OfText("قيمة رسوم الدمغة الهندسية = 0.0045 × تكلفة الرخصة").WithColor("#302c3c")}
-							pText={Text.Body.OfText("تتراوح عمليًا بين 4000 إلى 8000 حسب تكلفة الأعمال المسجلة بالرخصة").WithColor("#ff3333")}
-						/>
-
-					</HzStack>
-
-				</VrStack>
-
-			</HzStack>
-
-			<HzStack>
-
-				<VrStack>
-
-					<Emograph pTitle={Text.H3.OfText("التكلفة الإجمالية").WithColor("#2f3340").Centered} pText={Text.Body.OfText("")} />
-
-				</VrStack>
-
-				<VrStack>
-
-					<Emograph
-						pTitle={Text.H4.OfText("التكلفة = قيمة الخدمة + الرسوم الأساسية + الدمغة الهندسية").WithColor("#302c3c").Centered}
-						pText={Text.Body.OfText("")}
-					/>
-
-				</VrStack>
-
-			</HzStack>
-
-			<VrStack>
-
-				<Emograph pTitle={Text.H4.OfText("حالات الإعفاء من دفع الدمغة الهندسية :").WithColor("#302c3c")} pText={Text.Body.OfText("")} />
-
-				<EmoList
-					pWidth={new RespString("100%", "100%")}
-					pTitle={Text.Body.OfText("")}
-					pDesc={Text.Body.OfText("")}
-					pNumbered={false}
-					pItemFnt={Text.Body.WithColor("#302c3c")}
-					pItems={[
-						"إعفاء كامل إذا تم دفعها بالكامل أثناء ترخيص البناء ويكون الدفع مثبت في الرخصة، أو بإيصال دمغة مستقل",
-						"إعفاء جزئي إذا تم دفع جزء منها أثناء ترخيص البناء، ويكون الدفع مثبت في الرخصة، أو بإيصال دمغة مستقل، وفي هذه الحالة يتم دفع الجزء المتبقي فقط أثناء إصدار شهادة الإشراف الهندسي"
-					]}
-				/>
-
-			</VrStack>
-
-		</VrStack>
+		</HzStack>
 
 	</EmoSec>
 

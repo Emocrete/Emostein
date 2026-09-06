@@ -8,6 +8,15 @@ interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps
 
 	/** أتعاب الخدمة المباشرة عند اختيار الجيزة. */
 	pGizaFee: number;
+
+	/** أتعاب الخدمة للمبنى التجاري أو الإداري أو الصناعي عند اختيار القاهرة. */
+	pCairoNonResidentialFee: number;
+
+	/** أتعاب الخدمة للمبنى التجاري أو الإداري أو الصناعي عند اختيار الجيزة. */
+	pGizaNonResidentialFee: number;
+
+	/** أتعاب عقد المقاولة عند الحاجة إليه. */
+	pContractFee: number;
 }
 
 const cProps = Astro.props as Props & Record<string, unknown>;
@@ -15,6 +24,9 @@ const cProps = Astro.props as Props & Record<string, unknown>;
 const {
 	pCairoFee,
 	pGizaFee,
+	pCairoNonResidentialFee,
+	pGizaNonResidentialFee,
+	pContractFee,
 
 	pLoc,
 	pSize,
@@ -94,6 +106,9 @@ function GetCssName(pName: string) {
 	data-supervision-certificate-cost="true"
 	data-cairo-fee={pCairoFee}
 	data-giza-fee={pGizaFee}
+	data-cairo-non-residential-fee={pCairoNonResidentialFee}
+	data-giza-non-residential-fee={pGizaNonResidentialFee}
+	data-contract-fee={pContractFee}
 	data-building-fee={cBuildingFee}
 	data-stamp-rate={cStampRate}
 	{...RemAttr}
@@ -151,7 +166,7 @@ function GetCssName(pName: string) {
 
 				<legend>
 
-					مكان إصدار الشهادة
+					موقع المبنى
 
 				</legend>
 
@@ -160,6 +175,7 @@ function GetCssName(pName: string) {
 					<label class = " CertificateLocationButton ">
 
 						<input
+							data-field="location"
 							type="radio"
 							name={`${pGivenID}-location`}
 							value="cairo"
@@ -174,7 +190,12 @@ function GetCssName(pName: string) {
 
 					<label class = " CertificateLocationButton ">
 
-						<input type="radio" name={`${pGivenID}-location`} value="giza" />
+						<input
+							data-field="location"
+							type="radio"
+							name={`${pGivenID}-location`}
+							value="giza"
+						/>
 
 						<span>
 							الجيزة
@@ -186,30 +207,132 @@ function GetCssName(pName: string) {
 
 			</fieldset>
 
-			<label class = " CertificateField ">
+			<fieldset class = " CertificateLocation ">
 
-				<span>
-					عدد المباني المدرجة في رخصة البناء
-				</span>
+				<legend>
 
-				<input
-					data-field="buildings"
-					type="number"
-					min="1"
-					step="1"
-					value="1"
-					inputmode="numeric"
-				/>
+					نوع المبنى
+
+				</legend>
+
+				<div class = " CertificateLocationButtons ">
+
+					<label class = " CertificateLocationButton ">
+
+						<input
+							data-field="buildingType"
+							type="radio"
+							name={`${pGivenID}-building-type`}
+							value="residential"
+							checked
+						/>
+
+						<span>
+							سكني
+						</span>
+
+					</label>
+
+					<label class = " CertificateLocationButton ">
+
+						<input
+							data-field="buildingType"
+							type="radio"
+							name={`${pGivenID}-building-type`}
+							value="nonResidential"
+						/>
+
+						<span>
+							تجاري أو إداري أو صناعي
+						</span>
+
+					</label>
+
+				</div>
+
+			</fieldset>
+
+			<fieldset class = " CertificateBuildingExtras ">
+
+				<legend>
+
+					المنشآت الإضافية المذكورة في رخصة البناء
+
+				</legend>
+
+				<p class = " CertificateBuildingBase ">
+					أصل المبنى محسوب تلقائيًا كمبنى واحد.
+				</p>
+
+				<div class = " CertificateBuildingExtraOptions ">
+
+					<label class = " CertificateBuildingExtraOption ">
+
+						<input
+							data-field="buildingExtra"
+							type="checkbox"
+							value="wall"
+						/>
+
+						<span>
+							سور
+						</span>
+
+					</label>
+
+					<label class = " CertificateBuildingExtraOption ">
+
+						<input
+							data-field="buildingExtra"
+							type="checkbox"
+							value="electricRoom"
+						/>
+
+						<span>
+							غرفة كهرباء
+						</span>
+
+					</label>
+
+					<label class = " CertificateBuildingExtraOption ">
+
+						<input
+							data-field="buildingExtra"
+							type="checkbox"
+							value="securityRoom"
+						/>
+
+						<span>
+							غرفة أمن
+						</span>
+
+					</label>
+
+					<label class = " CertificateBuildingExtraOption ">
+
+						<input
+							data-field="buildingExtra"
+							type="checkbox"
+							value="elevator"
+						/>
+
+						<span>
+							يوجد مصعد
+						</span>
+
+					</label>
+
+				</div>
 
 				<small>
 
-					الرسوم الأساسية:
+					كل بند محدد يضاف كمبنى مستقل عند حساب الرسوم الأساسية للنقابة بقيمة
 
-					{cBuildingFee.toLocaleString("ar-EG")} جنيه لكل مبنى.
+					{cBuildingFee.toLocaleString("ar-EG")} جنيه.
 
 				</small>
 
-			</label>
+			</fieldset>
 
 			<label class = " CertificateField ">
 
@@ -244,28 +367,45 @@ function GetCssName(pName: string) {
 
 			</label>
 
-			<label class = " CertificateField ">
+			<div class = " CertificateField ">
 
 				<span>
 					دمغة هندسية سبق سدادها
 				</span>
 
-				<div class = " CertificateInputUnit ">
+				<div class = " CertificatePaidStampRow ">
 
-					<input
-						data-field="paidStamp"
-						type="number"
-						min="0"
-						step="100"
-						value="0"
-						inputmode="decimal"
-					/>
+					<label class = " CertificatePaidStampFull ">
 
-					<b>
+						<input
+							data-field="paidStampFull"
+							type="checkbox"
+						/>
 
-						جنيه
+						<span>
+							تم سدادها بالكامل
+						</span>
 
-					</b>
+					</label>
+
+					<div class = " CertificateInputUnit ">
+
+						<input
+							data-field="paidStamp"
+							type="number"
+							min="0"
+							step="100"
+							value="0"
+							inputmode="decimal"
+						/>
+
+						<b>
+
+							جنيه
+
+						</b>
+
+					</div>
 
 				</div>
 
@@ -274,6 +414,19 @@ function GetCssName(pName: string) {
 					اكتب صفر إذا لم يسبق سداد دمغة مثبتة بالرخصة أو بإيصال مستقل.
 
 				</small>
+
+			</div>
+
+			<label class = " CertificateContractOption ">
+
+				<input
+					data-field="contractRequired"
+					type="checkbox"
+				/>
+
+				<span>
+					يحتاج عقد مقاولة
+				</span>
 
 			</label>
 
@@ -314,6 +467,22 @@ function GetCssName(pName: string) {
 					</span>
 
 					<strong data-out="serviceFee">
+						0
+					</strong>
+
+				</div>
+
+				<div
+					class = " CertificateRow ContractFee "
+					data-row="contractFee"
+					hidden
+				>
+
+					<span>
+						عقد المقاولة
+					</span>
+
+					<strong data-out="contractFee">
 						0
 					</strong>
 
@@ -399,6 +568,10 @@ function GetCssName(pName: string) {
 			أتعاب الخدمة
 		</span>
 
+		<span data-formula="contractFee" hidden>
+			+ عقد المقاولة
+		</span>
+
 		<b>
 
 			+
@@ -457,13 +630,21 @@ function GetCssName(pName: string) {
 				const fRoot = document.currentScript?.closest("[data-supervision-certificate-cost]");
 				if (!fRoot) return;
 				const fForm = fRoot.querySelector('[data-area="inputs"]');
-				const fBuildings = fRoot.querySelector('[data-field="buildings"]');
+				const fBuildingExtras = [...fRoot.querySelectorAll('[data-field="buildingExtra"]')];
 				const fLicenseCost = fRoot.querySelector('[data-field="licenseCost"]');
 				const fPaidStamp = fRoot.querySelector('[data-field="paidStamp"]');
-				const fLocations = [...fRoot.querySelectorAll('input[type="radio"]')];
+				const fPaidStampFull = fRoot.querySelector('[data-field="paidStampFull"]');
+				const fContractRequired = fRoot.querySelector('[data-field="contractRequired"]');
+				const fContractRow = fRoot.querySelector('[data-row="contractFee"]');
+				const fContractFormula = fRoot.querySelector('[data-formula="contractFee"]');
+				const fLocations = [...fRoot.querySelectorAll('[data-field="location"]')];
+				const fBuildingTypes = [...fRoot.querySelectorAll('[data-field="buildingType"]')];
 				const fOut = (pName) => fRoot.querySelector(`[data-out="${pName}"]`);
 				const fCairoFee = fNumber(fRoot.dataset.cairoFee);
 				const fGizaFee = fNumber(fRoot.dataset.gizaFee);
+				const fCairoNonResidentialFee = fNumber(fRoot.dataset.cairoNonResidentialFee);
+				const fGizaNonResidentialFee = fNumber(fRoot.dataset.gizaNonResidentialFee);
+				const fContractFee = fNumber(fRoot.dataset.contractFee);
 				const fBuildingFee = fNumber(fRoot.dataset.buildingFee, 900);
 				const fStampRate = fNumber(fRoot.dataset.stampRate, 0.0045);
 				function fArabicToEnglishDigits(pValue)
@@ -489,18 +670,35 @@ function GetCssName(pName: string) {
 				}
 				function fCalc()
 				{
-					const fLocation = fRoot.querySelector('input[type="radio"]:checked')?.value || "cairo";
+					const fLocation = fRoot.querySelector('[data-field="location"]:checked')?.value || "cairo";
+					const fBuildingType = fRoot.querySelector('[data-field="buildingType"]:checked')?.value || "residential";
 					const fLocationName = fLocation === "giza" ? "الجيزة" : "القاهرة";
-					const fServiceFee = fLocation === "giza" ? fGizaFee : fCairoFee;
-					const fBuildingCount = Math.max(1, Math.floor(fNumber(fBuildings?.value, 1)));
+					const fIsNonResidential = fBuildingType === "nonResidential";
+					const fServiceFee = fIsNonResidential
+						? (fLocation === "giza" ? fGizaNonResidentialFee : fCairoNonResidentialFee)
+						: (fLocation === "giza" ? fGizaFee : fCairoFee);
+					const fBuildingCount = 1 + fBuildingExtras.filter((pField) => pField.checked).length;
 					const fLicense = Math.max(0, fNumber(fLicenseCost?.value));
-					const fPaid = Math.max(0, fNumber(fPaidStamp?.value));
 					const fBasicFee = fBuildingCount * fBuildingFee;
 					const fGrossStamp = fLicense * fStampRate;
+					if (fPaidStamp)
+					{
+						fPaidStamp.disabled = Boolean(fPaidStampFull?.checked);
+						if (fPaidStampFull?.checked)
+						{
+							fPaidStamp.value = String(Math.round(fGrossStamp));
+						}
+					}
+					const fPaid = Math.max(0, fNumber(fPaidStamp?.value));
 					const fStampDue = Math.max(0, fGrossStamp - fPaid);
-					const fTotal = fServiceFee + fBasicFee + fStampDue;
+					const fHasContract = Boolean(fContractRequired?.checked);
+					const fAppliedContractFee = fHasContract ? fContractFee : 0;
+					const fTotal = fServiceFee + fAppliedContractFee + fBasicFee + fStampDue;
+					if (fContractRow) fContractRow.hidden = !fHasContract;
+					if (fContractFormula) fContractFormula.hidden = !fHasContract;
 					fSet("locationName", fLocationName);
 					fSet("serviceFee", fMoney(fServiceFee));
+					fSet("contractFee", fMoney(fAppliedContractFee));
 					fSet("basicFee", fMoney(fBasicFee));
 					fSet("grossStamp", fMoney(fGrossStamp));
 					fSet("paidStamp", fMoney(Math.min(fPaid, fGrossStamp)));
@@ -517,15 +715,19 @@ function GetCssName(pName: string) {
 				}
 				if (fForm) fForm.addEventListener("submit", (pEvent) => pEvent.preventDefault());
 				[
-					fBuildings,
 					fLicenseCost,
 					fPaidStamp
 				].forEach((pField) =>
 					{
 						pField?.addEventListener("input", fCalc);
 						pField?.addEventListener("change", fCalc);
+						pField?.addEventListener("focus", () => pField.select());
 				});
 				fLocations.forEach((pField) => pField.addEventListener("change", fCalc));
+				fBuildingTypes.forEach((pField) => pField.addEventListener("change", fCalc));
+				fBuildingExtras.forEach((pField) => pField.addEventListener("change", fCalc));
+				fPaidStampFull?.addEventListener("change", fCalc);
+				fContractRequired?.addEventListener("change", fCalc);
 				fCalc();
 			}
 
@@ -712,6 +914,86 @@ function GetCssName(pName: string) {
 	}
 
 
+	.CertificateBuildingExtras {
+		min-width: 0;
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+
+	.CertificateBuildingExtras legend {
+		display: block;
+		margin-bottom: 8px;
+		color: #3a474e;
+		font-size: 13px;
+		font-weight: 900;
+	}
+
+	.CertificateBuildingBase {
+		margin: 0 0 8px;
+		color: #65737b;
+		font-size: 12px;
+		font-weight: 800;
+		line-height: 1.65;
+	}
+
+	.CertificateBuildingExtraOptions {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 8px;
+	}
+
+	.CertificateBuildingExtraOption {
+		position: relative;
+		min-width: 0;
+	}
+
+	.CertificateBuildingExtraOption input {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.CertificateBuildingExtraOption span {
+		display: grid;
+		place-items: center;
+		min-height: 43px;
+		padding: 8px 10px;
+		border: 1px solid #d8e0e4;
+		border-radius: 13px;
+		background: #fbfcfd;
+		color: #5c6970;
+		font-size: 13px;
+		font-weight: 900;
+		text-align: center;
+		cursor: pointer;
+		transition: background-color .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease;
+	}
+
+	.CertificateBuildingExtraOption input:checked + span {
+		border-color: var(--CertificateAccent);
+		background: var(--CertificateAccentSoft);
+		color: var(--CertificateAccentDark);
+		box-shadow: 0 5px 15px rgba(27, 67, 84, .10);
+	}
+
+	.CertificateBuildingExtraOption input:focus-visible + span {
+		outline: 3px solid color-mix(in srgb, var(--CertificateAccent) 28%, transparent);
+		outline-offset: 2px;
+	}
+
+	.CertificateBuildingExtras small {
+		display: block;
+		margin-top: 6px;
+		color: #859198;
+		font-size: 11px;
+		font-weight: 700;
+		line-height: 1.65;
+	}
+
+
 	.CertificateField {
 		display: block;
 	}
@@ -750,6 +1032,89 @@ function GetCssName(pName: string) {
 		font-size: 11px;
 		font-weight: 700;
 		line-height: 1.65;
+	}
+
+
+	.CertificatePaidStampRow {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		gap: 8px;
+		align-items: stretch;
+	}
+
+	.CertificatePaidStampFull {
+		display: flex;
+		align-items: center;
+		gap: 9px;
+		min-width: 0;
+		min-height: 48px;
+		padding: 10px 13px;
+		border: 1px solid #d8e0e4;
+		border-radius: 15px;
+		background: #fbfcfd;
+		color: #3a474e;
+		font-size: 13px;
+		font-weight: 900;
+		cursor: pointer;
+	}
+
+	.CertificatePaidStampFull input {
+		width: 18px;
+		height: 18px;
+		margin: 0;
+		accent-color: var(--CertificateAccent);
+		flex: 0 0 auto;
+	}
+
+	.CertificatePaidStampFull:has(input:checked) {
+		border-color: var(--CertificateAccent);
+		background: var(--CertificateAccentSoft);
+		color: var(--CertificateAccentDark);
+	}
+
+	.CertificatePaidStampFull:has(input:focus-visible) {
+		outline: 3px solid color-mix(in srgb, var(--CertificateAccent) 28%, transparent);
+		outline-offset: 2px;
+	}
+
+	.CertificatePaidStampRow .CertificateInputUnit input:disabled {
+		cursor: not-allowed;
+		opacity: .62;
+	}
+
+
+	.CertificateContractOption {
+		display: flex;
+		align-items: center;
+		gap: 9px;
+		min-height: 48px;
+		padding: 10px 13px;
+		border: 1px solid #d8e0e4;
+		border-radius: 15px;
+		background: #fbfcfd;
+		color: #3a474e;
+		font-size: 13px;
+		font-weight: 900;
+		cursor: pointer;
+	}
+
+	.CertificateContractOption input {
+		width: 18px;
+		height: 18px;
+		margin: 0;
+		accent-color: var(--CertificateAccent);
+		flex: 0 0 auto;
+	}
+
+	.CertificateContractOption:has(input:checked) {
+		border-color: var(--CertificateAccent);
+		background: var(--CertificateAccentSoft);
+		color: var(--CertificateAccentDark);
+	}
+
+	.CertificateContractOption:has(input:focus-visible) {
+		outline: 3px solid color-mix(in srgb, var(--CertificateAccent) 28%, transparent);
+		outline-offset: 2px;
 	}
 
 
@@ -997,6 +1362,10 @@ function GetCssName(pName: string) {
 		}
 
 		.CertificateBody {
+			grid-template-columns: 1fr;
+		}
+
+		.CertificateBuildingExtraOptions {
 			grid-template-columns: 1fr;
 		}
 

@@ -70,5 +70,8 @@ import SupervisionCertificateCostCalcIndexExport from "./SupervisionCertificateC
 /**
  * @pCairoFee as number — أتعاب الخدمة المباشرة عند اختيار القاهرة.
  * @pGizaFee as number — أتعاب الخدمة المباشرة عند اختيار الجيزة.
+ * @pCairoNonResidentialFee as number — أتعاب الخدمة للمبنى التجاري أو الإداري أو الصناعي عند اختيار القاهرة.
+ * @pGizaNonResidentialFee as number — أتعاب الخدمة للمبنى التجاري أو الإداري أو الصناعي عند اختيار الجيزة.
+ * @pContractFee as number — أتعاب عقد المقاولة عند الحاجة إليه.
  */
 export const SupervisionCertificateCostCalc = SupervisionCertificateCostCalcIndexExport;
