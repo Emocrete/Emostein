@@ -82,9 +82,13 @@ function GetCssName(pName: string) {
 }
 ---
 
+
+
+
+
 <section
-	class={`CertificateCostCalc SupervisionCertificateCostCalc ${cPlace.Class} ${pGivenClass}`.trim()}
-	style={cPlace.Style}
+	class = {`CertificateCostCalc SupervisionCertificateCostCalc ${cPlace.Class} ${pGivenClass}`.trim()}
+	style = {cPlace.Style}
 	id={pGivenID}
 	dir="rtl"
 	data-supervision-certificate-cost="true"
@@ -95,11 +99,17 @@ function GetCssName(pName: string) {
 	{...RemAttr}
 >
 
-	<header class="CertificateHead">
 
-		<div class="CertificateHeadText">
 
-			<p class="CertificateEyebrow">
+
+
+
+
+	<header class = " CertificateHead ">
+
+		<div class = " CertificateHeadText ">
+
+			<p class = " CertificateEyebrow ">
 				حاسبة تكلفة تقريبية
 			</p>
 
@@ -113,110 +123,253 @@ function GetCssName(pName: string) {
 
 		</div>
 
-		<div class="CertificateRateBadge" aria-label="نسبة الدمغة الهندسية 0.45 بالمائة">
-			<strong>0.45%</strong>
-			<span>دمغة هندسية من تكلفة الرخصة</span>
+		<div class = " CertificateRateBadge " aria-label="نسبة الدمغة الهندسية 0.45 بالمائة">
+
+			<strong>
+				0.45%
+			</strong>
+
+			<span>
+				دمغة هندسية من تكلفة الرخصة
+			</span>
+
 		</div>
 
 	</header>
 
-	<div class="CertificateBody">
 
-		<form class="CertificateInputs" data-area="inputs">
 
-			<fieldset class="CertificateLocation">
+
+
+
+
+	<div class = " CertificateBody ">
+
+		<form class = " CertificateInputs " data-area="inputs">
+
+			<fieldset class = " CertificateLocation ">
 
 				<legend>
-					مكان إصدار الشهادة
+
+					موقع المبنى
+
 				</legend>
 
-				<div class="CertificateLocationButtons">
+				<div class = " CertificateLocationButtons ">
 
-					<label class="CertificateLocationButton">
-						<input type="radio" name={`${pGivenID}-location`} value="cairo" checked />
+					<label class = " CertificateLocationButton ">
+
+						<input
+							type="radio"
+							name={`${pGivenID}-location`}
+							value="cairo"
+							checked
+						/>
+
 						<span>
 							القاهرة
 						</span>
+
 					</label>
 
-					<label class="CertificateLocationButton">
+					<label class = " CertificateLocationButton ">
+
 						<input type="radio" name={`${pGivenID}-location`} value="giza" />
+
 						<span>
 							الجيزة
 						</span>
+
 					</label>
 
 				</div>
 
 			</fieldset>
 
-			<label class="CertificateField">
-				<span>عدد المباني المدرجة في الشهادة</span>
-				<input data-field="buildings" type="number" min="1" step="1" value="1" inputmode="numeric" />
-				<small>الرسوم الأساسية: {cBuildingFee.toLocaleString("ar-EG")} جنيه لكل مبنى.</small>
+			<label class = " CertificateField ">
+
+				<span>
+					عدد المباني المدرجة في الشهادة
+				</span>
+
+				<input
+					data-field="buildings"
+					type="number"
+					min="1"
+					step="1"
+					value="1"
+					inputmode="numeric"
+				/>
+
+				<small>
+
+					الرسوم الأساسية:
+
+					{cBuildingFee.toLocaleString("ar-EG")} جنيه لكل مبنى.
+
+				</small>
+
 			</label>
 
-			<label class="CertificateField">
-				<span>تكلفة الأعمال المسجلة في الرخصة</span>
-				<div class="CertificateInputUnit">
-					<input data-field="licenseCost" type="number" min="0" step="1000" value="1000000" inputmode="decimal" />
-					<b>جنيه</b>
+			<label class = " CertificateField ">
+
+				<span>
+					تكلفة الأعمال المسجلة في الرخصة
+				</span>
+
+				<div class = " CertificateInputUnit ">
+
+					<input
+						data-field="licenseCost"
+						type="number"
+						min="0"
+						step="1000"
+						value="0"
+						inputmode="decimal"
+					/>
+
+					<b>
+
+						جنيه
+
+					</b>
+
 				</div>
-				<small>تستخدم هذه القيمة في حساب الدمغة فقط، وليست القيمة السوقية للعقار.</small>
+
+				<small>
+
+					تستخدم هذه القيمة في حساب الدمغة فقط، وليست القيمة السوقية للعقار.
+
+				</small>
+
 			</label>
 
-			<label class="CertificateField">
-				<span>دمغة هندسية سبق سدادها</span>
-				<div class="CertificateInputUnit">
-					<input data-field="paidStamp" type="number" min="0" step="100" value="0" inputmode="decimal" />
-					<b>جنيه</b>
+			<label class = " CertificateField ">
+
+				<span>
+					دمغة هندسية سبق سدادها
+				</span>
+
+				<div class = " CertificateInputUnit ">
+
+					<input
+						data-field="paidStamp"
+						type="number"
+						min="0"
+						step="100"
+						value="0"
+						inputmode="decimal"
+					/>
+
+					<b>
+
+						جنيه
+
+					</b>
+
 				</div>
-				<small>اكتب صفر إذا لم يسبق سداد دمغة مثبتة بالرخصة أو بإيصال مستقل.</small>
+
+				<small>
+
+					اكتب صفر إذا لم يسبق سداد دمغة مثبتة بالرخصة أو بإيصال مستقل.
+
+				</small>
+
 			</label>
 
 		</form>
 
-		<div class="CertificateResult" aria-live="polite">
+		<div class = " CertificateResult " aria-live="polite">
 
-			<p class="CertificateResultLabel">
+			<p class = " CertificateResultLabel ">
 				الإجمالي التقريبي المطلوب
 			</p>
 
-			<p class="CertificateTotal">
-				<strong data-out="total">0</strong>
-				<span>جنيه</span>
+			<p class = " CertificateTotal ">
+
+				<strong data-out="total">
+					0
+				</strong>
+
+				<span>
+					جنيه
+				</span>
+
 			</p>
 
-			<div class="CertificateBreakdown">
+			<div class = " CertificateBreakdown ">
 
-				<div class="CertificateRow">
-					<span>أتعاب الخدمة — <b data-out="locationName">القاهرة</b></span>
-					<strong data-out="serviceFee">0</strong>
+				<div class = " CertificateRow ">
+
+					<span>
+
+						أتعاب الخدمة —
+
+						<b data-out="locationName">
+
+							القاهرة
+
+						</b>
+
+					</span>
+
+					<strong data-out="serviceFee">
+						0
+					</strong>
+
 				</div>
 
-				<div class="CertificateRow">
-					<span>الرسوم الأساسية للنقابة</span>
-					<strong data-out="basicFee">0</strong>
+				<div class = " CertificateRow ">
+
+					<span>
+						الرسوم الأساسية للنقابة
+					</span>
+
+					<strong data-out="basicFee">
+						0
+					</strong>
+
 				</div>
 
-				<div class="CertificateRow">
-					<span>الدمغة الهندسية المحسوبة</span>
-					<strong data-out="grossStamp">0</strong>
+				<div class = " CertificateRow ">
+
+					<span>
+						الدمغة الهندسية المحسوبة
+					</span>
+
+					<strong data-out="grossStamp">
+						0
+					</strong>
+
 				</div>
 
-				<div class="CertificateRow Muted">
-					<span>المسدد سابقًا من الدمغة</span>
-					<strong data-out="paidStamp">0</strong>
+				<div class = " CertificateRow Muted ">
+
+					<span>
+						المسدد سابقًا من الدمغة
+					</span>
+
+					<strong data-out="paidStamp">
+						0
+					</strong>
+
 				</div>
 
-				<div class="CertificateRow StampDue">
-					<span>الدمغة المتبقية</span>
-					<strong data-out="stampDue">0</strong>
+				<div class = " CertificateRow StampDue ">
+
+					<span>
+						الدمغة المتبقية
+					</span>
+
+					<strong data-out="stampDue">
+						0
+					</strong>
+
 				</div>
 
 			</div>
 
-			<p class="CertificateStatus" data-out="status">
+			<p class = " CertificateStatus " data-out="status">
 				الحسبة تشمل كامل الدمغة المستحقة وفق البيانات المدخلة.
 			</p>
 
@@ -224,102 +377,78 @@ function GetCssName(pName: string) {
 
 	</div>
 
-	<div class="CertificateFormula">
-		<span>الإجمالي</span>
-		<b>=</b>
-		<span>أتعاب الخدمة</span>
-		<b>+</b>
-		<span>{cBuildingFee} × عدد المباني</span>
-		<b>+</b>
-		<span>الدمغة المتبقية</span>
+
+
+
+
+
+
+	<div class = " CertificateFormula ">
+
+		<span>
+			الإجمالي
+		</span>
+
+		<b>
+
+			=
+
+		</b>
+
+		<span>
+			أتعاب الخدمة
+		</span>
+
+		<b>
+
+			+
+
+		</b>
+
+		<span>
+
+			{cBuildingFee} × عدد المباني
+
+		</span>
+
+		<b>
+
+			+
+
+		</b>
+
+		<span>
+			الدمغة المتبقية
+		</span>
+
 	</div>
 
-	<p class="CertificateDisclaimer">
+
+
+
+
+
+
+	<p class = " CertificateDisclaimer ">
 		الناتج تقديري طبقًا لطريقة الحساب الموضحة بالصفحة. القيمة النهائية تعتمد على المستندات المثبتة بالرخصة وما سبق سداده فعليًا.
 	</p>
 
-	<script is:inline>
-		(() => {
-			const fRoot = document.currentScript.closest("[data-supervision-certificate-cost]");
-			if (!fRoot) return;
 
-			const fForm = fRoot.querySelector('[data-area="inputs"]');
-			if (fForm) fForm.addEventListener("submit", (pEvent) => pEvent.preventDefault());
 
-			const fBuildings = fRoot.querySelector('[data-field="buildings"]');
-			const fLicenseCost = fRoot.querySelector('[data-field="licenseCost"]');
-			const fPaidStamp = fRoot.querySelector('[data-field="paidStamp"]');
-			const fLocations = [...fRoot.querySelectorAll('input[type="radio"]')];
-			const fOut = (pName) => fRoot.querySelector(`[data-out="${pName}"]`);
 
-			const fCairoFee = fNumber(fRoot.dataset.cairoFee);
-			const fGizaFee = fNumber(fRoot.dataset.gizaFee);
-			const fBuildingFee = fNumber(fRoot.dataset.buildingFee, 900);
-			const fStampRate = fNumber(fRoot.dataset.stampRate, 0.0045);
 
-			function fArabicToEnglishDigits(pValue) {
-				return String(pValue ?? "")
-					.replace(/[٠-٩]/g, (pDigit) => String("٠١٢٣٤٥٦٧٨٩".indexOf(pDigit)))
-					.replace(/[۰-۹]/g, (pDigit) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(pDigit)))
-					.replace(/,/g, ".");
-			}
 
-			function fNumber(pValue, pFallback = 0) {
-				const fParsed = Number(fArabicToEnglishDigits(pValue));
-				return Number.isFinite(fParsed) ? fParsed : pFallback;
-			}
-
-			function fMoney(pValue) {
-				return Math.round(Math.max(0, pValue)).toLocaleString("ar-EG");
-			}
-
-			function fSet(pName, pValue) {
-				const fElement = fOut(pName);
-				if (fElement) fElement.textContent = pValue;
-			}
-
-			function fCalc() {
-				const fLocation = fRoot.querySelector('input[type="radio"]:checked')?.value || "cairo";
-				const fLocationName = fLocation === "giza" ? "الجيزة" : "القاهرة";
-				const fServiceFee = fLocation === "giza" ? fGizaFee : fCairoFee;
-				const fBuildingCount = Math.max(1, Math.floor(fNumber(fBuildings?.value, 1)));
-				const fLicense = Math.max(0, fNumber(fLicenseCost?.value));
-				const fPaid = Math.max(0, fNumber(fPaidStamp?.value));
-				const fBasicFee = fBuildingCount * fBuildingFee;
-				const fGrossStamp = fLicense * fStampRate;
-				const fStampDue = Math.max(0, fGrossStamp - fPaid);
-				const fTotal = fServiceFee + fBasicFee + fStampDue;
-
-				fSet("locationName", fLocationName);
-				fSet("serviceFee", fMoney(fServiceFee));
-				fSet("basicFee", fMoney(fBasicFee));
-				fSet("grossStamp", fMoney(fGrossStamp));
-				fSet("paidStamp", fMoney(Math.min(fPaid, fGrossStamp)));
-				fSet("stampDue", fMoney(fStampDue));
-				fSet("total", fMoney(fTotal));
-
-				if (fGrossStamp > 0 && fPaid >= fGrossStamp) {
-					fSet("status", "لا توجد دمغة متبقية وفق المبلغ المسدد الذي أدخلته.");
-				} else if (fPaid > 0) {
-					fSet("status", `تم خصم ${fMoney(Math.min(fPaid, fGrossStamp))} جنيه من الدمغة المحسوبة.`);
-				} else {
-					fSet("status", "الحسبة تشمل كامل الدمغة المستحقة وفق البيانات المدخلة.");
-				}
-			}
-
-			[fBuildings, fLicenseCost, fPaidStamp].forEach((pField) => {
-				pField?.addEventListener("input", fCalc);
-				pField?.addEventListener("change", fCalc);
-			});
-			fLocations.forEach((pField) => pField.addEventListener("change", fCalc));
-
-			fCalc();
-		})();
-	</script>
 
 </section>
 
+
+
+
+
 <style>
+
+
+
 	.CertificateCostCalc {
 		box-sizing: border-box;
 		width: min(1120px, calc(100% - 24px));
@@ -333,15 +462,6 @@ function GetCssName(pName: string) {
 		direction: rtl;
 	}
 
-	.CertificateCostCalc,
-	.CertificateCostCalc * {
-		box-sizing: border-box;
-	}
-
-	.CertificateCostCalc.IsPlaced {
-		width: var(--PlaceWidthL);
-		height: var(--PlaceHeightL);
-	}
 
 	.CertificateHead {
 		display: grid;
@@ -351,10 +471,6 @@ function GetCssName(pName: string) {
 		margin-bottom: 24px;
 	}
 
-	.CertificateHeadText h2,
-	.CertificateHeadText p {
-		margin: 0;
-	}
 
 	.CertificateHeadText h2 {
 		font-size: clamp(25px, 3vw, 40px);
@@ -370,6 +486,7 @@ function GetCssName(pName: string) {
 		line-height: 1.9;
 	}
 
+
 	.CertificateEyebrow {
 		width: fit-content;
 		margin-bottom: 10px;
@@ -380,6 +497,7 @@ function GetCssName(pName: string) {
 		font-size: 13px;
 		font-weight: 900;
 	}
+
 
 	.CertificateRateBadge {
 		min-height: 128px;
@@ -406,25 +524,20 @@ function GetCssName(pName: string) {
 		line-height: 1.5;
 	}
 
+
 	.CertificateBody {
 		display: grid;
 		grid-template-columns: minmax(300px, .95fr) minmax(330px, 1.05fr);
 		gap: 18px;
 	}
 
-	.CertificateInputs,
-	.CertificateResult {
-		padding: 18px;
-		border: 1px solid #e3eaee;
-		border-radius: 24px;
-		background: #fff;
-	}
 
 	.CertificateInputs {
 		display: grid;
 		gap: 15px;
 		align-content: start;
 	}
+
 
 	.CertificateLocation {
 		min-width: 0;
@@ -433,14 +546,6 @@ function GetCssName(pName: string) {
 		border: 0;
 	}
 
-	.CertificateLocation legend,
-	.CertificateField > span {
-		display: block;
-		margin-bottom: 8px;
-		color: #3a474e;
-		font-size: 13px;
-		font-weight: 900;
-	}
 
 	.CertificateLocationButtons {
 		display: grid;
@@ -450,6 +555,7 @@ function GetCssName(pName: string) {
 		border-radius: 17px;
 		background: #eef3f5;
 	}
+
 
 	.CertificateLocationButton {
 		position: relative;
@@ -489,27 +595,25 @@ function GetCssName(pName: string) {
 		outline-offset: 2px;
 	}
 
+
 	.CertificateField {
 		display: block;
-	}
-
-	.CertificateField > input,
-	.CertificateInputUnit {
-		width: 100%;
-		min-height: 48px;
-		border: 1px solid #d8e0e4;
-		border-radius: 15px;
-		background: #fbfcfd;
-		color: #20272c;
-		font-family: inherit;
-		font-size: 15px;
-		font-weight: 800;
 	}
 
 	.CertificateField > input {
 		padding: 10px 13px;
 		outline: none;
 	}
+
+	.CertificateField small {
+		display: block;
+		margin-top: 6px;
+		color: #859198;
+		font-size: 11px;
+		font-weight: 700;
+		line-height: 1.65;
+	}
+
 
 	.CertificateInputUnit {
 		display: grid;
@@ -537,20 +641,6 @@ function GetCssName(pName: string) {
 		white-space: nowrap;
 	}
 
-	.CertificateField > input:focus,
-	.CertificateInputUnit:focus-within {
-		border-color: var(--CertificateAccent);
-		box-shadow: 0 0 0 4px color-mix(in srgb, var(--CertificateAccent) 13%, transparent);
-	}
-
-	.CertificateField small {
-		display: block;
-		margin-top: 6px;
-		color: #859198;
-		font-size: 11px;
-		font-weight: 700;
-		line-height: 1.65;
-	}
 
 	.CertificateResult {
 		display: grid;
@@ -560,12 +650,14 @@ function GetCssName(pName: string) {
 		color: #fff;
 	}
 
+
 	.CertificateResultLabel {
 		margin: 0;
 		color: rgba(255, 255, 255, .68);
 		font-size: 13px;
 		font-weight: 900;
 	}
+
 
 	.CertificateTotal {
 		margin: 0;
@@ -587,10 +679,12 @@ function GetCssName(pName: string) {
 		color: rgba(255, 255, 255, .76);
 	}
 
+
 	.CertificateBreakdown {
 		display: grid;
 		gap: 7px;
 	}
+
 
 	.CertificateRow {
 		display: grid;
@@ -614,13 +708,6 @@ function GetCssName(pName: string) {
 		color: #fff;
 	}
 
-	.CertificateRow.Muted {
-		opacity: .7;
-	}
-
-	.CertificateRow.StampDue {
-		background: color-mix(in srgb, var(--CertificateAccent) 20%, transparent);
-	}
 
 	.CertificateStatus {
 		margin: 0;
@@ -630,6 +717,7 @@ function GetCssName(pName: string) {
 		font-weight: 700;
 		line-height: 1.7;
 	}
+
 
 	.CertificateFormula {
 		display: flex;
@@ -651,12 +739,101 @@ function GetCssName(pName: string) {
 		font-size: 16px;
 	}
 
+
 	.CertificateDisclaimer {
 		margin: 11px 2px 0;
 		color: #849097;
 		font-size: 11px;
 		line-height: 1.7;
 	}
+
+
+
+	.CertificateCostCalc.IsPlaced {
+		width: var(--PlaceWidthL);
+		height: var(--PlaceHeightL);
+	}
+
+
+	.CertificateRow.Muted {
+		opacity: .7;
+	}
+
+
+	.CertificateRow.StampDue {
+		background: color-mix(in srgb, var(--CertificateAccent) 20%, transparent);
+	}
+
+
+
+	.CertificateCostCalc,
+	.CertificateCostCalc *
+	{
+		box-sizing: border-box;
+	}
+
+
+	.CertificateHeadText h2,
+	.CertificateHeadText p
+	{
+		margin: 0;
+	}
+
+
+	.CertificateInputs,
+	.CertificateResult
+	{
+		padding: 18px;
+		border: 1px solid #e3eaee;
+		border-radius: 24px;
+		background: #fff;
+	}
+
+
+	.CertificateLocation legend,
+	.CertificateField > span
+	{
+		display: block;
+		margin-bottom: 8px;
+		color: #3a474e;
+		font-size: 13px;
+		font-weight: 900;
+	}
+
+
+	.CertificateField > input,
+	.CertificateInputUnit
+	{
+		width: 100%;
+		min-height: 48px;
+		border: 1px solid #d8e0e4;
+		border-radius: 15px;
+		background: #fbfcfd;
+		color: #20272c;
+		font-family: inherit;
+		font-size: 15px;
+		font-weight: 800;
+	}
+
+
+	.CertificateField > input:focus,
+	.CertificateInputUnit:focus-within
+	{
+		border-color: var(--CertificateAccent);
+		box-shadow: 0 0 0 4px color-mix(in srgb, var(--CertificateAccent) 13%, transparent);
+	}
+
+
+
+</style>
+
+
+
+
+
+<style>
+
+
 
 	@media (orientation: portrait), (max-width: 760px) {
 		.CertificateCostCalc {
@@ -691,7 +868,8 @@ function GetCssName(pName: string) {
 		}
 
 		.CertificateInputs,
-		.CertificateResult {
+		.CertificateResult
+		{
 			padding: 14px;
 			border-radius: 18px;
 		}
@@ -700,4 +878,142 @@ function GetCssName(pName: string) {
 			justify-content: flex-start;
 		}
 	}
+
+
+
 </style>
+
+
+
+
+
+<script is:inline>
+
+
+
+	(() =>
+	{
+
+		// ==================== Definitions: Variables & Methods ====================
+
+		const fRoot = document.currentScript.closest("[data-supervision-certificate-cost]");
+
+		const fForm = fRoot.querySelector('[data-area="inputs"]');
+
+		const fBuildings = fRoot.querySelector('[data-field="buildings"]');
+
+		const fLicenseCost = fRoot.querySelector('[data-field="licenseCost"]');
+
+		const fPaidStamp = fRoot.querySelector('[data-field="paidStamp"]');
+
+		const fLocations = [...fRoot.querySelectorAll('input[type="radio"]')];
+
+		const fOut = (pName) => fRoot.querySelector(`[data-out="${pName}"]`);
+
+		const fCairoFee = fNumber(fRoot.dataset.cairoFee);
+
+		const fGizaFee = fNumber(fRoot.dataset.gizaFee);
+
+		const fBuildingFee = fNumber(fRoot.dataset.buildingFee, 900);
+
+		const fStampRate = fNumber(fRoot.dataset.stampRate, 0.0045);
+
+
+
+
+
+		function fArabicToEnglishDigits(pValue)
+		{
+			return String(pValue ?? "")
+			.replace(/[٠-٩]/g, (pDigit) => String("٠١٢٣٤٥٦٧٨٩".indexOf(pDigit)))
+			.replace(/[۰-۹]/g, (pDigit) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(pDigit)))
+			.replace(/,/g, ".");
+		}
+
+
+
+
+
+		function fNumber(pValue, pFallback = 0)
+		{
+			const fParsed = Number(fArabicToEnglishDigits(pValue));
+			return Number.isFinite(fParsed) ? fParsed : pFallback;
+		}
+
+
+
+
+
+		function fMoney(pValue)
+		{
+			return Math.round(Math.max(0, pValue)).toLocaleString("ar-EG");
+		}
+
+
+
+
+
+		function fSet(pName, pValue)
+		{
+			const fElement = fOut(pName);
+			if (fElement) fElement.textContent = pValue;
+		}
+
+
+
+
+
+		function fCalc()
+		{
+			const fLocation = fRoot.querySelector('input[type="radio"]:checked')?.value || "cairo";
+			const fLocationName = fLocation === "giza" ? "الجيزة" : "القاهرة";
+			const fServiceFee = fLocation === "giza" ? fGizaFee : fCairoFee;
+			const fBuildingCount = Math.max(1, Math.floor(fNumber(fBuildings?.value, 1)));
+			const fLicense = Math.max(0, fNumber(fLicenseCost?.value));
+			const fPaid = Math.max(0, fNumber(fPaidStamp?.value));
+			const fBasicFee = fBuildingCount * fBuildingFee;
+			const fGrossStamp = fLicense * fStampRate;
+			const fStampDue = Math.max(0, fGrossStamp - fPaid);
+			const fTotal = fServiceFee + fBasicFee + fStampDue;
+			fSet("locationName", fLocationName);
+			fSet("serviceFee", fMoney(fServiceFee));
+			fSet("basicFee", fMoney(fBasicFee));
+			fSet("grossStamp", fMoney(fGrossStamp));
+			fSet("paidStamp", fMoney(Math.min(fPaid, fGrossStamp)));
+			fSet("stampDue", fMoney(fStampDue));
+			fSet("total", fMoney(fTotal));
+			if (fGrossStamp > 0 && fPaid >= fGrossStamp)
+			{
+				fSet("status", "لا توجد دمغة متبقية وفق المبلغ المسدد الذي أدخلته.");
+			} else if (fPaid > 0) {
+				fSet("status", `تم خصم ${fMoney(Math.min(fPaid, fGrossStamp))} جنيه من الدمغة المحسوبة.`);
+			} else {
+				fSet("status", "الحسبة تشمل كامل الدمغة المستحقة وفق البيانات المدخلة.");
+			}
+		}
+
+
+
+
+
+		// ==================== Execution Logic ====================
+
+		if (!fRoot) return;
+
+		if (fForm) fForm.addEventListener("submit", (pEvent) => pEvent.preventDefault());
+
+		[
+			fBuildings,
+			fLicenseCost,
+			fPaidStamp
+		].forEach((pField) =>
+			{
+				pField?.addEventListener("input", fCalc);
+				pField?.addEventListener("change", fCalc);
+		});
+
+		fLocations.forEach((pField) => pField.addEventListener("change", fCalc));
+
+		fCalc();
+	})();
+</script>
