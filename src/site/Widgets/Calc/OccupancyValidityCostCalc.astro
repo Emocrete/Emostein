@@ -3,14 +3,18 @@ import { Place, type PlaceProps } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
 
 interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps {
-	/** أتعاب الخدمة المباشرة لشهادة صلاحية المبنى للإشغال. */
+	/** أتعاب الخدمة المباشرة لشهادة صلاحية المبنى للإشغال للمبنى السكني. */
 	pServiceFee: number;
+
+	/** أتعاب الخدمة للمبنى التجاري أو الإداري أو الصناعي. */
+	pNonResidentialServiceFee: number;
 }
 
 const cProps = Astro.props as Props & Record<string, unknown>;
 
 const {
 	pServiceFee,
+	pNonResidentialServiceFee,
 
 	pLoc,
 	pSize,
@@ -89,6 +93,7 @@ function GetCssName(pName: string) {
 	dir="rtl"
 	data-occupancy-validity-cost="true"
 	data-service-fee={pServiceFee}
+	data-non-residential-service-fee={pNonResidentialServiceFee}
 	data-building-fee={cBuildingFee}
 	data-stamp-rate={cStampRate}
 	{...RemAttr}
@@ -142,6 +147,51 @@ function GetCssName(pName: string) {
 
 		<form class = " CertificateInputs " data-area="inputs">
 
+			<fieldset class = " CertificateLocation ">
+
+				<legend>
+
+					نوع المبنى
+
+				</legend>
+
+				<div class = " CertificateLocationButtons ">
+
+					<label class = " CertificateLocationButton ">
+
+						<input
+							data-field="buildingType"
+							type="radio"
+							name={`${pGivenID}-building-type`}
+							value="residential"
+							checked
+						/>
+
+						<span>
+							سكني
+						</span>
+
+					</label>
+
+					<label class = " CertificateLocationButton ">
+
+						<input
+							data-field="buildingType"
+							type="radio"
+							name={`${pGivenID}-building-type`}
+							value="nonResidential"
+						/>
+
+						<span>
+							تجاري أو إداري أو صناعي
+						</span>
+
+					</label>
+
+				</div>
+
+			</fieldset>
+
 			<div class = " CertificateFixedFee ">
 
 				<span>
@@ -150,36 +200,97 @@ function GetCssName(pName: string) {
 
 				<strong>
 
-					{pServiceFee.toLocaleString("ar-EG")} جنيه
+					<span data-out="serviceFeeInput">
+						{pServiceFee.toLocaleString("ar-EG")}
+					</span>
+
+					جنيه
 
 				</strong>
 
 			</div>
 
-			<label class = " CertificateField ">
+			<fieldset class = " CertificateBuildingExtras ">
 
-				<span>
-					عدد المباني المدرجة في الشهادة
-				</span>
+				<legend>
 
-				<input
-					data-field="buildings"
-					type="number"
-					min="1"
-					step="1"
-					value="1"
-					inputmode="numeric"
-				/>
+					المنشآت الإضافية المذكورة في رخصة البناء
+
+				</legend>
+
+				<p class = " CertificateBuildingBase ">
+					أصل المبنى محسوب تلقائيًا كمبنى واحد.
+				</p>
+
+				<div class = " CertificateBuildingExtraOptions ">
+
+					<label class = " CertificateBuildingExtraOption ">
+
+						<input
+							data-field="buildingExtra"
+							type="checkbox"
+							value="wall"
+						/>
+
+						<span>
+							سور
+						</span>
+
+					</label>
+
+					<label class = " CertificateBuildingExtraOption ">
+
+						<input
+							data-field="buildingExtra"
+							type="checkbox"
+							value="electricRoom"
+						/>
+
+						<span>
+							غرفة كهرباء
+						</span>
+
+					</label>
+
+					<label class = " CertificateBuildingExtraOption ">
+
+						<input
+							data-field="buildingExtra"
+							type="checkbox"
+							value="securityRoom"
+						/>
+
+						<span>
+							غرفة أمن
+						</span>
+
+					</label>
+
+					<label class = " CertificateBuildingExtraOption ">
+
+						<input
+							data-field="buildingExtra"
+							type="checkbox"
+							value="elevator"
+						/>
+
+						<span>
+							يوجد مصعد
+						</span>
+
+					</label>
+
+				</div>
 
 				<small>
 
-					الرسوم الأساسية:
+					كل بند محدد يضاف كمبنى مستقل عند حساب الرسوم الأساسية للنقابة بقيمة
 
-					{cBuildingFee.toLocaleString("ar-EG")} جنيه لكل مبنى.
+					{cBuildingFee.toLocaleString("ar-EG")} جنيه.
 
 				</small>
 
-			</label>
+			</fieldset>
 
 			<label class = " CertificateField ">
 
@@ -214,28 +325,45 @@ function GetCssName(pName: string) {
 
 			</label>
 
-			<label class = " CertificateField ">
+			<div class = " CertificateField ">
 
 				<span>
 					دمغة هندسية سبق سدادها
 				</span>
 
-				<div class = " CertificateInputUnit ">
+				<div class = " CertificatePaidStampRow ">
 
-					<input
-						data-field="paidStamp"
-						type="number"
-						min="0"
-						step="100"
-						value="0"
-						inputmode="decimal"
-					/>
+					<label class = " CertificatePaidStampFull ">
 
-					<b>
+						<input
+							data-field="paidStampFull"
+							type="checkbox"
+						/>
 
-						جنيه
+						<span>
+							تم سدادها بالكامل
+						</span>
 
-					</b>
+					</label>
+
+					<div class = " CertificateInputUnit ">
+
+						<input
+							data-field="paidStamp"
+							type="number"
+							min="0"
+							step="100"
+							value="0"
+							inputmode="decimal"
+						/>
+
+						<b>
+
+							جنيه
+
+						</b>
+
+					</div>
 
 				</div>
 
@@ -245,7 +373,7 @@ function GetCssName(pName: string) {
 
 				</small>
 
-			</label>
+			</div>
 
 		</form>
 
@@ -419,11 +547,14 @@ function GetCssName(pName: string) {
 				const fRoot = document.currentScript?.closest("[data-occupancy-validity-cost]");
 				if (!fRoot) return;
 				const fForm = fRoot.querySelector('[data-area="inputs"]');
-				const fBuildings = fRoot.querySelector('[data-field="buildings"]');
+				const fBuildingTypes = [...fRoot.querySelectorAll('[data-field="buildingType"]')];
+				const fBuildingExtras = [...fRoot.querySelectorAll('[data-field="buildingExtra"]')];
 				const fLicenseCost = fRoot.querySelector('[data-field="licenseCost"]');
 				const fPaidStamp = fRoot.querySelector('[data-field="paidStamp"]');
+				const fPaidStampFull = fRoot.querySelector('[data-field="paidStampFull"]');
 				const fOut = (pName) => fRoot.querySelector(`[data-out="${pName}"]`);
-				const fServiceFee = fNumber(fRoot.dataset.serviceFee);
+				const fResidentialServiceFee = fNumber(fRoot.dataset.serviceFee);
+				const fNonResidentialServiceFee = fNumber(fRoot.dataset.nonResidentialServiceFee);
 				const fBuildingFee = fNumber(fRoot.dataset.buildingFee, 900);
 				const fStampRate = fNumber(fRoot.dataset.stampRate, 0.0045);
 				function fArabicToEnglishDigits(pValue)
@@ -449,13 +580,26 @@ function GetCssName(pName: string) {
 				}
 				function fCalc()
 				{
-					const fBuildingCount = Math.max(1, Math.floor(fNumber(fBuildings?.value, 1)));
+					const fBuildingType = fRoot.querySelector('[data-field="buildingType"]:checked')?.value || "residential";
+					const fServiceFee = fBuildingType === "nonResidential"
+						? fNonResidentialServiceFee
+						: fResidentialServiceFee;
+					const fBuildingCount = 1 + fBuildingExtras.filter((pField) => pField.checked).length;
 					const fLicense = Math.max(0, fNumber(fLicenseCost?.value));
-					const fPaid = Math.max(0, fNumber(fPaidStamp?.value));
 					const fBasicFee = fBuildingCount * fBuildingFee;
 					const fGrossStamp = fLicense * fStampRate;
+					if (fPaidStamp)
+					{
+						fPaidStamp.disabled = Boolean(fPaidStampFull?.checked);
+						if (fPaidStampFull?.checked)
+						{
+							fPaidStamp.value = String(Math.round(fGrossStamp));
+						}
+					}
+					const fPaid = Math.max(0, fNumber(fPaidStamp?.value));
 					const fStampDue = Math.max(0, fGrossStamp - fPaid);
 					const fTotal = fServiceFee + fBasicFee + fStampDue;
+					fSet("serviceFeeInput", fMoney(fServiceFee));
 					fSet("serviceFee", fMoney(fServiceFee));
 					fSet("basicFee", fMoney(fBasicFee));
 					fSet("grossStamp", fMoney(fGrossStamp));
@@ -473,14 +617,17 @@ function GetCssName(pName: string) {
 				}
 				if (fForm) fForm.addEventListener("submit", (pEvent) => pEvent.preventDefault());
 				[
-					fBuildings,
 					fLicenseCost,
 					fPaidStamp
 				].forEach((pField) =>
 					{
 						pField?.addEventListener("input", fCalc);
 						pField?.addEventListener("change", fCalc);
+						pField?.addEventListener("focus", () => pField.select());
 				});
+				fBuildingTypes.forEach((pField) => pField.addEventListener("change", fCalc));
+				fBuildingExtras.forEach((pField) => pField.addEventListener("change", fCalc));
+				fPaidStampFull?.addEventListener("change", fCalc);
 				fCalc();
 			}
 
@@ -602,6 +749,70 @@ function GetCssName(pName: string) {
 	}
 
 
+	.CertificateLocation {
+		min-width: 0;
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+
+	.CertificateLocation legend {
+		display: block;
+		margin-bottom: 8px;
+		color: #463e40;
+		font-size: 13px;
+		font-weight: 900;
+	}
+
+	.CertificateLocationButtons {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 8px;
+		padding: 5px;
+		border-radius: 17px;
+		background: #f3edef;
+	}
+
+	.CertificateLocationButton {
+		position: relative;
+		min-width: 0;
+	}
+
+	.CertificateLocationButton input {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.CertificateLocationButton span {
+		display: grid;
+		place-items: center;
+		min-height: 43px;
+		padding: 8px 12px;
+		border: 1px solid transparent;
+		border-radius: 13px;
+		color: #6e6265;
+		font-size: 14px;
+		font-weight: 900;
+		text-align: center;
+		cursor: pointer;
+		transition: background-color .18s ease, color .18s ease, box-shadow .18s ease;
+	}
+
+	.CertificateLocationButton input:checked + span {
+		background: #fff;
+		color: var(--CertificateAccentDark);
+		box-shadow: 0 5px 15px rgba(83, 35, 44, .11);
+	}
+
+	.CertificateLocationButton input:focus-visible + span {
+		outline: 3px solid color-mix(in srgb, var(--CertificateAccent) 28%, transparent);
+		outline-offset: 2px;
+	}
+
+
 	.CertificateFixedFee {
 		display: flex;
 		align-items: center;
@@ -622,6 +833,86 @@ function GetCssName(pName: string) {
 	.CertificateFixedFee strong {
 		font-size: 18px;
 		white-space: nowrap;
+	}
+
+
+	.CertificateBuildingExtras {
+		min-width: 0;
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+
+	.CertificateBuildingExtras legend {
+		display: block;
+		margin-bottom: 8px;
+		color: #463e40;
+		font-size: 13px;
+		font-weight: 900;
+	}
+
+	.CertificateBuildingBase {
+		margin: 0 0 8px;
+		color: #6f696b;
+		font-size: 12px;
+		font-weight: 800;
+		line-height: 1.65;
+	}
+
+	.CertificateBuildingExtraOptions {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 8px;
+	}
+
+	.CertificateBuildingExtraOption {
+		position: relative;
+		min-width: 0;
+	}
+
+	.CertificateBuildingExtraOption input {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.CertificateBuildingExtraOption span {
+		display: grid;
+		place-items: center;
+		min-height: 43px;
+		padding: 8px 10px;
+		border: 1px solid #e1d9db;
+		border-radius: 13px;
+		background: #fdfbfc;
+		color: #6e6265;
+		font-size: 13px;
+		font-weight: 900;
+		text-align: center;
+		cursor: pointer;
+		transition: background-color .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease;
+	}
+
+	.CertificateBuildingExtraOption input:checked + span {
+		border-color: var(--CertificateAccent);
+		background: var(--CertificateAccentSoft);
+		color: var(--CertificateAccentDark);
+		box-shadow: 0 5px 15px rgba(83, 35, 44, .09);
+	}
+
+	.CertificateBuildingExtraOption input:focus-visible + span {
+		outline: 3px solid color-mix(in srgb, var(--CertificateAccent) 28%, transparent);
+		outline-offset: 2px;
+	}
+
+	.CertificateBuildingExtras small {
+		display: block;
+		margin-top: 6px;
+		color: #92878a;
+		font-size: 11px;
+		font-weight: 700;
+		line-height: 1.65;
 	}
 
 
@@ -663,6 +954,54 @@ function GetCssName(pName: string) {
 		font-size: 11px;
 		font-weight: 700;
 		line-height: 1.65;
+	}
+
+
+	.CertificatePaidStampRow {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		gap: 8px;
+		align-items: stretch;
+	}
+
+	.CertificatePaidStampFull {
+		display: flex;
+		align-items: center;
+		gap: 9px;
+		min-width: 0;
+		min-height: 48px;
+		padding: 10px 13px;
+		border: 1px solid #e1d9db;
+		border-radius: 15px;
+		background: #fdfbfc;
+		color: #463e40;
+		font-size: 13px;
+		font-weight: 900;
+		cursor: pointer;
+	}
+
+	.CertificatePaidStampFull input {
+		width: 18px;
+		height: 18px;
+		margin: 0;
+		accent-color: var(--CertificateAccent);
+		flex: 0 0 auto;
+	}
+
+	.CertificatePaidStampFull:has(input:checked) {
+		border-color: var(--CertificateAccent);
+		background: var(--CertificateAccentSoft);
+		color: var(--CertificateAccentDark);
+	}
+
+	.CertificatePaidStampFull:has(input:focus-visible) {
+		outline: 3px solid color-mix(in srgb, var(--CertificateAccent) 28%, transparent);
+		outline-offset: 2px;
+	}
+
+	.CertificatePaidStampRow .CertificateInputUnit input:disabled {
+		cursor: not-allowed;
+		opacity: .62;
 	}
 
 
@@ -910,6 +1249,10 @@ function GetCssName(pName: string) {
 		}
 
 		.CertificateBody {
+			grid-template-columns: 1fr;
+		}
+
+		.CertificateBuildingExtraOptions {
 			grid-template-columns: 1fr;
 		}
 

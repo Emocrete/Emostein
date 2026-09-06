@@ -1,10 +1,9 @@
 ---
 import BLayout from "@/Layout.astro";
 import { OccupancyValidityCostCalc } from "@/Widgets/Calc";
-import { EmoCall, Emograph, EmoList, HzStack, ListItem, SecTitle, VrStack } from "@/Widgets/Comp";
-import { Price } from "@/Widgets/Prices";
-import { DivCol, DivStr, EmoSec, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
-import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
+import { EmoCallIcon, Emograph, EmoList, EmoWhatsIcon, HzStack, ListItem, SecTitle, VrStack } from "@/Widgets/Comp";
+import { DivCol, DivStr, EmoSec, Hero } from "@/Widgets/Sections";
+import { Align, Colors, ElemBg, Loc, NumPer, Pixel, Size, Text } from "@/TypesLib";
 ---
 
 
@@ -37,7 +36,13 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } fro
 				pText={Text.Body.White.Centered.OfText("خدمات إصدار شهادة صلاحية المبنى للإشغال لتوصيل المرافق واعتماد جاهزية المبنى للاستخدام")}
 			/>
 
-			<EmoCall OrangeBlack pText="تواصل معنا" />
+			<HzStack pGap={new Pixel(30,10)}>
+
+				<EmoCallIcon BlackSky />
+
+				<EmoWhatsIcon OrangeBlack />
+
+			</HzStack>
 
 		</VrStack>
 
@@ -131,7 +136,7 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } fro
 
 
 
-	<OccupancyValidityCostCalc pServiceFee={4000} />
+	<OccupancyValidityCostCalc pServiceFee={4000} pNonResidentialServiceFee={6000} />
 
 
 
@@ -139,131 +144,17 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } fro
 
 
 
-	<EmoSec id="secCost" Readable>
+	<EmoSec pMinH={new NumPer(300,300)} pHzAlign={"Center"} pBg={new ElemBg(Colors.BistageLite)}>
 
-		<SecTitle OrangeDark pTitle="تكلفة استخراج شهادة صلاحية المبنى للإشغال" />
+		<HzStack pGap={new Pixel(30,10)} pHzAlign={"Center"}>
 
-		<HzStack
-			style = " margin-top : 50px ; margin-bottom : 50px ; padding : 30px "
-			id="stkCostEqn"
-			pBg={new ElemBg(Colors.SkyLite)}
-			pSize={new Size(new NumPer(1200))}
-			Readable
-		>
+			<EmoCallIcon BlackSky pText="اتصل للطلب" />
 
-			<Emograph pTitle={Text.H3.Centered.OfText("التكلفة الإجمالية =")} pSize={new Size(new NumPer(300))} data-own-size />
-
-			<Emograph pTitle={Text.Body.Centered.OfSize(30,20).OfText("قيمة الخدمة + الرسوم الأساسية + الدمغة الهندسية")} />
+			<EmoWhatsIcon BlackSky pText="اطلب عبر واتساب" pMessage="أرغب في عمل شهادة صلاحية المبنى للإشغال" />
 
 		</HzStack>
 
-		<Emograph pTitle={Text.H3.OfText("أولا : أتعاب الخدمة")} />
-
-		<DivStr id="strCost" Readable>
-
-			<DivCol>
-
-				<Price pTitle={Text.Body.OfText("للمباني السكنية")} pPrice={3000} />
-
-			</DivCol>
-
-			<DivCol>
-
-				<Price pTitle={Text.Body.OfText("للمباني التجارية والإدارية والصناعية")} pPrice={5000} />
-
-			</DivCol>
-
-		</DivStr>
-
-		<Emograph pTitle={Text.H3.OfText(" ثانيا : رسوم الخدمة المدفوعة لنقابة المهندسين")} />
-
-		<VrStack pWidth={new Pixel(1000,320)} pBg={new ElemBg(Colors.SkyLite)}>
-
-			<HzStack pBg={new ElemBg(Colors.WhiteOff)}>
-
-				<Emograph pTitle={Text.Body.Centered.OfSize(30,25).OfText("الرسوم الأساسية لكل مبنى في المشروع")} />
-
-				<Emograph pTitle={Text.Body.Centered.Bold.OfSize(80,50).OfText("900 جنيه")} />
-
-			</HzStack>
-
-			<VrStack pBgColor={new ElemBg(Colors.WhiteOff)} pHeight={new Pixel(800,320)}>
-
-				<Emograph pTitle={Text.H4.DarkSky.OfText("الرسوم الأساسية الإجمالية للشهادة = 900 × عدد المباني")} />
-
-				<Emograph pTitle={Text.H4.OfText("مثال لحالة مشروع سكني أو تجاري أو إداري :").WithColor("#8b1e2d")} />
-
-				<EmoList pWidth={new RespString("100%", "100%")} pNumbered={false}>
-
-					<ListItem pText="منطوق الرخصة ( بدروم + أرضي + متكرر + غرف سطح + سور ) تحتسب جميعًا كمبنى واحد" />
-
-					<ListItem pText="منطوق الرخصة ( أرضي + متكرر + غرف سطح ) تحتسب جميعًا كمبنى واحد" />
-
-					<ListItem pText="منطوق الرخصة ( أرضي + متكرر + غرفة كهرباء ) تحتسب على أنها 2 مبنى" />
-
-				</EmoList>
-
-				<Emograph
-					pTitle={Text.H4.OfText("مثال لحالة مباني صناعية :").WithColor("#8b1e2d")}
-					pText={Text.Body.OfText("يتم اعتبار كلا من المبنى الإداري والجمالون وغرفة الكهرباء وغرفة الأمن والسور على أنها مبنى مستقل حسب العناصر المثبتة منها في منطوق رخصة البناء، ويحسب منها فقط العناصر المطلوب تضمينها في شهادة صلاحية الإشغال.")}
-				/>
-
-			</VrStack>
-
-			<HzStack id="StkRatio" pBg={new ElemBg(Colors.WhiteOff)}>
-
-				<Emograph pTitle={Text.Body.Bold.OfSize(80,30).OfText("% 0.45")} pText={Text.Body.OfText("نسبة رسوم الدمغة الهندسية إلى تكلفة رخصة البناء")} />
-
-				<Emograph
-					pTitle={Text.Body.OfText("قيمة رسوم الدمغة الهندسية = 0.0045 × تكلفة الرخصة")}
-					pText={Text.Body.OfText("تتراوح عمليًا بين 4000 إلى 8000 حسب تكلفة الأعمال المسجلة بالرخصة").WithColor("red")}
-				/>
-
-			</HzStack>
-
-		</VrStack>
-
-		<VrStack pWidth={new Pixel(1200,320)} pBgColor={new ElemBg(Colors.WhiteOff)}>
-
-			<Emograph pTitle={Text.H4.OfText("حالات الإعفاء من دفع الدمغة الهندسية :").WithColor("#302c3c")} pText={Text.Body.OfText("")} />
-
-			<EmoList
-				id="5656"
-				pWidth={new RespString("100%", "100%")}
-				pNumbered={false}
-				pItems={[
-					"إعفاء كامل إذا تم دفعها بالكامل أثناء ترخيص البناء ويكون الدفع مثبت في الرخصة، أو بإيصال دمغة مستقل",
-					"إعفاء جزئي إذا تم دفع جزء منها أثناء ترخيص البناء، ويكون الدفع مثبت في الرخصة، أو بإيصال دمغة مستقل، وفي هذه الحالة يتم دفع الجزء المتبقي فقط أثناء إصدار شهادة صلاحية الإشغال"
-				]}
-			/>
-
-		</VrStack>
-
 	</EmoSec>
-
-
-
-
-
-
-
-	<RelServices>
-
-		<RelServiceItem
-			pTitle="شهادة إشراف هندسي على البناء"
-			pDesc="استخراج شهادة الإشراف الهندسي الصادرة من نقابة المهندسين المصرية للحصول على ترخيص الحفر وبدء التنفيذ، مع توضيح المستندات المطلوبة والتكلفة والرسوم الهندسية."
-			pHref="/emonsult/certificate/con-supervision"
-			pImg="/Media/Emonsult/Certificate/ConSV/Building-Construction-Supervision-Certificate-HeroL.webp"
-		/>
-
-		<RelServiceItem
-			pTitle="شهادة إشراف هندسي على الهدم"
-			pDesc="شهادة معتمدة من نقابة المهندسين تفيد تولي مهندس نقابي مسؤولية الإشراف على تنفيذ أعمال الهدم طبقًا للترخيص، مع مراعاة السلامة الإنشائية وتأمين الجوار والمارة والمرافق قبل بدء التنفيذ."
-			pHref="/emonsult/certificate/con-supervision"
-			pImg="/Media/Emonsult/Certificate/ConSV/Building-Construction-Supervision-Certificate-HeroL.webp"
-		/>
-
-	</RelServices>
 
 
 

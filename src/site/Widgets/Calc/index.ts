@@ -45,7 +45,8 @@ export type { FinishCostStage } from "./FinishCostGame.types";
 import OccupancyValidityCostCalcIndexExport from "./OccupancyValidityCostCalc.astro";
 
 /**
- * @pServiceFee as number — أتعاب الخدمة المباشرة لشهادة صلاحية المبنى للإشغال.
+ * @pServiceFee as number — أتعاب الخدمة المباشرة لشهادة صلاحية المبنى للإشغال للمبنى السكني.
+ * @pNonResidentialServiceFee as number — أتعاب الخدمة للمبنى التجاري أو الإداري أو الصناعي.
  */
 export const OccupancyValidityCostCalc = OccupancyValidityCostCalcIndexExport;
 
