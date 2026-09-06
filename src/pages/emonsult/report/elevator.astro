@@ -1,6 +1,6 @@
 ---
 import BLayout from "@/Layout.astro";
-import { EmoCall, EmoCallIcon, Emograph, EmoList, EmoWhatsIcon, HzStack, ListItem, SecTitle, VrStack } from "@/Widgets/Comp";
+import { EmoCallIcon, Emograph, EmoList, EmoWhatsIcon, HzStack, ListItem, SecTitle, VrStack } from "@/Widgets/Comp";
 import { PdfPreview } from "@/Widgets/Media";
 import { DivCol, DivStr, EmoSec, Hero } from "@/Widgets/Sections";
 import { Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
@@ -53,7 +53,7 @@ import { Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/Ty
 
 		<SecTitle id="sectDetails" Sky pTitle="التقارير الهندسية المطلوبة لترخيص المصعد" />
 
-		<DivStr id="strInstall" pBg={new ElemBg(Colors.Gray1)}>
+		<DivStr id="strInstall">
 
 			<DivCol id="colInstallInfo" pSize={new Size(new NumPer("20%","100%"))}>
 
@@ -69,11 +69,11 @@ import { Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/Ty
 
 			</DivCol>
 
-			<DivCol pHzAlign={"Center"}>
+			<DivCol id="colInstallCost" pHzAlign={"Center"}>
 
 				<DivStr id="strInstallCost" pHzAlign={"Center"}>
 
-					<Emograph pTitle={Text.H4.Centered.OfText("تكلفة أتعاب اعتماد تقرير تركيب مصعد")} />
+					<Emograph pTitle={Text.H4.Centered.OrangeDark.OfText("تكلفة أتعاب اعتماد تقرير تركيب مصعد")} />
 
 					<DivCol id="colInstallCostEngOnly">
 
@@ -144,9 +144,9 @@ import { Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/Ty
 
 		</DivStr>
 
-		<DivStr id="strRun" pBg={new ElemBg(Colors.Gray2)}>
+		<DivStr id="strRun" pBg={new ElemBg(Colors.Gray1)}>
 
-			<DivCol id="colRunInfo">
+			<DivCol id="colRunInfo" pSize={new Size(new NumPer("20%","100%"))}>
 
 				<Emograph
 					pTitle={Text.H3.Centered.OfText("ثانيا: تقرير استشاري هندسي لترخيص تشغيل مصعد")}
@@ -158,13 +158,17 @@ import { Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/Ty
 					pText={Text.Body.Centered.OfText("يقدم ضمن المستندات المطلوبة من قبل الجهة الإدارية المعنية، مثل رئاسة الحي أو جهاز المدينة، لترخيص تشغيل مصعد جديد لأول مرة.")}
 				/>
 
+			</DivCol>
+
+			<DivCol id="colRunCost">
+
 				<DivStr id="strRunCost">
 
-					<Emograph pTitle={Text.H4.Centered.OfText("تكلفة أتعاب اعتماد تقرير تشغيل مصعد")} />
+					<Emograph pTitle={Text.H4.Centered.OrangeDark.OfText("تكلفة أتعاب اعتماد تقرير تشغيل مصعد")} />
 
 					<DivCol id="colRunCostEngOnly">
 
-						<Emograph pTitle={Text.H3.Centered.OfText("تقرير معتمد من مهندس استشاري ميكانيكا فقط")} />
+						<Emograph pTitle={Text.H5.Centered.OfText("تقرير معتمد من مهندس استشاري ميكانيكا فقط")} />
 
 						<Emograph pTitle={Text.Body.Bold.DarkSky.OfSize(40,25).Centered.OfText("يبدأ من 4000 جنيه")} />
 
@@ -185,7 +189,7 @@ import { Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/Ty
 
 					<DivCol id="colRunCostEng">
 
-						<Emograph pTitle={Text.H3.Centered.OfText("تقرير معتمد من مهندس استشاري ميكانيكا ونقابة المهندسين")} />
+						<Emograph pTitle={Text.H5.Centered.OfText("تقرير معتمد من مهندس استشاري ميكانيكا ونقابة المهندسين")} />
 
 						<Emograph
 							pTitle={Text.Body.Bold.DarkSky.OfSize(40,25).Centered.OfText("يبدأ من 6000 جنيه")}
@@ -209,15 +213,21 @@ import { Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/Ty
 
 					</DivCol>
 
-					<EmoCall id="btnRunCall" BlackSky pText="للطلب والاستفسار" />
+					<HzStack pGap={new Pixel(30,10)} pHzAlign={"Center"}>
+
+						<EmoCallIcon BlackSky pText="اتصل لطلب الخدمة" />
+
+						<EmoWhatsIcon BlackSky pText="اطلب عبر واتساب" pMessage="أرغب في عمل تقرير تشغيل مصعد" />
+
+					</HzStack>
 
 				</DivStr>
 
 			</DivCol>
 
-			<DivCol id="colRunSample">
+			<DivCol id="colRunSample" pSize={new Size(new NumPer("20%","100%"))}>
 
-				<Emograph pTitle={Text.H4.Centered.OfText("نماذج تقرير تشغيل مصعد").WithColor("#302c3c")} pText={Text.Body.Centered.OfText("( ميكانيكا )")} />
+				<Emograph pTitle={Text.H4.Centered.OfText("نموذج تقرير تشغيل مصعد").WithColor("#302c3c")} pText={Text.Body.Centered.OfText("( ميكانيكا )")} />
 
 				<PdfPreview pFile="/Media/Emonsult/Report/Elevator/Elevator_Mechanical_Operating_Report.pdf" />
 
