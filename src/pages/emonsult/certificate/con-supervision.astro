@@ -2,7 +2,7 @@
 import BLayout from "@/Layout.astro";
 import { SupervisionCertificateCostCalc } from "@/Widgets/Calc";
 import { EmoCallIcon, Emograph, EmoList, EmoWhatsIcon, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
-import { EmoSec, Hero } from "@/Widgets/Sections";
+import { DivCol, DivStr, EmoSec, Hero } from "@/Widgets/Sections";
 import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } from "@/TypesLib";
 ---
 
@@ -56,37 +56,27 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } fro
 
 	<EmoSec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
-		<SecTitle style = {`--StripBg:${Colors.Creamy};`} pTitle="ما هي شهادة الإشراف الهندسي ؟" pDesc="" />
+		<DivStr>
 
-		<VrStack>
+			<DivCol>
 
-			<Emograph
-				pTitle={Text.Body.OfText("")}
-				pText={Text.Body.OfText("شهادة الإشراف الهندسي هي مستند رسمي تصدره نقابة المهندسين المصرية باسم مهندس نقابي معتمد ويقدم إلى الجهات الإدارية المختصة، مثل رئاسة الحي أو الجهاز التابع لهيئة المجتمعات العمرانية، والغرض منه ضمان أن المبنى سيتم إنشاؤه تحت إشراف هندسي يكون فيه المهندس مسئولًا عن التنفيذ وفقًا للمواصفات الفنية والمعايير الإنشائية واشتراطات الترخيص الصادرة. وبناء عليه يتم إصدار تصريح الحفر لبدء التنفيذ على هذا الأساس.")}
-			/>
+				<Emograph
+					pTitle={Text.H2.OfText("ما هي شهادة الإشراف الهندسي ؟")}
+					pText={Text.Body.OfText("شهادة الإشراف الهندسي هي مستند رسمي تصدره نقابة المهندسين المصرية باسم مهندس نقابي معتمد ويقدم إلى الجهات الإدارية المختصة، مثل رئاسة الحي أو الجهاز التابع لهيئة المجتمعات العمرانية، والغرض منه ضمان أن المبنى سيتم إنشاؤه تحت إشراف هندسي يكون فيه المهندس مسئولًا عن التنفيذ وفقًا للمواصفات الفنية والمعايير الإنشائية واشتراطات الترخيص الصادرة. وبناء عليه يتم إصدار تصريح الحفر لبدء التنفيذ على هذا الأساس.")}
+				/>
 
-		</VrStack>
+			</DivCol>
 
-	</EmoSec>
+			<DivCol>
 
+				<Emograph
+					pTitle={Text.H2.OfText("استخدامات شهادة الإشراف الهندسي")}
+					pText={Text.Body.OfText("تستخدم شهادة الإشراف الهندسي في الحصول على ترخيص الحفر من الجهة الإدارية المعنية، مثل رئاسة الحي أو جهاز هيئة المجتمعات العمرانية.")}
+				/>
 
+			</DivCol>
 
-
-
-
-
-	<EmoSec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
-
-		<SecTitle style = {`--StripBg:${Colors.Creamy};`} pTitle="استخدامات شهادة الإشراف الهندسي" pDesc="" />
-
-		<VrStack>
-
-			<Emograph
-				pTitle={Text.Body.OfText("")}
-				pText={Text.Body.OfText("تستخدم شهادة الإشراف الهندسي في الحصول على ترخيص الحفر من الجهة الإدارية المعنية، مثل رئاسة الحي أو جهاز هيئة المجتمعات العمرانية.")}
-			/>
-
-		</VrStack>
+		</DivStr>
 
 	</EmoSec>
 
@@ -98,38 +88,36 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } fro
 
 	<EmoSec pBg={new ElemBg(Colors.Creamy)} pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
-		<SecTitle style = " --StripBg : #ded8c3 " pTitle="المستندات المطلوبة لاستخراج شهادة الإشراف الهندسي" pDesc="" />
+		<SecTitle style = " --StripBg : #ded8c3 " pTitle="المستندات المطلوبة لاستخراج شهادة الإشراف الهندسي" />
 
-		<HzStack>
+		<DivStr>
 
-			<VrStack>
+			<DivCol>
 
-				<Emograph pTitle={Text.H4.OfText("في حال كانت رخصة البناء صادرة باسم مالك فردي").WithColor("#2f3340").Centered} pText={Text.Body.OfText("")} />
+				<Emograph pTitle={Text.H3.OfText("في حال كانت رخصة البناء صادرة باسم مالك فردي").WithColor("#2f3340").Centered} />
 
 				<EmoList
 					pWidth={new RespString("100%", "100%")}
 					pTitle={Text.Body.OfText("")}
 					pDesc={Text.Body.OfText("")}
 					pNumbered={false}
-					pItemFnt={Text.Body.WithColor("#302c3c")}
 					pItems={[
 						"صورة رخصة البناء المعتمدة",
 						"صورة بطاقة المالك"
 					]}
 				/>
 
-			</VrStack>
+			</DivCol>
 
-			<VrStack>
+			<DivCol>
 
-				<Emograph pTitle={Text.H4.OfText("في حال كانت رخصة البناء صادرة باسم شركة").WithColor("#2f3340").Centered} pText={Text.Body.OfText("")} />
+				<Emograph pTitle={Text.H3.OfText("في حال كانت رخصة البناء صادرة باسم شركة").WithColor("#2f3340").Centered} pText={Text.Body.OfText("")} />
 
 				<EmoList
 					pWidth={new RespString("100%", "100%")}
 					pTitle={Text.Body.OfText("")}
 					pDesc={Text.Body.OfText("")}
 					pNumbered={false}
-					pItemFnt={Text.Body.WithColor("#302c3c")}
 					pItems={[
 						"صورة رخصة البناء المعتمدة",
 						"صورة عقد الشراكة أو صورة السجل التجاري للشركة",
@@ -137,9 +125,9 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } fro
 					]}
 				/>
 
-			</VrStack>
+			</DivCol>
 
-		</HzStack>
+		</DivStr>
 
 	</EmoSec>
 
@@ -149,7 +137,15 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } fro
 
 
 
-	<EmoSec pBg={new ElemBg("#c9bfb8")} pHzAlign={Align.Center} pVrAlign={Align.Center}>
+	<SupervisionCertificateCostCalc pCairoFee={3000} pGizaFee={4000} />
+
+
+
+
+
+
+
+	<EmoSec pHzAlign={Align.Center} pVrAlign={Align.Center}>
 
 		<SecTitle style = " --StripBg : #c9bfb8 " pTitle="تكلفة استخراج شهادة الإشراف الهندسي" pDesc="" />
 
@@ -287,14 +283,6 @@ import { Align, Colors, ElemBg, Loc, NumPer, Pixel, RespString, Size, Text } fro
 		</VrStack>
 
 	</EmoSec>
-
-
-
-
-
-
-
-	<SupervisionCertificateCostCalc pCairoFee={3000} pGizaFee={4000} />
 
 
 

@@ -151,7 +151,7 @@ function GetCssName(pName: string) {
 
 				<legend>
 
-					موقع المبنى
+					مكان إصدار الشهادة
 
 				</legend>
 
@@ -189,7 +189,7 @@ function GetCssName(pName: string) {
 			<label class = " CertificateField ">
 
 				<span>
-					عدد المباني المدرجة في الشهادة
+					عدد المباني المدرجة في رخصة البناء
 				</span>
 
 				<input
@@ -214,7 +214,7 @@ function GetCssName(pName: string) {
 			<label class = " CertificateField ">
 
 				<span>
-					تكلفة الأعمال المسجلة في الرخصة
+					تكلفة الأعمال المسجلة في رخصة البناء
 				</span>
 
 				<div class = " CertificateInputUnit ">
@@ -439,6 +439,112 @@ function GetCssName(pName: string) {
 
 
 
+	<script is:inline NoMove>
+
+
+
+		(() =>
+		{
+
+			// ==================== Definitions: Variables & Methods ====================
+
+
+
+
+
+			function fInitCertificateCostCalc()
+			{
+				const fRoot = document.currentScript?.closest("[data-supervision-certificate-cost]");
+				if (!fRoot) return;
+				const fForm = fRoot.querySelector('[data-area="inputs"]');
+				const fBuildings = fRoot.querySelector('[data-field="buildings"]');
+				const fLicenseCost = fRoot.querySelector('[data-field="licenseCost"]');
+				const fPaidStamp = fRoot.querySelector('[data-field="paidStamp"]');
+				const fLocations = [...fRoot.querySelectorAll('input[type="radio"]')];
+				const fOut = (pName) => fRoot.querySelector(`[data-out="${pName}"]`);
+				const fCairoFee = fNumber(fRoot.dataset.cairoFee);
+				const fGizaFee = fNumber(fRoot.dataset.gizaFee);
+				const fBuildingFee = fNumber(fRoot.dataset.buildingFee, 900);
+				const fStampRate = fNumber(fRoot.dataset.stampRate, 0.0045);
+				function fArabicToEnglishDigits(pValue)
+				{
+					return String(pValue ?? "")
+					.replace(/[٠-٩]/g, (pDigit) => String("٠١٢٣٤٥٦٧٨٩".indexOf(pDigit)))
+					.replace(/[۰-۹]/g, (pDigit) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(pDigit)))
+					.replace(/,/g, ".");
+				}
+				function fNumber(pValue, pFallback = 0)
+				{
+					const fParsed = Number(fArabicToEnglishDigits(pValue));
+					return Number.isFinite(fParsed) ? fParsed : pFallback;
+				}
+				function fMoney(pValue)
+				{
+					return Math.round(Math.max(0, pValue)).toLocaleString("ar-EG");
+				}
+				function fSet(pName, pValue)
+				{
+					const fElement = fOut(pName);
+					if (fElement) fElement.textContent = pValue;
+				}
+				function fCalc()
+				{
+					const fLocation = fRoot.querySelector('input[type="radio"]:checked')?.value || "cairo";
+					const fLocationName = fLocation === "giza" ? "الجيزة" : "القاهرة";
+					const fServiceFee = fLocation === "giza" ? fGizaFee : fCairoFee;
+					const fBuildingCount = Math.max(1, Math.floor(fNumber(fBuildings?.value, 1)));
+					const fLicense = Math.max(0, fNumber(fLicenseCost?.value));
+					const fPaid = Math.max(0, fNumber(fPaidStamp?.value));
+					const fBasicFee = fBuildingCount * fBuildingFee;
+					const fGrossStamp = fLicense * fStampRate;
+					const fStampDue = Math.max(0, fGrossStamp - fPaid);
+					const fTotal = fServiceFee + fBasicFee + fStampDue;
+					fSet("locationName", fLocationName);
+					fSet("serviceFee", fMoney(fServiceFee));
+					fSet("basicFee", fMoney(fBasicFee));
+					fSet("grossStamp", fMoney(fGrossStamp));
+					fSet("paidStamp", fMoney(Math.min(fPaid, fGrossStamp)));
+					fSet("stampDue", fMoney(fStampDue));
+					fSet("total", fMoney(fTotal));
+					if (fGrossStamp > 0 && fPaid >= fGrossStamp)
+					{
+						fSet("status", "لا توجد دمغة متبقية وفق المبلغ المسدد الذي أدخلته.");
+					} else if (fPaid > 0) {
+						fSet("status", `تم خصم ${fMoney(Math.min(fPaid, fGrossStamp))} جنيه من الدمغة المحسوبة.`);
+					} else {
+						fSet("status", "الحسبة تشمل كامل الدمغة المستحقة وفق البيانات المدخلة.");
+					}
+				}
+				if (fForm) fForm.addEventListener("submit", (pEvent) => pEvent.preventDefault());
+				[
+					fBuildings,
+					fLicenseCost,
+					fPaidStamp
+				].forEach((pField) =>
+					{
+						pField?.addEventListener("input", fCalc);
+						pField?.addEventListener("change", fCalc);
+				});
+				fLocations.forEach((pField) => pField.addEventListener("change", fCalc));
+				fCalc();
+			}
+
+
+
+
+
+			// ==================== Execution Logic ====================
+
+			fInitCertificateCostCalc();
+		})();
+	</script>
+
+
+
+
+
+
+
 </section>
 
 
@@ -451,31 +557,35 @@ function GetCssName(pName: string) {
 
 	.CertificateCostCalc {
 		box-sizing: border-box;
-		width: min(1120px, calc(100% - 24px));
 		margin-inline: auto;
-		padding: clamp(18px, 3vw, 34px);
 		border: 1px solid #dce7ec;
-		border-radius: 30px;
 		background: linear-gradient(145deg, #ffffff, #f7fbfc 72%);
 		color: #20272c;
 		box-shadow: 0 18px 52px rgba(35, 68, 82, .11);
 		direction: rtl;
 	}
 
+	.CertificateCostCalc * {
+		box-sizing: border-box;
+	}
+
 
 	.CertificateHead {
 		display: grid;
-		grid-template-columns: minmax(0, 1fr) 150px;
-		gap: 24px;
 		align-items: center;
 		margin-bottom: 24px;
 	}
 
 
 	.CertificateHeadText h2 {
+		margin: 0;
 		font-size: clamp(25px, 3vw, 40px);
 		line-height: 1.35;
 		color: #1b2328;
+	}
+
+	.CertificateHeadText p {
+		margin: 0;
 	}
 
 	.CertificateHeadText > p:last-child {
@@ -500,7 +610,6 @@ function GetCssName(pName: string) {
 
 
 	.CertificateRateBadge {
-		min-height: 128px;
 		padding: 16px;
 		border-radius: 24px;
 		background: var(--CertificateAccentSoft);
@@ -509,11 +618,9 @@ function GetCssName(pName: string) {
 		place-items: center;
 		align-content: center;
 		gap: 8px;
-		text-align: center;
 	}
 
 	.CertificateRateBadge strong {
-		font-size: 38px;
 		line-height: 1;
 		direction: ltr;
 	}
@@ -527,7 +634,6 @@ function GetCssName(pName: string) {
 
 	.CertificateBody {
 		display: grid;
-		grid-template-columns: minmax(300px, .95fr) minmax(330px, 1.05fr);
 		gap: 18px;
 	}
 
@@ -536,6 +642,8 @@ function GetCssName(pName: string) {
 		display: grid;
 		gap: 15px;
 		align-content: start;
+		border: 1px solid #e3eaee;
+		background: #fff;
 	}
 
 
@@ -544,6 +652,14 @@ function GetCssName(pName: string) {
 		margin: 0;
 		padding: 0;
 		border: 0;
+	}
+
+	.CertificateLocation legend {
+		display: block;
+		margin-bottom: 8px;
+		color: #3a474e;
+		font-size: 13px;
+		font-weight: 900;
 	}
 
 
@@ -600,9 +716,31 @@ function GetCssName(pName: string) {
 		display: block;
 	}
 
+	.CertificateField > span {
+		display: block;
+		margin-bottom: 8px;
+		color: #3a474e;
+		font-size: 13px;
+		font-weight: 900;
+	}
+
 	.CertificateField > input {
+		width: 100%;
+		min-height: 48px;
 		padding: 10px 13px;
+		border: 1px solid #d8e0e4;
+		border-radius: 15px;
+		background: #fbfcfd;
+		color: #20272c;
+		font-family: inherit;
+		font-size: 15px;
+		font-weight: 800;
 		outline: none;
+	}
+
+	.CertificateField > input:focus {
+		border-color: var(--CertificateAccent);
+		box-shadow: 0 0 0 4px color-mix(in srgb, var(--CertificateAccent) 13%, transparent);
 	}
 
 	.CertificateField small {
@@ -619,7 +757,21 @@ function GetCssName(pName: string) {
 		display: grid;
 		grid-template-columns: minmax(0, 1fr) auto;
 		align-items: center;
+		width: 100%;
+		min-height: 48px;
 		overflow: hidden;
+		border: 1px solid #d8e0e4;
+		border-radius: 15px;
+		background: #fbfcfd;
+		color: #20272c;
+		font-family: inherit;
+		font-size: 15px;
+		font-weight: 800;
+	}
+
+	.CertificateInputUnit:focus-within {
+		border-color: var(--CertificateAccent);
+		box-shadow: 0 0 0 4px color-mix(in srgb, var(--CertificateAccent) 13%, transparent);
 	}
 
 	.CertificateInputUnit input {
@@ -646,6 +798,7 @@ function GetCssName(pName: string) {
 		display: grid;
 		gap: 14px;
 		align-content: start;
+		border: 1px solid #e3eaee;
 		background: linear-gradient(160deg, #172229, #23353e);
 		color: #fff;
 	}
@@ -722,7 +875,6 @@ function GetCssName(pName: string) {
 	.CertificateFormula {
 		display: flex;
 		align-items: center;
-		justify-content: center;
 		gap: 8px;
 		flex-wrap: wrap;
 		margin-top: 16px;
@@ -749,12 +901,6 @@ function GetCssName(pName: string) {
 
 
 
-	.CertificateCostCalc.IsPlaced {
-		width: var(--PlaceWidthL);
-		height: var(--PlaceHeightL);
-	}
-
-
 	.CertificateRow.Muted {
 		opacity: .7;
 	}
@@ -762,65 +908,6 @@ function GetCssName(pName: string) {
 
 	.CertificateRow.StampDue {
 		background: color-mix(in srgb, var(--CertificateAccent) 20%, transparent);
-	}
-
-
-
-	.CertificateCostCalc,
-	.CertificateCostCalc *
-	{
-		box-sizing: border-box;
-	}
-
-
-	.CertificateHeadText h2,
-	.CertificateHeadText p
-	{
-		margin: 0;
-	}
-
-
-	.CertificateInputs,
-	.CertificateResult
-	{
-		padding: 18px;
-		border: 1px solid #e3eaee;
-		border-radius: 24px;
-		background: #fff;
-	}
-
-
-	.CertificateLocation legend,
-	.CertificateField > span
-	{
-		display: block;
-		margin-bottom: 8px;
-		color: #3a474e;
-		font-size: 13px;
-		font-weight: 900;
-	}
-
-
-	.CertificateField > input,
-	.CertificateInputUnit
-	{
-		width: 100%;
-		min-height: 48px;
-		border: 1px solid #d8e0e4;
-		border-radius: 15px;
-		background: #fbfcfd;
-		color: #20272c;
-		font-family: inherit;
-		font-size: 15px;
-		font-weight: 800;
-	}
-
-
-	.CertificateField > input:focus,
-	.CertificateInputUnit:focus-within
-	{
-		border-color: var(--CertificateAccent);
-		box-shadow: 0 0 0 4px color-mix(in srgb, var(--CertificateAccent) 13%, transparent);
 	}
 
 
@@ -833,6 +920,52 @@ function GetCssName(pName: string) {
 
 <style>
 
+
+
+	@media (orientation: landscape) and (min-width: 761px) {
+		.CertificateCostCalc {
+			width: min(1120px, calc(100% - 24px));
+			padding: clamp(18px, 3vw, 34px);
+			border-radius: 30px;
+		}
+
+		.CertificateCostCalc.IsPlaced {
+			width: var(--PlaceWidthL);
+			height: var(--PlaceHeightL);
+		}
+
+		.CertificateHead {
+			grid-template-columns: minmax(0, 1fr) 150px;
+			gap: 24px;
+		}
+
+		.CertificateRateBadge {
+			min-height: 128px;
+			text-align: center;
+		}
+
+		.CertificateRateBadge strong {
+			font-size: 38px;
+		}
+
+		.CertificateBody {
+			grid-template-columns: minmax(300px, .95fr) minmax(330px, 1.05fr);
+		}
+
+		.CertificateInputs {
+			padding: 18px;
+			border-radius: 24px;
+		}
+
+		.CertificateResult {
+			padding: 18px;
+			border-radius: 24px;
+		}
+
+		.CertificateFormula {
+			justify-content: center;
+		}
+	}
 
 
 	@media (orientation: portrait), (max-width: 760px) {
@@ -867,9 +1000,12 @@ function GetCssName(pName: string) {
 			grid-template-columns: 1fr;
 		}
 
-		.CertificateInputs,
-		.CertificateResult
-		{
+		.CertificateInputs {
+			padding: 14px;
+			border-radius: 18px;
+		}
+
+		.CertificateResult {
 			padding: 14px;
 			border-radius: 18px;
 		}
@@ -882,138 +1018,3 @@ function GetCssName(pName: string) {
 
 
 </style>
-
-
-
-
-
-<script is:inline>
-
-
-
-	(() =>
-	{
-
-		// ==================== Definitions: Variables & Methods ====================
-
-		const fRoot = document.currentScript.closest("[data-supervision-certificate-cost]");
-
-		const fForm = fRoot.querySelector('[data-area="inputs"]');
-
-		const fBuildings = fRoot.querySelector('[data-field="buildings"]');
-
-		const fLicenseCost = fRoot.querySelector('[data-field="licenseCost"]');
-
-		const fPaidStamp = fRoot.querySelector('[data-field="paidStamp"]');
-
-		const fLocations = [...fRoot.querySelectorAll('input[type="radio"]')];
-
-		const fOut = (pName) => fRoot.querySelector(`[data-out="${pName}"]`);
-
-		const fCairoFee = fNumber(fRoot.dataset.cairoFee);
-
-		const fGizaFee = fNumber(fRoot.dataset.gizaFee);
-
-		const fBuildingFee = fNumber(fRoot.dataset.buildingFee, 900);
-
-		const fStampRate = fNumber(fRoot.dataset.stampRate, 0.0045);
-
-
-
-
-
-		function fArabicToEnglishDigits(pValue)
-		{
-			return String(pValue ?? "")
-			.replace(/[٠-٩]/g, (pDigit) => String("٠١٢٣٤٥٦٧٨٩".indexOf(pDigit)))
-			.replace(/[۰-۹]/g, (pDigit) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(pDigit)))
-			.replace(/,/g, ".");
-		}
-
-
-
-
-
-		function fNumber(pValue, pFallback = 0)
-		{
-			const fParsed = Number(fArabicToEnglishDigits(pValue));
-			return Number.isFinite(fParsed) ? fParsed : pFallback;
-		}
-
-
-
-
-
-		function fMoney(pValue)
-		{
-			return Math.round(Math.max(0, pValue)).toLocaleString("ar-EG");
-		}
-
-
-
-
-
-		function fSet(pName, pValue)
-		{
-			const fElement = fOut(pName);
-			if (fElement) fElement.textContent = pValue;
-		}
-
-
-
-
-
-		function fCalc()
-		{
-			const fLocation = fRoot.querySelector('input[type="radio"]:checked')?.value || "cairo";
-			const fLocationName = fLocation === "giza" ? "الجيزة" : "القاهرة";
-			const fServiceFee = fLocation === "giza" ? fGizaFee : fCairoFee;
-			const fBuildingCount = Math.max(1, Math.floor(fNumber(fBuildings?.value, 1)));
-			const fLicense = Math.max(0, fNumber(fLicenseCost?.value));
-			const fPaid = Math.max(0, fNumber(fPaidStamp?.value));
-			const fBasicFee = fBuildingCount * fBuildingFee;
-			const fGrossStamp = fLicense * fStampRate;
-			const fStampDue = Math.max(0, fGrossStamp - fPaid);
-			const fTotal = fServiceFee + fBasicFee + fStampDue;
-			fSet("locationName", fLocationName);
-			fSet("serviceFee", fMoney(fServiceFee));
-			fSet("basicFee", fMoney(fBasicFee));
-			fSet("grossStamp", fMoney(fGrossStamp));
-			fSet("paidStamp", fMoney(Math.min(fPaid, fGrossStamp)));
-			fSet("stampDue", fMoney(fStampDue));
-			fSet("total", fMoney(fTotal));
-			if (fGrossStamp > 0 && fPaid >= fGrossStamp)
-			{
-				fSet("status", "لا توجد دمغة متبقية وفق المبلغ المسدد الذي أدخلته.");
-			} else if (fPaid > 0) {
-				fSet("status", `تم خصم ${fMoney(Math.min(fPaid, fGrossStamp))} جنيه من الدمغة المحسوبة.`);
-			} else {
-				fSet("status", "الحسبة تشمل كامل الدمغة المستحقة وفق البيانات المدخلة.");
-			}
-		}
-
-
-
-
-
-		// ==================== Execution Logic ====================
-
-		if (!fRoot) return;
-
-		if (fForm) fForm.addEventListener("submit", (pEvent) => pEvent.preventDefault());
-
-		[
-			fBuildings,
-			fLicenseCost,
-			fPaidStamp
-		].forEach((pField) =>
-			{
-				pField?.addEventListener("input", fCalc);
-				pField?.addEventListener("change", fCalc);
-		});
-
-		fLocations.forEach((pField) => pField.addEventListener("change", fCalc));
-
-		fCalc();
-	})();
-</script>
