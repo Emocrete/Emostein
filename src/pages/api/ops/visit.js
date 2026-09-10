@@ -6,6 +6,7 @@ const cMaxBodyBytes = 4 * 1024 * 1024;
 const cSyntheticUserAgentPattern = /(bot|crawl|spider|slurp|googlebot|googleother|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb|pageburst|google-read-aloud|google-notebooklm|google-gemininotebook|google-agent|googlemessages|google-pinpoint|google-cws|feedfetcher-google|ptst(?:\/|\b))/i;
 const cSyntheticReferrerHosts = new Set(["pagespeed.web.dev"]);
 const cArabCountryCodes = new Set(["EG", "SA", "AE", "KW", "QA", "BH", "OM", "YE", "JO", "LB", "SY", "IQ", "PS", "MA", "DZ", "TN", "LY", "SD", "SO", "DJ", "KM", "MR"]);
+const cAssetDocumentPattern = /\.(?:avif|webp|jpe?g|png|gif|svg|ico|bmp|tiff?|css|js|mjs|map|woff2?|ttf|otf|eot|pdf|zip|rar|7z|xml|json|txt)(?:\/|$)/i;
 
 function Json(pBody, pStatus = 200) {
 	return new Response(JSON.stringify(pBody), {
@@ -33,6 +34,23 @@ function EventTypeOf(pInput) {
 	const Nested = Input.payload && typeof Input.payload === "object" ? Input.payload : {};
 	return Str(Input.eventType ?? Input.event_type ?? Input.type ?? Input.event ?? Nested.eventType ?? Nested.event_type ?? Nested.type ?? Nested.event).toLowerCase();
 }
+function PagePathOf(pInput) {
+	const Input = pInput && typeof pInput === "object" ? pInput : {};
+	const Nested = Input.payload && typeof Input.payload === "object" ? Input.payload : {};
+	return Str(Input.pagePath ?? Input.page_path ?? Nested.pagePath ?? Nested.page_path);
+}
+
+function EventSourceOf(pInput) {
+	const Input = pInput && typeof pInput === "object" ? pInput : {};
+	const Nested = Input.payload && typeof Input.payload === "object" ? Input.payload : {};
+	return Str(Input.eventSource ?? Input.event_source ?? Nested.eventSource ?? Nested.event_source).toLowerCase();
+}
+
+function IsAssetDocumentPath(pValue) {
+	const Value = Str(pValue).split(/[?#]/, 1)[0];
+	return !!Value && cAssetDocumentPattern.test(Value);
+}
+
 function EventStreamOf(pEventType) {
 	const Type = Str(pEventType).toLowerCase();
 	return Type.startsWith("system.") && Type !== "system.clarity_session_index" ? "replay" : "normal";
@@ -260,6 +278,7 @@ function SyntheticTrafficReason(pRequest, pEvent = {}) {
 	const BodySignal = Str(pEvent.botSignal ?? pEvent.bot_signal);
 	const TrafficKind = Str(pEvent.trafficKind ?? pEvent.traffic_kind).toLowerCase();
 	const Reasons = [];
+	if (EventSourceOf(pEvent) !== "emolive" && IsAssetDocumentPath(PagePathOf(pEvent))) Reasons.push("asset_document_path");
 	if (cSyntheticUserAgentPattern.test(UserAgent) || cSyntheticUserAgentPattern.test(ClientHintUa)) Reasons.push("ua_bot");
 	if (Purpose.includes("prefetch") || Purpose.includes("preview") || Purpose.includes("prerender")) Reasons.push("prefetch");
 	const ReferrerReason = SyntheticReferrerReason(pEvent.referrer);

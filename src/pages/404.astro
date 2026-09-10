@@ -4,12 +4,20 @@ import { EmoCall, Emograph, SiteSearch404, VrStack } from "@/Widgets/Comp";
 import { EmoSec, ReadAlso, ReadAlsoItem, RelServiceItem, RelServices } from "@/Widgets/Sections";
 import { Pixel, Text } from "@/TypesLib";
 
+const cAssetDocumentPattern = /\.(?:avif|webp|jpe?g|png|gif|svg|ico|bmp|tiff?|css|js|mjs|map|woff2?|ttf|otf|eot|pdf|zip|rar|7z|xml|json|txt)(?:\/|$)/i;
+const cIsAsset404 = cAssetDocumentPattern.test(Astro.url.pathname);
+
 Astro.response.status = 404;
+if (cIsAsset404) {
+	Astro.response.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
+}
 ---
 
 
 
 
+
+{ !cIsAsset404 && (
 
 <BLayout
 	pTitle="الرابط المطلوب غير موجود"
@@ -111,3 +119,5 @@ Astro.response.status = 404;
 
 
 </BLayout>
+
+) }

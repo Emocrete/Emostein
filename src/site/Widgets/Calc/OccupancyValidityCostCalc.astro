@@ -226,11 +226,7 @@ function GetCssName(pName: string) {
 
 					<label class = " CertificateBuildingExtraOption ">
 
-						<input
-							data-field="buildingExtra"
-							type="checkbox"
-							value="wall"
-						/>
+						<input data-field="buildingExtra" type="checkbox" value="wall" />
 
 						<span>
 							سور
@@ -240,11 +236,7 @@ function GetCssName(pName: string) {
 
 					<label class = " CertificateBuildingExtraOption ">
 
-						<input
-							data-field="buildingExtra"
-							type="checkbox"
-							value="electricRoom"
-						/>
+						<input data-field="buildingExtra" type="checkbox" value="electricRoom" />
 
 						<span>
 							غرفة كهرباء
@@ -254,11 +246,7 @@ function GetCssName(pName: string) {
 
 					<label class = " CertificateBuildingExtraOption ">
 
-						<input
-							data-field="buildingExtra"
-							type="checkbox"
-							value="securityRoom"
-						/>
+						<input data-field="buildingExtra" type="checkbox" value="securityRoom" />
 
 						<span>
 							غرفة أمن
@@ -268,11 +256,7 @@ function GetCssName(pName: string) {
 
 					<label class = " CertificateBuildingExtraOption ">
 
-						<input
-							data-field="buildingExtra"
-							type="checkbox"
-							value="elevator"
-						/>
+						<input data-field="buildingExtra" type="checkbox" value="elevator" />
 
 						<span>
 							يوجد مصعد
@@ -335,10 +319,7 @@ function GetCssName(pName: string) {
 
 					<label class = " CertificatePaidStampFull ">
 
-						<input
-							data-field="paidStampFull"
-							type="checkbox"
-						/>
+						<input data-field="paidStampFull" type="checkbox" />
 
 						<span>
 							تم سدادها بالكامل
@@ -582,8 +563,8 @@ function GetCssName(pName: string) {
 				{
 					const fBuildingType = fRoot.querySelector('[data-field="buildingType"]:checked')?.value || "residential";
 					const fServiceFee = fBuildingType === "nonResidential"
-						? fNonResidentialServiceFee
-						: fResidentialServiceFee;
+					? fNonResidentialServiceFee
+					: fResidentialServiceFee;
 					const fBuildingCount = 1 + fBuildingExtras.filter((pField) => pField.checked).length;
 					const fLicense = Math.max(0, fNumber(fLicenseCost?.value));
 					const fBasicFee = fBuildingCount * fBuildingFee;
@@ -764,6 +745,7 @@ function GetCssName(pName: string) {
 		font-weight: 900;
 	}
 
+
 	.CertificateLocationButtons {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -772,6 +754,7 @@ function GetCssName(pName: string) {
 		border-radius: 17px;
 		background: #f3edef;
 	}
+
 
 	.CertificateLocationButton {
 		position: relative;
@@ -851,6 +834,16 @@ function GetCssName(pName: string) {
 		font-weight: 900;
 	}
 
+	.CertificateBuildingExtras small {
+		display: block;
+		margin-top: 6px;
+		color: #92878a;
+		font-size: 11px;
+		font-weight: 700;
+		line-height: 1.65;
+	}
+
+
 	.CertificateBuildingBase {
 		margin: 0 0 8px;
 		color: #6f696b;
@@ -859,11 +852,13 @@ function GetCssName(pName: string) {
 		line-height: 1.65;
 	}
 
+
 	.CertificateBuildingExtraOptions {
 		display: grid;
 		grid-template-columns: repeat(4, minmax(0, 1fr));
 		gap: 8px;
 	}
+
 
 	.CertificateBuildingExtraOption {
 		position: relative;
@@ -904,15 +899,6 @@ function GetCssName(pName: string) {
 	.CertificateBuildingExtraOption input:focus-visible + span {
 		outline: 3px solid color-mix(in srgb, var(--CertificateAccent) 28%, transparent);
 		outline-offset: 2px;
-	}
-
-	.CertificateBuildingExtras small {
-		display: block;
-		margin-top: 6px;
-		color: #92878a;
-		font-size: 11px;
-		font-weight: 700;
-		line-height: 1.65;
 	}
 
 
@@ -964,6 +950,12 @@ function GetCssName(pName: string) {
 		align-items: stretch;
 	}
 
+	.CertificatePaidStampRow .CertificateInputUnit input:disabled {
+		cursor: not-allowed;
+		opacity: .62;
+	}
+
+
 	.CertificatePaidStampFull {
 		display: flex;
 		align-items: center;
@@ -997,11 +989,6 @@ function GetCssName(pName: string) {
 	.CertificatePaidStampFull:has(input:focus-visible) {
 		outline: 3px solid color-mix(in srgb, var(--CertificateAccent) 28%, transparent);
 		outline-offset: 2px;
-	}
-
-	.CertificatePaidStampRow .CertificateInputUnit input:disabled {
-		cursor: not-allowed;
-		opacity: .62;
 	}
 
 

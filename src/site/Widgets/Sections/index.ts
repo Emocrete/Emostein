@@ -33,8 +33,8 @@ import DivStrIndexExport from "./DivStr.astro";
  * @pImgP as string (Default: "")
  * @pImgAlt as string (Default: "")
  * @pContentSize as Size
- * @pGap as Pixel (Default: new Pixel(35, 18))
- * @pPad as Pixel (Default: new Pixel(0))
+ * @pGap as Pixel (Default: new Pixel(30, 30))
+ * @pPad as Pixel (Default: new Pixel(30,5))
  */
 export const DivStr = DivStrIndexExport;
 
@@ -55,8 +55,8 @@ import EmoSecIndexExport from "./EmoSec.astro";
  * @pMinH as NumPer
  * @pHzAlign as HzAlignValue
  * @pVrAlign as VrAlignValue
- * @pGap as SectionCssValue (Default: new Pixel(0))
- * @pPad as SectionCssValue (Default: new Pixel(0))
+ * @pGap as SectionCssValue (Default: new Pixel(30,30))
+ * @pPad as SectionCssValue (Default: new Pixel(50,5))
  * @pImgF as string (Default: "")
  * @pImgL as string (Default: "")
  * @pImgP as string (Default: "")

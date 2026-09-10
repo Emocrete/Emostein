@@ -1133,7 +1133,7 @@ export class Text {
 	static readonly H4 = new Text(4, new Pixel(25, 18), true);
 	static readonly H5 = new Text(5, new Pixel(22, 16), true);
 	static readonly H6 = new Text(6, new Pixel(20, 14), true);
-	static readonly Body = new Text(0, new Pixel(18, 12));
+	static readonly Body = new Text(0, new Pixel(18, 14));
 
 }
 

@@ -9,30 +9,6 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 { cEnabled && (
 
-	<script is:inline NoMove>
-	
-	
-	
-		(() =>
-		{
-	
-			// ==================== Definitions: Variables & Methods ====================
-	
-	
-	
-	
-	
-			// ==================== Execution Logic ====================
-	
-			// باقي كود التتبع الموجود حاليًا
-		})();
-	</script>
-) }
-
-
-
-
-
 <script is:inline>
 
 
@@ -209,6 +185,8 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		const cBotUserAgentPattern = /(bot|crawl|spider|slurp|googlebot|googleother|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|google-inspectiontool|apis-google|adsbot|mediapartners-google|lighthouse|chrome-lighthouse|pagespeed|headlesschrome|puppeteer|playwright|phantomjs|selenium|webdriver|gtmetrix|pingdom|ahrefs|semrush|mj12bot|dotbot|petalbot|screaming frog|sitebulb|pageburst|google-read-aloud|google-notebooklm|google-gemininotebook|google-agent|googlemessages|google-pinpoint|google-cws|feedfetcher-google|ptst(?:\/|\b))/i;
 
+		const cAssetDocumentPattern = /\.(?:avif|webp|jpe?g|png|gif|svg|ico|bmp|tiff?|css|js|mjs|map|woff2?|ttf|otf|eot|pdf|zip|rar|7z|xml|json|txt)(?:\/|$)/i;
+
 
 
 
@@ -218,6 +196,15 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			const Rand = Math.random().toString(36).slice(2, 10);
 			const Time = Date.now().toString(36);
 			return `${pPrefix}_${Time}_${Rand}`;
+		}
+
+
+
+
+
+		function IsAssetDocumentPath(pPath = location.pathname)
+		{
+			return cAssetDocumentPattern.test(String(pPath || "").split(/[?#]/, 1)[0]);
 		}
 
 
@@ -1019,7 +1006,7 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			window.__EMO_OPS_TRAFFIC_GATE__ = { status: "pending", startedAtClient: new Date(StartedAt).toISOString() };
 			try
 			{
-				const Res = await fetch(`${cTrafficGateUrl}?phase=gate`, { method: "GET", headers: { accept: "application/json" }, cache: "no-store" });
+				const Res = await fetch(`${cTrafficGateUrl}?phase=gate&page=${encodeURIComponent(location.pathname)}`, { method: "GET", headers: { accept: "application/json" }, cache: "no-store" });
 				const Data = await Res.json();
 				const CompletedAt = Date.now();
 				const ExplicitDenied = Res.ok && Data?.track === false;
@@ -2550,6 +2537,12 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 			const ClientEventUid = `${GetSessionId()}:${SessionSeq}:${GetPageInstanceId()}:${ClientEventSeq}`;
 			const EventData = pOptions.eventData && typeof pOptions.eventData === "object" ? { ...pOptions.eventData } : {};
 			if (fNetworkAutomationHint) EventData.networkAutomationHint = true;
+			if (fLastHumanActivityAt > 0)
+			{
+				EventData.trustedHumanActivity = true;
+				EventData.trustedHumanActivityAt = new Date(fLastHumanActivityAt).toISOString();
+				EventData.trustedHumanActivityReason = fLastHumanActivityReason;
+			}
 			const IsContactEvent = EventType === "call_click" || EventType === "whatsapp_click";
 			const IsReplayEvent = EventType.startsWith("system.") && EventType !== "system.clarity_session_index";
 			const PageElapsedMs = Number.isFinite(Number(pOptions.pageElapsedMs)) ? Math.max(
@@ -3704,6 +3697,8 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 
 		// ==================== Execution Logic ====================
 
+		if (IsAssetDocumentPath()) return;
+
 		if (cReplayParams.has("emoNoAnalytics"))
 		{
 			try
@@ -3731,3 +3726,5 @@ const cEnabled = cRealHosts.has(Astro.url.hostname.toLowerCase()) && import.meta
 		}
 	})();
 </script>
+
+) }

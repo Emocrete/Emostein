@@ -9,6 +9,7 @@ const cSourceWeights = { vercel: 0.65, ipapi: 1, ipwho: 1, freeipapi: 1.1, iploc
 const cCorrelatedRadiusKm = 3;
 const cInvalidGeoTextPattern = /\b(atlantic|pacific|indian ocean|ocean|sea|gulf of|mediterranean|red sea|arabian sea)\b|المحيط|البحر/i;
 const cArabCountryCodes = new Set(["EG", "SA", "AE", "KW", "QA", "BH", "OM", "YE", "JO", "LB", "SY", "IQ", "PS", "MA", "DZ", "TN", "LY", "SD", "SO", "DJ", "KM", "MR"]);
+const cAssetDocumentPattern = /\.(?:avif|webp|jpe?g|png|gif|svg|ico|bmp|tiff?|css|js|mjs|map|woff2?|ttf|otf|eot|pdf|zip|rar|7z|xml|json|txt)(?:\/|$)/i;
 const cCairoAreaNames = new Set([
 	"nozha", "el nozha", "al nozha", "النزهه", "النزهة",
 	"marg", "el marg", "al marg", "المرج",
@@ -70,6 +71,11 @@ function GeoNorm(pValue) {
 function ClientIp(pRequest) {
 	const Forwarded = Header(pRequest, "x-forwarded-for").split(",")[0].trim();
 	return Forwarded || Header(pRequest, "x-real-ip") || Header(pRequest, "cf-connecting-ip");
+}
+
+function IsAssetDocumentPath(pValue) {
+	const Value = Str(pValue).split(/[?#]/, 1)[0];
+	return !!Value && cAssetDocumentPattern.test(Value);
 }
 
 function HeaderReason(pRequest) {
@@ -796,6 +802,14 @@ export async function GET({ request }) {
 	const Ip = ClientIp(request);
 	const Url = new URL(request.url);
 	const Phase = Str(Url.searchParams.get("phase") || "gate").toLowerCase();
+	const PagePath = Str(Url.searchParams.get("page"));
+	if (Phase !== "location" && IsAssetDocumentPath(PagePath)) return Json({
+		ok: true,
+		track: false,
+		reason: "asset_document_path",
+		phase: Phase,
+		diagnostics: RequestDiagnostics(request, Ip, [], null, StartedAt, 0, [])
+	});
 	const HeaderBlock = HeaderReason(request);
 	if (HeaderBlock) return Json({
 		ok: true,
