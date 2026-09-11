@@ -55,8 +55,9 @@ import EmoSecIndexExport from "./EmoSec.astro";
  * @pMinH as NumPer
  * @pHzAlign as HzAlignValue
  * @pVrAlign as VrAlignValue
- * @pGap as SectionCssValue (Default: new Pixel(30,30))
- * @pPad as SectionCssValue (Default: new Pixel(50,5))
+ * @pGap as Pixel (Default: new Pixel(30,30))
+ * @pHzPad as Pixel (Default: new Pixel(50,5))
+ * @pVrPad as Pixel (Default: new Pixel(50,5))
  * @pImgF as string (Default: "")
  * @pImgL as string (Default: "")
  * @pImgP as string (Default: "")

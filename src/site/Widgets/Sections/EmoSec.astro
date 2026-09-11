@@ -4,16 +4,15 @@ import { Media } from "@/Media";
 import { SeoText } from "@/SeoText";
 import type { HTMLAttributes } from "astro/types";
 
-type SectionCssValue = Pixel | NumPer | string | number;
-
 interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps {
 	pBg?: ElemBg;
 	pBox?: Size;
 	pMinH?: NumPer;
 	pHzAlign?: HzAlignValue;
 	pVrAlign?: VrAlignValue;
-	pGap?: SectionCssValue;
-	pPad?: SectionCssValue;
+	pGap?: Pixel;
+	pHzPad?: Pixel;
+	pVrPad?: Pixel;
 	pImgF?: string;
 	pImgL?: string;
 	pImgP?: string;
@@ -29,7 +28,8 @@ const {
 	pHzAlign,
 	pVrAlign,
 	pGap = new Pixel(30,30),
-	pPad = new Pixel(50,5),
+	pHzPad = new Pixel(50,5),
+	pVrPad = new Pixel(50,5),
 	pImgF = "",
 	pImgL = "",
 	pImgP = "",
@@ -102,8 +102,6 @@ const cBgAlt = pImgAlt || pBg?.Img?.Alt || SeoText.GetLocalsImageAlt(Astro.local
 
 const cHzAlign = pHzAlign ?? Align.Center;
 const cVrAlign = pVrAlign ?? Align.Center;
-const cGap = GetResponsiveCssValue(pGap, "0px", "0px");
-const cPad = GetResponsiveCssValue(pPad, "0px", "0px");
 const cHasExplicitHeight = HasExplicitCssSize(pBox?.HeightL) || HasExplicitCssSize(pBox?.HeightP) || HasExplicitCssSize(pSize?.HeightL) || HasExplicitCssSize(pSize?.HeightP);
 
 const cSectionStyle = [
@@ -118,49 +116,16 @@ const cSectionStyle = [
 	`--SecAlignP:${GetHzAlignCss(cHzAlign, "Portrait")};`,
 	`--SecJustifyL:${GetVrAlignCss(cVrAlign, "Landscape")};`,
 	`--SecJustifyP:${GetVrAlignCss(cVrAlign, "Portrait")};`,
-	`--SecGapL:${cGap.Landscape};`,
-	`--SecGapP:${cGap.Portrait};`,
-	`--SecPadL:${cPad.Landscape};`,
-	`--SecPadP:${cPad.Portrait};`,
+	`--SecGapL:${pGap.Landscape};`,
+	`--SecGapP:${pGap.Portrait};`,
+	`--SecHzPadL:${pHzPad.Landscape};`,
+	`--SecHzPadP:${pHzPad.Portrait};`,
+	`--SecVrPadL:${pVrPad.Landscape};`,
+	`--SecVrPadP:${pVrPad.Portrait};`,
 	cGivenStyle,
 ].filter(Boolean).join(" ");
 
 const cPlace = new Place(Astro.props as PlaceProps, cSectionStyle);
-
-function GetResponsiveCssValue(
-	pValue: SectionCssValue | undefined,
-	pLandscapeFallback: string,
-	pPortraitFallback: string = pLandscapeFallback,
-) {
-	if (pValue === undefined || pValue === null) {
-		return {
-			Landscape: pLandscapeFallback,
-			Portrait: pPortraitFallback,
-		};
-	}
-
-	if (typeof pValue === "number") {
-		return {
-			Landscape: `${pValue}px`,
-			Portrait: `${pValue}px`,
-		};
-	}
-
-	if (typeof pValue === "string") {
-		return {
-			Landscape: pValue,
-			Portrait: pValue,
-		};
-	}
-
-	const cValue = pValue as { Landscape?: string; Portrait?: string };
-	const cLandscape = cValue.Landscape ?? pLandscapeFallback;
-
-	return {
-		Landscape: cLandscape,
-		Portrait: cValue.Portrait ?? cLandscape ?? pPortraitFallback,
-	};
-}
 
 function GetStyleText(pStyle: Props["style"]) {
 	if (!pStyle) return "";
@@ -273,7 +238,8 @@ function HasExplicitCssSize(pValue?: string) {
 		height: var(--SecHeightL, auto);
 		min-height: var(--SecMinHeightL, auto);
 		max-width: 100%;
-		padding: var(--SecPadL, 0);
+		padding-inline: var(--SecHzPadL, 0);
+		padding-block: var(--SecVrPadL, 0);
 		gap: var(--SecGapL, 0);
 		background-color: var(--SecBg, transparent);
 		min-width: 0;
@@ -315,7 +281,7 @@ function HasExplicitCssSize(pValue?: string) {
 
 
 	.EmoSection[hidden] {
-		display: none !important;
+		display: none;
 	}
 
 
@@ -338,7 +304,8 @@ function HasExplicitCssSize(pValue?: string) {
 			width: var(--SecWidthP, var(--SecWidthL, 100%));
 			height: var(--SecHeightP, var(--SecHeightL, auto));
 			min-height: var(--SecMinHeightP, var(--SecMinHeightL, auto));
-			padding: var(--SecPadP, var(--SecPadL, 0));
+			padding-inline: var(--SecHzPadP, var(--SecHzPadL, 0));
+			padding-block: var(--SecVrPadP, var(--SecVrPadL, 0));
 			gap: var(--SecGapP, var(--SecGapL, 0));
 		}
 

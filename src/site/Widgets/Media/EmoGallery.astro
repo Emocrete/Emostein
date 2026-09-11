@@ -4,6 +4,15 @@ import { basename, extname, isAbsolute, relative, resolve } from "path";
 import { NumPer, Place, type PlaceProps, Size } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
 
+const cGalleryAssets = import.meta.glob(
+	"/src/**/*.{webp,jpg,jpeg,png,avif,gif}",
+	{
+		eager: true,
+		query: "?url",
+		import: "default"
+	}
+) as Record<string, string | { src: string }>;
+
 // @ts-ignore
 // @ts-ignore
 type CssSize = string | number;
@@ -20,9 +29,9 @@ type GalleryImage = {
 interface Props extends DebugOutlineProps, HTMLAttributes<"div">, Omit<PlaceProps, "pSize"> {
 	/**
 	 * @Required
-	 * Images folder path inside public.
+	 * Images folder path relative to the current page folder.
 	 * @Requires
-	 * Existing public folder and must contain images with extensions included in pExts. Otherwise, pEmptyText will be shown.
+	 * Existing folder relative to the current page and must contain images with extensions included in pExts. Otherwise, pEmptyText will be shown.
 	 */
 	pFolder: string;
 
@@ -199,7 +208,12 @@ const {
 	...RemAttr
 } = Astro.props as Props;
 
-const cImages = GetPublicFolderImages(pFolder, pExts, pRecursive);
+const cImages = GetFolderImages(
+	pFolder,
+	pExts,
+	pRecursive,
+	Astro.url.pathname
+);
 
 const cGap = NormalizeUnit(pGap);
 const cRadius = NormalizeUnit(pRadius);
@@ -226,19 +240,28 @@ const cStyle = [
 
 const cPlace = new Place(Astro.props as unknown as PlaceProps, cStyle);
 
-function GetPublicFolderImages(
+function GetFolderImages(
 	pFolder: string,
 	pExts: string[],
 	pRecursive: boolean,
+	pPagePath: string,
 ): GalleryImage[] {
 
-	const cPublicRoot = resolve(process.cwd(), "public");
-	const cCleanFolder = NormalizePublicFolder(pFolder);
+	const cProjectRoot = resolve(process.cwd());
+	const cPagesRoot = resolve(cProjectRoot, "src", "pages");
+	const cPageRelativePath = decodeURIComponent(pPagePath)
+		.replace(/^\/+|\/+$/g, "");
+	const cPageFolder = resolve(cPagesRoot, cPageRelativePath);
+	const cFolder = String(pFolder ?? "")
+		.trim()
+		.replaceAll("\\", "/");
 
-	if (!cCleanFolder) return [];
+	if (!cFolder) return [];
 
-	const cTargetFolder = resolve(cPublicRoot, cCleanFolder);
-	const cRelativeTarget = relative(cPublicRoot, cTargetFolder);
+	const cTargetFolder = cFolder.startsWith("/")
+		? resolve(cPagesRoot, cFolder.replace(/^\/+/, ""))
+		: resolve(cPageFolder, cFolder);
+	const cRelativeTarget = relative(cPagesRoot, cTargetFolder);
 
 	if (
 		cRelativeTarget.startsWith("..") ||
@@ -260,6 +283,15 @@ function GetPublicFolderImages(
 	return cFiles
 		.sort((pA, pB) => pA.localeCompare(pB, "ar", { numeric: true }))
 		.map((pFile) => {
+			const cSourcePath = `/${relative(cProjectRoot, pFile).replaceAll("\\", "/")}`;
+			const cAsset = cGalleryAssets[cSourcePath];
+
+			if (!cAsset) return null;
+
+			const cSrc = typeof cAsset === "string" ? cAsset : cAsset.src;
+
+			if (!cSrc) return null;
+
 			const cFileName = basename(pFile);
 			const cExt = extname(cFileName);
 			const cTitle = basename(cFileName, cExt).replace(/[-_]+/g, " ").trim();
@@ -269,14 +301,15 @@ function GetPublicFolderImages(
 			const cRatio = cWidth / cHeight;
 
 			return {
-				Src: `/${relative(cPublicRoot, pFile).replaceAll("\\", "/")}`,
+				Src: cSrc,
 				Title: cTitle,
 				Alt: cTitle,
 				Width: cWidth,
 				Height: cHeight,
 				Ratio: Number.isFinite(cRatio) && cRatio > 0 ? cRatio : 1,
 			};
-		});
+		})
+		.filter((pImage): pImage is GalleryImage => pImage !== null);
 }
 
 function CollectImageFiles(
@@ -427,15 +460,6 @@ function ReadWebpSize(pBuffer: any) {
 	}
 
 	return null;
-}
-
-function NormalizePublicFolder(pFolder: string) {
-	return String(pFolder ?? "")
-		.trim()
-		.replaceAll("\\", "/")
-		.replace(/^\/+/, "")
-		.replace(/^public\//, "")
-		.replace(/\/+$/, "");
 }
 
 function NormalizeUnit(pValue: CssSize) {

@@ -1,34 +1,63 @@
-import { existsSync, readdirSync } from "node:fs";
-import { join } from "node:path";
+const cPageMediaAssets = import.meta.glob(
+	"/src/pages/**/_M/*",
+	{
+		eager: true,
+		query: "?url",
+		import: "default"
+	}
+) as Record<string, string>;
 
-export interface MediaPathOptions {
-	pRoot?: string;
-	pFolder?: string;
-	pAbsolute?: boolean;
-	pImgName?: string;
+
+interface PageMediaItem {
+	FileName: string;
+	Url: string;
 }
 
-export class Media {
 
-	private static readonly cDefaultRoot = "/Media";
+const cPageMediaIndex = new Map<string, PageMediaItem[]>();
+
+for (const [cSourcePath, cAssetUrl] of Object.entries(cPageMediaAssets)) {
+	const cNormalizedSourcePath = cSourcePath.replace(/\\/g, "/");
+	const cLowerSourcePath = cNormalizedSourcePath.toLowerCase();
+	const cPagesIndex = cLowerSourcePath.lastIndexOf("/pages/");
+
+	if (cPagesIndex < 0) { continue; }
+
+	const cPageRelativePath = cNormalizedSourcePath.slice(cPagesIndex + "/pages/".length);
+	const cLowerPageRelativePath = cPageRelativePath.toLowerCase();
+	const cMediaIndex = cLowerPageRelativePath.lastIndexOf("/_m/");
+
+	if (cMediaIndex < 0) { continue; }
+
+	const cPagePath = cLowerPageRelativePath.slice(0, cMediaIndex);
+	const cFileName = cPageRelativePath.slice(cMediaIndex + "/_M/".length);
+	const cItems = cPageMediaIndex.get(cPagePath) ?? [];
+
+	cItems.push({
+		FileName: cFileName,
+		Url: cAssetUrl
+	});
+
+	cPageMediaIndex.set(cPagePath, cItems);
+}
+
+
+export interface MediaPathOptions {
+	pFolder?: string;
+	pAbsolute?: boolean;
+}
+
+
+export class Media {
 
 	public static GetPageFolder( pPageUrlOrPath: string , pOptions: MediaPathOptions = {} ) : string
 		{
 
-			if (pOptions.pFolder) { return Media.NormalizeFolder(pOptions.pFolder); }
+			const cPagePath = Media.GetPagePath(pPageUrlOrPath);
 
-			const cRoot = Media.NormalizeFolder(pOptions.pRoot ?? Media.cDefaultRoot).replace(/\/$/, "");
-			const cPath = Media.GetPathname(pPageUrlOrPath);
-
-			const cParts = cPath
-				.split("/")
-				.map((pPart) => pPart.trim())
-				.filter((pPart) => pPart.length > 0)
-				.map((pPart) => Media.ToFolderPart(pPart));
-
-			if (cParts.length === 0) { return `${cRoot}/`; }
-
-			return `${cRoot}/${cParts.join("/")}/`;
+			return cPagePath
+				? `/${cPagePath}/_M/`
+				: "/_M/";
 
 		}
 
@@ -41,11 +70,17 @@ export class Media {
 
 			if (Media.IsReadyUrl(pFileOrPath)) { return pFileOrPath; }
 
-			const cPath = pFileOrPath.startsWith("/") ? pFileOrPath : `${Media.GetPageFolder(pPageUrlOrPath, pOptions)}${pFileOrPath}`;
+			if (pFileOrPath.startsWith("/")) {
+				return pOptions.pAbsolute
+					? Media.GetAbsoluteUrl(pPageUrlOrPath, pFileOrPath)
+					: pFileOrPath;
+			}
 
-			if (!pOptions.pAbsolute) { return cPath; }
-
-			return Media.GetAbsoluteUrl(pPageUrlOrPath, cPath);
+			return Media.GetExistingPageAsset(
+				pPageUrlOrPath,
+				pFileOrPath,
+				pOptions.pAbsolute ?? false
+			);
 
 		}
 
@@ -62,47 +97,78 @@ export class Media {
 
 
 
-		public static GetExistingHeroLandscape( pPageUrlOrPath: string , pOptions: MediaPathOptions = {} ) : string
-			{
+	public static GetExistingPageAsset( pPageUrlOrPath: string , pFileName: string , pAbsolute = false ) : string
+		{
 
-				const cFileName = Media.FindHeroFileName(Media.GetPageFolder(pPageUrlOrPath, pOptions), "HeroL");
+			if (!pFileName) { return ""; }
 
-				if (!cFileName) { return ""; }
+			const cPagePath = Media.GetPagePath(pPageUrlOrPath).toLowerCase();
+			const cTargetFileName = Media.GetFileName(pFileName).toLowerCase();
+			const cItems = cPageMediaIndex.get(cPagePath) ?? [];
 
-				return Media.GetPageFile(pPageUrlOrPath, cFileName, pOptions);
+			if (!cTargetFileName || cItems.length === 0) { return ""; }
 
-			}
+			const cExactItem = cItems.find((pItem) => {
+				return pItem.FileName.toLowerCase() === cTargetFileName;
+			});
 
+			const cSuffixItem = cExactItem ?? cItems.find((pItem) => {
+				return pItem.FileName.toLowerCase().endsWith(cTargetFileName);
+			});
 
+			const cAssetUrl = cSuffixItem?.Url ?? "";
 
-		public static GetExistingHeroPortrait( pPageUrlOrPath: string , pOptions: MediaPathOptions = {} ) : string
-			{
+			if (!cAssetUrl) { return ""; }
 
-				const cFileName = Media.FindHeroFileName(Media.GetPageFolder(pPageUrlOrPath, pOptions), "HeroP");
+			return pAbsolute
+				? Media.GetAbsoluteUrl(pPageUrlOrPath, cAssetUrl)
+				: cAssetUrl;
 
-				if (!cFileName) { return ""; }
-
-				return Media.GetPageFile(pPageUrlOrPath, cFileName, pOptions);
-
-			}
-
-
-
-		public static GetHeroLandscape( pPageUrlOrPath: string , pOptions: MediaPathOptions = {} ) : string
-			{
-
-				return Media.GetPageFile(pPageUrlOrPath, Media.GetHeroFileName(pPageUrlOrPath, pOptions, "HeroL"), pOptions);
-
-			}
+		}
 
 
 
-		public static GetHeroPortrait( pPageUrlOrPath: string , pOptions: MediaPathOptions = {} ) : string
-			{
+	public static GetExistingHeroLandscape( pPageUrlOrPath: string , pOptions: MediaPathOptions = {} ) : string
+		{
 
-				return Media.GetPageFile(pPageUrlOrPath, Media.GetHeroFileName(pPageUrlOrPath, pOptions, "HeroP"), pOptions);
+			return Media.GetExistingHero(
+				pPageUrlOrPath,
+				"HeroL",
+				pOptions.pAbsolute ?? false
+			);
 
-			}
+		}
+
+
+
+	public static GetExistingHeroPortrait( pPageUrlOrPath: string , pOptions: MediaPathOptions = {} ) : string
+		{
+
+			return Media.GetExistingHero(
+				pPageUrlOrPath,
+				"HeroP",
+				pOptions.pAbsolute ?? false
+			);
+
+		}
+
+
+
+	public static GetHeroLandscape( pPageUrlOrPath: string , pOptions: MediaPathOptions = {} ) : string
+		{
+
+			return Media.GetExistingHeroLandscape(pPageUrlOrPath, pOptions);
+
+		}
+
+
+
+	public static GetHeroPortrait( pPageUrlOrPath: string , pOptions: MediaPathOptions = {} ) : string
+		{
+
+			return Media.GetExistingHeroPortrait(pPageUrlOrPath, pOptions);
+
+		}
 
 
 
@@ -118,66 +184,56 @@ export class Media {
 
 
 
-		private static GetHeroFileName( pPageUrlOrPath: string , pOptions: MediaPathOptions , pHeroName: "HeroL" | "HeroP" ) : string
-			{
+	private static GetExistingHero( pPageUrlOrPath: string , pHeroName: "HeroL" | "HeroP" , pAbsolute: boolean ) : string
+		{
 
-				const cFolder = Media.GetPageFolder(pPageUrlOrPath, pOptions);
-				const cFoundFile = Media.FindHeroFileName(cFolder, pHeroName);
+			const cExtensions = ["webp", "avif", "png", "jpg", "jpeg"];
 
-				return cFoundFile || `${pHeroName}.webp`;
+			for (const cExtension of cExtensions) {
+				const cAssetUrl = Media.GetExistingPageAsset(
+					pPageUrlOrPath,
+					`${pHeroName}.${cExtension}`,
+					pAbsolute
+				);
 
+				if (cAssetUrl) { return cAssetUrl; }
 			}
 
+			return "";
 
-
-		private static FindHeroFileName( pFolder: string , pHeroName: "HeroL" | "HeroP" ) : string
-			{
-
-				const cFolderPath = Media.GetPublicFolderPath(pFolder);
-
-				if (!existsSync(cFolderPath)) { return ""; }
-
-				const cHeroFilePattern = new RegExp(`${pHeroName}\\.(webp|avif|png|jpe?g)$`, "i");
-
-				const cFiles = readdirSync(cFolderPath, { withFileTypes: true })
-					.filter((pFile) => pFile.isFile())
-					.map((pFile) => pFile.name)
-					.filter((pFileName) => cHeroFilePattern.test(pFileName))
-					.sort((pFirst, pSecond) => {
-						return Media.GetHeroFilePriority(pFirst, pHeroName) - Media.GetHeroFilePriority(pSecond, pHeroName)
-							|| pFirst.localeCompare(pSecond);
-					});
-
-				return cFiles[0] ?? "";
-
-			}
+		}
 
 
 
-		private static GetHeroFilePriority( pFileName: string , pHeroName: "HeroL" | "HeroP" ) : number
-			{
+	private static GetPagePath( pPageUrlOrPath: string ) : string
+		{
 
-				return pFileName.toLowerCase() === `${pHeroName.toLowerCase()}.webp` ? 10 : 0;
+			return Media.GetPathname(pPageUrlOrPath)
+				.split(/[?#]/, 1)[0]
+				.replace(/^\/+|\/+$/g, "");
 
-			}
+		}
 
 
 
-		private static GetPublicFolderPath( pFolder: string ) : string
-			{
+	private static GetFileName( pPath: string ) : string
+		{
 
-				const cFolder = Media.NormalizeFolder(pFolder).replace(/^\/+/, "");
+			const cNormalizedPath = pPath.replace(/\\/g, "/");
+			const cParts = cNormalizedPath.split("/");
 
-				return join(process.cwd(), "public", cFolder);
+			return cParts[cParts.length - 1] ?? "";
 
-			}
+		}
 
 
 
 	private static GetPathname( pPageUrlOrPath: string ) : string
 		{
 
-			if (/^https?:\/\//i.test(pPageUrlOrPath)) {	return new URL(pPageUrlOrPath).pathname;}
+			if (/^https?:\/\//i.test(pPageUrlOrPath)) {
+				return new URL(pPageUrlOrPath).pathname;
+			}
 
 			return pPageUrlOrPath;
 
@@ -188,7 +244,11 @@ export class Media {
 	private static GetAbsoluteUrl( pPageUrlOrPath: string , pPath: string ) : string
 		{
 
-			const cBase = /^https?:\/\//i.test(pPageUrlOrPath) ? pPageUrlOrPath : "https://www.emocrete.com/";
+			if (Media.IsReadyUrl(pPath)) { return pPath; }
+
+			const cBase = /^https?:\/\//i.test(pPageUrlOrPath)
+				? pPageUrlOrPath
+				: "https://www.emocrete.com/";
 
 			return new URL(pPath, cBase).href;
 
@@ -199,35 +259,10 @@ export class Media {
 	private static IsReadyUrl( pValue: string ) : boolean
 		{
 
-			return /^https?:\/\//i.test(pValue) || pValue.startsWith("data:") || pValue.startsWith("blob:");
+			return /^https?:\/\//i.test(pValue) ||
+				pValue.startsWith("data:") ||
+				pValue.startsWith("blob:");
 
 		}
 
-
-
-	private static NormalizeFolder( pFolder: string ) : string
-		{
-
-			if (!pFolder) { return "/"; }
-
-			const cStart = pFolder.startsWith("/") ? pFolder : `/${pFolder}`;
-
-			return cStart.endsWith("/") ? cStart : `${cStart}/`;
-
-		}
-
-
-
-	private static ToFolderPart( pValue: string ) : string
-		{
-
-			return pValue
-				.split("-")
-				.filter((pPart) => pPart.length > 0)
-				.map((pPart) => {
-					return pPart.charAt(0).toUpperCase() + pPart.slice(1);
-				})
-				.join("-");
-
-		}
 }

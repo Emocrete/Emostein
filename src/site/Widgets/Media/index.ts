@@ -28,9 +28,9 @@ import EGallIndexExport from "./EmoGallery.astro";
 
 /**
  * @pFolder as string — @Required
- * Images folder path inside public.
+ * Images folder path relative to the current page folder.
  * @Requires
- * Existing public folder and must contain images with extensions included in pExts. Otherwise, pEmptyText will be shown. (Default: "")
+ * Existing folder relative to the current page and must contain images with extensions included in pExts. Otherwise, pEmptyText will be shown. (Default: "")
  * @pSize as Size — Gallery outer size in landscape and portrait.
  * * DefVal = new Box("100%", 600, "100%", 400) , L = ("100%",600) , P = ("100%",400)
  * * Requires: No extra prop is required. The whole internal image layout is calculated inside this size. (Default: new Size(new NumPer("100%", "100%"), new NumPer(600, 400)))
@@ -88,9 +88,9 @@ import EmoGalleryIndexExport from "./EmoGallery.astro";
 
 /**
  * @pFolder as string — @Required
- * Images folder path inside public.
+ * Images folder path relative to the current page folder.
  * @Requires
- * Existing public folder and must contain images with extensions included in pExts. Otherwise, pEmptyText will be shown. (Default: "")
+ * Existing folder relative to the current page and must contain images with extensions included in pExts. Otherwise, pEmptyText will be shown. (Default: "")
  * @pSize as Size — Gallery outer size in landscape and portrait.
  * * DefVal = new Box("100%", 600, "100%", 400) , L = ("100%",600) , P = ("100%",400)
  * * Requires: No extra prop is required. The whole internal image layout is calculated inside this size. (Default: new Size(new NumPer("100%", "100%"), new NumPer(600, 400)))

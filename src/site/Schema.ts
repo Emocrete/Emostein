@@ -1,5 +1,3 @@
-import { existsSync, readdirSync } from "node:fs";
-import { join } from "node:path";
 import { Media } from "@/Media";
 import { SeoText } from "@/SeoText";
 
@@ -32,7 +30,6 @@ export interface SchemaPrimaryImageMeta {
 
 export interface ServiceSchemaOptions {
 	pImages?: string[];
-	pHeroFolder?: string;
 	pHeroImageNames?: string[];
 	pServiceType?: string;
 	pProviderId?: string;
@@ -41,7 +38,6 @@ export interface ServiceSchemaOptions {
 
 export interface SectionSchemaOptions {
 	pImages?: string[];
-	pHeroFolder?: string;
 	pHeroImageNames?: string[];
 	pSchemaType?: LayoutSchemaType;
 	pParentId?: string;
@@ -52,13 +48,11 @@ export interface SectionSchemaOptions {
 
 export interface CollectionSchemaOptions {
 	pImages?: string[];
-	pHeroFolder?: string;
 	pHeroImageNames?: string[];
 }
 
 export interface ArticleSchemaOptions {
 	pImages?: string[];
-	pHeroFolder?: string;
 	pHeroImageNames?: string[];
 	pAuthorId?: string;
 }
@@ -70,7 +64,6 @@ export interface OrganizationSchemaOptions {
 	pSameAs?: string[];
 	pTelephone?: string;
 	pImages?: string[];
-	pHeroFolder?: string;
 	pHeroImageNames?: string[];
 }
 
@@ -80,7 +73,6 @@ export interface FreelancerSchemaOptions {
 	pSameAs?: string[];
 	pTelephone?: string;
 	pImages?: string[];
-	pHeroFolder?: string;
 	pHeroImageNames?: string[];
 }
 
@@ -170,7 +162,7 @@ export class Schema {
 			pUrl = SeoText.NormalizePageUrl(pUrl);
 
 			const cPageId = `${pUrl}#webpage`;
-			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
+			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroImageNames);
 			const cGraph = Schema.GetBaseGraph(pTitle, pDescr, pUrl, pOptions);
 
 			Schema.AddGraphImages(cGraph, cImages);
@@ -197,12 +189,11 @@ export class Schema {
 			pUrl = SeoText.NormalizePageUrl(pUrl);
 
 			const cPageId = `${pUrl}#webpage`;
-			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
+			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroImageNames);
 			const cGraph = Schema.GetBaseGraph(pTitle, pDescr, pUrl, {
 				pSameAs: pOptions.pSameAs,
 				pTelephone: pOptions.pTelephone,
 				pImages: pOptions.pImages,
-				pHeroFolder: pOptions.pHeroFolder,
 				pHeroImageNames: pOptions.pHeroImageNames
 			});
 
@@ -231,7 +222,7 @@ export class Schema {
 
 			const cSectionId = `${pUrl}#business`;
 			const cPageId = `${pUrl}#webpage`;
-			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
+			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroImageNames);
 			const cGraph = Schema.GetBaseGraph(pTitle, pDescr, pUrl);
 
 			Schema.AddGraphImages(cGraph, cImages);
@@ -276,7 +267,7 @@ export class Schema {
 			pUrl = SeoText.NormalizePageUrl(pUrl);
 
 			const cPageId = `${pUrl}#webpage`;
-			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
+			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroImageNames);
 			const cGraph = Schema.GetBaseGraph(pTitle, pDescr, pUrl);
 
 			Schema.AddGraphImages(cGraph, cImages);
@@ -307,7 +298,7 @@ export class Schema {
 
 			const cServiceId = `${pUrl}#service`;
 			const cPageId = `${pUrl}#webpage`;
-			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
+			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroImageNames);
 			const cGraph = Schema.GetBaseGraph(pTitle, pDescr, pUrl);
 
 			Schema.AddGraphImages(cGraph, cImages);
@@ -352,7 +343,7 @@ export class Schema {
 
 			const cArticleId = `${pUrl}#article`;
 			const cPageId = `${pUrl}#webpage`;
-			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
+			const cImages = Schema.GetSchemaImages(pUrl, pTitle, pDescr, pOptions.pImages, pOptions.pHeroImageNames);
 			const cGraph = Schema.GetBaseGraph(pTitle, pDescr, pUrl);
 
 			Schema.AddGraphImages(cGraph, cImages);
@@ -398,7 +389,7 @@ export class Schema {
 
 			pUrl = SeoText.NormalizePageUrl(pUrl);
 
-			const cImages = Schema.GetSchemaImages(pUrl, pTitle, "", pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames);
+			const cImages = Schema.GetSchemaImages(pUrl, pTitle, "", pOptions.pImages, pOptions.pHeroImageNames);
 
 			return Schema.GetImageUrl(cImages[0]);
 
@@ -411,41 +402,29 @@ public static GetPrimaryImageMeta( pTitle: string , pDescr: string , pUrl: strin
 
 		pUrl = SeoText.NormalizePageUrl(pUrl);
 
-		const cHeroFolder = Schema.GetSchemaHeroFolder(pUrl, pOptions.pHeroFolder);
-		const cFolders = [cHeroFolder, ...Schema.GetFallbackHeroFolders(cHeroFolder)];
-		const cImages: SchemaObject[] = [];
-		const cUsedUrls = new Set<string>();
 		const cPreviewSpecs: SchemaImageSpec[] = [
 			Schema.GetImageSpecByName("Share.jpg"),
 			Schema.GetImageSpecByName("Schema-16x9-1200x675.webp"),
 			Schema.GetImageSpecByName("HeroL.webp")
 		];
 
-		for (const cFolder of cFolders) {
-			for (const cSpec of cPreviewSpecs) {
-				Schema.AddImageObjects(cImages, cUsedUrls, pUrl, pTitle, pDescr, [cSpec], cFolder, true);
+		for (const cSpec of cPreviewSpecs) {
+			const cImageUrl = Schema.ResolveImagePath(pUrl, cSpec);
 
-				if (cImages.length > 0) { break; }
-			}
+			if (!cImageUrl) { continue; }
 
-			if (cImages.length > 0) { break; }
+			return {
+				Url: cImageUrl,
+				Alt: SeoText.GetImageAlt(pTitle, pDescr),
+				Type: Schema.GetImageMimeType(cImageUrl),
+				Width: cSpec.Width,
+				Height: cSpec.Height
+			};
 		}
 
-		const cImage = cImages[0];
-		const cImageUrl = Schema.GetImageUrl(cImage);
-
-		if (!cImageUrl) { throw new Error(`No rectangular preview image was found for ${pUrl}. Expected Share.jpg, Schema-16x9-1200x675.webp, or HeroL.`); }
-
-		return {
-			Url: cImageUrl,
-			Alt: SeoText.GetImageAlt(pTitle, pDescr),
-			Type: Schema.GetImageMimeType(cImageUrl),
-			Width: Schema.GetNumberValue(cImage?.["width"]),
-			Height: Schema.GetNumberValue(cImage?.["height"])
-		};
+		throw new Error(`No rectangular preview image was found for ${pUrl}. Expected Share.jpg, Schema-16x9-1200x675.webp, or HeroL.`);
 
 	}
-
 
 
 	public static GetImageUrls( pTitle: string , pUrl: string , pOptions: ServiceSchemaOptions | SectionSchemaOptions | CollectionSchemaOptions | ArticleSchemaOptions | OrganizationSchemaOptions = {} ) : string[]
@@ -453,7 +432,7 @@ public static GetPrimaryImageMeta( pTitle: string , pDescr: string , pUrl: strin
 
 			pUrl = SeoText.NormalizePageUrl(pUrl);
 
-			return Schema.GetSchemaImages(pUrl, pTitle, "", pOptions.pImages, pOptions.pHeroFolder, pOptions.pHeroImageNames)
+			return Schema.GetSchemaImages(pUrl, pTitle, "", pOptions.pImages, pOptions.pHeroImageNames)
 				.map((pImage) => Schema.GetImageUrl(pImage))
 				.filter((pUrl) => pUrl.length > 0);
 
@@ -574,10 +553,9 @@ public static GetPrimaryImageMeta( pTitle: string , pDescr: string , pUrl: strin
 
 
 
-	private static GetSchemaImages( pUrl: string , pTitle: string , pDescr: string , pImages?: string[] , pHeroFolder?: string , pHeroImageNames?: string[] ) : SchemaObject[]
+	private static GetSchemaImages( pUrl: string , pTitle: string , pDescr: string , pImages?: string[] , pHeroImageNames?: string[] ) : SchemaObject[]
 		{
 
-			const cHeroFolder = Schema.GetSchemaHeroFolder(pUrl, pHeroFolder);
 			const cImages: SchemaObject[] = [];
 			const cUsedUrls = new Set<string>();
 
@@ -589,8 +567,7 @@ public static GetPrimaryImageMeta( pTitle: string , pDescr: string , pUrl: strin
 				pDescr,
 				(pImages ?? []).map((pImage) => {
 					return { FileName: pImage };
-				}),
-				cHeroFolder
+				})
 			);
 
 			Schema.AddImageObjects(
@@ -601,19 +578,17 @@ public static GetPrimaryImageMeta( pTitle: string , pDescr: string , pUrl: strin
 				pDescr,
 				(pHeroImageNames ?? []).map((pImage) => {
 					return Schema.GetImageSpecByName(pImage);
-				}),
-				cHeroFolder
+				})
 			);
 
-			Schema.AddImageObjects(cImages, cUsedUrls, pUrl, pTitle, pDescr, Schema.cDefaultSchemaImageSpecs, cHeroFolder, true);
-
-			if (cImages.length === 0) {
-				for (const cFallbackFolder of Schema.GetFallbackHeroFolders(cHeroFolder)) {
-					Schema.AddImageObjects(cImages, cUsedUrls, pUrl, pTitle, pDescr, Schema.cDefaultSchemaImageSpecs, cFallbackFolder, true);
-
-					if (cImages.length > 0) { break; }
-				}
-			}
+			Schema.AddImageObjects(
+				cImages,
+				cUsedUrls,
+				pUrl,
+				pTitle,
+				pDescr,
+				Schema.cDefaultSchemaImageSpecs
+			);
 
 			return cImages;
 
@@ -621,194 +596,36 @@ public static GetPrimaryImageMeta( pTitle: string , pDescr: string , pUrl: strin
 
 
 
-	private static GetFallbackHeroFolders( pFolder: string ) : string[]
-		{
-
-			const cParts = Schema.NormalizeFolder(pFolder)
-				.replace(/^\/+|\/+$/g, "")
-				.split("/")
-				.filter((pPart) => pPart.length > 0);
-			const cFolders: string[] = [];
-
-			while (cParts.length > 2) {
-				cParts.pop();
-
-				const cFolder = Schema.ResolveExistingFolderPath(`/${cParts.join("/")}/`);
-
-				if (cFolder) { cFolders.push(cFolder); }
-			}
-
-			return cFolders;
-
-		}
-
-
-
-	private static AddImageObjects( pImages: SchemaObject[] , pUsedUrls: Set<string> , pPageUrl: string , pTitle: string , pDescr: string , pSpecs: SchemaImageSpec[] , pFolder: string , pRequireLocalFile = false ) : void
+	private static AddImageObjects( pImages: SchemaObject[] , pUsedUrls: Set<string> , pPageUrl: string , pTitle: string , pDescr: string , pSpecs: SchemaImageSpec[] ) : void
 		{
 
 			pSpecs.forEach((pSpec) => {
-				const cPath = Schema.ResolveImagePath(pPageUrl, pFolder, pSpec, pRequireLocalFile);
+				const cPath = Schema.ResolveImagePath(pPageUrl, pSpec);
 
 				if (!cPath) { return; }
-				if (!Schema.IsExternalUrl(cPath) && !Schema.CanUseImagePath(cPath)) { return; }
+				if (pUsedUrls.has(cPath)) { return; }
 
-				const cUrl = Schema.GetAbsoluteUrl(pPageUrl, cPath);
-
-				if (pUsedUrls.has(cUrl)) { return; }
-
-				pUsedUrls.add(cUrl);
-				pImages.push(Schema.GetImageObject(cUrl, pTitle, pDescr, pSpec.Width, pSpec.Height));
+				pUsedUrls.add(cPath);
+				pImages.push(Schema.GetImageObject(cPath, pTitle, pDescr, pSpec.Width, pSpec.Height));
 			});
 
 		}
 
 
 
-	private static GetSchemaHeroFolder( pUrl: string , pHeroFolder?: string ) : string
-		{
-
-			if (pHeroFolder) {
-				const cFolder = Media.GetPageFolder(pUrl, { pFolder: pHeroFolder });
-
-				return Schema.ResolveExistingFolderPath(cFolder) || cFolder;
-			}
-
-			const cPath = new URL(pUrl).pathname.replace(/\/+$/, "") || "/";
-			const cFolder = cPath === "/" ? "/Media/Home/" : Media.GetPageFolder(pUrl);
-
-			return Schema.ResolveExistingFolderPath(cFolder) || cFolder;
-
-		}
-
-
-
-	private static ResolveExistingFolderPath( pFolder: string ) : string
-		{
-
-			const cFolder = Schema.NormalizeFolder(pFolder);
-			const cExactPath = join(process.cwd(), "public", cFolder.replace(/^\/+/, ""));
-
-			if (existsSync(cExactPath)) { return cFolder; }
-
-			const cParts = cFolder.replace(/^\/+|\/+$/g, "").split("/").filter((pPart) => pPart.length > 0);
-			let cCurrentPath = join(process.cwd(), "public");
-			const cResolvedParts: string[] = [];
-
-			for (const cPart of cParts) {
-				if (!existsSync(cCurrentPath)) { return ""; }
-
-				const cFoundPart = readdirSync(cCurrentPath, { withFileTypes: true })
-					.filter((pItem) => pItem.isDirectory())
-					.map((pItem) => pItem.name)
-					.find((pName) => pName.toLowerCase() === cPart.toLowerCase());
-
-				if (!cFoundPart) { return ""; }
-
-				cResolvedParts.push(cFoundPart);
-				cCurrentPath = join(cCurrentPath, cFoundPart);
-			}
-
-			return `/${cResolvedParts.join("/")}/`;
-
-		}
-
-
-
-	private static ResolveImagePath( pPageUrl: string , pFolder: string , pSpec: SchemaImageSpec , pRequireLocalFile: boolean ) : string
+	private static ResolveImagePath( pPageUrl: string , pSpec: SchemaImageSpec ) : string
 		{
 
 			if (!pSpec.FileName) { return ""; }
 			if (Schema.IsExternalUrl(pSpec.FileName)) { return pSpec.FileName; }
 
-			const cHeroPath = Schema.GetHeroPath(pPageUrl, pFolder, pSpec.FileName);
-			if (cHeroPath) { return cHeroPath; }
-
-			const cRawPath = Schema.JoinImagePath(pFolder, pSpec.FileName);
-			const cResolvedPath = Schema.ResolveExistingImagePath(cRawPath);
-
-			if (cResolvedPath) { return cResolvedPath; }
-			if (pRequireLocalFile) { return ""; }
-
-			return cRawPath;
+			return Media.GetExistingPageAsset(
+				pPageUrl,
+				Schema.GetFileName(pSpec.FileName),
+				true
+			);
 
 		}
-
-
-
-	private static GetHeroPath( pPageUrl: string , pFolder: string , pFileName: string ) : string
-		{
-
-			const cFileName = Schema.GetFileName(pFileName).toLowerCase();
-
-			if (cFileName === "herol.webp") {
-				const cHeroPath = Media.GetHeroLandscape(pPageUrl, { pFolder });
-
-				return Schema.CanUseImagePath(cHeroPath) ? cHeroPath : "";
-			}
-
-			if (cFileName === "herop.webp") {
-				const cHeroPath = Media.GetHeroPortrait(pPageUrl, { pFolder });
-
-				return Schema.CanUseImagePath(cHeroPath) ? cHeroPath : "";
-			}
-
-			return "";
-
-		}
-
-
-
-	private static ResolveExistingImagePath( pPath: string ) : string
-		{
-
-			if (Schema.IsExternalUrl(pPath)) { return pPath; }
-			if (Schema.CanUseImagePath(pPath)) { return pPath; }
-			if (!pPath.startsWith("/")) { return ""; }
-
-			const cSlashIndex = pPath.lastIndexOf("/");
-			if (cSlashIndex < 0) { return ""; }
-
-			const cFolder = pPath.slice(0, cSlashIndex + 1);
-			const cFileName = pPath.slice(cSlashIndex + 1);
-			const cFoundFile = Schema.FindLocalFileBySuffix(cFolder, cFileName);
-
-			return cFoundFile ? `${cFolder}${cFoundFile}` : "";
-
-		}
-
-
-
-	private static FindLocalFileBySuffix( pFolder: string , pFileName: string ) : string
-		{
-
-			const cFolder = Schema.NormalizeFolder(pFolder);
-			const cFolderPath = join(process.cwd(), "public", cFolder.replace(/^\/+/, ""));
-
-			if (!existsSync(cFolderPath)) { return ""; }
-
-			const cFileName = pFileName.toLowerCase();
-			const cFiles = readdirSync(cFolderPath, { withFileTypes: true })
-				.filter((pFile) => pFile.isFile())
-				.map((pFile) => pFile.name)
-				.filter((pFoundFileName) => pFoundFileName.toLowerCase().endsWith(cFileName))
-				.sort((pFirst, pSecond) => {
-					return Schema.GetFileSuffixPriority(pFirst, cFileName) - Schema.GetFileSuffixPriority(pSecond, cFileName) || pFirst.localeCompare(pSecond);
-				});
-
-			return cFiles[0] ?? "";
-
-		}
-
-
-
-	private static GetFileSuffixPriority( pFoundFileName: string , pTargetFileName: string ) : number
-		{
-
-			return pFoundFileName.toLowerCase() === pTargetFileName ? 0 : 10;
-
-		}
-
 
 
 	private static GetImageObject( pUrl: string , pTitle: string , pDescr: string , pWidth?: number , pHeight?: number ) : SchemaObject
@@ -938,51 +755,12 @@ public static GetPrimaryImageMeta( pTitle: string , pDescr: string , pUrl: strin
 
 
 
-	private static JoinImagePath( pFolder: string , pFileName: string ) : string
-		{
-
-			if (Schema.IsExternalUrl(pFileName) || pFileName.startsWith("/")) { return pFileName; }
-			if (!pFolder) { return pFileName; }
-
-			return `${Schema.NormalizeFolder(pFolder)}${pFileName}`;
-
-		}
-
-
-
-	private static NormalizeFolder( pFolder: string ) : string
-		{
-
-			if (!pFolder) { return "/"; }
-
-			const cStart = pFolder.startsWith("/") ? pFolder : `/${pFolder}`;
-
-			return cStart.endsWith("/") ? cStart : `${cStart}/`;
-
-		}
-
-
-
 	private static GetFileName( pPath: string ) : string
 		{
 
 			const cParts = pPath.split("/");
 
 			return cParts[cParts.length - 1] ?? pPath;
-
-		}
-
-
-
-	private static CanUseImagePath( pPath: string ) : boolean
-		{
-
-			if (Schema.IsExternalUrl(pPath)) { return true; }
-			if (!pPath.startsWith("/")) { return false; }
-
-			const cFilePath = join(process.cwd(), "public", pPath);
-
-			return existsSync(cFilePath);
 
 		}
 
