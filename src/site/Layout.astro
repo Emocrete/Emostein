@@ -133,7 +133,7 @@ const cPreviewImageMeta = Schema.GetPrimaryImageMeta(pTitle ?? "", pDescr ?? "",
 	pHeroFolder: pSchemaHeroFolder,
 	pHeroImageNames: pSchemaHeroImageNames
 });
-const cPreviewImageUrl = cPreviewImageMeta.Url;
+const cPreviewImageUrl = cPreviewImageMeta?.Url ?? "";
 const cOgType = pSchemaType === "Article" ? "article" : "website";
 const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 ---
@@ -181,7 +181,7 @@ const cReplayMode = import.meta.env.EMO_DEPLOY_MODE === "replay";
 
 			<meta property="og:site_name" content="Emostein" />
 
-			{ cPreviewImageUrl && (
+			{ cPreviewImageMeta && cPreviewImageUrl && (
 
 				<>
 				

@@ -397,7 +397,7 @@ export class Schema {
 
 
 
-public static GetPrimaryImageMeta( pTitle: string , pDescr: string , pUrl: string , pOptions: ServiceSchemaOptions | SectionSchemaOptions | CollectionSchemaOptions | ArticleSchemaOptions | OrganizationSchemaOptions = {} ) : SchemaPrimaryImageMeta
+public static GetPrimaryImageMeta( pTitle: string , pDescr: string , pUrl: string , pOptions: ServiceSchemaOptions | SectionSchemaOptions | CollectionSchemaOptions | ArticleSchemaOptions | OrganizationSchemaOptions = {} ) : SchemaPrimaryImageMeta | undefined
 	{
 
 		pUrl = SeoText.NormalizePageUrl(pUrl);
@@ -422,7 +422,8 @@ public static GetPrimaryImageMeta( pTitle: string , pDescr: string , pUrl: strin
 			};
 		}
 
-		throw new Error(`No rectangular preview image was found for ${pUrl}. Expected Share.jpg, Schema-16x9-1200x675.webp, or HeroL.`);
+		// Pages without a preview image can render without image metadata.
+		return undefined;
 
 	}
 

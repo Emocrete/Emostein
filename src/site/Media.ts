@@ -23,13 +23,13 @@ for (const [cSourcePath, cAssetUrl] of Object.entries(cPageMediaAssets)) {
 
 	if (cPagesIndex < 0) { continue; }
 
-	const cPageRelativePath = cNormalizedSourcePath.slice(cPagesIndex + "/pages/".length);
+	const cPageRelativePath = `/${cNormalizedSourcePath.slice(cPagesIndex + "/pages/".length)}`;
 	const cLowerPageRelativePath = cPageRelativePath.toLowerCase();
 	const cMediaIndex = cLowerPageRelativePath.lastIndexOf("/_m/");
 
 	if (cMediaIndex < 0) { continue; }
 
-	const cPagePath = cLowerPageRelativePath.slice(0, cMediaIndex);
+	const cPagePath = cLowerPageRelativePath.slice(0, cMediaIndex).replace(/^\/+|\/+$/g, "");
 	const cFileName = cPageRelativePath.slice(cMediaIndex + "/_M/".length);
 	const cItems = cPageMediaIndex.get(cPagePath) ?? [];
 
