@@ -1,0 +1,69 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, MosaicGrid, MosaicItem } from "@/Widgets/Layouts";
+import { Hero } from "@/Widgets/Sections";
+import { Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="إعداد سجل الضمانات وقطع الغيار"
+	pDescr="إعداد سجل الضمانات وقطع الغيار — تنظيم بيانات الأصول والصيانة والتسليم التشغيلي للمنشأة بحيث تتحول المعدات والضمانات والوثائق من ملفات متفرقة إلى نظام قابل للإدارة. ويُبنى نطاق إعداد سجل الضمانات وقطع الغيار على حالة المشروع الفعلية لا على وصف عام للخدمة. سعر مبدئي استرشادي ومراحل واضحة لبدء الخدمة."
+>
+
+	<Hero Readable pImgAlt="إعداد سجل الضمانات وقطع الغيار">
+
+		<VrStack
+			pBg={new ElemBg(Colors.SkyLite)}
+			pBgOpacity={new Percent(85)}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("10%","10%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pGap={new Pixel(20,10)}
+			pPad={new Pixel(10,5)}
+			pHzAlign="Center"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor(Colors.Black).OfText("إعداد سجل الضمانات وقطع الغيار")}
+				pText={Text.Body.Centered.WithColor(Colors.Black).OfText("تنظيم بيانات الأصول والصيانة والتسليم التشغيلي للمنشأة بحيث تتحول المعدات والضمانات والوثائق من ملفات متفرقة إلى نظام قابل للإدارة. ويُبنى نطاق إعداد سجل الضمانات وقطع الغيار على حالة المشروع الفعلية لا على وصف عام للخدمة.")}
+			/>
+
+			<HzStack pGap={new Pixel(30,10)}>
+				<EmoCallIcon BlackSky />
+				<EmoWhatsIcon BlackSky />
+				<EmoDet BistageBlack pHref="#secSrvCost" pHeight="58px" />
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+	<MosaicGrid pColumns={12} pColumnsP={4} pAutoRows={new RespString("82px","70px")} pGap={new RespString("10px","8px")} pPad={new RespString("42px","10px")} pBg={Colors.Gray1}>
+		<MosaicItem pColSpan={5} pColSpanP={4} pRowSpan={3} pRowSpanP={2} pBg={Colors.BrownDark} pColor={Colors.WhiteOff}>
+			<Emograph pTitle={Text.H2.WithColor(Colors.WhiteOff).OfText("المخرج الرئيسي")} pText={Text.Body.WithColor(Colors.WhiteOff).OfText("تسليم قواعد بيانات أو أدلة تشغيل حسب النطاق.")} />
+		</MosaicItem>
+		<MosaicItem pColSpan={3} pColSpanP={2} pRowSpan={2} pRowSpanP={2} pBg={Colors.SkyLite} pColor={Colors.Black}>
+			<Emograph pTitle={Text.H3.WithColor(Colors.Black).OfText("01")} pText={Text.Body.WithColor(Colors.Black).OfText("حصر الأصول والوثائق المتاحة")} />
+		</MosaicItem>
+		<MosaicItem pColSpan={4} pColSpanP={2} pRowSpan={2} pRowSpanP={2} pBg={Colors.BistageLite} pColor={Colors.Black}>
+			<Emograph pTitle={Text.H3.WithColor(Colors.Black).OfText("02")} pText={Text.Body.WithColor(Colors.Black).OfText("تنظيم سجلات الصيانة والضمان والتشغيل")} />
+		</MosaicItem>
+		<MosaicItem pColSpan={7} pColSpanP={4} pRowSpan={2} pRowSpanP={2} pBg={Colors.Creamy} pColor={Colors.Black}>
+			<Emograph pTitle={Text.H3.WithColor(Colors.Black).OfText("لماذا الآن؟")} pText={Text.Body.WithColor(Colors.Black).OfText("يقلل فقد المستندات والصيانة الطارئة ويساعد على معرفة حالة كل أصل وموعد خدمته ومسؤولية متابعته. ويظل القرار النهائي مرتبطًا ببيانات إعداد سجل الضمانات وقطع الغيار نفسها قبل إصدار العرض.")} />
+		</MosaicItem>
+	</MosaicGrid>
+
+	<AngleBand id="secSrvCost" pBg={Colors.Black} pColor={Colors.WhiteOff} pDirection="Rise">
+		<VrStack pGap={new Pixel(14,10)} pHzAlign="Center">
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor(Colors.WhiteOff).OfText("سعر مبدئي للدرافـت")}
+				pText={Text.Body.Centered.WithColor(Colors.WhiteOff).OfText("يبدأ من 5,000 ج.م للمهمة الصغيرة، ويحدد حسب عدد الأصول وحجم الوثائق.")}
+			/>
+			<Emograph pText={Text.Body.Centered.WithColor(Colors.Gray2).OfText("السعر استرشادي لتحديد موضع الخدمة داخل الموقع؛ العرض النهائي يتحدد بعد معرفة الموقع والمساحة والمستندات والنطاق الفعلي.")} />
+		</VrStack>
+	</AngleBand>
+
+</BLayout>

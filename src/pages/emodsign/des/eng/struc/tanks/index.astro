@@ -1,0 +1,61 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, RadialItem, RadialLayout } from "@/Widgets/Layouts";
+import { Hero } from "@/Widgets/Sections";
+import { Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="تصميم خزانات خرسانية"
+	pDescr="تصميم خزانات خرسانية — تصميم إنشائي يختار النظام المناسب للأحمال والبحور والتربة والاستخدام، ثم يحوله إلى نموذج حسابي ورسومات وتفاصيل قابلة للتنفيذ. ويُبنى نطاق تصميم خزانات خرسانية على حالة المشروع الفعلية لا على وصف عام للخدمة. سعر مبدئي استرشادي ومراحل واضحة لبدء الخدمة."
+>
+
+	<Hero Readable pImgAlt="تصميم خزانات خرسانية">
+
+		<VrStack
+			pBg={new ElemBg(Colors.SkyLite)}
+			pBgOpacity={new Percent(85)}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("10%","10%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pGap={new Pixel(20,10)}
+			pPad={new Pixel(10,5)}
+			pHzAlign="Center"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor(Colors.Black).OfText("تصميم خزانات خرسانية")}
+				pText={Text.Body.Centered.WithColor(Colors.Black).OfText("تصميم إنشائي يختار النظام المناسب للأحمال والبحور والتربة والاستخدام، ثم يحوله إلى نموذج حسابي ورسومات وتفاصيل قابلة للتنفيذ. ويُبنى نطاق تصميم خزانات خرسانية على حالة المشروع الفعلية لا على وصف عام للخدمة.")}
+			/>
+
+			<HzStack pGap={new Pixel(30,10)}>
+				<EmoCallIcon BlackSky />
+				<EmoWhatsIcon BlackSky />
+				<EmoDet BistageBlack pHref="#secSrvCost" pHeight="58px" />
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+	<RadialLayout pCount={4} pDiameter={new RespString("820px","96%")} pOrbit={new RespString("38%","36%")} pCenterSize={new RespString("30%","36%")} pBg={Colors.Gray1} pCenterBg={Colors.BrownDark} pCenterColor={Colors.WhiteOff} pRingColor={Colors.Gray3} pAccent={Colors.Bistage} pCenterTitle="تصميم خزانات خرسانية" pCenterText="مسار الخدمة" pStackPortrait={true}>
+		<RadialItem pTitle="المدخلات" pText="تحديد النظام والأحمال ومعطيات التربة" pBg={Colors.WhiteOff} pColor={Colors.Black} pAccent={Colors.Bistage} />
+		<RadialItem pTitle="المعالجة" pText="التحليل والتصميم ومراجعة الحالات الحرجة" pBg={Colors.SkyLite} pColor={Colors.Black} pAccent={Colors.SkyDark} />
+		<RadialItem pTitle="المخرج" pText="إصدار الرسومات والتفاصيل والحسابات المطلوبة" pBg={Colors.Creamy} pColor={Colors.Black} pAccent={Colors.OrangeDark} />
+		<RadialItem pTitle="الفائدة" pText="يوازن بين الأمان والاقتصاد وقابلية التنفيذ، ويقلل القرارات المبالغ فيها أو التفاصيل غير المتوافقة مع المعماري والخدمات. ويظل القرار النهائي مرتبطًا ببيانات تصميم خزانات خرسانية نفسها قبل إصدار العرض." pBg={Colors.BistageLite} pColor={Colors.Black} pAccent={Colors.BistageDark} />
+	</RadialLayout>
+
+	<AngleBand id="secSrvCost" pBg={Colors.Black} pColor={Colors.WhiteOff} pDirection="Rise">
+		<VrStack pGap={new Pixel(14,10)} pHzAlign="Center">
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor(Colors.WhiteOff).OfText("سعر مبدئي للدرافـت")}
+				pText={Text.Body.Centered.WithColor(Colors.WhiteOff).OfText("استرشاديًا يبدأ من 40 ج.م/م² وبحد أدنى 8,000 ج.م للأعمال البسيطة.")}
+			/>
+			<Emograph pText={Text.Body.Centered.WithColor(Colors.Gray2).OfText("السعر استرشادي لتحديد موضع الخدمة داخل الموقع؛ العرض النهائي يتحدد بعد معرفة الموقع والمساحة والمستندات والنطاق الفعلي.")} />
+		</VrStack>
+	</AngleBand>
+
+</BLayout>

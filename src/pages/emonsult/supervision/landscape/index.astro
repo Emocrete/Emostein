@@ -1,0 +1,61 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, StickyStory, StickyStoryItem } from "@/Widgets/Layouts";
+import { Hero } from "@/Widgets/Sections";
+import { Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="إشراف لاندسكيب"
+	pDescr="إشراف لاندسكيب — إشراف هندسي على مراحل التنفيذ يركز على مطابقة الرسومات والمواصفات وجودة الأعمال قبل إغلاقها، مع توثيق الملاحظات ونسب التقدم. وفي هذه الصفحة يكون التركيز الخاص على الري والصرف والمناسيب والظل والخامات ومصاريف التشغيل. سعر مبدئي استرشادي ومراحل واضحة لبدء الخدمة."
+>
+
+	<Hero Readable pImgAlt="إشراف لاندسكيب">
+
+		<VrStack
+			pBg={new ElemBg(Colors.SkyLite)}
+			pBgOpacity={new Percent(85)}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("10%","10%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pGap={new Pixel(20,10)}
+			pPad={new Pixel(10,5)}
+			pHzAlign="Center"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor(Colors.Black).OfText("إشراف لاندسكيب")}
+				pText={Text.Body.Centered.WithColor(Colors.Black).OfText("إشراف هندسي على مراحل التنفيذ يركز على مطابقة الرسومات والمواصفات وجودة الأعمال قبل إغلاقها، مع توثيق الملاحظات ونسب التقدم. وفي هذه الصفحة يكون التركيز الخاص على الري والصرف والمناسيب والظل والخامات ومصاريف التشغيل.")}
+			/>
+
+			<HzStack pGap={new Pixel(30,10)}>
+				<EmoCallIcon BlackSky />
+				<EmoWhatsIcon BlackSky />
+				<EmoDet BistageBlack pHref="#secSrvCost" pHeight="58px" />
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+	<StickyStory pVisualShare={40} pBg={Colors.Creamy} pVisualBg={Colors.BrownDark} pGap={new RespString("34px","16px")} pPad={new RespString("44px","12px")}>
+		<Emograph slot="visual" pTitle={Text.H2.WithColor(Colors.WhiteOff).OfText("لماذا هذه الخدمة؟")} pText={Text.Body.WithColor(Colors.WhiteOff).OfText("يكشف الخطأ في الوقت الذي يمكن إصلاحه فيه، ويعطي المالك مرجعًا مستقلًا عند استلام الأعمال أو مراجعة مستخلص المقاول. ويُراجع القرار هنا تحديدًا في ضوء الري والصرف والمناسيب والظل والخامات ومصاريف التشغيل.")} />
+		<StickyStoryItem pKicker="01 / فحص" pTitle="زيارات ومراجعة الأعمال الحرجة مع مراعاة الري والصرف والمناسيب والظل والخامات ومصاريف التشغيل" pText="نبدأ من المعلومات والمستندات المتاحة لتحديد ما يصلح للاعتماد وما يحتاج استكمالًا قبل أي التزام إضافي." pBg={Colors.WhiteOff} pColor={Colors.Black} pAccent={Colors.Bistage} />
+		<StickyStoryItem pKicker="02 / تجهيز" pTitle="استلام البنود قبل الإغلاق أو التسليم" pText="يتم تحويل المطلوب إلى مخرجات هندسية واضحة يمكن مراجعتها وربطها بالجهة أو المقاول أو المورد حسب طبيعة المهمة." pBg={Colors.SkyLite} pColor={Colors.Black} pAccent={Colors.SkyDark} />
+		<StickyStoryItem pKicker="03 / إغلاق" pTitle="ملاحظات وتقارير متابعة حسب الاتفاق" pText="نسلم المخرجات المتفق عليها مع تحديد ما تم وما يتبقى وما يعتمد على طرف أو جهة أخرى." pBg={Colors.BistageLite} pColor={Colors.Black} pAccent={Colors.BistageDark} />
+	</StickyStory>
+
+	<AngleBand id="secSrvCost" pBg={Colors.Black} pColor={Colors.WhiteOff} pDirection="Rise">
+		<VrStack pGap={new Pixel(14,10)} pHzAlign="Center">
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor(Colors.WhiteOff).OfText("سعر مبدئي للدرافـت")}
+				pText={Text.Body.Centered.WithColor(Colors.WhiteOff).OfText("تبدأ الزيارة من 2,000 ج.م؛ الإشراف الكامل يُسعر عادة كنسبة من قيمة الأعمال أو أتعاب شهرية.")}
+			/>
+			<Emograph pText={Text.Body.Centered.WithColor(Colors.Gray2).OfText("السعر استرشادي لتحديد موضع الخدمة داخل الموقع؛ العرض النهائي يتحدد بعد معرفة الموقع والمساحة والمستندات والنطاق الفعلي.")} />
+		</VrStack>
+	</AngleBand>
+
+</BLayout>

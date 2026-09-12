@@ -1,0 +1,61 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, RadialItem, RadialLayout } from "@/Widgets/Layouts";
+import { Hero } from "@/Widgets/Sections";
+import { Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="تصميم قوى كهربائية"
+	pDescr="تصميم قوى كهربائية — تصميم كهربائي يعتمد على الأحمال الفعلية ودرجات الاستمرارية والحماية المطلوبة، ثم يوزع الدوائر واللوحات والمسارات والأنظمة المرتبطة. وفي هذه الصفحة يكون التركيز الخاص على الأحمال والطلب والتزامن والحماية والهبوط في الجهد واستمرارية الخدمة. سعر مبدئي استرشادي ومراحل واضحة لبدء الخدمة."
+>
+
+	<Hero Readable pImgAlt="تصميم قوى كهربائية">
+
+		<VrStack
+			pBg={new ElemBg(Colors.SkyLite)}
+			pBgOpacity={new Percent(85)}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("10%","10%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pGap={new Pixel(20,10)}
+			pPad={new Pixel(10,5)}
+			pHzAlign="Center"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor(Colors.Black).OfText("تصميم قوى كهربائية")}
+				pText={Text.Body.Centered.WithColor(Colors.Black).OfText("تصميم كهربائي يعتمد على الأحمال الفعلية ودرجات الاستمرارية والحماية المطلوبة، ثم يوزع الدوائر واللوحات والمسارات والأنظمة المرتبطة. وفي هذه الصفحة يكون التركيز الخاص على الأحمال والطلب والتزامن والحماية والهبوط في الجهد واستمرارية الخدمة.")}
+			/>
+
+			<HzStack pGap={new Pixel(30,10)}>
+				<EmoCallIcon BlackSky />
+				<EmoWhatsIcon BlackSky />
+				<EmoDet BistageBlack pHref="#secSrvCost" pHeight="58px" />
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+	<RadialLayout pCount={4} pDiameter={new RespString("820px","96%")} pOrbit={new RespString("38%","36%")} pCenterSize={new RespString("30%","36%")} pBg={Colors.Gray1} pCenterBg={Colors.BrownDark} pCenterColor={Colors.WhiteOff} pRingColor={Colors.Gray3} pAccent={Colors.Bistage} pCenterTitle="تصميم قوى كهربائية" pCenterText="مسار الخدمة" pStackPortrait={true}>
+		<RadialItem pTitle="المدخلات" pText="حصر الأحمال ومستويات الخدمة مع مراعاة الأحمال والطلب والتزامن والحماية والهبوط في الجهد واستمرارية الخدمة" pBg={Colors.WhiteOff} pColor={Colors.Black} pAccent={Colors.Bistage} />
+		<RadialItem pTitle="المعالجة" pText="اختيار اللوحات والحماية والمسارات" pBg={Colors.SkyLite} pColor={Colors.Black} pAccent={Colors.SkyDark} />
+		<RadialItem pTitle="المخرج" pText="مخططات وجداول وحسابات ومواصفات" pBg={Colors.Creamy} pColor={Colors.Black} pAccent={Colors.OrangeDark} />
+		<RadialItem pTitle="الفائدة" pText="يساعد على ضبط السعات والحماية ومسارات الكابلات قبل التنفيذ ويقلل التعديلات والتوسعات غير المخططة. ويُراجع القرار هنا تحديدًا في ضوء الأحمال والطلب والتزامن والحماية والهبوط في الجهد واستمرارية الخدمة." pBg={Colors.BistageLite} pColor={Colors.Black} pAccent={Colors.BistageDark} />
+	</RadialLayout>
+
+	<AngleBand id="secSrvCost" pBg={Colors.Black} pColor={Colors.WhiteOff} pDirection="Rise">
+		<VrStack pGap={new Pixel(14,10)} pHzAlign="Center">
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor(Colors.WhiteOff).OfText("سعر مبدئي للدرافـت")}
+				pText={Text.Body.Centered.WithColor(Colors.WhiteOff).OfText("يبدأ من 10,000 ج.م للمهمة الصغيرة، أو يسعر حسب المساحة ونطاق الأنظمة.")}
+			/>
+			<Emograph pText={Text.Body.Centered.WithColor(Colors.Gray2).OfText("السعر استرشادي لتحديد موضع الخدمة داخل الموقع؛ العرض النهائي يتحدد بعد معرفة الموقع والمساحة والمستندات والنطاق الفعلي.")} />
+		</VrStack>
+	</AngleBand>
+
+</BLayout>

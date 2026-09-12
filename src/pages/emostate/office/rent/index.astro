@@ -1,0 +1,59 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { SplitPane, SplitScene, StoryRail, StoryStep } from "@/Widgets/Layouts";
+import { Hero } from "@/Widgets/Sections";
+import { Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="تسويق مكتب للإيجار"
+	pDescr="تسويق مكتب للإيجار — تسويق عقار للإيجار مع تجهيز العرض وفرز المستأجرين وترتيب المعاينات والتفاوض على الشروط حتى الاتفاق. وفي هذه الصفحة يكون التركيز الخاص على مرونة التقسيم ومسارات الموظفين والعملاء وإمكانية تغيير التوزيع لاحقًا. سعر مبدئي استرشادي ومراحل واضحة لبدء الخدمة."
+>
+
+	<Hero Readable pImgAlt="تسويق مكتب للإيجار">
+
+		<VrStack
+			pBg={new ElemBg(Colors.SkyLite)}
+			pBgOpacity={new Percent(85)}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("10%","10%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pGap={new Pixel(20,10)}
+			pPad={new Pixel(10,5)}
+			pHzAlign="Center"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor(Colors.Black).OfText("تسويق مكتب للإيجار")}
+				pText={Text.Body.Centered.WithColor(Colors.Black).OfText("تسويق عقار للإيجار مع تجهيز العرض وفرز المستأجرين وترتيب المعاينات والتفاوض على الشروط حتى الاتفاق. وفي هذه الصفحة يكون التركيز الخاص على مرونة التقسيم ومسارات الموظفين والعملاء وإمكانية تغيير التوزيع لاحقًا.")}
+			/>
+
+			<HzStack pGap={new Pixel(30,10)}>
+				<EmoCallIcon BlackSky />
+				<EmoWhatsIcon BlackSky />
+				<EmoDet BistageBlack pHref="#secSrvCost" pHeight="58px" />
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+	<StoryRail pBg={Colors.Black} pTrackColor={Colors.Gray4} pAccent={Colors.Bistage} pGap={new RespString("24px","14px")} pPad={new RespString("44px","12px")}>
+		<StoryStep pNumber="01" pKicker="البداية" pTitle="Prepare" pText="تجهيز بيانات وشروط الإيجار مع مراعاة مرونة التقسيم ومسارات الموظفين والعملاء وإمكانية تغيير التوزيع لاحقًا." pBg={Colors.WhiteOff} pColor={Colors.Black} pAccent={Colors.Bistage} />
+		<StoryStep pNumber="02" pKicker="المعالجة" pTitle="Market" pText="التسويق والمعاينات." pBg={Colors.SkyLite} pColor={Colors.Black} pAccent={Colors.SkyDark} />
+		<StoryStep pNumber="03" pKicker="المخرج" pTitle="Lease" pText="التفاوض وتنسيق الإغلاق." pBg={Colors.Creamy} pColor={Colors.Black} pAccent={Colors.OrangeDark} />
+	</StoryRail>
+
+	<SplitScene id="secSrvCost" pBg={Colors.Gray1} pColumns={new RespString("5fr 7fr","1fr")} pGap={new RespString("12px","10px")}>
+		<SplitPane pBg={Colors.BrownDark} pColor={Colors.WhiteOff} pHzAlign="Right" pVrAlign="Center">
+			<Emograph pTitle={Text.H2.WithColor(Colors.WhiteOff).OfText("القيمة العملية")} pText={Text.Body.WithColor(Colors.WhiteOff).OfText("يقلل الوقت الضائع في معاينات غير مناسبة ويعرض الأصل بمعلومات فنية واستخدامية أوضح. ويُراجع القرار هنا تحديدًا في ضوء مرونة التقسيم ومسارات الموظفين والعملاء وإمكانية تغيير التوزيع لاحقًا.")} />
+		</SplitPane>
+		<SplitPane pBg={Colors.WhiteOff} pColor={Colors.Black} pHzAlign="Right" pVrAlign="Center">
+			<Emograph pTitle={Text.H2.WithColor(Colors.Black).OfText("السعر المبدئي")} pText={Text.Body.WithColor(Colors.Black).OfText("عمولة استرشادية تعادل نحو شهر إيجار وفق العرف السوقي والاتفاق المكتوب.")} />
+		</SplitPane>
+	</SplitScene>
+
+</BLayout>

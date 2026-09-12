@@ -1,0 +1,59 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { SplitPane, SplitScene, StoryRail, StoryStep } from "@/Widgets/Layouts";
+import { Hero } from "@/Widgets/Sections";
+import { Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="ترخيص تعديل واجهة عقار"
+	pDescr="ترخيص تعديل واجهة عقار — مراجعة هندسية لمسار الترخيص المرتبط بالمبنى القائم أو الأعمال المطلوبة، وتجهيز الرسومات والتقارير والمستندات الفنية اللازمة للحالة. وفي هذه الصفحة يكون التركيز الخاص على نظام التثبيت والأحمال والعزل والتصريف والفواصل وقابلية الصيانة. سعر مبدئي استرشادي ومراحل واضحة لبدء الخدمة."
+>
+
+	<Hero Readable pImgAlt="ترخيص تعديل واجهة عقار">
+
+		<VrStack
+			pBg={new ElemBg(Colors.SkyLite)}
+			pBgOpacity={new Percent(85)}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("10%","10%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pGap={new Pixel(20,10)}
+			pPad={new Pixel(10,5)}
+			pHzAlign="Center"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor(Colors.Black).OfText("ترخيص تعديل واجهة عقار")}
+				pText={Text.Body.Centered.WithColor(Colors.Black).OfText("مراجعة هندسية لمسار الترخيص المرتبط بالمبنى القائم أو الأعمال المطلوبة، وتجهيز الرسومات والتقارير والمستندات الفنية اللازمة للحالة. وفي هذه الصفحة يكون التركيز الخاص على نظام التثبيت والأحمال والعزل والتصريف والفواصل وقابلية الصيانة.")}
+			/>
+
+			<HzStack pGap={new Pixel(30,10)}>
+				<EmoCallIcon BlackSky />
+				<EmoWhatsIcon BlackSky />
+				<EmoDet BistageBlack pHref="#secSrvCost" pHeight="58px" />
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+	<StoryRail pBg={Colors.Black} pTrackColor={Colors.Gray4} pAccent={Colors.Bistage} pGap={new RespString("24px","14px")} pPad={new RespString("44px","12px")}>
+		<StoryStep pNumber="01" pKicker="البداية" pTitle="تحديد موقف المبنى" pText="مراجعة مستندات العقار والرخص السابقة مع مراعاة نظام التثبيت والأحمال والعزل والتصريف والفواصل وقابلية الصيانة." pBg={Colors.WhiteOff} pColor={Colors.Black} pAccent={Colors.Bistage} />
+		<StoryStep pNumber="02" pKicker="المعالجة" pTitle="تثبيت نطاق الأعمال" pText="معاينة أو مراجعة الوضع التنفيذي عند الحاجة." pBg={Colors.SkyLite} pColor={Colors.Black} pAccent={Colors.SkyDark} />
+		<StoryStep pNumber="03" pKicker="المخرج" pTitle="تجهيز مسار الترخيص" pText="إعداد المستندات والرسومات الفنية المطلوبة للإجراء." pBg={Colors.Creamy} pColor={Colors.Black} pAccent={Colors.OrangeDark} />
+	</StoryRail>
+
+	<SplitScene id="secSrvCost" pBg={Colors.Gray1} pColumns={new RespString("5fr 7fr","1fr")} pGap={new RespString("12px","10px")}>
+		<SplitPane pBg={Colors.BrownDark} pColor={Colors.WhiteOff} pHzAlign="Right" pVrAlign="Center">
+			<Emograph pTitle={Text.H2.WithColor(Colors.WhiteOff).OfText("القيمة العملية")} pText={Text.Body.WithColor(Colors.WhiteOff).OfText("يوضح قابلية الإجراء قبل صرف وقت وتكلفة على ملف غير مكتمل، ويربط المطلوب الإداري بالحالة الإنشائية والمعمارية الفعلية. ويُراجع القرار هنا تحديدًا في ضوء نظام التثبيت والأحمال والعزل والتصريف والفواصل وقابلية الصيانة.")} />
+		</SplitPane>
+		<SplitPane pBg={Colors.WhiteOff} pColor={Colors.Black} pHzAlign="Right" pVrAlign="Center">
+			<Emograph pTitle={Text.H2.WithColor(Colors.Black).OfText("السعر المبدئي")} pText={Text.Body.WithColor(Colors.Black).OfText("يبدأ من 7,500 ج.م أتعاب هندسية؛ الرسوم والدمغات والمراجعات الرسمية غير مشمولة.")} />
+		</SplitPane>
+	</SplitScene>
+
+</BLayout>

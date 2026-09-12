@@ -1,0 +1,59 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { SplitPane, SplitScene, StoryRail, StoryStep } from "@/Widgets/Layouts";
+import { Hero } from "@/Widgets/Sections";
+import { Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="مقاولات الخوازيق"
+	pDescr="مقاولات الخوازيق — تنفيذ متخصص بنطاق واضح يبدأ من المعاينة والمقايسة واختيار النظام والخامات وينتهي بالاستلام وفق المواصفات المتفق عليها. وفي هذه الصفحة يكون التركيز الخاص على بيانات التربة والأحمال واختبارات التنفيذ وربط الخوازيق بالقبعات. سعر مبدئي استرشادي ومراحل واضحة لبدء الخدمة."
+>
+
+	<Hero Readable pImgAlt="مقاولات الخوازيق">
+
+		<VrStack
+			pBg={new ElemBg(Colors.SkyLite)}
+			pBgOpacity={new Percent(85)}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("10%","10%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pGap={new Pixel(20,10)}
+			pPad={new Pixel(10,5)}
+			pHzAlign="Center"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor(Colors.Black).OfText("مقاولات الخوازيق")}
+				pText={Text.Body.Centered.WithColor(Colors.Black).OfText("تنفيذ متخصص بنطاق واضح يبدأ من المعاينة والمقايسة واختيار النظام والخامات وينتهي بالاستلام وفق المواصفات المتفق عليها. وفي هذه الصفحة يكون التركيز الخاص على بيانات التربة والأحمال واختبارات التنفيذ وربط الخوازيق بالقبعات.")}
+			/>
+
+			<HzStack pGap={new Pixel(30,10)}>
+				<EmoCallIcon BlackSky />
+				<EmoWhatsIcon BlackSky />
+				<EmoDet BistageBlack pHref="#secSrvCost" pHeight="58px" />
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+	<StoryRail pBg={Colors.Black} pTrackColor={Colors.Gray4} pAccent={Colors.Bistage} pGap={new RespString("24px","14px")} pPad={new RespString("44px","12px")}>
+		<StoryStep pNumber="01" pKicker="البداية" pTitle="معاينة ومقايسة" pText="معاينة وتثبيت نطاق الأعمال والكميات مع مراعاة بيانات التربة والأحمال واختبارات التنفيذ وربط الخوازيق بالقبعات." pBg={Colors.WhiteOff} pColor={Colors.Black} pAccent={Colors.Bistage} />
+		<StoryStep pNumber="02" pKicker="المعالجة" pTitle="تجهيز وتنفيذ" pText="عرض فني ومالي وخطة تنفيذ." pBg={Colors.SkyLite} pColor={Colors.Black} pAccent={Colors.SkyDark} />
+		<StoryStep pNumber="03" pKicker="المخرج" pTitle="استلام وإغلاق" pText="تنفيذ واستلام وضبط جودة حسب طبيعة البند." pBg={Colors.Creamy} pColor={Colors.Black} pAccent={Colors.OrangeDark} />
+	</StoryRail>
+
+	<SplitScene id="secSrvCost" pBg={Colors.Gray1} pColumns={new RespString("5fr 7fr","1fr")} pGap={new RespString("12px","10px")}>
+		<SplitPane pBg={Colors.BrownDark} pColor={Colors.WhiteOff} pHzAlign="Right" pVrAlign="Center">
+			<Emograph pTitle={Text.H2.WithColor(Colors.WhiteOff).OfText("القيمة العملية")} pText={Text.Body.WithColor(Colors.WhiteOff).OfText("يجمع المسؤولية الفنية والتنفيذية في نطاق محدد يمكن تسعيره ومراجعته بدل توزيع البند بين فرق غير منسقة. ويُراجع القرار هنا تحديدًا في ضوء بيانات التربة والأحمال واختبارات التنفيذ وربط الخوازيق بالقبعات.")} />
+		</SplitPane>
+		<SplitPane pBg={Colors.WhiteOff} pColor={Colors.Black} pHzAlign="Right" pVrAlign="Center">
+			<Emograph pTitle={Text.H2.WithColor(Colors.Black).OfText("السعر المبدئي")} pText={Text.Body.WithColor(Colors.Black).OfText("تسعير مبدئي حسب المقايسة؛ الأعمال الصغيرة تبدأ عادة من 25,000 ج.م قبل المواد الخاصة أو المعدات.")} />
+		</SplitPane>
+	</SplitScene>
+
+</BLayout>

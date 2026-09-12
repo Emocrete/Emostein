@@ -1,0 +1,69 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, ZigzagItem, ZigzagStory } from "@/Widgets/Layouts";
+import { Hero } from "@/Widgets/Sections";
+import { Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="إشراف دوري بالزيارات"
+	pDescr="إشراف دوري بالزيارات — إشراف هندسي على مراحل التنفيذ يركز على مطابقة الرسومات والمواصفات وجودة الأعمال قبل إغلاقها، مع توثيق الملاحظات ونسب التقدم. ويُبنى نطاق إشراف دوري بالزيارات على حالة المشروع الفعلية لا على وصف عام للخدمة. سعر مبدئي استرشادي ومراحل واضحة لبدء الخدمة."
+>
+
+	<Hero Readable pImgAlt="إشراف دوري بالزيارات">
+
+		<VrStack
+			pBg={new ElemBg(Colors.SkyLite)}
+			pBgOpacity={new Percent(85)}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("10%","10%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pGap={new Pixel(20,10)}
+			pPad={new Pixel(10,5)}
+			pHzAlign="Center"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor(Colors.Black).OfText("إشراف دوري بالزيارات")}
+				pText={Text.Body.Centered.WithColor(Colors.Black).OfText("إشراف هندسي على مراحل التنفيذ يركز على مطابقة الرسومات والمواصفات وجودة الأعمال قبل إغلاقها، مع توثيق الملاحظات ونسب التقدم. ويُبنى نطاق إشراف دوري بالزيارات على حالة المشروع الفعلية لا على وصف عام للخدمة.")}
+			/>
+
+			<HzStack pGap={new Pixel(30,10)}>
+				<EmoCallIcon BlackSky />
+				<EmoWhatsIcon BlackSky />
+				<EmoDet BistageBlack pHref="#secSrvCost" pHeight="58px" />
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+	<ZigzagStory pBg={Colors.Gray1} pGap={new RespString("36px","18px")} pPad={new RespString("44px","12px")} pAlternate={true}>
+		<ZigzagItem pMediaShare={38} pBg={Colors.WhiteOff} pColor={Colors.Black} pMediaBg={Colors.BrownDark} pClip="Diagonal" pClipP="None">
+			<Emograph slot="media" pTitle={Text.H2.Centered.WithColor(Colors.WhiteOff).OfText("فحص")} pText={Text.Body.Centered.WithColor(Colors.WhiteOff).OfText("زيارات ومراجعة الأعمال الحرجة")} />
+			<VrStack pGap={new Pixel(12,8)} pPad={new Pixel(26,16)}>
+				<Emograph pTitle={Text.H2.WithColor(Colors.Black).OfText("القرار يبدأ من الواقع")} pText={Text.Body.WithColor(Colors.Black).OfText("يكشف الخطأ في الوقت الذي يمكن إصلاحه فيه، ويعطي المالك مرجعًا مستقلًا عند استلام الأعمال أو مراجعة مستخلص المقاول. ويظل القرار النهائي مرتبطًا ببيانات إشراف دوري بالزيارات نفسها قبل إصدار العرض.")} />
+			</VrStack>
+		</ZigzagItem>
+		<ZigzagItem pMediaShare={42} pBg={Colors.Creamy} pColor={Colors.Black} pMediaBg={Colors.BistageLite} pClip="Arch" pClipP="None">
+			<Emograph slot="media" pTitle={Text.H2.Centered.WithColor(Colors.Black).OfText("مخرج")} pText={Text.Body.Centered.WithColor(Colors.Black).OfText("ملاحظات وتقارير متابعة حسب الاتفاق")} />
+			<VrStack pGap={new Pixel(12,8)} pPad={new Pixel(26,16)}>
+				<Emograph pTitle={Text.H2.WithColor(Colors.Black).OfText("التجهيز")} pText={Text.Body.WithColor(Colors.Black).OfText("استلام البنود قبل الإغلاق أو التسليم، ثم مراجعة الناتج قبل التسليم.")} />
+			</VrStack>
+		</ZigzagItem>
+	</ZigzagStory>
+
+	<AngleBand id="secSrvCost" pBg={Colors.BrownDark} pColor={Colors.WhiteOff} pDirection="Rise">
+		<VrStack pGap={new Pixel(14,10)} pHzAlign="Center">
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor(Colors.WhiteOff).OfText("سعر مبدئي للدرافـت")}
+				pText={Text.Body.Centered.WithColor(Colors.WhiteOff).OfText("تبدأ الزيارة من 2,000 ج.م؛ الإشراف الكامل يُسعر عادة كنسبة من قيمة الأعمال أو أتعاب شهرية.")}
+			/>
+			<Emograph pText={Text.Body.Centered.WithColor(Colors.Gray2).OfText("السعر استرشادي لتحديد موضع الخدمة داخل الموقع؛ العرض النهائي يتحدد بعد معرفة الموقع والمساحة والمستندات والنطاق الفعلي.")} />
+		</VrStack>
+	</AngleBand>
+
+</BLayout>

@@ -1,0 +1,63 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, SplitPane, SplitScene } from "@/Widgets/Layouts";
+import { Hero } from "@/Widgets/Sections";
+import { Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="ترخيص مركز خدمة سيارات ملحق"
+	pDescr="ترخيص مركز خدمة سيارات ملحق — خدمة هندسية أولية لتجهيز ملف محطة الوقود أو التعديل المطلوب بها، تشمل مراجعة الموقع والحركة والمباني والخدمات ومتطلبات السلامة والجهات ذات العلاقة. ويُبنى نطاق ترخيص مركز خدمة سيارات ملحق على حالة المشروع الفعلية لا على وصف عام للخدمة. سعر مبدئي استرشادي ومراحل واضحة لبدء الخدمة."
+>
+
+	<Hero Readable pImgAlt="ترخيص مركز خدمة سيارات ملحق">
+
+		<VrStack
+			pBg={new ElemBg(Colors.SkyLite)}
+			pBgOpacity={new Percent(85)}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("10%","10%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pGap={new Pixel(20,10)}
+			pPad={new Pixel(10,5)}
+			pHzAlign="Center"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor(Colors.Black).OfText("ترخيص مركز خدمة سيارات ملحق")}
+				pText={Text.Body.Centered.WithColor(Colors.Black).OfText("خدمة هندسية أولية لتجهيز ملف محطة الوقود أو التعديل المطلوب بها، تشمل مراجعة الموقع والحركة والمباني والخدمات ومتطلبات السلامة والجهات ذات العلاقة. ويُبنى نطاق ترخيص مركز خدمة سيارات ملحق على حالة المشروع الفعلية لا على وصف عام للخدمة.")}
+			/>
+
+			<HzStack pGap={new Pixel(30,10)}>
+				<EmoCallIcon BlackSky />
+				<EmoWhatsIcon BlackSky />
+				<EmoDet BistageBlack pHref="#secSrvCost" pHeight="58px" />
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+	<SplitScene pBg={Colors.Gray1} pColumns={new RespString("1fr 1fr","1fr")} pGap={new RespString("12px","10px")} pPad={new RespString("42px","10px")}>
+		<SplitPane pBg={Colors.BrownDark} pColor={Colors.WhiteOff} pEdge="Chevron" pEdgeP="None" pHzAlign="Right" pVrAlign="Center">
+			<Emograph pTitle={Text.H2.WithColor(Colors.WhiteOff).OfText("نطاق الخدمة")} pText={Text.Body.WithColor(Colors.WhiteOff).OfText("مراجعة الموقع والمداخل والحركة والمسافات، تنسيق المتطلبات المعمارية والميكانيكية والحريق، إعداد قائمة الموافقات والرسومات المطلوبة.")} />
+		</SplitPane>
+		<SplitPane pBg={Colors.SkyLite} pColor={Colors.Black} pHzAlign="Right" pVrAlign="Center">
+			<Emograph pTitle={Text.H2.WithColor(Colors.Black).OfText("الفائدة قبل الخطوة التالية")} pText={Text.Body.WithColor(Colors.Black).OfText("تساعد على اكتشاف التعارضات التخطيطية والفنية قبل الدخول في تكلفة التصميم والتنفيذ والموافقات المتتابعة. ويظل القرار النهائي مرتبطًا ببيانات ترخيص مركز خدمة سيارات ملحق نفسها قبل إصدار العرض.")} />
+		</SplitPane>
+	</SplitScene>
+
+	<AngleBand id="secSrvCost" pBg={Colors.BrownDark} pColor={Colors.WhiteOff} pDirection="Rise">
+		<VrStack pGap={new Pixel(14,10)} pHzAlign="Center">
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor(Colors.WhiteOff).OfText("سعر مبدئي للدرافـت")}
+				pText={Text.Body.Centered.WithColor(Colors.WhiteOff).OfText("يبدأ من 20,000 ج.م للدراسة والملف الهندسي المبدئي؛ الرسوم والتصميمات التفصيلية منفصلة.")}
+			/>
+			<Emograph pText={Text.Body.Centered.WithColor(Colors.Gray2).OfText("السعر استرشادي لتحديد موضع الخدمة داخل الموقع؛ العرض النهائي يتحدد بعد معرفة الموقع والمساحة والمستندات والنطاق الفعلي.")} />
+		</VrStack>
+	</AngleBand>
+
+</BLayout>

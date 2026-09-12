@@ -1,0 +1,61 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, StickyStory, StickyStoryItem } from "@/Widgets/Layouts";
+import { Hero } from "@/Widgets/Sections";
+import { Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="ترخيص معرض تجاري"
+	pDescr="ترخيص معرض تجاري — خدمة هندسية لتنظيم ملف الترخيص ومراجعة اشتراطات المكان والرسومات والمستندات المطلوبة قبل التقديم، مع تحديد النواقص ومسار المتابعة. وفي هذه الصفحة يكون التركيز الخاص على حركة العملاء والواجهة وقابلية التقسيم والتشغيل. سعر مبدئي استرشادي ومراحل واضحة لبدء الخدمة."
+>
+
+	<Hero Readable pImgAlt="ترخيص معرض تجاري">
+
+		<VrStack
+			pBg={new ElemBg(Colors.SkyLite)}
+			pBgOpacity={new Percent(85)}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("10%","10%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pGap={new Pixel(20,10)}
+			pPad={new Pixel(10,5)}
+			pHzAlign="Center"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor(Colors.Black).OfText("ترخيص معرض تجاري")}
+				pText={Text.Body.Centered.WithColor(Colors.Black).OfText("خدمة هندسية لتنظيم ملف الترخيص ومراجعة اشتراطات المكان والرسومات والمستندات المطلوبة قبل التقديم، مع تحديد النواقص ومسار المتابعة. وفي هذه الصفحة يكون التركيز الخاص على حركة العملاء والواجهة وقابلية التقسيم والتشغيل.")}
+			/>
+
+			<HzStack pGap={new Pixel(30,10)}>
+				<EmoCallIcon BlackSky />
+				<EmoWhatsIcon BlackSky />
+				<EmoDet BistageBlack pHref="#secSrvCost" pHeight="58px" />
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+	<StickyStory pVisualShare={40} pBg={Colors.Creamy} pVisualBg={Colors.BrownDark} pGap={new RespString("34px","16px")} pPad={new RespString("44px","12px")}>
+		<Emograph slot="visual" pTitle={Text.H2.WithColor(Colors.WhiteOff).OfText("لماذا هذه الخدمة؟")} pText={Text.Body.WithColor(Colors.WhiteOff).OfText("تقلل احتمالات رفض الملف أو تكرار الزيارات بسبب نقص مستند أو تعارض بين الواقع والرسم أو النشاط المطلوب. ويُراجع القرار هنا تحديدًا في ضوء حركة العملاء والواجهة وقابلية التقسيم والتشغيل.")} />
+		<StickyStoryItem pKicker="01 / فحص" pTitle="فحص النشاط والمكان والمستندات المتاحة مع مراعاة حركة العملاء والواجهة وقابلية التقسيم والتشغيل" pText="نبدأ من المعلومات والمستندات المتاحة لتحديد ما يصلح للاعتماد وما يحتاج استكمالًا قبل أي التزام إضافي." pBg={Colors.WhiteOff} pColor={Colors.Black} pAccent={Colors.Bistage} />
+		<StickyStoryItem pKicker="02 / تجهيز" pTitle="تجهيز أو مراجعة الرسومات والنماذج الفنية" pText="يتم تحويل المطلوب إلى مخرجات هندسية واضحة يمكن مراجعتها وربطها بالجهة أو المقاول أو المورد حسب طبيعة المهمة." pBg={Colors.SkyLite} pColor={Colors.Black} pAccent={Colors.SkyDark} />
+		<StickyStoryItem pKicker="03 / إغلاق" pTitle="ترتيب ملف التقديم والمتابعة في حدود النطاق المتفق عليه" pText="نسلم المخرجات المتفق عليها مع تحديد ما تم وما يتبقى وما يعتمد على طرف أو جهة أخرى." pBg={Colors.BistageLite} pColor={Colors.Black} pAccent={Colors.BistageDark} />
+	</StickyStory>
+
+	<AngleBand id="secSrvCost" pBg={Colors.Black} pColor={Colors.WhiteOff} pDirection="Rise">
+		<VrStack pGap={new Pixel(14,10)} pHzAlign="Center">
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor(Colors.WhiteOff).OfText("سعر مبدئي للدرافـت")}
+				pText={Text.Body.Centered.WithColor(Colors.WhiteOff).OfText("يبدأ من 5,000 ج.م أتعاب خدمة؛ الرسوم الحكومية والاعتمادات الخارجية منفصلة.")}
+			/>
+			<Emograph pText={Text.Body.Centered.WithColor(Colors.Gray2).OfText("السعر استرشادي لتحديد موضع الخدمة داخل الموقع؛ العرض النهائي يتحدد بعد معرفة الموقع والمساحة والمستندات والنطاق الفعلي.")} />
+		</VrStack>
+	</AngleBand>
+
+</BLayout>

@@ -1,0 +1,63 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, ScrollShelf, ShelfItem, SideRail } from "@/Widgets/Layouts";
+import { Hero } from "@/Widgets/Sections";
+import { Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="BIM 5D وربط التكلفة"
+	pDescr="BIM 5D وربط التكلفة — خدمة BIM لتحويل المعلومات والرسومات إلى نموذج منسق يمكن استخدامه في المراجعة والتنسيق واستخراج الكميات وربطه بالوقت أو التكلفة حسب النطاق. وفي هذه الصفحة يكون التركيز الخاص على مستوى التفاصيل ونظام الإحداثيات وقواعد التسمية والتنسيق بين التخصصات. سعر مبدئي استرشادي ومراحل واضحة لبدء الخدمة."
+>
+
+	<Hero Readable pImgAlt="BIM 5D وربط التكلفة">
+
+		<VrStack
+			pBg={new ElemBg(Colors.SkyLite)}
+			pBgOpacity={new Percent(85)}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("10%","10%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pGap={new Pixel(20,10)}
+			pPad={new Pixel(10,5)}
+			pHzAlign="Center"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor(Colors.Black).OfText("BIM 5D وربط التكلفة")}
+				pText={Text.Body.Centered.WithColor(Colors.Black).OfText("خدمة BIM لتحويل المعلومات والرسومات إلى نموذج منسق يمكن استخدامه في المراجعة والتنسيق واستخراج الكميات وربطه بالوقت أو التكلفة حسب النطاق. وفي هذه الصفحة يكون التركيز الخاص على مستوى التفاصيل ونظام الإحداثيات وقواعد التسمية والتنسيق بين التخصصات.")}
+			/>
+
+			<HzStack pGap={new Pixel(30,10)}>
+				<EmoCallIcon BlackSky />
+				<EmoWhatsIcon BlackSky />
+				<EmoDet BistageBlack pHref="#secSrvCost" pHeight="58px" />
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+	<SideRail pRailWidth={new RespString("290px","100%")} pGap={new RespString("24px","12px")} pPad={new RespString("42px","12px")} pBg={Colors.Gray1} pRailBg={Colors.BrownDark} pRailColor={Colors.WhiteOff}>
+		<Emograph slot="rail" pTitle={Text.H2.WithColor(Colors.WhiteOff).OfText("BIM 5D وربط التكلفة")} pText={Text.Body.WithColor(Colors.WhiteOff).OfText("يجمع التخصصات في بيئة واحدة ويكشف التعارضات قبل الموقع، ويجعل التعديلات والكميات والوثائق أسهل في التتبع. ويُراجع القرار هنا تحديدًا في ضوء مستوى التفاصيل ونظام الإحداثيات وقواعد التسمية والتنسيق بين التخصصات.")} />
+		<ScrollShelf pItemWidth={new RespString("330px","82vw")} pGap={new RespString("14px","10px")} pPad={new RespString("10px","8px")} pBg={Colors.Gray1}>
+			<ShelfItem pBg={Colors.WhiteOff} pColor={Colors.Black} pAccent={Colors.Bistage}><Emograph pTitle={Text.H3.WithColor(Colors.Black).OfText("مدخلات")} pText={Text.Body.WithColor(Colors.Black).OfText("تحديد مستوى التفاصيل ومتطلبات النموذج مع مراعاة مستوى التفاصيل ونظام الإحداثيات وقواعد التسمية والتنسيق بين التخصصات")} /></ShelfItem>
+			<ShelfItem pBg={Colors.SkyLite} pColor={Colors.Black} pAccent={Colors.SkyDark}><Emograph pTitle={Text.H3.WithColor(Colors.Black).OfText("تنسيق")} pText={Text.Body.WithColor(Colors.Black).OfText("نمذجة وتنسيق العناصر والبيانات")} /></ShelfItem>
+			<ShelfItem pBg={Colors.Creamy} pColor={Colors.Black} pAccent={Colors.OrangeDark}><Emograph pTitle={Text.H3.WithColor(Colors.Black).OfText("تسليم")} pText={Text.Body.WithColor(Colors.Black).OfText("تسليم النموذج والتقارير أو المخرجات المتفق عليها")} /></ShelfItem>
+		</ScrollShelf>
+	</SideRail>
+
+	<AngleBand id="secSrvCost" pBg={Colors.BrownDark} pColor={Colors.WhiteOff} pDirection="Rise">
+		<VrStack pGap={new Pixel(14,10)} pHzAlign="Center">
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor(Colors.WhiteOff).OfText("سعر مبدئي للدرافـت")}
+				pText={Text.Body.Centered.WithColor(Colors.WhiteOff).OfText("يبدأ من 7,500 ج.م للمهمة الصغيرة، ويحدد حسب LOD والمساحة والتخصصات.")}
+			/>
+			<Emograph pText={Text.Body.Centered.WithColor(Colors.Gray2).OfText("السعر استرشادي لتحديد موضع الخدمة داخل الموقع؛ العرض النهائي يتحدد بعد معرفة الموقع والمساحة والمستندات والنطاق الفعلي.")} />
+		</VrStack>
+	</AngleBand>
+
+</BLayout>

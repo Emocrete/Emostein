@@ -1,0 +1,61 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, StickyStory, StickyStoryItem } from "@/Widgets/Layouts";
+import { Hero } from "@/Widgets/Sections";
+import { Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="تطوير مشروع بغرض البيع"
+	pDescr="تطوير مشروع بغرض البيع — تطوير عقاري يبدأ من قراءة الأرض أو الأصل القائم واختيار الاستخدام والمنتج المناسب ثم ربط التصميم والتكلفة والتنفيذ والتسويق بخطة واحدة. وفي هذه الصفحة يكون التركيز الخاص على تجهيز معلومات الأصل والتحقق من نقاط القوة الفنية التي تؤثر في قرار المشتري. سعر مبدئي استرشادي ومراحل واضحة لبدء الخدمة."
+>
+
+	<Hero Readable pImgAlt="تطوير مشروع بغرض البيع">
+
+		<VrStack
+			pBg={new ElemBg(Colors.SkyLite)}
+			pBgOpacity={new Percent(85)}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("10%","10%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pGap={new Pixel(20,10)}
+			pPad={new Pixel(10,5)}
+			pHzAlign="Center"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor(Colors.Black).OfText("تطوير مشروع بغرض البيع")}
+				pText={Text.Body.Centered.WithColor(Colors.Black).OfText("تطوير عقاري يبدأ من قراءة الأرض أو الأصل القائم واختيار الاستخدام والمنتج المناسب ثم ربط التصميم والتكلفة والتنفيذ والتسويق بخطة واحدة. وفي هذه الصفحة يكون التركيز الخاص على تجهيز معلومات الأصل والتحقق من نقاط القوة الفنية التي تؤثر في قرار المشتري.")}
+			/>
+
+			<HzStack pGap={new Pixel(30,10)}>
+				<EmoCallIcon BlackSky />
+				<EmoWhatsIcon BlackSky />
+				<EmoDet BistageBlack pHref="#secSrvCost" pHeight="58px" />
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+	<StickyStory pVisualShare={40} pBg={Colors.Creamy} pVisualBg={Colors.BrownDark} pGap={new RespString("34px","16px")} pPad={new RespString("44px","12px")}>
+		<Emograph slot="visual" pTitle={Text.H2.WithColor(Colors.WhiteOff).OfText("لماذا هذه الخدمة؟")} pText={Text.Body.WithColor(Colors.WhiteOff).OfText("يحوّل قرار البناء من مجرد استغلال مساحة متاحة إلى سيناريو تطوير قابل للمقارنة ماليًا وهندسيًا قبل ضخ رأس المال. ويُراجع القرار هنا تحديدًا في ضوء تجهيز معلومات الأصل والتحقق من نقاط القوة الفنية التي تؤثر في قرار المشتري.")} />
+		<StickyStoryItem pKicker="01 / فحص" pTitle="تحليل الأصل والاشتراطات وفرص الاستخدام مع مراعاة تجهيز معلومات الأصل والتحقق من نقاط القوة الفنية التي تؤثر في قرار المشتري" pText="نبدأ من المعلومات والمستندات المتاحة لتحديد ما يصلح للاعتماد وما يحتاج استكمالًا قبل أي التزام إضافي." pBg={Colors.WhiteOff} pColor={Colors.Black} pAccent={Colors.Bistage} />
+		<StickyStoryItem pKicker="02 / تجهيز" pTitle="اختيار سيناريو التطوير والبرنامج والمساحات" pText="يتم تحويل المطلوب إلى مخرجات هندسية واضحة يمكن مراجعتها وربطها بالجهة أو المقاول أو المورد حسب طبيعة المهمة." pBg={Colors.SkyLite} pColor={Colors.Black} pAccent={Colors.SkyDark} />
+		<StickyStoryItem pKicker="03 / إغلاق" pTitle="ميزانية أولية وخطة تصميم وتنفيذ وتسويق" pText="نسلم المخرجات المتفق عليها مع تحديد ما تم وما يتبقى وما يعتمد على طرف أو جهة أخرى." pBg={Colors.BistageLite} pColor={Colors.Black} pAccent={Colors.BistageDark} />
+	</StickyStory>
+
+	<AngleBand id="secSrvCost" pBg={Colors.Black} pColor={Colors.WhiteOff} pDirection="Rise">
+		<VrStack pGap={new Pixel(14,10)} pHzAlign="Center">
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor(Colors.WhiteOff).OfText("سعر مبدئي للدرافـت")}
+				pText={Text.Body.Centered.WithColor(Colors.WhiteOff).OfText("تبدأ الدراسة المبدئية من 15,000 ج.م؛ الإدارة أو المشاركة تُسعر باتفاق منفصل حسب حجم المشروع.")}
+			/>
+			<Emograph pText={Text.Body.Centered.WithColor(Colors.Gray2).OfText("السعر استرشادي لتحديد موضع الخدمة داخل الموقع؛ العرض النهائي يتحدد بعد معرفة الموقع والمساحة والمستندات والنطاق الفعلي.")} />
+		</VrStack>
+	</AngleBand>
+
+</BLayout>

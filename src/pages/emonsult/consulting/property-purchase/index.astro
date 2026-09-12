@@ -1,0 +1,59 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { SplitPane, SplitScene, StoryRail, StoryStep } from "@/Widgets/Layouts";
+import { Hero } from "@/Widgets/Sections";
+import { Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="استشارة هندسية قبل شراء عقار"
+	pDescr="استشارة هندسية قبل شراء عقار — استشارة هندسية مركزة لتحليل مشكلة أو قرار فني محدد وتقديم رأي مهني وخيارات عملية قبل الالتزام بتصميم أو تنفيذ أو شراء. ويُبنى نطاق استشارة هندسية قبل شراء عقار على حالة المشروع الفعلية لا على وصف عام للخدمة. سعر مبدئي استرشادي ومراحل واضحة لبدء الخدمة."
+>
+
+	<Hero Readable pImgAlt="استشارة هندسية قبل شراء عقار">
+
+		<VrStack
+			pBg={new ElemBg(Colors.SkyLite)}
+			pBgOpacity={new Percent(85)}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("10%","10%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pGap={new Pixel(20,10)}
+			pPad={new Pixel(10,5)}
+			pHzAlign="Center"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor(Colors.Black).OfText("استشارة هندسية قبل شراء عقار")}
+				pText={Text.Body.Centered.WithColor(Colors.Black).OfText("استشارة هندسية مركزة لتحليل مشكلة أو قرار فني محدد وتقديم رأي مهني وخيارات عملية قبل الالتزام بتصميم أو تنفيذ أو شراء. ويُبنى نطاق استشارة هندسية قبل شراء عقار على حالة المشروع الفعلية لا على وصف عام للخدمة.")}
+			/>
+
+			<HzStack pGap={new Pixel(30,10)}>
+				<EmoCallIcon BlackSky />
+				<EmoWhatsIcon BlackSky />
+				<EmoDet BistageBlack pHref="#secSrvCost" pHeight="58px" />
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+	<StoryRail pBg={Colors.Black} pTrackColor={Colors.Gray4} pAccent={Colors.Bistage} pGap={new RespString("24px","14px")} pPad={new RespString("44px","12px")}>
+		<StoryStep pNumber="01" pKicker="البداية" pTitle="تعريف السؤال" pText="استلام المشكلة والرسومات أو الصور المتاحة." pBg={Colors.WhiteOff} pColor={Colors.Black} pAccent={Colors.Bistage} />
+		<StoryStep pNumber="02" pKicker="المعالجة" pTitle="تحليل الحالة" pText="تحليل البدائل والمخاطر الفنية." pBg={Colors.SkyLite} pColor={Colors.Black} pAccent={Colors.SkyDark} />
+		<StoryStep pNumber="03" pKicker="المخرج" pTitle="توصية قابلة للتنفيذ" pText="توصية واضحة بالخطوة التالية." pBg={Colors.Creamy} pColor={Colors.Black} pAccent={Colors.OrangeDark} />
+	</StoryRail>
+
+	<SplitScene id="secSrvCost" pBg={Colors.Gray1} pColumns={new RespString("5fr 7fr","1fr")} pGap={new RespString("12px","10px")}>
+		<SplitPane pBg={Colors.BrownDark} pColor={Colors.WhiteOff} pHzAlign="Right" pVrAlign="Center">
+			<Emograph pTitle={Text.H2.WithColor(Colors.WhiteOff).OfText("القيمة العملية")} pText={Text.Body.WithColor(Colors.WhiteOff).OfText("تعطيك قرارًا مبكرًا منخفض التكلفة مقارنة بالدخول في أعمال تنفيذ أو تعاقد قبل فهم القيود والبدائل. ويظل القرار النهائي مرتبطًا ببيانات استشارة هندسية قبل شراء عقار نفسها قبل إصدار العرض.")} />
+		</SplitPane>
+		<SplitPane pBg={Colors.WhiteOff} pColor={Colors.Black} pHzAlign="Right" pVrAlign="Center">
+			<Emograph pTitle={Text.H2.WithColor(Colors.Black).OfText("السعر المبدئي")} pText={Text.Body.WithColor(Colors.Black).OfText("تبدأ من 3,000 ج.م للاستشارة البسيطة؛ الزيارة أو الحسابات التفصيلية تسعر حسب النطاق.")} />
+		</SplitPane>
+	</SplitScene>
+
+</BLayout>

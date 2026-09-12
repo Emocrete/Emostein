@@ -1,0 +1,60 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, LayerDeck, LayerItem } from "@/Widgets/Layouts";
+import { Hero } from "@/Widgets/Sections";
+import { Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="تسويق مبنى كامل للبيع"
+	pDescr="تسويق مبنى كامل للبيع — تسويق عقاري منظم للأصل يشمل تجهيز المعلومات والعرض والفلترة الأولية للعملاء والتفاوض حتى الوصول إلى صفقة قابلة للإغلاق. وفي هذه الصفحة يكون التركيز الخاص على تجهيز معلومات الأصل والتحقق من نقاط القوة الفنية التي تؤثر في قرار المشتري. سعر مبدئي استرشادي ومراحل واضحة لبدء الخدمة."
+>
+
+	<Hero Readable pImgAlt="تسويق مبنى كامل للبيع">
+
+		<VrStack
+			pBg={new ElemBg(Colors.SkyLite)}
+			pBgOpacity={new Percent(85)}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("10%","10%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pGap={new Pixel(20,10)}
+			pPad={new Pixel(10,5)}
+			pHzAlign="Center"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor(Colors.Black).OfText("تسويق مبنى كامل للبيع")}
+				pText={Text.Body.Centered.WithColor(Colors.Black).OfText("تسويق عقاري منظم للأصل يشمل تجهيز المعلومات والعرض والفلترة الأولية للعملاء والتفاوض حتى الوصول إلى صفقة قابلة للإغلاق. وفي هذه الصفحة يكون التركيز الخاص على تجهيز معلومات الأصل والتحقق من نقاط القوة الفنية التي تؤثر في قرار المشتري.")}
+			/>
+
+			<HzStack pGap={new Pixel(30,10)}>
+				<EmoCallIcon BlackSky />
+				<EmoWhatsIcon BlackSky />
+				<EmoDet BistageBlack pHref="#secSrvCost" pHeight="58px" />
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+	<LayerDeck pBg={Colors.Gray1} pPad={new RespString("28px","12px")}>
+		<LayerItem pWidth={new RespString("76%","92%")} pHeight={new RespString("72%","72%")} pOffsetX={new RespString("-8%","0%")} pOffsetY={new RespString("-7%","-8%")} pBg={Colors.BrownDark} pColor={Colors.WhiteOff}><Emograph pTitle={Text.H2.WithColor(Colors.WhiteOff).OfText("الفرصة")} pText={Text.Body.WithColor(Colors.WhiteOff).OfText("يربط التسويق بالمعلومات الهندسية الحقيقية للعقار ويقلل المعاينات غير الجادة أو الوعود غير المطابقة لحالة الأصل. ويُراجع القرار هنا تحديدًا في ضوء تجهيز معلومات الأصل والتحقق من نقاط القوة الفنية التي تؤثر في قرار المشتري.")} /></LayerItem>
+		<LayerItem pWidth={new RespString("54%","86%")} pHeight={new RespString("auto","auto")} pOffsetX={new RespString("14%","0%")} pOffsetY={new RespString("14%","12%")} pBg={Colors.SkyLite} pColor={Colors.Black}><Emograph pTitle={Text.H3.WithColor(Colors.Black).OfText("المسار")} pText={Text.Body.WithColor(Colors.Black).OfText("Prepare ← Market ← Negotiate")} /></LayerItem>
+		<LayerItem pWidth={new RespString("40%","78%")} pHeight={new RespString("auto","auto")} pOffsetX={new RespString("-20%","0%")} pOffsetY={new RespString("24%","30%")} pBg={Colors.BistageLite} pColor={Colors.Black}><Emograph pTitle={Text.H3.WithColor(Colors.Black).OfText("المخرج")} pText={Text.Body.WithColor(Colors.Black).OfText("تفاوض وتنسيق إجراءات الإغلاق")} /></LayerItem>
+	</LayerDeck>
+
+	<AngleBand id="secSrvCost" pBg={Colors.Black} pColor={Colors.WhiteOff} pDirection="Rise">
+		<VrStack pGap={new Pixel(14,10)} pHzAlign="Center">
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor(Colors.WhiteOff).OfText("سعر مبدئي للدرافـت")}
+				pText={Text.Body.Centered.WithColor(Colors.WhiteOff).OfText("عمولة استرشادية 1.5%–2.5% من قيمة البيع وفق الاتفاق المكتوب ونطاق التسويق.")}
+			/>
+			<Emograph pText={Text.Body.Centered.WithColor(Colors.Gray2).OfText("السعر استرشادي لتحديد موضع الخدمة داخل الموقع؛ العرض النهائي يتحدد بعد معرفة الموقع والمساحة والمستندات والنطاق الفعلي.")} />
+		</VrStack>
+	</AngleBand>
+
+</BLayout>

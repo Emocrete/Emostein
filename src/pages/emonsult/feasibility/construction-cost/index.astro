@@ -1,0 +1,63 @@
+---
+import BLayout from "@/Layout.astro";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { AngleBand, SplitPane, SplitScene } from "@/Widgets/Layouts";
+import { Hero } from "@/Widgets/Sections";
+import { Colors, ElemBg, Loc, NumPer, Percent, Pixel, RespString, Size, Text } from "@/TypesLib";
+---
+
+<BLayout
+	pSchemaType="Service"
+	pTitle="تقدير تكلفة إنشاء مشروع"
+	pDescr="تقدير تكلفة إنشاء مشروع — دراسة هندسية مبكرة تربط المساحة والاشتراطات والبدائل الفنية والتكلفة التقريبية بقرار الاستثمار قبل الدخول في تصميم وتنفيذ كامل. ويُبنى نطاق تقدير تكلفة إنشاء مشروع على حالة المشروع الفعلية لا على وصف عام للخدمة. سعر مبدئي استرشادي ومراحل واضحة لبدء الخدمة."
+>
+
+	<Hero Readable pImgAlt="تقدير تكلفة إنشاء مشروع">
+
+		<VrStack
+			pBg={new ElemBg(Colors.SkyLite)}
+			pBgOpacity={new Percent(85)}
+			pLoc={new Loc(new NumPer("5%","2.5%"),new NumPer("10%","10%"))}
+			pSize={new Size(new NumPer("40%","95%"))}
+			pGap={new Pixel(20,10)}
+			pPad={new Pixel(10,5)}
+			pHzAlign="Center"
+			pVrAlign="Center"
+		>
+
+			<Emograph
+				pTitle={Text.H1.Centered.WithColor(Colors.Black).OfText("تقدير تكلفة إنشاء مشروع")}
+				pText={Text.Body.Centered.WithColor(Colors.Black).OfText("دراسة هندسية مبكرة تربط المساحة والاشتراطات والبدائل الفنية والتكلفة التقريبية بقرار الاستثمار قبل الدخول في تصميم وتنفيذ كامل. ويُبنى نطاق تقدير تكلفة إنشاء مشروع على حالة المشروع الفعلية لا على وصف عام للخدمة.")}
+			/>
+
+			<HzStack pGap={new Pixel(30,10)}>
+				<EmoCallIcon BlackSky />
+				<EmoWhatsIcon BlackSky />
+				<EmoDet BistageBlack pHref="#secSrvCost" pHeight="58px" />
+			</HzStack>
+
+		</VrStack>
+
+	</Hero>
+
+
+	<SplitScene pBg={Colors.Gray1} pColumns={new RespString("1fr 1fr","1fr")} pGap={new RespString("12px","10px")} pPad={new RespString("42px","10px")}>
+		<SplitPane pBg={Colors.BrownDark} pColor={Colors.WhiteOff} pEdge="Chevron" pEdgeP="None" pHzAlign="Right" pVrAlign="Center">
+			<Emograph pTitle={Text.H2.WithColor(Colors.WhiteOff).OfText("نطاق الخدمة")} pText={Text.Body.WithColor(Colors.WhiteOff).OfText("تحديد السيناريوهات والقيود، تقدير المساحات والتكلفة والاحتياجات، مقارنة البدائل وتوصية بالمسار الأنسب.")} />
+		</SplitPane>
+		<SplitPane pBg={Colors.SkyLite} pColor={Colors.Black} pHzAlign="Right" pVrAlign="Center">
+			<Emograph pTitle={Text.H2.WithColor(Colors.Black).OfText("الفائدة قبل الخطوة التالية")} pText={Text.Body.WithColor(Colors.Black).OfText("تساعد على استبعاد البدائل الضعيفة مبكرًا وتوضح أين تتركز التكلفة والمخاطر والعائد الهندسي الممكن من المشروع. ويظل القرار النهائي مرتبطًا ببيانات تقدير تكلفة إنشاء مشروع نفسها قبل إصدار العرض.")} />
+		</SplitPane>
+	</SplitScene>
+
+	<AngleBand id="secSrvCost" pBg={Colors.BrownDark} pColor={Colors.WhiteOff} pDirection="Rise">
+		<VrStack pGap={new Pixel(14,10)} pHzAlign="Center">
+			<Emograph
+				pTitle={Text.H2.Centered.WithColor(Colors.WhiteOff).OfText("سعر مبدئي للدرافـت")}
+				pText={Text.Body.Centered.WithColor(Colors.WhiteOff).OfText("يبدأ من 7,500 ج.م للدراسة المبدئية؛ الدراسات الاستثمارية الموسعة تسعر حسب البيانات المطلوبة.")}
+			/>
+			<Emograph pText={Text.Body.Centered.WithColor(Colors.Gray2).OfText("السعر استرشادي لتحديد موضع الخدمة داخل الموقع؛ العرض النهائي يتحدد بعد معرفة الموقع والمساحة والمستندات والنطاق الفعلي.")} />
+		</VrStack>
+	</AngleBand>
+
+</BLayout>
