@@ -1,11 +1,11 @@
 ---
 import BLayout from "@/Layout.astro";
 import { CardsGr } from "@/Widgets/Cards";
-import { EmoCallIcon, EmoDet, Emograph, EmoList, EmoWhatsIcon, HzStack, SecTitle, VrStack } from "@/Widgets/Comp";
-import { RespImg } from "@/Widgets/Media";
+import { EmoCallIcon, EmoDet, Emograph, EmoWhatsIcon, HzStack, VrStack } from "@/Widgets/Comp";
+import { EmoGallery } from "@/Widgets/Media";
+import { PriceCard1 } from "@/Widgets/Prices";
 import { EmoFaq, EmoSec, FaqItem, Hero, RelServiceItem, RelServices } from "@/Widgets/Sections";
-import { EmoStr } from "@/Widgets/Strips";
-import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text, Topic } from "@/TypesLib";
+import { ElemBg, Loc, NumPer, Pixel, Size, Text, Topic } from "@/TypesLib";
 ---
 
 
@@ -37,9 +37,9 @@ import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text
 
 				<EmoCallIcon />
 
-				<EmoWhatsIcon />
+				<EmoWhatsIcon pMessage="أرغب في الاستفسار عن خدمات التصميم المعماري" />
 
-				<EmoDet Gold pHref="#secSrvCost" pHeight="58px" />
+				<EmoDet Gold pHref="#secCost" pHeight="58px" />
 
 			</HzStack>
 
@@ -53,153 +53,24 @@ import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text
 
 
 
-	<EmoSec pBg={new ElemBg("#111318")}>
+	<EmoSec pBg={new ElemBg("#242323")}>
 
-		<CardsGr
-			pGrTitle={Text.H2.Centered.WithColor("#F4E5C4").OfText("محاور التصميم الأساسية")}
-			pCardBg={new ElemBg("#F7F1E6")}
-			pCardTitleFnt={Text.H3}
-			pCardBodyFnt={Text.Body}
-			pStackDir="Row"
-			pSpacing={20}
-			pTopic1={new Topic("تقسيم المساحات", "توزيع الغرف والخدمات والممرات والفراغات المفتوحة بما يحقق استخدامًا عمليًا للمساحة دون مناطق مهدرة أو علاقات مزعجة بين الأنشطة.")}
-			pTopic2={new Topic("مسارات الحركة", "تنظيم المداخل والسلالم والممرات وحركة الضيوف والخدمات بحيث يشعر المستخدم بالوضوح والراحة من أول خطوة داخل المبنى.")}
-			pTopic3={new Topic("الإضاءة والتهوية", "تحديد مواضع الفتحات ومساحاتها واتجاهاتها بما يدعم الإضاءة الطبيعية والتهوية المناسبة مع الحفاظ على الخصوصية والاتزان البصري.")}
-			pTopic4={new Topic("الواجهات والهوية", "تحويل كتلة المبنى إلى واجهة راقية لها إيقاع واضح في الفتحات، وخامات مناسبة، ونسب معمارية متزنة مع طبيعة المكان.")}
-		/>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoStr pBg={new ElemBg("#0E1118")} pSize={new Size(new NumPer("100%", "100%"), new NumPer("auto", "auto"))}>
-
-		<EmoStr
-			pBg={new ElemBg("#151923")}
-			pSize={new Size(new NumPer(1200, "calc(100% - 20px)"), new NumPer("auto", "auto"))}
-			pHzAlign={Align.Center}
-			pVrAlign={Align.Center}
-		>
+		<HzStack pSize={new Size(new NumPer("80%","100%"))} pGap={new Pixel(150,50)} pPad={new Pixel(50,50)}>
 
 			<Emograph
-				pTitle={Text.H2.Centered.WithColor("#D9B86C").OfText("خدمات الرسم الهندسي المعماري")}
-				pText={Text.Body.Centered.WithColor("#F8F4EA").OfText("نقدم خدمة رسم هندسي معماري متكاملة للمنزل أو الفيلا أو العمارة السكنية، بدءًا من الفكرة الأولية إلى المخططات التنفيذية الجاهزة. الهدف أن يكون التصميم واضحًا للعميل، مفهومًا للمقاول، وقابلًا للمراجعة مع التخصصات الأخرى.")}
-				pSize={new Size(new NumPer(1000, 320), new NumPer("auto", "auto"))}
+				pText={Text.Body.White.Centered.OfText("يحدد التصميم المعماري طريقة تقسيم المساحات على الاحتياجات المختلفة المطلوب تحقيقها بكل دور وكذلك طريقة توزيعها والعلاقات التي تربطها ومسارات الحركة فيما بينها")}
 			/>
 
-		</EmoStr>
-
-		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
-
-			<EmoList
-				pItemFnt={Text.Body.White}
-				pWidth={new RespString("560px", "320px")}
-				pTitle={Text.H3.WithColor("#F4E5C4").OfText("الخدمة تشمل")}
-				pDesc={Text.Body.White.OfText("كل بند في الرسومات له وظيفة واضحة في الترخيص أو التنفيذ أو تقدير التكلفة.")}
-				pHeadBg={new ElemBg("transparent")}
-				pItemsBg={new ElemBg("transparent")}
-				pNumbered={false}
-				pItems={[
-					"رسم معماري لمنزل أو فيلا: مخططات الطوابق، الفتحات، المناسيب، والخدمات.",
-					"رسومات معمارية للمنازل: توزيع المساحات وتنظيم الحركة الداخلية.",
-					"تصميم واجهات ثلاثية الأبعاد: عرض شكل الواجهة مع التفاصيل الجمالية والخامات المقترحة.",
-					"رسومات تنفيذية تفصيلية: قطاعات، واجهات، تفاصيل معمارية، وجداول أبواب ونوافذ.",
-					"تنسيق مبدئي مع التصميم الإنشائي والكهرباء والميكانيكا لتقليل التعارضات قبل التنفيذ."
-				]}
+			<Emograph
+				pText={Text.Body.White.Centered.OfText("يحدد التصميم المعماري أيضا المناسيب وارتفاعات الأدوار المناسبة وأماكن الأبواب والشبابيك واتساع منافذ التهوية والإضاءة الطبيعية المناسب لطبيعة واستخدام المبنى")}
 			/>
 
-			<RespImg
-				pImg={new EmoMediaData(
-					"Img",
-					"https://static.wixstatic.com/media/",
-					"308dfd_e415edfe1c7b45708e2bf54045b08840~mv2.jpg/v1/fill/w_592,h_333,q_90,enc_avif,quality_auto/308dfd_e415edfe1c7b45708e2bf54045b08840~mv2.jpg",
-					false,
-					"تصميم واجهة فيلا",
-					new Size(new NumPer(560, 320), new NumPer("auto", "auto"))
-				)}
+			<Emograph
+				pText={Text.Body.White.Centered.OfText("يحدد التصميم المعماري طريقة تنسيق الواجهات بالشكل الذي يتلائم مع أماكن وأحجام المنافذ المطلة عليها للحصول على إطلالة خارجية جذابة متناسقة مع الوسط المحيط به")}
 			/>
 
 		</HzStack>
 
-	</EmoStr>
-
-
-
-
-
-
-
-	<EmoSec pBg={new ElemBg("#F7F1E6")}>
-
-		<SecTitle
-			pTitle="مراحل خدمة تصميم معماري لفيلا"
-			pDesc="المراحل مرتبة بحيث ينتقل المشروع من رغبة عامة إلى مخطط دقيق، ثم إلى رسومات قابلة للتسليم والمراجعة والتنفيذ."
-		/>
-
-		<EmoList
-			pWidth={new RespString("1000px", "320px")}
-			pTitle={Text.H3.Centered.WithColor("#111318").OfText("تسلسل العمل")}
-			pDesc={Text.Body.Centered.WithColor("#333333").OfText("كل مرحلة لها مخرجات واضحة، ولا يتم الانتقال للمرحلة التالية قبل تثبيت الفكرة الأساسية مع العميل.")}
-			pHeadBg={new ElemBg("transparent")}
-			pItemsBg={new ElemBg("#FFFFFF")}
-			pNumbered={true}
-			pItems={[
-				{
-					Title: "دراسة المتطلبات",
-					Items: [
-						"عدد الغرف المطلوبة وطبيعة استخدام كل فراغ.",
-						"الأنشطة اليومية للأسرة ومستوى الخصوصية المطلوب.",
-						"العناصر الخاصة مثل مكتب منزلي، غرفة ألعاب، قبو، حمام سباحة، أو جناح ضيافة.",
-						"الطراز المفضل للواجهة ومستوى التشطيب المتوقع."
-					]
-				},
-				{
-					Title: "دراسة الموقع والأرض",
-					Items: [
-						"تحديد اتجاهات الشمال والشمس والرياح.",
-						"قراءة أبعاد الأرض ومداخلها وعلاقتها بالشوارع والجيران.",
-						"مراجعة اشتراطات المنطقة أو جهاز المدينة قبل تثبيت التصميم."
-					]
-				},
-				{
-					Title: "المخطط الأولي",
-					Items: [
-						"توزيع أولي للغرف والأدوار.",
-						"تحديد مسارات الحركة داخل الفيلا.",
-						"تصور مبدئي للحديقة والمداخل الرئيسية والفرعية."
-					]
-				},
-				{
-					Title: "التصميم التفصيلي",
-					Items: [
-						"إعداد مخططات الطوابق بمقاييس دقيقة.",
-						"إعداد القطاعات الرأسية لتوضيح ارتفاعات الغرف والمناسيب.",
-						"تصميم الواجهات مع تصور ثلاثي الأبعاد للرؤية المستقبلية."
-					]
-				},
-				{
-					Title: "الرسومات التنفيذية",
-					Items: [
-						"رسومات تفصيلية تستخدم أثناء التنفيذ.",
-						"جداول أبواب ونوافذ.",
-						"تفاصيل التشطيبات الداخلية والخارجية."
-					]
-				},
-				{
-					Title: "المراجعة والتعديلات",
-					Items: [
-						"جلسات مراجعة مع العميل لتثبيت المخطط النهائي.",
-						"ضبط الحلول المعمارية مع القيود الإنشائية والتشغيلية.",
-						"تجهيز النسخة النهائية للتنسيق مع باقي التخصصات."
-					]
-				}
-			]}
-		/>
-
 	</EmoSec>
 
 
@@ -208,7 +79,20 @@ import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text
 
 
 
-	<EmoSec pBg={new ElemBg("#FFFFFF")}>
+	<EmoGallery pFolder="Samples" />
+
+
+
+
+
+
+
+	<EmoSec
+		id="secCost"
+		pBg={new ElemBg("#FFFFFF")}
+		pVrPad={new Pixel(100,50)}
+		pGap={new Pixel(100)}
+	>
 
 		<CardsGr
 			pGrTitle={Text.H2.Centered.WithColor("#111318").OfText("ما الذي تحصل عليه؟")}
@@ -223,82 +107,15 @@ import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text
 			pTopic4={new Topic("تصور ثلاثي الأبعاد", "منظور خارجي أو واجهة ثلاثية الأبعاد حسب نطاق الاتفاق لتوضيح الشكل النهائي قبل بدء التنفيذ.")}
 		/>
 
-	</EmoSec>
+		<PriceCard1 pCaption={Text.H2.OfSize(25,20).OfText("تكلفة التصميم المعماري")} pSize={new Size(new NumPer(1000,"90%"))} pPrice={7000} />
 
+		<HzStack pGap={new Pixel(30,10)} pHzAlign={"Center"}>
 
+			<EmoCallIcon BlackSky pText="اتصل لطلب الخدمة" />
 
-
-
-
-
-	<EmoSec>
-
-		<SecTitle
-			pTitle="تكلفة تصميم فيلا"
-			pDesc="التكلفة النهائية تتحدد بعد معرفة مساحة الأرض، نسبة البناء، عدد الأدوار، مستوى التفاصيل، ونطاق الرسومات المطلوبة. الرقم التالي بداية استرشادية لخدمة التصميم المعماري، وليس عرضًا نهائيًا لكل الحالات."
-		/>
-
-		<HzStack pGap={new Pixel(30, 20)} pPad={new Pixel(35, 20)}>
-
-			<CardsGr
-				pWidth={new RespString("520px", "320px")}
-				pGrTitle={Text.H3.Centered.WithColor("#D9B86C").OfText("يبدأ من 7000 ج.م")}
-				pCardBg={new ElemBg("#F7F1E6")}
-				pCardTitleFnt={Text.H4.WithColor("#111318")}
-				pCardBodyFnt={Text.Body.WithColor("#333333")}
-				pStackDir="Col"
-				pSpacing={20}
-				pTopic1={new Topic("تصميم فيلا", "بداية استرشادية لتصميم معماري حسب مساحة الأرض وعدد الأدوار ومستوى التفاصيل المطلوبة.")}
-				pTopic2={new Topic("تسعير أدق بعد المعاينة", "يتم تحديد الأتعاب بعد دراسة بيانات الأرض، نوع المبنى، الاشتراطات، ومخرجات التسليم المطلوبة.")}
-			/>
-
-			<EmoList
-				pWidth={new RespString("560px", "320px")}
-				pTitle={Text.H3.WithColor("#F4E5C4").OfText("عوامل تغير السعر")}
-				pDesc={Text.Body.WithColor("#F8F4EA").OfText("كل مشروع له وزن مختلف في التصميم، لذلك يتم التسعير على أساس نطاق العمل لا على اسم الخدمة فقط.")}
-				pHeadBg={new ElemBg("transparent")}
-				pItemsBg={new ElemBg("transparent")}
-				pNumbered={false}
-				pItems={[
-					"نوع المبنى: فيلا، عمارة سكنية، مبنى تجاري، أو مبنى إداري.",
-					"مساحة الأرض ونسبة البناء المسموح بها.",
-					"عدد الأدوار والبدروم والسطح والخدمات الملحقة.",
-					"مستوى تصميم الواجهة والتصور ثلاثي الأبعاد.",
-					"حجم الرسومات التنفيذية المطلوبة للتنفيذ أو الترخيص."
-				]}
-			/>
+			<EmoWhatsIcon BlackSky pText="اطلب عبر واتساب" pMessage="أرغب في الاستفسار عن خدمات التصميم المعماري" />
 
 		</HzStack>
-
-	</EmoSec>
-
-
-
-
-
-
-
-	<EmoSec pBg={new ElemBg("#F7F1E6")}>
-
-		<SecTitle
-			style = " --StripBg : #E7D3A1 "
-			pTitle="أنواع المشروعات التي نخدمها"
-			pDesc="التصميم المعماري مناسب لكل مشروع يحتاج توزيعًا مضبوطًا، واجهة راقية، ورسومات قابلة للمراجعة والتنفيذ."
-		/>
-
-		<CardsGr
-			pWidth={new RespString("1200px", "340px")}
-			pGrTitle={Text.H3.Centered.WithColor("#111318").OfText("نطاقات التصميم")}
-			pCardBg={new ElemBg("#FFFFFF")}
-			pCardTitleFnt={Text.H4.WithColor("#111318")}
-			pCardBodyFnt={Text.Body.WithColor("#333333")}
-			pStackDir="Row"
-			pSpacing={20}
-			pTopic1={new Topic("فيلا خاصة", "توزيع داخلي راقٍ، واجهات مميزة، علاقة واضحة بين المبنى والحديقة والمداخل والجراج.")}
-			pTopic2={new Topic("منزل عائلي", "حلول عملية للمساحات المحدودة، خصوصية مناسبة، وواجهة متزنة تناسب الحي والتكلفة.")}
-			pTopic3={new Topic("عمارة سكنية", "توزيع وحدات، قلب حركة، واجهات، مداخل، خدمات، واستغلال أفضل للمساحة طبقًا للاشتراطات.")}
-			pTopic4={new Topic("مبنى تجاري أو إداري", "تنظيم الحركة والواجهات والمداخل بما يدعم تجربة المستخدم وقيمة النشاط التجاري.")}
-		/>
 
 	</EmoSec>
 
@@ -325,16 +142,6 @@ import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text
 			pAnswer="التصميم المعماري يحدد الفكرة والتوزيع والكتلة والواجهات، أما الرسومات التنفيذية فتفصل الأبعاد والمناسيب والقطاعات والجداول والتفاصيل التي يعتمد عليها التنفيذ."
 		/>
 
-		<FaqItem
-			pQuestion="هل السعر ثابت لكل الفلل؟"
-			pAnswer="لا، لأن مساحة الأرض وعدد الأدوار ومستوى التفاصيل والواجهات والتصور ثلاثي الأبعاد وحجم الرسومات المطلوبة كلها عوامل تؤثر على الأتعاب النهائية."
-		/>
-
-		<FaqItem
-			pQuestion="هل يتم التنسيق مع الإنشائي والكهرباء والميكانيكا؟"
-			pAnswer="يمكن تقديم التصميم كملف معماري فقط، ويمكن أيضًا توسيع نطاق الخدمة ليشمل التنسيق مع التصميم الإنشائي والكهرباء والميكانيكا حسب احتياج المشروع."
-		/>
-
 	</EmoFaq>
 
 
@@ -351,13 +158,9 @@ import { Align, ElemBg, EmoMediaData, Loc, NumPer, Pixel, RespString, Size, Text
 
 		<RelServiceItem pTitle="شوب دروينج معماري" pDesc="تفصيل الرسومات المعمارية للتنفيذ الدقيق في الموقع." pHref="/emodsign/tech/shopdwg/arch" />
 
-		<RelServiceItem pTitle="استخراج ترخيص بناء" pDesc="تجهيز ملف الترخيص ومتابعة الإجراءات حسب جهة الاختصاص." pHref="/emoperm/building/newcities/construction" />
+		<RelServiceItem pTitle="استخراج ترخيص بناء" pDesc="تجهيز ملف الترخيص ومتابعة الإجراءات حسب جهة الاختصاص." pHref="/emoperm/building/construction/license" />
 
-		<RelServiceItem
-			pTitle="الإشراف الهندسي على البناء"
-			pDesc="متابعة التنفيذ للتأكد من مطابقة الأعمال للرسومات والمواصفات."
-			pHref="/emonsult/consulting/supervision/construction"
-		/>
+		<RelServiceItem pTitle="الإشراف الهندسي" pDesc="متابعة التنفيذ للتأكد من مطابقة الأعمال للرسومات والمواصفات." pHref="/emonsult/supervision" />
 
 	</RelServices>
 
