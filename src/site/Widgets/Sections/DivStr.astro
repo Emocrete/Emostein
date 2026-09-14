@@ -73,7 +73,7 @@ const {
 } = Astro.props as Props;
 
 const cPagePath = Astro.url.pathname;
-const cImgFolder = pImgF || Media.GetPageFolder(cPagePath);
+const cImgFolder = pImgF;
 const cUseAutoHeroImg = GetBoolAttr((Astro.props as Record<string, unknown>)["data-hero"]) || pImgF !== "";
 const cLoading: "eager" | "lazy" = cUseAutoHeroImg ? "eager" : "lazy";
 const cFetchPriority: "high" | undefined = cUseAutoHeroImg ? "high" : undefined;
@@ -82,7 +82,7 @@ const cBgImgL = pImgL
 	? Media.GetPageFile(cPagePath, pImgL, { pFolder: cImgFolder })
 	: cUseAutoHeroImg
 		? Media.GetHeroLandscape(cPagePath, { pFolder: cImgFolder })
-		: pBg?.Img?.LinkL || "";
+		: Media.GetPageFile(cPagePath, pBg?.Img?.LinkL || "", { pFolder: cImgFolder });
 
 const cBgImgP = pImgP
 	? Media.GetPageFile(cPagePath, pImgP, { pFolder: cImgFolder })
@@ -90,7 +90,7 @@ const cBgImgP = pImgP
 		? cBgImgL
 		: cUseAutoHeroImg
 			? Media.GetHeroPortrait(cPagePath, { pFolder: cImgFolder })
-			: pBg?.Img?.LinkP || pBg?.Img?.LinkL || "";
+			: Media.GetPageFile(cPagePath, pBg?.Img?.LinkP || pBg?.Img?.LinkL || "", { pFolder: cImgFolder });
 
 const cFinalBgImgL = cBgImgL || cBgImgP;
 const cFinalBgImgP = cBgImgP || cBgImgL;

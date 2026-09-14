@@ -240,6 +240,11 @@ const cStyle = [
 
 const cPlace = new Place(Astro.props as unknown as PlaceProps, cStyle);
 
+type GalleryFolderTarget = {
+	FolderPath: string;
+	Kind: "source" | "public";
+};
+
 function GetFolderImages(
 	pFolder: string,
 	pExts: string[],
@@ -248,47 +253,24 @@ function GetFolderImages(
 ): GalleryImage[] {
 
 	const cProjectRoot = resolve(process.cwd());
-	const cPagesRoot = resolve(cProjectRoot, "src", "pages");
-	const cPageRelativePath = decodeURIComponent(pPagePath)
-		.replace(/^\/+|\/+$/g, "");
-	const cPageFolder = resolve(cPagesRoot, cPageRelativePath);
-	const cFolder = String(pFolder ?? "")
-		.trim()
-		.replaceAll("\\", "/");
+	const cPublicRoot = resolve(cProjectRoot, "public");
+	const cTarget = ResolveGalleryFolder(cProjectRoot, cPublicRoot, pFolder, pPagePath);
 
-	if (!cFolder) return [];
-
-	const cTargetFolder = cFolder.startsWith("/")
-		? resolve(cPagesRoot, cFolder.replace(/^\/+/, ""))
-		: resolve(cPageFolder, cFolder);
-	const cRelativeTarget = relative(cPagesRoot, cTargetFolder);
-
-	if (
-		cRelativeTarget.startsWith("..") ||
-		cRelativeTarget === ".." ||
-		isAbsolute(cRelativeTarget) ||
-		!existsSync(cTargetFolder)
-	) {
-		return [];
-	}
+	if (!cTarget) return [];
 
 	const cAllowedExts = pExts.map((pExt) => {
 		const cExt = String(pExt).trim().toLowerCase();
-
 		return cExt.startsWith(".") ? cExt : `.${cExt}`;
 	});
 
-	const cFiles = CollectImageFiles(cTargetFolder, cAllowedExts, pRecursive);
+	const cFiles = CollectImageFiles(cTarget.FolderPath, cAllowedExts, pRecursive);
 
 	return cFiles
 		.sort((pA, pB) => pA.localeCompare(pB, "ar", { numeric: true }))
 		.map((pFile) => {
-			const cSourcePath = `/${relative(cProjectRoot, pFile).replaceAll("\\", "/")}`;
-			const cAsset = cGalleryAssets[cSourcePath];
-
-			if (!cAsset) return null;
-
-			const cSrc = typeof cAsset === "string" ? cAsset : cAsset.src;
+			const cSrc = cTarget.Kind === "public"
+				? BuildPublicUrl(cPublicRoot, pFile)
+				: GetSourceAssetUrl(cProjectRoot, pFile);
 
 			if (!cSrc) return null;
 
@@ -310,6 +292,100 @@ function GetFolderImages(
 			};
 		})
 		.filter((pImage): pImage is GalleryImage => pImage !== null);
+}
+
+function ResolveGalleryFolder(
+	pProjectRoot: string,
+	pPublicRoot: string,
+	pFolderValue: string,
+	pPagePath: string,
+): GalleryFolderTarget | null {
+
+	const cPagesRoot = resolve(pProjectRoot, "src", "pages");
+	const cPageRelativePath = SafeDecodeURIComponent(pPagePath).replace(/^\/+|\/+$/g, "");
+	const cPageFolder = resolve(cPagesRoot, cPageRelativePath);
+	const cFolder = String(pFolderValue ?? "").trim().replaceAll("\\", "/");
+
+	if (!cFolder) return null;
+
+	if (cFolder.startsWith("/")) {
+		const cRootRelative = cFolder.replace(/^\/+/, "");
+		const cPublicCandidate = resolve(pPublicRoot, cRootRelative);
+
+		if (IsSafeExistingFolder(pPublicRoot, cPublicCandidate)) {
+			return { FolderPath: cPublicCandidate, Kind: "public" };
+		}
+
+		const cPagesCandidate = resolve(cPagesRoot, cRootRelative);
+		if (IsSafeExistingFolder(cPagesRoot, cPagesCandidate)) {
+			return { FolderPath: cPagesCandidate, Kind: "source" };
+		}
+
+		return null;
+	}
+
+	const cRelativeFolder = cFolder.replace(/^\.\//, "").replace(/^\/+|\/+$/g, "");
+	const cSourceCandidates: string[] = [];
+
+	if (cRelativeFolder.toLowerCase().startsWith("_m/") || cRelativeFolder.toLowerCase() === "_m") {
+		cSourceCandidates.push(resolve(cPageFolder, cRelativeFolder));
+	}
+	else if (cRelativeFolder.toLowerCase().includes("/_m/") || cRelativeFolder.toLowerCase().endsWith("/_m")) {
+		cSourceCandidates.push(resolve(cPageFolder, cRelativeFolder));
+	}
+	else {
+		// New neutral shorthand: a relative folder means a folder inside this page's _M first.
+		cSourceCandidates.push(resolve(cPageFolder, "_M", cRelativeFolder));
+		// Backward compatibility for older page-relative gallery folders.
+		cSourceCandidates.push(resolve(cPageFolder, cRelativeFolder));
+	}
+
+	for (const cCandidate of cSourceCandidates) {
+		if (IsSafeExistingFolder(cPagesRoot, cCandidate)) {
+			return { FolderPath: cCandidate, Kind: "source" };
+		}
+	}
+
+	const cPublicCandidate = resolve(pPublicRoot, cRelativeFolder);
+	if (IsSafeExistingFolder(pPublicRoot, cPublicCandidate)) {
+		return { FolderPath: cPublicCandidate, Kind: "public" };
+	}
+
+	return null;
+}
+
+function IsSafeExistingFolder(pRoot: string, pFolder: string) {
+	const cRelative = relative(pRoot, pFolder);
+
+	return !(
+		cRelative.startsWith("..") ||
+		cRelative === ".." ||
+		isAbsolute(cRelative) ||
+		!existsSync(pFolder)
+	);
+}
+
+function GetSourceAssetUrl(pProjectRoot: string, pFile: string) {
+	const cSourcePath = `/${relative(pProjectRoot, pFile).replaceAll("\\", "/")}`;
+	const cAsset = cGalleryAssets[cSourcePath];
+
+	if (!cAsset) return "";
+	return typeof cAsset === "string" ? cAsset : cAsset.src;
+}
+
+function BuildPublicUrl(pPublicRoot: string, pFile: string) {
+	const cRelative = relative(pPublicRoot, pFile).replaceAll("\\", "/");
+	const cSegments = cRelative.split("/").filter(Boolean).map((pSegment) => encodeURIComponent(pSegment));
+	return `/${cSegments.join("/")}`;
+}
+
+function SafeDecodeURIComponent(pValue: string) {
+	try {
+		return decodeURIComponent(pValue);
+	}
+	catch {
+		return pValue;
+	}
 }
 
 function CollectImageFiles(

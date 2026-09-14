@@ -1,4 +1,5 @@
 ---
+import { Media } from "@/Media";
 import { EmoFooterPanel } from "@/Widgets/Footer";
 import { EmoRatingStrip, EmoStatsStrip } from "@/Widgets/Strips";
 import { Place, type PlaceProps } from "@/TypesLib";
@@ -87,9 +88,10 @@ const {
 	...RemAttr
 } = Astro.props as Props;
 
+const cBgImg = Media.GetPageFile(Astro.url.href, pBgImg);
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
 const cCssVars = [
-	`--FooterBgImg:${BuildCssUrl(pBgImg)};`,
+	`--FooterBgImg:${BuildCssUrl(cBgImg)};`,
 	cGivenStyle,
 ].filter(Boolean).join(" ");
 

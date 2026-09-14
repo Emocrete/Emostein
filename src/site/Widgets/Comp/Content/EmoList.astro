@@ -1,4 +1,5 @@
 ---
+import { Media } from "@/Media";
 import { ElemBg, Place, type PlaceProps, RespString, Text } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
 
@@ -75,6 +76,8 @@ let {
 	style: pGivenStyle = "",
 	...RemAttr
 } = Astro.props as Props;
+
+const cBulletIcon = Media.GetPageFile(Astro.url.href, pBulletIcon || "");
 
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
 
@@ -173,7 +176,7 @@ const cPlace = new Place(Astro.props as PlaceProps, cRootStyle);
 
 								<img
 									class = " BulletIcon "
-									src={pBulletIcon}
+									src={cBulletIcon}
 									alt=""
 									loading="lazy"
 									decoding="async"
@@ -209,7 +212,7 @@ const cPlace = new Place(Astro.props as PlaceProps, cRootStyle);
 									
 															<img
 																class = " SubBulletIcon "
-																src={pBulletIcon}
+																src={cBulletIcon}
 																alt=""
 																loading="lazy"
 																decoding="async"

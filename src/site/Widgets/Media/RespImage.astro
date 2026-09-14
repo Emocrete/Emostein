@@ -1,5 +1,6 @@
 ---
 import { EmoMediaData, Place, type PlaceProps, Size } from "@/TypesLib";
+import { Media } from "@/Media";
 import type { HTMLAttributes } from "astro/types";
 interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
 	pImg?: EmoMediaData;
@@ -53,6 +54,8 @@ const cCssVars = [
 ].join("\n");
 
 const cPlace = new Place(Astro.props as PlaceProps, cCssVars);
+const cImgL = Media.GetPageFile(Astro.url.href, pImg?.LinkL || "/Media/ErrorImg.webp");
+const cImgP = Media.GetPageFile(Astro.url.href, pImg?.LinkP || pImg?.LinkL || "/Media/ErrorImg.webp");
 
 ---
 
@@ -79,9 +82,9 @@ const cPlace = new Place(Astro.props as PlaceProps, cCssVars);
 
 	<picture class = " RespImgPicBox ">
 
-		<source srcset={pImg?.LinkP ||"/Media/ErrorImg.webp"} media="(orientation: portrait)" />
+		<source srcset={cImgP} media="(orientation: portrait)" />
 
-		<img class = " RespImgImg " src={pImg?.LinkL ||"/Media/ErrorImg.webp"} alt={pImg?.Alt} />
+		<img class = " RespImgImg " src={cImgL} alt={pImg?.Alt} />
 
 	</picture>
 

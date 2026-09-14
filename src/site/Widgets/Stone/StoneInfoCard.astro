@@ -1,4 +1,5 @@
 ---
+import { Media } from "@/Media";
 import { Place, type PlaceProps } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
 type StoneCardIcon = string;
@@ -141,6 +142,7 @@ const {
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
 const cFeatures = [pFeature1, pFeature2, pFeature3, pFeature4].filter(IsValidFeature);
 const cImageAlt = pImgAlt || `${pName} - ${pKind}`;
+const cImg = Media.GetPageFile(Astro.url.href, pImg);
 const cOwnSize = GetBoolAttr(pOwnSizeValue);
 
 const cCssVars = [
@@ -178,8 +180,10 @@ function GetBoolAttr(pValue: unknown) {
 
 function GetIconPath(pIcon?: StoneCardIcon | string) {
 	if (!pIcon) return "";
-	if (pIcon.includes("/") || pIcon.includes(".")) return pIcon;
-	return `${pAssetsBase}${pIcon}.svg`;
+	const cValue = pIcon.includes("/") || pIcon.includes(".")
+		? pIcon
+		: `${pAssetsBase}${pIcon}.svg`;
+	return Media.GetPageFile(Astro.url.href, cValue);
 }
 ---
 
@@ -223,7 +227,7 @@ function GetIconPath(pIcon?: StoneCardIcon | string) {
 
 			<img
 				class = " StoneCardImg "
-				src={pImg}
+				src={cImg}
 				alt={cImageAlt}
 				loading="lazy"
 				decoding="async"

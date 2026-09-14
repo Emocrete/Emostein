@@ -68,7 +68,7 @@ const cSectionAlign = pAlign instanceof Align ? pAlign : Align.Center;
 const cLegacyAlign = typeof pAlign === "string" ? pAlign : "center";
 
 const cPagePath = Astro.url.pathname;
-const cImgFolder = pImgF || Media.GetPageFolder(cPagePath);
+const cImgFolder = pImgF;
 
 const cBgImgL = pImgL
 	? Media.GetPageFile(cPagePath, pImgL, { pFolder: cImgFolder })
@@ -80,8 +80,10 @@ const cBgImgP = pImgP
 		? cBgImgL
 		: Media.GetHeroPortrait(cPagePath, { pFolder: cImgFolder });
 
-const cFinalBgImgL = cBgImgL || cBgImgP || pBg?.Img?.LinkL || pBg?.Img?.LinkP || "";
-const cFinalBgImgP = cBgImgP || cBgImgL || pBg?.Img?.LinkP || pBg?.Img?.LinkL || "";
+const cFallbackBgImgL = Media.GetPageFile(cPagePath, pBg?.Img?.LinkL || pBg?.Img?.LinkP || "", { pFolder: cImgFolder });
+const cFallbackBgImgP = Media.GetPageFile(cPagePath, pBg?.Img?.LinkP || pBg?.Img?.LinkL || "", { pFolder: cImgFolder });
+const cFinalBgImgL = cBgImgL || cBgImgP || cFallbackBgImgL || cFallbackBgImgP;
+const cFinalBgImgP = cBgImgP || cBgImgL || cFallbackBgImgP || cFallbackBgImgL;
 const cHasBgImg = cFinalBgImgL !== "" || cFinalBgImgP !== "";
 const cAutoImgAlt = SeoText.GetLocalsImageAlt(Astro.locals) ;
 const cBgAlt = pImgAlt || pBg?.Img?.Alt || cAutoImgAlt;

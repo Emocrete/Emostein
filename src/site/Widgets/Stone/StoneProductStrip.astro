@@ -1,9 +1,25 @@
 ---
 import { existsSync, readFileSync } from "fs";
 import { isAbsolute, relative, resolve } from "path";
+import { Media } from "@/Media";
 import { Place, type PlaceProps } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
+const cStoneProductAssets = import.meta.glob(
+	"/src/**/*.{webp,jpg,jpeg,png,avif,gif}",
+	{
+		eager: true,
+		query: "?url",
+		import: "default"
+	}
+) as Record<string, string | { src: string }>;
+
 // @ts-ignore
+
+type StoneMediaFolder = {
+	FolderPath: string;
+	Kind: "source" | "public";
+	PublicRoot?: string;
+};
 
 type StoneProductType = "Marble" | "Granite" | "marble" | "granite" | "رخام" | "جرانيت";
 type CssValue = string | number;
@@ -34,7 +50,7 @@ interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps
 	/** Marble / Granite / رخام / جرانيت. يغير زخرفة الخلفية تلقائيًا. */
 	pStoneType?: StoneProductType;
 
-	/** فولدر الصور داخل public، مثل /Media/Emostone/ProductStripSample. */
+	/** فولدر الصور: نسبي داخل _M للصفحة الحالية، أو صريح من public مثل /Media/Emostone/ProductStripSample. */
 	pFolder?: string;
 
 	/** صور جاهزة مباشرة. لها أولوية على pFolder وملف JSON. */
@@ -147,6 +163,8 @@ const {
 	...RemAttr
 } = cProps;
 
+const cProjectRoot = resolve(process.cwd());
+const cMediaFolder = ResolveMediaFolder(pFolder);
 const cStoneType = NormalizeStoneType(pStoneType);
 const cAccent = pAccent ?? (cStoneType === "granite" ? "#2c6674" : "#c8909a");
 const cAccentSoft = pAccentSoft ?? (cStoneType === "granite" ? "#86bdc8" : "#f0c0c7");
@@ -258,50 +276,37 @@ function GetCssName(pName: string) {
 
 function GetGalleryItems(pFolderValue: string, pJsonName: string, pDefaultUse: string, pDirectItems: GalleryJsonItem[] = []): GalleryItem[] {
 	if (pDirectItems.length > 0) {
-		return NormalizeGalleryItems(pDirectItems, pFolderValue, pDefaultUse);
+		return NormalizeGalleryItems(pDirectItems, pDefaultUse);
 	}
 
-	const cPublicRoot = resolve(process.cwd(), "public");
-	const cFolder = NormalizePublicFolder(pFolderValue);
-	if (!cFolder) return [];
+	const cFolderTarget = ResolveMediaFolder(pFolderValue);
+	if (!cFolderTarget) return [];
 
-	const cFolderPath = resolve(cPublicRoot, cFolder);
-	const cRelative = relative(cPublicRoot, cFolderPath);
-
-	if (cRelative.startsWith("..") || cRelative === ".." || isAbsolute(cRelative) || !existsSync(cFolderPath)) {
-		return [];
-	}
-
-	const cJsonPath = resolve(cFolderPath, pJsonName);
-	const cJsonRelative = relative(cFolderPath, cJsonPath);
-
-	if (cJsonRelative.startsWith("..") || cJsonRelative === ".." || isAbsolute(cJsonRelative) || !existsSync(cJsonPath)) {
-		return [];
-	}
+	const cJsonPath = GetSafeFolderFilePath(cFolderTarget.FolderPath, pJsonName);
+	if (!cJsonPath || !existsSync(cJsonPath)) return [];
 
 	try {
 		const cRaw = JSON.parse(readFileSync(cJsonPath, "utf-8"));
 		const cItems = Array.isArray(cRaw) ? cRaw : Array.isArray(cRaw?.Images) ? cRaw.Images : Array.isArray(cRaw?.images) ? cRaw.images : [];
 
-		return NormalizeGalleryItems(cItems, cFolder, pDefaultUse);
+		return NormalizeGalleryItems(cItems, pDefaultUse, cFolderTarget);
 	} catch {
 		return [];
 	}
 }
 
 
-function NormalizeGalleryItems(pItems: GalleryJsonItem[], pFolderValue: string, pDefaultUse: string): GalleryItem[] {
-	const cFolder = NormalizePublicFolder(pFolderValue);
-
+function NormalizeGalleryItems(pItems: GalleryJsonItem[], pDefaultUse: string, pFolderTarget: StoneMediaFolder | null = cMediaFolder): GalleryItem[] {
 	return pItems
 		.map((pItem) => {
-			const cFile = `${pItem.File ?? pItem.file ?? pItem.Src ?? pItem.src ?? ""}`.trim();
+			const cFile = `${pItem.File ?? pItem.file ?? pItem.Src ?? pItem.src ?? ""}`.trim().replaceAll("\\", "/");
 			if (!cFile) return null;
 
 			const cName = `${pItem.NameAr ?? pItem.nameAr ?? StripExt(cFile)}`.trim();
 			const cAlt = `${pItem.Alt ?? pItem.alt ?? cName}`.trim();
 			const cUse = `${pItem.Use ?? pItem.use ?? pDefaultUse}`.trim();
-			const cSrc = cFile.startsWith("/") ? cFile : JoinPublicUrl(cFolder, cFile);
+			const cSrc = ResolveGalleryImageUrl(cFile, pFolderTarget);
+			if (!cSrc) return null;
 
 			return {
 				Src: cSrc,
@@ -315,23 +320,99 @@ function NormalizeGalleryItems(pItems: GalleryJsonItem[], pFolderValue: string, 
 		.filter(Boolean) as GalleryItem[];
 }
 
-function NormalizePublicFolder(pFolderValue: string) {
-	return `${pFolderValue ?? ""}`
-		.trim()
-		.replace(/\\/g, "/")
-		.replace(/^public\//, "")
-		.replace(/^\/+/, "")
-		.replace(/\/+$/, "");
+function ResolveMediaFolder(pFolderValue: string): StoneMediaFolder | null {
+	const cFolder = `${pFolderValue ?? ""}`.trim().replaceAll("\\", "/");
+	if (!cFolder) return null;
+
+	const cPublicRoot = resolve(cProjectRoot, "public");
+	const cPagesRoot = resolve(cProjectRoot, "src", "pages");
+	const cPageRelativePath = SafeDecodeURIComponent(Astro.url.pathname).replace(/^\/+|\/+$/g, "");
+	const cPageFolder = resolve(cPagesRoot, cPageRelativePath);
+
+	if (cFolder.startsWith("/")) {
+		const cCandidate = resolve(cPublicRoot, cFolder.replace(/^\/+/, ""));
+		return IsSafeExistingFolder(cPublicRoot, cCandidate)
+			? { FolderPath: cCandidate, Kind: "public", PublicRoot: cPublicRoot }
+			: null;
+	}
+
+	const cRelativeFolder = cFolder.replace(/^\.\//, "").replace(/^\/+|\/+$/g, "");
+	const cSourceCandidates: string[] = [];
+
+	if (cRelativeFolder.toLowerCase() === "_m" || cRelativeFolder.toLowerCase().startsWith("_m/")) {
+		cSourceCandidates.push(resolve(cPageFolder, cRelativeFolder));
+	}
+	else if (cRelativeFolder.toLowerCase().includes("/_m/") || cRelativeFolder.toLowerCase().endsWith("/_m")) {
+		cSourceCandidates.push(resolve(cPageFolder, cRelativeFolder));
+	}
+	else {
+		cSourceCandidates.push(resolve(cPageFolder, "_M", cRelativeFolder));
+		cSourceCandidates.push(resolve(cPageFolder, cRelativeFolder));
+	}
+
+	for (const cCandidate of cSourceCandidates) {
+		if (IsSafeExistingFolder(cPagesRoot, cCandidate)) {
+			return { FolderPath: cCandidate, Kind: "source" };
+		}
+	}
+
+	const cPublicCandidate = resolve(cPublicRoot, cRelativeFolder);
+	if (IsSafeExistingFolder(cPublicRoot, cPublicCandidate)) {
+		return { FolderPath: cPublicCandidate, Kind: "public", PublicRoot: cPublicRoot };
+	}
+
+	return null;
 }
 
-function JoinPublicUrl(pFolderValue: string, pFileValue: string) {
-	const cSegments = `${pFolderValue}/${pFileValue}`
-		.replace(/\\/g, "/")
-		.split("/")
-		.filter(Boolean)
-		.map((pSegment) => encodeURIComponent(pSegment));
+function ResolveGalleryImageUrl(pFileValue: string, pFolderTarget: StoneMediaFolder | null) {
+	if (/^[a-z][a-z0-9+.-]*:/i.test(pFileValue) || pFileValue.startsWith("//") || pFileValue.startsWith("/")) {
+		return Media.GetPageFile(Astro.url.href, pFileValue);
+	}
 
+	if (!pFolderTarget) {
+		return Media.GetPageFile(Astro.url.href, pFileValue);
+	}
+
+	const cFilePath = GetSafeFolderFilePath(pFolderTarget.FolderPath, pFileValue);
+	if (!cFilePath) return "";
+
+	if (pFolderTarget.Kind === "source") {
+		const cSourcePath = `/${relative(cProjectRoot, cFilePath).replaceAll("\\", "/")}`;
+		const cAsset = cStoneProductAssets[cSourcePath];
+		if (!cAsset) return "";
+		return typeof cAsset === "string" ? cAsset : cAsset.src;
+	}
+
+	const cPublicRoot = pFolderTarget.PublicRoot ?? resolve(cProjectRoot, "public");
+	const cRelative = relative(cPublicRoot, cFilePath).replaceAll("\\", "/");
+	const cSegments = cRelative.split("/").filter(Boolean).map((pSegment) => encodeURIComponent(pSegment));
 	return `/${cSegments.join("/")}`;
+}
+
+function GetSafeFolderFilePath(pFolderPath: string, pFileValue: string) {
+	const cFilePath = resolve(pFolderPath, `${pFileValue ?? ""}`.trim());
+	const cRelative = relative(pFolderPath, cFilePath);
+	if (cRelative.startsWith("..") || cRelative === ".." || isAbsolute(cRelative)) return null;
+	return cFilePath;
+}
+
+function IsSafeExistingFolder(pRoot: string, pFolderPath: string) {
+	const cRelative = relative(pRoot, pFolderPath);
+	return !(
+		cRelative.startsWith("..") ||
+		cRelative === ".." ||
+		isAbsolute(cRelative) ||
+		!existsSync(pFolderPath)
+	);
+}
+
+function SafeDecodeURIComponent(pValue: string) {
+	try {
+		return decodeURIComponent(pValue);
+	}
+	catch {
+		return pValue;
+	}
 }
 
 function StripExt(pFile: string) {

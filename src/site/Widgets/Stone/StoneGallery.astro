@@ -2,12 +2,28 @@
 import { existsSync, readdirSync, readFileSync } from "fs";
 import { basename, dirname, extname, isAbsolute, relative, resolve } from "path";
 import { fileURLToPath } from "url";
+import { Media } from "@/Media";
 import { Place, type PlaceProps } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
 import { CreateStoneGalleryExcelImageMatcher, ReadStoneGalleryExcelFile } from "./StoneGalleryExcel";
 
+const cStoneGalleryAssets = import.meta.glob(
+	"/src/**/*.{webp,jpg,jpeg,png,avif,gif}",
+	{
+		eager: true,
+		query: "?url",
+		import: "default"
+	}
+) as Record<string, string | { src: string }>;
+
 type CssValue = string | number;
 type StoneImageRole = "sample" | "slab" | "application" | "detail";
+
+type StoneMediaFolder = {
+	FolderPath: string;
+	Kind: "source" | "public";
+	PublicRoot?: string;
+};
 
 export interface StoneGalleryImageInput {
 	File?: string;
@@ -86,7 +102,7 @@ interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps
 	/** بيانات جاهزة مباشرة. عند تمريرها لها أولوية على Excel وJSON ومسح الفولدر. */
 	pItems?: StoneGalleryItemInput[];
 
-	/** فولدر صور الخامات داخل public. */
+	/** فولدر الصور: مسار نسبي داخل _M للصفحة الحالية، أو مسار صريح من public مثل /Media/.... */
 	pFolder?: string;
 
 	/** ملف Excel داخل pFolder. إذا كان موجودًا تكون له أولوية على JSON ومسح الفولدر. */
@@ -242,6 +258,8 @@ const cDefaultUses = ToList(pDefaultUses);
 const cDefaultFinishes = ToList(pDefaultFinishes);
 const cDataWarnings: string[] = [];
 const cPublicRoots = GetPublicRoots();
+const cProjectRoot = resolve(process.cwd());
+const cMediaFolder = ResolveMediaFolder(pFolder);
 const cRawItems = GetRawItems();
 const cUsedIds = new Set<string>();
 const cItems = cRawItems
@@ -344,10 +362,10 @@ function GetRawItems(): StoneGalleryItemInput[] {
 }
 
 function ReadExcelItems(): StoneGalleryItemInput[] | null {
-	const cFolderPath = GetSafePublicFolderPath(pFolder);
+	const cFolderPath = cMediaFolder?.FolderPath ?? null;
 	if (!pExcel) return null;
 	if (!cFolderPath) {
-		AddDataWarning(`لم أجد فولدر الصور "${pFolder}" داخل public. المسارات التي تم فحصها: ${cPublicRoots.join("، ")}.`);
+		AddDataWarning(`لم أجد فولدر الصور "${pFolder}" داخل _M الخاصة بالصفحة أو داخل public.`);
 		return null;
 	}
 
@@ -434,7 +452,7 @@ function GetExcelMatchWarning(pRowNumber: number, pRole: string, pReference: str
 }
 
 function ReadJsonItems(): StoneGalleryItemInput[] {
-	const cFolderPath = GetSafePublicFolderPath(pFolder);
+	const cFolderPath = cMediaFolder?.FolderPath ?? null;
 	if (!cFolderPath || !pJson) return [];
 
 	const cJsonPath = resolve(cFolderPath, pJson);
@@ -462,7 +480,7 @@ function ReadJsonItems(): StoneGalleryItemInput[] {
 }
 
 function ScanFolderItems(): StoneGalleryItemInput[] {
-	const cFolderPath = GetSafePublicFolderPath(pFolder);
+	const cFolderPath = cMediaFolder?.FolderPath ?? null;
 	if (!cFolderPath) return [];
 
 	return CollectImageFiles(cFolderPath)
@@ -491,18 +509,66 @@ function CollectImageFiles(pFolderPath: string): string[] {
 	return cFiles;
 }
 
-function GetSafePublicFolderPath(pFolderValue: string) {
-	const cFolder = NormalizePublicFolder(pFolderValue);
+function ResolveMediaFolder(pFolderValue: string): StoneMediaFolder | null {
+	const cFolder = `${pFolderValue ?? ""}`.trim().replaceAll("\\", "/");
 	if (!cFolder) return null;
 
+	const cPagesRoot = resolve(cProjectRoot, "src", "pages");
+	const cPageRelativePath = SafeDecodeURIComponent(Astro.url.pathname).replace(/^\/+|\/+$/g, "");
+	const cPageFolder = resolve(cPagesRoot, cPageRelativePath);
+
+	if (cFolder.startsWith("/")) {
+		const cRootRelative = cFolder.replace(/^\/+/, "");
+
+		for (const cPublicRoot of cPublicRoots) {
+			const cCandidate = resolve(cPublicRoot, cRootRelative);
+			if (IsSafeExistingFolder(cPublicRoot, cCandidate)) {
+				return { FolderPath: cCandidate, Kind: "public", PublicRoot: cPublicRoot };
+			}
+		}
+
+		return null;
+	}
+
+	const cRelativeFolder = cFolder.replace(/^\.\//, "").replace(/^\/+|\/+$/g, "");
+	const cSourceCandidates: string[] = [];
+
+	if (cRelativeFolder.toLowerCase() === "_m" || cRelativeFolder.toLowerCase().startsWith("_m/")) {
+		cSourceCandidates.push(resolve(cPageFolder, cRelativeFolder));
+	}
+	else if (cRelativeFolder.toLowerCase().includes("/_m/") || cRelativeFolder.toLowerCase().endsWith("/_m")) {
+		cSourceCandidates.push(resolve(cPageFolder, cRelativeFolder));
+	}
+	else {
+		cSourceCandidates.push(resolve(cPageFolder, "_M", cRelativeFolder));
+		// Backward compatibility for old page-relative folders.
+		cSourceCandidates.push(resolve(cPageFolder, cRelativeFolder));
+	}
+
+	for (const cCandidate of cSourceCandidates) {
+		if (IsSafeExistingFolder(cPagesRoot, cCandidate)) {
+			return { FolderPath: cCandidate, Kind: "source" };
+		}
+	}
+
 	for (const cPublicRoot of cPublicRoots) {
-		const cFolderPath = resolve(cPublicRoot, cFolder);
-		const cRelative = relative(cPublicRoot, cFolderPath);
-		if (cRelative.startsWith("..") || cRelative === ".." || isAbsolute(cRelative) || !existsSync(cFolderPath)) continue;
-		return cFolderPath;
+		const cCandidate = resolve(cPublicRoot, cRelativeFolder);
+		if (IsSafeExistingFolder(cPublicRoot, cCandidate)) {
+			return { FolderPath: cCandidate, Kind: "public", PublicRoot: cPublicRoot };
+		}
 	}
 
 	return null;
+}
+
+function IsSafeExistingFolder(pRoot: string, pFolderPath: string) {
+	const cRelative = relative(pRoot, pFolderPath);
+	return !(
+		cRelative.startsWith("..") ||
+		cRelative === ".." ||
+		isAbsolute(cRelative) ||
+		!existsSync(pFolderPath)
+	);
 }
 
 function GetPublicRoots() {
@@ -624,19 +690,46 @@ function AddImage(pImages: NormalizedStoneImage[], pFile: string, pAlt: string, 
 function ResolveImageUrl(pValue: string) {
 	const cValue = `${pValue ?? ""}`.trim().replaceAll("\\", "/");
 	if (!cValue) return "";
-	if (/^(https?:|data:|blob:)/i.test(cValue) || cValue.startsWith("/")) return cValue;
 
-	const cFolder = NormalizePublicFolder(pFolder);
-	return JoinPublicUrl(cFolder, cValue);
+	if (/^[a-z][a-z0-9+.-]*:/i.test(cValue) || cValue.startsWith("//") || cValue.startsWith("/")) {
+		return Media.GetPageFile(Astro.url.href, cValue);
+	}
+
+	if (!cMediaFolder) {
+		return Media.GetPageFile(Astro.url.href, cValue);
+	}
+
+	const cFilePath = GetSafeFolderFilePath(cMediaFolder.FolderPath, cValue);
+	if (!cFilePath) return "";
+
+	if (cMediaFolder.Kind === "source") {
+		return GetSourceAssetUrl(cFilePath);
+	}
+
+	return BuildPublicUrl(cMediaFolder.PublicRoot ?? resolve(cProjectRoot, "public"), cFilePath);
 }
 
-function NormalizePublicFolder(pFolderValue: string) {
-	return `${pFolderValue ?? ""}`.trim().replaceAll("\\", "/").replace(/^public\//, "").replace(/^\/+/, "").replace(/\/+$/, "");
+function GetSourceAssetUrl(pFilePath: string) {
+	const cSourcePath = `/${relative(cProjectRoot, pFilePath).replaceAll("\\", "/")}`;
+	const cAsset = cStoneGalleryAssets[cSourcePath];
+
+	if (!cAsset) return "";
+	return typeof cAsset === "string" ? cAsset : cAsset.src;
 }
 
-function JoinPublicUrl(pFolderValue: string, pFileValue: string) {
-	const cSegments = `${pFolderValue}/${pFileValue}`.split("/").filter(Boolean).map((pSegment) => encodeURIComponent(pSegment));
+function BuildPublicUrl(pPublicRoot: string, pFilePath: string) {
+	const cRelative = relative(pPublicRoot, pFilePath).replaceAll("\\", "/");
+	const cSegments = cRelative.split("/").filter(Boolean).map((pSegment) => encodeURIComponent(pSegment));
 	return `/${cSegments.join("/")}`;
+}
+
+function SafeDecodeURIComponent(pValue: string) {
+	try {
+		return decodeURIComponent(pValue);
+	}
+	catch {
+		return pValue;
+	}
 }
 
 function ReadValue(pObject: Record<string, unknown>, pNames: string[]) {

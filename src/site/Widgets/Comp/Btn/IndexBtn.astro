@@ -1,4 +1,5 @@
 ---
+import { Media } from "@/Media";
 import { Colors, Place, type PlaceProps } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
 
@@ -77,13 +78,13 @@ const cBgColorActive = pBgColorActive ?? cBgColorHover;
 const cTextColorHover = pTextColorHover ?? pTextColor;
 const cTextColorActive = pTextColorActive ?? cTextColorHover;
 
-const cBgImgNormal = BuildCssUrl(pBgImg);
-const cBgImgHover = BuildCssUrl(pBgImgHover ?? pBgImg);
-const cBgImgActive = BuildCssUrl(pBgImgActive ?? pBgImgHover ?? pBgImg);
+const cBgImgNormal = BuildCssUrl(Media.GetPageFile(Astro.url.href, pBgImg));
+const cBgImgHover = BuildCssUrl(Media.GetPageFile(Astro.url.href, pBgImgHover ?? pBgImg));
+const cBgImgActive = BuildCssUrl(Media.GetPageFile(Astro.url.href, pBgImgActive ?? pBgImgHover ?? pBgImg));
 
-const cIconNormal = BuildCssUrl(pIcon);
-const cIconHover = BuildCssUrl(pIconHover ?? pIcon);
-const cIconActive = BuildCssUrl(pIconActive ?? pIconHover ?? pIcon);
+const cIconNormal = BuildCssUrl(Media.GetPageFile(Astro.url.href, pIcon));
+const cIconHover = BuildCssUrl(Media.GetPageFile(Astro.url.href, pIconHover ?? pIcon));
+const cIconActive = BuildCssUrl(Media.GetPageFile(Astro.url.href, pIconActive ?? pIconHover ?? pIcon));
 
 const cHasIcon = Boolean(pIcon);
 

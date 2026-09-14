@@ -1,4 +1,5 @@
 ---
+import { Media } from "@/Media";
 import { Place, type PlaceProps } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
 
@@ -52,6 +53,8 @@ const {
 	...RemAttr
 } = Astro.props as Props;
 
+const cImg = Media.GetPageFile(Astro.url.href, pImg || "");
+
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
 
 const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
@@ -87,7 +90,7 @@ const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
 
 		<img
 			class = " CardMedia "
-			src={pImg}
+			src={cImg}
 			alt=""
 			loading="lazy"
 		/>

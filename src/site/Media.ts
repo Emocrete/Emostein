@@ -1,5 +1,5 @@
 const cPageMediaAssets = import.meta.glob(
-	"/src/pages/**/_M/*",
+	"/src/pages/**/_M/**/*",
 	{
 		eager: true,
 		query: "?url",
@@ -9,6 +9,7 @@ const cPageMediaAssets = import.meta.glob(
 
 
 interface PageMediaItem {
+	RelativePath: string;
 	FileName: string;
 	Url: string;
 }
@@ -23,18 +24,19 @@ for (const [cSourcePath, cAssetUrl] of Object.entries(cPageMediaAssets)) {
 
 	if (cPagesIndex < 0) { continue; }
 
-	const cPageRelativePath = `/${cNormalizedSourcePath.slice(cPagesIndex + "/pages/".length)}`;
+	const cPageRelativePath = cNormalizedSourcePath.slice(cPagesIndex + "/pages/".length);
 	const cLowerPageRelativePath = cPageRelativePath.toLowerCase();
 	const cMediaIndex = cLowerPageRelativePath.lastIndexOf("/_m/");
 
 	if (cMediaIndex < 0) { continue; }
 
-	const cPagePath = cLowerPageRelativePath.slice(0, cMediaIndex).replace(/^\/+|\/+$/g, "");
-	const cFileName = cPageRelativePath.slice(cMediaIndex + "/_M/".length);
+	const cPagePath = cLowerPageRelativePath.slice(0, cMediaIndex);
+	const cRelativePath = cPageRelativePath.slice(cMediaIndex + "/_M/".length).replace(/^\/+/, "");
 	const cItems = cPageMediaIndex.get(cPagePath) ?? [];
 
 	cItems.push({
-		FileName: cFileName,
+		RelativePath: cRelativePath,
+		FileName: GetPathFileName(cRelativePath),
 		Url: cAssetUrl
 	});
 
@@ -42,7 +44,19 @@ for (const [cSourcePath, cAssetUrl] of Object.entries(cPageMediaAssets)) {
 }
 
 
+function GetPathFileName(pPath: string) : string {
+	const cNormalizedPath = pPath.replace(/\\/g, "/");
+	const cParts = cNormalizedPath.split("/");
+	return cParts[cParts.length - 1] ?? "";
+}
+
+
 export interface MediaPathOptions {
+	/**
+	 * Optional explicit media folder. Use this only when the caller wants to
+	 * force a shared/public folder such as /Media/Shared. Relative file paths
+	 * without this option are resolved against the current page _M folder.
+	 */
 	pFolder?: string;
 	pAbsolute?: boolean;
 }
@@ -63,24 +77,55 @@ export class Media {
 
 
 
+	/**
+	 * Resolve a media/file reference without forcing one storage location.
+	 *
+	 * - Ready URLs (https:, data:, blob:, //...) are returned unchanged.
+	 * - Root-relative URLs (/Media/...) are returned unchanged.
+	 * - Relative values first try the current page's _M folder, including any
+	 *   nested path, then fall back to the value exactly as supplied.
+	 * - pFolder can explicitly force a shared/public folder while keeping the
+	 *   old pImgF style working.
+	 */
 	public static GetPageFile( pPageUrlOrPath: string , pFileOrPath: string , pOptions: MediaPathOptions = {} ) : string
 		{
 
-			if (!pFileOrPath) { return ""; }
+			const cValue = `${pFileOrPath ?? ""}`.trim();
 
-			if (Media.IsReadyUrl(pFileOrPath)) { return pFileOrPath; }
+			if (!cValue) { return ""; }
 
-			if (pFileOrPath.startsWith("/")) {
+			if (Media.IsReadyUrl(cValue)) { return cValue; }
+
+			if (cValue.startsWith("/")) {
 				return pOptions.pAbsolute
-					? Media.GetAbsoluteUrl(pPageUrlOrPath, pFileOrPath)
-					: pFileOrPath;
+					? Media.GetAbsoluteUrl(pPageUrlOrPath, cValue)
+					: cValue;
 			}
 
-			return Media.GetExistingPageAsset(
+			const cExplicitFolder = `${pOptions.pFolder ?? ""}`.trim();
+
+			if (cExplicitFolder) {
+				const cFolderResult = Media.GetFolderFile(
+					pPageUrlOrPath,
+					cExplicitFolder,
+					cValue,
+					pOptions.pAbsolute ?? false
+				);
+
+				if (cFolderResult) { return cFolderResult; }
+			}
+
+			const cPageAsset = Media.GetExistingPageAsset(
 				pPageUrlOrPath,
-				pFileOrPath,
+				cValue,
 				pOptions.pAbsolute ?? false
 			);
+
+			if (cPageAsset) { return cPageAsset; }
+
+			return pOptions.pAbsolute
+				? Media.GetAbsoluteUrl(pPageUrlOrPath, cValue)
+				: cValue;
 
 		}
 
@@ -97,28 +142,48 @@ export class Media {
 
 
 
-	public static GetExistingPageAsset( pPageUrlOrPath: string , pFileName: string , pAbsolute = false ) : string
+	public static GetExistingPageAsset( pPageUrlOrPath: string , pFileOrPath: string , pAbsolute = false ) : string
 		{
 
-			if (!pFileName) { return ""; }
+			const cValue = `${pFileOrPath ?? ""}`.trim();
+
+			if (!cValue) { return ""; }
 
 			const cPagePath = Media.GetPagePath(pPageUrlOrPath).toLowerCase();
-			const cTargetFileName = Media.GetFileName(pFileName).toLowerCase();
+			const cTargetPath = Media.NormalizePageMediaRelativePath(cValue);
+			const cTargetPathLower = cTargetPath.toLowerCase();
 			const cItems = cPageMediaIndex.get(cPagePath) ?? [];
 
-			if (!cTargetFileName || cItems.length === 0) { return ""; }
+			if (!cTargetPathLower || cItems.length === 0) { return ""; }
 
-			const cExactItem = cItems.find((pItem) => {
-				return pItem.FileName.toLowerCase() === cTargetFileName;
+			let cItem = cItems.find((pItem) => {
+				return pItem.RelativePath.toLowerCase() === cTargetPathLower;
 			});
 
-			const cSuffixItem = cExactItem ?? cItems.find((pItem) => {
-				return pItem.FileName.toLowerCase().endsWith(cTargetFileName);
-			});
+			if (!cItem && !cTargetPathLower.includes("/")) {
+				const cFileMatches = cItems.filter((pItem) => {
+					return pItem.FileName.toLowerCase() === cTargetPathLower;
+				});
 
-			const cAssetUrl = cSuffixItem?.Url ?? "";
+				if (cFileMatches.length === 1) {
+					cItem = cFileMatches[0];
+				}
 
-			if (!cAssetUrl) { return ""; }
+				if (!cItem) {
+					const cSuffixMatches = cItems.filter((pItem) => {
+						return pItem.FileName.toLowerCase().endsWith(cTargetPathLower);
+					});
+
+					if (cSuffixMatches.length === 1) {
+						cItem = cSuffixMatches[0];
+					}
+				}
+			}
+
+			if (!cItem) { return ""; }
+
+			const cSuffix = Media.GetUrlSuffix(cValue);
+			const cAssetUrl = `${cItem.Url}${cSuffix}`;
 
 			return pAbsolute
 				? Media.GetAbsoluteUrl(pPageUrlOrPath, cAssetUrl)
@@ -134,7 +199,7 @@ export class Media {
 			return Media.GetExistingHero(
 				pPageUrlOrPath,
 				"HeroL",
-				pOptions.pAbsolute ?? false
+				pOptions
 			);
 
 		}
@@ -147,7 +212,7 @@ export class Media {
 			return Media.GetExistingHero(
 				pPageUrlOrPath,
 				"HeroP",
-				pOptions.pAbsolute ?? false
+				pOptions
 			);
 
 		}
@@ -184,16 +249,25 @@ export class Media {
 
 
 
-	private static GetExistingHero( pPageUrlOrPath: string , pHeroName: "HeroL" | "HeroP" , pAbsolute: boolean ) : string
+	private static GetExistingHero( pPageUrlOrPath: string , pHeroName: "HeroL" | "HeroP" , pOptions: MediaPathOptions ) : string
 		{
 
 			const cExtensions = ["webp", "avif", "png", "jpg", "jpeg"];
+			const cExplicitFolder = `${pOptions.pFolder ?? ""}`.trim();
+
+			if (cExplicitFolder && !Media.IsPageMediaFolder(pPageUrlOrPath, cExplicitFolder)) {
+				return Media.GetPageFile(
+					pPageUrlOrPath,
+					`${pHeroName}.${cExtensions[0]}`,
+					pOptions
+				);
+			}
 
 			for (const cExtension of cExtensions) {
 				const cAssetUrl = Media.GetExistingPageAsset(
 					pPageUrlOrPath,
 					`${pHeroName}.${cExtension}`,
-					pAbsolute
+					pOptions.pAbsolute ?? false
 				);
 
 				if (cAssetUrl) { return cAssetUrl; }
@@ -205,10 +279,79 @@ export class Media {
 
 
 
+	private static GetFolderFile( pPageUrlOrPath: string , pFolder: string , pFileOrPath: string , pAbsolute: boolean ) : string
+		{
+
+			if (Media.IsPageMediaFolder(pPageUrlOrPath, pFolder)) {
+				return Media.GetExistingPageAsset(pPageUrlOrPath, pFileOrPath, pAbsolute);
+			}
+
+			const cFolder = pFolder.replace(/\\/g, "/").replace(/\/+$/, "");
+			const cFile = pFileOrPath.replace(/\\/g, "/").replace(/^\.\//, "").replace(/^\/+/, "");
+
+			if (!cFolder || !cFile) { return ""; }
+
+			let cJoined = "";
+
+			if (Media.IsReadyUrl(cFolder)) {
+				const cBase = cFolder.endsWith("/") ? cFolder : `${cFolder}/`;
+				cJoined = new URL(cFile, cBase).href;
+			}
+			else {
+				cJoined = `${cFolder}/${cFile}`.replace(/\/{2,}/g, "/");
+				if (pFolder.startsWith("/") && !cJoined.startsWith("/")) {
+					cJoined = `/${cJoined}`;
+				}
+			}
+
+			return pAbsolute
+				? Media.GetAbsoluteUrl(pPageUrlOrPath, cJoined)
+				: cJoined;
+
+		}
+
+
+
+	private static IsPageMediaFolder( pPageUrlOrPath: string , pFolder: string ) : boolean
+		{
+
+			const cFolder = pFolder.replace(/\\/g, "/").replace(/\/+$/, "").toLowerCase();
+			const cExpected = Media.GetPageFolder(pPageUrlOrPath).replace(/\/+$/, "").toLowerCase();
+
+			return cFolder === cExpected || cFolder === "_m" || cFolder === "./_m";
+
+		}
+
+
+
+	private static NormalizePageMediaRelativePath( pValue: string ) : string
+		{
+
+			const cWithoutSuffix = pValue.split(/[?#]/, 1)[0];
+			let cPath = Media.SafeDecodeURIComponent(cWithoutSuffix)
+				.replace(/\\/g, "/")
+				.replace(/^\.\//, "")
+				.replace(/^\/+/, "");
+
+			if (cPath.toLowerCase().startsWith("_m/")) {
+				cPath = cPath.slice(3);
+			}
+
+			const cNestedMediaIndex = cPath.toLowerCase().lastIndexOf("/_m/");
+			if (cNestedMediaIndex >= 0) {
+				cPath = cPath.slice(cNestedMediaIndex + "/_M/".length);
+			}
+
+			return cPath.replace(/^\/+|\/+$/g, "");
+
+		}
+
+
+
 	private static GetPagePath( pPageUrlOrPath: string ) : string
 		{
 
-			return Media.GetPathname(pPageUrlOrPath)
+			return Media.SafeDecodeURIComponent(Media.GetPathname(pPageUrlOrPath))
 				.split(/[?#]/, 1)[0]
 				.replace(/^\/+|\/+$/g, "");
 
@@ -216,13 +359,24 @@ export class Media {
 
 
 
-	private static GetFileName( pPath: string ) : string
+	public static GetFileName( pPath: string ) : string
 		{
 
-			const cNormalizedPath = pPath.replace(/\\/g, "/");
+			const cCleanPath = pPath.split(/[?#]/, 1)[0];
+			const cNormalizedPath = Media.SafeDecodeURIComponent(cCleanPath).replace(/\\/g, "/");
 			const cParts = cNormalizedPath.split("/");
 
 			return cParts[cParts.length - 1] ?? "";
+
+		}
+
+
+
+	private static GetUrlSuffix( pValue: string ) : string
+		{
+
+			const cIndex = pValue.search(/[?#]/);
+			return cIndex >= 0 ? pValue.slice(cIndex) : "";
 
 		}
 
@@ -259,9 +413,21 @@ export class Media {
 	private static IsReadyUrl( pValue: string ) : boolean
 		{
 
-			return /^https?:\/\//i.test(pValue) ||
-				pValue.startsWith("data:") ||
-				pValue.startsWith("blob:");
+			return /^[a-z][a-z0-9+.-]*:/i.test(pValue) || pValue.startsWith("//");
+
+		}
+
+
+
+	private static SafeDecodeURIComponent( pValue: string ) : string
+		{
+
+			try {
+				return decodeURIComponent(pValue);
+			}
+			catch {
+				return pValue;
+			}
 
 		}
 

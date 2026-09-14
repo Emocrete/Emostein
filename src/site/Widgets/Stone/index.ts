@@ -6,7 +6,7 @@ import StoneGalleryIndexExport from "./StoneGallery.astro";
 
 /**
  * @pItems as StoneGalleryItemInput[] — بيانات جاهزة مباشرة. عند تمريرها لها أولوية على Excel وJSON ومسح الفولدر.
- * @pFolder as string — فولدر صور الخامات داخل public.
+ * @pFolder as string — فولدر الصور: مسار نسبي داخل _M للصفحة الحالية، أو مسار صريح من public مثل /Media/....
  * @pExcel as string — ملف Excel داخل pFolder. إذا كان موجودًا تكون له أولوية على JSON ومسح الفولدر.
  * @pExcelSheet as string — اسم ورقة بيانات الخامات داخل ملف Excel.
  * @pExcelWarnings as boolean — إظهار تحذيرات المطابقة في طرفية البناء للملفات الناقصة أو الأسماء المكررة.
@@ -93,7 +93,7 @@ import StoneProductStripIndexExport from "./StoneProductStrip.astro";
 
 /**
  * @pStoneType as StoneProductType — Marble / Granite / رخام / جرانيت. يغير زخرفة الخلفية تلقائيًا.
- * @pFolder as string — فولدر الصور داخل public، مثل /Media/Emostone/ProductStripSample.
+ * @pFolder as string — فولدر الصور: نسبي داخل _M للصفحة الحالية، أو صريح من public مثل /Media/Emostone/ProductStripSample.
  * @pImages as GalleryJsonItem[] — صور جاهزة مباشرة. لها أولوية على pFolder وملف JSON.
  * @pJson as string — اسم ملف الجسون داخل نفس فولدر الصور.
  * @pName as string — بيانات الخامة.

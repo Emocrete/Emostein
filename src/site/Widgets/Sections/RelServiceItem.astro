@@ -35,7 +35,7 @@ const cImg = GetCardImage(pHref, pImg, pExternal);
 
 function GetCardImage(pHref: string, pImg?: string, pExternal = false) {
 	const cGivenImg = pImg?.trim() ?? "";
-	if (cGivenImg) return cGivenImg;
+	if (cGivenImg) return Media.GetPageFile(Astro.url.href, cGivenImg);
 
 	const cHref = pHref?.trim() ?? "";
 	if (!ShouldReadHeroFromHref(cHref, pExternal)) return "";

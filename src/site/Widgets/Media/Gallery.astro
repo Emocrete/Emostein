@@ -1,4 +1,6 @@
 ---
+import { Media } from "@/Media";
+
 const {
 	fId = "gallery1",
 	fItems = [],
@@ -7,12 +9,18 @@ const {
 	style: fStyle = "",
 	...cAttrs
 } = Astro.props as DebugOutlineProps & Record<string, any>;
+const cPageUrl = Astro.url.href;
+const cItems = fItems.map((pItem: Record<string, any>) => ({
+	...pItem,
+	fSrc: Media.GetPageFile(cPageUrl, pItem.fSrc || ""),
+	fThumb: pItem.fThumb ? Media.GetPageFile(cPageUrl, pItem.fThumb) : "",
+}));
 // fItems: [{ fSrc, fAlt, fThumb? }]
 ---
 
 <div id={fIdAttr} class={`galleryGrid ${fClass}`.trim()} style={fStyle} {...cAttrs}>
     {
-        fItems.map((fIt, fI) => (
+        cItems.map((fIt, fI) => (
             <button
                 class="gItem reveal"
                 data-reveal="up"
@@ -24,7 +32,7 @@ const {
                 data-alt={fIt.fAlt ?? ""}
             >
                 <img
-                    src={fIt.fThumb ?? fIt.fSrc}
+                    src={fIt.fThumb || fIt.fSrc}
                     alt={fIt.fAlt ?? ""}
                     loading="lazy"
                 />

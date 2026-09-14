@@ -1,4 +1,6 @@
 ---
+import { Media } from "@/Media";
+
 interface Props extends DebugOutlineProps {
 	pImg?: string;
 	pImgHover?: string;
@@ -34,9 +36,10 @@ const {
 } = Astro.props as Props & Record<string, any>;
 
 const cId = pGivenId || `StateImg-${Math.random().toString(36).slice(2, 11)}`;
-const cImgNormal = pImg;
-const cImgHover = pImgHover || cImgNormal;
-const cImgActive = pImgActive || cImgHover || cImgNormal;
+const cPageUrl = Astro.url.href;
+const cImgNormal = Media.GetPageFile(cPageUrl, pImg);
+const cImgHover = Media.GetPageFile(cPageUrl, pImgHover || pImg) || cImgNormal;
+const cImgActive = Media.GetPageFile(cPageUrl, pImgActive || pImgHover || pImg) || cImgHover || cImgNormal;
 const cHasLink = Boolean(pLink);
 const cRel = pRel || (pTarget === "_blank" ? "noopener noreferrer" : undefined);
 const cClass = `StateImg ${pClass} ${pGivenClass}`.trim();

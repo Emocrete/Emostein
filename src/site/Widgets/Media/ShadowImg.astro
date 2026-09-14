@@ -1,5 +1,6 @@
 ---
 import { Place, type PlaceProps } from "@/TypesLib";
+import { Media } from "@/Media";
 
 interface Props extends DebugOutlineProps, PlaceProps {
 	pImg?: string;
@@ -7,6 +8,7 @@ interface Props extends DebugOutlineProps, PlaceProps {
 
 const { pImg = "/Media/ErrorImg.webp" } = Astro.props as Props;
 const cPlace = new Place(Astro.props as PlaceProps);
+const cImg = Media.GetPageFile(Astro.url.href, pImg);
 const cId = GetWidgetId("ShadowImg");
 ---
 
@@ -35,7 +37,7 @@ const cId = GetWidgetId("ShadowImg");
 
 	<img
 		class = " ShadowImgImage "
-		src={pImg}
+		src={cImg}
 		alt=""
 		loading="eager"
 		decoding="async"

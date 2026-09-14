@@ -1,4 +1,5 @@
 ---
+import { Media } from "@/Media";
 import { Colors, Pixel, Place, type PlaceProps } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
 
@@ -79,6 +80,7 @@ pIcon = "/Media/ErrorImg.webp",
 const cHeadingLevel = NormalizeHeadingLevel(pTitleLevel);
 const TitleTag = `h${cHeadingLevel}` as keyof astroHTML.JSX.DefinedIntrinsicElements;
 const cIconAlt = pIconAlt ?? pTitle;
+const cIcon = Media.GetPageFile(Astro.url.href, pIcon || "");
 const cHasSlot = Astro.slots.has("default");
 const cGivenStyle = GetStyleText(pGivenStyle);
 
@@ -168,7 +170,7 @@ function GetCssName(pName: string) {
 		
 			<img
 				class = " IconInfoCardIcon "
-				src={pIcon}
+				src={cIcon}
 				alt={cIconAlt}
 				loading="lazy"
 				decoding="async"

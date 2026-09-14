@@ -1,4 +1,5 @@
 ---
+import { Media } from "@/Media";
 import { Place, type PlaceProps } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
 interface Props extends DebugOutlineProps, HTMLAttributes<"section">, PlaceProps {
@@ -66,6 +67,8 @@ const {
 } = Astro.props as Props;
 
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
+const cVideoSrc = Media.GetPageFile(Astro.url.href, pVideoSrc);
+const cPosterSrc = Media.GetPageFile(Astro.url.href, pPosterSrc);
 
 const cOwnerWhatsapp = GetWhatsappNumber(pPhone);
 const cCallHref = GetCallHref(pPhone);
@@ -127,10 +130,10 @@ const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
 		loop
 		playsinline
 		preload="metadata"
-		poster={pPosterSrc}
+		poster={cPosterSrc || undefined}
 	>
 
-		<source src={pVideoSrc} type="video/mp4" />
+		<source src={cVideoSrc} type="video/mp4" />
 
 	</video>
 

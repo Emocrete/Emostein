@@ -1,4 +1,5 @@
 ---
+import { Media } from "@/Media";
 import { ElemBg, GetHzAlignCss, GetVrAlignCss, type HzAlignValue, Percent, Pixel, Place, type PlaceProps, Size, type VrAlignValue } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
 
@@ -83,11 +84,12 @@ const cBgColor = pBg?.Color || pBgColor?.Color || "transparent";
 const cBgOpacityL = pBgOpacity.Landscape;
 const cBgOpacityP = pBgOpacity.Portrait;
 
-const cBgImgL = pBg?.Img?.LinkL || "";
-const cBgImgP = pBg?.Img?.LinkP || pBg?.Img?.LinkL || "";
+const cPageUrl = Astro.url.href;
+const cBgImgL = Media.GetPageFile(cPageUrl, pBg?.Img?.LinkL || "");
+const cBgImgP = Media.GetPageFile(cPageUrl, pBg?.Img?.LinkP || pBg?.Img?.LinkL || "");
 
-const cBgVidL = pBg?.Vid?.LinkL || "";
-const cBgVidP = pBg?.Vid?.LinkP || pBg?.Vid?.LinkL || "";
+const cBgVidL = Media.GetPageFile(cPageUrl, pBg?.Vid?.LinkL || "");
+const cBgVidP = Media.GetPageFile(cPageUrl, pBg?.Vid?.LinkP || pBg?.Vid?.LinkL || "");
 
 const cBgAlt = pBg?.Img?.Alt || pBg?.Vid?.Alt || "";
 

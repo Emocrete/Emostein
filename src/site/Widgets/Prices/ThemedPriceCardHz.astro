@@ -1,4 +1,5 @@
 ---
+import { Media } from "@/Media";
 import { NumPer, Pixel, Place, type PlaceProps, Size } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
 import EmoCall from "../Comp/Btn/EmoCall.astro";
@@ -118,6 +119,8 @@ const {
 } = cProps;
 
 const cOwnSize = GetBoolAttr(pOwnSizeValue);
+const cImage = Media.GetPageFile(Astro.url.href, pImage || "");
+const cIcon = Media.GetPageFile(Astro.url.href, pIcon || "");
 const cIconMask = GetBoolAttr(pIconMask);
 const cForcedHz = GetBoolAttr(ForcedHz) || GetBoolAttr(pForcedHz);
 const cIntro = GetBoolAttr(pIntro);
@@ -148,7 +151,7 @@ const cCssVars = [
 	`--TPCHGapP:${pGap.Portrait};`,
 	`--TPCHIconSizeL:${pIconSize.Landscape};`,
 	`--TPCHIconSizeP:${pIconSize.Portrait};`,
-	`--TPCHIconUrl:${BuildCssUrl(pIcon)};`,
+	`--TPCHIconUrl:${BuildCssUrl(cIcon)};`,
 	`--TPCHIconColor:${pIconColor};`,
 	`--TPCHImageDuration:${pImageDuration};`,
 	`--TPCHImageScale:${cImageScale};`,
@@ -250,7 +253,7 @@ function GetCssName(pName: string) {
 
 		<div class = " TPCHMedia " aria-hidden={pImage ? undefined : "true"}>
 
-			{ pImage && ( <img class = " TPCHMediaImg " src={pImage} alt={pImageAlt} loading="lazy" decoding="async" /> ) }
+			{ pImage && ( <img class = " TPCHMediaImg " src={cImage} alt={pImageAlt} loading="lazy" decoding="async" /> ) }
 
 		</div>
 
@@ -277,7 +280,7 @@ function GetCssName(pName: string) {
 
 						<img
 							class = " TPCHIconImg "
-							src={pIcon}
+							src={cIcon}
 							alt={pIconAlt}
 							loading="lazy"
 							decoding="async"

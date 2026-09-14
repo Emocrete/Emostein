@@ -1,4 +1,5 @@
 ---
+import { Media } from "@/Media";
 import { NumPer, Pixel, Place, type PlaceProps, Size } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
 interface Props extends DebugOutlineProps, HTMLAttributes<"article">, PlaceProps {
@@ -110,6 +111,8 @@ const {
 } = cProps;
 
 const cOwnSize = GetBoolAttr(pOwnSizeValue);
+const cImage = Media.GetPageFile(Astro.url.href, pImage || "");
+const cIcon = Media.GetPageFile(Astro.url.href, pIcon || "");
 const cIconMask = GetBoolAttr(pIconMask);
 const cIntro = GetBoolAttr(pIntro);
 const cActionTitle = pActionTitle || pActionText;
@@ -138,7 +141,7 @@ const cCssVars = [
 	`--TPCVrGapP:${pGap.Portrait};`,
 	`--TPCVrIconSizeL:${pIconSize.Landscape};`,
 	`--TPCVrIconSizeP:${pIconSize.Portrait};`,
-	`--TPCVrIconUrl:${BuildCssUrl(pIcon)};`,
+	`--TPCVrIconUrl:${BuildCssUrl(cIcon)};`,
 	`--TPCVrIconColor:${pIconColor};`,
 	`--TPCVrImageDuration:${pImageDuration};`,
 	`--TPCVrImageScale:${cImageScale};`,
@@ -259,7 +262,7 @@ function GetCssName(pName: string) {
 
 				<img
 					class = " TPCVrHeaderImg "
-					src={pImage}
+					src={cImage}
 					alt={pImageAlt}
 					loading="lazy"
 					decoding="async"
@@ -306,7 +309,7 @@ function GetCssName(pName: string) {
 
 						<img
 							class = " TPCVrIconImg "
-							src={pIcon}
+							src={cIcon}
 							alt={pIconAlt}
 							loading="lazy"
 							decoding="async"

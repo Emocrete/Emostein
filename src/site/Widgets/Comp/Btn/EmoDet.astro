@@ -1,4 +1,5 @@
 ---
+import { Media } from "@/Media";
 import { Colors, Place, type PlaceProps, HoverColors, HoverImg } from "@/TypesLib";
 import type { HTMLAttributes } from "astro/types";
 import { CreateButtonPreset, GetBoolAttr, GetButtonPreset, GetButtonTitleColors, type ButtonColorPreset, type ButtonPresetProps } from "./ButtonPresets";
@@ -166,13 +167,13 @@ const cTitleColors = pTitleColors ?? cPreset?.TitleColors ?? GetButtonTitleColor
 const cIconImgs = pIconImgs ?? new HoverImg("");
 const cBgImgs = pBgImgs ?? new HoverImg("");
 
-const cBgImgNormal = BuildCssUrl(cBgImgs.Normal);
-const cBgImgHover = BuildCssUrl(cBgImgs.Hover);
-const cBgImgActive = BuildCssUrl(cBgImgs.Click);
+const cBgImgNormal = BuildCssUrl(Media.GetPageFile(Astro.url.href, cBgImgs.Normal));
+const cBgImgHover = BuildCssUrl(Media.GetPageFile(Astro.url.href, cBgImgs.Hover));
+const cBgImgActive = BuildCssUrl(Media.GetPageFile(Astro.url.href, cBgImgs.Click));
 
-const cIconNormal = BuildCssUrl(cIconImgs.Normal);
-const cIconHover = BuildCssUrl(cIconImgs.Hover);
-const cIconActive = BuildCssUrl(cIconImgs.Click);
+const cIconNormal = BuildCssUrl(Media.GetPageFile(Astro.url.href, cIconImgs.Normal));
+const cIconHover = BuildCssUrl(Media.GetPageFile(Astro.url.href, cIconImgs.Hover));
+const cIconActive = BuildCssUrl(Media.GetPageFile(Astro.url.href, cIconImgs.Click));
 
 const cHasIcon = Boolean(cIconImgs.Normal);
 

@@ -1,5 +1,6 @@
 ---
 import { ElemBg, EmoMediaData, Place, type PlaceProps, RespString, Text } from "@/TypesLib";
+import { Media } from "@/Media";
 import type { HTMLAttributes } from "astro/types";
 export interface Props extends DebugOutlineProps, HTMLAttributes<"div">, PlaceProps {
 	pImg?: EmoMediaData;
@@ -48,6 +49,11 @@ const {
 const cGivenStyle = typeof pGivenStyle === "string" ? pGivenStyle : "";
 
 const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
+const cPageUrl = Astro.url.href;
+const cVidL = Media.GetPageFile(cPageUrl, pVid?.LinkL || "");
+const cVidP = Media.GetPageFile(cPageUrl, pVid?.LinkP || pVid?.LinkL || "");
+const cImgL = Media.GetPageFile(cPageUrl, pImg?.LinkL || "");
+const cImgP = Media.GetPageFile(cPageUrl, pImg?.LinkP || pImg?.LinkL || "");
 
 ---
 
@@ -82,27 +88,27 @@ const cPlace = new Place(Astro.props as PlaceProps, cGivenStyle);
 		<video
 			class = " BgMedia "
 			id="Vid"
-			data-src-l={pVid.LinkL}
-			data-src-p={pVid.LinkP || pVid.LinkL}
+			data-src-l={cVidL}
+			data-src-p={cVidP || cVidL}
 			crossorigin="anonymous"
 			playsinline
 			preload="auto"
 			loop
 			autoplay
 			muted
-			src={pVid.LinkL}
+			src={cVidL}
 		/>
 
 		) : pImg ? (
 
 			<picture class = " BgMedia ">
 
-				<source media="(max-width: 460px) and (orientation: portrait)" srcset={pImg.LinkP} />
+				<source media="(max-width: 460px) and (orientation: portrait)" srcset={cImgP || cImgL} />
 
 				<img
 					class = " BgMedia "
 					style = " object-fit : cover "
-					src={pImg.LinkL}
+					src={cImgL || cImgP}
 					alt={pImg.Alt}
 					loading="lazy"
 					decoding="async"
