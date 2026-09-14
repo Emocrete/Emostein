@@ -1,3 +1,13 @@
+import DaabesRequestIndexExport from "./DaabesRequest.astro";
+
+/**
+ * @pTitle as string (Default: "سجّل عرضك أو طلبك")
+ * @pDesc as string (Default: "اختار حالتك، وسجّل البيانات المناسبة لطلبك.")
+ * @pDefaultCase as CaseKey | "" (Default: "")
+ * @pMaxWidth as string (Default: "1100px")
+ */
+export const DaabesRequest = DaabesRequestIndexExport;
+
 import PharmacyWorkCardIndexExport from "./PharmacyWorkCard.astro";
 
 /**

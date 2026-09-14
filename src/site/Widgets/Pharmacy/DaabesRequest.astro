@@ -1,0 +1,466 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import EmoBtn from "../Comp/Btn/EmoBtn.astro";
+import HzStack from "../Comp/Layout/HzStack.astro";
+import { Pixel, Place, type PlaceProps } from "@/TypesLib";
+
+type CaseKey = "shop-owner" | "pharmacy-seller" | "new-license" | "pharmacy-buyer";
+type Option = { Value: string; Text: string };
+type Field = {
+	Name: string;
+	Label: string;
+	Kind?: "text" | "tel" | "number" | "select" | "choice" | "textarea";
+	Placeholder?: string;
+	Unit?: string;
+	Required?: boolean;
+	Wide?: boolean;
+	Options?: Option[];
+	Condition?: { Name: string; Values: string[] };
+};
+type RequestCase = {
+	Key: CaseKey;
+	Title: string;
+	Person: string;
+	Intent: string;
+	Heading: string;
+	Description: string;
+	DetailsTitle: string;
+	Fields: Field[];
+	Details: Field[];
+};
+
+interface Props extends HTMLAttributes<"section">, PlaceProps {
+	pTitle?: string;
+	pDesc?: string;
+	pDefaultCase?: CaseKey | "";
+	pMaxWidth?: string;
+}
+
+const {
+	id: pId = "",
+	class: pClass = "",
+	pTitle = "سجّل عرضك أو طلبك",
+	pDesc = "اختار حالتك، وسجّل البيانات المناسبة لطلبك.",
+	pDefaultCase = "",
+	pMaxWidth = "1100px",
+} = Astro.props as Props;
+const cId = pId || GetWidgetId("DaabesRequest");
+const cPlace = new Place(Astro.props as PlaceProps, `--DaabesMaxWidth:${pMaxWidth};`);
+// Placement props belong to Place, never to the DOM.
+const cHtmlAttrs = Object.fromEntries(Object.entries(Astro.props).filter(([pName]) =>
+	!["id", "class", "style"].includes(pName) && !/^p[A-Z]/.test(pName)
+));
+
+const cGovernorates: Option[] = [
+	{ Value: "cairo", Text: "القاهرة" },
+	{ Value: "giza", Text: "الجيزة" },
+];
+const cSearchGovernorates: Option[] = [...cGovernorates, { Value: "both", Text: "القاهرة والجيزة" }];
+const cOfferDeals: Option[] = [
+	{ Value: "sale", Text: "للبيع" },
+	{ Value: "rent", Text: "للإيجار" },
+	{ Value: "either", Text: "كلاهما متاح" },
+];
+const cSearchDeals: Option[] = [
+	{ Value: "sale", Text: "شراء محل" },
+	{ Value: "rent", Text: "استئجار محل" },
+	{ Value: "either", Text: "كلاهما مناسب" },
+];
+const cTiming: Option[] = [
+	{ Value: "now", Text: "جاهز للبدء الآن" },
+	{ Value: "month", Text: "خلال شهر" },
+	{ Value: "three-months", Text: "خلال ٣ أشهر" },
+	{ Value: "exploring", Text: "أستكشف الفرص حاليًا" },
+];
+
+const cCases: RequestCase[] = [
+	{
+		Key: "shop-owner",
+		Title: "عندي محل",
+		Person: "مالك غير صيدلي",
+		Intent: "أعرضه للبيع أو الإيجار لصيدلي",
+		Heading: "عرض محل للبيع أو الإيجار",
+		Description: "عرّفنا بالمكان وشروط العرض، لبحث تسويقه لصيدلي.",
+		DetailsTitle: "تفاصيل إضافية عن المحل",
+		Fields: [
+			{ Name: "offerDeal", Label: "نوع العرض", Kind: "choice", Required: true, Wide: true, Options: cOfferDeals },
+			{ Name: "governorate", Label: "المحافظة", Kind: "select", Required: true, Options: cGovernorates },
+			{ Name: "district", Label: "المدينة أو الحي", Required: true, Placeholder: "مثال: مدينة نصر" },
+			{ Name: "area", Label: "مساحة المحل", Kind: "number", Unit: "م²", Placeholder: "مثال: ٦٠" },
+			{ Name: "salePrice", Label: "سعر البيع المطلوب", Kind: "number", Unit: "جنيه", Placeholder: "السعر التقريبي", Condition: { Name: "offerDeal", Values: ["sale", "either"] } },
+			{ Name: "monthlyRent", Label: "الإيجار الشهري المطلوب", Kind: "number", Unit: "جنيه / شهر", Placeholder: "القيمة الشهرية", Condition: { Name: "offerDeal", Values: ["rent", "either"] } },
+		],
+		Details: [
+			{ Name: "address", Label: "العنوان وأقرب علامة مميزة", Wide: true, Placeholder: "الشارع ورقم العقار أو أقرب معلم" },
+			{ Name: "height", Label: "الارتفاع الداخلي", Kind: "number", Unit: "متر" },
+			{ Name: "frontage", Label: "عرض الواجهة", Kind: "number", Unit: "متر" },
+			{ Name: "finish", Label: "حالة التشطيب", Kind: "select", Options: [{ Value: "shell", Text: "على الطوب" }, { Value: "partial", Text: "نصف تشطيب" }, { Value: "finished", Text: "متشطب" }] },
+			{ Name: "inspection", Label: "فحص صلاحية الترخيص", Kind: "select", Options: [{ Value: "pending", Text: "لم يتم الفحص" }, { Value: "done", Text: "أُجري فحص سابق" }, { Value: "unknown", Text: "غير متأكد" }] },
+			{ Name: "notes", Label: "ملاحظات وشروط العرض", Kind: "textarea", Wide: true, Placeholder: "مدة الإيجار، شروط الدفع، أو تفاصيل مهمة عن المكان" },
+		],
+	},
+	{
+		Key: "pharmacy-seller",
+		Title: "أبيع صيدليتي",
+		Person: "صيدلي لديه مكان مرخص",
+		Intent: "أبيع الصيدلية وأنقل ملكيتها",
+		Heading: "بيع صيدلية مرخصة ونقل ملكيتها",
+		Description: "سجّل بيانات الصيدلية وشروط البيع لصيدلي آخر.",
+		DetailsTitle: "تفاصيل إضافية عن الصيدلية",
+		Fields: [
+			{ Name: "governorate", Label: "المحافظة", Kind: "select", Required: true, Options: cGovernorates },
+			{ Name: "district", Label: "المدينة أو الحي", Required: true, Placeholder: "مثال: الدقي" },
+			{ Name: "pharmacyName", Label: "اسم الصيدلية", Placeholder: "اسم الصيدلية الحالي" },
+			{ Name: "salePrice", Label: "سعر البيع المطلوب", Kind: "number", Unit: "جنيه", Placeholder: "السعر التقريبي" },
+			{ Name: "operation", Label: "حالة التشغيل", Kind: "select", Options: [{ Value: "operating", Text: "تعمل حاليًا" }, { Value: "closed", Text: "متوقفة حاليًا" }, { Value: "preparing", Text: "تحت التجهيز" }] },
+			{ Name: "tenure", Label: "وضع مقر الصيدلية", Kind: "select", Options: [{ Value: "owned", Text: "تمليك" }, { Value: "rented", Text: "إيجار" }] },
+			{ Name: "monthlyRent", Label: "الإيجار الشهري الحالي", Kind: "number", Unit: "جنيه / شهر", Condition: { Name: "tenure", Values: ["rented"] } },
+		],
+		Details: [
+			{ Name: "area", Label: "مساحة الصيدلية", Kind: "number", Unit: "م²" },
+			{ Name: "dailySales", Label: "متوسط المبيعات اليومية", Kind: "number", Unit: "جنيه" },
+			{ Name: "address", Label: "العنوان وأقرب علامة مميزة", Wide: true, Placeholder: "الشارع ورقم العقار أو أقرب معلم" },
+			{ Name: "included", Label: "محتويات السعر المعروض", Wide: true, Placeholder: "المقر، التجهيزات، الأدوية والمخزون…" },
+			{ Name: "leaseRemaining", Label: "المدة المتبقية بعقد الإيجار", Wide: true, Placeholder: "مثال: ٥ سنوات", Condition: { Name: "tenure", Values: ["rented"] } },
+			{ Name: "notes", Label: "ملاحظات وشروط البيع", Kind: "textarea", Wide: true, Placeholder: "شروط الدفع، موعد التسليم، أو تفاصيل مهمة للمشتري" },
+		],
+	},
+	{
+		Key: "new-license",
+		Title: "أبحث عن محل",
+		Person: "صيدلي يبحث عن مكان",
+		Intent: "لترخيص صيدلية جديدة",
+		Heading: "البحث عن محل لترخيص جديد",
+		Description: "حدّد نطاق البحث والميزانية للعثور على محل وفحص ملاءمته للترخيص.",
+		DetailsTitle: "مواصفات المكان المفضل",
+		Fields: [
+			{ Name: "searchDeal", Label: "طريقة الحصول على المحل", Kind: "choice", Required: true, Wide: true, Options: cSearchDeals },
+			{ Name: "governorate", Label: "نطاق البحث", Kind: "select", Required: true, Options: cSearchGovernorates },
+			{ Name: "area", Label: "أقل مساحة مناسبة", Kind: "number", Unit: "م²", Placeholder: "المساحة المفضلة" },
+			{ Name: "districts", Label: "المدن أو الأحياء المفضلة", Required: true, Wide: true, Placeholder: "مثال: الشروق، العبور، القاهرة الجديدة" },
+			{ Name: "purchaseBudget", Label: "ميزانية شراء المحل حتى", Kind: "number", Unit: "جنيه", Condition: { Name: "searchDeal", Values: ["sale", "either"] } },
+			{ Name: "rentBudget", Label: "الإيجار الشهري حتى", Kind: "number", Unit: "جنيه / شهر", Condition: { Name: "searchDeal", Values: ["rent", "either"] } },
+		],
+		Details: [
+			{ Name: "timing", Label: "موعد البدء المناسب", Kind: "select", Options: cTiming },
+			{ Name: "frontage", Label: "أقل عرض واجهة مفضل", Kind: "number", Unit: "متر" },
+			{ Name: "locationPreference", Label: "طبيعة الموقع المفضل", Wide: true, Placeholder: "شارع رئيسي، منطقة سكنية، قرب عيادات…" },
+			{ Name: "notes", Label: "مواصفات أو شروط أخرى", Kind: "textarea", Wide: true, Placeholder: "تفاصيل تساعدنا في اختيار الأماكن المناسبة لك" },
+		],
+	},
+	{
+		Key: "pharmacy-buyer",
+		Title: "أشتري صيدلية",
+		Person: "صيدلي يبحث عن صيدلية",
+		Intent: "مرخصة وجاهزة وأنقلها باسمي",
+		Heading: "شراء صيدلية مرخصة ونقلها باسمك",
+		Description: "حدّد المنطقة والميزانية ومواصفات الصيدلية التي تبحث عنها.",
+		DetailsTitle: "مواصفات الصيدلية المفضلة",
+		Fields: [
+			{ Name: "governorate", Label: "نطاق البحث", Kind: "select", Required: true, Options: cSearchGovernorates },
+			{ Name: "purchaseBudget", Label: "إجمالي ميزانية الشراء حتى", Kind: "number", Unit: "جنيه", Placeholder: "الحد التقريبي" },
+			{ Name: "districts", Label: "المدن أو الأحياء المفضلة", Required: true, Wide: true, Placeholder: "مثال: فيصل، الهرم، حدائق الأهرام" },
+			{ Name: "operation", Label: "حالة التشغيل المفضلة", Kind: "select", Options: [{ Value: "operating", Text: "تعمل بالفعل" }, { Value: "closed", Text: "مرخصة ولو متوقفة" }, { Value: "either", Text: "كلاهما مناسب" }] },
+			{ Name: "tenure", Label: "وضع المقر المفضل", Kind: "select", Options: [{ Value: "owned", Text: "تمليك" }, { Value: "rented", Text: "إيجار" }, { Value: "either", Text: "كلاهما مناسب" }] },
+		],
+		Details: [
+			{ Name: "area", Label: "أقل مساحة مناسبة", Kind: "number", Unit: "م²" },
+			{ Name: "timing", Label: "موعد الشراء المناسب", Kind: "select", Options: cTiming },
+			{ Name: "rentBudget", Label: "الإيجار الشهري المقبول حتى", Kind: "number", Unit: "جنيه / شهر", Condition: { Name: "tenure", Values: ["rented", "either"] } },
+			{ Name: "notes", Label: "مواصفات أو شروط أخرى", Kind: "textarea", Wide: true, Placeholder: "التجهيزات المطلوبة، حجم النشاط المفضل، وشروط الدفع" },
+		],
+	},
+];
+const cInitialCase = cCases.find((pCase) => pCase.Key === pDefaultCase)?.Key || "";
+---
+
+<section {...cHtmlAttrs} id={cId} class={`DaabesRequest ${cPlace.Class} ${pClass}`.trim()} style={cPlace.Style} dir="rtl" data-daabes-request data-default-case={cInitialCase} aria-labelledby={`${cId}-title`}>
+	<header class="DBrandBar">
+		<span class="DBrand">دَعْبِس<span>لتسويق الصيدليات</span></span>
+		<span class="DCoverage">القاهرة والجيزة</span>
+	</header>
+	<div class="DIntro">
+		<h2 id={`${cId}-title`}>{pTitle}</h2>
+		<p>{pDesc}</p>
+	</div>
+	<fieldset class="DCasePicker">
+		<legend>اختر الحالة المناسبة لك</legend>
+		<div class="DCaseOptions">
+			{cCases.map((cCase) => (
+				<label class="DCaseChoice">
+					<input type="radio" name={`${cId}-visitor-case`} value={cCase.Key} checked={cInitialCase === cCase.Key} aria-controls={`${cId}-${cCase.Key}`} data-case-choice />
+					<strong>{cCase.Title}</strong>
+					<span class="DPerson">{cCase.Person}</span>
+					<span class="DIntent">{cCase.Intent}</span>
+				</label>
+			))}
+		</div>
+	</fieldset>
+	<p class="DEmpty" data-empty hidden={Boolean(cInitialCase)}>ابدأ باختيار حالتك لعرض البيانات المطلوبة.</p>
+	<p class="DAnnounce" role="status" data-case-status></p>
+
+	<form class="DForm" data-request-form hidden={!cInitialCase} onsubmit="return false" autocomplete="on" aria-label="بيانات طلب دعبس">
+		{cCases.map((cCase) => (
+			<fieldset class="DCasePanel" id={`${cId}-${cCase.Key}`} data-case-panel={cCase.Key} hidden={cInitialCase !== cCase.Key} disabled={cInitialCase !== cCase.Key}>
+				<legend class="DAnnounce">{cCase.Heading}</legend>
+				<div class="DPanelIntro">
+					<span class="DSectionKicker">بيانات {cCase.Key === "shop-owner" || cCase.Key === "pharmacy-seller" ? "العرض" : "الطلب"}</span>
+					<h3>{cCase.Heading}</h3>
+					<p>{cCase.Description}</p>
+				</div>
+				{[false, true].map((cIsDetail) => {
+					const cGroupFields = cIsDetail ? cCase.Details : cCase.Fields;
+					const GroupTag = cIsDetail ? "details" : "div";
+					return (
+						<GroupTag class={cIsDetail ? "DDetails" : "DMainFields"}>
+							{cIsDetail && <summary>{cCase.DetailsTitle}<span>اختياري</span></summary>}
+							<div class="DFields">
+								{cGroupFields.map((cField) => {
+									const cFieldId = `${cId}-${cCase.Key}-${cField.Name}`;
+									const cFieldName = `${cCase.Key}.${cField.Name}`;
+									const cOptions = cField.Options || [];
+									return cField.Kind === "choice" ? (
+										<fieldset class="DChoiceField DFieldWide">
+											<legend>{cField.Label}{cField.Required && <span class="DRequired" aria-label="مطلوب">*</span>}</legend>
+											<div class="DChoiceRow">
+												{cOptions.map((cOption) => <label><input type="radio" name={cFieldName} value={cOption.Value} required={cField.Required} data-field={cField.Name} /><span>{cOption.Text}</span></label>)}
+											</div>
+										</fieldset>
+									) : (
+										<label class={`DField ${cField.Wide ? "DFieldWide" : ""}`} for={cFieldId} hidden={Boolean(cField.Condition)} data-condition-name={cField.Condition?.Name} data-condition-values={cField.Condition?.Values.join(",")}>
+											<span class="DFieldLabel">{cField.Label}{cField.Required && <span class="DRequired" aria-label="مطلوب">*</span>}</span>
+											{cField.Kind === "select" ? (
+												<select id={cFieldId} name={cFieldName} data-field={cField.Name} required={cField.Required} disabled={Boolean(cField.Condition)}>
+													<option value="">اختر…</option>
+													{cOptions.map((cOption) => <option value={cOption.Value}>{cOption.Text}</option>)}
+												</select>
+											) : cField.Kind === "textarea" ? (
+												<textarea id={cFieldId} name={cFieldName} data-field={cField.Name} rows={3} maxlength={1200} placeholder={cField.Placeholder} disabled={Boolean(cField.Condition)} />
+											) : (
+												<span class={`DInputRow ${cField.Unit ? "DHasUnit" : ""}`}>
+													<input id={cFieldId} name={cFieldName} data-field={cField.Name} type={cField.Kind || "text"} required={cField.Required} disabled={Boolean(cField.Condition)} placeholder={cField.Placeholder || "اختياري"} inputmode={cField.Kind === "number" ? "decimal" : undefined} min={cField.Kind === "number" ? 0 : undefined} step={cField.Kind === "number" ? "any" : undefined} maxlength={cField.Kind === "number" ? undefined : 300} aria-describedby={cField.Unit ? `${cFieldId}-unit` : undefined} />
+													{cField.Unit && <span class="DUnit" id={`${cFieldId}-unit`}>{cField.Unit}</span>}
+												</span>
+											)}
+										</label>
+									);
+								})}
+							</div>
+						</GroupTag>
+					);
+				})}
+			</fieldset>
+		))}
+		<fieldset class="DContact">
+			<legend>بيانات التواصل</legend>
+			<div class="DFields">
+				<label class="DField" for={`${cId}-contact-name`}>
+					<span class="DFieldLabel">الاسم<span class="DRequired" aria-label="مطلوب">*</span></span>
+					<input id={`${cId}-contact-name`} name="contactName" autocomplete="name" type="text" placeholder="اسمك" required maxlength={100} />
+				</label>
+				<label class="DField" for={`${cId}-contact-phone`}>
+					<span class="DFieldLabel">رقم الموبايل<span class="DRequired" aria-label="مطلوب">*</span></span>
+					<input id={`${cId}-contact-phone`} name="contactPhone" autocomplete="tel" type="tel" inputmode="tel" dir="ltr" placeholder="01xxxxxxxxx" required maxlength={25} />
+				</label>
+			</div>
+			<p class="DRequiredHint">الحقول بعلامة <span aria-hidden="true">*</span> مطلوبة. باقي البيانات اختيارية.</p>
+		</fieldset>
+		<div class="DFooter">
+			<HzStack pGap={new Pixel(12, 10)}>
+				<EmoBtn id={`${cId}-official`} type="button" data-own-size={false} pText="تسجيل طلب رسمي" pWidth="100%" pHeight="50px" pRadius="10px" pBgColor="#152438" pBgColorHover="#152438" pTextColor="#C4CDD7" pTextColorHover="#C4CDD7" pFontSize="16px" disabled aria-describedby={`${cId}-preview-note`} />
+				<EmoBtn id={`${cId}-whatsapp`} type="button" data-own-size={false} pText="إرسال عبر واتساب" pWidth="100%" pHeight="50px" pRadius="10px" pBgColor="#E7EEEA" pBgColorHover="#E7EEEA" pTextColor="#476255" pTextColorHover="#476255" pFontSize="16px" disabled aria-describedby={`${cId}-preview-note`} />
+			</HzStack>
+			<p class="DPreviewNote" id={`${cId}-preview-note`}>معاينة التصميم · الإرسال غير مفعّل حاليًا</p>
+		</div>
+	</form>
+	<noscript><p class="DNoScript">فعّل JavaScript في المتصفح لعرض نموذج الحالة المختارة.</p></noscript>
+</section>
+
+<script>
+	function InitDaabesRequests() {
+		for (const cRoot of document.querySelectorAll<HTMLElement>("[data-daabes-request]")) {
+			if (cRoot.dataset.daabesReady === "true") continue;
+			cRoot.dataset.daabesReady = "true";
+			const cForm = cRoot.querySelector<HTMLFormElement>("[data-request-form]");
+			const cEmpty = cRoot.querySelector<HTMLElement>("[data-empty]");
+			const cStatus = cRoot.querySelector<HTMLElement>("[data-case-status]");
+			const cChoices = Array.from(cRoot.querySelectorAll<HTMLInputElement>("[data-case-choice]"));
+			const cPanels = Array.from(cRoot.querySelectorAll<HTMLFieldSetElement>("[data-case-panel]"));
+			if (!cForm || !cEmpty || !cStatus) continue;
+
+			function SyncConditions(cPanel: HTMLFieldSetElement) {
+				for (const cField of cPanel.querySelectorAll<HTMLElement>("[data-condition-name]")) {
+					const cSources = Array.from(cPanel.querySelectorAll<HTMLInputElement | HTMLSelectElement>("[data-field]"));
+					const cSource = cSources.find((pInput) => pInput.dataset.field === cField.dataset.conditionName && (!(pInput instanceof HTMLInputElement) || pInput.type !== "radio" || pInput.checked));
+					const cVisible = (cField.dataset.conditionValues || "").split(",").includes(cSource?.value || "");
+					cField.hidden = !cVisible;
+					for (const cInput of cField.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>("input, select, textarea")) cInput.disabled = !cVisible;
+				}
+			}
+
+			function SelectCase(cValue: string, cAnnounce = false) {
+				const cSelected = cPanels.find((pPanel) => pPanel.dataset.casePanel === cValue);
+				for (const cPanel of cPanels) {
+					const cActive = cPanel === cSelected;
+					cPanel.hidden = !cActive;
+					cPanel.disabled = !cActive;
+					if (cActive) SyncConditions(cPanel);
+				}
+				for (const cChoice of cChoices) cChoice.checked = cChoice.value === cSelected?.dataset.casePanel;
+				cForm.hidden = !cSelected;
+				cEmpty.hidden = Boolean(cSelected);
+				cRoot.dataset.selectedCase = cSelected?.dataset.casePanel || "";
+				if (cAnnounce) cStatus.textContent = cSelected?.querySelector("h3")?.textContent || "اختر الحالة المناسبة لك";
+			}
+
+			// This design build never submits, opens WhatsApp, or stores form data.
+			cForm.addEventListener("submit", (cEvent) => cEvent.preventDefault());
+			cForm.addEventListener("change", () => {
+				const cActive = cPanels.find((pPanel) => !pPanel.disabled);
+				if (cActive) SyncConditions(cActive);
+			});
+			for (const cChoice of cChoices) cChoice.addEventListener("change", () => SelectCase(cChoice.value, true));
+			SelectCase(cChoices.find((pChoice) => pChoice.checked)?.value || cRoot.dataset.defaultCase || "");
+			// Native controls preserve their values while their case is hidden.
+			// A second instance has independent radio names, IDs, and event handlers.
+		}
+	}
+
+	InitDaabesRequests();
+	document.addEventListener("astro:page-load", InitDaabesRequests);
+</script>
+
+<style>
+	.DaabesRequest {
+		--DInk: #152438;
+		--DMuted: #576678;
+		--DGold: #D4AF37;
+		--DBorder: #DDE3E9;
+		display: block;
+		width: 100%;
+		max-width: var(--DaabesMaxWidth, 1100px);
+		min-width: 0;
+		margin-inline: auto;
+		box-sizing: border-box;
+		border: 1px solid var(--DBorder);
+		border-radius: 20px;
+		background: #FFF;
+		color: var(--DInk);
+		font-family: "Cairo", system-ui, Arial, sans-serif;
+		font-size: 15px;
+		line-height: 1.7;
+		text-align: right;
+		box-shadow: 0 12px 38px #1524380D;
+		isolation: isolate;
+		container: daabes / inline-size;
+	}
+	.DaabesRequest.PlaceSized { width: var(--PlaceWidthL); height: var(--PlaceHeightL); }
+	.DaabesRequest.IsPlaced { width: var(--PlaceWidthL); height: var(--PlaceHeightL); }
+	.DaabesRequest :where(div, header, fieldset, form, label, input, select, textarea, span, details, summary) { box-sizing: border-box; min-width: 0; }
+	.DaabesRequest fieldset { margin: 0; padding: 0; border: 0; }
+	.DaabesRequest h2, .DaabesRequest h3, .DaabesRequest p { margin: 0; }
+	.DaabesRequest [hidden] { display: none; }
+	.DBrandBar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 18px 30px; border-radius: 19px 19px 0 0; background: #101D2F; color: #FFF; }
+	.DBrand { display: flex; align-items: center; gap: 15px; color: var(--DGold); font-size: 31px; font-weight: 800; line-height: 1.5; white-space: nowrap; }
+	.DBrand span { padding-inline-start: 15px; border-inline-start: 1px solid #5B5D59; color: #E4E8EE; font-size: 14px; font-weight: 500; }
+	.DCoverage { font-size: 12px; color: #E0CD8F; white-space: nowrap; }
+	.DIntro { padding: 24px 30px 17px; }
+	.DaabesRequest h2 { color: var(--DInk); font-size: 27px; line-height: 1.5; font-weight: 800; }
+	.DIntro p { margin-top: 5px; color: var(--DMuted); font-size: 14px; }
+	.DaabesRequest .DCasePicker { padding: 0 30px 24px; }
+	.DCasePicker > legend { margin-bottom: 10px; font-size: 13px; font-weight: 600; }
+	.DCaseOptions { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+	.DCaseChoice { position: relative; display: flex; flex-direction: column; justify-content: flex-start; padding: 16px 14px 14px; border: 1px solid #D7DFE7; border-radius: 11px; background: #FFF; cursor: pointer; transition: border-color 120ms, background-color 120ms; }
+	.DCaseChoice > input { position: absolute; inset-inline-end: 12px; top: 17px; width: 17px; height: 17px; margin: 0; accent-color: var(--DGold); cursor: pointer; }
+	.DCaseChoice > strong { padding-inline-end: 20px; font-size: 18px; font-weight: 800; line-height: 1.6; }
+	.DPerson { margin-top: 5px; font-size: 11px; color: var(--DMuted); }
+	.DIntent { margin-top: 1px; font-size: 12px; line-height: 1.8; color: #38485A; }
+	.DCaseChoice:hover { border-color: #9C853F; background: #FAF8F1; }
+	.DCaseChoice:has(input:checked) { border-color: #152438; background: #152438; color: #FFF; }
+	.DCaseChoice:has(input:checked) strong { color: #F2D47B; }
+	.DCaseChoice:has(input:checked) .DPerson { color: #C6CFDB; }
+	.DCaseChoice:has(input:checked) .DIntent { color: #F3F5F8; }
+	.DCaseChoice:has(input:focus-visible) { outline: 3px solid #A7872C; outline-offset: 3px; }
+	.DaabesRequest .DEmpty { margin: 0 30px 26px; padding: 15px; border-radius: 9px; background: #F5F7F9; color: var(--DMuted); text-align: center; font-size: 13px; }
+	.DAnnounce { position: absolute; width: 1px; height: 1px; padding: 0; clip-path: inset(50%); overflow: hidden; white-space: nowrap; }
+	.DForm { margin: 0; border-top: 1px solid var(--DBorder); }
+	.DaabesRequest .DCasePanel { padding: 23px 30px 0; }
+	.DPanelIntro { margin-bottom: 23px; padding-inline-start: 14px; border-inline-start: 3px solid var(--DGold); }
+	.DSectionKicker { display: block; margin-bottom: 3px; color: #76601D; font-size: 11px; font-weight: 700; }
+	.DaabesRequest h3 { font-size: 22px; line-height: 1.55; font-weight: 800; }
+	.DPanelIntro p { margin-top: 6px; color: var(--DMuted); font-size: 13px; }
+	.DFields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px 20px; }
+	.DField { display: flex; flex-direction: column; gap: 6px; }
+	.DFieldWide { grid-column: 1 / -1; }
+	.DFieldLabel, .DChoiceField > legend { font-size: 13px; font-weight: 650; line-height: 1.65; }
+	.DRequired { display: inline-block; margin-inline-start: 5px; color: #876915; }
+	.DaabesRequest input:not([type="radio"]), .DaabesRequest select, .DaabesRequest textarea {
+		display: block; width: 100%; min-width: 0; min-height: 46px; margin: 0; padding: 10px 12px;
+		border: 1px solid #CCD5DF; border-radius: 9px; background: #FFF; color: var(--DInk);
+		font: inherit; font-size: 16px; line-height: 1.5; box-shadow: 0 1px 2px #15243804;
+	}
+	.DaabesRequest select { padding-inline-end: 8px; cursor: pointer; }
+	.DaabesRequest input::placeholder, .DaabesRequest textarea::placeholder { color: #6D7988; opacity: 1; font-size: 13px; }
+	.DaabesRequest textarea { min-height: 90px; resize: vertical; }
+	.DaabesRequest input[type="number"] { appearance: textfield; }
+	.DaabesRequest input[type="number"]::-webkit-inner-spin-button, .DaabesRequest input[type="number"]::-webkit-outer-spin-button { margin: 0; appearance: none; }
+	.DaabesRequest :is(input, select, textarea):focus-visible { outline: 2px solid #9D7F2A; outline-offset: 2px; }
+	.DInputRow { display: flex; align-items: stretch; border: 1px solid #CCD5DF; border-radius: 9px; background: #FFF; }
+	.DaabesRequest .DInputRow input { flex: 1; width: 0; border: 0; box-shadow: none; background: transparent; }
+	.DUnit { display: flex; align-items: center; flex: 0 0 auto; padding: 0 10px; color: #5E6B7B; font-size: 11px; white-space: nowrap; }
+	.DChoiceField > legend { margin-bottom: 8px; }
+	.DChoiceRow { display: flex; flex-wrap: wrap; gap: 9px; }
+	.DChoiceRow label { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 8px 17px; border: 1px solid #CCD5DF; border-radius: 8px; font-size: 13px; cursor: pointer; }
+	.DChoiceRow input { width: 16px; height: 16px; margin: 0; accent-color: #8B7024; }
+	.DChoiceRow label:has(input:checked) { background: #FBF6E7; border-color: #A58A35; }
+	.DDetails { margin-top: 23px; border-block: 1px solid #E4E8ED; }
+	.DDetails summary { display: list-item; min-height: 51px; padding-block: 13px; color: #364559; font-size: 13px; font-weight: 600; cursor: pointer; }
+	.DDetails summary::marker { color: #8A712A; }
+	.DDetails summary span { margin-inline-start: 10px; color: #687585; font-size: 11px; font-weight: 400; }
+	.DDetails .DFields { padding: 4px 0 21px; }
+	.DaabesRequest .DContact { margin: 23px 30px; }
+	.DContact legend { margin-bottom: 14px; padding: 0; font-size: 16px; font-weight: 800; }
+	.DaabesRequest .DRequiredHint { margin-top: 12px; font-size: 11px; color: var(--DMuted); }
+	.DRequiredHint span { color: #876915; }
+	.DFooter { padding: 21px 30px 18px; border-top: 1px solid #E4E8ED; border-radius: 0 0 19px 19px; background: #F7F8FA; }
+	.DaabesRequest .DPreviewNote { margin-top: 11px; color: #617083; text-align: center; font-size: 11px; }
+	.DNoScript { padding: 15px 24px; color: #7C3A25; }
+	@container daabes (max-width: 780px) {
+		.DCaseOptions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	}
+	@container daabes (max-width: 520px) {
+		.DBrandBar { padding: 13px 16px; }
+		.DBrand { font-size: 27px; gap: 8px; }
+		.DBrand span { font-size: 10px; padding-inline-start: 8px; }
+		.DCoverage { font-size: 10px; }
+		.DIntro { padding: 20px 16px 15px; }
+		.DaabesRequest h2 { font-size: 23px; }
+		.DIntro p { font-size: 12px; }
+		.DaabesRequest .DCasePicker { padding: 0 16px 19px; }
+		.DCaseOptions { gap: 8px; }
+		.DCaseChoice { padding: 11px 10px; }
+		.DCaseChoice > input { top: 15px; inset-inline-end: 8px; width: 15px; height: 15px; }
+		.DCaseChoice > strong { font-size: 16px; }
+		.DPerson { font-size: 10px; }
+		.DIntent { font-size: 11px; }
+		.DaabesRequest .DEmpty { margin: 0 16px 20px; font-size: 12px; }
+		.DaabesRequest .DCasePanel { padding: 20px 16px 0; }
+		.DPanelIntro { margin-bottom: 20px; padding-inline-start: 11px; }
+		.DaabesRequest h3 { font-size: 19px; }
+		.DPanelIntro p { font-size: 12px; }
+		.DFields { gap: 15px 10px; }
+		.DFieldLabel, .DChoiceField > legend { font-size: 12px; }
+		.DChoiceRow { gap: 6px; }
+		.DChoiceRow label { flex: 1 1 auto; gap: 6px; padding: 8px; font-size: 12px; }
+		.DaabesRequest input:not([type="radio"]), .DaabesRequest select, .DaabesRequest textarea { padding: 10px 8px; }
+		.DUnit { padding-inline: 6px; font-size: 10px; }
+		.DaabesRequest input::placeholder, .DaabesRequest textarea::placeholder { font-size: 12px; }
+		.DaabesRequest .DContact { margin: 20px 16px; }
+		.DFooter { padding: 18px 16px 15px; }
+	}
+	@media (orientation: portrait) {
+		.DaabesRequest.PlaceSized { width: var(--PlaceWidthP); height: var(--PlaceHeightP); }
+		.DaabesRequest.IsPlaced { width: var(--PlaceWidthP); height: var(--PlaceHeightP); }
+	}
+	@media (prefers-reduced-motion: reduce) { .DCaseChoice { transition: none; } }
+</style>
